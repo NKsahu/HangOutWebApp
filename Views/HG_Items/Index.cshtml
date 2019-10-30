@@ -1,0 +1,84 @@
+﻿@model IEnumerable<HangOut.Models.HG_Items>
+
+
+<div class="card">
+    <div class="card-header">
+        <h1 style="text-align:center"><b>USER ITEM</b> </h1>
+        <hr />
+    </div>
+    <a href="/HG_Items/CreateEdit?ID=0" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <div class="card-body">
+        <table class="table table-bordered table-hover w-100" id="Tbl">
+            <thead>
+
+
+                <tr>
+                      
+                    <th>
+                        @Html.DisplayNameFor(model => model.CategoryID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrgID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Items)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Plates)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ItemMode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Discount)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrgID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Items)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Plates)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemMode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Discount)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm "> Edit</a>
+                            <a href="/HG_Items/Delete?ID=@item.ItemID" class="btn btn-danger btn-sm "> Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

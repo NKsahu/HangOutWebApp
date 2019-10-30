@@ -1,0 +1,57 @@
+﻿@model IEnumerable<HangOut.Models.HG_Category>
+@using HangOut.Models
+ 
+   @{ List<HG_Items> Listitem = new HG_Items().GetAll(); }
+    <div class="card">
+        <div class="card-header">
+            <h1 style="text-align:center"><b>CATEGORY</b> </h1>
+            <hr />
+        </div>
+        <a href="/HG_Category/CreateEdit?ID=0" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            CategoryID
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.OrgID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Category)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                              @Html.DisplayFor(ModelItem => item.CategoryID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(ModelItem => item.OrgID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                <a href=" /HG_Category/CreateEdit?ID=@item.CategoryID" class="btn btn-warning btn-sm "> Edit</a>
+                                <a href="/HG_Category/Delete?ID=@item.CategoryID" class="btn btn-danger btn-sm "> Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>

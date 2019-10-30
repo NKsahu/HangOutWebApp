@@ -1,0 +1,56 @@
+﻿@model IEnumerable<HangOut.Models.HG_UserTypes>
+
+<div class=" card">
+    <div class=" card-header">
+        <h1 style="text-align:center"><b>MASTER PAGE</b> </h1>
+        <hr />
+    </div>
+    <a href="/HG_UserTypes/CreateEdit?ID=0" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <div class="card-body">
+
+
+        <table class="table table-bordered table-hover w-100" id="Tbl">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.UTID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserType)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserTypeName)
+                    </th>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </td>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(ModelItem => item.UTID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserTypeName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            <a href=" /HG_UserTypes/CreateEdit?ID=@item.UTID" class="btn btn-warning btn-sm "> Edit</a>
+                            <a href="/HG_UserTypes/Delete?ID=@item.UTID" class="btn btn-danger btn-sm "> Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

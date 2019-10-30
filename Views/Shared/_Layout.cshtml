@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HangOut | Fooddu</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" type="image/png" href="https://ithelper.ueuo.com\Images\iT-helperlogo\it-helper-logo.png">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="../AdminLTE/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="../AdminLTE/bower_components/jvectormap/jquery-jvectormap.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../AdminLTE/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../AdminLTE/dist/css/skins/_all-skins.min.css">
+    <link href="~/Assests/bootstrap-4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="~/Assests/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="../AdminLTE/bower_components/fastclick/lib/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../AdminLTE/dist/js/adminlte.min.js"></script>
+    <!-- Sparkline -->
+    <script src="../AdminLTE/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+    <!-- jvectormap  -->
+    <script src="../AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="../AdminLTE/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- SlimScroll -->
+    <script src="../AdminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- Google Font -->
+    <!--sql server table -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <!-- End sql server table -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!-- select 2-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+    <!-- end select 2-->
+    <!--Datepiker-->
+    <link href="~/AdminLTE/Datepicker/datepicker.css" rel="stylesheet" />
+    <script src="~/AdminLTE/Datepicker/datepicker.js"></script>
+    <!--/Datepiker-->
+    <!--/Datepiker-->
+    <style>
+        table {
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="vw_HG_UserDetails/Admin" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>A</b>LT</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>Hang</b>Out</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="../AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">@Session["Display_Name"] </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="../AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                                    <p>
+                                        @Session["ID"]  -- @Session["Display_Name"]
+                                        <small>Member since Nov. 2019</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="/vw_HG_UsersDetails/LogOut" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-asterisk" aria-hidden="true"></i></i>
+                            <span>MASTER</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="/HG_UserTypes/Index"><i class="fa fa-circle-o text-aqua"></i> MASTER</a></li>
+                            <li><a href="/HG_Items/Index "><i class="fa fa-circle-o text-aqua"></i>USER ITEM</a></li>
+                            <li><a href="/HG_Category/Index "><i class="fa fa-circle-o text-aqua"></i>CATEGORY</a></li>
+                           
+                        </ul>
+                    </li>
+                    
+                    <li><a href="/HG_OrganizationDetails/Index"><i class="fa fa-circle-o text-aqua"></i> <span>TRANSACTION</span></a></li>
+                    <li><a href="/Rental/Index"><i class="fa fa-circle-o text-aqua"></i> Rentals</a></li>
+                    <li>
+                        <a href="/RantPaid/Index"><i class="fa fa-circle-o text-aqua"></i> <span>Rent Paid </span></a>
+                    </li>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper" style="padding:10px">
+            <div class="container-fluid">
+                <!-- Content Header (Page header) -->
+                @RenderBody()
+            </div>
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <!-- ./wrapper -->
+    <!-- jQuery 3 -->
+
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+
+        $('#Tbl').DataTable({
+            "scrollY": "200px",
+            "scrollCollapse": true,
+            "paging": false,
+            "sScrollX": "100%",
+
+        });
+    });
+</script>

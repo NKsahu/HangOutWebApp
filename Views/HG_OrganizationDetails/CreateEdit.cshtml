@@ -1,0 +1,179 @@
+﻿@model HangOut.Models.HG_OrganizationDetails
+<div class="card">
+    <div class="card-header">
+        <h4 style="text-align:center;color:#000000"><b>ORGONIZATION</b></h4>
+        <hr />
+    </div>
+    <div class="card-body">
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.OrgID)
+        <div class="row">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.OrgTypes, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.OrgTypes, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.OrgTypes, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.HeadName, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.HeadName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.HeadName, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+                
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.PinCode, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.PinCode, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.PinCode, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.Cell, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Cell, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Cell, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.WebSite, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.WebSite, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.WebSite, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.Logo, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Logo, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Logo, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.GSTNO, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.GSTNO, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.GSTNO, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.PANNO, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.PANNO, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.PANNO, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-12">
+                @Html.LabelFor(model => model.ACNO, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.ACNO, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.ACNO, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-12">
+                @Html.LabelFor(model => model.AcType, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.AcType, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.AcType, "", new { @class = "text-danger" })
+
+            </div>
+
+
+
+
+
+
+
+            <div class="col-sm-4">
+                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
+
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Status)
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+
+            <div class="col-sm-1">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input type="submit" value="Save" class="btn btn-success" />
+
+            </div>
+        </div>
+        }
+    </div>
+</div>

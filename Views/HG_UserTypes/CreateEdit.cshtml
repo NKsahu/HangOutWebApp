@@ -1,0 +1,57 @@
+﻿@model HangOut.Models.HG_UserTypes
+@using HangOut.Models
+
+<div class="card">
+    <div class="card-header">
+        <h4 style="text-align:center;color:#000000"><b>MASTER PAGE</b></h4>
+        <hr />
+    </div>
+    <div class="card-body">
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.UTID)
+            <div class="row">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                
+                    @Html.ValidationMessageFor(model => model.UTID, "", new { @class = "text-danger" })
+
+                 
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.UserType, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.UserType, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.UserTypeName, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.UserTypeName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UserTypeName, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Status)
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="col-sm-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input type="submit" value="Save" class="btn btn-success" />
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
