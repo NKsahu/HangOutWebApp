@@ -12,6 +12,9 @@ namespace HangOut.Controllers
 {
     public class HG_CategoryController : Controller
     {
+
+
+
         // GET: HG_Category
         public ActionResult Index()
         {
