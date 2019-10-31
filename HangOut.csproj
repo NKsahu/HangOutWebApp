@@ -7298,8 +7298,8 @@
     <Content Include="Views\HG_OrganizationDetails\Index.cshtml" />
     <Content Include="Views\HG_OrganizationDetails\CreateEdit.cshtml" />
     <Content Include="Views\UsersMenu\Index.cshtml" />
-    <Content Include="Views\UsersMenu\CreateEdit.cshtml" />
-    <Content Include="Views\UsersMenu\Error.cshtml" />
+    <Content Include="Views\UsersMenu\Create.cshtml" />
+    <Content Include="Views\UsersMenu\SubMenuIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

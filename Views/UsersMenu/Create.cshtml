@@ -1,7 +1,4 @@
-﻿@model HangOut.Models.Common.UsersMenu
-    @using HangOut.Models 
-@using HangOut.Models.Common
-
+﻿@using HangOut.Models.Common
 @{
 
     Layout = null;
@@ -32,8 +29,8 @@
                 </div>
                 <div class="col-md-3">
                     @{
-                        List<UsersMenu> OnlyParentMenus =new UsersMenu().GetAll().FindAll(x => x.ParentMenuId == 0);
-                        OnlyParentMenus.Add(new UsersMenu { Menu_Id = 0, MenuDisplayName = "No-parent" });
+                        List<Menu> OnlyParentMenus = Menu.List.FindAll(x => x.ParentMenuId == 0);
+                        OnlyParentMenus.Add(new Menu { Menu_Id = 0, MenuDisplayName = "No-parent" });
                         SelectList selectParentMenu = new SelectList(OnlyParentMenus, "Menu_Id", "MenuDisplayName");
                     }
                     @Html.LabelFor(model => model.ParentMenuId, htmlAttributes: new { @class = "control-label " })
@@ -52,12 +49,17 @@
                     @Html.EditorFor(model => model.Menu_Icon, new { htmlAttributes = new { @class = "form-control ", @placeholder = "fa fa-IconName" } })
                 </div>
                 <div class="col-md-6">
-                    @{ 
-                        SelectList list = new SelectList(new HG_UserTypes().GetAll(), "UserName", "UserTypeName");
+                    @{
+                        List<SelectListItem> SLUserType = new List<SelectListItem>()
+                                                                    {
+                                                                         new SelectListItem { Text = "ADMIN", Value = "ADMIN" },
+                                                                         new SelectListItem { Text = "MESS-ADMIN", Value = "MESS-ADMIN" },
+                                                                         new SelectListItem { Text = "FOOD-COLLECTION", Value = "FOOD-COLLECTION" },
+                                                                         new SelectListItem { Text = "FOOD-PACKING", Value = "FOOD-PACKING" }
+                                                                    };
                     }
-                    
                     @Html.LabelFor(model => model.MultipleUserType, htmlAttributes: new { @class = "control-label " })
-                    @Html.ListBoxFor(model => model.MultipleUserType ,list, new { @multiple = "multiple", @class = "form-control", @name = "MultipleUserType[]", @placeholder = "Select User Types", required = "required" })
+                    @Html.ListBoxFor(model => model.MultipleUserType, SLUserType, new { @multiple = "multiple", @class = "form-control", @name = "MultipleUserType[]", @placeholder = "Select User Types", required = "required" })
 
                 </div>
                 <script>
