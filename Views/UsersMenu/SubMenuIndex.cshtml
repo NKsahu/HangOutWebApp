@@ -1,7 +1,62 @@
-﻿
+﻿@model IEnumerable<HangOut.Models.Common.UsersMenu>
+
 @{
-    ViewBag.Title = "SubMenuIndex";
+    Layout = null;
 }
 
-<h2>SubMenuIndex</h2>
+<div class="card">
+    <div class="card-header">
+        Sub Menu
+        <span class="float-right">
+            <a href="/UsersMenu/Create?Menu_Id=0" class="btn btn-success btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> <i class="fa fa-plus"></i></a>
+        </span>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-hover" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Menu_Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MenuDisplayName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ParentMenuId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MenuOrderNo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.User_Types)
+                    </th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Menu_Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MenuDisplayName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParentMenuId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MenuOrderNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User_Types)
+                    </td>
+                    <td>
+                        <a href="/UsersMenu/Create?Menu_Id=@item.Menu_Id" class="btn btn-warning btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> <i class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            }
 
+        </table>
+    </div>
+</div>
