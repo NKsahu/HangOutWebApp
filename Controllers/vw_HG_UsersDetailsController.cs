@@ -30,15 +30,30 @@ namespace HangOut.Controllers
             {
                 Session["ID"] = Obj .UserCode;
                 Session["Display_Name"] = Obj .UserName;
-                 return RedirectToAction("Admin");
+                HttpCookie cookie = new HttpCookie("UserInfo");
+                cookie.Values.Add("UserCode", Obj.UserCode.ToString());
+                cookie.Values.Add("UserName", Obj.UserName);
+                cookie.Values.Add("UserType", Obj.UserType);
+                Response.Cookies.Add(cookie);
+                return Json(new { url = "/vw_HG_UsersDetails/Admin" });
             }
-               ViewData["msg"] = "Invalid User Name or Password";
-            return View("Login");
+            else
+            {
+                return Json(new { msg = "Invalid Credential" });
+            }
+           
         }
         public ActionResult Admin()
         {
-
-            return View();
+            if (Request.Cookies["UserInfo"] != null)
+            {
+                return View();
+            }
+            else
+            {
+             return   RedirectToAction("vw_HG_UsersDetails");
+            }
+                
         }
 
         public ActionResult LogOut()

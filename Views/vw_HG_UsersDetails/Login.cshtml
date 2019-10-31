@@ -1,108 +1,45 @@
 ﻿@model HangOut.Models.vw_HG_UsersDetails
-@{ Layout = null;}
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-
-    @*<link href="~/Assests/bootstrap-4.3.1/css/bootstrap.min.css" rel="stylesheet" />
-        <script src="~/Assests/bootstrap-4.3.1/js/bootstrap.min.js"></script>
-        <script src="~/Assests/bootstrap-4.3.1/js/jquery-3.3.1.slim.min.js"></script>
-        <script src="~/Assests/bootstrap-4.3.1/js/popper.min.js"></script>*@
-    <link href="~/AdminLTE/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="~/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <link href="~/AdminLTE/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-    <script src="~/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
-    <link href="~/AdminLTE/bower_components/Ionicons/css/ionicons.min.css" rel="stylesheet" />
-    <link href="~/AdminLTE/dist/css/AdminLTE.min.css" rel="stylesheet" />
-    <link href="~/AdminLTE/plugins/iCheck/square/blue.css" rel="stylesheet" />
-    <script src="~/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-    
-
-    
-</head>
-<body>
-    <div class="row">
-        <div class="col-md-4">
-
-        </div>
-
-
-
-        <div class="col-sm-4 mt-5 pt-5  ">
-            @using (Html.BeginForm("LoginPost", "vw_HG_UsersDetails", FormMethod.Post))
-            {
-                <div class="login-box mt-5 pt-5 " style="box-shadow:4px 4px 2px black; z-index:100">
-                    <div class="login-logo">
-                        <a href="../../index2.html"><b>Hang</b>Out</a>
+<style>
+    #LoginModal {
+        font-family: 'Roboto', sans-serif;
+    }
+</style>
+<div class="modal hide fade" id="LoginModal" style="background-image:url('../../Assets/backimg.jpg');background-repeat: no-repeat;background-size: 100% 100%;">
+    <div class="row" style="height:100%; z-index: 999;background-color:rgba(0, 0, 0, 0.63)">
+        <div class="card" id="logsin" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%); min-width:280px; max-width:300px; box-shadow:2px 4px 4px #000000">
+            <div class="card-header" style="background-color:lightgrey">
+                <div class="row">
+                    <div class="col text-center" style="margin-top:-40px;">
+                        <img src="~/Assets/foodicon.jpg" width="70" height="70" />
+                        <h3 class="pt-2 mb-0">HANGOUT</h3>
                     </div>
-                    <!-- /.login-logo -->
-                    <div class="login-box-body">
-                        <p class="login-box-msg">Sign in to start your session</p>
-
-                        <form action="../../index2.html" method="post">
-                            <div class="form-group has-feedback">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label  text-dark"  ,required ="required",placeholder="UserName"})
-                                   
-                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control " } })
-                                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                                </div>
-
-                                
-                            </div>
-                            <div class="form-group has-feedback">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label text-dark", required = "required",placeholder= "Password" })
-                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { maxlength = "9", Type = "password", @class = "form-control" } })
-                                    <h6 style="color:red"> @ViewData["msg"] </h6>
-                                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                                </div>
-                                
-                                
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-8">
-                                    <div class="checkbox icheck">
-                                        <label>
-                                            <input type="checkbox"> Remember Me
-                                        </label>
-                                    </div>
-                                </div>
-                                <!-- /.col -->
-                                <div class="col-xs-4">
-                                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-                                </div>
-                                <!-- /.col -->
-                            </div>
-                        </form>
-
-                        <div class="social-auth-links text-center">
-                            <p>- OR -</p>
-                            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat">
-                                <i class="fa fa-facebook"></i> Sign in using
-                                Facebook
-                            </a>
-                            <a href="#" class="btn btn-block btn-social btn-google btn-flat">
-                                <i class="fa fa-google-plus"></i> Sign in using
-                                Google+
-                            </a>
-                        </div>
-                        <!-- /.social-auth-links -->
-
-                        <a href="#">I forgot my password</a><br>
-                        <a href="register.html" class="text-center">Register a new membership</a>
-
-                    </div>
-                    <!-- /.login-box-body -->
                 </div>
-            } <!-- /.login-box -->
             </div>
-        <div class="col-md-4">
+            <div class="card-body pt-1" id="LogSin">
+                @using (Ajax.BeginForm("LoginPost", "vw_HG_UsersDetails", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", LoadingElementId = "waiting" }))
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.Label("User Login Id", new { @class = "control-label " })
+                            @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        </div>
+                        <div class="col-md-12">
+                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label " })
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @type = "password", @class = "form-control", required = "required" } })
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <button type="submit" class="btn btn-secondary w-100">Login</button>
+                        </div>
+                    </div>
+                }
 
+            </div>
+            <div class="card-footer pb-1 pt-0">
+            </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+<script type="text/javascript">
+    $('#LoginModal').modal('show');
+</script>
