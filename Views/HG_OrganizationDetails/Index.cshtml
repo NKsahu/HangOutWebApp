@@ -1,15 +1,17 @@
 ﻿@model IEnumerable<HangOut.Models.HG_OrganizationDetails>
-    
+@{
+    Layout = null;
+}
 <div class=" card">
     <div class="card-header">
         <h1 style="text-align:center"><b>ORGONIZATION</b> </h1>
         <hr />
     </div>
-    <a href="/HG_OrganizationDetails/CreateEdit?ID=0" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <a href="/HG_OrganizationDetails/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
     <div class="card-body">
 
 
-        <table class="table table-bordered table-hover w-100" id="Tbl">
+        <table class="table table-bordered table-hover w-100" id="TBLID">
             <thead>
                 <tr>
                     <th>
@@ -51,7 +53,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Logo)
                     </th>
-                     
+
                     <th>
                         @Html.DisplayNameFor(model => model.GSTNO)
                     </th>
@@ -67,7 +69,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.AcType)
                     </th>
-                    
+
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
@@ -119,7 +121,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Logo)
                         </td>
-                        
+
                         <td>
                             @Html.DisplayFor(modelItem => item.GSTNO)
                         </td>
@@ -135,12 +137,12 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.AcType)
                         </td>
-                        
+
                         <td>
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
                         <td>
-                            <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn btn-warning btn-sm "> Edit</a>
+                            <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn btn-warning btn-sm "data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" > Edit</a>
                             <a href="/HG_OrganizationDetails/Delete?ID=@item.OrgID" class="btn btn-danger btn-sm "> Delete</a>
                         </td>
                     </tr>

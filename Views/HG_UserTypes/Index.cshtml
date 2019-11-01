@@ -1,11 +1,13 @@
 ﻿@model IEnumerable<HangOut.Models.HG_UserTypes>
-
+@{
+    Layout = null;
+}
 <div class=" card">
     <div class=" card-header">
         <h1 style="text-align:center"><b>MASTER PAGE</b> </h1>
         <hr />
     </div>
-    <a href="/HG_UserTypes/CreateEdit?ID=0" class="btn btn-success"  data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+    <a href="/HG_UserTypes/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
     <div class="card-body">
 
 
@@ -45,7 +47,7 @@
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
                         <td>
-                            <a href=" /HG_UserTypes/CreateEdit?ID=@item.UTID" class="btn btn-warning btn-sm "> Edit</a>
+                            <a href=" /HG_UserTypes/CreateEdit?ID=@item.UTID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" > Edit</a>
                             <a href="/HG_UserTypes/Delete?ID=@item.UTID" class="btn btn-danger btn-sm "> Delete</a>
                         </td>
                     </tr>

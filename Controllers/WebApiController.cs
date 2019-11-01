@@ -28,10 +28,11 @@ namespace HangOut.Controllers
             vw_HG_UsersDetails Exist = Objuser.Checkvw_HG_UsersDetails();
             if(Exist!=null)
             {
-                Objuser = null;
-            }else
+                Objuser = new vw_HG_UsersDetails();
+                Objuser.UserCode = -1; // ALREADY USER EXIST
+            }
+            else
             {
-
                 Objuser.UserCode = Objuser.save();
             }
 
