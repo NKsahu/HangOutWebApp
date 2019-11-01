@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-md-6">
                     @{ 
-                        SelectList list= new SelectList(new HG_UserTypes().GetAll(),"UserName","UserTypeName")
+                        SelectList list = new SelectList(new HG_UserTypes().GetAll(), "UserName", "UserTypeName");
                     }
                     
                     @Html.LabelFor(model => model.MultipleUserType, htmlAttributes: new { @class = "control-label " })
