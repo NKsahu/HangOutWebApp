@@ -7274,9 +7274,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Common\Cart.cs" />
     <Compile Include="Models\Common\UsersMenu.cs" />
+    <Compile Include="Models\DBCon.cs" />
     <Compile Include="Models\HG_Category.cs" />
     <Compile Include="Models\HG_Items.cs" />
+    <Compile Include="Models\HG_Orders.cs" />
     <Compile Include="Models\HG_OrganizationDetails.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />

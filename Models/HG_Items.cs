@@ -16,7 +16,7 @@ namespace HangOut.Models
         public int OrgID { get; set; }
         public string Items { get; set; }
         public double Price { get; set; }
-        public string Plates { get; set; }
+        public string Qty { get; set; }
         public string ItemMode { get; set; }
         public double Discount { get; set; }
         public int EntryBy { get; set; }
@@ -62,7 +62,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                 cmd.Parameters.AddWithValue("@Items", this.Items);
                 cmd.Parameters.AddWithValue("@Price", this.Price);
-                cmd.Parameters.AddWithValue("@Plates", this.Plates);
+                cmd.Parameters.AddWithValue("@Plates", this.Qty);
                 cmd.Parameters.AddWithValue("@ItemMode ", this.ItemMode);
                 cmd.Parameters.AddWithValue("@Discount ", this.Discount);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
@@ -105,7 +105,7 @@ namespace HangOut.Models
                     ObjTmp.OrgID = SDR.GetInt32(2);
                     ObjTmp.Items = SDR.GetString(3);
                     ObjTmp.Price = SDR.GetDouble(4);
-                    ObjTmp.Plates = SDR.GetString(5);
+                    ObjTmp.Qty = SDR.GetString(5);
                     ObjTmp.ItemMode = SDR.GetString(6);
                     ObjTmp.Discount = SDR.GetDouble(7);
                     ObjTmp.Status = SDR.GetBoolean(11);
@@ -139,7 +139,7 @@ namespace HangOut.Models
                     ObjTmp.OrgID = SDR.GetInt32(2);
                     ObjTmp.Items = SDR.GetString(3);
                     ObjTmp.Price = SDR.GetDouble(4);
-                    ObjTmp.Plates = SDR.GetString(5);
+                    ObjTmp.Qty = SDR.GetString(5);
                     ObjTmp.ItemMode = SDR.GetString(6);
                     ObjTmp.Discount = SDR.GetDouble(7);
                     ObjTmp.Status = SDR.GetBoolean(11);
