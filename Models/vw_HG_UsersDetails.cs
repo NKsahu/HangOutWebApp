@@ -96,22 +96,23 @@ namespace HangOut.Models
                 else
                 {
                     Quary = "Update vw_HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,status=@status where UserCode=@UserCode;";
-                    SqlCommand cmd = new SqlCommand(Quary, Con);
-                    cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
-                    cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
-                    cmd.Parameters.AddWithValue("@UserType", this.UserType);
-                    cmd.Parameters.AddWithValue("@UserName", this.UserName);
-                    cmd.Parameters.AddWithValue("@UserId", this.UserId);
-                    cmd.Parameters.AddWithValue("@Password", this.Password);
-                    cmd.Parameters.AddWithValue("@EMail", this.EMail);
-                    cmd.Parameters.AddWithValue("@UPhoto", this.UPhoto);
-                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
-                    cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@Status", this.Status);
-                    R = cmd.ExecuteNonQuery();
 
                 }
+                SqlCommand cmd = new SqlCommand(Quary, Con);
+                cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
+                cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
+                cmd.Parameters.AddWithValue("@UserType", this.UserType);
+                cmd.Parameters.AddWithValue("@UserName", this.UserName);
+                cmd.Parameters.AddWithValue("@UserId", this.UserId);
+                cmd.Parameters.AddWithValue("@Password", this.Password);
+                cmd.Parameters.AddWithValue("@EMail", this.EMail);
+                cmd.Parameters.AddWithValue("@UPhoto", this.UPhoto);
+                cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
+                cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
+                cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
+                cmd.Parameters.AddWithValue("@Status", this.Status);
+                R = cmd.ExecuteNonQuery();
+                this.UserCode = R ;
             }
             catch (System.Exception e){ e.ToString(); }
 

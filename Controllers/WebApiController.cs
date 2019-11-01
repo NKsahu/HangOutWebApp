@@ -1,10 +1,10 @@
-﻿using System.Web.Http;
+﻿using System.Web.Mvc;
 using HangOut.Models;
 using Newtonsoft.Json.Linq;
 
 namespace HangOut.Controllers
 {
-    public class WebApiController : ApiController
+    public class WebApiController : Controller
     {
         public JObject GetLogin(string Obj)
         {
@@ -17,7 +17,7 @@ namespace HangOut.Controllers
 
         }
 
-        public JObject GetRegistration(string Obj)
+        public JObject PostRegistration(string Obj)
         {
 
             vw_HG_UsersDetails Objuser = Newtonsoft.Json.JsonConvert.DeserializeObject<vw_HG_UsersDetails>(Obj);
