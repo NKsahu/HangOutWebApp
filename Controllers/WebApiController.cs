@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
 using HangOut.Models;
+using HangOut.Models.Common;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace HangOut.Controllers
@@ -39,6 +41,26 @@ namespace HangOut.Controllers
 
             return JObject.FromObject(Objuser);
 
+        }
+        [HttpPost]
+        public JArray GetItemList(string Obj)
+        {
+            JObject objParams = new JObject(Obj);
+            JArray jarrayObj = new JArray();
+            List<HG_Items> ListItems = new HG_Items().GetAll();
+            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == System.Int64.Parse(objParams["CID"].ToString()));
+            foreach( var Items in ListItems)
+            {
+                JObject objItem = new JObject();
+                objItem.Add("IID", Items.ItemID);
+                objItem.Add("ItemName", Items.Items);
+                objItem.Add("ItemPrice", Items.Price);
+                objItem.Add("ItemQuntity", Items.Qty);
+                objItem.Add("ItemImage", Items.Image);
+                objItem.Add("ItemCartValue", cartlist.FindAll(x => x.ItemId == Items.ItemID).Count);
+                jarrayObj.Add(objItem);
+            }
+           return jarrayObj;
         }
 
     }

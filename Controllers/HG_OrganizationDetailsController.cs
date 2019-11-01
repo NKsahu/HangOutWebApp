@@ -1,12 +1,11 @@
 ﻿using HangOut.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace HangOut.Controllers
 {
+    [HangOut.Models.Common.LoginFilter]
     public class HG_OrganizationDetailsController : Controller
     {
         // GET: HG_OrganizationDetails
