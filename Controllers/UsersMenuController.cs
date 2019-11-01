@@ -14,6 +14,7 @@ namespace HangOut.Controllers
         {
             UsersMenu Objuser = new UsersMenu();
             List<UsersMenu> Listuser = Objuser.GetAll();
+            Listuser = Listuser.FindAll(x => x.ParentMenuId == 0);
             return View(Listuser);
         }
         [HttpGet]
