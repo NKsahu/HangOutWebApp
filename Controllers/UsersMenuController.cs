@@ -14,30 +14,41 @@ namespace HangOut.Controllers
         {
             UsersMenu Objuser = new UsersMenu();
             List<UsersMenu> Listuser = Objuser.GetAll();
-            return View();
+            return View(Listuser);
         }
-        public ActionResult CreateEdit(int ID)
+        [HttpGet]
+        public ActionResult Create(int Menu_Id = 0)
         {
-            UsersMenu Objuser = new UsersMenu();
-            if(ID>0)
+            UsersMenu menu = new UsersMenu();
+            if (Menu_Id > 0)
             {
-                Objuser = Objuser.GetOne(ID);
+                menu = menu.GetOne(Menu_Id);
+                if (menu.MultipleUserType == null || menu.MultipleUserType.Length == 0)
+                {
+                    menu.MultipleUserType = menu.User_Types.Split(',');
+                }
             }
-            return View(Objuser);
+            return View(menu);
         }
         [HttpPost]
-        public ActionResult CreateEdit(UsersMenu objuser)
+        public ActionResult Create(UsersMenu ObjMenu)
         {
-            int i = 0;
-            if(i >  0)
-            
-               return  RedirectToAction("Index");
-            return RedirectToAction("Error");
-            
+            if (ObjMenu.MenuDisplayName == null || ObjMenu.MenuDisplayName == "" || ObjMenu.MenuDisplayName == "0")
+            {
+                return Json(new { msg = "Please Enter Valid Menu Name" });
+            }
+            string UserTypesstring = string.Join(",", ObjMenu.MultipleUserType);
+            ObjMenu.User_Types = UserTypesstring;
+            ObjMenu.Save();
+            return RedirectToAction("index");
         }
-        public ActionResult Error()
+
+        public ActionResult SubMenuIndex(int Sid)
         {
-            return View();
+            List<UsersMenu> Listuser =new UsersMenu().GetAll();
+            List<UsersMenu> MenuList = Listuser.FindAll(x => x.ParentMenuId == Sid);
+            MenuList = MenuList.OrderBy(x => x.MenuOrderNo).ToList();
+            return View(MenuList);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿@model IEnumerable<HangOut.Models.Common.UsersMenu>
+
 @{
     Layout = null;
 }
 
 <div class="card">
     <div class="card-header">
-        Menu List
+        Sub Menu
         <span class="float-right">
             <a href="/UsersMenu/Create?Menu_Id=0" class="btn btn-success btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> <i class="fa fa-plus"></i></a>
         </span>
@@ -14,7 +15,6 @@
         <table class="table table-bordered table-hover" id="TBLID">
             <thead>
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.Section)</th>
                     <th>
                         @Html.DisplayNameFor(model => model.Menu_Id)
                     </th>
@@ -27,12 +27,8 @@
                     <th>
                         @Html.DisplayNameFor(model => model.MenuOrderNo)
                     </th>
-
                     <th>
                         @Html.DisplayNameFor(model => model.User_Types)
-                    </th>
-                    <th>
-                        Sub Menu
                     </th>
                     <th>Edit</th>
                 </tr>
@@ -40,7 +36,6 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelitem => item.Section)</td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Menu_Id)
                     </td>
@@ -57,17 +52,7 @@
                         @Html.DisplayFor(modelItem => item.User_Types)
                     </td>
                     <td>
-                        @{
-                            if (item.MenuLink == null || item.MenuLink == "")
-                            {
-                                <a href="/UsersMenu/SubMenuIndex?Sid=@item.Menu_Id" class="btn btn-success btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting">
-                                    <i class="fa fa-bars" aria-hidden="true"></i>
-                                </a>
-                            }
-                        }
-                    </td>
-                    <td>
-                        <a href="/UsersMenu/Create? Id=@item.Menu_Id" class="btn btn-warning btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> <i class="fa fa-edit"></i></a>
+                        <a href="/UsersMenu/Create?Menu_Id=@item.Menu_Id" class="btn btn-warning btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> <i class="fa fa-edit"></i></a>
                     </td>
                 </tr>
             }

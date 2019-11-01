@@ -1,7 +1,6 @@
 ﻿@model HangOut.Models.Common.UsersMenu
-    @using HangOut.Models 
 @using HangOut.Models.Common
-
+@using HangOut.Models
 @{
 
     Layout = null;
@@ -9,7 +8,7 @@
 <div class="card">
     <div class="card-header"> Menu </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("Create", "Menu", new { Menu_Id = Model.Menu_Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("Create", "UsersMenu", new { Menu_Id = Model.Menu_Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             <div class="row">
                 <div class="col-md-2">
@@ -32,7 +31,8 @@
                 </div>
                 <div class="col-md-3">
                     @{
-                        List<UsersMenu> OnlyParentMenus =new UsersMenu().GetAll().FindAll(x => x.ParentMenuId == 0);
+                        List<UsersMenu> List = new UsersMenu().GetAll();
+                        List<UsersMenu> OnlyParentMenus = List.FindAll(x => x.ParentMenuId == 0);
                         OnlyParentMenus.Add(new UsersMenu { Menu_Id = 0, MenuDisplayName = "No-parent" });
                         SelectList selectParentMenu = new SelectList(OnlyParentMenus, "Menu_Id", "MenuDisplayName");
                     }
@@ -52,16 +52,17 @@
                     @Html.EditorFor(model => model.Menu_Icon, new { htmlAttributes = new { @class = "form-control ", @placeholder = "fa fa-IconName" } })
                 </div>
                 <div class="col-md-6">
-                    @{ 
-                        SelectList list = new SelectList(new HG_UserTypes().GetAll(), "UserName", "UserTypeName");
+                    @{
+                        List<HG_UserTypes> UserType = new HG_UserTypes().GetAll();
+                        SelectList SLUserType = new SelectList(UserType, "UserType", "UserTypeName");
+
                     }
-                    
                     @Html.LabelFor(model => model.MultipleUserType, htmlAttributes: new { @class = "control-label " })
-                    @Html.ListBoxFor(model => model.MultipleUserType ,list, new { @multiple = "multiple", @class = "form-control", @name = "MultipleUserType[]", @placeholder = "Select User Types", required = "required" })
+                    @Html.ListBoxFor(model => model.MultipleUserType, SLUserType, new { @multiple = "multiple", @class = "form-control", @name = "MultipleUserType[]", @placeholder = "Select User Types", required = "required" })
 
                 </div>
                 <script>
-                $("#MultipleUserType").select2();
+                    $("#MultipleUserType").select2();
                 </script>
                 <div class="col-md-1" style="margin-top:20px">
                     <input type="submit" value="Create" class="btn btn-secondary" />
