@@ -4,14 +4,14 @@
         font-family: 'Roboto', sans-serif;
     }
 </style>
-<div class="modal hide fade" id="LoginModal" style="background-image:url('../../Assets/backimg.jpg');background-repeat: no-repeat;background-size: 100% 100%;">
+<div class="modal hide fade" id="LoginModal" style="background-image:url('../../Assets/back.jpg');background-repeat: no-repeat;background-size: 100% 100%;">
     <div class="row" style="height:100%; z-index: 999;background-color:rgba(0, 0, 0, 0.63)">
         <div class="card" id="logsin" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%); min-width:280px; max-width:300px; box-shadow:2px 4px 4px #000000">
-            <div class="card-header" style="background-color:lightgrey">
+            <div class="card-header" style="background-color:#223D71">
                 <div class="row">
                     <div class="col text-center" style="margin-top:-40px;">
-                        <img src="~/Assets/foodicon.jpg" width="70" height="70" />
-                        <h3 class="pt-2 mb-0">HANGOUT</h3>
+                        <img src="~/Assets/fork.png" width="70" height="70" />
+                        <h3 class="text-white">HANGOUT</h3>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                 {
                     <div class="row">
                         <div class="col-md-12">
-                            @Html.Label("User Login Id", new { @class = "control-label " })
+                            @Html.Label("User Login ", new { @class = "control-label " })
                             @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                         </div>
                         <div class="col-md-12">
@@ -28,7 +28,7 @@
                             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @type = "password", @class = "form-control", required = "required" } })
                         </div>
                         <div class="col-md-12 mt-3">
-                            <button type="submit" class="btn btn-secondary w-100">Login</button>
+                            <button type="submit"  style="background-color:#223D71"class="btn  w-100 text-white">Login</button>
                         </div>
                     </div>
                 }

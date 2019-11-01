@@ -6605,6 +6605,7 @@
     <Content Include="AdminLTE\plugins\timepicker\bootstrap-timepicker.min.js" />
     <Content Include="Assets\AjaxForm\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Assets\autonumeric.js" />
+    <Content Include="Assets\back.jpg" />
     <Content Include="Assets\backimg.jpg" />
     <Content Include="Assets\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css" />
     <Content Include="Assets\bootstrap-4.3.1-dist\css\bootstrap-reboot.min.css" />
@@ -6615,10 +6616,9 @@
     <Content Include="Assets\Datepicker\datepicker.css" />
     <Content Include="Assets\Datepicker\datepicker.js" />
     <Content Include="Assets\foodicon.jpg" />
-    <Content Include="Assets\FoodLogo.png" />
+    <Content Include="Assets\fork.png" />
     <Content Include="Assets\jQuery\animate.css" />
     <Content Include="Assets\jQuery\jquery-3.4.1.min.js" />
-    <Content Include="Assets\Loginbg.jpg" />
     <Content Include="Assets\Mystyle.css" />
     <Content Include="Assets\Select2\css\select2.min.css" />
     <Content Include="Assets\Select2\js\i18n\en.js" />

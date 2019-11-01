@@ -16,9 +16,11 @@ namespace HangOut.Controllers
         public ActionResult vw_HG_UsersDetails()
         {
             // GET: Home
-           
-                ViewData["msg"] = "";
-                return View("Login");
+            if (Request.Cookies["UserInfo"] != null)
+            {
+                return RedirectToAction("Admin");
+            }
+            return View("Login");
            }
 
 
@@ -29,7 +31,6 @@ namespace HangOut.Controllers
              if (Obj != null)
             {
                 Session["ID"] = Obj .UserCode;
-                Session["Display_Name"] = Obj .UserName;
                 HttpCookie cookie = new HttpCookie("UserInfo");
                 cookie.Values.Add("UserCode", Obj.UserCode.ToString());
                 cookie.Values.Add("UserName", Obj.UserName);
@@ -60,6 +61,12 @@ namespace HangOut.Controllers
         {
             FormsAuthentication.SignOut();
             Session.Abandon(); // it will clear the session at the end of request
+            if (Request.Cookies["UserInfo"] != null)
+            {
+                var c = new HttpCookie("UserInfo");
+                c.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(c);
+            }
             return RedirectToAction("vw_HG_UsersDetails");
         }
     }
