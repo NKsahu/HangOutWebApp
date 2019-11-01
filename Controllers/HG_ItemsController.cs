@@ -31,15 +31,21 @@ namespace HangOut.Controllers
                 return View(Objitem);
             }
         [HttpPost]
-        public ActionResult CreateEdit(HG_Items Objitem)
+        public ActionResult CreateEdit(HG_Items Objitem, System.Web.HttpPostedFileBase FoodImg)
         {
-
-
+            Objitem.EntryBy =System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             int i = Objitem.Save();
-
-            if (i > 0)
-                return RedirectToAction("Index");
-            return RedirectToAction("Error");
+            if (i > 0 && FoodImg!=null)
+            {
+                FoodImg.SaveAs(System.IO.Path.Combine(Server.MapPath("~/FoodImg/"), i + ".jpg"));
+            }
+            if (Objitem.Image.Equals(""))
+            {
+                Objitem.Image = "/FoodImg/"+i+".jpg";
+                if (Objitem.Save() < 1)
+                    return Json(new { msg = "Error in Update Items" });
+            }
+            return RedirectToAction("Index");
         }
 
         public ActionResult Delete(int ID)

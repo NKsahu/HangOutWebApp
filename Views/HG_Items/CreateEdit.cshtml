@@ -9,12 +9,29 @@
         <hr />
     </div>
     <div class="card-body">
-           
 
-        @using (Html.BeginForm())
+
+        @using (Ajax.BeginForm("CreateEdit", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-            @Html.AntiForgeryToken()
+           
             @Html.HiddenFor(model => model.ItemID)
+           
+            <div class="row">
+                <div class="col text-center">
+                    @if (Model.ItemID > 0)
+                    {
+
+                        <img id="DemoUser" src="@Model.Image" width="110" height="110" class="mb-4" /><br />
+                        <input type="file" id="FoodImg" name="FoodImg" value="@Model.Image" accept="image/jpeg" onChange="document.getElementById('DemoUser').src = window.URL.createObjectURL(this.files[0])" />
+                    }
+                    else
+                    {
+                        <img id="DemoUser" src="~/Assets/fork.png" width="110" height="110" class="mb-4" /><br />
+                        <input type="file" id="FoodImg" name="FoodImg" value="" required accept="image/jpeg" onChange="document.getElementById('DemoUser').src = window.URL.createObjectURL(this.files[0])" />
+                    }
+
+                </div>
+            </div>
             <div class="row">
 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })

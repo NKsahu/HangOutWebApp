@@ -17,7 +17,7 @@
 
 
                 <tr>
-
+                    <th>@Html.DisplayNameFor(model=>model.Image)</th>
                     <th>
                         @Html.DisplayName( "Category Name")
                     </th>
@@ -50,7 +50,9 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-
+                        <td>
+                            <img src="@item.Image" width="60" height="60" />
+                        </td>
                         <td>
                              @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
                             @objcategory.Category
