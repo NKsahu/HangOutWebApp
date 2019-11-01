@@ -1,166 +1,172 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>HangOut | Fooddu</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="icon" type="image/png" href="https://ithelper.ueuo.com\Images\iT-helperlogo\it-helper-logo.png">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="../AdminLTE/bower_components/font-awesome/css/font-awesome.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="../AdminLTE/bower_components/Ionicons/css/ionicons.min.css">
-    <!-- jvectormap -->
-    <link rel="stylesheet" href="../AdminLTE/bower_components/jvectormap/jquery-jvectormap.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../AdminLTE/dist/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="../AdminLTE/dist/css/skins/_all-skins.min.css">
-    <link href="~/Assests/bootstrap-4.3.1/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="~/AdminLTE/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="~/Assests/bootstrap-4.3.1/js/bootstrap.min.js"></script>
-    <!-- FastClick -->
-    <script src="../AdminLTE/bower_components/fastclick/lib/fastclick.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../AdminLTE/dist/js/adminlte.min.js"></script>
-    <!-- Sparkline -->
-    <script src="../AdminLTE/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-    <!-- jvectormap  -->
-    <script src="../AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-    <script src="../AdminLTE/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <!-- SlimScroll -->
-    <script src="../AdminLTE/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-    <!-- Google Font -->
-    <!--sql server table -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <!-- End sql server table -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <!-- select 2-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
-    <!-- end select 2-->
-    <!--Datepiker-->
-    <link href="~/AdminLTE/Datepicker/datepicker.css" rel="stylesheet" />
-    <script src="~/AdminLTE/Datepicker/datepicker.js"></script>
-    <!--/Datepiker-->
-    <!--/Datepiker-->
-    <style>
-        table {
-            width: 100% !important;
-        }
-    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HANGOUT| N-Work Technology</title>
+    <!-- CSS -->
+    <link rel="shortcut icon" type="image/png" href="~/Assets/FoodLogo.png">
+    <link href="~/Assets/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <!-- JS -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6EOAVbyXcsjpq0JkNNKAkCkPl650O4Z4&libraries=places"></script>
+    <script src="~/Assets/jQuery/jquery-3.4.1.min.js"></script>
+    <script src="~/Assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script src="~/Assets/AjaxForm/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Assets/Website.js"></script>
+    <script src="~/Assets/autonumeric.js"></script>
+
+    <!-- Select2 cdn(content deliver network)-->
+    <link href="~/Assets/Select2/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Assets/Select2/js/select2.min.js"></script>
+
+    <!-- Bootstrap Date picker -->
+    <link href="~/Assets/Datepicker/datepicker.css" rel="stylesheet" />
+    <script src="~/Assets/Datepicker/datepicker.js"></script>
+    <link href="~/Assets/jQuery/animate.css" rel="stylesheet" />
+    <link href="~/Assets/Mystyle.css" rel="stylesheet" />
+
+    @*<link href='https://fonts.googleapis.com/css?family=Libre Barcode 39' rel='stylesheet'>*@
+    <!-- datatable -->
+    <link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://www.datatables.net/download/build/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    @*<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+    <!--responsive voice js-->
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
-    <div class="wrapper">
-        <header class="main-header">
-            <!-- Logo -->
-            <a href="vw_HG_UserDetails/Admin" class="logo">
-                <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>A</b>LT</span>
-                <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Hang</b>Out</span>
-            </a>
-            <!-- Header Navbar: style can be found in header.less -->
-            <nav class="navbar navbar-static-top">
-                <!-- Sidebar toggle button-->
-                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                </a>
-                <!-- Navbar Right Menu -->
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
+<body>
+    <!--Waiting Spinner-->
+    <div id="waiting" style="display:none;"><div id="pwaiting"><i class="fa fa-cog fa-spin fa-3x fa-fw"></i></div></div>
+    <!--End Waiting Spinner-->
+    @RenderBody()
 
-                        <!-- User Account: style can be found in dropdown.less -->
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="../AdminLTE/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                                <span class="hidden-xs">@Session["Display_Name"] </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                                <li class="user-header">
-                                    <img src="../AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-
-                                    <p>
-                                        @Session["ID"]  -- @Session["Display_Name"]
-                                        <small>Member since Nov. 2019</small>
-                                    </p>
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="/vw_HG_UsersDetails/LogOut" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <!-- Left side column. contains the logo and sidebar -->
-        <aside class="main-sidebar">
-            <!-- sidebar: style can be found in sidebar.less -->
-            <section class="sidebar">
-                
-                <ul class="sidebar-menu" data-widget="tree">
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-asterisk" aria-hidden="true"></i></i>
-                            <span>MASTER</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/HG_UserTypes/Index"><i class="fa fa-circle-o text-aqua"></i> MASTER</a></li>
-                            <li><a href="/HG_Items/Index "><i class="fa fa-circle-o text-aqua"></i>USER ITEM</a></li>
-                            <li><a href="/HG_Category/Index "><i class="fa fa-circle-o text-aqua"></i>CATEGORY</a></li>
-                           
-                        </ul>
-                    </li>
-                    
-                    <li><a href="/HG_OrganizationDetails/Index"><i class="fa fa-circle-o text-aqua"></i> <span>TRANSACTION</span></a></li>
-                    <li><a href="/Rental/Index"><i class="fa fa-circle-o text-aqua"></i> Rentals</a></li>
-                    <li>
-                        <a href="/RantPaid/Index"><i class="fa fa-circle-o text-aqua"></i> <span>Rent Paid </span></a>
-                    </li>
-                </ul>
-            </section>
-            <!-- /.sidebar -->
-        </aside>
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper" style="padding:10px">
-            <div class="container-fluid">
-                <!-- Content Header (Page header) -->
-                @RenderBody()
+    <!--Warning Model-->
+    <div class="modal fade bd-example-modal-sm pr-0" id="WarningModel" tabindex="-1" role="dialog" aria-labelledby="WarningModel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content border border-warning text-center">
+                <div class="modal-header pt-2 pb-2 bg-secondary " style="text-align:center !important;">
+                    <h5 class="modal-title w-100" style="color:#fffa08;"> <i class="fas fa-exclamation-triangle"></i> Warning</h5>
+                </div><div class="modal-body text-center"></div>
             </div>
         </div>
-        <!-- /.content-wrapper -->
-        <!-- Add the sidebar's background. This div must be placed
-             immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
     </div>
-    <!-- ./wrapper -->
-    <!-- ./wrapper -->
-    <!-- jQuery 3 -->
+    <!--End Warning Model-->
+    <!--popup modeal-->
 
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-max  modal-xl" style="max-width:100% ;height:100%">
+            <div class="modal-content" style="height:100%">
+                <div class="modal-header" style="top:-15px;right:10px;position:absolute;z-index:10">
+                    <button type="button" style="font-size:50px;" class="close" aria-hidden="true" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body " data-height="100%" style="padding:0px">
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade in" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-max  modal-xl" style="max-width:100% ;height:100%">
+            <div class="modal-content" style="height:100%">
+                <div class="modal-header" style="top:-15px;right:10px;position:absolute;z-index:10">
+                    <button type="button" style="font-size:50px;" class="close" aria-hidden="true" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body " data-height="100%" style="padding:0px">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--pop up modal en-->
 </body>
 </html>
 <script>
-    $(document).ready(function () {
+    $("body").on('DOMSubtreeModified', "#DynamicData", function () {
+        //=======Date Picker ============
+        $(".DateField").datepicker();
+        //======= Data Table ============
+        if (!$.fn.DataTable.isDataTable('#TBLID')) {
+            LoadDataTable();
+        }
+        //=========== End Datatable ============
+    });
 
-        $('#Tbl').DataTable({
-            "scrollY": "200px",
+    $("body").on('DOMSubtreeModified', "#DynamicData", function () {
+        //=======Date Picker ============
+        $(".DateField").datepicker();
+        //========== Only Char =============
+        $(".OnlyChar").keypress(function (e) {
+            var regex = new RegExp("[a-zA-Z ]");
+            var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            if (regex.test(str)) {
+                return true;
+            }
+            e.preventDefault();
+            return false;
+        });
+        $(".OnlyNum").keypress(function (e) {
+            var regex = new RegExp("[0-9]");
+            var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            if (regex.test(str)) {
+                return true;
+            }
+            e.preventDefault();
+            return false;
+        });
+        //========= End Only Char ==============
+
+        $('.auto').autoNumeric('init', {
+            vMax: '100000000000000000000', vMin: '-100000000000000000000', aSep: ''
+        });
+
+        $('.autodouble').each(function () {
+                $(this).autoNumeric('init', {
+                    vMax: '100000000000000000000.00', vMin: '-100000000000000000000.00', aSep: ''
+                });
+
+        });
+
+
+    });
+
+    //============= Disable Back button =================
+    function preventBack() {
+        window.history.forward();
+    }
+    window.onunload = function () {
+        null;
+    };
+    setTimeout("preventBack()", 0);
+    //============= End Disable Back button =============
+
+    //===cal datatable=====
+
+    function LoadDataTable() {
+     var table=   $("#TBLID").DataTable({
+
+            "scrollY": "300px",
             "scrollCollapse": true,
             "paging": false,
             "sScrollX": "100%",
+            "bScrollCollapse": true,
+            "dom": 'Bfrtip',
+         "buttons": ['colvis','excel', 'pdf', { extend: 'print', title: 'Impression', exportOptions: { columns: ':visible', stripHtml:false } },]
 
         });
-    });
+        table.buttons.exportData({
+            stripHtml: true
+        });
+
+    }
+
+
 </script>

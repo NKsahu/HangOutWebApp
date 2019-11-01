@@ -1,0 +1,72 @@
+﻿@model HangOut.Models.Common.UsersMenu
+    @using HangOut.Models 
+@using HangOut.Models.Common
+
+@{
+
+    Layout = null;
+}
+<div class="card">
+    <div class="card-header"> Menu </div>
+    <div class="card-body">
+        @using (Ajax.BeginForm("Create", "Menu", new { Menu_Id = Model.Menu_Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            <div class="row">
+                <div class="col-md-2">
+                    @{
+                        List<SelectListItem> SectionType = new List<SelectListItem>()
+                                                                    {
+                                                                         new SelectListItem { Text = "ADMIN", Value = "ADMIN" },
+                                                                         new SelectListItem { Text = "ACCOUNT", Value = "ACCOUNT" },
+
+                                                                    };
+                    }
+                    @Html.LabelFor(model => model.Section, htmlAttributes: new { @class = "control-label " })
+                    @Html.DropDownListFor(model => model.Section, SectionType, new { @class = "form-control", required = "required" })
+
+                </div>
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.MenuDisplayName, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.MenuDisplayName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                </div>
+                <div class="col-md-3">
+                    @{
+                        List<UsersMenu> OnlyParentMenus =new UsersMenu().GetAll().FindAll(x => x.ParentMenuId == 0);
+                        OnlyParentMenus.Add(new UsersMenu { Menu_Id = 0, MenuDisplayName = "No-parent" });
+                        SelectList selectParentMenu = new SelectList(OnlyParentMenus, "Menu_Id", "MenuDisplayName");
+                    }
+                    @Html.LabelFor(model => model.ParentMenuId, htmlAttributes: new { @class = "control-label " })
+                    @Html.DropDownListFor(model => model.ParentMenuId, selectParentMenu, new { @class = "form-control OnlyNum", required = "required" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.MenuOrderNo, htmlAttributes: new { @class = "control-label " })
+                    @Html.TextBoxFor(model => model.MenuOrderNo, new { @class = "form-control OnlyNum", required = "required" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.MenuLink, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.MenuLink, new { htmlAttributes = new { @class = "form-control ", @placeholder = "/CntrName/FunName?id etc." } })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Menu_Icon, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Menu_Icon, new { htmlAttributes = new { @class = "form-control ", @placeholder = "fa fa-IconName" } })
+                </div>
+                <div class="col-md-6">
+                    @{ 
+                        SelectList list= new SelectList(new HG_UserTypes().GetAll(),"UserName","UserTypeName")
+                    }
+                    
+                    @Html.LabelFor(model => model.MultipleUserType, htmlAttributes: new { @class = "control-label " })
+                    @Html.ListBoxFor(model => model.MultipleUserType ,list, new { @multiple = "multiple", @class = "form-control", @name = "MultipleUserType[]", @placeholder = "Select User Types", required = "required" })
+
+                </div>
+                <script>
+                $("#MultipleUserType").select2();
+                </script>
+                <div class="col-md-1" style="margin-top:20px">
+                    <input type="submit" value="Create" class="btn btn-secondary" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
