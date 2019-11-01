@@ -1,24 +1,28 @@
 ﻿@model IEnumerable<HangOut.Models.HG_Items>
-
-
+   @using HangOut.Models
+@{
+    Layout = null;
+}
+@{ List<HG_Category> listitems = new HG_Category().GetAll();}
+@{List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();  }
 <div class="card">
     <div class="card-header">
         <h1 style="text-align:center"><b>USER ITEM</b> </h1>
         <hr />
     </div>
-    <a href="/HG_Items/CreateEdit?ID=0" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <a href="/HG_Items/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
     <div class="card-body">
-        <table class="table table-bordered table-hover w-100" id="Tbl">
+        <table class="table table-bordered table-hover w-100" id="TBLID">
             <thead>
 
 
                 <tr>
-                      
+
                     <th>
-                        @Html.DisplayNameFor(model => model.CategoryID)
+                        @Html.DisplayName( "Category Name")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.OrgID)
+                        @Html.DisplayName("Orgonization Name")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Items)
@@ -46,12 +50,14 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        
+
                         <td>
-                            @Html.DisplayFor(modelItem => item.CategoryID)
+                             @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
+                            @objcategory.Category
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.OrgID)
+                            @{HG_OrganizationDetails objorgonization = listorgonization.Find(x => x.OrgID == item.OrgID);}
+                            @objorgonization.Name
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Items)
@@ -73,7 +79,7 @@
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
                         <td>
-                            <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm "> Edit</a>
+                            <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" > Edit</a>
                             <a href="/HG_Items/Delete?ID=@item.ItemID" class="btn btn-danger btn-sm "> Delete</a>
                         </td>
                     </tr>

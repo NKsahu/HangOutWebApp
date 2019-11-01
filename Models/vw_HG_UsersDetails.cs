@@ -22,7 +22,11 @@ namespace HangOut.Models
         public DateTime EntryDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public bool Status { get; set; }
-
+       public vw_HG_UsersDetails()
+        {
+            EMail = "";
+            UPhoto = "";
+        }
         public List<vw_HG_UsersDetails> GetAll()
         {
             SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -88,18 +92,19 @@ namespace HangOut.Models
             try
             {
                 Con.Open();
+                SqlCommand cmd = null;
                 string Quary = "";
                 if (this.UserCode == 0)
                 {
-                    Quary = "Insert into vw_HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status); ";
+                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status);SELECT SCOPE_IDENTITY(); ";
+                    cmd= new SqlCommand(Quary, Con);
                 }
                 else
                 {
-                    Quary = "Update vw_HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,status=@status where UserCode=@UserCode;";
-
+                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,status=@status where UserCode=@UserCode;";
+                    cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
+                    cmd =   new SqlCommand(Quary, Con);
                 }
-                SqlCommand cmd = new SqlCommand(Quary, Con);
-                cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                 cmd.Parameters.AddWithValue("@UserType", this.UserType);
                 cmd.Parameters.AddWithValue("@UserName", this.UserName);
@@ -111,8 +116,20 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
-                R = cmd.ExecuteNonQuery();
-                this.UserCode = R ;
+               
+                if (this.UserCode == 0)
+                {
+                    R = System.Convert.ToInt32(cmd.ExecuteScalar());
+                   
+                }
+                else
+                {
+                   if(cmd.ExecuteNonQuery() > 0)
+                    {
+                        R = this.UserCode;
+                    }
+                }
+               
             }
             catch (System.Exception e){ e.ToString(); }
 
