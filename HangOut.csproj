@@ -153,6 +153,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HG_CategoryController.cs" />
     <Compile Include="Controllers\HG_ItemsController.cs" />
+    <Compile Include="Controllers\HG_OrdersController.cs" />
     <Compile Include="Controllers\HG_OrganizationDetailsController.cs" />
     <Compile Include="Controllers\HG_UserTypesController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
@@ -192,6 +193,7 @@
     <Content Include="Views\UsersMenu\Index.cshtml" />
     <Content Include="Views\UsersMenu\Create.cshtml" />
     <Content Include="Views\UsersMenu\SubMenuIndex.cshtml" />
+    <Content Include="Views\HG_Orders\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -202,6 +204,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
+    <Folder Include="Views\HG_Order\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
