@@ -9,5 +9,10 @@ namespace HangOut.Models.Common
         public System.Int64 OrgId { get; set; }
         public static List<Cart> List { get; set; }
 
+      public  Cart()
+        {
+            Count = 0;
+
+        }
     }
 }
