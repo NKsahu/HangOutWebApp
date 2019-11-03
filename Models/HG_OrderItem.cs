@@ -5,6 +5,7 @@ using System.Web;
 
 namespace HangOut.Models
 {
+
     public class HG_OrderItem
     {
         public System.Int64 OIID { get; set; }
