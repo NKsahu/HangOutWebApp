@@ -35,10 +35,10 @@ namespace HangOut.Models
             try
             {
                 if (this.OIID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO ORDERITEM (FID,Price,Count,Qty,OID,Deleted,MessId,OrderDate,TifinRackId,UpdatedBy,UpdationDate,TifinID) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@MessId,@OrderDate,@TifinRackId,@UpdatedBy,@UpdationDate,@TifinID);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO ORDERITEM (FID,Price,Count,Qty,OID,Deleted,OrderDate,UpdatedBy,UpdationDate) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@OrderDate,@UpdatedBy,@UpdationDate);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,MessId=@MessId,Status=@Status,TifinRackId=@TifinRackId,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate,TifinID=@TifinID where OIID=@OIID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate where OIID=@OIID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OIID", this.OIID);
                 }
                 cmd.Parameters.AddWithValue("@FID", this.FID);
@@ -88,10 +88,10 @@ namespace HangOut.Models
                     ObjTmp.Count = SDR.GetInt32(3);
                     ObjTmp.Qty = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
-                    ObjTmp.Status = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8);
-                    ObjTmp.OrderDate = SDR.IsDBNull(9) ? System.DateTime.Now : SDR.GetDateTime(9);
-                    ObjTmp.UpdatedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
-                    ObjTmp.UpdationDate = SDR.IsDBNull(12) ? System.DateTime.Now : SDR.GetDateTime(12);
+                    ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(8);
+                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? System.DateTime.Now : SDR.GetDateTime(9);
+                    ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(11);
+                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? System.DateTime.Now : SDR.GetDateTime(12);
                     ListTmp.Add(ObjTmp);
                 }
             }
