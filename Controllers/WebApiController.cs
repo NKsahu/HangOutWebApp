@@ -98,14 +98,32 @@ namespace HangOut.Controllers
             return Count + "," + Amt + "," + "0";
         }
         [HttpPost]
-        public JObject GetCart(string CID)
+        public JObject GetCart(string Obj)
         {
+            JObject ParaMeters = JObject.Parse(Obj);
+            System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
+            System.Int64 OrgId = System.Convert.ToInt64(ParaMeters["OrgId"].ToString());
+            double TotalPrice = 0.00;
+            List<Cart> CartItems = Cart.List.FindAll(x => x.CID == CustID && x.OrgId==OrgId);
+            List<HG_Items> ListItems = new HG_Items().GetAll();
+            JArray jArray = new JArray();
+            foreach (Cart Mycart in CartItems)
+            {
+                HG_Items Items = ListItems.Find(x => x.ItemID == Mycart.ItemId);
+                JObject ObjItem = new JObject();
+                ObjItem.Add("IID", Items.ItemID);
+                ObjItem.Add("ItemName", Items.Items);
+                ObjItem.Add("ItemPrice", Items.Price);
+                ObjItem.Add("ItemQuntity", Items.Qty);
+                ObjItem.Add("ItemImage", Items.Image);
+                ObjItem.Add("ItemCartValue", Mycart.Count);
+                TotalPrice += Mycart.Count * Items.Price;
+                jArray.Add(ObjItem);
+
+            }
             JObject ViewCartItem = new JObject();
-
-            JArray CartItems = new JArray();
-
-
-
+            ViewCartItem.Add("TotalPrice", TotalPrice);
+            ViewCartItem.Add("ListGetCart", jArray);
             return ViewCartItem;
         }
 
