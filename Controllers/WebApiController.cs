@@ -29,7 +29,7 @@ namespace HangOut.Controllers
             vw_HG_UsersDetails Objuser = Newtonsoft.Json.JsonConvert.DeserializeObject<vw_HG_UsersDetails>(Obj);
 
             vw_HG_UsersDetails Exist = Objuser.Checkvw_HG_UsersDetails();
-            if(Exist!=null)
+            if (Exist != null)
             {
                 Objuser = new vw_HG_UsersDetails();
                 Objuser.UserCode = -1; // ALREADY USER EXIST
@@ -41,16 +41,16 @@ namespace HangOut.Controllers
             return JObject.FromObject(Objuser);
 
         }
-       [HttpPost]
+        [HttpPost]
         public JArray GetItemList(string Obj)
         {
             JObject objParams = JObject.Parse(Obj);
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
             JArray jarrayObj = new JArray();
-            
+
             List<HG_Items> ListItems = new HG_Items().GetAll();
             List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID);
-            foreach( var Items in ListItems)
+            foreach (var Items in ListItems)
             {
                 JObject objItem = new JObject();
                 objItem.Add("IID", Items.ItemID);
@@ -61,17 +61,17 @@ namespace HangOut.Controllers
                 objItem.Add("ItemCartValue", cartlist.FindAll(x => x.ItemId == Items.ItemID).Count);
                 jarrayObj.Add(objItem);
             }
-           return jarrayObj;
+            return jarrayObj;
         }
         [HttpPost]
         public string AddCart(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);
-            System.Int64 CustID =System.Int64.Parse(ParaMeters["CID"].ToString());
+            System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
             System.Int64 ItemId = System.Convert.ToInt64(ParaMeters["ItemID"].ToString());
             int Cnt = System.Convert.ToInt32(ParaMeters["Cnt"].ToString());
             int OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
-            Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId==OrgId);
+            Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId);
             if (ObjCart != null)
             {
                 ObjCart.Count = Cnt;
@@ -80,7 +80,7 @@ namespace HangOut.Controllers
                     Cart.List.Add(ObjCart);
             }
             else
-                Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, OrgId=OrgId});
+                Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, OrgId = OrgId });
 
             double Amt = 0;
             int Count = 0;
@@ -93,11 +93,20 @@ namespace HangOut.Controllers
                 Count += CartObj.Count;
             }
 
-            if (Cnt==0)
+            if (Cnt == 0)
                 return Count + "," + Amt + "," + ItemId;
             return Count + "," + Amt + "," + "0";
         }
+        [HttpPost]
+        public JObject AddCart(string CID)
+        {
+            JObject ViewCartItem = new JObject();
 
+
+
+
+            return ViewCartItem;
+        }
 
 
 
