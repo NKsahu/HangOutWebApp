@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<HangOut.Models.HG_Orders>
     @using HangOut.Models 
-@{List<HG_UsersDetails> listItem = new HG_UsersDetails().GetAll(); }
+@{List<vw_HG_UsersDetails > listItem = new vw_HG_UsersDetails().GetAll(); }
 <div class="card">
     <div class="card-header">
         <h1 style="text-align:center"><b>USER Order</b> </h1>
@@ -60,7 +60,8 @@
                             @Html.DisplayFor(modelItem => item.OID)
                         </td>
                         <td>
-                            @{vw_HG_UsersDetails objitem = listItem.Find(x => x.UserCode == item.UserCode); }
+                            @{vw_HG_UsersDetails objitem = listItem.Find(x => x.UserCode == item.CID); }
+                            @objitem.UserName
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status)
