@@ -1,0 +1,74 @@
+﻿@model IEnumerable<HangOut.Models.HG_Tables_or_Rows>
+@{
+    Layout = null;
+}
+
+ <div class="card">
+    <div class="card-header">
+        <h1 style="text-align:center"><b>TABLE OR ROW</b> </h1>
+        <hr />
+    </div>
+    <a href="/HG_Tables_or_Rows/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <div class="card-body">
+        <table class=" table table-bordered table-hover w-100" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Table_or_RowID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OrgId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Table_or_RowName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Floor_or_ScreenId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FloorSide_or_RowNoID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreateDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreateBy)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Table_or_RowID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrgId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Table_or_RowName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Floor_or_ScreenId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FloorSide_or_RowNoID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreateDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreateBy)
+                        </td>
+                        <td>
+                            <a href=" /HG_Tables_or_Rows/CreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" > Edit</a>
+                            <a href="/HG_Tables_or_Rows/Delete?ID=@item.Table_or_RowID" class="btn btn-danger btn-sm "> Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

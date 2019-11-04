@@ -16,10 +16,10 @@ namespace HangOut.Controllers
             List<HG_Floor_or_ScreenMaster> listfloor = Objfloor.GetAll();
             return View(listfloor);
         }
-        public ActionResult CreateEdit( int  ID)
+        public ActionResult CreateEdit(int ID)
         {
             HG_Floor_or_ScreenMaster Objfloor = new HG_Floor_or_ScreenMaster();
-            if(ID>0)
+            if (ID > 0)
             {
                 Objfloor = Objfloor.GetOne(ID);
             }
@@ -32,8 +32,9 @@ namespace HangOut.Controllers
             if (i > 0)
                 return RedirectToAction("Index");
             return RedirectToAction("Error");
-            
+
         }
+        
         public ActionResult Error()
         {
             return View();

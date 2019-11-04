@@ -158,6 +158,7 @@
     <Compile Include="Controllers\HG_ItemsController.cs" />
     <Compile Include="Controllers\HG_OrdersController.cs" />
     <Compile Include="Controllers\HG_OrganizationDetailsController.cs" />
+    <Compile Include="Controllers\HG_Tables_or_RowsController.cs" />
     <Compile Include="Controllers\HG_UserTypesController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
     <Compile Include="Controllers\vw_HG_UsersDetailsController.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Models\HG_Items.cs" />
     <Compile Include="Models\HG_Orders.cs" />
     <Compile Include="Models\HG_OrganizationDetails.cs" />
+    <Compile Include="Models\HG_Tables_or_Rows.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\HG_OrderItem.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
@@ -199,6 +201,9 @@
     <Content Include="Views\UsersMenu\Create.cshtml" />
     <Content Include="Views\UsersMenu\SubMenuIndex.cshtml" />
     <Content Include="Views\HG_Orders\Index.cshtml" />
+    <Content Include="Views\HG_Tables_or_Rows\Index.cshtml" />
+    <Content Include="Views\HG_Tables_or_Rows\CreateEdit.cshtml" />
+    <Content Include="Views\HG_Tables_or_Rows\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
