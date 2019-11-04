@@ -5,6 +5,7 @@ using System.Web;
 
 namespace HangOut.Models
 {
+
     public class HG_OrderItem
     {
         public System.Int64 OIID { get; set; }
@@ -14,19 +15,12 @@ namespace HangOut.Models
         public string Qty { get; set; }
         public System.Int64 OID { get; set; }
         public bool Deleted { get; set; }
-        public System.Int64 MessID { get; set; }
         public int Status { get; set; }//{ 0: itemplaceByUser,1-Item ReadybyMess,2:ItemCollecteByAdmin
-        public System.Int64 TifinID { get; set; }
         public System.DateTime OrderDate { get; set; }
-        public string TifinRackIds { get; set; }
         public int UpdatedBy { get; set; }
         public System.DateTime UpdationDate { get; set; }
-        public int ItemCollectBy;
-        public int ItemAssembleBy;
         public HG_OrderItem()
         {
-            TifinRackIds = "";
-            TifinID = 0;
             this.Qty = "0.00";
             this.OrderDate = System.DateTime.Now;
             this.UpdatedBy = 0;
@@ -53,15 +47,10 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Qty", this.Qty);
                 cmd.Parameters.AddWithValue("@OID", this.OID);
                 cmd.Parameters.AddWithValue("@Deleted", this.Deleted);
-                cmd.Parameters.AddWithValue("@MessId", this.MessID);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@OrderDate", this.OrderDate);
-                cmd.Parameters.AddWithValue("@TifinRackId", this.TifinRackIds);
-                cmd.Parameters.AddWithValue("@TifinID", this.TifinID);
                 cmd.Parameters.AddWithValue("@UpdatedBy", this.UpdatedBy);
                 cmd.Parameters.AddWithValue("@UpdationDate", this.UpdationDate);
-                cmd.Parameters.AddWithValue("@ItemCollectBy", this.ItemCollectBy);
-                cmd.Parameters.AddWithValue("@ItemAssembleBy", this.ItemAssembleBy);
                 if (this.OIID == 0)
                 {
                     this.OIID = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -71,7 +60,6 @@ namespace HangOut.Models
                 {
                     if (cmd.ExecuteNonQuery() > 0)
                     {
-                       
                     }
                 }
             }
@@ -85,7 +73,6 @@ namespace HangOut.Models
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
             System.Collections.Generic.List<HG_OrderItem> ListTmp = new System.Collections.Generic.List<HG_OrderItem>();
-
             DBCon Obj = new DBCon();
             try
             {
@@ -101,15 +88,10 @@ namespace HangOut.Models
                     ObjTmp.Count = SDR.GetInt32(3);
                     ObjTmp.Qty = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
-                    ObjTmp.MessID = SDR.IsDBNull(7) ? 0 : SDR.GetInt64(7);
                     ObjTmp.Status = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8);
                     ObjTmp.OrderDate = SDR.IsDBNull(9) ? System.DateTime.Now : SDR.GetDateTime(9);
-                    ObjTmp.TifinRackIds = SDR.IsDBNull(10) ? "" : SDR.GetString(10);
                     ObjTmp.UpdatedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
                     ObjTmp.UpdationDate = SDR.IsDBNull(12) ? System.DateTime.Now : SDR.GetDateTime(12);
-                    ObjTmp.TifinID = SDR.IsDBNull(13) ? 0 : SDR.GetInt64(13);
-                    ObjTmp.ItemCollectBy = SDR.IsDBNull(14) ? 0 : SDR.GetInt32(14);
-                    ObjTmp.ItemAssembleBy = SDR.IsDBNull(15) ? 0 : SDR.GetInt32(15);
                     ListTmp.Add(ObjTmp);
                 }
             }
