@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Data.SqlClient;
 
 namespace HangOut.Models
 {
@@ -107,6 +107,39 @@ namespace HangOut.Models
             return (ListTmp);
         }
 
+        public  HG_Orders  GetOne(int OID)
+        {
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR= null;
+            HG_Orders ObjTemp = new HG_Orders();
+            try
+            {
+                string Query = "SELECT * FROM HG_Orders Where OID=OID";
+                cmd = new SqlCommand(Query, Con);
+                cmd.Parameters.AddWithValue("@OID",this.OID);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                 ObjTemp.OID   = SDR.GetInt64(0);
+                 ObjTemp.CID = SDR.GetInt64(1);
+                 ObjTemp.Status = SDR.GetString(2);
+                 ObjTemp.Create_By = SDR.GetInt64(3);
+                 ObjTemp.Create_Date = SDR.GetDateTime(4);
+                 ObjTemp.Update_By = SDR.GetInt64(5);
+                 ObjTemp.Update_Date = SDR.GetDateTime(6);
+                 ObjTemp.MessIDs = SDR.IsDBNull(8) ? "0," : SDR.GetString(8);
+                 ObjTemp.Type = SDR.IsDBNull(9) ? "0" : SDR.GetString(9);
+                 ObjTemp.TifinIds = SDR.IsDBNull(10) ? "" : SDR.GetString(10);
+                    ObjTemp.HubId = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
+                    
+                }
+            }
+            catch (System.Exception e){ e.ToString(); }
 
+            finally { Con.Close(); }
+            return (ObjTemp);
+        }
     }
 }

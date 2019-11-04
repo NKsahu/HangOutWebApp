@@ -36,18 +36,19 @@ namespace HangOut.Models
             List<vw_HG_UsersDetails> listOfuser = new List<vw_HG_UsersDetails>();
             try
             {
-                string Query = "SELECT * FROM vw_HG_UsersDetails WHERE Status=1 ;";
+                string Query = "SELECT * FROM HG_UsersDetails WHERE Status=1 ;";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
                     vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
+                    ObjTmp = new vw_HG_UsersDetails();
                     ObjTmp.UserCode = SDR.GetInt32(0);
                     ObjTmp.OrgID = SDR.GetInt32(1);
                     ObjTmp.UserType = SDR.GetString(2);
                     ObjTmp.UserName = SDR.GetString(3);
-                    ObjTmp.Password = SDR.GetString(4);
-                    ObjTmp.Status = SDR.GetBoolean(5);
+                    ObjTmp.UserId = SDR.GetString(4);
+                    ObjTmp.Password = SDR.GetString(5);
                     listOfuser.Add(ObjTmp);
                 }
             }
