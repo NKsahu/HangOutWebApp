@@ -73,7 +73,7 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM ORDERS WHERE Deleted=0 ORDER BY OID DESC";
+                string Query = "SELECT * FROM HG_ORDERS WHERE Deleted=0 ORDER BY OID DESC";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
