@@ -68,7 +68,7 @@ namespace HangOut.Controllers
         {
             JObject ParaMeters = JObject.Parse(Obj);
             System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
-            System.Int64 ItemId = System.Convert.ToInt64(ParaMeters["ItemID"].ToString());
+            System.Int64 ItemId = System.Convert.ToInt64(ParaMeters["ItemId"].ToString());
             int Cnt = System.Convert.ToInt32(ParaMeters["Cnt"].ToString());
             int OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
             Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId);
@@ -98,10 +98,11 @@ namespace HangOut.Controllers
             return Count + "," + Amt + "," + "0";
         }
         [HttpPost]
-        public JObject AddCart(string CID)
+        public JObject GetCart(string CID)
         {
             JObject ViewCartItem = new JObject();
 
+            JArray CartItems = new JArray();
 
 
 
