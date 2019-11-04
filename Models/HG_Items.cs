@@ -69,7 +69,9 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Item_Img", this.Image);
                 if (this.ItemID == 0)
                 {
-                    Row =System.Convert.ToInt32(cmd.ExecuteScalar());
+                    Row = System.Convert.ToInt32(cmd.ExecuteScalar());
+                    this.ItemID = Row;
+
                 }
                 else
                 {
