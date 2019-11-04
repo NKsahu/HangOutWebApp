@@ -26,7 +26,15 @@ namespace HangOut.Controllers
             return View(ObjRowName);
         }
         [HttpPost]
-        public ActionResult CreateEdit()
+        public ActionResult CreateEdit(HG_FloorSide_or_RowName ObjRowName)
+        {
+            int i = ObjRowName.save();
+            if (i > 0)
+                return RedirectToAction("Index");
+            return RedirectToAction("Error");
+             
+        }
+        public ActionResult Error()
         {
             return View();
         }
