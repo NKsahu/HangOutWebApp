@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<HangOut.Models.HG_Orders>
-    @using HangOut.Models 
+@using HangOut.Models 
+@{ Layout = null;}
 @{List<vw_HG_UsersDetails > listItem = new vw_HG_UsersDetails().GetAll(); }
 <div class="card">
     <div class="card-header">
@@ -10,8 +11,6 @@
     <div class="card-body">
         <table class="table table-bordered table-hover w-100" id="TBLID">
             <thead>
-
-
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.OID)
@@ -24,7 +23,7 @@
                     </th>
                     
                     <th>
-                        @Html.DisplayNameFor(model => model.Create_Date)
+                        @Html.DisplayName("Order Date")
                     </th>
                     
                 </tr>
