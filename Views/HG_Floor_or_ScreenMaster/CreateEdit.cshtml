@@ -10,7 +10,7 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("CreateEdit", "HG_Floor_or_ScreenMaster", new { ItemID = Model.Floor_or_ScreenID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEdit", "HG_Floor_or_ScreenMaster", new {  ID = Model.Floor_or_ScreenID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
            
             @Html.HiddenFor(model => model.Floor_or_ScreenID)
@@ -53,7 +53,7 @@
 
                 <div class="col-sm-1">
                     @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="Create" class="btn btn-success " />
+                    <input type="submit" value="SaVe" class="btn btn-success " />
                 </div>
 
             </div>
