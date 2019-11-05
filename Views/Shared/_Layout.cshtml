@@ -42,7 +42,7 @@
 </head>
 <body>
     <!--Waiting Spinner-->
-    <div id="waiting" style="display:none;"><div id="pwaiting"><i class="fa fa-cog fa-spin fa-3x fa-fw"></i></div></div>
+    <div id="waiting" style="display:none;"><div id="pwaiting"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div></div>
     <!--End Waiting Spinner-->
     @RenderBody()
 
@@ -89,15 +89,6 @@
 </body>
 </html>
 <script>
-    $("body").on('DOMSubtreeModified', "#DynamicData", function () {
-        //=======Date Picker ============
-        $(".DateField").datepicker();
-        //======= Data Table ============
-        if (!$.fn.DataTable.isDataTable('#TBLID')) {
-            LoadDataTable();
-        }
-        //=========== End Datatable ============
-    });
 
     $("body").on('DOMSubtreeModified', "#DynamicData", function () {
         //=======Date Picker ============
@@ -133,7 +124,9 @@
                 });
 
         });
-
+        if (!$.fn.DataTable.isDataTable('#TBLID')) {
+            LoadDataTable();
+        }
 
     });
 
@@ -150,7 +143,7 @@
     //===cal datatable=====
 
     function LoadDataTable() {
-     var table=   $("#TBLID").DataTable({
+     var table=$("#TBLID").DataTable({
 
             "scrollY": "300px",
             "scrollCollapse": true,
@@ -158,7 +151,7 @@
             "sScrollX": "100%",
             "bScrollCollapse": true,
             "dom": 'Bfrtip',
-         "buttons": ['colvis','excel', 'pdf', { extend: 'print', title: 'Impression', exportOptions: { columns: ':visible', stripHtml:false } },]
+         "buttons": ['excel', 'pdf', { extend: 'print', title: 'Impression', exportOptions: { columns: ':visible' } },]
 
         });
         table.buttons.exportData({
