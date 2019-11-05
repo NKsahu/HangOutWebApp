@@ -35,9 +35,12 @@ namespace HangOut.Models
         public bool Status { get; set; }
 
 
-
-
-
+        public HG_OrganizationDetails()
+        {
+            EntryDate = DateTime.Now;
+            UpdateDate = DateTime.Now;
+            EntryBy = 0;
+        }
         public int Save()
         {
             int Row = 0;
@@ -56,19 +59,15 @@ namespace HangOut.Models
                     cmd.Parameters.AddWithValue("@EntryBy", HttpContext.Current.Session["ID"]);
                     cmd.Parameters.AddWithValue("@EntryDate",System.DateTime.Now);
                     cmd.Parameters.AddWithValue("@UpdateDate", System.DateTime.Now);
-
                 }
                 else
                 {
 
-                    Query = "update  HG_OrganizationDetails set OrgTypes=@OrgTypes,HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,Status=@Status where OrgID =@OrgID ";
+                    Query = "update  HG_OrganizationDetails set OrgTypes=@OrgTypes,HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status where OrgID =@OrgID ";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@OrgID ", this.OrgID );
-                    cmd.Parameters.AddWithValue("@EntryBy", HttpContext.Current.Session["ID"]);
-                    cmd.Parameters.AddWithValue("@EntryDate", System.DateTime.Now);
                     cmd.Parameters.AddWithValue("@UpdateDate", System.DateTime.Now);
                 }
-
                 cmd.Parameters.AddWithValue("@OrgTypes", this.OrgTypes);
                 cmd.Parameters.AddWithValue("@HeadName", this.HeadName);
                 cmd.Parameters.AddWithValue("@Name", this.Name);

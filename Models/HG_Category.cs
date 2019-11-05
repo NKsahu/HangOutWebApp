@@ -46,11 +46,9 @@ namespace HangOut.Models
                 else
                 {
 
-                    Query = "update  HG_Category set   OrgID =@OrgID ,Category=@Category,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,Status=@Status where CategoryID=@CategoryID";
+                    Query = "update  HG_Category set   OrgID =@OrgID ,Category=@Category,UpdateDate=@UpdateDate,Status=@Status where CategoryID=@CategoryID";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@CategoryID", this.CategoryID);
-                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
-                    cmd.Parameters.AddWithValue("@EntryDate", this.EntryDate);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
                 }
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
