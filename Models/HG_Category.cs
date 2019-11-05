@@ -18,14 +18,16 @@ namespace HangOut.Models
         public bool Status { get; set; }
 
 
-
+     public   HG_Category()
+        {
+            EntryBy = 0;
+            EntryDate = DateTime.Now;
+        }
 
 
         public int Save()
         {
             int Row = 0;
-
-
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             try
             {
@@ -36,7 +38,7 @@ namespace HangOut.Models
                 {
                     Query = "Insert into  HG_Category  values( @OrgID ,@Category ,@EntryBy,@EntryDate,@UpdateDate,@Status);";
                     cmd = new SqlCommand(Query, Con);
-                    cmd.Parameters.AddWithValue("@EntryBy", HttpContext.Current.Session["ID"]);
+                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
 
@@ -47,12 +49,10 @@ namespace HangOut.Models
                     Query = "update  HG_Category set   OrgID =@OrgID ,Category=@Category,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,Status=@Status where CategoryID=@CategoryID";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@CategoryID", this.CategoryID);
-                    cmd.Parameters.AddWithValue("@EntryBy", HttpContext.Current.Session["ID"]);
-                    cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
+                    cmd.Parameters.AddWithValue("@EntryDate", this.EntryDate);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
                 }
-
-                
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                 cmd.Parameters.AddWithValue("@Category", this.Category);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
