@@ -127,7 +127,14 @@ namespace HangOut.Controllers
             return ViewCartItem;
         }
 
-
+        public JArray GetCategorylist(string Obj)
+        {    
+            JObject ParaMeters = JObject.Parse(Obj);
+            System.Int64 OrgId = System.Convert.ToInt64(ParaMeters["OrgId"].ToString());
+            List<HG_Category> listcategory = new HG_Category().GetAll();
+             listcategory = listcategory.FindAll(x => x.OrgID == OrgId); 
+            return  JArray.FromObject(listcategory);
+        }
 
     }
 }
