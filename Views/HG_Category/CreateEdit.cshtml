@@ -12,7 +12,7 @@
 
         @using (Ajax.BeginForm("CreateEdit", "HG_Category", new {ID = Model.CategoryID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-            {
+            
               
                 @Html.HiddenFor(model => model.CategoryID)
                 <div class="row">
