@@ -3,9 +3,11 @@
 @{
     Layout = null;
 }
+@using HangOut.Models
+@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
 <div class="card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>FLOOR AND MASTER</b> </h1>
+        <h1 style="text-align:center"><b>FLOOR  </b> </h1>
         <hr />
     </div>
     <a href="/HG_Floor_or_ScreenMaster/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
@@ -23,6 +25,9 @@
                     <th>
                         @Html.DisplayNameFor(Model =>Model.Type)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(Model=>Model.OrgID)
+                    </th>
                     <th></th>
                 </tr>
                 </thead>
@@ -38,6 +43,10 @@
                         </td>
                          <td>
                              @Html.DisplayFor(modelItem => item.Type)
+                         </td>
+                         <td>
+                             @{ HG_OrganizationDetails ObjOrg = listorgonization.Find(x => x.OrgID == item.OrgID);}
+                             @ObjOrg.Name
                          </td>
                         <td>
                             <a href=" /HG_Floor_or_ScreenMaster/CreateEdit?ID=@item.Floor_or_ScreenID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
