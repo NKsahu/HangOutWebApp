@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Web;
+using System.Web.Mvc;
 
 
 namespace HangOut.Models
@@ -86,17 +86,20 @@ namespace HangOut.Models
             return Row;
         }
 
-        public List<HG_Items> GetAll()
+        public List<HG_Items> GetAll(int IID=0)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<HG_Items> ListTmp = new List<HG_Items>();
-            
+            string Query = "SELECT * FROM  HG_Items ORDER BY ItemID DESC";
+            if (IID > 0)
+            {
+                Query = "SELECT * FROM  HG_Items where ItemID"+IID.ToString()+" ORDER BY ItemID DESC";
+            }
             try
             {
-                string Query = "SELECT * FROM  HG_Items ORDER BY ItemID DESC";
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
