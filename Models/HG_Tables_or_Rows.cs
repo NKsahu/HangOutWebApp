@@ -13,7 +13,7 @@ namespace HangOut.Models
         public string Table_or_RowName { get; set; }
         public int  Floor_or_ScreenId { get; set; }
         public int  FloorSide_or_RowNoID{ get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; } // "1" means restauarant "2" means theater
         public  DateTime CreateDate { get; set; }
         public int CreateBy { get; set; }
 
@@ -36,6 +36,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("Table_or_RowName", this. Table_or_RowName);
                 cmd.Parameters.AddWithValue("Floor_or_ScreenId", this.Floor_or_ScreenId);
                 cmd.Parameters.AddWithValue("FloorSide_or_RowNoID", this.FloorSide_or_RowNoID);
+                cmd.Parameters.AddWithValue("@Type", this.Type);
                 cmd.Parameters.AddWithValue("CreateDate",DateTime.Now);
                 cmd.Parameters.AddWithValue("CreateBy", this.CreateBy);
                 if (this.Table_or_RowID == 0)
@@ -75,7 +76,7 @@ namespace HangOut.Models
                     ObjTemp.Table_or_RowName = SDR .GetString(2);
                     ObjTemp.Floor_or_ScreenId = SDR .GetInt32(3);
                     ObjTemp.FloorSide_or_RowNoID = SDR .GetInt32(4);
-                    ObjTemp.Type = SDR.GetInt32(5);
+                    ObjTemp.Type = SDR.GetString(5);
                     ObjTemp.CreateDate = SDR .GetDateTime(6);
                     ObjTemp.CreateBy = SDR .GetInt32(7);
                     listTemp.Add(ObjTemp);
@@ -97,7 +98,7 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_FloorSide_or_RowName where Table_or_RowID=@Table_or_RowID";
+                string Query = "SELECT * FROM  HG_Tables_or_Rows where Table_or_RowID=@Table_or_RowID";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", Table_or_RowID);
                 SDR = cmd.ExecuteReader();
@@ -108,7 +109,7 @@ namespace HangOut.Models
                     ObjTemp.Table_or_RowName = SDR.GetString(2);
                     ObjTemp.Floor_or_ScreenId = SDR.GetInt32(3);
                     ObjTemp.FloorSide_or_RowNoID = SDR.GetInt32(4);
-                    ObjTemp.Type = SDR.GetInt32(5);
+                    ObjTemp.Type = SDR.GetString(5);
                     ObjTemp.CreateDate = SDR.GetDateTime(6);
                     ObjTemp.CreateBy = SDR.GetInt32(7);
                     
@@ -121,6 +122,41 @@ namespace HangOut.Models
 
             return (ObjTemp);
         }
+        public List<HG_Tables_or_Rows> GetAllByOID(int Orgid)
+        {
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<HG_Tables_or_Rows> TempList = new List<HG_Tables_or_Rows>();
+            try
+            {
+                string Query = "SELECT * FROM  HG_Tables_or_Rows where OrgId=@OrgId";
+                cmd = new SqlCommand(Query, Con);
+                cmd.Parameters.AddWithValue("@OrgId", OrgId);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    HG_Tables_or_Rows ObjTemp = new HG_Tables_or_Rows();
+                    ObjTemp.Table_or_RowID = SDR.GetInt64(0);
+                    ObjTemp.OrgId = SDR.GetInt32(1);
+                    ObjTemp.Table_or_RowName = SDR.GetString(2);
+                    ObjTemp.Floor_or_ScreenId = SDR.GetInt32(3);
+                    ObjTemp.FloorSide_or_RowNoID = SDR.GetInt32(4);
+                    ObjTemp.Type = SDR.GetString(5);
+                    ObjTemp.CreateDate = SDR.GetDateTime(6);
+                    ObjTemp.CreateBy = SDR.GetInt32(7);
+                    TempList.Add(ObjTemp);
+                }
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally { Con.Close(); }
+
+            return (TempList);
+        }
+
         public int Dell(int ID)
         {
             int R = 0;
