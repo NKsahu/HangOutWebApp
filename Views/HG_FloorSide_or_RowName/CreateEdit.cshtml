@@ -1,0 +1,57 @@
+﻿@model HangOut.Models.HG_FloorSide_or_RowName
+@{ Layout = null;}
+<div class="card">
+    <div class="card-header">
+        <h4 style="text-align:center;color:#000000"><b>FLOOR SIDE AND ROW NAME</b></h4>
+        <hr />
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.FloorSide_or_RowName, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.EditorFor(model => model.FloorSide_or_RowName, new { htmlAttributes = new { @class = "form-control" ,required="required" } })
+                        @Html.ValidationMessageFor(model => model.FloorSide_or_RowName, "", new { @class = "text-danger" })
+                     
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.RowSize, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.EditorFor(model => model.RowSize, new { htmlAttributes = new { @class = "form-control",required="required" } })
+                        @Html.ValidationMessageFor(model => model.RowSize, "", new { @class = "text-danger" })
+                    
+                </div> 
+                <div class="col-sm-4">
+                    @{
+                        List<SelectListItem> selectListItem = new List<SelectListItem>{
+
+                                            new SelectListItem { Text = "Restauarant", Value = "1" },
+                                            new SelectListItem { Text = "Theater", Value = "2" }
+
+                                    };
+
+                    }
+                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.DropDownListFor(model => model.Type,selectListItem, new { @class = "form-control", required = "required"  })
+                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+
+                </div>
+
+                 
+                    <div class="col-sm-1">
+                        @Html.Label("Save", new { @class = "text-white" })
+                        <input type="submit" value="Create" class="btn btn-success" />
+                    </div>
+                
+            </div>
+        }
+    </div>
+</div>

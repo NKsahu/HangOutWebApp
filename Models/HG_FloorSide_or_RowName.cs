@@ -11,6 +11,7 @@ namespace HangOut.Models
         public int  ID { get; set; }
         public string FloorSide_or_RowName { get; set; }
         public int RowSize { get; set; }
+        public string Type { get; set; }
         
 
         public int save()
@@ -24,16 +25,17 @@ namespace HangOut.Models
                 string Query = "";
                 if (this. ID == 0)
 
-                    Query = "Insert into  HG_FloorSide_or_RowName  values(@FloorSide_or_RowName,@RowSize); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  HG_FloorSide_or_RowName  values(@FloorSide_or_RowName,@RowSize,@Type); SELECT SCOPE_IDENTITY();";
 
                 else
 
-                    Query = "update  HG_FloorSide_or_RowName set  FloorSide_or_RowName=@FloorSide_or_RowName,RowSize=@RowSize where ID=@ID";
+                    Query = "update  HG_FloorSide_or_RowName set  FloorSide_or_RowName=@FloorSide_or_RowName,RowSize=@RowSize,Type=@Type where ID=@ID";
 
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Floor_or_ScreenID", this. ID);
                 cmd.Parameters.AddWithValue("@FloorSide_or_RowName", this.FloorSide_or_RowName);
                 cmd.Parameters.AddWithValue("@RowSize", this.RowSize);
+                cmd.Parameters.AddWithValue("@Type", this.Type);
                 if (this. ID == 0)
                     Row = System.Convert.ToInt32(cmd.ExecuteScalar());
                 else if (cmd.ExecuteNonQuery() > 0)
@@ -65,6 +67,7 @@ namespace HangOut.Models
                     ObjTmp. ID = SDR.GetInt32(0);
                     ObjTmp.FloorSide_or_RowName = SDR.GetString(1);
                     ObjTmp.RowSize = SDR.GetInt32(2);
+                    ObjTmp.Type = SDR.GetString(3);
                     
 
 
@@ -95,6 +98,7 @@ namespace HangOut.Models
                     ObjTmp.ID = SDR.GetInt32(0);
                     ObjTmp.FloorSide_or_RowName = SDR.GetString(1);
                     ObjTmp.RowSize = SDR.GetInt32(2);
+                    ObjTmp.Type = SDR.GetString(3);
                 }
             }
             catch (System.Exception e)

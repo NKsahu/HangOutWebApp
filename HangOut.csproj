@@ -208,6 +208,8 @@
     <Content Include="Views\HG_Floor_or_ScreenMaster\Index.cshtml" />
     <Content Include="Views\HG_Floor_or_ScreenMaster\CreateEdit.cshtml" />
     <Content Include="Views\HG_Floor_or_ScreenMaster\Error.cshtml" />
+    <Content Include="Views\HG_FloorSide_or_RowName\Index.cshtml" />
+    <Content Include="Views\HG_FloorSide_or_RowName\CreateEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -218,7 +220,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
-    <Folder Include="Views\HG_FloorSide_or_RowName\" />
     <Folder Include="Views\HG_Order\" />
   </ItemGroup>
   <ItemGroup>

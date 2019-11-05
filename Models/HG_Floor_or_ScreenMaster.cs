@@ -15,6 +15,7 @@ namespace HangOut.Models
         public DateTime CreatonDate { get; set; }
         public int UpdatedBy{ get; set; }
         public int UpdateionDate { get; set; }
+        public string Type { get; set; }
 
 
         public int save()
@@ -28,11 +29,11 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.Floor_or_ScreenID ==0)
                 
-                    Query = "Insert into  HG_Floor_or_ScreenMaster  values(@Name,@CreatedBy,@CreationDate,@UpdatedBy,@UpdateionDate); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  HG_Floor_or_ScreenMaster  values(@Name,@CreatedBy,@CreationDate,@UpdatedBy,@UpdateionDate,@Type); SELECT SCOPE_IDENTITY();";
                     
                  else
                  
-                  Query = "update  HG_Floor_or_ScreenMaster set  Name=@Name,CreatedBy=@CreatedBy,CreationDate=@CreationDate,UpdatedBy=@UpdatedBy,UpdateionDate=@UpdateionDate where Floor_or_ScreenID=@Floor_or_ScreenID";
+                  Query = "update  HG_Floor_or_ScreenMaster set  Name=@Name,CreatedBy=@CreatedBy,CreationDate=@CreationDate,UpdatedBy=@UpdatedBy,UpdateionDate=@UpdateionDate,Type=@Type where Floor_or_ScreenID=@Floor_or_ScreenID";
                  
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Floor_or_ScreenID", this.Floor_or_ScreenID);
@@ -41,6 +42,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@CreationDate", this.CreatonDate);
                 cmd.Parameters.AddWithValue("@UpdatedBy", this.UpdatedBy);
                 cmd.Parameters.AddWithValue("@UpdateionDate", this.UpdateionDate);
+                cmd.Parameters.AddWithValue("@Type", this.Type);
                  if(this.Floor_or_ScreenID ==0)
                 Row =System.Convert.ToInt32(cmd.ExecuteScalar()) ;
                  else if(cmd.ExecuteNonQuery()>0)
@@ -75,6 +77,7 @@ namespace HangOut.Models
                     ObjTmp.CreatonDate = SDR.GetDateTime(3);
                     ObjTmp.UpdatedBy = SDR.GetInt32(4);
                     ObjTmp.UpdateionDate = SDR.GetInt32(5);
+                    ObjTmp.Type = SDR.GetString(6);
                     
 
                     ListTmp.Add(ObjTmp);
@@ -107,6 +110,7 @@ namespace HangOut.Models
                     ObjTmp.CreatonDate = SDR.GetDateTime(3);
                     ObjTmp.UpdatedBy = SDR.GetInt32(4);
                     ObjTmp.UpdateionDate = SDR.GetInt32(5);
+                    ObjTmp.Type = SDR.GetString(6);
                 }
             }
             catch (System.Exception e)
