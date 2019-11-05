@@ -108,18 +108,18 @@ namespace HangOut.Models.Common
             {
                 string Query = "SELECT * FROM  Menu where  Menu_Id=@Menu_Id ";
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@Menu_Id ", Menu_Id);
+                cmd.Parameters.AddWithValue("@Menu_Id ", ID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    Menu_Id = int.Parse(SDR["Menu_Id"].ToString());
-                    MenuDisplayName = SDR["MenuDisplayName"].ToString();
-                    ParentMenuId = int.Parse(SDR["ParentMenuId"].ToString());
-                    MenuOrderNo = int.Parse(SDR["MenuOrderNo"].ToString());
-                    MenuLink = SDR["MenuLink"].ToString();
-                    Menu_Icon = SDR["Menu_Icon"].ToString();
-                    User_Types = SDR["User_Types"].ToString();
-                    Section = SDR["Section"].ToString();
+                 ObjTmp.Menu_Id = int.Parse(SDR["Menu_Id"].ToString());
+                 ObjTmp.MenuDisplayName = SDR["MenuDisplayName"].ToString();
+                 ObjTmp.ParentMenuId = int.Parse(SDR["ParentMenuId"].ToString());
+                 ObjTmp.MenuOrderNo = int.Parse(SDR["MenuOrderNo"].ToString());
+                 ObjTmp.MenuLink = SDR["MenuLink"].ToString();
+                 ObjTmp.Menu_Icon = SDR["Menu_Icon"].ToString();
+                 ObjTmp.User_Types = SDR["User_Types"].ToString();
+                    ObjTmp.Section = SDR["Section"].ToString();
                 }
             }
             catch (System.Exception e)

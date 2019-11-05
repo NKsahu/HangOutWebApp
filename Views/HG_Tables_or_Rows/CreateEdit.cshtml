@@ -1,0 +1,75 @@
+﻿@model HangOut.Models.HG_Tables_or_Rows
+
+@{
+    Layout = null;
+}
+ 
+<div class="card">
+    <div class="card-header">
+        <h4 style="text-align:center;color:#000000"><b>TABLE OR ROW</b></h4>
+        <hr />
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.Table_or_RowID)
+            <div class="row">
+                
+                
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.OrgId, htmlAttributes: new { @class = "control-label  " })
+                    
+                        @Html.EditorFor(model => model.OrgId, new { htmlAttributes = new { @class = "form-control" ,required= "required" } })
+                        @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
+                     
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.Table_or_RowName, htmlAttributes: new { @class = "control-label  " })
+                   
+                        @Html.EditorFor(model => model.Table_or_RowName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.Table_or_RowName, "", new { @class = "text-danger" })
+                    
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.Floor_or_ScreenId, htmlAttributes: new { @class = "control-label  " })
+                   
+                        @Html.EditorFor(model => model.Floor_or_ScreenId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.Floor_or_ScreenId, "", new { @class = "text-danger" })
+                    
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.FloorSide_or_RowNoID, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.EditorFor(model => model.FloorSide_or_RowNoID, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.FloorSide_or_RowNoID, "", new { @class = "text-danger" })
+                    
+                </div>
+
+                 
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.CreateBy, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.EditorFor(model => model.CreateBy, new { htmlAttributes = new { @class = "form-control",required = "required" } })
+                        @Html.ValidationMessageFor(model => model.CreateBy, "", new { @class = "text-danger" })
+                    
+                </div>
+
+                
+                <div class=" col-sm-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input type="submit" value="Create" class="btn btn-success" />
+                </div>
+                
+            </div>
+        }
+
+    </div>
+</div>

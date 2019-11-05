@@ -28,7 +28,7 @@ namespace HangOut.Models
 
                 else
 
-                    Query = "update  HG_FloorSide_or_RowName set  FloorSide_or_RowName=@FloorSide_or_RowName,RowSize=@RoeSize where ID=@ID";
+                    Query = "update  HG_FloorSide_or_RowName set  FloorSide_or_RowName=@FloorSide_or_RowName,RowSize=@RowSize where ID=@ID";
 
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Floor_or_ScreenID", this. ID);
