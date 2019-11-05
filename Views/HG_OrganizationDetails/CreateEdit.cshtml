@@ -20,11 +20,20 @@
 
 
                 <div class="col-sm-4">
-                    @Html.LabelFor(model => model.OrgTypes, htmlAttributes: new { @class = "control-label  " })
+                    @{ 
+                            List<SelectListItem> selectListItem = new List<SelectListItem>{
 
-                    @Html.EditorFor(model => model.OrgTypes, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                            new SelectListItem { Text = "Restauarant", Value = "1" },
+                            new SelectListItem { Text = "Theater", Value = "2" }
+
+                    };
+
+                        }
+                        @Html.LabelFor(model => model.OrgTypes, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.DropDownListFor(model => model.OrgTypes,selectListItem, new { @class = "form-control", required = "required"  })
                     @Html.ValidationMessageFor(model => model.OrgTypes, "", new { @class = "text-danger" })
-
+                    
                 </div>
 
                 <div class="col-sm-4">
@@ -154,13 +163,6 @@
                     @Html.ValidationMessageFor(model => model.AcType, "", new { @class = "text-danger" })
 
                 </div>
-
-
-
-
-
-
-
                 <div class="col-sm-4">
                     @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
 

@@ -3,7 +3,9 @@
 @{
     Layout = null;
 }
- 
+ @using HangOut.Models
+@{List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(); }
+@{ List<HG_Floor_or_ScreenMaster> listFloorScreen = new HG_Floor_or_ScreenMaster().GetAll();}
 <div class="card">
     <div class="card-header">
         <h4 style="text-align:center;color:#000000"><b>TABLE OR ROW</b></h4>
@@ -22,10 +24,10 @@
 
                 <div class="col-sm-4">
                     @Html.LabelFor(model => model.OrgId, htmlAttributes: new { @class = "control-label  " })
-                    
-                        @Html.EditorFor(model => model.OrgId, new { htmlAttributes = new { @class = "form-control" ,required= "required" } })
-                        @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
-                     
+                    @Html.DropDownListFor(model => model.OrgId, new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID", "Name", Model. OrgId), "Select Organization Name", new { @class = "form-control", required = "required" })
+
+                    @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
+
                 </div>
 
                 <div class="col-sm-4">
@@ -39,7 +41,7 @@
                 <div class="col-sm-4">
                     @Html.LabelFor(model => model.Floor_or_ScreenId, htmlAttributes: new { @class = "control-label  " })
                    
-                        @Html.EditorFor(model => model.Floor_or_ScreenId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                        @Html.DropDownListFor(model => model.Floor_or_ScreenId, new SelectList (new HG_Floor_or_ScreenMaster().GetAll(), "Floor_or_ScreenID","Name",Model.Floor_or_ScreenId),"Select Screen and Floor Name", new { @class = "form-control", required = "required"  })
                         @Html.ValidationMessageFor(model => model.Floor_or_ScreenId, "", new { @class = "text-danger" })
                     
                 </div>
