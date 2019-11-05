@@ -46,10 +46,12 @@ namespace HangOut.Controllers
         {
             JObject objParams = JObject.Parse(Obj);
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
+            System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OID").ToString());
             JArray jarrayObj = new JArray();
 
             List<HG_Items> ListItems = new HG_Items().GetAll();
-            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID);
+            ListItems = ListItems.FindAll(x => x.OrgID == OrgId);
+            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId);
             foreach (var Items in ListItems)
             {
                 JObject objItem = new JObject();
@@ -70,7 +72,7 @@ namespace HangOut.Controllers
             System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
             System.Int64 ItemId = System.Convert.ToInt64(ParaMeters["ItemId"].ToString());
             int Cnt = System.Convert.ToInt32(ParaMeters["Cnt"].ToString());
-            int OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
+            int OrgId = System.Convert.ToInt32(ParaMeters["OID"].ToString());
             Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId);
             if (ObjCart != null)
             {
@@ -102,7 +104,7 @@ namespace HangOut.Controllers
         {
             JObject ParaMeters = JObject.Parse(Obj);
             System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
-            System.Int64 OrgId = System.Convert.ToInt64(ParaMeters["OrgId"].ToString());
+            System.Int64 OrgId = System.Convert.ToInt64(ParaMeters["OID"].ToString());
             double TotalPrice = 0.00;
             List<Cart> CartItems = Cart.List.FindAll(x => x.CID == CustID && x.OrgId==OrgId);
             List<HG_Items> ListItems = new HG_Items().GetAll();
@@ -127,13 +129,21 @@ namespace HangOut.Controllers
             return ViewCartItem;
         }
 
-        public JArray GetCategorylist(string Obj)
+        public JArray GetMenulist(string Obj)
         {    
             JObject ParaMeters = JObject.Parse(Obj);
-            System.Int64 OrgId = System.Convert.ToInt64(ParaMeters["OrgId"].ToString());
+            System.Int64 OrgId = System.Convert.ToInt64(ParaMeters["OID"].ToString());
             List<HG_Category> listcategory = new HG_Category().GetAll();
              listcategory = listcategory.FindAll(x => x.OrgID == OrgId); 
             return  JArray.FromObject(listcategory);
+        }
+
+        public JObject ScanRestTable(string Obj)
+        {
+            JObject ParaMeters = JObject.Parse(Obj);
+            System.Int64 TableId =System.Convert.ToInt64(ParaMeters.GetValue("TID").ToString());
+            HG_Tables_or_Rows TableRowObj = new HG_Tables_or_Rows().GetOne(TableId);
+            return JObject.FromObject(TableRowObj);
         }
 
     }

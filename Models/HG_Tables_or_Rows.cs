@@ -13,6 +13,7 @@ namespace HangOut.Models
         public string Table_or_RowName { get; set; }
         public int  Floor_or_ScreenId { get; set; }
         public int  FloorSide_or_RowNoID{ get; set; }
+        public int Type { get; set; }
         public  DateTime CreateDate { get; set; }
         public int CreateBy { get; set; }
 
@@ -26,9 +27,9 @@ namespace HangOut.Models
                 SqlCommand cmd = null;
                 string Query = "";
                 if (this.Table_or_RowID == 0)
-                    Query = "Insert Into HG_Tables_or_Rows values(@OrgId,@Table_or_RowName,Floor_or_ScreenId,@FloorSide_or_RowNoID,@CreateDate,@CreateBy);SELECT SCOPE_IDENTITY();";
+                    Query = "Insert Into HG_Tables_or_Rows values(@OrgId,@Table_or_RowName,Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy);SELECT SCOPE_IDENTITY();";
                 else
-                    Query = "Update HG_Tables_or_Rows  set OrgId=@OrgId,Table_or_RowName =@Table_or_RowName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@ FloorSide_or_RowNoID,CreateDate=@CreateDate,CreateBy=@CreateBy Where Table_or_RowID=@Table_or_RowID;";
+                    Query = "Update HG_Tables_or_Rows  set OrgId=@OrgId,Table_or_RowName =@Table_or_RowName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@ FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy Where Table_or_RowID=@Table_or_RowID;";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("Table_or_RowID", this.Table_or_RowID);
                 cmd.Parameters.AddWithValue("OrgId", this. OrgId);
@@ -38,10 +39,13 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("CreateDate",DateTime.Now);
                 cmd.Parameters.AddWithValue("CreateBy", this.CreateBy);
                 if (this.Table_or_RowID == 0)
+                {
                     Row = System.Convert.ToInt64(cmd.ExecuteScalar());
+                    this.Table_or_RowID = Row;
+                }
                 else if (cmd.ExecuteNonQuery() > 0)
                 {
-                    Row = this.Table_or_RowID;   
+                    Row = this.Table_or_RowID;
                 }
 
             }
@@ -71,8 +75,9 @@ namespace HangOut.Models
                     ObjTemp.Table_or_RowName = SDR .GetString(2);
                     ObjTemp.Floor_or_ScreenId = SDR .GetInt32(3);
                     ObjTemp.FloorSide_or_RowNoID = SDR .GetInt32(4);
-                    ObjTemp.CreateDate = SDR .GetDateTime(5);
-                    ObjTemp.CreateBy = SDR .GetInt32(6);
+                    ObjTemp.Type = SDR.GetInt32(5);
+                    ObjTemp.CreateDate = SDR .GetDateTime(6);
+                    ObjTemp.CreateBy = SDR .GetInt32(7);
                     listTemp.Add(ObjTemp);
                 }
 
@@ -82,7 +87,7 @@ namespace HangOut.Models
 
             return (listTemp);
         }
-        public HG_Tables_or_Rows GetOne(int Table_or_RowID)
+        public HG_Tables_or_Rows GetOne(Int64 Table_or_RowID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -92,19 +97,21 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_FloorSide_or_RowName where RantalID=@RantalID";
+                string Query = "SELECT * FROM  HG_FloorSide_or_RowName where Table_or_RowID=@Table_or_RowID";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", Table_or_RowID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    ObjTemp.Table_or_RowID = SDR .GetInt64(0);
-                    ObjTemp.OrgId = SDR .GetInt32(1);
-                    ObjTemp.Table_or_RowName = SDR .GetString(2);
-                    ObjTemp.Floor_or_ScreenId = SDR .GetInt32(3);
-                    ObjTemp.FloorSide_or_RowNoID = SDR .GetInt32(4);
-                    ObjTemp.CreateDate = SDR .GetDateTime(5);
-                    ObjTemp.CreateBy = SDR .GetInt32(6);
+                    ObjTemp.Table_or_RowID = SDR.GetInt64(0);
+                    ObjTemp.OrgId = SDR.GetInt32(1);
+                    ObjTemp.Table_or_RowName = SDR.GetString(2);
+                    ObjTemp.Floor_or_ScreenId = SDR.GetInt32(3);
+                    ObjTemp.FloorSide_or_RowNoID = SDR.GetInt32(4);
+                    ObjTemp.Type = SDR.GetInt32(5);
+                    ObjTemp.CreateDate = SDR.GetDateTime(6);
+                    ObjTemp.CreateBy = SDR.GetInt32(7);
+                    
                 }
             }
             catch (System.Exception e)
