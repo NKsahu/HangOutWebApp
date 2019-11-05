@@ -3,6 +3,7 @@ using HangOut.Models;
 using HangOut.Models.Common;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace HangOut.Controllers
 {
@@ -54,13 +55,14 @@ namespace HangOut.Controllers
             List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId);
             foreach (var Items in ListItems)
             {
+              List<Cart> cartCurrentItem=  cartlist.FindAll(x => x.ItemId == Items.ItemID);
                 JObject objItem = new JObject();
                 objItem.Add("IID", Items.ItemID);
                 objItem.Add("ItemName", Items.Items);
                 objItem.Add("ItemPrice", Items.Price);
                 objItem.Add("ItemQuntity", Items.Qty);
                 objItem.Add("ItemImage", Items.Image);
-                objItem.Add("ItemCartValue", cartlist.FindAll(x => x.ItemId == Items.ItemID).Count);
+                objItem.Add("ItemCartValue", cartCurrentItem.Sum(x=>x.Count));
                 jarrayObj.Add(objItem);
             }
             return jarrayObj;
@@ -143,6 +145,10 @@ namespace HangOut.Controllers
             System.Int64 TableId =System.Convert.ToInt64(ParaMeters.GetValue("TID").ToString());
             HG_Tables_or_Rows TableRowObj = new HG_Tables_or_Rows().GetOne(TableId);
             return JObject.FromObject(TableRowObj);
+        }
+        public JArray CartList(string CID)
+        {
+            return JArray.FromObject( Cart.List.FindAll(x => x.CID == int.Parse(CID)));
         }
 
     }
