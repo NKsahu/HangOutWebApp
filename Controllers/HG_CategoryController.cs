@@ -36,10 +36,11 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_Category Objitem)
         {
-
-
+            if (Objitem.EntryBy == 0)
+            {
+             Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
+            }
             int i = Objitem.Save();
-
             if (i > 0)
                 return RedirectToAction("Index");
             return RedirectToAction("Error");
