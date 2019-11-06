@@ -96,7 +96,7 @@ namespace HangOut.Models
             string Query = "SELECT * FROM  HG_Items ORDER BY ItemID DESC";
             if (OrgId > 0)
             {
-                Query = "SELECT * FROM  HG_Items where OrgID" + OrgId.ToString()+" ORDER BY ItemID DESC";
+                Query = "SELECT * FROM  HG_Items where OrgID=" + OrgId.ToString()+" ORDER BY ItemID DESC";
             }
             try
             {
