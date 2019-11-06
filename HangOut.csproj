@@ -126,6 +126,7 @@
     <Content Include="Assets\Select2\js\select2.min.js" />
     <Content Include="Assets\Website.js" />
     <Content Include="Global.asax" />
+    <Content Include="Image\app_icon.png" />
     <Content Include="Image\login.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
