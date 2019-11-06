@@ -27,6 +27,22 @@
                         @Html.EditorFor(model => model.RowSize, new { htmlAttributes = new { @class = "form-control",required="required" } })
                         @Html.ValidationMessageFor(model => model.RowSize, "", new { @class = "text-danger" })
                     
+                </div> 
+                <div class="col-sm-4">
+                    @{
+                        List<SelectListItem> selectListItem = new List<SelectListItem>{
+
+                                            new SelectListItem { Text = "Restauarant", Value = "1" },
+                                            new SelectListItem { Text = "Theater", Value = "2" }
+
+                                    };
+
+                    }
+                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.DropDownListFor(model => model.Type,selectListItem, new { @class = "form-control", required = "required"  })
+                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+
                 </div>
 
                  

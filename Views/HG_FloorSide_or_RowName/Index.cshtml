@@ -19,6 +19,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.RowSize)
                     </th>
+                    <th>
+                        @Html.DisplayNameFor(model=>model.Type)
+                    </th>
                     <th></th>
                 </tr>
                 </thead>
@@ -31,6 +34,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.RowSize)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
                         </td>
                         <td>
                             <a href=" /HG_FloorSide_or_RowName/CreateEdit?ID=@item.ID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
