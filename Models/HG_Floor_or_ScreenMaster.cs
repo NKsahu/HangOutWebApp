@@ -16,6 +16,7 @@ namespace HangOut.Models
         public int UpdatedBy{ get; set; }
         public int UpdateionDate { get; set; }
         public string Type { get; set; }
+        public int OrgID { get; set; }
 
 
         public int save()
@@ -29,20 +30,21 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.Floor_or_ScreenID ==0)
                 
-                    Query = "Insert into  HG_Floor_or_ScreenMaster  values(@Name,@CreatedBy,@CreationDate,@UpdatedBy,@UpdateionDate,@Type); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  HG_Floor_or_ScreenMaster  values(@Name,@CreatedBy,@CreationDate,@UpdatedBy,@UpdateionDate,@Type,@OrgID); SELECT SCOPE_IDENTITY();";
                     
                  else
                  
-                  Query = "update  HG_Floor_or_ScreenMaster set  Name=@Name,CreatedBy=@CreatedBy,CreationDate=@CreationDate,UpdatedBy=@UpdatedBy,UpdateionDate=@UpdateionDate,Type=@Type where Floor_or_ScreenID=@Floor_or_ScreenID";
+                  Query = "update  HG_Floor_or_ScreenMaster set  Name=@Name,CreatedBy=@CreatedBy,CreationDate=@CreationDate,UpdatedBy=@UpdatedBy,UpdateionDate=@UpdateionDate,Type=@Type,OrgID=@OrgID where Floor_or_ScreenID=@Floor_or_ScreenID";
                  
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Floor_or_ScreenID", this.Floor_or_ScreenID);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
                 cmd.Parameters.AddWithValue("@CreatedBy", this.CreatedBy);
-                cmd.Parameters.AddWithValue("@CreationDate", this.CreatonDate);
+                cmd.Parameters.AddWithValue("@CreationDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@UpdatedBy", this.UpdatedBy);
                 cmd.Parameters.AddWithValue("@UpdateionDate", this.UpdateionDate);
                 cmd.Parameters.AddWithValue("@Type", this.Type);
+                cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                  if(this.Floor_or_ScreenID ==0)
                 Row =System.Convert.ToInt32(cmd.ExecuteScalar()) ;
                  else if(cmd.ExecuteNonQuery()>0)
@@ -78,6 +80,7 @@ namespace HangOut.Models
                     ObjTmp.UpdatedBy = SDR.GetInt32(4);
                     ObjTmp.UpdateionDate = SDR.GetInt32(5);
                     ObjTmp.Type = SDR.GetString(6);
+                    ObjTmp.OrgID = SDR.GetInt32(7);
                     
 
                     ListTmp.Add(ObjTmp);
@@ -98,7 +101,7 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_Floor_or_ScreenMaster where RantalID=@RantalID";
+                string Query = "SELECT * FROM  HG_Floor_or_ScreenMaster where Floor_or_ScreenID=@Floor_or_ScreenID";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Floor_or_ScreenID", Floor_or_ScreenID);
                 SDR = cmd.ExecuteReader();
@@ -111,6 +114,7 @@ namespace HangOut.Models
                     ObjTmp.UpdatedBy = SDR.GetInt32(4);
                     ObjTmp.UpdateionDate = SDR.GetInt32(5);
                     ObjTmp.Type = SDR.GetString(6);
+                    ObjTmp.OrgID = SDR.GetInt32(7);
                 }
             }
             catch (System.Exception e)
