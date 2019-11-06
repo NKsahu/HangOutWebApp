@@ -19,17 +19,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
+                    
                     <th>
-                        @Html.DisplayNameFor(model => model.CreatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CreatonDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UpdatedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.UpdateionDate)
+                        @Html.DisplayNameFor(Model =>Model.Type)
                     </th>
                     <th></th>
                 </tr>
@@ -44,18 +36,9 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatonDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UpdatedBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.UpdateionDate)
-                        </td>
+                         <td>
+                             @Html.DisplayNameFor(modelItem => item.Type)
+                         </td>
                         <td>
                             <a href=" /HG_Floor_or_ScreenMaster/CreateEdit?ID=@item.Floor_or_ScreenID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
                             <a href="/HG_Floor_or_ScreenMaster/Delete?ID=@item.Floor_or_ScreenID" class="btn btn-danger btn-sm "> Delete</a>

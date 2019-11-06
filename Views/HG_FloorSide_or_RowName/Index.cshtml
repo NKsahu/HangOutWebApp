@@ -1,0 +1,44 @@
+﻿@model IEnumerable<HangOut.Models.HG_FloorSide_or_RowName>
+
+@{
+    Layout = null;
+}
+<div class="card">
+    <div class="card-header">
+        <h1 style="text-align:center"><b>FLOORSIDE AND ROW NAME</b> </h1>
+        <hr />
+    </div>
+    <a href="/HG_FloorSide_or_RowName/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <div class="card-body">
+        <table class="table table-bordered table-hover w-100" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FloorSide_or_RowName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RowSize)
+                    </th>
+                    <th></th>
+                </tr>
+                </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FloorSide_or_RowName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RowSize)
+                        </td>
+                        <td>
+                            <a href=" /HG_FloorSide_or_RowName/CreateEdit?ID=@item.ID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                            <a href="/HG_FloorSide_or_RowName/Delete?ID=@item.ID" class="btn btn-danger btn-sm "> Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+</div>
+</div>
