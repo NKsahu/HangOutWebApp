@@ -96,17 +96,20 @@ namespace HangOut.Models
             return Row;
         }
 
-        public List<HG_OrganizationDetails> GetAll()
+        public List<HG_OrganizationDetails> GetAll(int Orgid=0)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<HG_OrganizationDetails> ListTmp = new List<HG_OrganizationDetails>();
-
+            string Query = "SELECT * FROM  HG_OrganizationDetails ORDER BY OrgID  DESC";
+            if (OrgID > 0)
+            {
+                Query = "SELECT * FROM  HG_OrganizationDetails where OrgID="+OrgID.ToString()+"  ORDER BY OrgID  DESC";
+            }
             try
             {
-                string Query = "SELECT * FROM  HG_OrganizationDetails ORDER BY OrgID  DESC";
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
