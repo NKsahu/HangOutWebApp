@@ -227,6 +227,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
+    <Folder Include="QRImgTorR\" />
     <Folder Include="Views\HG_Order\" />
   </ItemGroup>
   <ItemGroup>
