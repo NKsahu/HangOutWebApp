@@ -18,9 +18,9 @@ namespace HangOut.Controllers
         }
         public ActionResult CreateEdit(int ID)
         {
-            int i = 0;
+             
             HG_Tables_or_Rows ObjTable = new HG_Tables_or_Rows();
-            if(i>0)
+            if(ID>0)
             {
                 ObjTable = ObjTable.GetOne(ID);
 

@@ -11,7 +11,7 @@ namespace HangOut.Models
         public Int64 Table_or_RowID { get; set; }
         public int  OrgId{ get; set; }
         public string Table_or_RowName { get; set; }
-        public int  Floor_or_ScreenId { get; set; }
+        public int Floor_or_ScreenId { get; set; }
         public int  FloorSide_or_RowNoID{ get; set; }
         public string Type { get; set; } // "1" means restauarant "2" means theater
         public  DateTime CreateDate { get; set; }
@@ -27,18 +27,18 @@ namespace HangOut.Models
                 SqlCommand cmd = null;
                 string Query = "";
                 if (this.Table_or_RowID == 0)
-                    Query = "Insert Into HG_Tables_or_Rows values(@OrgId,@Table_or_RowName,Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy);SELECT SCOPE_IDENTITY();";
+                    Query = "Insert Into HG_Tables_or_Rows values(@OrgId,@Table_or_RowName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy);SELECT SCOPE_IDENTITY();";
                 else
-                    Query = "Update HG_Tables_or_Rows  set OrgId=@OrgId,Table_or_RowName =@Table_or_RowName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@ FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy Where Table_or_RowID=@Table_or_RowID;";
+                    Query = "Update HG_Tables_or_Rows  set OrgId=@OrgId,Table_or_RowName =@Table_or_RowName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy Where Table_or_RowID=@Table_or_RowID;";
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("Table_or_RowID", this.Table_or_RowID);
-                cmd.Parameters.AddWithValue("OrgId", this. OrgId);
-                cmd.Parameters.AddWithValue("Table_or_RowName", this. Table_or_RowName);
-                cmd.Parameters.AddWithValue("Floor_or_ScreenId", this.Floor_or_ScreenId);
-                cmd.Parameters.AddWithValue("FloorSide_or_RowNoID", this.FloorSide_or_RowNoID);
+                cmd.Parameters.AddWithValue("@Table_or_RowID", this.Table_or_RowID);
+                cmd.Parameters.AddWithValue("@OrgId", this. OrgId);
+                cmd.Parameters.AddWithValue("@Table_or_RowName", this. Table_or_RowName);
+                cmd.Parameters.AddWithValue("@Floor_or_ScreenId", this.Floor_or_ScreenId);
+                cmd.Parameters.AddWithValue("@FloorSide_or_RowNoID", this.FloorSide_or_RowNoID);
                 cmd.Parameters.AddWithValue("@Type", this.Type);
-                cmd.Parameters.AddWithValue("CreateDate",DateTime.Now);
-                cmd.Parameters.AddWithValue("CreateBy", this.CreateBy);
+                cmd.Parameters.AddWithValue("@CreateDate",DateTime.Now);
+                cmd.Parameters.AddWithValue("@CreateBy", this.CreateBy);
                 if (this.Table_or_RowID == 0)
                 {
                     Row = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -65,7 +65,7 @@ namespace HangOut.Models
             
             try
             {
-                string Query = "Select * Form HG_Tables_or_Rows ORDER BY Floor_or_ScreenID DESC";
+                string Query = "SELECT * FROM HG_Tables_or_Rows ORDER BY Table_or_RowID DESC";
                 cmd = new SqlCommand(Query,Con);
                 SDR  = cmd.ExecuteReader();
                 while(SDR .Read())

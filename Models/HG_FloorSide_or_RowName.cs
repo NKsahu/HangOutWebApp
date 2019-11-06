@@ -33,16 +33,19 @@ namespace HangOut.Models
                     Query = "update  HG_FloorSide_or_RowName set  FloorSide_or_RowName=@FloorSide_or_RowName,RowSize=@RowSize,Type=@Type,OrgID=@OrgID where ID=@ID";
 
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@Floor_or_ScreenID", this. ID);
+                cmd.Parameters.AddWithValue("@ID", this. ID);
                 cmd.Parameters.AddWithValue("@FloorSide_or_RowName", this.FloorSide_or_RowName);
                 cmd.Parameters.AddWithValue("@RowSize", this.RowSize);
                 cmd.Parameters.AddWithValue("@Type", this.Type);
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
-                if (this. ID == 0)
+                if (this.ID == 0)
+                {
                     Row = System.Convert.ToInt32(cmd.ExecuteScalar());
+                    this.ID = Row;
+                }
                 else if (cmd.ExecuteNonQuery() > 0)
                 {
-                    Row = this. ID;
+                    Row = this.ID;
                 }
 
             }
@@ -60,7 +63,7 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_FloorSide_or_RowName ORDER BY Floor_or_ScreenID DESC";
+                string Query = "SELECT * FROM  HG_FloorSide_or_RowName ORDER BY ID DESC";
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -82,7 +85,7 @@ namespace HangOut.Models
 
             return (ListTmp);
         }
-        public HG_FloorSide_or_RowName GetOne(int Floor_or_ScreenID)
+        public HG_FloorSide_or_RowName GetOne(int ID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -92,9 +95,9 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_FloorSide_or_RowName where RantalID=@RantalID";
+                string Query = "SELECT * FROM  HG_FloorSide_or_RowName where ID=@ID";
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@Floor_or_ScreenID", Floor_or_ScreenID);
+                cmd.Parameters.AddWithValue("@ID", ID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
