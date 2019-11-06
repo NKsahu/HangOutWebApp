@@ -86,7 +86,7 @@ namespace HangOut.Models
             return Row;
         }
 
-        public List<HG_Items> GetAll(int IID=0)
+        public List<HG_Items> GetAll(int OrgId=0)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -94,9 +94,9 @@ namespace HangOut.Models
             SqlDataReader SDR = null;
             List<HG_Items> ListTmp = new List<HG_Items>();
             string Query = "SELECT * FROM  HG_Items ORDER BY ItemID DESC";
-            if (IID > 0)
+            if (OrgId > 0)
             {
-                Query = "SELECT * FROM  HG_Items where ItemID"+IID.ToString()+" ORDER BY ItemID DESC";
+                Query = "SELECT * FROM  HG_Items where OrgID" + OrgId.ToString()+" ORDER BY ItemID DESC";
             }
             try
             {

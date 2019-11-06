@@ -49,9 +49,7 @@ namespace HangOut.Controllers
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
             System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OID").ToString());
             JArray jarrayObj = new JArray();
-
-            List<HG_Items> ListItems = new HG_Items().GetAll();
-            ListItems = ListItems.FindAll(x => x.OrgID == OrgId);
+            List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
             List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId);
             foreach (var Items in ListItems)
             {
@@ -106,10 +104,10 @@ namespace HangOut.Controllers
         {
             JObject ParaMeters = JObject.Parse(Obj);
             System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
-            System.Int64 OrgId = System.Convert.ToInt64(ParaMeters["OID"].ToString());
+            System.Int32 OrgId = System.Convert.ToInt32(ParaMeters["OID"].ToString());
             double TotalPrice = 0.00;
             List<Cart> CartItems = Cart.List.FindAll(x => x.CID == CustID && x.OrgId==OrgId);
-            List<HG_Items> ListItems = new HG_Items().GetAll();
+            List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
             JArray jArray = new JArray();
             foreach (Cart Mycart in CartItems)
             {
