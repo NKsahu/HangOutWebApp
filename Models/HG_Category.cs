@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
-
+using System.ComponentModel.DataAnnotations;
 namespace HangOut.Models
 {
     public class HG_Category
     {
-        
+        [Display(Name ="Menu Id")]
         public int CategoryID { get; set; }
+        [Display(Name ="Organization")]
         public int OrgID { get; set; }
+        [Display(Name ="Menu ")]
         public string Category { get; set; }
         public int EntryBy { get; set; }
         public DateTime EntryDate { get; set; }
