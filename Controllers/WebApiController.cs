@@ -132,9 +132,8 @@ namespace HangOut.Controllers
         public JArray GetMenulist(string Obj)
         {    
             JObject ParaMeters = JObject.Parse(Obj);
-            System.Int64 OrgId = System.Convert.ToInt64(ParaMeters["OID"].ToString());
-            List<HG_Category> listcategory = new HG_Category().GetAll();
-             listcategory = listcategory.FindAll(x => x.OrgID == OrgId); 
+            int OrgId = System.Convert.ToInt32(ParaMeters["OID"].ToString());
+            List<HG_Category> listcategory = new HG_Category().GetAll(OrgId:OrgId);
             return  JArray.FromObject(listcategory);
         }
 
