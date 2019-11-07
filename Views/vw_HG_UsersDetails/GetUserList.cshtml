@@ -20,6 +20,9 @@
                         @Html.DisplayNameFor(model => model.UserType)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(Model =>Model.OrgID)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.UserName)
                     </th>
                     <th>
@@ -50,6 +53,9 @@
                     <td>
                         @{ HG_UserTypes objuser = listuser.Find(x => x.UserType == item.UserType);}
                         @objuser.UserType
+                    </td>
+                    <td>
+                        @Html.DisplayFor(ModelItem => item.OrgID)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.UserName)
