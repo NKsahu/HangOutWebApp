@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<HangOut.Models.HG_Tables_or_Rows>
+@using HangOut.Models.Common;
 @{
     Layout = null;
 }
@@ -16,6 +17,7 @@
         <table class=" table table-bordered table-hover w-100" id="TBLID">
             <thead>
                 <tr>
+                    <th>Qr Code</th>
                     <th>
                         @Html.DisplayNameFor(model => model.Table_or_RowID)
                     </th>
@@ -41,7 +43,9 @@
             <tbody>
                 @foreach (var item in Model)
                 {
+                    string ImgName = QrCode.GenerateQr(item.Table_or_RowID,Path: "QRImgTorR");
                     <tr>
+                        <td><img src="~/QRImgTorR/@ImgName" width="60" height="60"/></td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Table_or_RowID)
                         </td>
