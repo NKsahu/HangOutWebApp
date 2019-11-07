@@ -85,6 +85,14 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(vw_HG_UsersDetails Objuser)
         {
+            if(Objuser.UserType!="A"&& Objuser.UserType != "SA")
+            {
+                if (Objuser.OrgID <= 0)
+                {
+                    return Json(new { msg = "Please Select Organization First" });
+                }
+            }
+
             int i = Objuser.save();
                 if(i>0)
             
