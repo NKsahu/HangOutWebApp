@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿
 using System.Web.Http;
 using HangOut.Models.Common;
 using System.Web.Mvc;
 using System.Web.Routing;
+using HangOut.Models.DynamicList;
 
 namespace HangOut
 {
@@ -21,6 +19,7 @@ namespace HangOut
         public void RamRefresh()
         {
             Cart.List = new System.Collections.Generic.List<Cart>();
+            OrgType.List = new OrgType().OrgTypeList();
         }
     }
 }

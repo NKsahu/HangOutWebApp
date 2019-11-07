@@ -181,6 +181,7 @@
     <Compile Include="Models\Common\State.cs" />
     <Compile Include="Models\Common\UsersMenu.cs" />
     <Compile Include="Models\DBCon.cs" />
+    <Compile Include="Models\DynamicList\OrgType.cs" />
     <Compile Include="Models\HG_Category.cs" />
     <Compile Include="Models\HG_FloorSide_or_RowName.cs" />
     <Compile Include="Models\HG_Floor_or_ScreenMaster.cs" />
