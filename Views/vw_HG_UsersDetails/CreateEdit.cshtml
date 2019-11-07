@@ -1,0 +1,80 @@
+﻿@model HangOut.Models.vw_HG_UsersDetails
+ @{ Layout = null;}
+@using HangOut.Models
+@{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll(); }
+<div class="card">
+    <div class="card-header">
+        <h4 style="text-align:center;color:#000000"><b>LIST OF USER  </b></h4>
+        <hr />
+    </div>
+    <div class="card-body">
+        @using (Ajax.BeginForm("CreateEdit", "vw_HG_UsersDetails", new { ID = Model.UserCode }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.UserCode)
+
+            <div class="row">
+                
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.UserType, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.DropDownListFor(model => model.UserType, new SelectList(new HG_UserTypes().GetAll(), "UTID","UserType",Model.UserType),"Select User Type",new{ @class = "form-control" } )
+                        @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
+                    
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                     
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                     
+                </div>
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.EMail, htmlAttributes: new { @class = "control-label  " })
+                     
+                        @Html.EditorFor(model => model.EMail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.EMail, "", new { @class = "text-danger" })
+                    
+                </div>
+
+                
+
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
+                    
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.Status)
+                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                        </div>
+                    
+                </div>
+
+                 
+                    <div class="col-sm-1 ">
+                        @Html.Label("SAVE",new {@class="text-white" })
+                        <input type="submit" value="SaVe" class="btn btn-success" />
+                    </div>
+                 
+            </div>
+        }
+
+    </div>
+</div>

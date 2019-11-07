@@ -69,5 +69,30 @@ namespace HangOut.Controllers
             }
             return RedirectToAction("vw_HG_UsersDetails");
         }
+        public ActionResult GetUserList()
+        {
+            vw_HG_UsersDetails Objuser = new vw_HG_UsersDetails();
+            List<vw_HG_UsersDetails> listUser = Objuser.GetAll();
+            return View(listUser);
+        }
+        public ActionResult CreateEdit( int ID)
+        {
+            vw_HG_UsersDetails Objuser = new vw_HG_UsersDetails();
+            Objuser = Objuser.GetSingleByUserId(ID);
+            return View(Objuser);
+        }
+        [HttpPost]
+        public ActionResult CreateEdit(vw_HG_UsersDetails Objuser)
+        {
+            int i = Objuser.save();
+                if(i>0)
+            
+                return RedirectToAction("GetUserList");
+                return RedirectToAction("Error");
+             
+             
+        }
+        public ActionResult Error()
+        { return View(); }
     }
 }

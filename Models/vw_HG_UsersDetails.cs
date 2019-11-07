@@ -24,38 +24,41 @@ namespace HangOut.Models
         public bool Status { get; set; }
        public vw_HG_UsersDetails()
         {
-            EMail = "";
-            UPhoto = "";
+            OrgID = 0;
+           UPhoto = "";
         }
         public List<vw_HG_UsersDetails> GetAll()
         {
             SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
-            SqlCommand cmd = null;
-            SqlDataReader SDR = null;
+             
             List<vw_HG_UsersDetails> listOfuser = new List<vw_HG_UsersDetails>();
+            string Query = "SELECT * FROM HG_UsersDetails WHERE Status=1 ;";
+          SqlCommand  cmd = new  SqlCommand(Query, Con);
             try
             {
-                string Query = "SELECT * FROM HG_UsersDetails WHERE Status=1 ;";
-                cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
-                SDR = cmd.ExecuteReader();
+               
+               
+               SqlDataReader SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
                     vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
-                    ObjTmp = new vw_HG_UsersDetails();
+                    
                     ObjTmp.UserCode = SDR.GetInt32(0);
                     ObjTmp.OrgID = SDR.GetInt32(1);
                     ObjTmp.UserType = SDR.GetString(2);
                     ObjTmp.UserName = SDR.GetString(3);
                     ObjTmp.UserId = SDR.GetString(4);
                     ObjTmp.Password = SDR.GetString(5);
+                    ObjTmp.EMail = SDR.GetString(6);
                     listOfuser.Add(ObjTmp);
                 }
             }
             catch (System.Exception e) { e.ToString(); }
-            finally { cmd.Dispose(); SDR.Close(); Con.Close(); Con.Dispose(); Con = null; }
-            return (listOfuser);
+            finally { cmd.Dispose();Con.Close(); }
+            return listOfuser;
         }
+        //this is get One Function
         public vw_HG_UsersDetails Checkvw_HG_UsersDetails()
         {
             SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -79,6 +82,36 @@ namespace HangOut.Models
                     ObjTmp.UserName = SDR.GetString(3);
                     ObjTmp.UserId = SDR.GetString(4);
                     ObjTmp.Password = SDR.GetString(5);
+                    ObjTmp.EMail = SDR.GetString(6);
+
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Con.Close(); Con.Dispose(); Con = null; }
+            return (ObjTmp);
+        }
+        public vw_HG_UsersDetails GetSingleByUserId(int UserCode)
+        {
+            SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
+            try
+            {
+                string Query = "SELECT * FROM HG_UsersDetails where UserCode=" + UserCode.ToString()+" and Status=1 ;";
+                cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTmp = new vw_HG_UsersDetails();
+                    ObjTmp.UserCode = SDR.GetInt32(0);
+                    ObjTmp.OrgID = SDR.GetInt32(1);
+                    ObjTmp.UserType = SDR.GetString(2);
+                    ObjTmp.UserName = SDR.GetString(3);
+                    ObjTmp.UserId = SDR.GetString(4);
+                    ObjTmp.Password = SDR.GetString(5);
+                    ObjTmp.EMail = SDR.GetString(6);
 
                 }
             }
@@ -96,16 +129,14 @@ namespace HangOut.Models
                 SqlCommand cmd = null;
                 string Quary = "";
                 if (this.UserCode == 0)
-                {
+                
                     Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status);SELECT SCOPE_IDENTITY(); ";
-                    cmd= new SqlCommand(Quary, Con);
-                }
-                else
-                {
+                     
+                 
                     Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,status=@status where UserCode=@UserCode;";
-                    cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
-                    cmd =   new SqlCommand(Quary, Con);
-                }
+
+                cmd = new SqlCommand(Quary, Con);
+                cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                 cmd.Parameters.AddWithValue("@UserType", this.UserType);
                 cmd.Parameters.AddWithValue("@UserName", this.UserName);
