@@ -48,7 +48,7 @@
                     </td>
                     
                     <td>
-                        @{ HG_UserTypes objuser = listuser.Find(x => x.UTID == item.UserCode);}
+                        @{ HG_UserTypes objuser = listuser.Find(x => x.UserType == item.UserType);}
                         @objuser.UserType
                     </td>
                     <td>

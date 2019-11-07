@@ -35,9 +35,9 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.UTID == 0)
                 {
-                    Query = "Insert into  HG_UserTypes  values(@UserType, @UserTypeName ,@EntryBy,@EntryDate,@UpdateDate,@Status);";
+                    Query = "Insert into  HG_UserTypes  values(@UserType,@UserTypeName,@EntryBy,@EntryDate,@UpdateDate,@Status);";
                     cmd = new SqlCommand(Query, Con);
-                    cmd.Parameters.AddWithValue("@EntryBy", HttpContext.Current.Session["ID"]);
+                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
                      
@@ -45,10 +45,10 @@ namespace HangOut.Models
                 else
                 {
 
-                    Query = "update  HG_UserTypes set UserType=@UserType,UserTypeName =@UserTypeName ,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,Status=@Status where UTID=@UTID";
+                    Query = "update  HG_UserTypes set UserType=@UserType,UserTypeName=@UserTypeName,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,Status=@Status where UTID=@UTID";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@UTID", this.UTID);
-                    cmd.Parameters.AddWithValue("@EntryBy", HttpContext.Current.Session["ID"]);
+                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
                 }

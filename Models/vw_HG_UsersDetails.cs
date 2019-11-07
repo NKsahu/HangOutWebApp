@@ -26,6 +26,7 @@ namespace HangOut.Models
         {
             OrgID = 0;
            UPhoto = "";
+            EMail = "";
         }
         public List<vw_HG_UsersDetails> GetAll()
         {
@@ -50,7 +51,7 @@ namespace HangOut.Models
                     ObjTmp.UserName = SDR.GetString(3);
                     ObjTmp.UserId = SDR.GetString(4);
                     ObjTmp.Password = SDR.GetString(5);
-                    ObjTmp.EMail = SDR.GetString(6);
+                    ObjTmp.EMail =SDR.IsDBNull(6)?"": SDR.GetString(6);
                     listOfuser.Add(ObjTmp);
                 }
             }
@@ -131,7 +132,7 @@ namespace HangOut.Models
                 if (this.UserCode == 0)
                 
                     Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status);SELECT SCOPE_IDENTITY(); ";
-                     
+                     else
                  
                     Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,status=@status where UserCode=@UserCode;";
 

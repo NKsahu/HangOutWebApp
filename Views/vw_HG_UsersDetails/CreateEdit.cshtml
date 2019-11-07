@@ -18,7 +18,7 @@
                 <div class="col-sm-4">
                     @Html.LabelFor(model => model.UserType, htmlAttributes: new { @class = "control-label  " })
                      
-                        @Html.DropDownListFor(model => model.UserType, new SelectList(new HG_UserTypes().GetAll(), "UTID","UserType",Model.UserType),"Select User Type",new{ @class = "form-control" } )
+                        @Html.DropDownListFor(model => model.UserType, new SelectList(new HG_UserTypes().GetAll(), "UserType", "UserType",Model.UserType),"Select User Type",new{ @class = "form-control" } )
                         @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
                     
                 </div>
