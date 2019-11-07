@@ -28,6 +28,7 @@ namespace HangOut.Models
            UPhoto = "";
             EMail = "";
         }
+        
         public List<vw_HG_UsersDetails> GetAll()
         {
             SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -71,8 +72,8 @@ namespace HangOut.Models
             {
                 string Query = "SELECT TOP 1 * FROM HG_UsersDetails WHERE UserID = @UserID AND Password = @Password and Status=1 ;";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@UserID", this.UserId);
-                cmd.Parameters.AddWithValue("@Password", this.Password);
+                cmd.Parameters.AddWithValue("@UserID", UserId);
+                cmd.Parameters.AddWithValue("@Password", Password);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {

@@ -27,6 +27,7 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult LoginPost(vw_HG_UsersDetails Obj)
         {
+
             Obj = Obj.Checkvw_HG_UsersDetails();
              if (Obj != null)
             {
