@@ -1,5 +1,5 @@
 ﻿@model HangOut.Models.HG_Tables_or_Rows
-
+@using HangOut.Models.DynamicList
 @{
     Layout = null;
 }
@@ -55,18 +55,10 @@
                 </div>
 
                 <div class="col-sm-4">
-                    @{
-                        List<SelectListItem> selectListItem = new List<SelectListItem>{
-
-                                                                    new SelectListItem { Text = "Restauarant", Value = "1" },
-                                                                    new SelectListItem { Text = "Theater", Value = "2" }
-
-                                                            };
-
-                    }
+                    
                     @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.DropDownListFor(model => model.Type, selectListItem, new { @class = "form-control", required = "required" })
+                    @Html.DropDownListFor(model => model.Type , new SelectList(OrgType.List,"id","Name"),new { @class = "form-control", required = "required" })
                     @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 
                 </div>

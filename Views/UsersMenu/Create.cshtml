@@ -12,16 +12,9 @@
         {
             <div class="row">
                 <div class="col-md-2">
-                    @{
-                        List<SelectListItem> SectionType = new List<SelectListItem>()
-                                                                    {
-                                                                         new SelectListItem { Text = "ADMIN", Value = "ADMIN" },
-                                                                         new SelectListItem { Text = "ACCOUNT", Value = "ACCOUNT" },
-
-                                                                    };
-                    }
+                   
                     @Html.LabelFor(model => model.Section, htmlAttributes: new { @class = "control-label " })
-                    @Html.DropDownListFor(model => model.Section, SectionType, new { @class = "form-control", required = "required" })
+                    @Html.DropDownListFor(model => model.Section ,, new { htmlAttributes = new { @class = "form-control", required = "required" } })
 
                 </div>
 
