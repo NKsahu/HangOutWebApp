@@ -2,6 +2,7 @@
     @{ Layout = null;}
 @using HangOut.Models
 @{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll();}
+@{ List<HG_OrganizationDetails> listorgo = new HG_OrganizationDetails().GetAll();}
 <div class="card">
     <div class="card-header">
         <h1 style="text-align:center"><b>LIST OF USERS </b> </h1>
@@ -20,7 +21,7 @@
                         @Html.DisplayNameFor(model => model.UserType)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(Model =>Model.OrgID)
+                        @Html.DisplayName( "Orgonzation ID")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.UserName)
@@ -55,7 +56,19 @@
                         @objuser.UserType
                     </td>
                     <td>
-                        @Html.DisplayFor(ModelItem => item.OrgID)
+                        @{ HG_OrganizationDetails ObjOrg = listorgo.Find(x => x.OrgID == item.OrgID);
+                            if (ObjOrg == null)
+                            {
+
+                            }
+                            else
+                            {
+                                @ObjOrg.Name
+                            }
+
+                        }
+
+
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.UserName)
