@@ -19,24 +19,22 @@
                 <tr>
                     <th>Qr Code</th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Table_or_RowID)
+                        @Html.DisplayName("Table Code")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.OrgId)
+                        @Html.DisplayName("Organization ")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Table_or_RowName)
+                        @Html.DisplayName("Table Name")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Floor_or_ScreenId)
+                        @Html.DisplayName("Floor Number")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FloorSide_or_RowNoID)
+                        @Html.DisplayName("Floor Side")
                     </th>
                      
-                    <th>
-                        @Html.DisplayNameFor(model => model.Type)
-                    </th>
+                   
                     <th></th>
                 </tr>
             </thead>
@@ -63,10 +61,6 @@
                         <td>
                              @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x. ID == item.FloorSide_or_RowNoID);}
                             @Objfloor.FloorSide_or_RowName
-                        </td>
-                        
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Type)
                         </td>
                         <td>
                             <a href=" /HG_Tables_or_Rows/CreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" > Edit</a>
