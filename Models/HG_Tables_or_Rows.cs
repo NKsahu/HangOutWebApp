@@ -54,18 +54,17 @@ namespace HangOut.Models
             finally { Con.Close(); }
             return Row;
         }
-        public List<HG_Tables_or_Rows> GetAll()
+        public List<HG_Tables_or_Rows> GetAll(int Type)
         {
 
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR  = null;
-            List<HG_Tables_or_Rows> listTemp = new List<HG_Tables_or_Rows>();  
-            
+            List<HG_Tables_or_Rows> listTemp = new List<HG_Tables_or_Rows>();
+            string Query = "SELECT * FROM HG_Tables_or_Rows where Type="+Type.ToString()+" ORDER BY Table_or_RowID DESC";
             try
             {
-                string Query = "SELECT * FROM HG_Tables_or_Rows ORDER BY Table_or_RowID DESC";
                 cmd = new SqlCommand(Query,Con);
                 SDR  = cmd.ExecuteReader();
                 while(SDR .Read())

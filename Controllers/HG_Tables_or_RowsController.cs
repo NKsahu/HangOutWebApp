@@ -9,11 +9,11 @@ namespace HangOut.Controllers
 {
     public class HG_Tables_or_RowsController : Controller
     {
-        // GET: HG_Tables_or_Rows
-        public ActionResult Index()
+        // GET: HG_Tables INDEX
+        public ActionResult Index(int Type)
         {
             HG_Tables_or_Rows ObjTable = new HG_Tables_or_Rows();
-            List<HG_Tables_or_Rows> listtable = ObjTable.GetAll();
+            List<HG_Tables_or_Rows> listtable = ObjTable.GetAll(Type);
             return View(listtable);
         }
         public ActionResult CreateEdit(int ID)
