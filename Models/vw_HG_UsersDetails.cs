@@ -29,13 +29,17 @@ namespace HangOut.Models
             EMail = "";
         }
         
-        public List<vw_HG_UsersDetails> GetAll()
+        public List<vw_HG_UsersDetails> GetAll(string Type="")
         {
             SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
              
             List<vw_HG_UsersDetails> listOfuser = new List<vw_HG_UsersDetails>();
-            string Query = "SELECT * FROM HG_UsersDetails WHERE Status=1 ;";
+            string Query = " SELECT * FROM HG_UsersDetails WHERE  Status=1 and UserType!='CUST' ;";
+            if (Type != "")
+            {
+                Query = "SELECT * FROM HG_UsersDetails WHERE UserType='"+Type+"' and Status=1 ;";
+            }
           SqlCommand  cmd = new  SqlCommand(Query, Con);
             try
             {
