@@ -224,7 +224,8 @@
     <Content Include="Views\vw_HG_UsersDetails\GetUserList.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\Error.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\CreateEdit.cshtml" />
-    <Content Include="Views\City\Index.cshtml" />
+    <Content Include="Views\HG_Tables_or_Rows\SheetIndex.cshtml" />
+    <Content Include="Views\HG_Tables_or_Rows\SheetCreateEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -236,6 +237,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
+    <Folder Include="Views\City\" />
     <Folder Include="Views\HG_Order\" />
   </ItemGroup>
   <ItemGroup>

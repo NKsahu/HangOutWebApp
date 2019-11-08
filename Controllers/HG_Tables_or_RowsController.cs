@@ -16,6 +16,30 @@ namespace HangOut.Controllers
             List<HG_Tables_or_Rows> listtable = ObjTable.GetAll(Type);
             return View(listtable);
         }
+        public ActionResult SheetIndex(int Type)
+        {
+            HG_Tables_or_Rows ObjTable = new HG_Tables_or_Rows();
+            List<HG_Tables_or_Rows> listtable = ObjTable.GetAll(Type);
+            return View(listtable);
+        }
+        public ActionResult SheetCreateEdit(int ID)
+        {
+            HG_Tables_or_Rows ObjTable = new HG_Tables_or_Rows();
+            if (ID > 0)
+            {
+                ObjTable = ObjTable.GetOne(ID);
+
+            }
+            return View(ObjTable);
+        }
+        [HttpPost]
+        public ActionResult SheetCreateEdit(HG_Tables_or_Rows ObjTable)
+        {
+             Int64 i = ObjTable.save();
+            if (i > 0)
+                return RedirectToAction("SheetIndex",new { Type= 2});
+            return RedirectToAction("Error");
+        }
         public ActionResult CreateEdit(int ID)
         {
              
@@ -32,7 +56,7 @@ namespace HangOut.Controllers
         {
             Int64 i = ObjTable.save();
             if (i > 0)
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",new { Type= 1});
             return RedirectToAction("Error");
         }
         public ActionResult Delete(int ID)

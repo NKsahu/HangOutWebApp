@@ -1,0 +1,72 @@
+﻿@model IEnumerable<HangOut.Models.HG_Tables_or_Rows>
+@using HangOut.Models.Common;
+@{
+    Layout = null;
+}
+@using HangOut.Models
+@{ List<HG_FloorSide_or_RowName> listfloor = new HG_FloorSide_or_RowName().GetAll();}
+@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
+@{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll();}
+<div class="card">
+    <div class="card-header">
+        <h1 style="text-align:center"><b>SHEETS</b> </h1>
+        <hr />
+    </div>
+    <a href="/HG_Tables_or_Rows/SheetCreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <div class="card-body">
+        <table class=" table table-bordered table-hover w-100" id="TBLID">
+            <thead>
+                <tr>
+                    
+                    <th>
+                        @Html.DisplayName("Sheet Code")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Organization ")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Sheet  Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Screen Number")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Row Number")
+                    </th>
+
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    string ImgName = QrCode.GenerateQr(item.Table_or_RowID, Path: "QRImgTorR");
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Table_or_RowID)
+                        </td>
+                        <td>
+                            @{ HG_OrganizationDetails Objorg = listorgonization.Find(x => x.OrgID == item.OrgId);}
+                            @Objorg.Name
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Table_or_RowName)
+                        </td>
+                        <td>
+                            @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);}
+                            @ObjScreen.Name
+                        </td>
+                        <td>
+                            @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x.ID == item.FloorSide_or_RowNoID);}
+                            @Objfloor.FloorSide_or_RowName
+                        </td>
+                        <td>
+                            <a href=" /HG_Tables_or_Rows/SheetCreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                            <a href="/HG_Tables_or_Rows/Delete?ID=@item.Table_or_RowID" class="btn btn-danger btn-sm "> Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
