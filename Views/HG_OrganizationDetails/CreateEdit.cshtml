@@ -172,3 +172,44 @@
         }
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#State").change(function () {
+
+
+
+        });
+
+        function GetDrowpDownCity() {
+            var StateId = $("#State").val();
+            $("#waiting").show();
+            $.ajax({
+                url: "/Webapi/GetCityByState",
+                data: {
+                    SID:StateId
+                },
+                type: "POST",
+                success: function (data) {
+                    $.each(data, function (i, data) {      // bind the dropdown list using json result              
+                        $('<option>',
+                            {
+                                value: data.CityId,
+                                text: data.Name
+                            }).html(data.Name).appendTo("#State");
+                    });
+
+                    $("#waiting").hide();
+                },
+                error:function(Xr,Status,ErrorMsg) {
+                    $("#waiting").hide();
+                }
+            });
+        }
+
+    });
+   
+
+
+
+</script>
