@@ -1,7 +1,101 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿@model IEnumerable<HangOut.Models.Common.Cart>
+    @using HangOut.Models.Common
+@{ 
 
-<h2>Index</h2>
+}
+@{ Layout = null;}
+@{
+
+    switch (Request.QueryString["Type"])
+    {
+        //case 1 for show filters only
+        case "1":
+
+            <div class="card">
+                <div class="card-header">  Filter </div>
+                <div class="card-body">
+                    <div class="container">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                @Html.Label("Hub Name")
+                                @{
+
+                                    List<SelectListItem> HubSelectList = new List<SelectListItem>()
+                                                                                                                                                            {
+                                                                                                                                                                new SelectListItem{ Text="Select" ,Value="0"}
+                                                                                                                                                            };
+
+                                }
+                                @Html.DropDownList("HID", HubSelectList, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-2">
+                                <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col" id="List">
+
+
+            </div>
+
+            <script>
+    $("#Search").click(function () {
+                    $("#waiting").show();
+                    var CID = $("#CID").val();
+        var HID = $("#HID").val();
+                    var Ordertype = $("#Ordertype").val();
+                    $.ajax({
+                        type: 'GET',
+                        data: { CID: CID, HID: HID,Ordertype: Ordertype},
+                        url: "/Order/HubWiseOrderStatusReportFilter?Status=2",
+                        success: function (data) {
+                            $('#HUBOrderList2').html('');
+                            $("#HUBOrderList").html(data);
+                            $("#waiting").hide();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) { // error callback
+                            $("#waiting").hide();
+                        }
+                    });
+
+                });
+   </script>
+                                            break;
+                                        }
+                                    }
+
+<div class="col" id="HUBOrderList2">
+    <div class="card">
+        <div class="card-header">City List </div>
+        <div class="card-body">
+            <table class="table table-hover table-bordered text-center" id="TBLID">
+                <thead>
+                    <tr>
+                        <th> Code </th>
+                        <th> Name </th>
+                        <th>State</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in orders)
+                    {
+                        <tr>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
 
