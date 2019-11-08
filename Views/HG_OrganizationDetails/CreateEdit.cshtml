@@ -3,6 +3,9 @@
 @{
     Layout = null;
 }
+@using HangOut.Models.Common
+@{List<City> listcity = new City().GetAllByState(0);}
+@{List<State> liststate = new State().GetAll();}
 <div class="card">
     <div class="card-header">
         <h4 style="text-align:center;color:#000000"><b>ORGONIZATION</b></h4>
@@ -52,14 +55,14 @@
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId","Name"),"Select State", new { @class = "form-control", required = "required" } )
                 @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
 
             </div>
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.DropDownListFor(model => model.City, new SelectList(new City().GetAllByState(0), "CityId","Name")  , new { @class = "form-control", required = "required" } )
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
 
             </div>
