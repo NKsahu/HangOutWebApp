@@ -61,6 +61,7 @@ namespace HangOut.Controllers
                 objItem.Add("ItemQuntity", Items.Qty);
                 objItem.Add("ItemImage", Items.Image);
                 objItem.Add("ItemCartValue", cartCurrentItem.Sum(x=>x.Count));
+                objItem.Add("MenuId", Items.CategoryID);
                 jarrayObj.Add(objItem);
             }
             return jarrayObj;
@@ -148,6 +149,19 @@ namespace HangOut.Controllers
         {
             return JArray.FromObject( Cart.List.FindAll(x => x.CID == int.Parse(CID)));
         }
+        public JArray StateList()
+        {
+            List<State> list = new State().GetAll();
+            return JArray.FromObject(list);
+        }
+        public JArray CityListByStateId(string Obj)
+        {
+            JObject ParaMeters = JObject.Parse(Obj);
+            int StateId = System.Convert.ToInt32(ParaMeters.GetValue("SID").ToString());
+            List<City> citylist = new City().GetAllByState(StateId);
+            return JArray.FromObject(citylist);
+        }
+
 
     }
 }

@@ -159,6 +159,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\HG_CategoryController.cs" />
     <Compile Include="Controllers\HG_FloorSide_or_RowNameController.cs" />
     <Compile Include="Controllers\HG_Floor_or_ScreenMasterController.cs" />
@@ -174,8 +175,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Common\Cart.cs" />
+    <Compile Include="Models\Common\City.cs" />
     <Compile Include="Models\Common\LoginFilter.cs" />
     <Compile Include="Models\Common\QrCode.cs" />
+    <Compile Include="Models\Common\State.cs" />
     <Compile Include="Models\Common\UsersMenu.cs" />
     <Compile Include="Models\DBCon.cs" />
     <Compile Include="Models\HG_Category.cs" />
@@ -231,6 +234,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
+    <Folder Include="Views\City\" />
     <Folder Include="Views\HG_Order\" />
   </ItemGroup>
   <ItemGroup>
