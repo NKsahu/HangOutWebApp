@@ -32,7 +32,7 @@
                     @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label  " })
 
                    
-                    @Html.DropDownListFor(model => model.Type , new SelectList( OrgType.List,"id","Name") { @class = "form-control", required = "required" })
+                    @Html.DropDownListFor(model => model.Type , new SelectList( OrgType.List,"id","Name"),new { @class = "form-control", required = "required" })
                     @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 
                 </div>
