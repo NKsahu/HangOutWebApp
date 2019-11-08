@@ -23,9 +23,9 @@
 
             </div>
             <div class="col-sm-4 hh">
-                @Html.LabelFor(model => model.OrgID, htmlAttributes: new { @class = "control-label  " })
+                @Html.LabelFor(model => model.OrgID, htmlAttributes: new { @class = "control-label  ", style = " display: none; " })
 
-                @Html.EditorFor(model => model.OrgID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.OrgID, new { htmlAttributes = new { @class = "form-control" , style = " display: none; " } })
                 @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
 
             </div>
@@ -85,11 +85,11 @@
     </div>
 </div>
 <script>
-    $(document).change(function ( ) {
+    $(document).change(function () {
        var value = $("#UserType").val();
-        String a = "A";
-        String b = "SA";
-        if (a == a && b == b) {
+        var A = "Admin";
+        var B = "Super Admin"  
+        if (  A ==  A && SA == SA) {
             $("hh").hide();
         } else {
             $("hh").show();
