@@ -232,6 +232,7 @@
     <Content Include="Views\HG_FloorSide_or_RowName\RowIndex.cshtml" />
     <Content Include="Views\HG_FloorSide_or_RowName\RowCreateEdit.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\GetCustomerList.cshtml" />
+    <Content Include="Views\City\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
