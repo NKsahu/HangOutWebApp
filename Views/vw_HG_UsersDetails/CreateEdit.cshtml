@@ -22,7 +22,7 @@
                 @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 hh">
                 @Html.LabelFor(model => model.OrgID, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.OrgID, new { htmlAttributes = new { @class = "form-control" } })
@@ -85,8 +85,15 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-
+    $(document).change(function ( ) {
+       var value = $("#UserType").val();
+        String a = "A";
+        String b = "SA";
+        if (a == a && b == b) {
+            $("hh").hide();
+        } else {
+            $("hh").show();
+        }
 
     });
 </script>
