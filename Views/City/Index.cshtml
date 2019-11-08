@@ -1,33 +1,23 @@
-﻿@model IEnumerable<HangOut.Models.Common.Cart>
-    @using HangOut.Models.Common
-@{ 
-
-}
-@{ Layout = null;}
+﻿@model IEnumerable<HangOut.Models.Common.City>
+@using HangOut.Models.Common
 @{
-
-    switch (Request.QueryString["Type"])
-    {
-        //case 1 for show filters only
-        case "1":
-
+                Layout = null;
+                switch (Request.QueryString["Type"])
+                {
+                    //case 1 for show filters only
+                    case "1":
             <div class="card">
-                <div class="card-header">  Filter </div>
+                <div class="card-header">Filter</div>
                 <div class="card-body">
                     <div class="container">
-
                         <div class="row">
                             <div class="col-md-3">
-                                @Html.Label("Hub Name")
+                                @Html.Label("State Name")
                                 @{
 
-                                    List<SelectListItem> HubSelectList = new List<SelectListItem>()
-                                                                                                                                                            {
-                                                                                                                                                                new SelectListItem{ Text="Select" ,Value="0"}
-                                                                                                                                                            };
-
+                                    SelectList selectList = new SelectList(new State().GetAll(), "StateId", "Name");
                                 }
-                                @Html.DropDownList("HID", HubSelectList, new { @class = "form-control" })
+        @Html.DropDownList("SID", selectList, new { @class = "form-control" })
                             </div>
                             <div class="col-sm-2">
                                 <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
@@ -43,34 +33,37 @@
 
 
             </div>
-
             <script>
-    $("#Search").click(function () {
+                $("#Search").click(function () {
                     $("#waiting").show();
-                    var CID = $("#CID").val();
-        var HID = $("#HID").val();
-                    var Ordertype = $("#Ordertype").val();
+                    var StateCode = $("#SID").val();
                     $.ajax({
-                        type: 'GET',
-                        data: { CID: CID, HID: HID,Ordertype: Ordertype},
-                        url: "/Order/HubWiseOrderStatusReportFilter?Status=2",
+                        url:"/City/index?Type=2&StateCode="+StateCode,
+                        type: "GET",
                         success: function (data) {
-                            $('#HUBOrderList2').html('');
-                            $("#HUBOrderList").html(data);
+                            $("#List2").html("");
+                            $("#List").html("");
+                            $("#List").html(data);
                             $("#waiting").hide();
                         },
-                        error: function (jqXhr, textStatus, errorMessage) { // error callback
+                        error: function (jqXhr, textStatus, errorMessage) { // error callback 
                             $("#waiting").hide();
                         }
+
                     });
 
+
+
+
                 });
-   </script>
+            </script>
+           
+   
                                             break;
                                         }
                                     }
 
-<div class="col" id="HUBOrderList2">
+<div class="col" id="List2">
     <div class="card">
         <div class="card-header">City List </div>
         <div class="card-body">
@@ -79,16 +72,17 @@
                     <tr>
                         <th> Code </th>
                         <th> Name </th>
-                        <th>State</th>
                       
                     </tr>
                 </thead>
                 <tbody>
 
-                    @foreach (var item in orders)
+                    @foreach (var item in Model)
                     {
-                        <tr>
-                        </tr>
+                    <tr>
+                        <td>@item.CityId</td>
+                        <td>@item.Name</td>
+                    </tr>
                     }
                 </tbody>
             </table>
