@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
+
 namespace HangOut.Models.Common
 {
     public class City
     {
-        int CityId { get; set; }
-        string Name { get; set; }
-        int StateId { get; set; }
+      public  int CityId { get; set; }
+      public  string Name { get; set; }
+     public   int StateId { get; set; }
         public List<City> GetAllByState(int StateId)
         {
             System.Data.SqlClient.SqlCommand cmd = null;

@@ -1,0 +1,100 @@
+﻿@model IEnumerable<HangOut.Models.Common.City>
+@{
+    Layout = null;
+}
+@{
+    // type 1 means filter
+    if (Request.QueryString["Type"] == "1")
+    {
+        <div class="card">
+            <div class="card-header">  Filter </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("State Name")
+                            @{
+
+                                List<SelectListItem> HubSelectList = new List<SelectListItem>();
+
+                            }
+                            @Html.DropDownList("HID", HubSelectList, new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-2">
+
+                            <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col" id="List">
+
+
+        </div>
+
+        <script>
+    $("#Search").click(function () {
+                    $("#waiting").show();
+                    var CID = $("#CID").val();
+        var HID = $("#HID").val();
+                    var Ordertype = $("#Ordertype").val();
+                    $.ajax({
+                        type: 'GET',
+                        data: { CID: CID, HID: HID,Ordertype: Ordertype},
+                        url: "/Order/HubWiseOrderStatusReportFilter?Status=2",
+                        success: function (data) {
+                            $('#HUBOrderList2').html('');
+                            $("#HUBOrderList").html(data);
+                            $("#waiting").hide();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) { // error callback
+                            $("#waiting").hide();
+                        }
+                    });
+
+    });
+    </script>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                <h1 style="text-align:center"><b>Filter</b> </h1>
+            </div>
+            <a href="/HG_Tables_or_Rows/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+            <div class="card-body">
+                <table class=" table table-bordered table-hover w-100" id="TBLID">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CityId)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayName("State")
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.CityId</td>
+                                <td>@item.Name</td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+
