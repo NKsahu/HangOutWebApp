@@ -22,9 +22,7 @@
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
 
-                    <th>
-                        @Html.DisplayNameFor(Model => Model.Type)
-                    </th>
+                    
                     <th>
                         @Html.DisplayName("Orgonization")
                     </th>
@@ -41,9 +39,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Type)
-                        </td>
+                        
                         <td>
                             @{ HG_OrganizationDetails ObjOrg = listorgonization.Find(x => x.OrgID == item.OrgID);}
                             @ObjOrg.Name

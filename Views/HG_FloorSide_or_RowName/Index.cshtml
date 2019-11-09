@@ -18,12 +18,7 @@
                     <th>
                         @Html.DisplayName("Floor ID")
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RowSize)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model=>model.Type)
-                    </th>
+                    
                     <th>
                         @Html.DisplayName("Orgonization")
                     </th>
@@ -37,12 +32,8 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.FloorSide_or_RowName)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.RowSize)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Type)
-                        </td>
+                        
+                        
                         <td>
                             @{ HG_OrganizationDetails ObjOrg = listorgonization.Find(x => x.OrgID == item.OrgID);}
                             @ObjOrg.Name
