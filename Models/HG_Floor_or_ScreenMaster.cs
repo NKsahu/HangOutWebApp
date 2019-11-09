@@ -57,7 +57,7 @@ namespace HangOut.Models
             finally { Con.Close(); }
             return Row;
         }
-        public List<HG_Floor_or_ScreenMaster>GetAll()
+        public List<HG_Floor_or_ScreenMaster>GetAll(int Type)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -67,7 +67,7 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_Floor_or_ScreenMaster ORDER BY Floor_or_ScreenID DESC";
+                string Query = "SELECT * FROM  HG_Floor_or_ScreenMaster where Type="+Type.ToString()+" ORDER BY Floor_or_ScreenID DESC";
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

@@ -9,12 +9,38 @@ namespace HangOut.Controllers
 {
     public class HG_Floor_or_ScreenMasterController : Controller
     {
-        // GET: HG_Floor_or_ScreenMaster
-        public ActionResult Index()
+        // GET: HG_Floor 
+        public ActionResult Index(int Type)
         {
             HG_Floor_or_ScreenMaster Objfloor = new HG_Floor_or_ScreenMaster();
-            List<HG_Floor_or_ScreenMaster> listfloor = Objfloor.GetAll();
+            List<HG_Floor_or_ScreenMaster> listfloor = Objfloor.GetAll(Type);
             return View(listfloor);
+        }
+        // Get: Screen Index
+        public ActionResult ScreenIndex(int Type)
+        {
+            HG_Floor_or_ScreenMaster Objfloor = new HG_Floor_or_ScreenMaster();
+            List<HG_Floor_or_ScreenMaster> listfloor = Objfloor.GetAll(Type);
+            return View(listfloor);
+        }
+        // Get: Screen CreateEdit
+        public ActionResult ScreenCreateEdit(int ID)
+        {
+
+            HG_Floor_or_ScreenMaster Objfloor = new HG_Floor_or_ScreenMaster();
+            if (ID > 0)
+            {
+                Objfloor = Objfloor.GetOne(ID);
+            }
+            return View(Objfloor);
+        }
+        [HttpPost]
+        public ActionResult ScreenCreateEdit(HG_Floor_or_ScreenMaster Objfloor)
+        {
+            int i = Objfloor.save();
+            if (i > 0)
+                return RedirectToAction("ScreenIndex",new { Type=2});
+            return RedirectToAction("Error");
         }
         public ActionResult CreateEdit(int ID)
         {
@@ -30,7 +56,7 @@ namespace HangOut.Controllers
         {
             int i = Objfloor.save();
             if (i > 0)
-                return RedirectToAction("Index");
+                return RedirectToAction("Index" , new { Type=1});
             return RedirectToAction("Error");
 
         }

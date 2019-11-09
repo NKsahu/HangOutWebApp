@@ -226,6 +226,8 @@
     <Content Include="Views\vw_HG_UsersDetails\CreateEdit.cshtml" />
     <Content Include="Views\HG_Tables_or_Rows\SheetIndex.cshtml" />
     <Content Include="Views\HG_Tables_or_Rows\SheetCreateEdit.cshtml" />
+    <Content Include="Views\HG_Floor_or_ScreenMaster\ScreenCreateEdit.cshtml" />
+    <Content Include="Views\HG_Floor_or_ScreenMaster\ScreenIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
