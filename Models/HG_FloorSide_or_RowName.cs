@@ -53,7 +53,7 @@ namespace HangOut.Models
             finally { Con.Close(); }
             return Row;
         }
-        public List<HG_FloorSide_or_RowName> GetAll()
+        public List<HG_FloorSide_or_RowName> GetAll(int Type)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -63,7 +63,7 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_FloorSide_or_RowName ORDER BY ID DESC";
+                string Query = "SELECT * FROM  HG_FloorSide_or_RowName where Type="+Type.ToString()+" ORDER BY ID DESC";
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
