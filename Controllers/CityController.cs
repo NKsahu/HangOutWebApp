@@ -15,8 +15,9 @@ namespace HangOut.Controllers
             }
             return View(cities);
         }
-        public ActionResult FilterCity()
+        public ActionResult Create(int CityId)
         {
+            City city=new City().
 
             return View();
         }
