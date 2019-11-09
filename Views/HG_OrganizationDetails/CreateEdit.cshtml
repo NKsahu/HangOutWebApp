@@ -10,10 +10,9 @@
     </div>
     <div class="card-body">
 
-
-        @using (Html.BeginForm())
+        @using (Ajax.BeginForm("CreateEdit", "HG_OrganizationDetails", new { ID = Model.OrgID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-            @Html.AntiForgeryToken()
+             
             @Html.HiddenFor(model => model.OrgID)
             <div class="row">
 
@@ -21,9 +20,9 @@
 
 
                 <div class="col-sm-4">
-                    
-                        @Html.LabelFor(model => model.OrgTypes, htmlAttributes: new { @class = "control-label  " })
-                    @Html.DropDownListFor(model => model.OrgTypes, new SelectList(OrgType.List,"id","Name"),new { @class = "form-control", required = "required"  })
+
+                    @Html.LabelFor(model => model.OrgTypes, htmlAttributes: new { @class = "control-label  " })
+                    @Html.DropDownListFor(model => model.OrgTypes, new SelectList(OrgType.List, "id", "Name"), new { @class = "form-control", required = "required" })
                     @Html.ValidationMessageFor(model => model.OrgTypes, "", new { @class = "text-danger" })
                 </div>
 
