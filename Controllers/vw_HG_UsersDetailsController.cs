@@ -76,6 +76,12 @@ namespace HangOut.Controllers
             List<vw_HG_UsersDetails> listUser = Objuser.GetAll();
             return View(listUser);
         }
+        public ActionResult GetCustomerList()
+        {
+            vw_HG_UsersDetails Objuser = new vw_HG_UsersDetails();
+            List<vw_HG_UsersDetails> listUser = Objuser.GetAll(Type:"CUST");
+            return View(listUser);
+        }
         public ActionResult CreateEdit( int ID)
         {
             vw_HG_UsersDetails Objuser = new vw_HG_UsersDetails();

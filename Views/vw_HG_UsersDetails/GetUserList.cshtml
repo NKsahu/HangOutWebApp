@@ -53,7 +53,7 @@
                     
                     <td>
                         @{ HG_UserTypes objuser = listuser.Find(x => x.UserType == item.UserType);}
-                        @objuser.UserType
+                        @objuser.UserTypeName
                     </td>
                     <td>
                         @{ HG_OrganizationDetails ObjOrg = listorgo.Find(x => x.OrgID == item.OrgID);
