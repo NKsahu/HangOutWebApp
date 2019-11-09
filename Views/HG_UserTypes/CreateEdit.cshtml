@@ -10,17 +10,17 @@
     <div class="card-body">
 
 
-        @using (Html.BeginForm())
+        @using (Ajax.BeginForm("CreateEdit", "HG_UserTypes", new { UTID = Model.UTID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(model => model.UTID)
             <div class="row">
 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                
-                    @Html.ValidationMessageFor(model => model.UTID, "", new { @class = "text-danger" })
 
-                 
+                @Html.ValidationMessageFor(model => model.UTID, "", new { @class = "text-danger" })
+
+
 
                 <div class="col-sm-4">
                     @Html.LabelFor(model => model.UserType, htmlAttributes: new { @class = "control-label  " })
