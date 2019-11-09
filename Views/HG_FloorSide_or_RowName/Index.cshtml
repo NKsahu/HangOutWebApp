@@ -7,7 +7,7 @@
 @{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
 <div class="card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>FLOORSIDE AND ROW NAME</b> </h1>
+        <h1 style="text-align:center"><b>FLOORSIDE  </b> </h1>
         <hr />
     </div>
     <a href="/HG_FloorSide_or_RowName/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
@@ -16,7 +16,7 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.FloorSide_or_RowName)
+                        @Html.DisplayName("Floor ID")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.RowSize)
@@ -25,7 +25,7 @@
                         @Html.DisplayNameFor(model=>model.Type)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(Model=> Model.OrgID)
+                        @Html.DisplayName("Orgonization")
                     </th>
                     <th></th>
                 </tr>
