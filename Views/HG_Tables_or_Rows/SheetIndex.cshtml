@@ -4,9 +4,9 @@
     Layout = null;
 }
 @using HangOut.Models
-@{ List<HG_FloorSide_or_RowName> listfloor = new HG_FloorSide_or_RowName().GetAll();}
-@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
-@{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll();}
+@{ List<HG_FloorSide_or_RowName> listfloor = new HG_FloorSide_or_RowName().GetAll(1);}
+@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(1);}
+@{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll(1);}
 <div class="card">
     <div class="card-header">
         <h1 style="text-align:center"><b>SHEETS</b> </h1>
@@ -17,7 +17,7 @@
         <table class=" table table-bordered table-hover w-100" id="TBLID">
             <thead>
                 <tr>
-                    
+
                     <th>
                         @Html.DisplayName("Sheet Code")
                     </th>
@@ -54,19 +54,41 @@
                             @Html.DisplayFor(modelItem => item.Table_or_RowName)
                         </td>
                         <td>
-                            @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);}
-                            @ObjScreen.Name
-                        </td>
+                            @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);
+                                if (ObjScreen == null)
+                                {
+
+                                }
+                                else
+                                {
+                                    @ObjScreen.Name
+                                }
+                              
+                                
+                                }
+
+                            </td>
                         <td>
-                            @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x.ID == item.FloorSide_or_RowNoID);}
-                            @Objfloor.FloorSide_or_RowName
+                            @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x.ID == item.FloorSide_or_RowNoID);
+                                if (Objfloor == null)
+                                {
+
+                                }
+                                else
+                                {
+                                    @Objfloor.FloorSide_or_RowName
+                                }
+
+                            }
+
                         </td>
-                        <td>
-                            <a href=" /HG_Tables_or_Rows/SheetCreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                            <a href="/HG_Tables_or_Rows/Delete?ID=@item.Table_or_RowID" class="btn btn-danger btn-sm "> Delete</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                            <td>
+                                <a href=" /HG_Tables_or_Rows/SheetCreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                                <a href="/HG_Tables_or_Rows/Delete?ID=@item.Table_or_RowID" class="btn btn-danger btn-sm "> Delete</a>
+                            </td>
+                        </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>

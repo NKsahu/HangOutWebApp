@@ -4,9 +4,9 @@
     Layout = null;
 }
 @using HangOut.Models
-@{ List<HG_FloorSide_or_RowName> listfloor = new HG_FloorSide_or_RowName().GetAll();}
-@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
-@{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll();}
+@{ List<HG_FloorSide_or_RowName> listfloor = new HG_FloorSide_or_RowName().GetAll(1);}
+@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(1);}
+@{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll(1);}
  <div class="card">
     <div class="card-header">
         <h1 style="text-align:center"><b>TABLES</b> </h1>
