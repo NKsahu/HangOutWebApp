@@ -1,42 +1,50 @@
-﻿@model IEnumerable<HangOut.Models.Common.City>
-@{
-    Layout = null;
+﻿@model IEnumerable<HangOut.Models.Common.Cart>
+    @using HangOut.Models.Common
+@{ 
+
 }
+@{ Layout = null;}
 @{
-    // type 1 means filter
-    if (Request.QueryString["Type"] == "1")
+
+    switch (Request.QueryString["Type"])
     {
-        <div class="card">
-            <div class="card-header">  Filter </div>
-            <div class="card-body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3">
-                            @Html.Label("State Name")
-                            @{
+        //case 1 for show filters only
+        case "1":
 
-                                List<SelectListItem> HubSelectList = new List<SelectListItem>();
+            <div class="card">
+                <div class="card-header">  Filter </div>
+                <div class="card-body">
+                    <div class="container">
 
-                            }
-                            @Html.DropDownList("HID", HubSelectList, new { @class = "form-control" })
-                        </div>
-                        <div class="col-sm-2">
+                        <div class="row">
+                            <div class="col-md-3">
+                                @Html.Label("Hub Name")
+                                @{
 
-                            <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
+                                    List<SelectListItem> HubSelectList = new List<SelectListItem>()
+                                                                                                                                                            {
+                                                                                                                                                                new SelectListItem{ Text="Select" ,Value="0"}
+                                                                                                                                                            };
+
+                                }
+                                @Html.DropDownList("HID", HubSelectList, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-2">
+                                <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
+                            </div>
+
                         </div>
 
                     </div>
-
                 </div>
             </div>
-        </div>
 
-        <div class="col" id="List">
+            <div class="col" id="List">
 
 
-        </div>
+            </div>
 
-        <script>
+            <script>
     $("#Search").click(function () {
                     $("#waiting").show();
                     var CID = $("#CID").val();
@@ -56,45 +64,38 @@
                         }
                     });
 
-    });
-    </script>
-    }
-    else
-    {
-        <div class="card">
-            <div class="card-header">
-                <h1 style="text-align:center"><b>Filter</b> </h1>
-            </div>
-            <a href="/HG_Tables_or_Rows/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
-            <div class="card-body">
-                <table class=" table table-bordered table-hover w-100" id="TBLID">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CityId)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Name)
-                            </th>
-                            <th>
-                                @Html.DisplayName("State")
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.CityId</td>
-                                <td>@item.Name</td>
+                });
+   </script>
+                                            break;
+                                        }
+                                    }
 
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+<div class="col" id="HUBOrderList2">
+    <div class="card">
+        <div class="card-header">City List </div>
+        <div class="card-body">
+            <table class="table table-hover table-bordered text-center" id="TBLID">
+                <thead>
+                    <tr>
+                        <th> Code </th>
+                        <th> Name </th>
+                        <th>State</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in orders)
+                    {
+                        <tr>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-    }
-}
+    </div>
+
+</div>
+
+
 
