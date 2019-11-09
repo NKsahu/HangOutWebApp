@@ -12,7 +12,7 @@
 
         @using (Ajax.BeginForm("CreateEdit", "HG_UserTypes", new { UTID = Model.UTID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-            @Html.AntiForgeryToken()
+            
             @Html.HiddenFor(model => model.UTID)
             <div class="row">
 
