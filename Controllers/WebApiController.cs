@@ -75,6 +75,7 @@ namespace HangOut.Controllers
                         objItem.Add("MenuId", Items.CategoryID);
                         jarrayItem.Add(objItem);
                     }
+                    JobjMenu.Add("MenuItemCount", ItemListByMenu.Count);
                     JobjMenu.Add("MenuItems", jarrayItem);
                     JMenuArray.Add(JobjMenu);
                 }

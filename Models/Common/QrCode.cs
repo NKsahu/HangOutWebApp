@@ -19,7 +19,14 @@ namespace HangOut.Models.Common
             {
                 return QrId.ToString() + ".jpg";
             }
-            var barcodeBitmap = new Bitmap(result,100,100);
+            RectangleF rectf = new RectangleF(100, 100, 200, 200);
+            var barcodeBitmap = new Bitmap(result,400,400);
+            Graphics g = Graphics.FromImage(barcodeBitmap);
+            StringFormat sf = new StringFormat();
+            sf.LineAlignment = StringAlignment.Center;
+            sf.Alignment = StringAlignment.Center;
+            g.DrawString(QrId.ToString(), new Font(FontFamily.GenericSerif,30), Brushes.Black, barcodeBitmap.Width/2,barcodeBitmap.Height/2,sf);
+            g.Flush();
             using (MemoryStream memory = new MemoryStream())
             {
                 using (FileStream fs = new FileStream(path,
