@@ -48,23 +48,40 @@ namespace HangOut.Controllers
             JObject objParams = JObject.Parse(Obj);
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
             System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OID").ToString());
-            JArray jarrayObj = new JArray();
+            
+            List<HG_Category> MenuList = new HG_Category().GetAll(OrgId: OrgId);
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
             List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId);
-            foreach (var Items in ListItems)
+            JArray JMenuArray = new JArray();
+            foreach(HG_Category menu in MenuList)
             {
-              List<Cart> cartCurrentItem=  cartlist.FindAll(x => x.ItemId == Items.ItemID);
-                JObject objItem = new JObject();
-                objItem.Add("IID", Items.ItemID);
-                objItem.Add("ItemName", Items.Items);
-                objItem.Add("ItemPrice", Items.Price);
-                objItem.Add("ItemQuntity", Items.Qty);
-                objItem.Add("ItemImage", Items.Image);
-                objItem.Add("ItemCartValue", cartCurrentItem.Sum(x=>x.Count));
-                objItem.Add("MenuId", Items.CategoryID);
-                jarrayObj.Add(objItem);
+                List<HG_Items> ItemListByMenu = ListItems.FindAll(x => x.CategoryID == menu.CategoryID);
+                if (ItemListByMenu.Count > 0)
+                {
+                    JObject JobjMenu = new JObject();
+                    JArray jarrayItem = new JArray();
+                    JobjMenu.Add("MenuId", menu.CategoryID);
+                    JobjMenu.Add("Name", menu.Category);
+                    foreach (var Items in ItemListByMenu)
+                    {
+                        List<Cart> cartCurrentItem = cartlist.FindAll(x => x.ItemId == Items.ItemID);
+                        JObject objItem = new JObject();
+                        objItem.Add("IID", Items.ItemID);
+                        objItem.Add("ItemName", Items.Items);
+                        objItem.Add("ItemPrice", Items.Price);
+                        objItem.Add("ItemQuntity", Items.Qty);
+                        objItem.Add("ItemImage", Items.Image);
+                        objItem.Add("ItemCartValue", cartCurrentItem.Sum(x => x.Count));
+                        objItem.Add("MenuId", Items.CategoryID);
+                        jarrayItem.Add(objItem);
+                    }
+                    JobjMenu.Add("MenuItems", jarrayItem);
+                    JMenuArray.Add(JobjMenu);
+                }
             }
-            return jarrayObj;
+
+          
+            return JMenuArray;
         }
         [HttpPost]
         public string AddCart(string Obj)
@@ -154,10 +171,9 @@ namespace HangOut.Controllers
             List<State> list = new State().GetAll();
             return JArray.FromObject(list);
         }
-        public JArray CityListByStateId(string Obj)
+        [HttpPost]
+        public JArray CityListByStateId(int StateId)
         {
-            JObject ParaMeters = JObject.Parse(Obj);
-            int StateId = System.Convert.ToInt32(ParaMeters.GetValue("SID").ToString());
             List<City> citylist = new City().GetAllByState(StateId);
             return JArray.FromObject(citylist);
         }

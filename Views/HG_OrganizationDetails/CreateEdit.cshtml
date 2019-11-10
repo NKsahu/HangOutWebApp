@@ -5,7 +5,7 @@
 }
 @using HangOut.Models.Common
 @{List<City> listcity = new City().GetAllByState(0);}
-@{List<State> liststate = new State().GetAll();}
+@{List<State> liststate = new List<State>();}
 <div class="card">
     <div class="card-header">
         <h4 style="text-align:center;color:#000000"><b>ORGONIZATION</b></h4>
@@ -177,7 +177,7 @@
     $(document).ready(function () {
         $("#State").change(function () {
 
-
+            GetDrowpDownCity();
 
         });
 
@@ -185,20 +185,27 @@
             var StateId = $("#State").val();
             $("#waiting").show();
             $.ajax({
-                url: "/Webapi/GetCityByState",
-                data: {
-                    SID:StateId
-                },
+                url: "/WebApi/CityListByStateId?StateId="+StateId,
                 type: "POST",
                 success: function (data) {
-                    $.each(data, function (i, data) {      // bind the dropdown list using json result              
+                    var JsonArray = JSON.parse(data);
+                    $("#City").html("");
+                    if (JsonArray.length > 0) {
+                        $.each(JsonArray, function (i, Obj) {      // bind the dropdown list using json result              
+                            $('<option>',
+                                {
+                                    value: Obj.CityId,
+                                    text: Obj.Name
+                                }).html(Obj.Name).appendTo("#City");
+                        });
+                    }
+                    else {
                         $('<option>',
                             {
-                                value: data.CityId,
-                                text: data.Name
-                            }).html(data.Name).appendTo("#State");
-                    });
-
+                                value: "0",
+                                text: "Select"
+                            }).html("Select").appendTo("#City");
+                    }
                     $("#waiting").hide();
                 },
                 error:function(Xr,Status,ErrorMsg) {
