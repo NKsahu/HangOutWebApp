@@ -27,9 +27,9 @@ namespace HangOut.Models
                 SqlCommand cmd = null;
                 string Query = "";
                 if (this.Table_or_RowID == 0)
-                    Query = "Insert Into HG_Tables_or_Rows values(@OrgId,@Table_or_RowName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy);SELECT SCOPE_IDENTITY();";
+                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_RowName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy);SELECT SCOPE_IDENTITY();";
                 else
-                    Query = "Update HG_Tables_or_Rows  set OrgId=@OrgId,Table_or_RowName =@Table_or_RowName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy Where Table_or_RowID=@Table_or_RowID;";
+                    Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_RowName =@Table_or_RowName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy Where Table_or_RowID=@Table_or_RowID;";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", this.Table_or_RowID);
                 cmd.Parameters.AddWithValue("@OrgId", this. OrgId);
@@ -62,7 +62,7 @@ namespace HangOut.Models
             SqlCommand cmd = null;
             SqlDataReader SDR  = null;
             List<HG_Tables_or_Rows> listTemp = new List<HG_Tables_or_Rows>();
-            string Query = "SELECT * FROM HG_Tables_or_Rows where Type="+Type.ToString()+" ORDER BY Table_or_RowID DESC";
+            string Query = "SELECT * FROM HG_Tables_or_Sheat where Type=" + Type.ToString()+" ORDER BY Table_or_RowID DESC";
             try
             {
                 cmd = new SqlCommand(Query,Con);
@@ -97,7 +97,7 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_Tables_or_Rows where Table_or_RowID=@Table_or_RowID";
+                string Query = "SELECT * FROM  HG_Tables_or_Sheat where Table_or_RowID=@Table_or_RowID";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", Table_or_RowID);
                 SDR = cmd.ExecuteReader();
@@ -130,7 +130,7 @@ namespace HangOut.Models
             List<HG_Tables_or_Rows> TempList = new List<HG_Tables_or_Rows>();
             try
             {
-                string Query = "SELECT * FROM  HG_Tables_or_Rows where OrgId=@OrgId";
+                string Query = "SELECT * FROM  HG_Tables_or_Sheat where OrgId=@OrgId";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@OrgId", OrgId);
                 SDR = cmd.ExecuteReader();
@@ -164,7 +164,7 @@ namespace HangOut.Models
             SqlCommand cmd = null;
             try
             {
-                string Query = "Delete FROM  HG_Tables_or_Rows where Table_or_RowID =" + ID;
+                string Query = "Delete FROM  HG_Tables_or_Sheat where Table_or_RowID =" + ID;
                 cmd = new SqlCommand(Query, Con);
                 R = cmd.ExecuteNonQuery();
             }
