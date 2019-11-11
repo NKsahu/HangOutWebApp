@@ -212,5 +212,54 @@ namespace HangOut.Models
             }
             return R;
         }
+        public List<HG_OrganizationDetails> GetAllByType(string Type)
+        {
+            var CurrOrgID = HttpContext.Current.Request.Cookies[""];
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<HG_OrganizationDetails> ListTmp = new List<HG_OrganizationDetails>();
+            
+               string Query = "SELECT * FROM  HG_OrganizationDetails where Type=" + Type + "  ORDER BY OrgID  DESC";
+           
+            if (CurrOrgID != null)
+            {
+
+            }
+            try
+            {
+                cmd = new SqlCommand(Query, Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    HG_OrganizationDetails ObjTmp = new HG_OrganizationDetails();
+                    ObjTmp.OrgID = SDR.GetInt32(0);
+                    ObjTmp.OrgTypes = SDR.GetString(1);
+                    ObjTmp.HeadName = SDR.GetString(2);
+                    ObjTmp.Name = SDR.GetString(3);
+                    ObjTmp.Address = SDR.GetString(4);
+                    ObjTmp.City = SDR.GetString(5);
+                    ObjTmp.State = SDR.GetString(6);
+                    ObjTmp.PinCode = SDR.GetString(7);
+                    ObjTmp.Phone = SDR.GetString(8);
+                    ObjTmp.Cell = SDR.GetString(9);
+                    ObjTmp.Email = SDR.GetString(10);
+                    ObjTmp.WebSite = SDR.GetString(11);
+                    ObjTmp.Logo = SDR.GetString(12);
+                    ObjTmp.GSTNO = SDR.GetString(15);
+                    ObjTmp.PANNO = SDR.GetString(16);
+                    ObjTmp.BankName = SDR.GetString(17);
+                    ObjTmp.ACNO = SDR.GetString(18);
+                    ObjTmp.AcType = SDR.GetString(19);
+                    ObjTmp.Status = SDR.GetBoolean(23);
+                    ListTmp.Add(ObjTmp);
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { Con.Close(); }
+
+            return (ListTmp);
+        }
     }
 }
