@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace HangOut.Models
 {
@@ -10,7 +11,8 @@ namespace HangOut.Models
     {
         public Int64 Table_or_RowID { get; set; }
         public int  OrgId{ get; set; }
-        public string Table_or_RowName { get; set; }
+        [Display(Name ="TableOrSheatName")]
+        public string Table_or_SheetName { get; set; }
         public int Floor_or_ScreenId { get; set; }
         public int  FloorSide_or_RowNoID{ get; set; }
         public string Type { get; set; } // "1" means restauarant "2" means theater
@@ -33,7 +35,7 @@ namespace HangOut.Models
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", this.Table_or_RowID);
                 cmd.Parameters.AddWithValue("@OrgId", this. OrgId);
-                cmd.Parameters.AddWithValue("@Table_or_RowName", this. Table_or_RowName);
+                cmd.Parameters.AddWithValue("@Table_or_RowName", this. Table_or_SheetName);
                 cmd.Parameters.AddWithValue("@Floor_or_ScreenId", this.Floor_or_ScreenId);
                 cmd.Parameters.AddWithValue("@FloorSide_or_RowNoID", this.FloorSide_or_RowNoID);
                 cmd.Parameters.AddWithValue("@Type", this.Type);
@@ -72,7 +74,7 @@ namespace HangOut.Models
                     HG_Tables_or_Rows ObjTemp = new HG_Tables_or_Rows();
                     ObjTemp.Table_or_RowID = SDR .GetInt64(0);
                     ObjTemp.OrgId = SDR .GetInt32(1);
-                    ObjTemp.Table_or_RowName = SDR .GetString(2);
+                    ObjTemp.Table_or_SheetName = SDR .GetString(2);
                     ObjTemp.Floor_or_ScreenId = SDR .GetInt32(3);
                     ObjTemp.FloorSide_or_RowNoID = SDR .GetInt32(4);
                     ObjTemp.Type = SDR.GetString(5);
@@ -105,7 +107,7 @@ namespace HangOut.Models
                 {
                     ObjTemp.Table_or_RowID = SDR.GetInt64(0);
                     ObjTemp.OrgId = SDR.GetInt32(1);
-                    ObjTemp.Table_or_RowName = SDR.GetString(2);
+                    ObjTemp.Table_or_SheetName = SDR.GetString(2);
                     ObjTemp.Floor_or_ScreenId = SDR.GetInt32(3);
                     ObjTemp.FloorSide_or_RowNoID = SDR.GetInt32(4);
                     ObjTemp.Type = SDR.GetString(5);
@@ -139,7 +141,7 @@ namespace HangOut.Models
                     HG_Tables_or_Rows ObjTemp = new HG_Tables_or_Rows();
                     ObjTemp.Table_or_RowID = SDR.GetInt64(0);
                     ObjTemp.OrgId = SDR.GetInt32(1);
-                    ObjTemp.Table_or_RowName = SDR.GetString(2);
+                    ObjTemp.Table_or_SheetName = SDR.GetString(2);
                     ObjTemp.Floor_or_ScreenId = SDR.GetInt32(3);
                     ObjTemp.FloorSide_or_RowNoID = SDR.GetInt32(4);
                     ObjTemp.Type = SDR.GetString(5);
