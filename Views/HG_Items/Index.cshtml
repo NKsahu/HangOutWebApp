@@ -17,12 +17,12 @@
 
 
                 <tr>
-                    <th>@Html.DisplayNameFor(model=>model.Image)</th>
-                    <th>
-                        @Html.DisplayName( "Category Name")
-                    </th>
+                    <th>@Html.DisplayNameFor(model => model.Image)</th>
                     <th>
                         @Html.DisplayName("Orgonization Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Category Name")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Items)
@@ -49,42 +49,42 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            <img src="@item.Image" width="60" height="60" />
-                        </td>
-                        <td>
-                             @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
-                            @objcategory.Category
-                        </td>
-                        <td>
-                            @{HG_OrganizationDetails objorgonization = listorgonization.Find(x => x.OrgID == item.OrgID);}
-                            @objorgonization.Name
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Items)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Qty)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ItemMode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Discount)
-                        </td>
+                <tr>
+                    <td>
+                        <img src="@item.Image" width="60" height="60" />
+                    </td>
+                    <td>
+                        @{HG_OrganizationDetails objorgonization = listorgonization.Find(x => x.OrgID == item.OrgID);}
+                        @objorgonization.Name
+                    </td>
+                    <td>
+                        @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
+                        @objcategory.Category
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Items)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qty)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemMode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Discount)
+                    </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td>
-                            <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" > Edit</a>
-                            <a href="/HG_Items/Delete?ID=@item.ItemID" class="btn btn-danger btn-sm "> Delete</a>
-                        </td>
-                    </tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                        <a href="/HG_Items/Delete?ID=@item.ItemID" class="btn btn-danger btn-sm "> Delete</a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

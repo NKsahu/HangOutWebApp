@@ -38,20 +38,18 @@
 
 
                 <div class="col-sm-4">
-                    @Html.Label("Category Name")
-                    @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
-
-                </div>
-
-                <div class="col-sm-4">
-                    @Html.Label("Organization ID")
+                    @Html.Label("Organization  ")
 
                     @Html.DropDownListFor(model => model.OrgID, new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID", "Name", Model.OrgID), "Select Organization Name", new { @class = "form-control", required = "required" })
                     @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
 
                 </div>
+                <div class="col-sm-4">
+                    @Html.Label("Category Name")
+                    @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
 
+                </div>
                 <div class="col-sm-4">
                     @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "control-label  " })
 
@@ -111,4 +109,52 @@
         }
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $("#OrgID").change(function () {
+
+            GetDrowpDownCity();
+
+        });
+
+        function GetDrowpDownCity() {
+            var OrgID = $("#OrgID").val();
+            var Obj = "{OID: "+OrgID+"}";
+            $("#waiting").show();
+            $.ajax({
+                url: "/WebApi/GetMenulist?Obj=" + Obj,
+                type: "GET",
+                success: function (data) {
+                    var JsonArray = JSON.parse(data);
+                    $("#CategoryID").html("");
+                    if (JsonArray.length > 0) {
+                        $.each(JsonArray, function (i, Obj) {      // bind the dropdown list using json result
+                            $('<option>',
+                                {
+                                    value: Obj.CategoryID,
+                                    text: Obj.Category
+                                }).html(Obj.Category).appendTo("#CategoryID");
+                        });
+                    }
+                    else {
+                        $('<option>',
+                            {
+                                value: "0",
+                                text: "Select"
+                            }).html("Select").appendTo("#CategoryID");
+                    }
+                    $("#waiting").hide();
+                },
+                error: function (Xr, Status, ErrorMsg) {
+                    $("#waiting").hide();
+                }
+            });
+        }
+
+    });
+
+
+
+
+</script>
 
