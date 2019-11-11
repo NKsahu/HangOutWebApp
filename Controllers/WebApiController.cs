@@ -167,10 +167,10 @@ namespace HangOut.Controllers
         {
             return JArray.FromObject( Cart.List.FindAll(x => x.CID == int.Parse(CID)));
         }
-        public JArray StateList()
+        public JObject StateList()
         {
-            List<State> list = new State().GetAll();
-            return JArray.FromObject(list);
+            List<State> StateList = new State().GetAll();
+            return JObject.FromObject(StateList);
         }
         [HttpPost]
         public JArray CityListByStateId(int StateId)
@@ -178,6 +178,8 @@ namespace HangOut.Controllers
             List<City> citylist = new City().GetAllByState(StateId);
             return JArray.FromObject(citylist);
         }
+
+
 
 
     }
