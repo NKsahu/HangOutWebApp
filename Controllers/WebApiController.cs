@@ -172,14 +172,37 @@ namespace HangOut.Controllers
             List<State> StateList = new State().GetAll();
             return JObject.FromObject(StateList);
         }
-        [HttpPost]
+         [HttpPost]
         public JArray CityListByStateId(int StateId)
         {
             List<City> citylist = new City().GetAllByState(StateId);
             return JArray.FromObject(citylist);
         }
-
-
+        public JArray GetTheaterListByCityCode(string CityCode)
+        {
+            List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(2);//2 for get list for theater
+            listorgonization = listorgonization.FindAll(x => x.City == CityCode);
+            return JArray.FromObject(listorgonization);
+                
+        }
+        public JArray GetScreenListByTheaterCode(int OrgID)
+        {
+            List<HG_Floor_or_ScreenMaster> listScreen = new HG_Floor_or_ScreenMaster().GetAll(2);//2 for get list for theater
+            listScreen = listScreen.FindAll(x => x.OrgID == OrgID);
+            return JArray.FromObject(listScreen);
+        }
+        public JArray GetRowListbyScreenCode(int OrgID)
+        {
+            List<HG_FloorSide_or_RowName> listFloor = new HG_FloorSide_or_RowName().GetAll(2);//2 get list forlist for row
+            listFloor = listFloor.FindAll(x => x.OrgID == OrgID);
+            return JArray.FromObject(listFloor);
+        }
+        public JArray GetSheetNumberBYRowList(int OrgID)
+        {
+            List<HG_Tables_or_Rows> listSheet = new HG_Tables_or_Rows().GetAll(2);// 2 for list of sheets
+            listSheet = listSheet.FindAll(x => x.OrgId == OrgID);
+            return JArray.FromObject(listSheet);
+        }
 
 
 
