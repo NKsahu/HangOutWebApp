@@ -166,7 +166,7 @@
     <Compile Include="Controllers\HG_ItemsController.cs" />
     <Compile Include="Controllers\HG_OrdersController.cs" />
     <Compile Include="Controllers\HG_OrganizationDetailsController.cs" />
-    <Compile Include="Controllers\HG_Tables_or_RowsController.cs" />
+    <Compile Include="Controllers\HG_Tables_or_SheatController.cs" />
     <Compile Include="Controllers\HG_UserTypesController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
     <Compile Include="Controllers\vw_HG_UsersDetailsController.cs" />

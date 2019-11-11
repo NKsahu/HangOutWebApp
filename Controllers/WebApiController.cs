@@ -160,7 +160,7 @@ namespace HangOut.Controllers
         {
             JObject ParaMeters = JObject.Parse(Obj);
             System.Int64 TableId =System.Convert.ToInt64(ParaMeters.GetValue("TID").ToString());
-            HG_Tables_or_Rows TableRowObj = new HG_Tables_or_Rows().GetOne(TableId);
+            HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(TableId);
             return JObject.FromObject(TableRowObj);
         }
         public JArray CartList(string CID)
@@ -203,7 +203,7 @@ namespace HangOut.Controllers
         [HttpPost]
         public JArray GetSheetNumberBYRowList(int OrgID)
         {
-            List<HG_Tables_or_Rows> listSheet = new HG_Tables_or_Rows().GetAll(2);// 2 for list of sheets
+            List<HG_Tables_or_Sheat> listSheet = new HG_Tables_or_Sheat().GetAll(2);// 2 for list of sheets
             listSheet = listSheet.FindAll(x => x.OrgId == OrgID);
             return JArray.FromObject(listSheet);
         }

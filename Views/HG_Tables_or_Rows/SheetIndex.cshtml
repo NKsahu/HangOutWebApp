@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HangOut.Models.HG_Tables_or_Rows>
+﻿@model IEnumerable<HangOut.Models.HG_Tables_or_Sheat>
 @using HangOut.Models.Common;
 @{
     Layout = null;
@@ -12,7 +12,7 @@
         <h1 style="text-align:center"><b>SHEETS</b> </h1>
         <hr />
     </div>
-    <a href="/HG_Tables_or_Rows/SheetCreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <a href="/HG_Tables_or_Sheat/SheetCreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
     <div class="card-body">
         <table class=" table table-bordered table-hover w-100" id="TBLID">
             <thead>
@@ -83,8 +83,8 @@
 
                         </td>
                             <td>
-                                <a href=" /HG_Tables_or_Rows/SheetCreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                                <a href="/HG_Tables_or_Rows/Delete?ID=@item.Table_or_RowID" class="btn btn-danger btn-sm "> Delete</a>
+                                <a href=" /HG_Tables_or_Sheat/SheetCreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                                <a href="/HG_Tables_or_Sheat/Delete?ID=@item.Table_or_RowID" class="btn btn-danger btn-sm "> Delete</a>
                             </td>
                         </tr>
                             }

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HangOut.Models
 {
-    public class HG_Tables_or_Rows
+    public class HG_Tables_or_Sheat
     {
         public Int64 Table_or_RowID { get; set; }
         public int  OrgId{ get; set; }
@@ -56,14 +56,14 @@ namespace HangOut.Models
             finally { Con.Close(); }
             return Row;
         }
-        public List<HG_Tables_or_Rows> GetAll(int Type)
+        public List<HG_Tables_or_Sheat> GetAll(int Type)
         {
 
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR  = null;
-            List<HG_Tables_or_Rows> listTemp = new List<HG_Tables_or_Rows>();
+            List<HG_Tables_or_Sheat> listTemp = new List<HG_Tables_or_Sheat>();
             string Query = "SELECT * FROM HG_Tables_or_Sheat where Type=" + Type.ToString()+" ORDER BY Table_or_RowID DESC";
             try
             {
@@ -71,7 +71,7 @@ namespace HangOut.Models
                 SDR  = cmd.ExecuteReader();
                 while(SDR .Read())
                 {
-                    HG_Tables_or_Rows ObjTemp = new HG_Tables_or_Rows();
+                    HG_Tables_or_Sheat ObjTemp = new HG_Tables_or_Sheat();
                     ObjTemp.Table_or_RowID = SDR .GetInt64(0);
                     ObjTemp.OrgId = SDR .GetInt32(1);
                     ObjTemp.Table_or_SheetName = SDR .GetString(2);
@@ -89,13 +89,13 @@ namespace HangOut.Models
 
             return (listTemp);
         }
-        public HG_Tables_or_Rows GetOne(Int64 Table_or_RowID)
+        public HG_Tables_or_Sheat GetOne(Int64 Table_or_RowID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            HG_Tables_or_Rows ObjTemp = new HG_Tables_or_Rows();
+            HG_Tables_or_Sheat ObjTemp = new HG_Tables_or_Sheat();
 
             try
             {
@@ -123,13 +123,13 @@ namespace HangOut.Models
 
             return (ObjTemp);
         }
-        public List<HG_Tables_or_Rows> GetAllByOID(int Orgid)
+        public List<HG_Tables_or_Sheat> GetAllByOID(int Orgid)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            List<HG_Tables_or_Rows> TempList = new List<HG_Tables_or_Rows>();
+            List<HG_Tables_or_Sheat> TempList = new List<HG_Tables_or_Sheat>();
             try
             {
                 string Query = "SELECT * FROM  HG_Tables_or_Sheat where OrgId=@OrgId";
@@ -138,7 +138,7 @@ namespace HangOut.Models
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    HG_Tables_or_Rows ObjTemp = new HG_Tables_or_Rows();
+                    HG_Tables_or_Sheat ObjTemp = new HG_Tables_or_Sheat();
                     ObjTemp.Table_or_RowID = SDR.GetInt64(0);
                     ObjTemp.OrgId = SDR.GetInt32(1);
                     ObjTemp.Table_or_SheetName = SDR.GetString(2);
