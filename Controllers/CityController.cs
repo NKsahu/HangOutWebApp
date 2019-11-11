@@ -13,13 +13,29 @@ namespace HangOut.Controllers
             {
                 cities = new City().GetAllByState(StateCode);
             }
-            return View(cities);
+             return View(cities);
         }
-        public ActionResult Create(int CityId)
+        public ActionResult CreateEdit(int CityId)
         {
 
             City city = new City().GetOne(CityId);
+            if(CityId>0)
+            {
+                city = city.GetOne(CityId);
+            }
             return View(city);
+        }
+        [HttpPost]
+        public ActionResult CreateEdit(City city)
+        {
+            int i = city.save();
+            if (i > 0)
+                return RedirectToAction("Index", "City", new { Type = 1 });
+            return RedirectToAction("Error");
+        }
+        public ActionResult Error()
+        {
+            return View();
         }
     }
 }
