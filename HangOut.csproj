@@ -213,9 +213,9 @@
     <Content Include="Views\UsersMenu\Create.cshtml" />
     <Content Include="Views\UsersMenu\SubMenuIndex.cshtml" />
     <Content Include="Views\HG_Orders\Index.cshtml" />
-    <Content Include="Views\HG_Tables_or_Rows\Index.cshtml" />
-    <Content Include="Views\HG_Tables_or_Rows\CreateEdit.cshtml" />
-    <Content Include="Views\HG_Tables_or_Rows\Error.cshtml" />
+    <Content Include="Views\HG_Tables_or_Sheat\Index.cshtml" />
+    <Content Include="Views\HG_Tables_or_Sheat\CreateEdit.cshtml" />
+    <Content Include="Views\HG_Tables_or_Sheat\Error.cshtml" />
     <Content Include="Views\HG_Floor_or_ScreenMaster\Index.cshtml" />
     <Content Include="Views\HG_Floor_or_ScreenMaster\CreateEdit.cshtml" />
     <Content Include="Views\HG_Floor_or_ScreenMaster\Error.cshtml" />
@@ -224,8 +224,8 @@
     <Content Include="Views\vw_HG_UsersDetails\GetUserList.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\Error.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\CreateEdit.cshtml" />
-    <Content Include="Views\HG_Tables_or_Rows\SheetIndex.cshtml" />
-    <Content Include="Views\HG_Tables_or_Rows\SheetCreateEdit.cshtml" />
+    <Content Include="Views\HG_Tables_or_Sheat\SheetIndex.cshtml" />
+    <Content Include="Views\HG_Tables_or_Sheat\SheetCreateEdit.cshtml" />
     <Content Include="Views\HG_Floor_or_ScreenMaster\ScreenCreateEdit.cshtml" />
     <Content Include="Views\HG_Floor_or_ScreenMaster\ScreenIndex.cshtml" />
     <Content Include="Views\City\Index.cshtml" />
