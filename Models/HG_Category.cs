@@ -65,6 +65,7 @@ namespace HangOut.Models
 
         public List<HG_Category> GetAll(int OrgId=0)
         {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
@@ -75,9 +76,13 @@ namespace HangOut.Models
             {
                 Query = "SELECT * FROM  HG_Category where OrgID="+OrgId.ToString()+"ORDER BY CategoryID DESC";
             }
+            else if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
+            {
+                Query = "SELECT * FROM  HG_Category where OrgID=" + CurrOrgID["OrgId"] + "ORDER BY CategoryID DESC";
+
+            }
             try
             {
-               
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

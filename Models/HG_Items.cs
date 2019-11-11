@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 
@@ -88,6 +89,7 @@ namespace HangOut.Models
 
         public List<HG_Items> GetAll(int OrgId=0)
         {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
@@ -97,6 +99,11 @@ namespace HangOut.Models
             if (OrgId > 0)
             {
                 Query = "SELECT * FROM  HG_Items where OrgID=" + OrgId.ToString()+" ORDER BY ItemID DESC";
+            }
+            else if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
+            {
+                Query = "SELECT * FROM  HG_Items where OrgID=" + CurrOrgID["OrgId"] + " ORDER BY ItemID DESC";
+
             }
             try
             {
