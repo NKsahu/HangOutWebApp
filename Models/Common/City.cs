@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Data.SqlClient;
 
 namespace HangOut.Models.Common
 {
@@ -62,5 +62,35 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); SDR.Close(); Con.Close(); Con.Dispose(); Con = null; }
             return (ObjTmp);
         }
+        public int save()
+        {
+            int Row = 0;
+            System.Data.SqlClient.SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            try
+            {
+                Con.Open();
+                SqlCommand cmd = null;
+                string Query = "";
+                if (this.CityId == 0)
+                    Query = "insert into City values (@Name,@StateId); SELECT SCOPE_IDENTITY(); ";
+                else
+                    Query = "Update   City set Name=@Name,StateId=@StateId where CityId=@CityId";
+                cmd = new SqlCommand(Query,Con);
+                cmd.Parameters.AddWithValue("CityId", CityId);
+                cmd.Parameters.AddWithValue("Name", Name);
+                cmd.Parameters.AddWithValue("StateId", StateId);
+                if (this.CityId == 0)
+                    Row = System.Convert.ToInt32(cmd.ExecuteScalar());
+                else if (cmd.ExecuteNonQuery() > 0)
+                {
+                    Row = this.CityId;
+                }
+
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { Con.Close(); }
+            return Row;
+        }
     }
+    
 }

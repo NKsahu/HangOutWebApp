@@ -1,13 +1,25 @@
 ﻿@model IEnumerable<HangOut.Models.Common.City>
 @using HangOut.Models.Common
 @{
-                Layout = null;
-                switch (Request.QueryString["Type"])
-                {
-                    //case 1 for show filters only
-                    case "1":
+    Layout = null;
+    switch (Request.QueryString["Type"])
+    {
+        //case 1 for show filters only
+        case "1":
             <div class="card">
-                <div class="card-header">Filter</div>
+                <div class="row">
+                    <div class="col-md-7">
+
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-sm-1">
+                        <a href="/City/CreateEdit?CityId=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+                    </div>
+                </div>
+                <div class="card-header text-center"><b>Filter</b></div>
+
                 <div class="card-body">
                     <div class="container">
                         <div class="row">
@@ -17,10 +29,10 @@
 
                                     SelectList selectList = new SelectList(new State().GetAll(), "StateId", "Name");
                                 }
-        @Html.DropDownList("SID", selectList, new { @class = "form-control" })
+                                @Html.DropDownList("SID", selectList, new { @class = "form-control" })
                             </div>
                             <div class="col-sm-2">
-                                <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
+                                <button  id="Search"  class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
                             </div>
 
                         </div>
@@ -33,35 +45,12 @@
 
 
             </div>
-            <script>
-                $("#Search").click(function () {
-                    $("#waiting").show();
-                    var StateCode = $("#SID").val();
-                    $.ajax({
-                        url:"/City/index?Type=2&StateCode="+StateCode,
-                        type: "GET",
-                        success: function (data) {
-                            $("#List2").html("");
-                            $("#List").html("");
-                            $("#List").html(data);
-                            $("#waiting").hide();
-                        },
-                        error: function (jqXhr, textStatus, errorMessage) { // error callback 
-                            $("#waiting").hide();
-                        }
-
-                    });
 
 
 
-
-                });
-            </script>
-           
-   
-                                            break;
-                                        }
-                                    }
+            break;
+    }
+}
 
 <div class="col" id="List2">
     <div class="card">
@@ -72,17 +61,17 @@
                     <tr>
                         <th> Code </th>
                         <th> Name </th>
-                      
+
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>@item.CityId</td>
-                        <td>@item.Name</td>
-                    </tr>
+                        <tr>
+                            <td>@item.CityId</td>
+                            <td>@item.Name</td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -91,5 +80,36 @@
 
 </div>
 
+<script>
+    $(document).ready(function () {
+        
+        setTimeout(function () {
+
+            function Search() {
+                $("#waiting").show();
+                var StateCode = $("#SID").val();
+                $.ajax({
+                    url: "/City/index?Type=2&StateCode=" + StateCode,
+                    type: "GET",
+                    success: function (data) {
+                        $("#List2").html("");
+                        $("#List").html("");
+                        $("#List").html(data);
+                        $("#waiting").hide();
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) { // error callback
+                        $("#waiting").hide();
+                    }
+
+                });
+            }
+            $("#Search").click(function () {
+                Search();
+            });
+
+        }, 2000);
+    });
+
+</script>
 
 
