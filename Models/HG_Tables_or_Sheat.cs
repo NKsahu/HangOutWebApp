@@ -65,6 +65,7 @@ namespace HangOut.Models
             SqlDataReader SDR  = null;
             List<HG_Tables_or_Sheat> listTemp = new List<HG_Tables_or_Sheat>();
             string Query = "SELECT * FROM HG_Tables_or_Sheat where Type=" + Type.ToString()+" ORDER BY Table_or_RowID DESC";
+
             try
             {
                 cmd = new SqlCommand(Query,Con);
