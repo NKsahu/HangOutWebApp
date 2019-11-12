@@ -30,8 +30,13 @@
     <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-color: #223D71;">
         <ul id="myaccordion" class="list-unstyled mb-0">
             @{
+                var UserType = Request.Cookies["UserInfo"]["UserType"];
                 List<UsersMenu> List = new UsersMenu().GetAll();
                 List<UsersMenu> ADMINMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId == 0);
+                if(UserType!="SA" && UserType != "A")
+                {
+                    ADMINMenuList = ADMINMenuList.FindAll(x => x.User_Types.Contains(UserType));
+                }
                 ADMINMenuList = ADMINMenuList.OrderBy(x => x.MenuOrderNo).ToList();
                 List<UsersMenu> AdminSubMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId != 0);
                 foreach (var ObjMenuLi in ADMINMenuList)

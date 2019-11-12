@@ -58,7 +58,7 @@ namespace HangOut.Controllers
             }
                 
         }
-
+        
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
