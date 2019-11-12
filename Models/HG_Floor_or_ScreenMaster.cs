@@ -59,6 +59,8 @@ namespace HangOut.Models
         }
         public List<HG_Floor_or_ScreenMaster>GetAll(int Type)
         {
+
+
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
