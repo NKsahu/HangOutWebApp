@@ -118,7 +118,11 @@
 
         function GetDrowpDownCity() {
             var OrgID = $("#OrgID").val();
+            console.log("OrgId " + OrgID);
             var categoryvalue = $("#CategoryID").attr("val");
+            if (OrgID=="" ||OrgID == null) {
+                OrgID = "0";
+            }
             var Obj = "{OID: "+OrgID+"}";
             $("#waiting").show();
             $.ajax({
