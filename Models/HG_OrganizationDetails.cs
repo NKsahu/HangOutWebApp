@@ -56,7 +56,7 @@ namespace HangOut.Models
                 {
                     Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status);";
                     cmd = new SqlCommand(Query, Con);
-                    cmd.Parameters.AddWithValue("@EntryBy", HttpContext.Current.Session["ID"]);
+                    cmd.Parameters.AddWithValue("@EntryBy",int.Parse(HttpContext.Current.Request.Cookies["UserInfo"]["UserCode"]));
                     cmd.Parameters.AddWithValue("@EntryDate",System.DateTime.Now);
                     cmd.Parameters.AddWithValue("@UpdateDate", System.DateTime.Now);
                 }
@@ -98,7 +98,7 @@ namespace HangOut.Models
 
         public List<HG_OrganizationDetails> GetAll(int Orgid=0)
         {
-            var CurrOrgID = HttpContext.Current.Request.Cookies[""];
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
@@ -108,9 +108,9 @@ namespace HangOut.Models
             if (OrgID > 0)
             {
                 Query = "SELECT * FROM  HG_OrganizationDetails where OrgID="+OrgID.ToString()+"  ORDER BY OrgID  DESC";
-            }if (CurrOrgID!=null)
+            }else if(CurrOrgID!=null && int.Parse(CurrOrgID["OrgId"])>0)
             {
-
+                Query = "SELECT * FROM  HG_OrganizationDetails where OrgID=" + CurrOrgID["OrgId"] + "  ORDER BY OrgID  DESC";
             }
             try
             {
