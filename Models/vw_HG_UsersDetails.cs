@@ -31,20 +31,23 @@ namespace HangOut.Models
         
         public List<vw_HG_UsersDetails> GetAll(string Type="")
         {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
              
             List<vw_HG_UsersDetails> listOfuser = new List<vw_HG_UsersDetails>();
-            string Query = " SELECT * FROM HG_UsersDetails WHERE  Status=1 and UserType!='CUST' ;";
+            string Query = " SELECT * FROM HG_UsersDetails WHERE  UserType!='CUST' ;";
             if (Type != "")
             {
-                Query = "SELECT * FROM HG_UsersDetails WHERE UserType='"+Type+"' and Status=1 ;";
+                Query = "SELECT * FROM HG_UsersDetails WHERE UserType='"+Type+"' ;";
             }
-          SqlCommand  cmd = new  SqlCommand(Query, Con);
+            else if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
+            {
+                Query = "SELECT * FROM HG_UsersDetails WHERE OrgID=" + CurrOrgID["OrgId"] + ";";
+            }
+            SqlCommand  cmd = new  SqlCommand(Query, Con);
             try
             {
-               
-               
                SqlDataReader SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
