@@ -46,7 +46,7 @@
                 </div>
                 <div class="col-sm-4">
                     @Html.Label("Category Name")
-                    @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required" })
+                    @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required", val=Model.CategoryID })
                     @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
 
                 </div>
@@ -118,6 +118,7 @@
 
         function GetDrowpDownCity() {
             var OrgID = $("#OrgID").val();
+            var categoryvalue = $("#CategoryID").attr("val");
             var Obj = "{OID: "+OrgID+"}";
             $("#waiting").show();
             $.ajax({
@@ -135,6 +136,7 @@
                                     text: Obj.Category
                                 }).html(Obj.Category).appendTo("#CategoryID");
                         });
+                        $("CategoryID").val(categoryvalue);
                     }
                   
                        
