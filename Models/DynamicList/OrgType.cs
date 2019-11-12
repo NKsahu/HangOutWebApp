@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Web;
 using System.Collections.Generic;
 
 
@@ -17,6 +17,22 @@ namespace HangOut.Models.DynamicList
 
             return list;
         }
+
+
+        public bool IsAccess()
+        {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"]["UserType"];
+
+            if (CurrOrgID != "SA" &&CurrOrgID!="A" && CurrOrgID != "ONR")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
     }
    
 

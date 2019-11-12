@@ -108,7 +108,7 @@ namespace HangOut.Models
             vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
             try
             {
-                string Query = "SELECT * FROM HG_UsersDetails where UserCode=" + UserCode.ToString()+" and Status=1 ;";
+                string Query = "SELECT * FROM HG_UsersDetails where UserCode=" + UserCode.ToString()+"";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
