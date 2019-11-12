@@ -4,7 +4,7 @@
     Layout = null;
 }
 @using HangOut.Models.Common
-@{List<City> listcity = new City().GetAllByState(0);}
+@{List<City> listcity = new List<City>(); }
 @{List<State> liststate = new List<State>();}
 <div class="card">
     <div class="card-header">
@@ -55,14 +55,14 @@
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId","Name"),"Select State", new { @class = "form-control", required = "required" } )
+                @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId","Name",Model.State),"Select State", new { @class = "form-control", required = "required" } )
                 @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
 
             </div>
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.DropDownListFor(model => model.City, new SelectList(new City().GetAllByState(0), "CityId","Name")  , new { @class = "form-control", required = "required" } )
+                @Html.DropDownListFor(model => model.City, new SelectList(listcity, "CityId","Name",Model.City)  , new { @class = "form-control", required = "required" ,val=Model.City} )
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
 
             </div>
@@ -175,6 +175,7 @@
 
 <script>
     $(document).ready(function () {
+        GetDrowpDownCity();
         $("#State").change(function () {
 
             GetDrowpDownCity();
@@ -183,32 +184,32 @@
 
         function GetDrowpDownCity() {
             var StateId = $("#State").val();
+            var CityValue = $("#City").attr("val");
+            console.log("City Value  " + CityValue);
             $("#waiting").show();
             $.ajax({
                 url: "/WebApi/CityListByStateId?StateId="+StateId,
                 type: "POST",
                 success: function (data) {
                     var JsonArray = JSON.parse(data);
-                    $("#City").html("");
+                    $("#City").val('0');
+                    $('<option>',{value: "0",text: "Select"}).html("Select").appendTo("#City");
                     if (JsonArray.length > 0) {
                         $.each(JsonArray, function (i, Obj) {      // bind the dropdown list using json result              
                             $('<option>',
                                 {
                                     value: Obj.CityId,
                                     text: Obj.Name
+                                    
                                 }).html(Obj.Name).appendTo("#City");
                         });
-                    }
-                    else {
-                        $('<option>',
-                            {
-                                value: "0",
-                                text: "Select"
-                            }).html("Select").appendTo("#City");
+                        $("#City").val(CityValue);
                     }
                     $("#waiting").hide();
                 },
-                error:function(Xr,Status,ErrorMsg) {
+                error: function (Xr, Status, ErrorMsg) {
+                    $("#City").val('0');
+                    $('<option>', { value: "0", text: "Select" }).html("Select").appendTo("#City");
                     $("#waiting").hide();
                 }
             });

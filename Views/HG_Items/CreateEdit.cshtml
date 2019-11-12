@@ -111,6 +111,7 @@
 </div>
 <script>
     $(document).ready(function () {
+        GetDrowpDownCity();
         $("#OrgID").change(function () {
 
             GetDrowpDownCity();
@@ -127,6 +128,7 @@
                 success: function (data) {
                     var JsonArray = JSON.parse(data);
                     $("#CategoryID").html("");
+                    $('<option>',{value: "0",text: "Select"}).html("Select").appendTo("#CategoryID");
                     if (JsonArray.length > 0) {
                         $.each(JsonArray, function (i, Obj) {      // bind the dropdown list using json result
                             $('<option>',
@@ -136,16 +138,14 @@
                                 }).html(Obj.Category).appendTo("#CategoryID");
                         });
                     }
-                    else {
-                        $('<option>',
-                            {
-                                value: "0",
-                                text: "Select"
-                            }).html("Select").appendTo("#CategoryID");
-                    }
+                  
+                       
+                    
                     $("#waiting").hide();
                 },
                 error: function (Xr, Status, ErrorMsg) {
+                    $("#CategoryID").html("");
+                    $('<option>', { value: "0", text: "Select" }).html("Select").appendTo("#CategoryID");
                     $("#waiting").hide();
                 }
             });
