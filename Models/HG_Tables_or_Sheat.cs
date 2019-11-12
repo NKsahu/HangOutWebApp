@@ -29,13 +29,13 @@ namespace HangOut.Models
                 SqlCommand cmd = null;
                 string Query = "";
                 if (this.Table_or_RowID == 0)
-                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_RowName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy);SELECT SCOPE_IDENTITY();";
+                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_SheetName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy);SELECT SCOPE_IDENTITY();";
                 else
-                    Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_RowName =@Table_or_RowName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy Where Table_or_RowID=@Table_or_RowID;";
+                    Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_SheetName =@Table_or_SheetName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy Where Table_or_RowID=@Table_or_RowID;";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", this.Table_or_RowID);
                 cmd.Parameters.AddWithValue("@OrgId", this. OrgId);
-                cmd.Parameters.AddWithValue("@Table_or_RowName", this. Table_or_SheetName);
+                cmd.Parameters.AddWithValue("@Table_or_SheetName", this. Table_or_SheetName);
                 cmd.Parameters.AddWithValue("@Floor_or_ScreenId", this.Floor_or_ScreenId);
                 cmd.Parameters.AddWithValue("@FloorSide_or_RowNoID", this.FloorSide_or_RowNoID);
                 cmd.Parameters.AddWithValue("@Type", this.Type);
