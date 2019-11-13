@@ -130,7 +130,7 @@ namespace HangOut.Models
 
             return (ListTmp);
         }
-        public HG_Items GetOne(int ItemID)
+        public HG_Items GetOne(Int64 ItemID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();

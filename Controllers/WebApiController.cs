@@ -213,7 +213,61 @@ namespace HangOut.Controllers
            Settings settingsObj = listsettings.Find(x => x.KeyName == KeyName);
             return JObject.FromObject(settingsObj);
         }
+        // make order
+        public JObject PostOrder(string Obj)
+        {
+            JObject Params = JObject.Parse(Obj);
+            System.Int64 CID = System.Int64.Parse(Params["CID"].ToString());
+            int OrgId = int.Parse(Params["OrgID"].ToString());
 
+            JObject PostResult = new JObject();
+            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId);
+            if (ListCart.Count <= 0)
+            {
+                PostResult.Add("Status",400);
+                PostResult.Add("MSG","Add Atleast one Item");
+                return PostResult;
+            }
+                HG_Orders ObjOrders = new HG_Orders()
+                {
+                    Create_By = CID,
+                    Create_Date = System.DateTime.Now,
+                    CID = CID,
+                    Update_By=CID,
+                    Status = "0",
+                    OrgId =OrgId
+                };
+                System.Int64 NewOID = ObjOrders.Save();
+                if (NewOID > 0)
+                {
+                    foreach (Cart Item in ListCart)
+                    {
+                    HG_Items ObjItem = new HG_Items().GetOne(ItemID: Item.ItemId);
+                        HG_OrderItem OrderItem = new HG_OrderItem()
+                        {
+                            FID = 0,
+                            Price = ObjItem.ItemID,
+                            Count = Item.Count,
+                            Qty = ObjItem.Qty,
+                            OID = NewOID,
+                            Status = 0
+                        };
+                        if (OrderItem.Save() <= 0)
+                        {
+                            HG_Orders order = new HG_Orders();
+                            order.DeleteOrderAndOrderItem(NewOID,false);
+                        PostResult.Add("Status", 400);
+                        PostResult.Add("MSG", "Can't Confirm Order Try After Some Time.");
+                        return PostResult;
+                        }
+                    }
+                PostResult.Add("Status", 200);
+                PostResult.Add("MSG",NewOID.ToString());
+            }
+            
+            Cart.List.RemoveAll(x => x.CID == CID);
+            return PostResult;
+        }
 
     }
 }

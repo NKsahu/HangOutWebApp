@@ -21,6 +21,7 @@ namespace HangOut.Models
             this.Create_Date = System.DateTime.Now;//
             this.Update_Date = System.DateTime.Now;
             this.OrgId = 0;
+            this.Update_By = 0;
         }
 
         public System.Int64 Save()
@@ -97,7 +98,7 @@ namespace HangOut.Models
             return (ListTmp);
         }
 
-        public  HG_Orders  GetOne(int OID)
+        public  HG_Orders  GetOne(Int64 OID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -128,6 +129,27 @@ namespace HangOut.Models
 
             finally { Con.Close(); }
             return (ObjTemp);
+        }
+
+        public int DeleteOrderAndOrderItem(System.Int64 OID,bool DeleteOItem)
+        {
+            HG_Orders Order =new HG_Orders().GetOne(OID);
+            if (Order != null)
+            {
+                Order.Deleted = true;
+                Order.Save();
+            }
+            if (DeleteOItem)
+            {
+                List<HG_OrderItem> list = new HG_OrderItem().GetAll();
+                foreach(var obj in list)
+                {
+                    obj.Deleted = true;
+                    obj.Save();
+                }
+            }
+            return 0;
+
         }
     }
 }

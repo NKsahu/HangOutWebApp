@@ -10,7 +10,7 @@
 
                         <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
                             New
-                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                            <a href="#" onclick="Order('1')" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
                         </li>
                         <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
                             Canceled
@@ -92,3 +92,25 @@
 
 </div>
 
+<script>
+    function Order(status) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Orders/Index?Status=" + status,
+            success: function (data) {
+                makedpt("OrderItem");
+               $("#OrderItem > .modal-dialog > .modal-content > .modal-body").html(data);
+               showdpt("OrderItem");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback 
+                $("#waiting").hide();
+            }
+        });
+
+    }
+
+
+
+</script>

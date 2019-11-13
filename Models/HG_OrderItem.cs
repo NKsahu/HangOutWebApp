@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace HangOut.Models
 {
@@ -28,7 +26,7 @@ namespace HangOut.Models
            
         }
 
-        public System.Int64 Save()
+        public Int64 Save()
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             DBCon Obj = new DBCon();
@@ -68,7 +66,7 @@ namespace HangOut.Models
             return this.OIID;
         }
 
-        public System.Collections.Generic.List<HG_OrderItem> GetAll()
+        public List<HG_OrderItem> GetAll()
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;

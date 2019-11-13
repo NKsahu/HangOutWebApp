@@ -77,7 +77,8 @@ function showdpt(id) {
     modaladded = true;
     window.location.hash = id;
     $("#" + id).show();
-    $("#" + id).display = "block";
+   // $("#" + id).display = "block";
+    $("#"+id).modal();
 
 }
 function hidedpt(id) {
