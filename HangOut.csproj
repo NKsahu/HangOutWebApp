@@ -168,6 +168,7 @@
     <Compile Include="Controllers\HG_OrganizationDetailsController.cs" />
     <Compile Include="Controllers\HG_Tables_or_SheatController.cs" />
     <Compile Include="Controllers\HG_UserTypesController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
     <Compile Include="Controllers\vw_HG_UsersDetailsController.cs" />
     <Compile Include="Controllers\WebApiController.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Models\Common\City.cs" />
     <Compile Include="Models\Common\LoginFilter.cs" />
     <Compile Include="Models\Common\QrCode.cs" />
+    <Compile Include="Models\Common\Settings.cs" />
     <Compile Include="Models\Common\State.cs" />
     <Compile Include="Models\Common\UsersMenu.cs" />
     <Compile Include="Models\DBCon.cs" />
@@ -233,6 +235,7 @@
     <Content Include="Views\HG_FloorSide_or_RowName\RowCreateEdit.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\GetCustomerList.cshtml" />
     <Content Include="Views\City\CreateEdit.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
