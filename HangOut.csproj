@@ -237,6 +237,7 @@
     <Content Include="Views\City\CreateEdit.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\Settings\Create.cshtml" />
+    <Content Include="Views\vw_HG_UsersDetails\Account.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

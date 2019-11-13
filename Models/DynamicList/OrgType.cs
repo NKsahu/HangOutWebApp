@@ -23,7 +23,7 @@ namespace HangOut.Models.DynamicList
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"]["UserType"];
 
-            if (CurrOrgID != "SA" &&CurrOrgID!="A" && CurrOrgID != "ONR")
+            if (CurrOrgID != "SA" &&CurrOrgID!="A")
             {
                 return false;
             }
