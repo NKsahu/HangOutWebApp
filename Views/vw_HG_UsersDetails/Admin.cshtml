@@ -6,7 +6,7 @@
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
     </div>
 
-    <div class="col-md-4 col-12  text-md-right text-center p-md-2 p-2 border-top   mt-0"> 
+    <div class="col-md-4 col-12  text-md-right text-center p-md-2 p-2 border-top    mt-0"> 
         <div class="btn-group mt-0">
             <a href="/vw_HG_UsersDetails/Account" class="text-white m-1" ><i class="fas fa-rupee-sign border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
             <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
@@ -28,8 +28,8 @@
 <div class="row">
    
     <!-- admin side menus -->
-    <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
-        <ul id="myaccordion" class="list-unstyled mb-0">
+    <div id="admin-side-menu" class="col-md-2 col-12  ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
+        <ul id="myaccordion" class="list-unstyled mb-0 ">
             @{
                 var UserType = Request.Cookies["UserInfo"]["UserType"];
                 List<UsersMenu> List = new UsersMenu().GetAll();
