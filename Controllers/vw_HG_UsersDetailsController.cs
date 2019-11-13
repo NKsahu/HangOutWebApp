@@ -69,7 +69,7 @@ namespace HangOut.Controllers
                 c.Expires = DateTime.Now.AddDays(-1);
                 Response.Cookies.Add(c);
             }
-            return RedirectToAction("vw_HG_UsersDetails");
+            return Json(new { url = "/vw_HG_UsersDetails/vw_HG_UsersDetails" });
         }
         public ActionResult GetUserList()
         {

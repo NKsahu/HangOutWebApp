@@ -55,6 +55,7 @@ namespace HangOut.Models
         }
         public List<HG_FloorSide_or_RowName> GetAll(int Type)
         {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
@@ -64,6 +65,10 @@ namespace HangOut.Models
             try
             {
                 string Query = "SELECT * FROM  HG_FloorSide_or_RowName where Type="+Type.ToString()+" ORDER BY ID DESC";
+                if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
+                {
+                 Query = "SELECT * FROM  HG_FloorSide_or_RowName where OrgID="+CurrOrgID["OrgId"]+" and Type=" + Type.ToString() + " ORDER BY ID DESC";
+                }
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

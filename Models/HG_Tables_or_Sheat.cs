@@ -58,13 +58,17 @@ namespace HangOut.Models
         }
         public List<HG_Tables_or_Sheat> GetAll(int Type)
         {
-
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR  = null;
             List<HG_Tables_or_Sheat> listTemp = new List<HG_Tables_or_Sheat>();
-            string Query = "SELECT * FROM HG_Tables_or_Sheat where Type=" + Type.ToString()+" ORDER BY Table_or_RowID DESC";
+            string Query = "SELECT * FROM HG_Tables_or_Sheat where  Type=" + Type.ToString()+" ORDER BY Table_or_RowID DESC";
+             if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
+            {
+                Query = "SELECT * FROM HG_Tables_or_Sheat where OrgId="+CurrOrgID["OrgId"]+" and Type=" + Type.ToString() + " ORDER BY Table_or_RowID DESC";
+            }
             try
             {
                 cmd = new SqlCommand(Query,Con);

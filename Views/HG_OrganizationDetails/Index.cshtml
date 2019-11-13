@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<HangOut.Models.HG_OrganizationDetails>
+    @using HangOut.Models.DynamicList;
 @{
     Layout = null;
 }
@@ -7,7 +8,10 @@
         <h1 style="text-align:center"><b>ORGONIZATION</b> </h1>
         <hr />
     </div>
-    <a href="/HG_OrganizationDetails/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+    @if (new OrgType().IsAccess())
+    {
+        <a href="/HG_OrganizationDetails/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+    }
     <div class="card-body">
 
 
@@ -32,8 +36,8 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Phone)
                     </th>
-                    
-                   
+
+
                     <th>
                         @Html.DisplayNameFor(model => model.WebSite)
                     </th>
@@ -50,7 +54,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.ACNO)
                     </th>
-                  
+
 
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
@@ -79,12 +83,12 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Address)
                         </td>
-                        
+
                         <td>
                             @Html.DisplayFor(modelItem => item.Phone)
                         </td>
-                        
-                        
+
+
                         <td>
                             @Html.DisplayFor(modelItem => item.WebSite)
                         </td>
@@ -100,12 +104,12 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.ACNO)
                         </td>
-                        
+
                         <td>
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
                         <td>
-                            <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn btn-warning btn-sm "data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" > Edit</a>
+                            <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
                             <a href="/HG_OrganizationDetails/Delete?ID=@item.OrgID" class="btn btn-danger btn-sm "> Delete</a>
                         </td>
                     </tr>

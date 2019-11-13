@@ -59,6 +59,7 @@ namespace HangOut.Models
         }
         public List<HG_Floor_or_ScreenMaster>GetAll(int Type)
         {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
@@ -68,6 +69,11 @@ namespace HangOut.Models
             try
             {
                 string Query = "SELECT * FROM  HG_Floor_or_ScreenMaster where Type="+Type.ToString()+" ORDER BY Floor_or_ScreenID DESC";
+                if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
+                {
+                 Query = "SELECT * FROM  HG_Floor_or_ScreenMaster where OrgID="+CurrOrgID["OrgId"]+" and Type=" + Type.ToString() + " ORDER BY Floor_or_ScreenID DESC";
+
+                }
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
