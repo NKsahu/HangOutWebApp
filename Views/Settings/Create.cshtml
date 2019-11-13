@@ -1,0 +1,37 @@
+﻿@model HangOut.Models.Common.Settings
+@{ Layout = null;}
+
+<div class="card h-100">
+    <div class="card-header bg-secondary" style="color:#ffdb00"><i class="fa fa-edit"></i> Settings </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                @using (Ajax.BeginForm("Create", "Settings", new { SettingId = Model.SettingId }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+                {
+
+
+                    @Html.HiddenFor(Model => Model.SettingId)
+                    <div class="row pt-4">
+                        <div class="col-md-3">
+                            @Html.LabelFor(Model => Model.KeyName)
+                            @Html.EditorFor(Model => Model.KeyName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name Of Key ", required = "required" } })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(Model => Model.KeyValue)
+                            @Html.EditorFor(Model => Model.KeyValue, new { htmlAttributes = new { @class = "form-control", @placeholder = "value Of Key  ", required = "required" } })
+                        </div>
+                        <div class="col-md-5">
+                            @Html.LabelFor(Model => Model.KeyDiscription)
+                            @Html.TextAreaFor(Model => Model.KeyDiscription, new {@class = "form-control", @placeholder = "value Of Key  ", required = "required" })
+                        </div>
+                        <div class="col-sm-1">
+                            @Html.Label("savebutton", new { @class = "text-white" })
+                            <button type="submit" class="btn btn-secondary">Save</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

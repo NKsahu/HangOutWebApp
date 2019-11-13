@@ -1,6 +1,7 @@
 ﻿using HangOut.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -78,6 +79,35 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ListTmp);
         }
+        public  Settings GetOne( int SettingId)
+        {
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            Settings ObjTemp = new Settings();
+            try
+            {
+                string Query = "SELECT * FROM  Settings where SettingId=@SettingId";
+                cmd = new SqlCommand(Query, Con);
+                cmd.Parameters.AddWithValue("@SettingId", SettingId);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTemp.SettingId = SDR.GetInt32(0);
+                    ObjTemp.KeyName = SDR.GetString(1);
+                    ObjTemp.KeyValue = SDR.GetString(2);
+                    ObjTemp.KeyDiscription = SDR.GetString(3);
+                    
+                }
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
 
+            finally { Con.Close(); }
+
+            return (ObjTemp);
+
+        }
     }
 }

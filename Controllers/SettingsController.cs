@@ -20,7 +20,7 @@ namespace HangOut.Controllers
         {
             Settings ObjSettings = new Settings();
             if (SettingId > 0)
-                ObjSettings =new Settings().GetAll().Find(x => x.SettingId == SettingId);
+                ObjSettings = ObjSettings.GetOne(SettingId);
             return View(ObjSettings);
         }
 

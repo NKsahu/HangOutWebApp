@@ -207,7 +207,12 @@ namespace HangOut.Controllers
             listSheet = listSheet.FindAll(x => x.OrgId == OrgID);
             return JArray.FromObject(listSheet);
         }
-
+        public JObject SettingPrivacyPolicy(string KeyName)
+        {
+            List<Settings> listsettings = new Settings().GetAll();
+           Settings settingsObj = listsettings.Find(x => x.KeyName == KeyName);
+            return JObject.FromObject(settingsObj);
+        }
 
 
     }
