@@ -2,6 +2,100 @@
 @{
     ViewBag.Title = "AccDashboard";
 }
+<style>
 
-<h2>AccDashboard</h2>
+</style>
+<div>
+    <div class="card-header text-center" style="background-color:#2df50a" >Today Order Status </div>
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card text-white bg-danger " style=" width: 100%; height:100% ;box-shadow:2px 4px 4px black ;">
+                <div class="card-header text-center">Unpaid Orders</div>
+                <div class="card-body">
+                    <ul class="list-group">
+
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            New
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            Canceled
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            Total
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-secondary " style=" width: 100%; height:100% ;box-shadow:2px 4px 4px black ;">
+                <div class="card-header text-center">Paid Orders</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            By Cash
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            By Card
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            By E-wallet
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="card text-white bg-info " style=" width: 100%; height:100% ;box-shadow:2px 4px 4px black ;">
+                <div class="card-header text-center">Total Orders</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            Ongoing
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            Incoming
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+                        <li class="list-group-item d-flex text-dark justify-content-between align-items-center">
+                            Total
+                            <a href="#" id="TodayOrder"><span class="badge badge-primary badge-pill">0</span></a>
+                        </li>
+
+
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+</div>
 
