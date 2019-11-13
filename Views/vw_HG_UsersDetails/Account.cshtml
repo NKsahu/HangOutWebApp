@@ -3,23 +3,20 @@
 @if (Request.Cookies["UserInfo"] == null)
 {
     Response.Redirect("~/vw_HG_UsersDetails/vw_HG_UsersDetails");
-};
+}
 <header class="navbar navbar-expand-sm text-white w-100 p-0" style="background:#34495E;z-index:1;">
     <div class="col-md-8 col-12 text-md-left text-center mt-0">
-        <a class="text-white navbar-brand pl-3" style="font-size:23px;"> ACCOUNT </a>
+        <a class="text-white navbar-brand pl-3" style="font-size:15px;"> BILLING </a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
     </div>
 
     <div class="col-md-4 col-12  text-md-right text-center p-md-2 p-2 border-top border-dark mt-0">
         <div class="btn-group mt-0">
-            <button id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
-        </div>
-
-        <div class="btn-group mt-0">
             <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
             <div class="dropdown-menu dropdown-menu-right text-center pb-0">
                 <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
-                <a href="/User/Logout" id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </a>
+                <button id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
+
                 <style>
                     #logoutbtn > i:hover {
                         border: none !important;
@@ -83,11 +80,7 @@
     </div>
     <!-- End admin side menus -->
     <div class="col-md-10 col-12 mt-0 p-0" id="DynamicData">
-
-
-
-
-
+        @{ Html.RenderPartial("AccDashboard"); }
     </div>
 
 </div>
