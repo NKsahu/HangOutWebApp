@@ -37,7 +37,7 @@
 <body>
 
 
-    <div class="container-login100" style=" background-image: url('../../Assets/Login Assets/images/bg-01.jpg');
+    <div class="container-login100" style=" background-image: url('../../Assets/Login Assets/images/food.jpg');
         
 ">
         <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
@@ -49,12 +49,12 @@
                 </span>
 
                 <div class="wrap-input100 validate-input m-b-20" data-validate="Enter userid">
-                    @Html.TextBoxFor(model=>model.UserId,new { @class= "input100", required= "required", placeholder = "User Login" ,type="text"} )
+                    @Html.TextBoxFor(model=>model.UserId,new { @class= "input100" , required= "required", placeholder = "User Login" ,type="text"} )
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input m-b-25" data-validate="Enter password">
-                    @Html.TextBoxFor(model => model.Password, new { @class = "input100", required = "required", placeholder = "Password" ,id= "myInput",type="password" })
+                    @Html.TextBoxFor(model => model.Password, new { @class = "input100" , placeholder = "Password" ,id= "myInput",type="password" })
                     <span class="focus-input100"></span>
                 </div>
                 <div class="wrap-input100 validate-input m-b-25">
