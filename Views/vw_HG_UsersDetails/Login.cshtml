@@ -22,6 +22,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             @Html.Label("User Login ", new { @class = "control-label " })
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">$</span>
+                            </div>
                             @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                         </div>
                         <div class="col-md-12">
