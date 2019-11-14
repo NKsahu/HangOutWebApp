@@ -219,7 +219,7 @@ namespace HangOut.Controllers
             JObject Params = JObject.Parse(Obj);
             System.Int64 CID = System.Int64.Parse(Params["CID"].ToString());
             int OrgId = int.Parse(Params["OrgID"].ToString());
-
+            System.Int64 TableorSheatId=System.Int64.Parse(Params["TORSID"].ToString());
             JObject PostResult = new JObject();
             List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId);
             if (ListCart.Count <= 0)
@@ -228,14 +228,15 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG","Add Atleast one Item");
                 return PostResult;
             }
-                HG_Orders ObjOrders = new HG_Orders()
-                {
-                    Create_By = CID,
-                    Create_Date = System.DateTime.Now,
-                    CID = CID,
-                    Update_By=CID,
-                    Status = "1",//placed
-                    OrgId =OrgId
+            HG_Orders ObjOrders = new HG_Orders()
+            {
+                Create_By = CID,
+                Create_Date = System.DateTime.Now,
+                CID = CID,
+                Update_By = CID,
+                Status = "1",//placed
+                OrgId = OrgId,
+                Table_or_SheatId = TableorSheatId
                 };
                 System.Int64 NewOID = ObjOrders.Save();
                 if (NewOID > 0)
@@ -274,6 +275,43 @@ namespace HangOut.Controllers
             Cart.List.RemoveAll(x => x.CID == CID);
             return PostResult;
         }
+        public JArray ChefOrders(int OrgId)
+        {
+            List<HG_Orders> Orderlist = new HG_Orders().GetAll(OrgId: OrgId);
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+            int OrgType =int.Parse(ObjOrg.OrgTypes);
+            List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
+            List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
+            List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
+            string TableSheatPrefix = ObjOrg.OrgTypes == "1" ? "Table" :"Sheat: ";
+            List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
+            //string SideOrRowPrefix = ObjOrg.OrgTypes == "1" ? "Table" : "Sheat: ";
+            JArray tableorSheatList = new JArray();
+            foreach (var order in Orderlist)
+            {
+                HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
+                HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
+                HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
+                JObject TableScreen = new JObject();
+                TableScreen.Add("TableScreenInfo", TableSheatPrefix + hG_Tables_Or_Sheat.Table_or_SheetName + " " + hG_Floor_Or_ScreenMaster.Name + " " + hG_FloorSide_Or_RowName.FloorSide_or_RowName);
+                TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
+                List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
+                JArray ItemsArray = new JArray();
+                foreach(var OrderItem in hG_OrderItems)
+                {
+                    HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
+                    JObject itemobj = new JObject();
+                    itemobj.Add("ItemID", OrderItem.FID);
+                    itemobj.Add("ItemName", hG_Items.Items);
+                    itemobj.Add("Quantity", OrderItem.Qty);
+                    itemobj.Add("Status", OrderItem.Status);
+                    ItemsArray.Add(itemobj);
+                }
+                TableScreen.Add("OrderItems", ItemsArray);
+                tableorSheatList.Add(TableScreen);
+            }
+            return tableorSheatList;
 
+        }
     }
 }

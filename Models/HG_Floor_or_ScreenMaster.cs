@@ -57,7 +57,7 @@ namespace HangOut.Models
             finally { Con.Close(); }
             return Row;
         }
-        public List<HG_Floor_or_ScreenMaster>GetAll(int Type)
+        public List<HG_Floor_or_ScreenMaster>GetAll(int Type,int OrgId=0)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -69,7 +69,11 @@ namespace HangOut.Models
             try
             {
                 string Query = "SELECT * FROM  HG_Floor_or_ScreenMaster where Type="+Type.ToString()+" ORDER BY Floor_or_ScreenID DESC";
-                if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
+                if (OrgId > 0)
+                {
+                    Query = "SELECT * FROM  HG_Floor_or_ScreenMaster where OrgID=" + OrgId.ToString() + " and Type=" + Type.ToString() + " ORDER BY Floor_or_ScreenID DESC";
+                }
+                else if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
                 {
                  Query = "SELECT * FROM  HG_Floor_or_ScreenMaster where OrgID="+CurrOrgID["OrgId"]+" and Type=" + Type.ToString() + " ORDER BY Floor_or_ScreenID DESC";
 

@@ -13,7 +13,7 @@ namespace HangOut.Controllers
         public ActionResult Index()
         {
             HG_Orders listorder = new HG_Orders();
-            List<HG_Orders> objorder = listorder.GetAll();
+            List<HG_Orders> objorder = listorder.GetAll(0);
             return View(objorder);
         }
     }
