@@ -1,71 +1,122 @@
 ﻿@model HangOut.Models.vw_HG_UsersDetails
+<!DOCTYPE html>
+<html >
 
+<head>
+    <title>Login V9</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/vendor/animate/animate.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/vendor/animsition/css/animsition.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/vendor/select2/select2.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/vendor/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Assets/Login Assets/css/util.css" rel="stylesheet" />
+    <link href="~/Assets/Login Assets/css/main.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+</head>
 <style>
     #LoginModal {
         font-family: 'Roboto', sans-serif;
     }
-
-    body {
-        padding: 100px 0;
-        background-color: #efefef
-    }
-
-    a, a:hover {
-        color: #333
-    }
 </style>
-<div class="modal hide fade" id="LoginModal" style="background-image:url('../../Assets/back.jpg');background-repeat: no-repeat;background-size: 100% 100%;">
-    <div class="row" style="height:100%; z-index: 999;background-color:rgba(0, 0, 0, 0.63)">
-        <div class="card" id="logsin" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%); min-width:280px; max-width:300px; box-shadow:2px 4px 4px #000000">
-            <div class="card-header" style="background-color:#223D71">
-                <div class="row">
-                    <div class="col text-center" style="margin-top:-40px;">
-                        <img src="~/Assets/fork.png" width="70" height="70" />
-                        <h3 class="text-white">HANGOUT</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body pt-1" id="LogSin">
-                @using (Ajax.BeginForm("LoginPost", "vw_HG_UsersDetails", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", LoadingElementId = "waiting" }))
-                {
-                    <div class="row">
-                        <div class="col-md-12">
-                            @Html.Label("User Login ", new { @class = "control-label " })
-                            <div class="input-group  ">
-                                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                                <div class=" input-group-append">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-user-tie"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            @Html.Label("Password ", new { @class = "control-label " })
-                            <div class="input-group  ">
-                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", required = "required", id = "myInput", type = "password" } })
-                                <div class=" input-group-append">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-unlock-alt"></i></span>
-                                </div>
-                            </div>
-                                <br />
-                                <input type="checkbox" onclick="myFunction()">Show Password
-                            </div>
-                            <div class="col-md-12 mt-3">
-                                <button type="submit" style="background-color:#223D71" class="btn  w-100 text-white">Login</button>
-                            </div>
-                        </div>
-                }
+<body>
 
-            </div>
-            <div class="card-footer pb-1 pt-0">
-            </div>
+
+    <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
+            <form class="login100-form validate-form">
+                <span class="login100-form-title p-b-37">
+                    Sign In
+                </span>
+
+                <div class="wrap-input100 validate-input m-b-20" data-validate="Enter username or email">
+                    <input class="input100" type="text" name="username" placeholder="username or email">
+                    <span class="focus-input100"></span>
+                </div>
+
+                <div class="wrap-input100 validate-input m-b-25" data-validate="Enter password">
+                    <input class="input100" type="password" name="pass" placeholder="password" id="myInput">
+                    <span class="focus-input100"></span>
+                </div>
+                <div>
+                    <input type="checkbox" onclick="myFunction()">Show Password
+                </div>
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn">
+                        Sign In
+                    </button>
+                </div>
+
+                <div class="text-center p-t-57 p-b-20">
+                    <span class="txt1">
+                        Or login with
+                    </span>
+                </div>
+
+                <div class="flex-c p-b-112">
+                    <a href="#" class="login100-social-item">
+                        <i class="fa fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" class="login100-social-item">
+                        <img src="images/icons/icon-google.png" alt="GOOGLE">
+                    </a>
+                </div>
+
+                <div class="text-center">
+                    <a href="#" class="txt2 hov1">
+                        Sign Up
+                    </a>
+                </div>
+            </form>
+
+
         </div>
     </div>
-</div>
 
+
+
+    <div id="dropDownSelect1"></div>
+
+    <!--===============================================================================================-->
+    <script src="~/Assets/Login Assets/vendor/jquery/jquery-3.2.1.min.js"></script>
+
+    <!--===============================================================================================-->
+    <script src="~/Assets/Login Assets/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Assets/Login Assets/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/Assets/Login Assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Assets/Login Assets/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Assets/Login Assets/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/Assets/Login Assets/vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Assets/Login Assets/vendor/countdowntime/countdowntime.js"></script>
+    
+    <!--===============================================================================================-->
+    <script src="~/Assets/Login Assets/js/main.js"></script>
+</body>
+</html>
 <script type="text/javascript">
     $('#LoginModal').modal('show');
 </script>
-   
+
 <script>
     function myFunction() {
         var x = document.getElementById("myInput");
