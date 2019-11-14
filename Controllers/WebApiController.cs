@@ -313,5 +313,37 @@ namespace HangOut.Controllers
             return tableorSheatList;
 
         }
+        public JObject ChangePassWord(string Obj)
+        {
+            JObject ParaMeters = JObject.Parse(Obj);
+            System.Int32 UserCode = int.Parse(ParaMeters["UserCode"].ToString());
+            string OldPassword =ParaMeters["OldPass"].ToString();
+            string NewPassword = ParaMeters["NewPass"].ToString();
+            JObject JsonResult = new JObject();
+            vw_HG_UsersDetails user_obj = new vw_HG_UsersDetails().GetSingleByUserId(UserCode);
+            if (user_obj.Password.Equals(OldPassword))
+            {
+                user_obj.Password = OldPassword;
+                int check = user_obj.save();
+                if (check > 0)
+                {
+                    JsonResult.Add("Status", 200);
+                    JsonResult.Add("Msg", "Password Change Successful");
+                }
+                else
+                {
+                    JsonResult.Add("Status", 400);
+                    JsonResult.Add("Msg", "Password Not Change.");
+                }
+            }
+            else
+            {
+                JsonResult.Add("Status", 400);
+                JsonResult.Add("Msg", "Old Password Incorrect.Please type correct old password");
+            }
+            return JsonResult;
+        }
+
+
     }
 }
