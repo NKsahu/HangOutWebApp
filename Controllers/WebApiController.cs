@@ -251,7 +251,7 @@ namespace HangOut.Controllers
                             Count = Item.Count,
                             Qty = ObjItem.Qty,
                             OID = NewOID,
-                            Status = 0
+                            Status = 1
                         };
                         if (OrderItem.Save() <= 0)
                         {
