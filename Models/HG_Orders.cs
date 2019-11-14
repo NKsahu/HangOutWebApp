@@ -8,7 +8,7 @@ namespace HangOut.Models
     {
         public System.Int64 OID { get; set; }
         public System.Int64 CID { get; set; }
-        public string Status { get; set; } //Order-Placed=1,Order-Collected=2,
+        public string Status { get; set; } //Order-Placed=1,Order-Accepted=2,Order-Ready=3,Order-completed=4
         public System.Int64 Create_By { get; set; }
         public System.DateTime Create_Date { get; set; }
         public System.Int64 Update_By { get; set; }
@@ -32,10 +32,10 @@ namespace HangOut.Models
             try
             {
                 if (this.OID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId where OID=@OID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId where OID=@OID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
                 }
 
@@ -46,7 +46,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Update_By", this.Update_By);
                 cmd.Parameters.AddWithValue("@Update_Date", System.DateTime.Now);
                 cmd.Parameters.AddWithValue("@Deleted", this.Deleted);
-                cmd.Parameters.AddWithValue("@HubId", this.OrgId);
+                cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 if (this.OID == 0)
                 {
                     R = System.Convert.ToInt64(cmd.ExecuteScalar());

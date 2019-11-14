@@ -234,7 +234,7 @@ namespace HangOut.Controllers
                     Create_Date = System.DateTime.Now,
                     CID = CID,
                     Update_By=CID,
-                    Status = "0",
+                    Status = "1",//placed
                     OrgId =OrgId
                 };
                 System.Int64 NewOID = ObjOrders.Save();
@@ -245,8 +245,8 @@ namespace HangOut.Controllers
                     HG_Items ObjItem = new HG_Items().GetOne(ItemID: Item.ItemId);
                         HG_OrderItem OrderItem = new HG_OrderItem()
                         {
-                            FID = 0,
-                            Price = ObjItem.ItemID,
+                            FID = ObjItem.ItemID,
+                            Price = ObjItem.Price,
                             Count = Item.Count,
                             Qty = ObjItem.Qty,
                             OID = NewOID,
@@ -263,6 +263,12 @@ namespace HangOut.Controllers
                     }
                 PostResult.Add("Status", 200);
                 PostResult.Add("MSG",NewOID.ToString());
+            }
+            else
+            {
+                PostResult.Add("Status", 400);
+                PostResult.Add("MSG", "Unable To Place Order Try Again.");
+                return PostResult;
             }
             
             Cart.List.RemoveAll(x => x.CID == CID);
