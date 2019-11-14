@@ -11,7 +11,7 @@
             <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
             <div class="dropdown-menu dropdown-menu-right text-center pb-0">
                 <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
-                <a href="/vw_HG_UsersDetails/Logout" id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </a>
+                <button id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
                 <style>
                     #logoutbtn > i:hover {
                         border: none !important;
@@ -30,8 +30,13 @@
     <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-color: #223D71;">
         <ul id="myaccordion" class="list-unstyled mb-0">
             @{
+                var UserType = Request.Cookies["UserInfo"]["UserType"];
                 List<UsersMenu> List = new UsersMenu().GetAll();
                 List<UsersMenu> ADMINMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId == 0);
+                if(UserType!="SA" && UserType != "A")
+                {
+                    ADMINMenuList = ADMINMenuList.FindAll(x => x.User_Types.Contains(UserType));
+                }
                 ADMINMenuList = ADMINMenuList.OrderBy(x => x.MenuOrderNo).ToList();
                 List<UsersMenu> AdminSubMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId != 0);
                 foreach (var ObjMenuLi in ADMINMenuList)
@@ -127,7 +132,23 @@
                         $(this).find("span").addClass("fa-minus");
                     }
                 }
+        });
+
+
+        $("#logoutbtn").click(function () {
+            $.ajax({
+                url: "/vw_HG_UsersDetails/LogOut",
+                type: "GET",
+                success: function (data) {
+                   // alert("AAYA");
+                    window.location = "/vw_HG_UsersDetails/vw_HG_UsersDetails";
+                },
+                error: function (Xr, Status, ErrorMsg) {
+                  
+                }
             });
+
+        });
 
     });
 

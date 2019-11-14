@@ -58,7 +58,7 @@ namespace HangOut.Controllers
             }
                 
         }
-
+        
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
@@ -69,13 +69,19 @@ namespace HangOut.Controllers
                 c.Expires = DateTime.Now.AddDays(-1);
                 Response.Cookies.Add(c);
             }
-            return Json(new { url = "/vw_HG_UsersDetails/vw_HG_UsersDetails" });
+            return RedirectToAction("LogInUrl");
+
         }
         public ActionResult GetUserList()
         {
             vw_HG_UsersDetails Objuser = new vw_HG_UsersDetails();
             List<vw_HG_UsersDetails> listUser = Objuser.GetAll();
             return View(listUser);
+        }
+        
+        public ActionResult LogInUrl()
+        {
+            return Json(new { url = "/vw_HG_UsersDetails/vw_HG_UsersDetails" },JsonRequestBehavior.AllowGet );
         }
         public ActionResult GetCustomerList()
         {
