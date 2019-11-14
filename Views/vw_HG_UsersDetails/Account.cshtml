@@ -44,7 +44,7 @@
                 List<UsersMenu> AccountSubMenuList =List.FindAll(x => x.Section == "ACCOUNT" && x.ParentMenuId != 0);
                 foreach (var ObjMenuLi in AccountMenuList)
                 {
-                    if (ObjMenuLi.MenuLink != null)
+                    if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink!="")
                     {
                         <li class="nav-item" data-parent="#myaccordion">
                             <a class="nav-link" href="@ObjMenuLi.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@ObjMenuLi.Menu_Icon"></i>@ObjMenuLi.MenuDisplayName</a>
