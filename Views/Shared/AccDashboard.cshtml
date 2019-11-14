@@ -1,5 +1,37 @@
 ﻿<div>
-    <div class="card-header text-center text-white" style="background-color:black" >Today Order Status </div>
+    <div class="card-header text-center text-white" style="background-color:black">Today Order </div>
+    <div class="row" style="min-height:120px">
+        <div class="col-md-6">
+            @Html.Label("Search Table Number")
+            @{
+                List<SelectListItem> slist = new List<SelectListItem>();
+                SelectListItem sl = new SelectListItem();
+                sl.Text = "Select";
+                sl.Value = "0";
+                slist.Add(sl);
+            }
+            @Html.DropDownList("TorSid", slist, new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-6">
+            @Html.Label("Search Order Number")
+            @{
+                List<SelectListItem> slist2 = new List<SelectListItem>();
+                SelectListItem sl2 = new SelectListItem();
+                sl2.Text = "Select";
+                sl2.Value = "0";
+                slist2.Add(sl2);
+            }
+            @Html.DropDownList("OID", slist2, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+
+
+
+    <div class="card-header text-center text-white" style="background-color:black">Today Order Status </div>
+
     <div class="row">
 
         <div class="col-md-4">
@@ -50,8 +82,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="col-md-4">
             <div class="card text-white bg-info " style=" width: 100%; height:100% ;box-shadow:2px 4px 4px black ;">
                 <div class="card-header text-center">Total Orders</div>
@@ -77,11 +107,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
     </div>
 
 

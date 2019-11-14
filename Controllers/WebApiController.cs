@@ -288,8 +288,8 @@ namespace HangOut.Controllers
             List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
             string TableSheatPrefix = ObjOrg.OrgTypes == "1" ? "Table" :"Sheat: ";
             List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
-            //string SideOrRowPrefix = ObjOrg.OrgTypes == "1" ? "Table" : "Sheat: ";
-            
+                //string SideOrRowPrefix = ObjOrg.OrgTypes == "1" ? "Table" : "Sheat: ";
+                int TorSIndex = 0;
             foreach (var order in Orderlist)
             {
                 HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
@@ -300,6 +300,8 @@ namespace HangOut.Controllers
                 TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
                 JArray ItemsArray = new JArray();
+                    int ItemIndex = 0;
+
                 foreach(var OrderItem in hG_OrderItems)
                 {
                     HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
@@ -308,9 +310,11 @@ namespace HangOut.Controllers
                     itemobj.Add("ItemName", hG_Items.Items);
                     itemobj.Add("Quantity", OrderItem.Qty);
                     itemobj.Add("Status", OrderItem.Status);
+                    itemobj.Add("IIndex", ItemIndex++);
                     ItemsArray.Add(itemobj);
                 }
                 TableScreen.Add("OrderItems", ItemsArray);
+                    TableScreen.Add("TorSIndex", TorSIndex++);
                 tableorSheatList.Add(TableScreen);
             }
             }

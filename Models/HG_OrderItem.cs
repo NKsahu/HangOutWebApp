@@ -88,10 +88,10 @@ namespace HangOut.Models
                     ObjTmp.Count = SDR.GetInt32(3);
                     ObjTmp.Qty = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
-                    ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(8);
-                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? System.DateTime.Now : SDR.GetDateTime(9);
-                    ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(11);
-                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? System.DateTime.Now : SDR.GetDateTime(12);
+                    ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(7);
+                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? System.DateTime.Now : SDR.GetDateTime(8);
+                    ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
+                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? System.DateTime.Now : SDR.GetDateTime(10);
                     ListTmp.Add(ObjTmp);
                 }
             }
