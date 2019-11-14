@@ -9,11 +9,11 @@
     string searchTerm = Request.QueryString["searchTerm"];
     int pageSize = int.Parse(Request.QueryString["pageSize"].ToString());
     int pageNum = int.Parse(Request.QueryString["pageNum"]);
-    int OrgId= int.Parse(Request.QueryString["OrgId"]);
-    List<HG_Orders> MessList = new HG_Orders().GetAll(OrgId);
+    int Type = int.Parse(Request.QueryString["OrgType"]);
+    List<HG_Tables_or_Sheat> MessList = new HG_Tables_or_Sheat().GetAll(Type);
     if (searchTerm != null && searchTerm != "")
     {
-        MessList = MessList.FindAll(x => x.OID.ToString().Contains(searchTerm.ToUpper()));
+        MessList = MessList.FindAll(x => x.Table_or_SheetName.ToUpper().Contains(searchTerm.ToUpper()));
     }
 
     var Cnt = MessList.Count;
@@ -43,8 +43,8 @@
         foreach (var obj in MessList)
         {
             Select2Result ObjRESULT = new Select2Result();
-            ObjRESULT.id = obj.OID.ToString();
-            ObjRESULT.text = obj.OID.ToString();
+            ObjRESULT.id = obj.Table_or_RowID.ToString();
+            ObjRESULT.text = obj.Table_or_SheetName;
             jsonAttendees.Results.Add(ObjRESULT);
             jsonAttendees.Total = Cnt;
         }

@@ -135,7 +135,88 @@
         });
 
     }
-
-
+    function TableSearch() {
+        $("#TorSid").select2({
+            ajax: {
+                url: "/HG_Orders/LiveSearch?OrgType=1",
+                dataType: 'json',
+                delay: 200,
+                data: function (params) {
+                    return {
+                        pageSize: 20,
+                        pageNum: params.page || 1,
+                        searchTerm: params.term
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.Results,
+                        pagination: {
+                            more: (params.page * 20) < data.Total
+                        }
+                    };
+                },
+                cache: true
+            },
+            //escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 0,
+            allowClear: true,
+            placeholder: "Serch Table Name",
+            tags: false,
+            tokenSeparators: [','],
+            dropdownAutoWidth: true
+            //templateResult: formatRepo,
+            //templateSelection: formatRepoSelection
+        }).on("select2:focus", function (e) {
+            $(this).select2('open');
+        });
+        $("#TorSid").select2('open');
+    }
+    $("#TorSid").click(function () {
+        TableSearch();
+    });
+   
+    function OrderSearch() {
+        $("#OID").select2({
+            ajax: {
+                url: "/HG_Orders/LiveSearch?OrgType=1",
+                dataType: 'json',
+                delay: 200,
+                data: function (params) {
+                    return {
+                        pageSize: 20,
+                        pageNum: params.page || 1,
+                        searchTerm: params.term
+                    };
+                },
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.Results,
+                        pagination: {
+                            more: (params.page * 20) < data.Total
+                        }
+                    };
+                },
+                cache: true
+            },
+            //escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 0,
+            allowClear: true,
+            placeholder: "Serch Order Number",
+            tags: false,
+            tokenSeparators: [','],
+            dropdownAutoWidth: true
+            //templateResult: formatRepo,
+            //templateSelection: formatRepoSelection
+        }).on("select2:focus", function (e) {
+            $(this).select2('open');
+        });
+        $("#OID").select2('open');
+    }
+    $("#OID").click(function () {
+        OrderSearch();
+    });
 
 </script>
