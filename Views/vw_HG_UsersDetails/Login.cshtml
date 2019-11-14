@@ -1,8 +1,17 @@
 ﻿@model HangOut.Models.vw_HG_UsersDetails
-  
+
 <style>
     #LoginModal {
         font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+        padding: 100px 0;
+        background-color: #efefef
+    }
+
+    a, a:hover {
+        color: #333
     }
 </style>
 <div class="modal hide fade" id="LoginModal" style="background-image:url('../../Assets/back.jpg');background-repeat: no-repeat;background-size: 100% 100%;">
@@ -22,19 +31,28 @@
                     <div class="row">
                         <div class="col-md-12">
                             @Html.Label("User Login ", new { @class = "control-label " })
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">$</span>
+                            <div class="input-group  ">
+                                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                <div class=" input-group-append">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-user-tie"></i></span>
+                                </div>
                             </div>
-                            @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                         </div>
                         <div class="col-md-12">
-                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label " })
-                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @type = "password", @class = "form-control", required = "required" } })
+                            @Html.Label("User Login ", new { @class = "control-label " })
+                            <div class="input-group  ">
+                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", required = "required", id = "myInput", type = "password" } })
+                                <div class=" input-group-append">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-unlock-alt"></i></span>
+                                </div>
+                            </div>
+                                <br />
+                                <input type="checkbox" onclick="myFunction()">Show Password
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <button type="submit" style="background-color:#223D71" class="btn  w-100 text-white">Login</button>
+                            </div>
                         </div>
-                        <div class="col-md-12 mt-3">
-                            <button type="submit"  style="background-color:#223D71"class="btn  w-100 text-white">Login</button>
-                        </div>
-                    </div>
                 }
 
             </div>
@@ -46,4 +64,15 @@
 
 <script type="text/javascript">
     $('#LoginModal').modal('show');
+</script>
+   
+<script>
+    function myFunction() {
+        var x = document.getElementById("myInput");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
 </script>
