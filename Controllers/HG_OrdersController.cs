@@ -12,9 +12,8 @@ namespace HangOut.Controllers
         // GET: HG_Order
         public ActionResult Index()
         {
-            HG_Orders listorder = new HG_Orders();
-            List<HG_Orders> objorder = listorder.GetAll(1);
-            return View(objorder);
+            
+            return View();
         }
 
         public ActionResult LiveSearch()
