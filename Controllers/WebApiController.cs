@@ -363,13 +363,12 @@ namespace HangOut.Controllers
             JArray TablesOrSheatList = new JArray();
             foreach (var TableObj in ListTableOrSheat)
             {
-                JObject TableOrSheatObj = new JObject();
                 HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == TableObj.FloorSide_or_RowNoID);
                 HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == TableObj.Floor_or_ScreenId);
                 JObject TableScreen = new JObject();
                 TableScreen.Add("TableOrSheatName","Table No "+TableObj.Table_or_SheetName+" Floor No "+ hG_Floor_Or_ScreenMaster.Name+" Side "+ hG_FloorSide_Or_RowName.FloorSide_or_RowName);
                 TableScreen.Add("TableSeatID", TableObj.Table_or_RowID);
-                TablesOrSheatList.Add(TableOrSheatObj);
+                TablesOrSheatList.Add(TableScreen);
 
             }
             return TablesOrSheatList;
