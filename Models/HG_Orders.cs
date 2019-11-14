@@ -163,7 +163,7 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM HG_ORDERS WHERE Create_Date>="+Formdate.ToString("dd/MM/yyyy")+" and Create_Date<="+Todate.ToString("dd/MM/yyyy")+" ORDER BY OID DESC";
+                string Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("MM/dd/yyyy")+"' and '"+Todate.ToString("MM/dd/yyyy HH:mm:ss")+"' ORDER BY OID DESC";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

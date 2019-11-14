@@ -9,10 +9,10 @@
          var date = DateTime.Now;
          listorder = new HG_Orders().GetListByGetDate(date, date);
      }
-
-
-
-
+     else
+     {
+         listorder = new HG_Orders().GetAll(1);
+     }
          }
 @{List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(1); }
 @{List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(1); }

@@ -138,7 +138,7 @@
     function TableSearch() {
         $("#TorSid").select2({
             ajax: {
-                url: "/HG_Orders/LiveSearch?OrgType=1",
+                url: "/HG_Tables_or_Sheat/LiveSearch?OrgType=1",
                 dataType: 'json',
                 delay: 200,
                 data: function (params) {
@@ -180,7 +180,7 @@
     function OrderSearch() {
         $("#OID").select2({
             ajax: {
-                url: "/HG_Orders/LiveSearch?OrgType=1",
+                url: "/HG_Orders/LiveSearch?OrgId=1",
                 dataType: 'json',
                 delay: 200,
                 data: function (params) {
