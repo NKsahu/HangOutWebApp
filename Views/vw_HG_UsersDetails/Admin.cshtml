@@ -1,6 +1,6 @@
 ﻿@using HangOut.Models.Common;
 <!-- header -->
-<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);z-index:1;">
+<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to bottom, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3);z-index:1;">
     <div class="col-md-8 col-12 text-md-left text-center mt-0">
         <a class="text-white navbar-brand pl-3" style="font-size:15px;">@Request.Cookies["UserInfo"]["UserName"]</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
@@ -27,7 +27,7 @@
 <div class="row">
    
     <!-- admin side menus -->
-    <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);">
+    <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to bottom, #cd71a7, #c682be, #bc92d0, #b2a2de, #abb1e7, #a6bceb, #a5c6ee, #a8cfee, #add7ed, #b7dfeb, #c3e5ea, #d1ebeb);">
         <ul id="myaccordion" class="list-unstyled mb-0">
             @{
                 var UserType = Request.Cookies["UserInfo"]["UserType"];
