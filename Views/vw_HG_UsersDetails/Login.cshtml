@@ -48,13 +48,13 @@
                     Sign In
                 </span>
 
-                <div class="wrap-input100 validate-input m-b-20" data-validate="Enter userid">
+                <div class="wrap-input100 validate-input m-b-25" data-validate="Enter userid">
                     @Html.TextBoxFor(model=>model.UserId,new { @class= "input100" , required= "required", placeholder = "User Login" ,type="text"} )
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input m-b-25" data-validate="Enter password">
-                    @Html.TextBoxFor(model => model.Password, new { @class = "input100" , placeholder = "Password" ,id= "myInput",type="password" })
+                    @Html.TextBoxFor(model => model.Password, new { @class = "input100", required = "required", placeholder = "Password" ,id= "myInput",type="password" })
                     <span class="focus-input100"></span>
                 </div>
                 <div class="wrap-input100 validate-input m-b-25">
