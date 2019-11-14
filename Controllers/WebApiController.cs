@@ -343,7 +343,25 @@ namespace HangOut.Controllers
             }
             return JsonResult;
         }
+        public JArray GetTableInfo(int OrgId,int OrgType)
+        {
+            List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(1, OrgId);
+            List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
+            List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
+            JArray TablesOrSheatList = new JArray();
+            foreach (var TableObj in ListTableOrSheat)
+            {
+                JObject TableOrSheatObj = new JObject();
+                HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == TableObj.FloorSide_or_RowNoID);
+                HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == TableObj.Floor_or_ScreenId);
+                JObject TableScreen = new JObject();
+                TableScreen.Add("TableOrSheatName","Table No "+TableObj.Table_or_SheetName+" Floor No "+ hG_Floor_Or_ScreenMaster.Name+" Side "+ hG_FloorSide_Or_RowName.FloorSide_or_RowName);
+                TableScreen.Add("TableSeatID", TableObj.Table_or_RowID);
+                TablesOrSheatList.Add(TableOrSheatObj);
 
+            }
+            return TablesOrSheatList;
+        }
 
     }
 }
