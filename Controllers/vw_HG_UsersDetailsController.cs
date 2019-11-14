@@ -116,5 +116,10 @@ namespace HangOut.Controllers
         }
         public ActionResult Error()
         { return View(); }
+
+        public ActionResult Account()
+        {
+            return View();
+        }
     }
 }
