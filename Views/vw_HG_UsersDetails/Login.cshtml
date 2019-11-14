@@ -40,7 +40,7 @@
     <div class="container-login100" style=" background-image: url('../../Assets/Login Assets/images/fooddo.jpg') ; 
         
 ">
-        <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" style="box-shadow:2px 6px 6px black">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
             @using(Ajax.BeginForm("LoginPost", "vw_HG_UsersDetails", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
             {
             <form class="login100-form validate-form">

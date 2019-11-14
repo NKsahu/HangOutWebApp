@@ -65,15 +65,20 @@ namespace HangOut.Models
 
         public List<HG_UserTypes> GetAll()
         {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<HG_UserTypes> ListTmp = new List<HG_UserTypes>();
-
+            string Query = "SELECT * FROM  HG_UserTypes   ORDER BY UTID DESC";
+            if (CurrOrgID!=null && int.Parse(CurrOrgID["OrgId"]) >0)
+            {
+                  Query = "SELECT * FROM  HG_UserTypes where UserType!='SA' And UserType!='A' ORDER BY UTID DESC";
+            }
             try
             {
-                string Query = "SELECT * FROM  HG_UserTypes ORDER BY UTID DESC";
+             
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
