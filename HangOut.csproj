@@ -136,7 +136,7 @@
     <Content Include="Assets\Login Assets\fonts\iconic\fonts\Material-Design-Iconic-Font.svg" />
     <Content Include="Assets\Login Assets\fonts\JosefinSans\OFL.txt" />
     <Content Include="Assets\Login Assets\fonts\source-sans-pro\OFL.txt" />
-    <Content Include="Assets\Login Assets\images\bg-01.jpg" />
+    <Content Include="Assets\Login Assets\images\food.jpg" />
     <Content Include="Assets\Login Assets\images\icons\favicon.ico" />
     <Content Include="Assets\Login Assets\images\icons\icon-google.png" />
     <Content Include="Assets\Login Assets\images\icons\map-marker.png" />

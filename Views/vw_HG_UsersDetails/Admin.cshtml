@@ -1,13 +1,14 @@
 ﻿@using HangOut.Models.Common;
 <!-- header -->
-<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to bottom, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3, #e396c3);z-index:1;">
+<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #5be047, #5de151, #60e15a, #62e262, #65e26a, #63e169, #60df69, #5ede68, #55da5f, #4cd656, #41d14d, #36cd43);z-index:1;">
     <div class="col-md-8 col-12 text-md-left text-center mt-0">
         <a class="text-white navbar-brand pl-3" style="font-size:15px;">@Request.Cookies["UserInfo"]["UserName"]</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
     </div>
 
-    <div class="col-md-4 col-12  text-md-right text-center p-md-2 p-2 border-top   mt-0">
+    <div class="col-md-4 col-12  text-md-right text-center p-md-2 p-2 border-top   mt-0"> 
         <div class="btn-group mt-0">
+            <a href="/vw_HG_UsersDetails/Account" class="text-white m-1" ><i class="fas fa-rupee-sign border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
             <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
             <div class="dropdown-menu dropdown-menu-right text-center pb-0">
                 <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
@@ -27,7 +28,7 @@
 <div class="row">
    
     <!-- admin side menus -->
-    <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to bottom, #cd71a7, #c682be, #bc92d0, #b2a2de, #abb1e7, #a6bceb, #a5c6ee, #a8cfee, #add7ed, #b7dfeb, #c3e5ea, #d1ebeb);">
+    <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5bee5b, #92ee77, #b7ed95, #d2edb5, #e6edd9);">
         <ul id="myaccordion" class="list-unstyled mb-0">
             @{
                 var UserType = Request.Cookies["UserInfo"]["UserType"];
