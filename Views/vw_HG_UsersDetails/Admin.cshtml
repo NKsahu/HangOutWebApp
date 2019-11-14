@@ -1,6 +1,6 @@
 ﻿@using HangOut.Models.Common;
 <!-- header -->
-<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background:#223D71;z-index:1;">
+<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background:#bd59d4;z-index:1;">
     <div class="col-md-8 col-12 text-md-left text-center mt-0">
         <a class="text-white navbar-brand pl-3" style="font-size:15px;">@Request.Cookies["UserInfo"]["UserName"]</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
@@ -27,7 +27,7 @@
 <div class="row">
    
     <!-- admin side menus -->
-    <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-color: #223D71;">
+    <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-color: #bd59d4;">
         <ul id="myaccordion" class="list-unstyled mb-0">
             @{
                 var UserType = Request.Cookies["UserInfo"]["UserType"];
