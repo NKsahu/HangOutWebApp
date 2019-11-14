@@ -1,7 +1,58 @@
-﻿
+﻿@using HangOut.Models;
+@using Newtonsoft.Json;
 @{
-    ViewBag.Title = "LiveSearch";
+    Layout = null;
+}
+@{
+
+    string searchTerm = Request.QueryString["searchTerm"];
+    int pageSize = int.Parse(Request.QueryString["pageSize"].ToString());
+    int pageNum = int.Parse(Request.QueryString["pageNum"]);
+    int Type= int.Parse(Request.QueryString["OrgType"]);
+    List<HG_Tables_or_Sheat> MessList = new HG_Tables_or_Sheat().GetAll(Type);
+    if (searchTerm != null && searchTerm != "")
+    {
+        MessList = MessList.FindAll(x => x.Table_or_SheetName.ToUpper().Contains(searchTerm.ToUpper()));
+    }
+
+    var Cnt = MessList.Count;
+    if (MessList != null)
+    {
+        if (MessList.Count > pageSize * (pageNum - 1) & MessList.Count < (pageSize * (pageNum - 1) + pageSize))
+        {
+            MessList = MessList.GetRange(pageSize * (pageNum - 1), MessList.Count - pageSize * (pageNum - 1));
+
+        }
+        else if (MessList.Count >= (pageSize * (pageNum - 1) + pageSize))
+        {
+            MessList = MessList.GetRange(pageSize * (pageNum - 1), pageSize);
+
+        }
+        else if (MessList.Count < pageSize * (pageNum - 1))
+        {
+            MessList = null;
+        }
+
+    }
+
+    Select2PagedResult jsonAttendees = new Select2PagedResult();
+    jsonAttendees.Results = new List<Select2Result>();
+    if (MessList != null)
+    {
+        foreach (var obj in MessList)
+        {
+            Select2Result ObjRESULT = new Select2Result();
+            ObjRESULT.id = obj.MID.ToString();
+            ObjRESULT.text = obj.Mess_Name;
+            jsonAttendees.Results.Add(ObjRESULT);
+            // data will return in the combination of Company name and its ISIN number(eg. 'NAME - MOBILE')
+            jsonAttendees.Total = Cnt;
+        }
+    }
+
+    var JsonResult = JsonConvert.SerializeObject(jsonAttendees);
+    @(new HtmlString(JsonResult));
+
 }
 
-<h2>LiveSearch</h2>
 
