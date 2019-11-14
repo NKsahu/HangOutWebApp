@@ -16,5 +16,10 @@ namespace HangOut.Controllers
             List<HG_Orders> objorder = listorder.GetAll(1);
             return View(objorder);
         }
+
+        public ActionResult LiveSearch()
+        {
+            return View();
+        }
     }
 }

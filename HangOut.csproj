@@ -351,6 +351,7 @@
     <Content Include="Views\Settings\Create.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\Account.cshtml" />
     <Content Include="Views\Shared\AccDashboard.cshtml" />
+    <Content Include="Views\HG_Orders\LiveSearch.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
