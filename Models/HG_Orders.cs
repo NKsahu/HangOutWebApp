@@ -154,5 +154,38 @@ namespace HangOut.Models
             return 0;
 
         }
+        public List<HG_Orders> GetListByGetDate(DateTime Formdate , DateTime Todate)
+        {
+            System.Data.SqlClient.SqlCommand cmd = null;
+            System.Data.SqlClient.SqlDataReader SDR = null;
+            List<HG_Orders> ListTmp = new List<HG_Orders>();
+            HG_Orders ObjTmp = null;
+            DBCon Obj = new DBCon();
+            try
+            {
+                string Query = "SELECT * FROM HG_ORDERS WHERE Create_Date>="+Formdate.ToString("dd/MM/yyyy")+" and Create_Date<="+Todate.ToString("dd/MM/yyyy")+" ORDER BY OID DESC";
+                cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTmp = new HG_Orders
+                    {
+                        OID = SDR.GetInt64(0),
+                        CID = SDR.GetInt64(1),
+                        Status = SDR.GetString(2),
+                        Create_By = SDR.GetInt64(3),
+                        Create_Date = SDR.GetDateTime(4),
+                        Update_By = SDR.GetInt64(5),
+                        Update_Date = SDR.GetDateTime(6),
+                        OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8),
+                        Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9)
+                    };
+                    ListTmp.Add(ObjTmp);
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
+            return (ListTmp);
+        }
     }
 }

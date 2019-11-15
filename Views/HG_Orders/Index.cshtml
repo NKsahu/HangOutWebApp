@@ -3,9 +3,11 @@
 @{ Layout = null;}
  @{ 
      List<HG_Orders> listorder = new List<HG_Orders>();
-     if (Request.QueryString["Today"]=="1")
+
+     if (Request.QueryString["Today"]=="1" )
      {
-         listorder = new HG_Orders().GetAll(1);
+         var date = DateTime.Now;
+         listorder = new HG_Orders().GetListByGetDate(date, date);
      }
 
 
