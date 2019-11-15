@@ -122,6 +122,10 @@ namespace HangOut.Controllers
             
             return View();
         }
+        public ActionResult UserStatus()
+        {
+            return View();
+        }
         
     }
 }

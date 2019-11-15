@@ -51,5 +51,6 @@ namespace HangOut.Controllers
             MenuList = MenuList.OrderBy(x => x.MenuOrderNo).ToList();
             return View(MenuList);
         }
+
     }
 }
