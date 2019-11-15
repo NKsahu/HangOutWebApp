@@ -313,5 +313,55 @@ namespace HangOut.Controllers
             return tableorSheatList;
 
         }
+        public JObject ChangePassWord(string Obj)
+        {
+            JObject ParaMeters = JObject.Parse(Obj);
+            System.Int32 UserCode = int.Parse(ParaMeters["UserCode"].ToString());
+            string OldPassword =ParaMeters["OldPass"].ToString();
+            string NewPassword = ParaMeters["NewPass"].ToString();
+            JObject JsonResult = new JObject();
+            vw_HG_UsersDetails user_obj = new vw_HG_UsersDetails().GetSingleByUserId(UserCode);
+            if (user_obj.Password.Equals(OldPassword))
+            {
+                user_obj.Password = OldPassword;
+                int check = user_obj.save();
+                if (check > 0)
+                {
+                    JsonResult.Add("Status", 200);
+                    JsonResult.Add("Msg", "Password Change Successful");
+                }
+                else
+                {
+                    JsonResult.Add("Status", 400);
+                    JsonResult.Add("Msg", "Password Not Change.");
+                }
+            }
+            else
+            {
+                JsonResult.Add("Status", 400);
+                JsonResult.Add("Msg", "Old Password Incorrect.Please type correct old password");
+            }
+            return JsonResult;
+        }
+        public JArray GetTableInfo(int OrgId,int OrgType)
+        {
+            List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(1, OrgId);
+            List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
+            List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
+            JArray TablesOrSheatList = new JArray();
+            foreach (var TableObj in ListTableOrSheat)
+            {
+                JObject TableOrSheatObj = new JObject();
+                HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == TableObj.FloorSide_or_RowNoID);
+                HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == TableObj.Floor_or_ScreenId);
+                JObject TableScreen = new JObject();
+                TableScreen.Add("TableOrSheatName","Table No "+TableObj.Table_or_SheetName+" Floor No "+ hG_Floor_Or_ScreenMaster.Name+" Side "+ hG_FloorSide_Or_RowName.FloorSide_or_RowName);
+                TableScreen.Add("TableSeatID", TableObj.Table_or_RowID);
+                TablesOrSheatList.Add(TableOrSheatObj);
+
+            }
+            return TablesOrSheatList;
+        }
+
     }
 }
