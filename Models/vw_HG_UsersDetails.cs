@@ -215,6 +215,12 @@ namespace HangOut.Models
             }
             return ParaMeters;
         }
+        public jObject GetTableInfo(string OrgId)
+        {
+            List<HG_Tables_or_Sheat> listTable = new HG_Tables_or_Sheat().GetAll(0);
+            listTable = listTable.FindAll(x => x.OrgId == OrgId);
+            return jObject.FromObject(listTable);
+        }
        
     }
 }
