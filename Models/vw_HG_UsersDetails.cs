@@ -182,45 +182,7 @@ namespace HangOut.Models
             }
             return R;
         }
-
-
-        public JObject ChangePassWord(String Obj)
-        {
-
-            JObject ParaMeters = JObject.Parse(Obj);
-            System.Int32 UserCode = System.Int64.Parse(ParaMeters["UserCode"].ToString());
-            string OldPassword = System.Convert.ToInt64(ParaMeters["OldPass"].ToString());
-
-            vw_HG_UsersDetails user_obj = new vw_HG_UsersDetails().GetSingleByUserId(UserCode);
-
-            if(user_obj.Password.Equals(OldPassword))
-            {
-                user_obj.Password = OldPassword;
-                int check = user_obj.save();
-                if(check > 0)
-                {
-                    ParaMeters.add("Status", 200);
-                    ParaMeters.add("Msg", "Password Change Successful");
-                }
-                else
-                {
-                    ParaMeters.add("Status", 400);
-                    ParaMeters.add("Msg", "Password Not Change.");
-                }
-            }
-            else
-            {
-                ParaMeters.add("Status", 200);
-                ParaMeters.add("Msg", "Old Password Incorrect.Please type correct old password");
-            }
-            return ParaMeters;
-        }
-        public jObject GetTableInfo(string OrgId)
-        {
-            List<HG_Tables_or_Sheat> listTable = new HG_Tables_or_Sheat().GetAll(0);
-            listTable = listTable.FindAll(x => x.OrgId == OrgId);
-            return jObject.FromObject(listTable);
-        }
+       
        
     }
 }
