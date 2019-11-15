@@ -15,6 +15,7 @@ namespace HangOut.Models
         public System.DateTime Update_Date { get; set; }
         public bool Deleted { get; set; }
         public int OrgId { get; set; }
+        public Int64 Table_or_SheatId { get; set; }
         public HG_Orders()
         {
             this.Status = "";
@@ -22,6 +23,7 @@ namespace HangOut.Models
             this.Update_Date = System.DateTime.Now;
             this.OrgId = 0;
             this.Update_By = 0;
+            Table_or_SheatId = 0;
         }
 
         public System.Int64 Save()
@@ -32,10 +34,10 @@ namespace HangOut.Models
             try
             {
                 if (this.OID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId,Table_or_SheatId) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId where OID=@OID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId where OID=@OID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
                 }
 
@@ -47,6 +49,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Update_Date", System.DateTime.Now);
                 cmd.Parameters.AddWithValue("@Deleted", this.Deleted);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
+                cmd.Parameters.AddWithValue("@Table_or_SheatId", this.Table_or_SheatId);
                 if (this.OID == 0)
                 {
                     R = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -65,7 +68,7 @@ namespace HangOut.Models
             return R;
         }
 
-        public List<HG_Orders> GetAll()
+        public List<HG_Orders> GetAll(int OrgId)
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
@@ -74,7 +77,7 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM HG_ORDERS WHERE Deleted=0 ORDER BY OID DESC";
+                string Query = "SELECT * FROM HG_ORDERS WHERE OrgId="+OrgId+" and Deleted=0 ORDER BY OID DESC";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -88,7 +91,8 @@ namespace HangOut.Models
                         Create_Date = SDR.GetDateTime(4),
                         Update_By = SDR.GetInt64(5),
                         Update_Date = SDR.GetDateTime(6),
-                        OrgId = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11)
+                        OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8),
+                        Table_or_SheatId=SDR.IsDBNull(9)?0:SDR.GetInt64(9)
                     };
                     ListTmp.Add(ObjTmp);
                 }
@@ -120,9 +124,8 @@ namespace HangOut.Models
                  ObjTemp.Create_Date = SDR.GetDateTime(4);
                  ObjTemp.Update_By = SDR.GetInt64(5);
                  ObjTemp.Update_Date = SDR.GetDateTime(6);
-                 
-                    ObjTemp.OrgId = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
-                    
+                    OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8);
+                    Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9);
                 }
             }
             catch (System.Exception e){ e.ToString(); }
@@ -141,7 +144,7 @@ namespace HangOut.Models
             }
             if (DeleteOItem)
             {
-                List<HG_OrderItem> list = new HG_OrderItem().GetAll();
+                List<HG_OrderItem> list = new HG_OrderItem().GetAll(OID);
                 foreach(var obj in list)
                 {
                     obj.Deleted = true;

@@ -68,7 +68,7 @@ namespace HangOut.Models
             return Row;
         }
 
-        public List<HG_OrderItem> GetAll()
+        public List<HG_OrderItem> GetAll(Int64 OID)
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
@@ -76,7 +76,7 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM HG_ORDERITEM WHERE Deleted=0 ORDER BY OIID DESC";
+                string Query = "SELECT * FROM HG_ORDERITEM WHERE OID="+OID.ToString()+" and Deleted=0 ORDER BY OIID DESC";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
