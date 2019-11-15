@@ -84,4 +84,5 @@ function showdpt(id) {
 function hidedpt(id) {
     $("#" + id).hide();
     $("#" + id).remove();
+
 }

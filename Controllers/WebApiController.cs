@@ -277,6 +277,9 @@ namespace HangOut.Controllers
         }
         public JArray ChefOrders(int OrgId)
         {
+            JArray tableorSheatList = new JArray();
+            try
+            {
             List<HG_Orders> Orderlist = new HG_Orders().GetAll(OrgId: OrgId);
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             int OrgType =int.Parse(ObjOrg.OrgTypes);
@@ -286,7 +289,7 @@ namespace HangOut.Controllers
             string TableSheatPrefix = ObjOrg.OrgTypes == "1" ? "Table" :"Sheat: ";
             List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
             //string SideOrRowPrefix = ObjOrg.OrgTypes == "1" ? "Table" : "Sheat: ";
-            JArray tableorSheatList = new JArray();
+            
             foreach (var order in Orderlist)
             {
                 HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
@@ -309,6 +312,11 @@ namespace HangOut.Controllers
                 }
                 TableScreen.Add("OrderItems", ItemsArray);
                 tableorSheatList.Add(TableScreen);
+            }
+            }
+            catch(System.Exception e)
+            {
+
             }
             return tableorSheatList;
 
