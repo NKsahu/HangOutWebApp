@@ -1,7 +1,17 @@
-﻿@model IEnumerable<HangOut.Models.HG_Orders>
+﻿ 
 @using HangOut.Models
 @{ Layout = null;}
- 
+ @{ 
+     List<HG_Orders> listorder = new List<HG_Orders>();
+     if (Request.QueryString["Today"]=="1")
+     {
+         listorder = new HG_Orders().GetAll(1);
+     }
+
+
+
+
+         }
 @{List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(1); }
 @{List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(1); }
 @{List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(1); }
@@ -39,7 +49,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in listorder)
                             {
                                 <tr>
                                     <td>
