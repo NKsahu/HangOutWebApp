@@ -13,7 +13,7 @@ namespace HangOut.Models
         public string Qty { get; set; }
         public System.Int64 OID { get; set; }
         public bool Deleted { get; set; }
-        public int Status { get; set; }//{ 0: itemplaceByUser,1-Item ReadybyMess,2:ItemCollecteByAdmin
+        public int Status { get; set; }//{"0" :new items,"1":accesptedItem,"2":Rejected Item,3:"Item-ready"
         public System.DateTime OrderDate { get; set; }
         public int UpdatedBy { get; set; }
         public System.DateTime UpdationDate { get; set; }
@@ -28,15 +28,16 @@ namespace HangOut.Models
 
         public Int64 Save()
         {
+            Int64 Row = 0;
             System.Data.SqlClient.SqlCommand cmd = null;
             DBCon Obj = new DBCon();
             try
             {
                 if (this.OIID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO ORDERITEM (FID,Price,Count,Qty,OID,Deleted,OrderDate,UpdatedBy,UpdationDate) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@OrderDate,@UpdatedBy,@UpdationDate);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate where OIID=@OIID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate where OIID=@OIID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OIID", this.OIID);
                 }
                 cmd.Parameters.AddWithValue("@FID", this.FID);
@@ -52,18 +53,19 @@ namespace HangOut.Models
                 if (this.OIID == 0)
                 {
                     this.OIID = System.Convert.ToInt64(cmd.ExecuteScalar());
-                    if (this.OIID > 0) { }
+                    Row = this.OIID;
                 }
                 else
                 {
                     if (cmd.ExecuteNonQuery() > 0)
                     {
+                        Row = this.OIID;
                     }
                 }
             }
             catch (System.Exception e) { this.OIID = 0; e.ToString(); }
             finally { cmd.Dispose(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
-            return this.OIID;
+            return Row;
         }
 
         public List<HG_OrderItem> GetAll()
@@ -74,7 +76,7 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM ORDERITEM WHERE Deleted=0 ORDER BY OIID DESC";
+                string Query = "SELECT * FROM HG_ORDERITEM WHERE Deleted=0 ORDER BY OIID DESC";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
