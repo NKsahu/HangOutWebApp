@@ -1,55 +1,73 @@
 ﻿@model IEnumerable<HangOut.Models.HG_Orders>
-@using HangOut.Models 
+@using HangOut.Models
 @{ Layout = null;}
-@{List<vw_HG_UsersDetails > listItem = new vw_HG_UsersDetails().GetAll(); }
-<div class="card">
-    <div class="card-header">
-        <h1 style="text-align:center"><b>USER Order</b> </h1>
-        <hr />
-    </div>
-   
-    <div class="card-body">
-        <table class="table table-bordered table-hover w-100" id="TBLID">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OID)
-                    </th>
-                    <th>
-                        @Html.DisplayName( "User Name")
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Status)
-                    </th>
-                    
-                    <th>
-                        @Html.DisplayName("Order Date")
-                    </th>
-                    
-                </tr>
-                </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.OID)
-                        </td>
-                        <td>
-                            @{vw_HG_UsersDetails objitem = listItem.Find(x => x.UserCode == item.CID); }
-                            @objitem.UserName
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Create_Date)
-                        </td>
-                         
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
+ 
+@{List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(1); }
+@{List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(1); }
+@{List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(1); }
+            <div class="card">
+                <div class="card-header">
+                    <h1 style="text-align:center"><b>USER Order</b> </h1>
+                    <hr />
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-hover w-100" id="TBLID">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayName("Order Number")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Table Number")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Floor Number")
+                                </th>
+
+                                <th>
+                                    @Html.DisplayName("Side")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Total Amount")
+                                </th> 
+                                <th>
+                                    @Html.DisplayName("Order Date")
+                                </th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OID)
+                                    </td>
+                                    <td>
+                                        @{HG_Tables_or_Sheat ObjTable = ListTableOrSheat.Find(x => x.Table_or_RowID == item.Table_or_SheatId); }
+                                        @ObjTable.Table_or_SheetName
+                                         
+                                    </td>
+                                    <td>
+                                        @{HG_Floor_or_ScreenMaster ObjFloor = ListFloorScreen.Find(x => x.Floor_or_ScreenID == ObjTable.Floor_or_ScreenId);}
+                                        @ObjFloor.Name
+                                    </td>
+                                    <td>
+                                        @{HG_FloorSide_or_RowName Objfloor = ListFloorSideorRow.Find(x => x.ID == ObjTable.FloorSide_or_RowNoID); }
+                                        @Objfloor.FloorSide_or_RowName
+                                    </td>
+                                    <td>
+                                        0
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem =>item.Create_Date)
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
