@@ -1,2 +1,65 @@
 ﻿
+<link href="~/Assets/MakeOrder.css" rel="stylesheet" />
+<section id="team" class="pb-5">
+    <div class="container">
+        <h5 class="section-title h1">OUR TEAM</h5>
+        <div class="row" id="UpdateResult">
+            <!-- Team member -->
+           
+          
+           
+        </div>
+    </div>
+</section>
 
+
+<script>
+    $(document).ready(function () {
+        var FirstDiv = "<div class='col-xs-12 col-sm-6 col-md-4'> ";
+        FirstDiv += "<div class='mainflip'>";
+        FirstDiv += "<div class='frontside'> ";
+        var EndDiv = "</div></div></div>";
+       
+        function GetItemList() {
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/GetItemList?Obj=",
+                success: function (data) {
+                    $("UpdateResult").html("");
+                    var CategoryItemArray = JSON.parse(data);
+                    for (i = 0; i < CategoryItemArray.length; i++) {
+                        var MenuItemsArray = JSON.parse(CategoryItemArray[i].MenuItems);
+                        for (j = 0; j < MenuItemsArray.length; j++) {
+                            var ItemName = MenuItemsArray[j].ItemName;
+                            var IID = MenuItemsArray[j].IID;
+                            var ItemPrice = MenuItemsArray.ItemPrice;
+                            var Qty = MenuItemsArray.Qty;
+                            var Image = MenuItemsArray.ItemImage;
+                            var ItemCnt = MenuItemsArray.ItemCartValue;
+                            var Middlediv = "<div class='card'>";
+                            Middlediv += "<div class='card-body text-center'>";
+                            Middlediv = "<p><img class='img-fluid' src='"+Image+"' alt='card image'></p>";
+                            Middlediv += "<h4 class='card-title'>"+ItemName+"</h4>";
+                            Middlediv += "<p class='card-text'>This is basic card with image on top, title, description and button.</p>";
+                            Middlediv += "<a href='#' class='btn btn-primary btn-sm'><i class='fa fa - plus'></i></a></div> </div>";
+                            $("UpdateResult").append(FirstDiv + Middlediv + EndDiv);
+                        }
+                    }
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback 
+                    $("#waiting").hide();
+                }
+            });
+
+        }
+
+
+
+
+
+
+    });
+
+
+</script>
