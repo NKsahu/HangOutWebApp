@@ -4,6 +4,9 @@ using HangOut.Models.Common;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System;
+using System.Net;
+
 
 namespace HangOut.Controllers
 {
@@ -373,6 +376,47 @@ namespace HangOut.Controllers
             }
             return TablesOrSheatList;
         }
+        public JObject OTPVerification(string MobileNO,string OtpNu)
+        {
+            OTPGeneretion ObjOtp = new OTPGeneretion();
+            ObjOtp = ObjOtp.GetOne(MobileNO, OtpNu);
+            JObject result = new JObject();
+            if (ObjOtp.ID > 0)
+            {
+                result.Add("Status", 200);
+                ObjOtp.Dell(ObjOtp.ID);
 
+            }
+            else
+            {
+                result.Add("Status", 400);
+            }
+            return JObject.FromObject(result);
+        }
+        
+        public JObject OTPGenerator(string MobileNO)
+        {
+            Random generator = new Random();
+            string  OTPNumber = generator.Next(100000, 999999).ToString("D6");
+            OTPGeneretion ObjOtp = new OTPGeneretion();
+            ObjOtp.MobileNO = MobileNO;
+            ObjOtp.OTP = OTPNumber;
+            JObject Result = new JObject();
+           if(ObjOtp.save() > 0)
+            {
+                // Settings settingsObj = new Settings().GetOne("Mgs");
+                // APICONTACT&senderid=FOODDO&msg=APIMSG
+                string Msg = "Your One Time Otp For Foodoo Login Is " + OTPNumber + " Please Dont Share with Any one";
+                HttpWebRequest webRequest =(HttpWebRequest) HttpWebRequest.Create("http://host6.hemsmedia.com/app/smsapi/index.php?key=25DC260CCC0CBF&campaign=0&routeid=5&type=text&contacts="+ MobileNO+ "&senderid=FOODDO&msg="+Msg);
+                webRequest.Method = "GET";
+                WebResponse webResp = webRequest.GetResponse();
+                Result.Add("Status", 200);
+            }
+           else
+            {
+                Result.Add("Status",400);
+            }
+            return JObject.FromObject(Result);
+        }
     }
 }

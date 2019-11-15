@@ -60,7 +60,7 @@ namespace HangOut.Models.Common
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM Settings";
+                string Query = "SELECT * FROM Settings ";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -79,7 +79,7 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ListTmp);
         }
-        public  Settings GetOne( int SettingId)
+        public  Settings GetOne( string keyname)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -88,9 +88,8 @@ namespace HangOut.Models.Common
             Settings ObjTemp = new Settings();
             try
             {
-                string Query = "SELECT * FROM  Settings where SettingId=@SettingId";
+                string Query = "SELECT * FROM  Settings where KeyName="+keyname;
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@SettingId", SettingId);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -99,6 +98,35 @@ namespace HangOut.Models.Common
                     ObjTemp.KeyValue = SDR.GetString(2);
                     ObjTemp.KeyDiscription = SDR.GetString(3);
                     
+                }
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally { Con.Close(); }
+
+            return (ObjTemp);
+
+        }
+        public Settings GetOne(int SettingId)
+        {
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            Settings ObjTemp = new Settings();
+            try
+            {
+                string Query = "SELECT * FROM  Settings where KeyName=" + SettingId.ToString();
+                cmd = new SqlCommand(Query, Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTemp.SettingId = SDR.GetInt32(0);
+                    ObjTemp.KeyName = SDR.GetString(1);
+                    ObjTemp.KeyValue = SDR.GetString(2);
+                    ObjTemp.KeyDiscription = SDR.GetString(3);
+
                 }
             }
             catch (System.Exception e)
