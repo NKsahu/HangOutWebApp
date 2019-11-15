@@ -99,6 +99,8 @@ namespace HangOut.Models
             finally { cmd.Dispose(); SDR.Close(); Con.Close(); Con.Dispose(); Con = null; }
             return (ObjTmp);
         }
+
+
         public vw_HG_UsersDetails GetSingleByUserId(int UserCode)
         {
             SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -180,5 +182,39 @@ namespace HangOut.Models
             }
             return R;
         }
+
+
+        public JObject ChangePassWord(String Obj)
+        {
+
+            JObject ParaMeters = JObject.Parse(Obj);
+            System.Int32 UserCode = System.Int64.Parse(ParaMeters["UserCode"].ToString());
+            string OldPassword = System.Convert.ToInt64(ParaMeters["OldPass"].ToString());
+
+            vw_HG_UsersDetails user_obj = new vw_HG_UsersDetails().GetSingleByUserId(UserCode);
+
+            if(user_obj.Password.Equals(OldPassword))
+            {
+                user_obj.Password = OldPassword;
+                int check = user_obj.save();
+                if(check > 0)
+                {
+                    ParaMeters.add("Status", 200);
+                    ParaMeters.add("Msg", "Password Change Successful");
+                }
+                else
+                {
+                    ParaMeters.add("Status", 400);
+                    ParaMeters.add("Msg", "Password Not Change.");
+                }
+            }
+            else
+            {
+                ParaMeters.add("Status", 200);
+                ParaMeters.add("Msg", "Old Password Incorrect.Please type correct old password");
+            }
+            return ParaMeters;
+        }
+       
     }
 }
