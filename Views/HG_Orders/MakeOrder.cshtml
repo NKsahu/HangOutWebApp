@@ -1,11 +1,12 @@
-﻿
+﻿@{ 
+    Layout = null;
+}
 <link href="~/Assets/MakeOrder.css" rel="stylesheet" />
 <section id="team" class="pb-5">
     <div class="container">
-        <h5 class="section-title h1">OUR TEAM</h5>
+        <h5 class="section-title h1" id="title"></h5>
         <div class="row" id="UpdateResult">
             <!-- Team member -->
-           
           
            
         </div>
@@ -17,49 +18,92 @@
     $(document).ready(function () {
         var FirstDiv = "<div class='col-xs-12 col-sm-6 col-md-4'> ";
         FirstDiv += "<div class='mainflip'>";
-        FirstDiv += "<div class='frontside'> ";
+        FirstDiv += "<div class='frontside'>";
         var EndDiv = "</div></div></div>";
-       
+        GetItemList();
         function GetItemList() {
+            $("#waiting").show();
+            var Obj = {};
+            Obj.CID = 0;
+            Obj.OID = 0;
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/GetItemList?Obj=",
+                url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
                 success: function (data) {
-                    $("UpdateResult").html("");
+                    $("#UpdateResult").html("");
                     var CategoryItemArray = JSON.parse(data);
+                    console.log(JSON.stringify(CategoryItemArray));
                     for (i = 0; i < CategoryItemArray.length; i++) {
-                        var MenuItemsArray = JSON.parse(CategoryItemArray[i].MenuItems);
+                        var MenuItemsArray = CategoryItemArray[i].MenuItems;
                         for (j = 0; j < MenuItemsArray.length; j++) {
                             var ItemName = MenuItemsArray[j].ItemName;
                             var IID = MenuItemsArray[j].IID;
-                            var ItemPrice = MenuItemsArray.ItemPrice;
-                            var Qty = MenuItemsArray.Qty;
-                            var Image = MenuItemsArray.ItemImage;
-                            var ItemCnt = MenuItemsArray.ItemCartValue;
-                            var Middlediv = "<div class='card'>";
+                            var ItemPrice = MenuItemsArray[j].ItemPrice;
+                            var Qty = MenuItemsArray[j].ItemQuntity;
+                            var Image = MenuItemsArray[j].ItemImage;
+                            var ItemCnt = MenuItemsArray[j].ItemCartValue;
+                            var Middlediv ="<div class='card'>";
                             Middlediv += "<div class='card-body text-center'>";
-                            Middlediv = "<p><img class='img-fluid' src='"+Image+"' alt='card image'></p>";
-                            Middlediv += "<h4 class='card-title'>"+ItemName+"</h4>";
-                            Middlediv += "<p class='card-text'>This is basic card with image on top, title, description and button.</p>";
-                            Middlediv += "<a href='#' class='btn btn-primary btn-sm'><i class='fa fa - plus'></i></a></div> </div>";
-                            $("UpdateResult").append(FirstDiv + Middlediv + EndDiv);
+                            Middlediv += "<p class='text-center'><img class='img-fluid card-bodyimg '  src='"+Image+"' alt='card image'></p>";
+                            Middlediv += "<h4 class='card-title card-title text-center'>" + ItemName + "</h4>";
+                            Middlediv += "<p class='text-center'> <span class='label info'> Price : " + ItemPrice + " Qty : " + Qty +"</span></p>"
+                         //   Middlediv += "<p class='card-text text-center'>This is basic card with image on top, title, description and button.</p>";
+                            Middlediv += "<button onclick='minus(this)' Minus=" + IID+" class='btn btn-danger btn-sm'><i class='fa fa-minus'></i></button>";
+                            Middlediv += "<button class='btn btn-info btn-sm'><span class='badge badge-primary badge-pill'><div id=" + IID + ">" + ItemCnt+"</div></span></button>";
+                            Middlediv += "<button onclick='plus(this)' Plus="+ IID +" class='btn btn-primary btn-sm'><i class='fa fa-plus'></i></button></div> </div>";
+                            $("#UpdateResult").append(FirstDiv + Middlediv + EndDiv);
+                            $("#title").text("Make Order");
+                            $("#waiting").hide();
                         }
                     }
 
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback 
                     $("#waiting").hide();
+                    $("#title").text("Make Order");
                 }
             });
 
         }
+       
 
-
-
-
-
-
+        
     });
 
+    
+    function plus(event) {
+        var add = $(event).attr("Plus");
+        var CartValue = parseInt($("#" + add).text());
+        AddToCart(add, CartValue+1);
+        //$("#" + add).text(CartValue+1);
+    }
+    function minus(event) {
+        var minu = $(event).attr("Minus");
+        var CartValue = parseInt($("#" + minu).text());
+        if (CartValue > 0) {
+            AddToCart(minu, CartValue-1);
+        }
+        
+    }
+    function AddToCart(itemid,Cnt) {
+        var Obj = {};
+        Obj.CID = 0;
+        Obj.OID = 0;
+        Obj.ItemId = itemid;
+        Obj.Cnt = Cnt;
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/AddCart?Obj=" + JSON.stringify(Obj),
+            success: function (data) {
+                //var Count = data.split(",")[0];
+                $("#" + itemid).text(Cnt);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback 
+                $("#waiting").hide();
+            }
+        });
+
+
+    }
 
 </script>
