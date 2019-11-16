@@ -24,6 +24,10 @@ namespace HangOut.Controllers
         {
             return View();
         }
-
+        public ActionResult CaseRecipt()
+        {
+            return View();
+        }
+        
     }
 }
