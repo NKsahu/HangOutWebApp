@@ -25,9 +25,9 @@ namespace HangOut.Models.Common
                 Con.Open();
                 SqlCommand cmd = null;
                 string Query = "";
-                if(this.ID>0)
-                 
-                    Query = "INSERT INTO OTPGeneretion Values (@MobileNo,@OTP,@Creation_Date); SELECT SCOPE_IDENTITY();";
+               
+                
+                    Query = "INSERT INTO OTPGeneretion Values (@MobileNO,@OTP,@Creation_Date); SELECT SCOPE_IDENTITY();";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@ID",this.ID);
                 cmd.Parameters.AddWithValue("@MobileNO", this.MobileNO);
@@ -60,7 +60,7 @@ namespace HangOut.Models.Common
             OTPGeneretion OTPTemp = new OTPGeneretion();
             try
             {
-                string Query = "SELECT * FROM  OTPGeneretion  where  MobileNO=" + MobileNO+" and Password ="+Password+ "";
+                string Query = "SELECT * FROM  OTPGeneretion  where  MobileNO=" + MobileNO+" and OTP ="+Password+ "";
                 cmd = new SqlCommand(Query , Con);
                 SDR = cmd.ExecuteReader();
                 while(SDR.Read())
