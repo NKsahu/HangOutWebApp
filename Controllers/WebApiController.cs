@@ -169,7 +169,10 @@ namespace HangOut.Controllers
             JObject ParaMeters = JObject.Parse(Obj);
             System.Int64 TableId =System.Convert.ToInt64(ParaMeters.GetValue("TID").ToString());
             HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(TableId);
-            return JObject.FromObject(TableRowObj);
+            JObject jObject = JObject.FromObject(TableRowObj);
+            HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
+            jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
+            return jObject;
         }
         public JArray CartList(string CID)
         {

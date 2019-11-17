@@ -34,6 +34,13 @@
 
 <section id="team" class="">
     <div class="container">
+
+        <div class="row" style="padding-top:30px">
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="SearchItem" onkeyup="SearchItem()" placeholder="Search Item ..." title="Search Item..">
+            </div>
+
+        </div>
         <div class="row" id="UpdateResult">
             <!-- Team member -->
            
@@ -205,6 +212,20 @@
                 $("#waiting").hide();
             }
         });
+    }
+
+    function SearchItem() {
+        var input = document.getElementById("SearchItem");
+        var filter = input.value.toLowerCase();
+        var nodes = document.getElementsByClassName('card');
+
+        for (i = 0; i < nodes.length; i++) {
+            if (nodes[i].innerText.toLowerCase().includes(filter)) {
+                nodes[i].style.visibility = "visible";
+            } else {
+                nodes[i].style.visibility = "hidden";
+            }
+        }
     }
 
 </script>
