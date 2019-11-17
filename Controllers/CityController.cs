@@ -30,8 +30,9 @@ namespace HangOut.Controllers
         {
             int i = city.save();
             if (i > 0)
-                return RedirectToAction("Index", "City", new { Type = 1 });
-            return RedirectToAction("Error");
+                return Json(new { CityId = city.CityId, Name = city.Name }, JsonRequestBehavior.AllowGet);
+            //    return RedirectToAction("Index", "City", new { Type = 1 });
+           return RedirectToAction("Error");
         }
         public ActionResult Error()
         {

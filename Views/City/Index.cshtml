@@ -129,6 +129,12 @@
         });
 
     }
+
+    function ReturnRow(data) {
+        var JsonObj = JSON.parse(data);
+        var table = $('#TBLID').DataTable();
+        table.row.add([JsonArray[i].CityId, JsonArray[i].Name]).draw();//.//node();
+    }
 </script>
 
 

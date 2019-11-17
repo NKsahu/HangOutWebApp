@@ -10,7 +10,7 @@
     </div>
     <div class="card-body">
 
-        @using (Ajax.BeginForm("CreateEdit", "City", new { ID = Model.CityId }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEdit", "City", new { ID = Model.CityId }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "", LoadingElementId = "waiting", OnSuccess ="alert('saved succesfully'); hidedpt('AddCity');ReturnRow();" }))
         {
             @Html.AntiForgeryToken()
 
