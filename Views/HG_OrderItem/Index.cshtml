@@ -6,16 +6,19 @@
    
 
     }
-@{List<HG_OrderItem> listOrder = new HG_OrderItem().GetAll(OrderId); }
+
+@{List<HG_Items> listItem = new HG_Items().GetAll(); }
 <div class="card">
     <div class="card-header">
-        <h1 class="text-center" style="color:#000000"><b>List OF Order</b></h1>
+        <h1 class="text-center" style="color:#000000"><b>List OF Item</b></h1>
     </div>
     <div class="card-body">
         <table class="table">
             <thead>
                 <tr>
-
+                    <th>
+                        S.N
+                    </th>
                     <th>
                         @Html.DisplayName("Items")
                     </th>
@@ -34,25 +37,29 @@
                 </tr>
             </thead>
             <tbody>
+                @{
+                    int sno = 0;
+                }
                 @foreach (var item in Model)
                 {
                 <tr>
                     <td>
-                        @{HG_OrderItem ObjOrder = listOrder.Find(x => x.OIID == item.OIID); }
-                        @ObjOrder.FID
+                        @{ sno++; }
+                        @sno
+                    </td>
+                    <td>
+                        @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
+                        @ObjOrder.Items
                     </td>
 
                     <td>
-                       @{HG_OrderItem ObjOyt= listOrder.Find(x => x.OIID == item.OIID); }
-                        @ObjOyt.Qty
+                        @item.Qty
                     </td>
                     <td>
-                        @{HG_OrderItem Objamt = listOrder.Find(x => x.OIID == item.OIID); }
-                        @Objamt.Price
+                        @item.Price
                     </td>
                     <td>
-                        @{HG_OrderItem Objstatus= listOrder.Find(x => x.OIID == item.OIID); }
-                        @Objstatus.Status
+                        @item.Status
                     </td>
 
                 </tr>

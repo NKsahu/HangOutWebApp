@@ -10,7 +10,7 @@
                 sl.Value = "0";
                 slist.Add(sl);
             }
-            @Html.DropDownList("TorSid", slist, new { @class = "form-control" })
+            @Html.DropDownList("TorSid", slist, new { @class = "form-control" , onclick= "TableOrder('@item.OID');" })
         </div>
 
         <div class="col-md-6">
@@ -22,7 +22,7 @@
                 sl2.Value = "0";
                 slist2.Add(sl2);
             }
-            @Html.DropDownList("OID", slist2, new { @class = "form-control" })
+            @Html.DropDownList("OID", slist2, new { @class = "form-control"  ,onclick= "OrderSearch('@item.OID');" })
         </div>
 
     </div>
@@ -125,11 +125,11 @@
             url: "/HG_Orders/Index?Status=" + status,
             success: function (data) {
                 makedpt("OrderItem");
-               $("#OrderItem > .modal-dialog > .modal-content > .modal-body").html(data);
-               showdpt("OrderItem");
+                $("#OrderItem > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("OrderItem");
                 $("#waiting").hide();
             },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback 
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
             }
         });
@@ -176,7 +176,10 @@
     $("#TorSid").click(function () {
         TableSearch();
     });
-   
+    $("#TorSid").change(function () {
+        TableOrder($("#TorSid").val());
+    });
+
     function OrderSearch() {
         $("#OID").select2({
             ajax: {
@@ -218,5 +221,43 @@
     $("#OID").click(function () {
         OrderSearch();
     });
+    $("#OID").change(function () {
+        OrderItemList($("#OID").val());
+    });
 
+</script>
+<script>
+    function OrderItemList(OID) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_OrderItem/Index?OID=" + OID,
+            success: function (data) {
+                makedpt("OrderItem");
+                $("#OrderItem > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("OrderItem");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+
+    }
+    function TableOrder(TRSID) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Orders/Index?TRSID=" + TRSID,
+            success: function (data) {
+                makedpt("OrderItem");
+                $("#OrderItem > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("OrderItem");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
 </script>

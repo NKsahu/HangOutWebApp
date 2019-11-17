@@ -9,6 +9,13 @@
          var date = DateTime.Now;
          listorder = new HG_Orders().GetListByGetDate(date, date);
      }
+     else if(Request.QueryString["TRSID"]==null)
+     {
+         string TRSID = Request.QueryString["TRSID"];
+         Int64 TRSIDid = Int64.Parse(TRSID);
+
+         listorder = listorder.FindAll(x => x.Table_or_SheatId == TRSIDid);
+     }
      else
      {
          listorder = new HG_Orders().GetAll(1);
