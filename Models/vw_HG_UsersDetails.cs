@@ -24,6 +24,7 @@ namespace HangOut.Models
         public bool Status { get; set; }
        public vw_HG_UsersDetails()
         {
+            Status = true;
             OrgID = 0;
            UPhoto = "";
             EMail = "";
@@ -192,7 +193,7 @@ namespace HangOut.Models
             vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
             try
             {
-                string Query = "SELECT * FROM HG_UsersDetails where UserId=" + UserLogin+ "";
+                string Query = "SELECT * FROM HG_UsersDetails where UserId='" + UserLogin+ "'";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

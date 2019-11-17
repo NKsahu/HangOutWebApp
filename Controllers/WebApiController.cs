@@ -377,13 +377,13 @@ namespace HangOut.Controllers
                 else
                 {
                     Result.Add("Status", 400);
-                    Result.Add("Status", "Unable To Change  Password Try after some time ");
+                    Result.Add("MSG", "Unable To Change  Password Try after some time ");
                 }
             }
             else
             {
                 Result.Add("Status", 400);
-                Result.Add("Status", "Invalid Mobile Number ");
+                Result.Add("MSG", "Invalid Mobile Number ");
 
             }
             return Result;
