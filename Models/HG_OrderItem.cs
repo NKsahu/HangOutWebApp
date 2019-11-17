@@ -7,7 +7,7 @@ namespace HangOut.Models
     public class HG_OrderItem
     {
         public System.Int64 OIID { get; set; }
-        public System.Int64 FID { get; set; }
+        public System.Int64 FID { get; set; }//FID mean food ID
         public double Price { get; set; }
         public int Count { get; set; }
         public string Qty { get; set; }
