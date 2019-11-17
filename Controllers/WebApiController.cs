@@ -406,7 +406,7 @@ namespace HangOut.Controllers
             {
                 // Settings settingsObj = new Settings().GetOne("Mgs");
                 // APICONTACT&senderid=FOODDO&msg=APIMSG
-                string Msg = "Your One Time Otp For Foodoo Login Is " + OTPNumber + " Please Dont Share with Any one";
+                string Msg = "Your  Otp For Foodoo Login Is " + OTPNumber+"";
                 HttpWebRequest webRequest =(HttpWebRequest) HttpWebRequest.Create("http://host6.hemsmedia.com/app/smsapi/index.php?key=25DC260CCC0CBF&campaign=0&routeid=5&type=text&contacts="+ MobileNO+ "&senderid=FOODDO&msg="+Msg);
                 webRequest.Method = "GET";
                 WebResponse webResp = webRequest.GetResponse();
