@@ -10,7 +10,7 @@
                 sl.Value = "0";
                 slist.Add(sl);
             }
-            @Html.DropDownList("TorSid", slist, new { @class = "form-control" , onclick= "TableOrder('@item.OID');" })
+            @Html.DropDownList("TorSid", slist, new { @class = "form-control" ,  })
         </div>
 
         <div class="col-md-6">
@@ -22,7 +22,7 @@
                 sl2.Value = "0";
                 slist2.Add(sl2);
             }
-            @Html.DropDownList("OID", slist2, new { @class = "form-control"  ,onclick= "OrderSearch('@item.OID');" })
+            @Html.DropDownList("OID", slist2, new { @class = "form-control" })
         </div>
 
     </div>
