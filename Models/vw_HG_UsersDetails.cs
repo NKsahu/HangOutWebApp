@@ -183,6 +183,34 @@ namespace HangOut.Models
             return R;
         }
        
-       
+       public vw_HG_UsersDetails MobileAlreadyExist(string UserLogin)
+        {
+            SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
+            try
+            {
+                string Query = "SELECT * FROM HG_UsersDetails where UserId=" + UserLogin+ "";
+                cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTmp = new vw_HG_UsersDetails();
+                    ObjTmp.UserCode = SDR.GetInt32(0);
+                    ObjTmp.OrgID = SDR.GetInt32(1);
+                    ObjTmp.UserType = SDR.GetString(2);
+                    ObjTmp.UserName = SDR.GetString(3);
+                    ObjTmp.UserId = SDR.GetString(4);
+                    ObjTmp.Password = SDR.GetString(5);
+                    ObjTmp.EMail = SDR.GetString(6);
+
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Con.Close(); Con.Dispose(); Con = null; }
+            return (ObjTmp);
+        }
     }
 }
