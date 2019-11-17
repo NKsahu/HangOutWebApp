@@ -23,6 +23,7 @@ namespace HangOut.Controllers
             {
                 LoginExist = new vw_HG_UsersDetails();
             }
+           
             return JObject.FromObject(LoginExist);
 
         }
@@ -56,6 +57,7 @@ namespace HangOut.Controllers
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
             List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId);
             JArray JMenuArray = new JArray();
+            int count = 0;
             foreach(HG_Category menu in MenuList)
             {
                 List<HG_Items> ItemListByMenu = ListItems.FindAll(x => x.CategoryID == menu.CategoryID);
@@ -65,6 +67,8 @@ namespace HangOut.Controllers
                     JArray jarrayItem = new JArray();
                     JobjMenu.Add("MenuId", menu.CategoryID);
                     JobjMenu.Add("Name", menu.Category);
+                    JobjMenu.Add("MenuIndex", count++);
+                    int ItemiIndex = 0;
                     foreach (var Items in ItemListByMenu)
                     {
                         List<Cart> cartCurrentItem = cartlist.FindAll(x => x.ItemId == Items.ItemID);
@@ -76,6 +80,7 @@ namespace HangOut.Controllers
                         objItem.Add("ItemImage", Items.Image);
                         objItem.Add("ItemCartValue", cartCurrentItem.Sum(x => x.Count));
                         objItem.Add("MenuId", Items.CategoryID);
+                        objItem.Add("ItemIndex", ItemiIndex++);
                         jarrayItem.Add(objItem);
                     }
                     JobjMenu.Add("MenuItemCount", ItemListByMenu.Count);
