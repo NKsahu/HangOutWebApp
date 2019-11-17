@@ -15,7 +15,7 @@
 
                     </div>
                     <div class="col-sm-1">
-                        <a href="/City/CreateEdit?CityId=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+                         <button   class="btn btn-success" id="AddCity"  onclick="AddCity();"    ><i class="fa fa-plus">ADD</i></button>
                     </div>
                 </div>
                 <div class="card-header text-center"><b>Filter</b></div>
@@ -32,7 +32,7 @@
                                 @Html.DropDownList("SID", selectList, new { @class = "form-control" })
                             </div>
                             <div class="col-sm-2">
-                                <button  id="Search"  class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
+                                <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
                             </div>
 
                         </div>
@@ -82,7 +82,7 @@
 
 <script>
     $(document).ready(function () {
-        
+
         setTimeout(function () {
 
             function Search() {
@@ -110,6 +110,25 @@
         }, 2000);
     });
 
+</script>
+<script>
+    function AddCity() {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/City/CreateEdit?CityId=0" ,
+            success: function (data) {
+                makedpt("AddCity");
+                $("#AddCity > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("AddCity");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+
+    }
 </script>
 
 
