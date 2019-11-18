@@ -1,168 +1,606 @@
-﻿@{ 
+﻿@using HangOut.Models;
+@{
     Layout = null;
 }
-<link href="~/Assets/MakeOrder.css" rel="stylesheet" />
-<div class="row" id="SearchTableDiv">
-    <div class="col-md-6">
-        @Html.Label("Search Table Number")
-        @{
-            List<SelectListItem> slist = new List<SelectListItem>();
-            SelectListItem sl = new SelectListItem();
-            sl.Text = "Select";
-            sl.Value = "0";
-            slist.Add(sl);
+
+<style>
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+    .tablink {
+        background-color: #555;
+        color: white;
+        float: left;
+        padding:5px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-size: 15px;
+        width: 25%;
+    }
+
+        .tablink:hover {
+            background-color: #000000;
         }
-        @Html.DropDownList("TorSid", slist, new { @class = "form-control" })
+    p .card {
+        font-size: 12px !important;
+        border-bottom: 1px solid #ebeef0;
+        min-height: 50px;
+        margin: 0;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        cursor: pointer;
+        background-color: #f5f5f5;
+    }
+    .Pspan {
+        align-self: center;
+        padding: 8px;
+        color: #008cba;
+    }
+    .sp-grid-cell {
+        padding-left: 0;
+        padding-bottom: 0;
+        padding-right: 8px;
+        padding-bottom: 16px;
+    }
+    .highlight-color-58D68D{
+        border-bottom: 3px solid #58d68d;
+    }
+
+    .sp-grid {
+        padding-right: 0;
+    }
+
+   
+    .sp-grid-items-scroll-with-noticebar{
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .sp-grid-cell-contents {
+        height: 100px;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        border-top: 1px solid #f5f5f5;
+        border-left: 1px solid #f5f5f5;
+        border-right: 1px solid #f5f5f5;
+    }
+    .sp-grid-cell-text {
+        padding: 2px;
+        -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
+        width: 100%;
+        text-align: center;
+        overflow-wrap: break-word;
+    }
+    slot-split-hidden{
+        font-size: 12px !important;
+        text-align: center;
+        padding-top: 8px;
+        padding-bottom: 4px;
+        margin-bottom: 0;
+    }
+    /* Style the tab content (and add height:100% for full page content) */
+  
+</style>
+<div class="row">
+    <div class="col-md-6">
+        @Html.Label("Select Floor")
+        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(1), "Floor_or_ScreenID", "Name",""),"Select Floor", new { @class = "form-control", })
     </div>
-    <div class="col-md-6">
-        @Html.Label("Customize Order")
-        @{
-            List<SelectListItem> CustomOrder = new List<SelectListItem>();
-            SelectListItem selobj = new SelectListItem();
-            selobj.Text = "NO";
-            selobj.Value = "0";
-            CustomOrder.Add(selobj);
-            SelectListItem selobj2 = new SelectListItem();
-            selobj2.Text = "YES";
-            selobj2.Value = "1";
-            CustomOrder.Add(selobj2);
-        }
-        @Html.DropDownList("COrder", CustomOrder, new { @class = "form-control" })
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-12 tab">
+
+        <button class=" tablink" onclick="openPage('Home', this, '#777')" id="defaultOpen">Orders</button>
+        <button class=" tablink" onclick="openPage('News', this, '#777')">Current</button>
+    </div>
+</div>
+
+
+<div class="row tabcontent2" id="Home">
+
+    <input id="TableSearch" class="form-control" style="margin:15px;border:1px solid;" name="orderSearch" placeholder="Search Order Tables..." trim="" type="text">
+    <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
+
+        <p class="card"><span class="Pspan">All</span></p>
+        <p class="card"><span class="Pspan">Take Away</span></p>
+        <p class="card"><span class="Pspan">Tables </span></p>
+        <p class="card"><span class="Pspan">Free </span></p>
+        <p class="card"><span class="Pspan">Occupied</span></p>
+        <p class="card"><span class="Pspan">Unpaid</span></p>
+
+    </div>
+    <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
+        <div class="row">
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
+                <div class="sp-grid-cell-contents highlight-color-58D68D">
+
+                    <span class="sp-grid-cell-text">
+                        Take-Away-4
+                        <hr class="sp-grid-text-break">
+
+                        <small _ngcontent-c4="" class="text-muted">In progress</small>
+
+                    </span>
+                </div>
+                <p class="sp-slot-split-hidden">Split</p>
+
+            </div>
+        </div>
+
     </div>
 
 </div>
+<div class="row tabcontent2" id="News">
 
-<section id="team" class="">
-    <div class="container">
+    <div class="col-sm-12 col-md-8 col-lg-8">
+        <input id="ItemSearch" class="form-control" style="margin:15px;border:1px solid;" name="orderSearch" placeholder="Search Items..." trim="" type="text">
+        <div class="row">
+            <div class=" col-xs-4 col-md-3 sp-grid-items-scroll-with-noticebar">
+                <p class="card"><span class="Pspan">All</span></p>
+                <p class="card"><span class="Pspan">General</span></p>
+                <p class="card"><span class="Pspan">All</span></p>
+                <p class="card"><span class="Pspan">General</span></p>
+                <p class="card"><span class="Pspan">All</span></p>
+                <p class="card"><span class="Pspan">General</span></p>
+                <p class="card"><span class="Pspan">All</span></p>
+                <p class="card"><span class="Pspan">General</span></p>
+                <p class="card"><span class="Pspan">General</span></p>
+                <p class="card"><span class="Pspan">All</span></p>
+                <p class="card"><span class="Pspan">General</span></p>
+            </div>
+            <div class=" col-xs-6 col-md-9 sp-grid-items-scroll-with-noticebar">
+                <div class="col-md-3  sp-grid-cell">
+                    <div class="sp-grid-cell-contents highlight-color-4DB6AC">
+                        <span class="sp-grid-cell-text">
+                            Burger
+                            <hr class="sp-grid-text-break">
+                            <span>
+                                <small class="text-muted">
+                                    ₹100.00
+                                </small>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3  sp-grid-cell">
+                    <div class="sp-grid-cell-contents highlight-color-4DB6AC">
+                        <span class="sp-grid-cell-text">
+                            Burger
+                            <hr class="sp-grid-text-break">
+                            <span>
+                                <small class="text-muted">
+                                    ₹100.00
+                                </small>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3  sp-grid-cell">
+                    <div class="sp-grid-cell-contents highlight-color-4DB6AC">
+                        <span class="sp-grid-cell-text">
+                            Burger
+                            <hr class="sp-grid-text-break">
+                            <span>
+                                <small class="text-muted">
+                                    ₹100.00
+                                </small>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-3 sp-grid-cell">
+                    <div class="sp-grid-cell-contents highlight-color-4DB6AC">
+                        <span class="sp-grid-cell-text">
+                            Burger
+                            <hr class="sp-grid-text-break">
+                            <span>
+                                <small class="text-muted">
+                                    ₹100.00
+                                </small>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-3 sp-grid-cell">
+                    <div class="sp-grid-cell-contents highlight-color-4DB6AC">
+                        <span class="sp-grid-cell-text">
+                            Burger
+                            <hr class="sp-grid-text-break">
+                            <span>
+                                <small class="text-muted">
+                                    ₹100.00
+                                </small>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-lg-3 sp-grid-cell">
+                    <div class="sp-grid-cell-contents highlight-color-4DB6AC">
+                        <span class="sp-grid-cell-text">
+                            Burger
+                            <hr class="sp-grid-text-break">
+                            <span>
+                                <small class="text-muted">
+                                    ₹100.00
+                                </small>
+                            </span>
+                        </span>
+                    </div>
+                </div>
 
-        <div class="row" style="padding-top:30px ;display:none" id="customsearch" >
-            <div class="col-md-12">
-                <input type="text" class="form-control" id="SearchItem" onkeyup="SearchItem()" placeholder="Search Item ..." title="Search Item..">
             </div>
 
         </div>
-        <div class="row" id="UpdateResult">
-            <!-- Team member -->
-           
-        </div>
+
+
     </div>
-</section>
+
 
 
 <script>
-   
-        var FirstDiv = "<div class='col-xs-12 col-sm-6 col-md-4'> ";
-        FirstDiv += "<div class='mainflip'>";
-        FirstDiv += "<div class='frontside'>";
-        var EndDiv = "</div></div></div>";
-       // GetItemList();
-        function GetItemList(Obj) {
-            $("#waiting").show();
-           
-            $.ajax({
-                type: 'POST',
-                url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
-                success: function (data) {
-                    ResetDiv();
-                    var CategoryItemArray = JSON.parse(data);
-                    console.log(JSON.stringify(CategoryItemArray));
-                    for (i = 0; i < CategoryItemArray.length; i++) {
-                        var MenuItemsArray = CategoryItemArray[i].MenuItems;
-                        for (j = 0; j < MenuItemsArray.length; j++) {
-                            var ItemName = MenuItemsArray[j].ItemName;
-                            var IID = MenuItemsArray[j].IID;
-                            var ItemPrice = MenuItemsArray[j].ItemPrice;
-                            var Qty = MenuItemsArray[j].ItemQuntity;
-                            var Image = MenuItemsArray[j].ItemImage;
-                            var ItemCnt = MenuItemsArray[j].ItemCartValue;
-                            var Middlediv ="<div class='card'>";
-                            Middlediv += "<div class='card-body text-center'>";
-                            Middlediv += "<p class='text-center'><img class='img-fluid card-bodyimg '  src='"+Image+"' alt='card image'></p>";
-                            Middlediv += "<h4 class='card-title card-title text-center'>" + ItemName + "</h4>";
-                            Middlediv += "<p class='text-center'> <span class='label info'> Price : " + ItemPrice + " Qty : " + Qty +"</span></p>"
-                         //   Middlediv += "<p class='card-text text-center'>This is basic card with image on top, title, description and button.</p>";
-                            Middlediv += "<button onclick='minus(this)' Minus=" + IID+" class='btn btn-danger btn-sm'><i class='fa fa-minus'></i></button>";
-                            Middlediv += "<button class='btn btn-info btn-sm'><span class='badge badge-primary badge-pill'><div id=" + IID + ">" + ItemCnt+"</div></span></button>";
-                            Middlediv += "<button onclick='plus(this)' Plus="+ IID +" class='btn btn-primary btn-sm'><i class='fa fa-plus'></i></button></div> </div>";
-                            $("#UpdateResult").append(FirstDiv + Middlediv + EndDiv);
-                            $("#waiting").hide();
-                        }
+
+    var FirstDiv = "<div class='col-xs-12 col-sm-6 col-md-2 hidediv'> ";
+    var EndDiv = "</div></div>";
+    // GetItemList();
+    function GetItemList(Obj) {
+        $("#waiting").show();
+
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/GetItemList?Obj=" + JSON.stringify(Obj),
+            success: function (data) {
+                ResetDiv();
+                var CategoryItemArray = JSON.parse(data);
+                console.log(JSON.stringify(CategoryItemArray));
+                for (i = 0; i < CategoryItemArray.length; i++) {
+                    var MenuItemsArray = CategoryItemArray[i].MenuItems;
+                    for (j = 0; j < MenuItemsArray.length; j++) {
+                        var ItemName = MenuItemsArray[j].ItemName;
+                        var IID = MenuItemsArray[j].IID;
+                        var ItemPrice = MenuItemsArray[j].ItemPrice;
+                        var Qty = MenuItemsArray[j].ItemQuntity;
+                        var Image = MenuItemsArray[j].ItemImage;
+                        var ItemCnt = MenuItemsArray[j].ItemCartValue;
+                        var Middlediv = "<div class='card'>";
+                        Middlediv += "<div class='card-body text-center '>";
+                        // Middlediv += "<p class='text-center'><img class='img-fluid card-bodyimg '  src='"+Image+"' alt='card image'></p>";
+                        Middlediv += "<h5 class='text-center'>" + ItemName + "</h5>";
+                        Middlediv += "<p class='text-center'>Price : " + ItemPrice + "</p>";
+                        //   Middlediv += "<p class='card-text text-center'>This is basic card with image on top, title, description and button.</p>";
+                        Middlediv += "<button onclick='minus(this)' Minus=" + IID + " class='btn btn-danger btn-sm'><i class='fa fa-minus'></i></button>";
+                        Middlediv += "<button class='btn btn-info btn-sm'><span class='badge badge-primary badge-pill'><div id=" + IID + ">" + ItemCnt + "</div></span></button>";
+                        Middlediv += "<button onclick='plus(this)' Plus=" + IID + " class='btn btn-primary btn-sm'><i class='fa fa-plus'></i></button></div>";
+                        $("#UpdateResult").append(FirstDiv + Middlediv + EndDiv);
+                        $("#waiting").hide();
                     }
-
-                },
-                error: function (jqXhr, textStatus, errorMessage) { // error callback 
-                    $("#waiting").hide();
-                    
                 }
-            });
 
-        }
-        function TableSearch() {
-            $("#TorSid").select2({
-                ajax: {
-                    url: "/HG_Tables_or_Sheat/LiveSearch?OrgType=1",
-                    dataType: 'json',
-                    delay: 200,
-                    data: function (params) {
-                        return {
-                            pageSize: 20,
-                            pageNum: params.page || 1,
-                            searchTerm: params.term
-                        };
-                    },
-                    processResults: function (data, params) {
-                        params.page = params.page || 1;
-                        return {
-                            results: data.Results,
-                            pagination: {
-                                more: (params.page * 20) < data.Total
-                            }
-                        };
-                    },
-                    cache: true
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+
+            }
+        });
+
+    }
+    function TableSearch() {
+        $("#TorSid").select2({
+            ajax: {
+                url: "/HG_Tables_or_Sheat/LiveSearch?OrgType=1",
+                dataType: 'json',
+                delay: 200,
+                data: function (params) {
+                    return {
+                        pageSize: 20,
+                        pageNum: params.page || 1,
+                        searchTerm: params.term
+                    };
                 },
-                //escapeMarkup: function (markup) { return markup; },
-                minimumInputLength: 0,
-                allowClear: true,
-                placeholder: "Search Table Name",
-                tags: false,
-                tokenSeparators: [','],
-                dropdownAutoWidth: true
-                //templateResult: formatRepo,
-                //templateSelection: formatRepoSelection
-            }).on("select2:focus", function (e) {
-                $(this).select2('open');
-            });
-            $("#TorSid").select2('open');
-        }
-        $("#TorSid").click(function () {
-            TableSearch();
+                processResults: function (data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: data.Results,
+                        pagination: {
+                            more: (params.page * 20) < data.Total
+                        }
+                    };
+                },
+                cache: true
+            },
+            //escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 0,
+            allowClear: true,
+            placeholder: "Search Table Name",
+            tags: false,
+            tokenSeparators: [','],
+            dropdownAutoWidth: true
+            //templateResult: formatRepo,
+            //templateSelection: formatRepoSelection
+        }).on("select2:focus", function (e) {
+            $(this).select2('open');
+        });
+        $("#TorSid").select2('open');
+    }
+    $("#TorSid").click(function () {
+        TableSearch();
     });
-    $("#TorSid").change(function () {
-        var TorSid = $("#TorSid").val();
 
-        if (TorSid != null) {
-            var Obj = {};
-            Obj.TID = TorSid;
-            ScanRestTable(Obj);
-        }
-       
-    });
     function plus(event) {
         var add = $(event).attr("Plus");
         var CartValue = parseInt($("#" + add).text());
-        AddToCart(add, CartValue+1);
+        AddToCart(add, CartValue + 1);
         //$("#" + add).text(CartValue+1);
     }
     function minus(event) {
         var minu = $(event).attr("Minus");
         var CartValue = parseInt($("#" + minu).text());
         if (CartValue > 0) {
-            AddToCart(minu, CartValue-1);
+            AddToCart(minu, CartValue - 1);
         }
-        
+
     }
-    function AddToCart(itemid,Cnt) {
+    function AddToCart(itemid, Cnt) {
         var Obj = {};
         Obj.CID = 0;
         Obj.OID = 0;
@@ -175,26 +613,13 @@
                 //var Count = data.split(",")[0];
                 $("#" + itemid).text(Cnt);
             },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback 
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
             }
         });
 
 
     }
-    $("#COrder").change(function () {
-
-        if ($("#COrder").val() == '1') {
-            var Obj = {};
-            Obj.CID = 0;
-            Obj.OID = 0;
-            GetItemList(Obj);
-        }
-        else {
-        
-            ResetDiv();
-        }
-    });
     function ResetDiv() {
         $("#UpdateResult").html('');
         $("#customsearch").show();
@@ -211,7 +636,7 @@
                 Obj.OID = OrgId;
                 GetItemList(Obj);
             },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback 
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
             }
         });
@@ -220,15 +645,30 @@
     function SearchItem() {
         var input = document.getElementById("SearchItem");
         var filter = input.value.toLowerCase();
-        var nodes = document.getElementsByClassName('card');
+        var nodes = document.getElementsByClassName('hidediv');
 
         for (i = 0; i < nodes.length; i++) {
             if (nodes[i].innerText.toLowerCase().includes(filter)) {
-                nodes[i].style.visibility = "visible";
+                nodes[i].style.display = "block";
             } else {
-                nodes[i].style.visibility = "hidden";
+                nodes[i].style.display = "none";
             }
         }
     }
+    function openPage(pageName, elmnt, color) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent2");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablink");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+        document.getElementById(pageName).style.display = 'flex';
+        elmnt.style.backgroundColor = color;
+    }
 
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
 </script>
