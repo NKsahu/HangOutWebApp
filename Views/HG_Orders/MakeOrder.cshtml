@@ -49,11 +49,9 @@
         FirstDiv += "<div class='frontside'>";
         var EndDiv = "</div></div></div>";
        // GetItemList();
-        function GetItemList() {
+        function GetItemList(Obj) {
             $("#waiting").show();
-            var Obj = {};
-            Obj.CID = 0;
-            Obj.OID = 0;
+           
             $.ajax({
                 type: 'POST',
                 url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
@@ -133,7 +131,17 @@
         }
         $("#TorSid").click(function () {
             TableSearch();
-        });
+    });
+    $("#TorSid").change(function () {
+        var TorSid = $("#TorSid").val();
+
+        if (TorSid != null) {
+            var Obj = {};
+            Obj.TID = TorSid;
+            ScanRestTable(Obj);
+        }
+       
+    });
     function plus(event) {
         var add = $(event).attr("Plus");
         var CartValue = parseInt($("#" + add).text());
@@ -174,12 +182,29 @@
             GetItemList();
         }
         else {
-         console.log("")
+        
             ResetDiv();
         }
     });
     function ResetDiv() {
         $("#UpdateResult").html('');
+    }
+    function ScanRestTable(Obj) {
+        $.ajax({
+            type: 'GET',
+            url: "/WebApi/ScanRestTable?Obj=" + JSON.stringify(Obj),
+            success: function (data) {
+                var JsonObj = JSON.parse(data);
+                var OrgId = JsonObj.OrgId;
+                var Obj = {};
+                Obj.CID = 0;
+                Obj.OID = OrgId;
+                GetItemList(Obj);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback 
+                $("#waiting").hide();
+            }
+        });
     }
 
 </script>
