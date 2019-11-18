@@ -1,0 +1,63 @@
+﻿@model IEnumerable<HangOut.Models.HG_OrderItem>
+@{ Layout = null;}
+@using HangOut.Models
+@{ string OID = Request.QueryString["OID"];
+    Int64 OrderId = Int64.Parse(OID);
+   
+
+    }
+@{List<HG_OrderItem> listOrder = new HG_OrderItem().GetAll(OrderId); }
+<div class="card">
+    <div class="card-header">
+        <h1 class="text-center" style="color:#000000"><b>List OF Order</b></h1>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+
+                    <th>
+                        @Html.DisplayName("Items")
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Qty)
+                    </th>
+                    <th>
+                        @Html.DisplayName("AMT")
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
+
+
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @{HG_OrderItem ObjOrder = listOrder.Find(x => x.OIID == item.OIID); }
+                        @ObjOrder.FID
+                    </td>
+
+                    <td>
+                       @{HG_OrderItem ObjOyt= listOrder.Find(x => x.OIID == item.OIID); }
+                        @ObjOyt.Qty
+                    </td>
+                    <td>
+                        @{HG_OrderItem Objamt = listOrder.Find(x => x.OIID == item.OIID); }
+                        @Objamt.Price
+                    </td>
+                    <td>
+                        @{HG_OrderItem Objstatus= listOrder.Find(x => x.OIID == item.OIID); }
+                        @Objstatus.Status
+                    </td>
+
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -46,7 +46,9 @@
                                 <th>
                                     @Html.DisplayName("Order Date")
                                 </th>
+                                <th>
 
+                                </th>
 
                             </tr>
                         </thead>
@@ -76,10 +78,31 @@
                                     <td>
                                         @Html.DisplayFor(modelItem =>item.Create_Date)
                                     </td>
-
+                                    <td>
+                                        <button class="btn btn-success" onclick="ListOrder('@item.OID');">CliCk</button>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
+<script>
+    function ListOrder(OID) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_OrderItem/Index?OID=" + OID,
+            success: function (data) {
+                makedpt("ListOrder");
+                $("#ListOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("ListOrder");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback 
+                $("#waiting").hide();
+            }
+        });
+
+    }
+</script>
