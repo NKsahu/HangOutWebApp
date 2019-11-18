@@ -35,7 +35,7 @@
 <section id="team" class="">
     <div class="container">
 
-        <div class="row" style="padding-top:30px">
+        <div class="row" style="padding-top:30px ;display:none" id="customsearch" >
             <div class="col-md-12">
                 <input type="text" class="form-control" id="SearchItem" onkeyup="SearchItem()" placeholder="Search Item ..." title="Search Item..">
             </div>
@@ -63,7 +63,7 @@
                 type: 'POST',
                 url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
                 success: function (data) {
-                    $("#UpdateResult").html("");
+                    ResetDiv();
                     var CategoryItemArray = JSON.parse(data);
                     console.log(JSON.stringify(CategoryItemArray));
                     for (i = 0; i < CategoryItemArray.length; i++) {
@@ -85,7 +85,6 @@
                             Middlediv += "<button class='btn btn-info btn-sm'><span class='badge badge-primary badge-pill'><div id=" + IID + ">" + ItemCnt+"</div></span></button>";
                             Middlediv += "<button onclick='plus(this)' Plus="+ IID +" class='btn btn-primary btn-sm'><i class='fa fa-plus'></i></button></div> </div>";
                             $("#UpdateResult").append(FirstDiv + Middlediv + EndDiv);
-                          
                             $("#waiting").hide();
                         }
                     }
@@ -185,8 +184,11 @@
     }
     $("#COrder").change(function () {
 
-        if ($("#COrder").val()=='1') {
-            GetItemList();
+        if ($("#COrder").val() == '1') {
+            var Obj = {};
+            Obj.CID = 0;
+            Obj.OID = 0;
+            GetItemList(Obj);
         }
         else {
         
@@ -195,6 +197,7 @@
     });
     function ResetDiv() {
         $("#UpdateResult").html('');
+        $("#customsearch").show();
     }
     function ScanRestTable(Obj) {
         $.ajax({
