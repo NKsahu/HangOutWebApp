@@ -14,18 +14,28 @@
         }
         @Html.DropDownList("TorSid", slist, new { @class = "form-control" })
     </div>
+    <div class="col-md-6">
+        @Html.Label("Customize Order")
+        @{
+            List<SelectListItem> CustomOrder = new List<SelectListItem>();
+            SelectListItem selobj = new SelectListItem();
+            selobj.Text = "NO";
+            selobj.Value = "0";
+            CustomOrder.Add(selobj);
+            SelectListItem selobj2 = new SelectListItem();
+            selobj2.Text = "YES";
+            selobj2.Value = "1";
+            CustomOrder.Add(selobj2);
+        }
+        @Html.DropDownList("COrder", CustomOrder, new { @class = "form-control" })
+    </div>
 
 </div>
 
 <section id="team" class="">
     <div class="container">
-      
-
-
-
         <div class="row" id="UpdateResult">
             <!-- Team member -->
-          
            
         </div>
     </div>
@@ -33,7 +43,7 @@
 
 
 <script>
-    $(document).ready(function () {
+   
         var FirstDiv = "<div class='col-xs-12 col-sm-6 col-md-4'> ";
         FirstDiv += "<div class='mainflip'>";
         FirstDiv += "<div class='frontside'>";
@@ -70,7 +80,7 @@
                             Middlediv += "<button class='btn btn-info btn-sm'><span class='badge badge-primary badge-pill'><div id=" + IID + ">" + ItemCnt+"</div></span></button>";
                             Middlediv += "<button onclick='plus(this)' Plus="+ IID +" class='btn btn-primary btn-sm'><i class='fa fa-plus'></i></button></div> </div>";
                             $("#UpdateResult").append(FirstDiv + Middlediv + EndDiv);
-                            $("#title").text("Make Order");
+                          
                             $("#waiting").hide();
                         }
                     }
@@ -78,17 +88,52 @@
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback 
                     $("#waiting").hide();
-                    $("#title").text("Make Order");
+                    
                 }
             });
 
         }
-       
-
-        
-    });
-
-    
+        function TableSearch() {
+            $("#TorSid").select2({
+                ajax: {
+                    url: "/HG_Tables_or_Sheat/LiveSearch?OrgType=1",
+                    dataType: 'json',
+                    delay: 200,
+                    data: function (params) {
+                        return {
+                            pageSize: 20,
+                            pageNum: params.page || 1,
+                            searchTerm: params.term
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.Results,
+                            pagination: {
+                                more: (params.page * 20) < data.Total
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                //escapeMarkup: function (markup) { return markup; },
+                minimumInputLength: 0,
+                allowClear: true,
+                placeholder: "Search Table Name",
+                tags: false,
+                tokenSeparators: [','],
+                dropdownAutoWidth: true
+                //templateResult: formatRepo,
+                //templateSelection: formatRepoSelection
+            }).on("select2:focus", function (e) {
+                $(this).select2('open');
+            });
+            $("#TorSid").select2('open');
+        }
+        $("#TorSid").click(function () {
+            TableSearch();
+        });
     function plus(event) {
         var add = $(event).attr("Plus");
         var CartValue = parseInt($("#" + add).text());
@@ -122,6 +167,19 @@
         });
 
 
+    }
+    $("#COrder").change(function () {
+
+        if ($("#COrder").val()=='1') {
+            GetItemList();
+        }
+        else {
+         console.log("")
+            ResetDiv();
+        }
+    });
+    function ResetDiv() {
+        $("#UpdateResult").html('');
     }
 
 </script>

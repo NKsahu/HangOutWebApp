@@ -351,12 +351,42 @@ namespace HangOut.Controllers
                     JsonResult.Add("Msg", "Password Not Change.");
                 }
             }
+            
             else
             {
                 JsonResult.Add("Status", 400);
                 JsonResult.Add("Msg", "Old Password Incorrect.Please type correct old password");
             }
             return JsonResult;
+        }
+        public JObject ForgotPassword(string Obj)
+        {
+            JObject Result = new JObject();
+            JObject ParaMeters = JObject.Parse(Obj);
+            string MobileNo = ParaMeters["MobileNo"].ToString();
+            string NewPassword = ParaMeters["Pass"].ToString();
+            vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().MobileAlreadyExist(MobileNo);
+            if (ObjUser.UserCode > 0)
+            {
+                ObjUser.Password = NewPassword;
+                if (ObjUser.save() > 0)
+                {
+                    Result.Add("Status",200);
+                    Result.Add("MSG", "Change Successfully");
+                }
+                else
+                {
+                    Result.Add("Status", 400);
+                    Result.Add("MSG", "Unable To Change  Password Try after some time ");
+                }
+            }
+            else
+            {
+                Result.Add("Status", 400);
+                Result.Add("MSG", "Invalid Mobile Number ");
+
+            }
+            return Result;
         }
         public JArray GetTableInfo(int OrgId,int OrgType)
         {
@@ -394,19 +424,31 @@ namespace HangOut.Controllers
             return JObject.FromObject(result);
         }
         
-        public JObject OTPGenerator(string MobileNO)
+        public JObject OTPGenerator(string MobileNO,int Type)
         {
+            JObject Result = new JObject();
+            /* Type 1 means User registartion 2 means forgot password */
+            if (Type == 1)//change registartion
+            {
+                vw_HG_UsersDetails ObjUser= new vw_HG_UsersDetails().MobileAlreadyExist(MobileNO);
+                if (ObjUser.UserCode > 0)
+                {
+                    Result.Add("Status", 500);
+                    return JObject.FromObject(Result);
+                }
+                
+            }
             Random generator = new Random();
             string  OTPNumber = generator.Next(100000, 999999).ToString("D6");
             OTPGeneretion ObjOtp = new OTPGeneretion();
             ObjOtp.MobileNO = MobileNO;
             ObjOtp.OTP = OTPNumber;
-            JObject Result = new JObject();
+           
            if(ObjOtp.save() > 0)
             {
                 // Settings settingsObj = new Settings().GetOne("Mgs");
                 // APICONTACT&senderid=FOODDO&msg=APIMSG
-                string Msg = "Your  Otp For Foodoo Login Is " + OTPNumber+"";
+                string Msg = "Your  Otp For Foodoo App Is " + OTPNumber+"";
                 HttpWebRequest webRequest =(HttpWebRequest) HttpWebRequest.Create("http://host6.hemsmedia.com/app/smsapi/index.php?key=25DC260CCC0CBF&campaign=0&routeid=5&type=text&contacts="+ MobileNO+ "&senderid=FOODDO&msg="+Msg);
                 webRequest.Method = "GET";
                 WebResponse webResp = webRequest.GetResponse();
