@@ -2,9 +2,27 @@
     Layout = null;
 }
 <link href="~/Assets/MakeOrder.css" rel="stylesheet" />
-<section id="team" class="pb-5">
+<div class="row" id="SearchTableDiv">
+    <div class="col-md-6">
+        @Html.Label("Search Table Number")
+        @{
+            List<SelectListItem> slist = new List<SelectListItem>();
+            SelectListItem sl = new SelectListItem();
+            sl.Text = "Select";
+            sl.Value = "0";
+            slist.Add(sl);
+        }
+        @Html.DropDownList("TorSid", slist, new { @class = "form-control" })
+    </div>
+
+</div>
+
+<section id="team" class="">
     <div class="container">
-        <h5 class="section-title h1" id="title"></h5>
+      
+
+
+
         <div class="row" id="UpdateResult">
             <!-- Team member -->
           
@@ -20,7 +38,7 @@
         FirstDiv += "<div class='mainflip'>";
         FirstDiv += "<div class='frontside'>";
         var EndDiv = "</div></div></div>";
-        GetItemList();
+       // GetItemList();
         function GetItemList() {
             $("#waiting").show();
             var Obj = {};
