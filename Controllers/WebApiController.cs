@@ -398,7 +398,7 @@ namespace HangOut.Controllers
         }
         public JArray GetTableInfo(int OrgId,int OrgType)
         {
-            List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(1, OrgId);
+            List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
             List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
             List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
             JArray TablesOrSheatList = new JArray();
@@ -456,7 +456,7 @@ namespace HangOut.Controllers
             {
                 // Settings settingsObj = new Settings().GetOne("Mgs");
                 // APICONTACT&senderid=FOODDO&msg=APIMSG
-                string Msg = "Your  Otp For Foodoo App Is " + OTPNumber+"";
+                string Msg = "Your Otp For FooDo App Is " + OTPNumber+"";
                 HttpWebRequest webRequest =(HttpWebRequest) HttpWebRequest.Create("http://host6.hemsmedia.com/app/smsapi/index.php?key=25DC260CCC0CBF&campaign=0&routeid=5&type=text&contacts="+ MobileNO+ "&senderid=FOODDO&msg="+Msg);
                 webRequest.Method = "GET";
                 WebResponse webResp = webRequest.GetResponse();

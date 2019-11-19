@@ -310,6 +310,7 @@
     <Compile Include="Models\HG_Tables_or_Sheat.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\HG_OrderItem.cs" />
+    <Compile Include="Models\TakeAway.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
