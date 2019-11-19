@@ -4,6 +4,9 @@
 }
 
 <style>
+    .card:hover {
+        background-color: #e2dbdb;
+    }
     .tab {
         overflow: hidden;
         border: 1px solid #ccc;
@@ -180,281 +183,17 @@
     <input id="TableSearch" class="form-control" style="margin:15px; border:1px solid;" name="orderSearch" placeholder="Search Order Tables..." trim="" type="text">
     <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
 
-        <p class="card"><span class="Pspan" id="All">All</span></p>
-        <p class="card"><span class="Pspan" id="TakeAway">Take Away</span></p>
-        <p class="card"><span class="Pspan" id="Tables">Tables </span></p>
-        <p class="card"><span class="Pspan" id="Free">Free </span></p>
-        <p class="card"><span class="Pspan" id="Occupied">Occupied</span></p>
-        <p class="card"><span class="Pspan" id="Unpaid">Unpaid</span></p>
+        <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)" ><span class="Pspan" id="All">All</span></p>
+        <p class="card" onclick="FilterOrder(3);SelectedColor('card',this)"><span class="Pspan" id="TakeAway">Take Away</span></p>
+        <p class="card"onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
+        <p class="card" onclick="FreeOrOccupied('1');SelectedColor('card',this)"><span class="Pspan" id="Free">Free </span></p>
+        <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
+        <p class="card"><span class="Pspan" onclick="FilterOrder(4);SelectedColor('card',this)" id="Unpaid">Unpaid</span></p>
 
     </div>
     <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
-        <div class="row">
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell">
-                <div class="sp-grid-cell-contents highlight-color-58D68D">
-
-                    <span class="sp-grid-cell-text">
-                        Take-Away-4
-                        <hr class="sp-grid-text-break">
-
-                        <small _ngcontent-c4="" class="text-muted">In progress</small>
-
-                    </span>
-                </div>
-                <p class="sp-slot-split-hidden">Split</p>
-
-            </div>
+        <div class="row" id="OrderStatus">
+          
         </div>
 
     </div>
@@ -956,7 +695,6 @@
 </div>
 <script>
     var TablesList = null;
-    var TakeAwayList = null;
     var ItemList = null;
     var CategoryList = null;
     document.getElementById("defaultOpen").click();
@@ -1020,33 +758,103 @@
         document.getElementById(pageName).style.display = 'flex';
         elmnt.style.backgroundColor = color;
     }
-    function GetAllOrders() {
-        GeTablesTakeAwya();
-       
+    function SelectedColor(classname, event) {
+       var tablinks = document.getElementsByClassName(classname);
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+        event.style.backgroundColor = '#e2dbdb';
+    }
+    
+    GeTablesTakeAwya();
+    function GeTablesTakeAwya() {
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/TableAndTakeAway?Type=1",
+            success: function (data) {
+                
+                TablesList = JSON.parse(data);
+                ShowOrders(TablesList);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
 
     }
-    function GeTables() {
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/GetTableInfo?OrgId=0&OrgType=1",
-            success: function (data) {
-                TablesList = JSON.parse(data);
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
+    function FilterOrder(Status) {
+//all
+        if (Status == '0') {
+            ShowOrders(TablesList);
+        }
+        else if (Status == '3') {
+            console.log(TablesList);
+            var TakeAwayList = TablesList.filter(function (itm) {
+                return itm.Type=='3';
+            });
+            ShowOrders(TakeAwayList);
+           
+        }
+        else if (Status == '1') {
+            
+            var TableListOnly = TablesList.filter(function (itm) {
+                return itm.Type == '1';
+            });
+            ShowOrders(TableListOnly);
+            console.log("Table"+TablesList);
+        }
+
     }
-    function GetTakeAway() {
+    function ShowOrders(list) {
+        $("#OrderStatus").html('');
+        var html = "<div class='col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell'>";
+        html += "<div class='sp-grid-cell-contents highlight-color-58D68D'>";
+        //html += "<span class='sp-grid-cell-text'>";
+        var Second = "<hr class='sp-grid-text-break'>";
+        Second += " <small  class='text-muted'> progress";
+        var Third = "</small> </span ></div > <p class='sp-slot-split-hidden'></p></div >";
+        for (i = 0; i < list.length; i++) {
+            var Name = list[i].Table_or_SheetName;
+            $("#OrderStatus").append(html + "<span class='sp-grid-cell-text' onclick='GetItemList(\""+list[i].Table_or_RowID+"\")'>"+ Name + Second + Third);
+        }
+    }
+    function FreeOrOccupied(Status) {
+
+        if (Status == '1') {
+            var FreeList = TablesList.filter(function (x) {
+                return x.Status==1;
+            });
+            ShowOrders(FreeList);
+            console.log("FreeList" + FreeList.length);
+
+        }
+        else if(Status == '2') {
+            var OccupiedList = TablesList.filter(function (x) {
+                return x.Status==2;
+            });
+            ShowOrders(OccupiedList);
+            console.log("OccupiedList" + OccupiedList.length);
+        }
+    }
+    function GetItemList(OrderId) {
+        
+    }
+    function GetItemListByCategory(Obj) {
+        var Obj = {};
+        Obj.CID = 0;
+        Obj.OID = 0;
         $.ajax({
             type: 'POST',
-            url: "/WebApi/GetTableInfo?OrgId=0&OrgType=1",
+            url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
             success: function (data) {
-                TakeAwayList = JSON.parse(data);
+                CategoryList = JSON.parse(data);
+                ItemList=CategoryList.
+
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
             }
         });
+
     }
 </script>
