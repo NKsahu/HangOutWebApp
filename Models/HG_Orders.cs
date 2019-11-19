@@ -111,9 +111,9 @@ namespace HangOut.Models
             HG_Orders ObjTemp = new HG_Orders();
             try
             {
-                string Query = "SELECT * FROM HG_Orders Where OID=OID";
+                string Query = "SELECT * FROM HG_Orders Where OID="+OID.ToString();
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@OID",this.OID);
+                //cmd.Parameters.AddWithValue("@OID",this.OID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
