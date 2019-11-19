@@ -8,7 +8,7 @@ namespace HangOut.Models
     {
         public System.Int64 OID { get; set; }
         public System.Int64 CID { get; set; }
-        public string Status { get; set; } //Order-Placed=1,Order-Accepted=2,Order-Ready=3,Order-completed=4
+        public string Status { get; set; } //Order-Placed=1,Order-Completed=3,Order-Cancelled=4,
         public System.Int64 Create_By { get; set; }
         public System.DateTime Create_Date { get; set; }
         public System.Int64 Update_By { get; set; }

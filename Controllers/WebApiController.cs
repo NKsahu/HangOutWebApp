@@ -245,7 +245,7 @@ namespace HangOut.Controllers
                 Create_Date = System.DateTime.Now,
                 CID = CID,
                 Update_By = CID,
-                Status = "1",//placed
+                Status = "1",// order placed
                 OrgId = OrgId,
                 Table_or_SheatId = TableorSheatId
                 };
@@ -292,6 +292,9 @@ namespace HangOut.Controllers
             try
             {
             List<HG_Orders> Orderlist = new HG_Orders().GetAll(OrgId: OrgId);
+
+                Orderlist = Orderlist.FindAll(x => x.Status == "1");
+                Orderlist = Orderlist.OrderBy(x => x.Create_Date).ToList();
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             int OrgType =int.Parse(ObjOrg.OrgTypes);
             List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
@@ -301,8 +304,7 @@ namespace HangOut.Controllers
             List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
                 //string SideOrRowPrefix = ObjOrg.OrgTypes == "1" ? "Table" : "Sheat: ";
                 int TorSIndex = 0;
-            foreach (var order in Orderlist)
-            {
+                var order = Orderlist.First();
                 HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
                 HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
                 HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
@@ -317,6 +319,7 @@ namespace HangOut.Controllers
                 {
                     HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
                     JObject itemobj = new JObject();
+                    itemobj.Add("OIID", OrderItem.OIID);
                     itemobj.Add("ItemID", OrderItem.FID);
                     itemobj.Add("ItemName", hG_Items.Items);
                     itemobj.Add("Quantity", OrderItem.Qty);
@@ -327,7 +330,7 @@ namespace HangOut.Controllers
                 TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
                 tableorSheatList.Add(TableScreen);
-            }
+           
             }
             catch(System.Exception e)
             {
@@ -468,6 +471,86 @@ namespace HangOut.Controllers
             }
             return JObject.FromObject(Result);
         }
+
+
+
+
+        public JObject ChangeOrderItemStatus(String  OIID,int Status)
+        {
+            HG_OrderItem hG_OrderItem = new HG_OrderItem().GetOne(Int64.Parse(OIID));
+            JObject PostResult = new JObject();
+            if (hG_OrderItem!=null)
+            {
+                hG_OrderItem.Status = Status;
+            
+                Int64 save = hG_OrderItem.Save();
+                if(save > 0)
+                {
+                    PostResult.Add("Status", "200");
+                    PostResult.Add("Msg", "Success");
+                }
+                else
+                {
+                    PostResult.Add("Status", "400");
+                    PostResult.Add("Msg", "Fail");
+                }
+
+            }
+            else
+            {
+                PostResult.Add("Status", "400");
+                PostResult.Add("Msg", "Order Item Not Found");
+            }
+
+            return PostResult;
+
+        }
+
+
+
+
+        public JObject ChangeOrdersStatus(String OID, String Status)
+        {
+            JObject PostResult = new JObject();
+
+            HG_Orders hG_Order = new HG_Orders().GetOne(Int64.Parse(OID));
+            List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(Int64.Parse(OID));
+            if(hG_Order!=null && OrderItemList.Count>0)
+            {
+                hG_Order.Status = Status;
+
+                Int64 save = hG_Order.Save();
+                if(save>0)
+                {
+
+              
+                    foreach(HG_OrderItem orderItem in OrderItemList)
+                    {
+
+                        orderItem.Status = int.Parse(Status);
+                        orderItem.Save();
+                    }
+                    PostResult.Add("Status", "200");
+                    PostResult.Add("Msg", "Success");
+
+                }
+                else
+                {
+                    PostResult.Add("Status", "400");
+                    PostResult.Add("Msg", "Fail");
+                }
+            }
+            else
+            {
+                PostResult.Add("Status", "400");
+                PostResult.Add("Msg", "Order Not Found.");
+            }
+
+
+            return PostResult;
+
+        }
+
 
 
 
