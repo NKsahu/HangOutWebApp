@@ -301,6 +301,7 @@
     <Compile Include="Models\Common\UsersMenu.cs" />
     <Compile Include="Models\DBCon.cs" />
     <Compile Include="Models\DynamicList\OrgType.cs" />
+    <Compile Include="Models\DynamicList\Type.cs" />
     <Compile Include="Models\HG_Category.cs" />
     <Compile Include="Models\HG_FloorSide_or_RowName.cs" />
     <Compile Include="Models\HG_Floor_or_ScreenMaster.cs" />
@@ -310,7 +311,6 @@
     <Compile Include="Models\HG_Tables_or_Sheat.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\HG_OrderItem.cs" />
-    <Compile Include="Models\TakeAway.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

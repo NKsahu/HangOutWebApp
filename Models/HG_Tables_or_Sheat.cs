@@ -15,10 +15,9 @@ namespace HangOut.Models
         public string Table_or_SheetName { get; set; }
         public int Floor_or_ScreenId { get; set; }
         public int  FloorSide_or_RowNoID{ get; set; }
-        public string Type { get; set; } // "1" means restauarant "2" means theater
+        public string Type { get; set; } // "1" means Table "2" Sheat //3 Take Away
         public  DateTime CreateDate { get; set; }
         public int CreateBy { get; set; }
-
         public Int64 save()
         {
             Int64 Row = 0;
