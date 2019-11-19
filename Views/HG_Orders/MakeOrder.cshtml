@@ -955,6 +955,10 @@
     </div>
 </div>
 <script>
+    var TablesList = null;
+    var TakeAwayList = null;
+    var ItemList = null;
+    var CategoryList = null;
     document.getElementById("defaultOpen").click();
     function plus(event) {
         var add = $(event).attr("Plus");
@@ -1017,7 +1021,32 @@
         elmnt.style.backgroundColor = color;
     }
     function GetAllOrders() {
+        GeTables();
+        GetTakeAway();
 
     }
-    
+    function GeTables() {
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/GetTableInfo?OrgId=0&OrgType=1",
+            success: function (data) {
+                TablesList = JSON.parse(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    function GetTakeAway() {
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/GetTableInfo?OrgId=0&OrgType=1",
+            success: function (data) {
+                TakeAwayList = JSON.parse(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
 </script>
