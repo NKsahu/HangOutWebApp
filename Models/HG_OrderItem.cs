@@ -99,5 +99,36 @@ namespace HangOut.Models
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ListTmp);
         }
+        public HG_OrderItem GetOne(Int64 OIID)
+        {
+            System.Data.SqlClient.SqlCommand cmd = null;
+            System.Data.SqlClient.SqlDataReader SDR = null;
+           HG_OrderItem ObjTmp = new HG_OrderItem();
+            DBCon Obj = new DBCon();
+            try
+            {
+                string Query = "SELECT * FROM HG_ORDERITEM WHERE OIID=" + OIID.ToString() + " and Deleted=0 ";
+                cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                     ObjTmp = new HG_OrderItem();
+                    ObjTmp.OIID = SDR.GetInt64(0);
+                    ObjTmp.FID = SDR.GetInt64(1);
+                    ObjTmp.Price = SDR.GetDouble(2);
+                    ObjTmp.Count = SDR.GetInt32(3);
+                    ObjTmp.Qty = SDR.GetString(4);
+                    ObjTmp.OID = SDR.GetInt64(5);
+                    ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(7);
+                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? System.DateTime.Now : SDR.GetDateTime(8);
+                    ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
+                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? System.DateTime.Now : SDR.GetDateTime(10);
+                  
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
+            return (ObjTmp);
+        }
     }
 }
