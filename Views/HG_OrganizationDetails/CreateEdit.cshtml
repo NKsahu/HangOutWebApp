@@ -201,7 +201,7 @@
             GetDrowpDownCity();
 
         });
-        HideShowPaymentType();
+      
         function GetDrowpDownCity() {
             var StateId = $("#State").val();
             var CityValue = $("#City").attr("val");
@@ -234,18 +234,7 @@
                 }
             });
         }
-        $("#OrgTypes").change(function () {
-            HideShowPaymentType();
-        });
-        function HideShowPaymentType() {
-            var OrgType = $("#OrgTypes").val();
-            if (OrgType == '1') {
-                $("#PaymentType").parent('div').show();
-            }
-            else {
-                $("#PaymentType").parent('div').hide();
-            }
-        }
+        
     });
    
 
