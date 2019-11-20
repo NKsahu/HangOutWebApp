@@ -359,6 +359,7 @@ namespace HangOut.Controllers
             if (hG_OrderItem != null)
             {
                 hG_OrderItem.Status = Status;
+                hG_OrderItem.UpdatedBy = UpdateBy;
 
                 Int64 save = hG_OrderItem.Save();
                 if (save > 0)
@@ -382,7 +383,7 @@ namespace HangOut.Controllers
             return PostResult;
 
         }
-        public JObject ChangeOrdersStatus(String OID, String Status, int UpdateBy)
+        public JObject ChangeOrderStatus(String OID, String Status, int UpdateBy)
         {
             JObject PostResult = new JObject();
 
@@ -391,8 +392,9 @@ namespace HangOut.Controllers
             if (hG_Order != null && OrderItemList.Count > 0)
             {
                 hG_Order.Status = Status;
-
+                hG_Order.Update_By = UpdateBy;
                 Int64 save = hG_Order.Save();
+
                 if (save > 0)
                 {
 
@@ -401,6 +403,7 @@ namespace HangOut.Controllers
                     {
 
                         orderItem.Status = int.Parse(Status);
+                        orderItem.UpdatedBy = UpdateBy;
                         orderItem.Save();
                     }
                     PostResult.Add("Status", "200");
