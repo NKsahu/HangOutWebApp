@@ -1,20 +1,20 @@
 ﻿using System.Web;
 using System.Collections.Generic;
-
+using Newtonsoft.Json.Linq;
 
 namespace HangOut.Models.DynamicList
 {
-    public class Type
+    public class OrderType
     {
         public string id { get; set; }
         public string Name { get; set; }
-        public static List<Type> List;
-        public List<Type> OrgTypeList()
+        public static List<OrderType> List;
+        public List<OrderType> OrgTypeList()
         {
-            List<Type> list = new List<Type>();
-            list.Add(new Type { id = "1", Name = "Tables" });
-            list.Add(new Type { id = "2", Name = "Sheats" });
-            list.Add(new Type { id = "3", Name = "Take Away" });
+            List<OrderType> list = new List<OrderType>();
+            list.Add(new OrderType { id = "1", Name = "Tables" });
+            list.Add(new OrderType { id = "2", Name = "Sheats" });
+            list.Add(new OrderType { id = "3", Name = "Take Away" });
             return list;
         }
         public bool IsAccess()
@@ -30,7 +30,19 @@ namespace HangOut.Models.DynamicList
                 return true;
             }
         }
-
+        public static  List<JObject> PaymentType()
+        {
+            List<JObject> list = new List<JObject>();
+            JObject jobj = new JObject();
+            jobj.Add("Id", "1");
+            jobj.Add("Name", "Prepaid");
+            list.Add(jobj);
+            JObject jobj2 = new JObject();
+            jobj2.Add("Id", "2");
+            jobj2.Add("Name", "PostPaid");
+            list.Add(jobj2);
+            return list;
+        }
     }
    
 

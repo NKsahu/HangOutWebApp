@@ -19,7 +19,7 @@ namespace HangOut
         public void RamRefresh()
         {
             Cart.List = new System.Collections.Generic.List<Cart>();
-            Type.List = new Type().OrgTypeList();
+            OrderType.List = new OrderType().OrgTypeList();
             OrgType.List = new OrgType().ListOrgTypeList();
         }
     }

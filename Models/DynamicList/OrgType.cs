@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Web.Mvc;
 
 namespace HangOut.Models.DynamicList
 {
@@ -16,6 +16,20 @@ namespace HangOut.Models.DynamicList
             list.Add(new OrgType { id = "1", Name = "Restuarant" });
             list.Add(new OrgType { id = "2", Name = "Theater" });
             return list;
+        }
+        public static List<SelectListItem> PaymentType()
+        {
+            List<SelectListItem> sl = new List<SelectListItem>();
+                        SelectListItem slobj = new SelectListItem();
+        slobj.Value = "1";
+                        slobj.Text = "Prepaid";
+                        SelectListItem slobj2 = new SelectListItem();
+        slobj2.Value = "2";
+                        slobj2.Text = "PostPaid";
+                        sl.Add(slobj);
+                        sl.Add(slobj2);
+
+            return sl;
         }
     }
 }

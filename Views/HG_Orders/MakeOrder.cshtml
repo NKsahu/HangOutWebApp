@@ -848,7 +848,7 @@
             url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
             success: function (data) {
                 CategoryList = JSON.parse(data);
-                ItemList=CategoryList.
+                ItemList = CategoryList.MenuItems;
 
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
