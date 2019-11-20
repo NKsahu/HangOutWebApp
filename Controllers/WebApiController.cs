@@ -431,7 +431,7 @@ namespace HangOut.Controllers
             }
             return JObject.FromObject(result);
         }
-        
+       
         public JObject OTPGenerator(string MobileNO,int Type)
         {
             JObject Result = new JObject();
@@ -468,5 +468,10 @@ namespace HangOut.Controllers
             }
             return JObject.FromObject(Result);
         }
+
+
+
+
+
     }
 }

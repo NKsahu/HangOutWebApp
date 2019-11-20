@@ -13,7 +13,7 @@ namespace HangOut.Models
         public string Qty { get; set; }
         public System.Int64 OID { get; set; }
         public bool Deleted { get; set; }
-        public int Status { get; set; }//"1":accesptedItem,"2":Rejected Item,3:"Item-ready"
+        public int Status { get; set; }//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
         public System.DateTime OrderDate { get; set; }
         public int UpdatedBy { get; set; }
         public System.DateTime UpdationDate { get; set; }
