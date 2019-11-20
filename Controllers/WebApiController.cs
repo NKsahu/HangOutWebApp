@@ -245,7 +245,7 @@ namespace HangOut.Controllers
                 Create_Date = System.DateTime.Now,
                 CID = CID,
                 Update_By = CID,
-                Status = "1",//placed
+                Status = "1",// order placed
                 OrgId = OrgId,
                 Table_or_SheatId = TableorSheatId
                 };
@@ -317,6 +317,7 @@ namespace HangOut.Controllers
                 {
                     HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
                     JObject itemobj = new JObject();
+                    itemobj.Add("OIID", OrderItem.OIID);
                     itemobj.Add("ItemID", OrderItem.FID);
                     itemobj.Add("ItemName", hG_Items.Items);
                     itemobj.Add("Quantity", OrderItem.Qty);
@@ -468,6 +469,17 @@ namespace HangOut.Controllers
             }
             return JObject.FromObject(Result);
         }
+
+
+
+
+        public JObject ChangeOrderStatus(String OIID)
+        {
+            HG_OrderItem hG_OrderItem = new HG_OrderItem().
+
+        }
+
+
 
 
 
