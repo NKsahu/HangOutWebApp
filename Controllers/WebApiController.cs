@@ -558,9 +558,11 @@ namespace HangOut.Controllers
             return JObject.FromObject(Result);
         }
 
-        public JArray TableAndTakAway()
+        public JArray TableAndTakeAway(int Type)
         {
-            List<HG_Tables_or_Sheat> list = new HG_Tables_or_Sheat().G
+            List<HG_Tables_or_Sheat> list = new HG_Tables_or_Sheat().GetAllWithTakeAwya(Type);
+
+            return JArray.FromObject(list);
         }
 
 
