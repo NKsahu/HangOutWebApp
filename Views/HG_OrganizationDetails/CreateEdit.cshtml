@@ -23,7 +23,10 @@
 
 
             <div class="col-sm-4">
-
+                @{ 
+                    List<SelectList> sl =new List<SelectList>();
+                    
+                }
                 @Html.LabelFor(model => model.OrgTypes, htmlAttributes: new { @class = "control-label  " })
                 @Html.DropDownListFor(model => model.OrgTypes, new SelectList(OrgType.List, "id", "Name"), new { @class = "form-control", required = "required" })
                 @Html.ValidationMessageFor(model => model.OrgTypes, "", new { @class = "text-danger" })

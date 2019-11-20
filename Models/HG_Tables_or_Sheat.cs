@@ -15,10 +15,9 @@ namespace HangOut.Models
         public string Table_or_SheetName { get; set; }
         public int Floor_or_ScreenId { get; set; }
         public int  FloorSide_or_RowNoID{ get; set; }
-        public string Type { get; set; } // "1" means restauarant "2" means theater
+        public string Type { get; set; } // "1" means Table "2" Sheat //3 Take Away
         public  DateTime CreateDate { get; set; }
         public int CreateBy { get; set; }
-
         public Int64 save()
         {
             Int64 Row = 0;
@@ -186,6 +185,47 @@ namespace HangOut.Models
                 Con.Close();
             }
             return R;
+        }
+        public List<HG_Tables_or_Sheat> GetAllWithTakeAwya(int Type, int OrgId = 0)
+        {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<HG_Tables_or_Sheat> listTemp = new List<HG_Tables_or_Sheat>();
+            string Query = "SELECT * FROM HG_Tables_or_Sheat where  Type=" + Type.ToString() + " ORDER BY Table_or_RowID DESC";
+            if (OrgId > 0)
+            {
+                Query = "SELECT * FROM HG_Tables_or_Sheat where OrgId=" + OrgId.ToString() + " and Type=" + Type.ToString() + " or Type=3 ORDER BY Table_or_RowID DESC";
+            }
+            else if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
+            {
+                Query = "SELECT * FROM HG_Tables_or_Sheat where OrgId=" + CurrOrgID["OrgId"] + " and Type=" + Type.ToString() + " or Type=3 ORDER BY Table_or_RowID DESC";
+            }
+            try
+            {
+                cmd = new SqlCommand(Query, Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    HG_Tables_or_Sheat ObjTemp = new HG_Tables_or_Sheat();
+                    ObjTemp.Table_or_RowID = SDR.GetInt64(0);
+                    ObjTemp.OrgId = SDR.GetInt32(1);
+                    ObjTemp.Table_or_SheetName = SDR.GetString(2);
+                    ObjTemp.Floor_or_ScreenId = SDR.GetInt32(3);
+                    ObjTemp.FloorSide_or_RowNoID = SDR.GetInt32(4);
+                    ObjTemp.Type = SDR.GetString(5);
+                    ObjTemp.CreateDate = SDR.GetDateTime(6);
+                    ObjTemp.CreateBy = SDR.GetInt32(7);
+                    listTemp.Add(ObjTemp);
+                }
+
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { Con.Close(); }
+
+            return (listTemp);
         }
     }
 }
