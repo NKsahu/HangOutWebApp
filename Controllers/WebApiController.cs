@@ -17,14 +17,24 @@ namespace HangOut.Controllers
         {
 
             vw_HG_UsersDetails Objuser = Newtonsoft.Json.JsonConvert.DeserializeObject<vw_HG_UsersDetails>(Obj);
-
-            vw_HG_UsersDetails LoginExist = Objuser.Checkvw_HG_UsersDetails();
-            if (LoginExist == null)
+            Objuser = Objuser.MobileAlreadyExist(Objuser.UserId);
+            if (Objuser.UserCode ==0)
             {
-                LoginExist = new vw_HG_UsersDetails();
+                Objuser.UserCode = -1;
+               
+            }
+            else
+            {
+                Objuser = Objuser.Checkvw_HG_UsersDetails();
+                if (Objuser.UserCode == 0)
+                {
+
+                    Objuser = new vw_HG_UsersDetails();
+                   
+                }
             }
            
-            return JObject.FromObject(LoginExist);
+            return JObject.FromObject(Objuser);
 
         }
         [HttpPost]
@@ -299,7 +309,7 @@ namespace HangOut.Controllers
                 {
                     Orderlist = Orderlist.FindAll(x => x.Status == "1");
                     Orderlist = Orderlist.OrderBy(x => x.Create_Date).ToList();
-                    var  order  = Orderlist.FirstOrDefault();
+                    var  order  = Orderlist.First();
                     Orderlist = Orderlist.FindAll(x => x.OID == order.OID);
                 }
                 else
