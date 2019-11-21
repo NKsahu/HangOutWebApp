@@ -297,17 +297,15 @@
                     <!---->
                     <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
                         <!---->
-                        <div class="btn-group" role="group" style="width:100%">
+                        <div class="btn-group" role="group" style="width:100% ;padding:20px" >
                             <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                                 RS <span id="FinalAmt">0</span> SUBMIT
                             </button>
+                        </div>
+                        <div class="btn-group" role="group" style="width:100%; padding:20px">
                             <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                                 INSTANT CLEAR
                             </button>
-
-                            <!---->
-                            <!---->
-                            <!---->
                         </div>
                     </div>
                 </div>
@@ -360,7 +358,7 @@
             url: "/WebApi/AddCart?Obj=" + JSON.stringify(Obj),
             success: function (data) {
                 var CurritemCnt = parseInt(data.split(",")[3]);
-                $("#FinalAmt").text(data.split(",")[1]);
+                $("#FinalAmt").html(data.split(",")[1]);
                 console.log("Count item" + CurritemCnt);
                 if (CurritemCnt >= 1) {
                     var ObjItem = ItemList.find(x => {
@@ -536,8 +534,7 @@
             return x.Table_or_RowID == Obj.TSTWID;
         });
         $("#TorTWID").text(ObjOrderName.Table_or_SheetName);
-        $("#FinalAmt").html('0');
-        finalAmt = 0.00;
+       
 
         $.ajax({
             type: 'POST',
