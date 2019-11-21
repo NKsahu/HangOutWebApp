@@ -230,10 +230,8 @@
     <div  class="col-sm-12 col-md-5 sp-billed-items">
         <div  class="sp-bill">
             <p  class="sp-panel-header">
-                <span  class="sp-hide-if-sm-screen">
-                  
-                    Take-Away-10
-                    
+                <span  class="sp-hide-if-sm-screen" id="TorTWID">
+                  <!--Table name or take-away name-->  
                 </span>
                 <small  class="pull-right sp-bill-actions">
                     <!----><span style="float:right" >
@@ -247,9 +245,9 @@
             </p>
             <!---->
             <!----><div >
-                <form  autocomplete="off" novalidate="" class="ng-pristine ng-valid ng-touched">
+                <form  autocomplete="off" novalidate="" class="ng-pristine ">
                     <div  class="form-group">
-                        <input  class="form-control ng-pristine ng-valid ng-touched" id="customerMobileLargeScreen" name="customerPhone" placeholder="Customer mobile number " spinputvalidator="" type="number">
+                        <input  class="form-control " id="customerMobileLargeScreen" name="customerPhone" placeholder="Customer mobile number " spinputvalidator="" type="number">
                         <!---->
                        
                     </div>
@@ -348,16 +346,18 @@
                     ObjItem.ItemCartValue = CurritemCnt;
                     if (!ItemAlreadyAdded(ItemId)) {
                         AddItemToQue(ObjItem);
+                        ResetOrder(CurrentOrder, 3);
                     }
                     else {
                         $("#C"+ItemId).text(Cnt);
                         var Price = parseFloat(ObjItem.ItemPrice);
                         $("#P" + ItemId).text(Price * Cnt);
+                       
                     }
                     
                 }
                 else {
-
+                    ResetOrder(CurrentOrder, 1); //free
                     $("#tr" + ItemId).remove();
                 }
                 //$("#" + itemid).text(Cnt);
@@ -458,10 +458,11 @@
         html += "<div class='sp-grid-cell-contents  ";//here table color with >
         //html += "<span class='sp-grid-cell-text'>";
         var Second = "<hr class='sp-grid-text-break'>";
-        Second += " <small  class='text-muted'> ";// with Status Name
+        Second += " <small  class='text-muted'";// with Status Name
         var Third = "</small> </span ></div > <p class='sp-slot-split-hidden'></p></div >";
         for (i = 0; i < list.length; i++) {
             var Name = list[i].Table_or_SheetName;
+            var TableID = list[i].Table_or_RowID.toString();
             var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
             var clasName = "";
             var ShowStatus = "";
@@ -476,7 +477,7 @@
                 clasName = "tableProgress";
                 ShowStatus = "Occupied";
             }
-            $("#OrderStatus").append(html + clasName+ "'><span class='sp-grid-cell-text' onclick='GetItemList(\""+list[i].Table_or_RowID+"\")'>"+ Name + Second +ShowStatus+ Third);
+            $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS"+TableID+"'>"+ShowStatus+ Third);
         }
     }
     function FreeOrOccupied(Status) {
@@ -507,7 +508,10 @@
     }
     function GetItemListByCategory(Obj) {
         $("#Current").click();
-
+        var ObjOrderName = TablesList.find(x => {
+            return x.Table_or_RowID == Obj.TSTWID;
+        });
+        $("#TorTWID").html(ObjOrderName.Table_or_SheetName);
         $.ajax({
             type: 'POST',
             url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
@@ -559,6 +563,28 @@
         } else {
             
             FilterItems(ItemList);
+        }
+    }
+    function ResetOrder(OrderId,status) {
+        $("#TC" + OrderId).removeClass();
+        $("#TS" + OrderId).text('');
+        if (status == 1) {
+            $("#TC" + OrderId).addClass('sp-grid-cell-contents tableFree');
+            $("#TS" + OrderId).text('Unoccupied');
+        }
+        else if (status == 2) {
+            $("#TC" + OrderId).addClass('sp-grid-cell-contents tableBooked');
+            $("#TS" + OrderId).text('Bill demanded');
+        } else {
+            $("#TC" + OrderId).addClass('sp-grid-cell-contents tableProgress');
+            $("#TS" + OrderId).text('Occupied');
+        }
+
+        for (var i = 0; i < TablesList.length; i++) {
+            if (TablesList[i].Table_or_RowID == OrderId) {
+                TablesList[i].Status = status;
+                return;
+            }
         }
     }
 
