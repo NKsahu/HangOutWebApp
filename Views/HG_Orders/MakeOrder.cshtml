@@ -173,16 +173,13 @@
 </div>
 <div class="row">
     <div class="col-xs-12 col-md-12 tab">
-
         <button class=" tablink" onclick="openPage('Home', this, '#777')" id="defaultOpen">Orders</button>
-        <button class=" tablink" onclick="openPage('News', this, '#777')">Current</button>
+        <button class=" tablink" onclick="openPage('News', this, '#777')" id="Current">Current</button>
     </div>
 </div>
 <div class="row tabcontent2" id="Home">
-
     <input id="TableSearch" class="form-control" style="margin:15px; border:1px solid;" name="orderSearch" placeholder="Search Order Tables..." trim="" type="text">
     <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
-
         <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)" ><span class="Pspan" id="All">All</span></p>
         <p class="card" onclick="FilterOrder(3);SelectedColor('card',this)"><span class="Pspan" id="TakeAway">Take Away</span></p>
         <p class="card"onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
@@ -206,257 +203,14 @@
     <div class="col-sm-12 col-md-8 col-lg-8">
         <input id="ItemSearch" class="form-control" style="margin:0px;border:1px solid;" name="orderSearch" placeholder="Search Items..." trim="" type="text">
         <div class="row">
-            <div class=" col-xs-4 col-md-3 sp-grid-items-scroll-with-noticebar">
-                <p class="card"><span class="Pspan">All</span></p>
-                <p class="card"><span class="Pspan">General</span></p>
-                <p class="card"><span class="Pspan">All</span></p>
-                <p class="card"><span class="Pspan">General</span></p>
-                <p class="card"><span class="Pspan">All</span></p>
-                <p class="card"><span class="Pspan">General</span></p>
-                <p class="card"><span class="Pspan">All</span></p>
-                <p class="card"><span class="Pspan">General</span></p>
-                <p class="card"><span class="Pspan">General</span></p>
-                <p class="card"><span class="Pspan">All</span></p>
-                <p class="card"><span class="Pspan">General</span></p>
+            <div class=" col-xs-4 col-md-3 sp-grid-items-scroll-with-noticebar" id="CategoryId">
+              
+
+                
             </div>
             <div class=" col-xs-6 col-md-9 sp-grid-items-scroll-with-noticebar">
-                <div class="row">
-
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3  sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3 sp-grid-cell">
-                        <div class="sp-grid-cell-contents highlight-color-4DB6AC">
-                            <span class="sp-grid-cell-text">
-                                Burger
-                                <hr class="sp-grid-text-break">
-                                <span>
-                                    <small class="text-muted">
-                                        ₹100.00
-                                    </small>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
+                <div class="row" id="ItemList">
+                    
 
                 </div>
 
@@ -471,16 +225,14 @@
         <div  class="sp-bill">
             <p  class="sp-panel-header">
                 <span  class="sp-hide-if-sm-screen">
-                    <!---->
+                  
                     Take-Away-10
-                    <!---->
-                    <!---->
-                    <!---->
+                    
                 </span>
                 <small  class="pull-right sp-bill-actions">
                     <!----><span style="float:right" >
                     <!---->
-                    <!----><a _ngcontent-c5="">Clear</a>
+                    <!----><a >Clear</a>
                     <!---->
                     <!----></span>
                     <!---->
@@ -509,8 +261,8 @@
                                     <th ></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!---->
+                            <tbody id="AddItem">
+                            
                                 <tr>
                                     <td>
                                         Burger
@@ -537,138 +289,8 @@
                                         <a class="sp-bill-actions"><span _ngcontent-c5="" class="glyphicon glyphicon-pencil"></span></a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        Burger
-                                        <!---->
-                                    </td>
-                                    <td>
-                                        <!----><div>
-                                            <!----><div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">−</span>
-                                                <div class="sp-item-quantity text-center"><span>1</span></div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">+</span>
-                                            </div>
-                                            <!---->
-                                        </div>
-                                        <!---->
-                                    </td>
-                                    <td class="sp-product-price">
-                                        <!----><span class="sp-padright-10"></span>
-                                        <!----><span class="sp-price">₹100.00</span>
-                                        <!---->
-                                    </td>
-                                    <!---->
-                                    <td>
-                                        <a class="sp-bill-actions"><span _ngcontent-c5="" class="glyphicon glyphicon-pencil"></span></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Burger
-                                        <!---->
-                                    </td>
-                                    <td>
-                                        <!----><div>
-                                            <!----><div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">−</span>
-                                                <div class="sp-item-quantity text-center"><span>1</span></div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">+</span>
-                                            </div>
-                                            <!---->
-                                        </div>
-                                        <!---->
-                                    </td>
-                                    <td class="sp-product-price">
-                                        <!----><span class="sp-padright-10"></span>
-                                        <!----><span class="sp-price">₹100.00</span>
-                                        <!---->
-                                    </td>
-                                    <!---->
-                                    <td>
-                                        <a class="sp-bill-actions"><span _ngcontent-c5="" class="glyphicon glyphicon-pencil"></span></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Burger
-                                        <!---->
-                                    </td>
-                                    <td>
-                                        <!----><div>
-                                            <!----><div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">−</span>
-                                                <div class="sp-item-quantity text-center"><span>1</span></div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">+</span>
-                                            </div>
-                                            <!---->
-                                        </div>
-                                        <!---->
-                                    </td>
-                                    <td class="sp-product-price">
-                                        <!----><span class="sp-padright-10"></span>
-                                        <!----><span class="sp-price">₹100.00</span>
-                                        <!---->
-                                    </td>
-                                    <!---->
-                                    <td>
-                                        <a class="sp-bill-actions"><span _ngcontent-c5="" class="glyphicon glyphicon-pencil"></span></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Burger
-                                        <!---->
-                                    </td>
-                                    <td>
-                                        <!----><div>
-                                            <!----><div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">−</span>
-                                                <div class="sp-item-quantity text-center"><span>1</span></div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">+</span>
-                                            </div>
-                                            <!---->
-                                        </div>
-                                        <!---->
-                                    </td>
-                                    <td class="sp-product-price">
-                                        <!----><span class="sp-padright-10"></span>
-                                        <!----><span class="sp-price">₹100.00</span>
-                                        <!---->
-                                    </td>
-                                    <!---->
-                                    <td>
-                                        <a class="sp-bill-actions"><span _ngcontent-c5="" class="glyphicon glyphicon-pencil"></span></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Burger
-                                        <!---->
-                                    </td>
-                                    <td>
-                                        <!----><div>
-                                            <!----><div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">−</span>
-                                                <div class="sp-item-quantity text-center"><span>1</span></div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">+</span>
-                                            </div>
-                                            <!---->
-                                        </div>
-                                        <!---->
-                                    </td>
-                                    <td class="sp-product-price">
-                                        <!----><span class="sp-padright-10"></span>
-                                        <!----><span class="sp-price">₹100.00</span>
-                                        <!---->
-                                    </td>
-                                    <!---->
-                                    <td>
-                                        <a class="sp-bill-actions"><span _ngcontent-c5="" class="glyphicon glyphicon-pencil"></span></a>
-                                    </td>
-                                </tr>
-                                <!---->
-                                <!---->
+                               
+                               
                             </tbody>
                         </table>
                     </div>
@@ -696,7 +318,16 @@
 <script>
     var TablesList = null;
     var ItemList = null;
-    var CategoryList = null;
+    var CurrentOrder = 0;
+    var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell'";
+    var ItemHtmlFirstPrefix="><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
+    var ItemHtmlSecond = "<hr class='sp-grid-text-break'> <span><small class='text-muted'>";
+    var ItemHtmlLast = "</small> </span> </span></div></div>";
+
+    var Carthtmfirst = "</td ><td><div><div><span class='sp-quantity-adjust sp-no-user-select'>−</span><div class='sp-item-quantity text-center'><span>1</span></div><span class='sp-quantity-adjust sp-no-user-select'>+</span></div></div></td><td class='sp-product-price'>";
+    Carthtmfirst+="<span class='sp-padright-10'></span>"
+    var Carthtmlsecond = "<span class='sp-price'>";
+    var cartlasthtml="</span ></td ><td><a class='sp-bill-actions'><span class='glyphicon glyphicon-pencil'></span></a ></td></tr>";
     document.getElementById("defaultOpen").click();
     function plus(event) {
         var add = $(event).attr("Plus");
@@ -712,7 +343,7 @@
         }
 
     }
-    function AddToCart(itemid, Cnt) {
+    function AddToCart2(itemid) {
         var Obj = {};
         Obj.CID = 0;
         Obj.OID = 0;
@@ -731,6 +362,12 @@
         });
 
 
+    }
+    function AddToCart(ItemId) {
+        var ObjItem = ItemList.filter(x => {
+            return x.IID.toString() === ItemId
+        });
+        $("#AddItem").append("<tr><td>" + ObjItem[0].ItemName + Carthtmfirst + Carthtmlsecond + "₹" + ObjItem[0].ItemPrice + cartlasthtml);
     }
     function SearchItem() {
         var input = document.getElementById("SearchItem");
@@ -765,7 +402,6 @@
         }
         event.style.backgroundColor = '#e2dbdb';
     }
-    
     GeTablesTakeAwya();
     function GeTablesTakeAwya() {
         $.ajax({
@@ -837,18 +473,40 @@
         }
     }
     function GetItemList(OrderId) {
-        
-    }
-    function GetItemListByCategory(Obj) {
+        CurrentOrder = OrderId;
         var Obj = {};
         Obj.CID = 0;
         Obj.OID = 0;
+        Obj.TSTWID = OrderId;
+        GetItemListByCategory(Obj)
+    }
+    function GetItemListByCategory(Obj) {
+        $("#Current").click();
+
         $.ajax({
             type: 'POST',
             url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
             success: function (data) {
-                CategoryList = JSON.parse(data);
-                ItemList = CategoryList.MenuItems;
+              var  CategoryList = JSON.parse(data);
+                console.log(CategoryList);
+                ItemList =[];
+                $("#CategoryId").html('');
+                $("#ItemList").html('');
+                var funSelected = "SelectedColor(\"card\",this)";
+                var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\""+0+"\")'><span class='Pspan'>All</span></p>";
+                $("#CategoryId").append(CategoryHtml);
+                for (i = 0; i < CategoryList.length; i++) {
+                    CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\""+CategoryList[i].MenuId+"\")'><span class='Pspan'>" + CategoryList[i].Name + "</span></p>";
+                    $("#CategoryId").append(CategoryHtml);
+                    var ItemsList = CategoryList[i].MenuItems;
+                    for (j = 0; j < ItemsList.length; j++) {
+                        ItemList.push(ItemsList[j]);
+                        $("#ItemList").append(ItemHtmlFirst + "onclick='AddToCart(\""+ItemsList[j].IID +"\")'"+ItemHtmlFirstPrefix + ItemsList[j].ItemName + ItemHtmlSecond + "₹" + ItemsList[j].ItemPrice + ItemHtmlLast);
+                    }
+
+                    //ItemList.concat(CategoryList.MenuItems);
+                }
+
 
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -857,4 +515,26 @@
         });
 
     }
+    function FilterItems(list) {
+        $("#ItemList").html('');
+        for (j = 0; j < list.length; j++) {
+            $("#ItemList").append(ItemHtmlFirst + "onclick='AddToCart(\"" + list[j].IID + "\")'" + ItemHtmlFirstPrefix + list[j].ItemName + ItemHtmlSecond + "₹" + list[j].ItemPrice + ItemHtmlLast);
+        }
+    }
+    function filterItemByCat(MenuId) {
+        if (MenuId != "0") {
+            var FilteredItemList = ItemList.filter(function (x) {
+                return x.MenuId == MenuId;
+            });
+            FilterItems(FilteredItemList);
+        } else {
+            
+            FilterItems(ItemList);
+        }
+    }
+
+
+    
+
+
 </script>
