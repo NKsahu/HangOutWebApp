@@ -19,7 +19,7 @@ namespace HangOut.Models
         public string Type { get; set; } // "1" means Table "2" Sheat //3 Take Away
         public  DateTime CreateDate { get; set; }
         public int CreateBy { get; set; }
-        public int Status { get; set; }// {"1":free,"2":"BOOKED"}
+        public int Status { get; set; }// {"1":free,"2":"BOOKED",3:"PROGRESS"}
         public int Otp { get; set; }
         public HG_Tables_or_Sheat()
         {

@@ -50,13 +50,19 @@
         padding-right: 8px;
         padding-bottom: 16px;
     }
-    .highlight-color-58D68D{
+    .tableFree{
         border-bottom: 3px solid #58d68d;
     }
-
-    .sp-grid {
-        padding-right: 0;
+    .tableProgress {
+        border-bottom: 3px solid #e00a0a;
     }
+    .tableBooked {
+        border-bottom: 3px solid rgba(221, 155, 18, 0.46);
+    }
+
+        .sp-grid {
+            padding-right: 0;
+        }
 
    
     .sp-grid-items-scroll-with-noticebar{
@@ -414,7 +420,6 @@
             type: 'POST',
             url: "/WebApi/TableAndTakeAway?Type=1",
             success: function (data) {
-                
                 TablesList = JSON.parse(data);
                 ShowOrders(TablesList);
             },
@@ -450,14 +455,28 @@
     function ShowOrders(list) {
         $("#OrderStatus").html('');
         var html = "<div class='col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell TabAndTakeW'>";
-        html += "<div class='sp-grid-cell-contents highlight-color-58D68D'>";
+        html += "<div class='sp-grid-cell-contents  ";//here table color with >
         //html += "<span class='sp-grid-cell-text'>";
         var Second = "<hr class='sp-grid-text-break'>";
-        Second += " <small  class='text-muted'> progress";
+        Second += " <small  class='text-muted'> ";// with Status Name
         var Third = "</small> </span ></div > <p class='sp-slot-split-hidden'></p></div >";
         for (i = 0; i < list.length; i++) {
             var Name = list[i].Table_or_SheetName;
-            $("#OrderStatus").append(html + "<span class='sp-grid-cell-text' onclick='GetItemList(\""+list[i].Table_or_RowID+"\")'>"+ Name + Second + Third);
+            var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
+            var clasName = "";
+            var ShowStatus = "";
+            if (Status == 1) {
+                clasName = "tableFree";
+                ShowStatus = "Unoccupied";
+            } else if (Status == 2) {
+                clasName = "tableBooked";
+                ShowStatus = "Bill demanded";
+            }
+            else {
+                clasName = "tableProgress";
+                ShowStatus = "Occupied";
+            }
+            $("#OrderStatus").append(html + clasName+ "'><span class='sp-grid-cell-text' onclick='GetItemList(\""+list[i].Table_or_RowID+"\")'>"+ Name + Second +ShowStatus+ Third);
         }
     }
     function FreeOrOccupied(Status) {
@@ -508,15 +527,10 @@
                     var ItemsList = CategoryList[i].MenuItems;
                     for (j = 0; j < ItemsList.length; j++) {
                         ItemList.push(ItemsList[j]);
-                        var ItemId = ItemsList[j].IID;
-                        var Name = ItemsList[j].ItemName;
-                        var Price = ItemsList[j].ItemPrice;
-                        var ItemCnt =parseInt(ItemsList[j].ItemCartValue);
                         ShowItems(ItemsList[j]);
                         AddItemToQue(ItemsList[j]);
                     }
-
-                    //ItemList.concat(CategoryList.MenuItems);
+    
                 }
 
 
