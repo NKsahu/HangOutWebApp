@@ -125,13 +125,22 @@ namespace HangOut.Controllers
 
             double Amt = 0;
             int Count = 0;
-            foreach (Cart CartObj in Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId && x.OrgId==OrgId))
+            List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId);
+            int CurrCount = CurrItemsOfUser.Count;
+            if (CurrCount == 1 || CurrCount == 0)
+            {
+                HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
+                hG_Tables_Or_Sheat.Status = CurrCount==0?1:3;// Free:Progress(Occupied)
+                hG_Tables_Or_Sheat.save();
+            }
+            foreach (Cart CartObj in CurrItemsOfUser)
             {
                 HG_Items ObjItem = new HG_Items().GetOne((int)CartObj.ItemId);
                 Amt += CartObj.Count * ObjItem.Price;
                 Count += CartObj.Count;
             }
             Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
+
             if (Cnt == 0)
                 return Count + "," + Amt + "," + ItemId+","+"0";
             return Count + "," + Amt + "," + "0"+"," + CurrentItemobj.Count;
@@ -585,7 +594,7 @@ namespace HangOut.Controllers
 
 
 
-        public JArray PastOrderInfo(int CID)
+        public JArray PastOrderMainList(int CID)
         {
             JArray Info = new JArray();
             List<HG_Orders> OrderList = new HG_Orders().GetAll(CID: CID);
@@ -598,10 +607,11 @@ namespace HangOut.Controllers
                     List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
                     JObject Object = new JObject();
 
-                    Object.Add("StartTime", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
+                    Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                     Object.Add("OrganizationName", hG_OrganizationDetails.Name);
-                    Object.Add("Amount", OrderItemList.Sum(X => X.Price));
-                    Object.Add("OrderNo", orders.OID);
+                    Object.Add("TotalAmount", OrderItemList.Sum(X => X.Price));
+                    Object.Add("OID", orders.OID);
+                    Object.Add("Status", orders.Status);
 
                     Info.Add(Object);
                 }
@@ -609,6 +619,50 @@ namespace HangOut.Controllers
             
             return Info;
         }
+
+
+        public JArray PastOrderSubList(int OID,string Status)
+        {
+            JArray Info = new JArray();
+           HG_Orders orders = new HG_Orders().GetOne(OID);
+
+            if (orders!= null && orders.Status==Status)
+            {
+              
+                    HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
+                    List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
+                    JObject Object = new JObject();
+
+                    Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
+                    Object.Add("OrganizationName", hG_OrganizationDetails.Name);
+                    Object.Add("TotalAmount", OrderItemList.Sum(X => X.Price));
+                    Object.Add("OID", orders.OID);
+                    Object.Add("Status", orders.Status);
+                    List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(orders.OID);
+                    List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
+                    JArray ItemsArray = new JArray();
+                    foreach (var OrderItem in hG_OrderItems)
+                    {
+                        HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
+                        JObject itemobj = new JObject();
+                        itemobj.Add("OIID", OrderItem.OIID);
+                        itemobj.Add("ItemID", OrderItem.FID);
+                        itemobj.Add("ItemName", hG_Items.Items);
+                        itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
+                        itemobj.Add("Status", OrderItem.Status);
+                        ItemsArray.Add(itemobj);
+                    }
+                    Object.Add("OrderList", ItemsArray);
+
+                    Info.Add(Object);
+                
+            }
+
+            return Info;
+        }
+
+
+
 
 
 
