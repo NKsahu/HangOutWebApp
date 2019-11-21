@@ -23,7 +23,7 @@ namespace HangOut.Models
             this.Update_Date = System.DateTime.Now;
             this.OrgId = 0;
             this.Update_By = 0;
-            Table_or_SheatId = 0;
+            this.Table_or_SheatId = 0;
         }
 
         public System.Int64 Save()
@@ -124,8 +124,8 @@ namespace HangOut.Models
                  ObjTemp.Create_Date = SDR.GetDateTime(4);
                  ObjTemp.Update_By = SDR.GetInt64(5);
                  ObjTemp.Update_Date = SDR.GetDateTime(6);
-                    OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8);
-                    Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9);
+                    ObjTemp.OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8);
+                    ObjTemp.Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9);
                 }
             }
             catch (System.Exception e){ e.ToString(); }
