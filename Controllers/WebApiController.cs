@@ -242,7 +242,7 @@ namespace HangOut.Controllers
             int OrgId = int.Parse(Params["OrgID"].ToString());
             System.Int64 TableorSheatId=System.Int64.Parse(Params["TORSID"].ToString());
             JObject PostResult = new JObject();
-            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId);
+            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId);
             if (ListCart.Count <= 0)
             {
                 PostResult.Add("Status",400);
@@ -348,6 +348,8 @@ namespace HangOut.Controllers
                         itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
                     }
+                    TableScreen.Add("OID", order.OID);
+                    
                     TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
                     tableorSheatList.Add(TableScreen);
