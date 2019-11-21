@@ -228,6 +228,7 @@ namespace HangOut.Controllers
             listSheet = listSheet.FindAll(x => x.OrgId == OrgID);
             return JArray.FromObject(listSheet);
         }
+
         public JObject SettingPrivacyPolicy(string KeyName)
         {
             List<Settings> listsettings = new Settings().GetAll();
@@ -321,7 +322,7 @@ namespace HangOut.Controllers
             List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
             List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
             List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
-            string TableSheatPrefix = ObjOrg.OrgTypes == "1" ? "Table : " :"Sheat : ";
+           // string TableSheatPrefix = ObjOrg.OrgTypes == "1" ? "Table : " :"Sheat : ";
             List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
                 //string SideOrRowPrefix = ObjOrg.OrgTypes == "1" ? "Table" : "Sheat: ";
                 int TorSIndex = 0;
@@ -331,7 +332,8 @@ namespace HangOut.Controllers
                     HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
                     HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
                     JObject TableScreen = new JObject();
-                    TableScreen.Add("TableScreenInfo", TableSheatPrefix + hG_Tables_Or_Sheat.Table_or_SheetName + " " + hG_Floor_Or_ScreenMaster.Name + " " + hG_FloorSide_Or_RowName.FloorSide_or_RowName);
+                      string  name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " ";
+                    TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
                     JArray ItemsArray = new JArray();
@@ -343,7 +345,7 @@ namespace HangOut.Controllers
                         itemobj.Add("OIID", OrderItem.OIID);
                         itemobj.Add("ItemID", OrderItem.FID);
                         itemobj.Add("ItemName", hG_Items.Items);
-                        itemobj.Add("Quantity", OrderItem.Qty);
+                        itemobj.Add("Quantity", OrderItem.Qty+"*"+OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
@@ -561,7 +563,7 @@ namespace HangOut.Controllers
                 // Settings settingsObj = new Settings().GetOne("Mgs");
                 // APICONTACT&senderid=FOODDO&msg=APIMSG
                 string Msg = "Your Otp For FooDo App Is " + OTPNumber+"";
-                HttpWebRequest webRequest =(HttpWebRequest) HttpWebRequest.Create("http://host6.hemsmedia.com/app/smsapi/index.php?key=25DC260CCC0CBF&campaign=0&routeid=5&type=text&contacts="+ MobileNO+ "&senderid=FOODDO&msg="+Msg);
+                HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create("http://app.telcob.cloud/app/smsapi/index.php?key=55DD67927E1B3E&campaign=0&routeid=4&type=text&contacts=" + MobileNO + "&senderid=FOODDO&msg=" + Msg);
                 webRequest.Method = "GET";
                 WebResponse webResp = webRequest.GetResponse();
                 Result.Add("Status", 200);
