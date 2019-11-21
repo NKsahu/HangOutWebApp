@@ -363,6 +363,7 @@
     <Content Include="Views\HG_Orders\CaseRecipt.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\UserStatus.cshtml" />
     <Content Include="Views\HG_OrderItem\Index.cshtml" />
+    <Content Include="Views\Shared\MakeOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

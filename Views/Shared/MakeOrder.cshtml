@@ -7,6 +7,7 @@
     .card:hover {
         background-color: #e2dbdb;
     }
+
     .tab {
         overflow: hidden;
         border: 1px solid #ccc;
@@ -17,7 +18,7 @@
         background-color: #555;
         color: white;
         float: left;
-        padding:5px;
+        padding: 5px;
         border: none;
         outline: none;
         cursor: pointer;
@@ -28,6 +29,7 @@
         .tablink:hover {
             background-color: #000000;
         }
+
     p .card {
         font-size: 12px !important;
         border-bottom: 1px solid #ebeef0;
@@ -39,37 +41,43 @@
         cursor: pointer;
         background-color: #f5f5f5;
     }
+
     .Pspan {
         align-self: center;
         padding: 8px;
         color: #008cba;
     }
+
     .sp-grid-cell {
         padding-left: 0;
         padding-bottom: 0;
         padding-right: 8px;
         padding-bottom: 16px;
     }
-    .tableFree{
+
+    .tableFree {
         border-bottom: 3px solid #58d68d;
     }
+
     .tableProgress {
         border-bottom: 3px solid #e00a0a;
     }
+
     .tableBooked {
         border-bottom: 3px solid rgba(221, 155, 18, 0.46);
     }
 
-        .sp-grid {
-            padding-right: 0;
-        }
+    .sp-grid {
+        padding-right: 0;
+    }
 
-   
-    .sp-grid-items-scroll-with-noticebar{
+
+    .sp-grid-items-scroll-with-noticebar {
         max-height: calc(100vh - 100px);
         overflow-y: auto;
         overflow-x: hidden;
     }
+
     .sp-grid-cell-contents {
         height: 100px;
         background-color: #f5f5f5;
@@ -81,6 +89,7 @@
         border-left: 1px solid #f5f5f5;
         border-right: 1px solid #f5f5f5;
     }
+
     .sp-grid-cell-text {
         padding: 2px;
         -ms-flex-item-align: center;
@@ -90,36 +99,43 @@
         text-align: center;
         overflow-wrap: break-word;
     }
-    slot-split-hidden{
+
+    slot-split-hidden {
         font-size: 12px !important;
         text-align: center;
         padding-top: 8px;
         padding-bottom: 4px;
         margin-bottom: 0;
     }
-    .sp-bill{
+
+    .sp-bill {
         padding-left: 10px;
         padding-right: 10px;
         padding-bottom: 10px;
         background-color: #f5f5f5;
     }
+
     .sp-panel-header {
         padding-top: 10px;
         margin-bottom: 9px;
     }
-    .sp-bill-actions{
+
+    .sp-bill-actions {
         margin-bottom: 12px;
     }
-    .sp-bill-actions{
+
+    .sp-bill-actions {
         padding-left: 5px;
         padding-right: 5px;
         color: gray;
     }
+
     .sp-sold-items-scroll-with-noticebar {
         max-height: calc(100vh - 100px);
         overflow-y: auto;
         overflow-x: hidden;
     }
+
     .sp-quantity-adjust {
         font: 1.2em serif;
         color: #565353;
@@ -138,6 +154,7 @@
         -ms-user-select: none;
         user-select: none;
     }
+
     .sp-item-quantity {
         font-size: 17px;
         width: 26px;
@@ -145,36 +162,42 @@
         display: inline-block;
         cursor: pointer;
     }
+
     .sp-product-price {
         min-width: 95px !important;
     }
+
     .sp-padright-10 {
         padding-right: 10px;
     }
+
     .sp-price {
         border-bottom: 1px dotted #8e8e8e;
     }
-    .sp-bill-actions{
+
+    .sp-bill-actions {
         margin-bottom: 12px;
     }
+
     .btn-group-justified {
         display: table;
         width: 100%;
         table-layout: fixed;
         border-collapse: separate;
     }
+
     group {
         float: none;
         display: table-cell;
         width: 1%;
     }
     /* Style the tab content (and add height:100% for full page content) */
-  
+
 </style>
 <div class="row">
     <div class="col-md-6">
         @Html.Label("Select Floor")
-        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(1), "Floor_or_ScreenID", "Name",""),"Select Floor", new { @class = "form-control", })
+        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(1), "Floor_or_ScreenID", "Name", ""), "Select Floor", new { @class = "form-control", })
     </div>
 </div>
 <div class="row">
@@ -186,9 +209,9 @@
 <div class="row tabcontent2" id="Home">
     <input id="TableSearch" class="form-control" onkeyup="SearchItem('TableSearch','TabAndTakeW')" style="margin:15px; border:1px solid;" name="orderSearch" placeholder="Search Order Tables...">
     <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
-        <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)" ><span class="Pspan" id="All">All</span></p>
+        <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)"><span class="Pspan" id="All">All</span></p>
         <p class="card" onclick="FilterOrder(3);SelectedColor('card',this)"><span class="Pspan" id="TakeAway">Take Away</span></p>
-        <p class="card"onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
+        <p class="card" onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
         <p class="card" onclick="FreeOrOccupied('1');SelectedColor('card',this)"><span class="Pspan" id="Free">Free </span></p>
         <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
         <p class="card"><span class="Pspan" onclick="FilterOrder(4);SelectedColor('card',this)" id="Unpaid">Unpaid</span></p>
@@ -196,13 +219,13 @@
     </div>
     <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
         <div class="row" id="OrderStatus">
-          
+
         </div>
 
     </div>
 
     <!---->
-    
+
 
 </div>
 <div class="row tabcontent2" id="News">
@@ -210,13 +233,13 @@
         <input id="ItemSearch2" onkeyup="SearchItem('ItemSearch2','ItemsClass')" class="form-control" style="margin:0px;border:1px solid;" name="orderSearch" placeholder="Search Items..." trim="" type="text">
         <div class="row">
             <div class=" col-xs-4 col-md-3 sp-grid-items-scroll-with-noticebar" id="CategoryId">
-              
 
-                
+
+
             </div>
             <div class=" col-xs-6 col-md-9 sp-grid-items-scroll-with-noticebar">
                 <div class="row" id="ItemList">
-                    
+
 
                 </div>
 
@@ -227,56 +250,52 @@
 
 
     </div>
-    <div  class="col-sm-12 col-md-5 sp-billed-items">
-        <div  class="sp-bill">
-            <p  class="sp-panel-header">
-                <span  class="sp-hide-if-sm-screen" id="TorTWID">
-                  <!--Table name or take-away name-->  
+    <div class="col-sm-12 col-md-5 sp-billed-items">
+        <div class="sp-bill">
+            <p class="sp-panel-header">
+                <span class="sp-hide-if-sm-screen" id="TorTWID">
+                    <!--Table name or take-away name-->
                 </span>
-                <small  class="pull-right sp-bill-actions">
-                    <!----><span style="float:right" >
-                    <!---->
-                    <!----><a >Clear</a>
-                    <!---->
-                    <!----></span>
+                <small class="pull-right sp-bill-actions">
+                    <!----><span style="float:right">
+                        <!---->
+                        <!----><a>Clear</a>
+                        <!---->
+                        <!---->
+                    </span>
                     <!---->
                     <!---->
                 </small>
             </p>
             <!---->
-            <!----><div >
-                <form  autocomplete="off" novalidate="" class="ng-pristine ">
-                    <div  class="form-group">
-                        <input  class="form-control " id="customerMobileLargeScreen" name="customerPhone" placeholder="Customer mobile number " spinputvalidator="" type="number">
+            <!----><div>
+                <form autocomplete="off" novalidate="" class="ng-pristine ">
+                    <div class="form-group">
+                        <input class="form-control " id="customerMobileLargeScreen" name="customerPhone" placeholder="Customer mobile number " spinputvalidator="" type="number">
                         <!---->
-                       
+
                     </div>
                 </form>
-                <div >
-                    <div  class="sp-sold-items-scroll-with-noticebar">
-                        <table  class="table table-hover sp-product-list">
+                <div>
+                    <div class="sp-sold-items-scroll-with-noticebar">
+                        <table class="table table-hover sp-product-list">
                             <thead>
-                                <tr >
-                                    <th >Item</th>
-                                    <th  class="sp-quantity-th">Quantity</th>
-                                    <th ><span  class="sp-padright-10"></span>Price</th>
+                                <tr>
+                                    <th>Item</th>
+                                    <th class="sp-quantity-th">Quantity</th>
+                                    <th><span class="sp-padright-10"></span>Price</th>
 
                                     <!---->
-                                    <th ></th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="AddItem">
-                            
-                                
-                               
-                               
-                            </tbody>
+                            <tbody id="AddItem"></tbody>
                         </table>
                     </div>
                     <!---->
                     <!---->
                     <!---->
-                    <div  class="btn-group btn-group-justified" role="group" id="ChargeBtn">
+                    <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
                         <!---->
                         <div class="btn-group" role="group" style="width:100%">
                             <button type="button" class="form-control btn btn-success sp-f2-hotkey">
@@ -303,7 +322,7 @@
     var CurrentOrder = 0;// which means table or  takeaway id
     var finalAmt = 0.00;
     var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
-    var ItemHtmlFirstPrefix="><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
+    var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
     var ItemHtmlSecond = "<hr class='sp-grid-text-break'> <span><small class='text-muted'>";
     var ItemHtmlLast = "</small> </span> </span></div></div>";
 
@@ -311,13 +330,13 @@
     var Minushtml = "<span class='sp-quantity-adjust sp-no-user-select'";
     var CountHtml = ">−</span ><div class='sp-item-quantity text-center'><span ";
     var PlusHtml = "</span></div><span class='sp-quantity-adjust sp-no-user-select'";
-    var Carthtmfirst=">+</span></div ></div ></td > <td class='sp-product-price'>";
-    Carthtmfirst+="<span class='sp-padright-10'></span>"
+    var Carthtmfirst = ">+</span></div ></div ></td > <td class='sp-product-price'>";
+    Carthtmfirst += "<span class='sp-padright-10'></span>"
     var Carthtmlsecond = "<span class='sp-price'>";
-    var cartlasthtml="</span ></td ><td><a class='sp-bill-actions'><span class='glyphicon glyphicon-pencil'></span></a ></td></tr>";
+    var cartlasthtml = "</span ></td ><td><a class='sp-bill-actions'><span class='glyphicon glyphicon-pencil'></span></a ></td></tr>";
     document.getElementById("defaultOpen").click();
     function plus(itemid) {
-        var CartValue = parseInt($("#C"+itemid).text());
+        var CartValue = parseInt($("#C" + itemid).text());
         AddToCart(itemid, CartValue + 1);
         //$("#" + add).text(CartValue+1);
     }
@@ -328,7 +347,7 @@
         }
 
     }
-  
+
     function AddToCart(ItemId, Cnt) {
         var Obj = {};
         Obj.CID = 0;
@@ -353,12 +372,12 @@
                         ResetOrder(CurrentOrder, 3);
                     }
                     else {
-                        $("#C"+ItemId).text(Cnt);
+                        $("#C" + ItemId).text(Cnt);
                         var Price = parseFloat(ObjItem.ItemPrice);
                         $("#P" + ItemId).text(Price * Cnt);
-                       
+
                     }
-                    
+
                 }
                 else {
                     ResetOrder(CurrentOrder, 1); //free
@@ -377,17 +396,17 @@
             var ItemPrice = parseFloat(ObjItem.ItemPrice) * parseInt(ObjItem.ItemCartValue);
             $("#AddItem").append("<tr id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "' >" + ObjItem.ItemCartValue + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ItemPrice + "</span>" + cartlasthtml);
         }
-        
+
     }
     function ItemAlreadyAdded(Itemid) {
-        if ($('#tr'+Itemid).length) {
+        if ($('#tr' + Itemid).length) {
             return true;
         }
         else {
             return false;
         }
     }
-    function SearchItem(SearchItem,hideClsName) {
+    function SearchItem(SearchItem, hideClsName) {
         var input = document.getElementById(SearchItem);
         var filter = input.value.toLowerCase();
         var nodes = document.getElementsByClassName(hideClsName);
@@ -413,7 +432,7 @@
         elmnt.style.backgroundColor = color;
     }
     function SelectedColor(classname, event) {
-       var tablinks = document.getElementsByClassName(classname);
+        var tablinks = document.getElementsByClassName(classname);
         for (i = 0; i < tablinks.length; i++) {
             tablinks[i].style.backgroundColor = "";
         }
@@ -435,25 +454,25 @@
 
     }
     function FilterOrder(Status) {
-//all
+        //all
         if (Status == '0') {
             ShowOrders(TablesList);
         }
         else if (Status == '3') {
             console.log(TablesList);
             var TakeAwayList = TablesList.filter(function (itm) {
-                return itm.Type=='3';
+                return itm.Type == '3';
             });
             ShowOrders(TakeAwayList);
-           
+
         }
         else if (Status == '1') {
-            
+
             var TableListOnly = TablesList.filter(function (itm) {
                 return itm.Type == '1';
             });
             ShowOrders(TableListOnly);
-            console.log("Table"+TablesList);
+            console.log("Table" + TablesList);
         }
 
     }
@@ -482,22 +501,22 @@
                 clasName = "tableProgress";
                 ShowStatus = "Occupied";
             }
-            $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS"+TableID+"'>"+ShowStatus+ Third);
+            $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS" + TableID + "'>" + ShowStatus + Third);
         }
     }
     function FreeOrOccupied(Status) {
 
         if (Status == '1') {
             var FreeList = TablesList.filter(function (x) {
-                return x.Status==1;
+                return x.Status == 1;
             });
             ShowOrders(FreeList);
             console.log("FreeList" + FreeList.length);
 
         }
-        else if(Status == '2') {
+        else if (Status == '2') {
             var OccupiedList = TablesList.filter(function (x) {
-                return x.Status==2;
+                return x.Status == 2;
             });
             ShowOrders(OccupiedList);
             console.log("OccupiedList" + OccupiedList.length);
@@ -522,19 +541,19 @@
 
         $.ajax({
             type: 'POST',
-            url: "/WebApi/GetItemList?Obj="+JSON.stringify(Obj),
+            url: "/WebApi/GetItemList?Obj=" + JSON.stringify(Obj),
             success: function (data) {
-              var  CategoryList = JSON.parse(data);
+                var CategoryList = JSON.parse(data);
                 console.log(CategoryList);
-                ItemList =[];
+                ItemList = [];
                 $("#CategoryId").html('');
                 $("#ItemList").html('');
                 $("#AddItem").html('');
                 var funSelected = "SelectedColor(\"card\",this)";
-                var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\""+0+"\")'><span class='Pspan'>All</span></p>";
+                var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + 0 + "\")'><span class='Pspan'>All</span></p>";
                 $("#CategoryId").append(CategoryHtml);
                 for (i = 0; i < CategoryList.length; i++) {
-                    CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\""+CategoryList[i].MenuId+"\")'><span class='Pspan'>" + CategoryList[i].Name + "</span></p>";
+                    CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + CategoryList[i].MenuId + "\")'><span class='Pspan'>" + CategoryList[i].Name + "</span></p>";
                     $("#CategoryId").append(CategoryHtml);
                     var ItemsList = CategoryList[i].MenuItems;
                     for (j = 0; j < ItemsList.length; j++) {
@@ -542,7 +561,7 @@
                         ShowItems(ItemsList[j]);
                         AddItemToQue(ItemsList[j]);
                     }
-    
+
                 }
 
 
@@ -569,11 +588,11 @@
             });
             FilterItems(FilteredItemList);
         } else {
-            
+
             FilterItems(ItemList);
         }
     }
-    function ResetOrder(OrderId,status) {
+    function ResetOrder(OrderId, status) {
         $("#TC" + OrderId).removeClass();
         $("#TS" + OrderId).text('');
         if (status == 1) {
@@ -595,9 +614,4 @@
             }
         }
     }
-
-
-    
-
-
 </script>
