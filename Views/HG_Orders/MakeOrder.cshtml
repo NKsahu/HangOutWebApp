@@ -263,32 +263,7 @@
                             </thead>
                             <tbody id="AddItem">
                             
-                                <tr>
-                                    <td>
-                                        Burger
-                                        <!---->
-                                    </td>
-                                    <td>
-                                        <!----><div>
-                                            <!----><div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">−</span>
-                                                <div class="sp-item-quantity text-center"><span>1</span></div>
-                                                <span class="sp-quantity-adjust sp-no-user-select">+</span>
-                                            </div>
-                                            <!---->
-                                        </div>
-                                        <!---->
-                                    </td>
-                                    <td class="sp-product-price">
-                                        <!----><span class="sp-padright-10"></span>
-                                        <!----><span class="sp-price">₹100.00</span>
-                                        <!---->
-                                    </td>
-                                    <!---->
-                                    <td>
-                                        <a class="sp-bill-actions"><span _ngcontent-c5="" class="glyphicon glyphicon-pencil"></span></a>
-                                    </td>
-                                </tr>
+                                
                                
                                
                             </tbody>
@@ -366,7 +341,7 @@
 
 
     }
-    function AddToCart(ItemId,Cnt) {
+    function AddToCart(ItemId, Cnt) {
         var Obj = {};
         Obj.CID = 0;
         Obj.OID = 0;
@@ -379,16 +354,25 @@
             success: function (data) {
                 var CurritemCnt = parseInt(data.split(",")[3]);
                 console.log("Count item" + CurritemCnt);
-                if (CurritemCnt > 1) {
-                    $("#C" + ItemId).text(Cnt);
-                    var Price = parseFloat($("#P" + ItemId).text());
-                    $("#P" + ItemId).text(Price * Cnt);
-                }
-                else {
-                    var ObjItem = ItemList.filter(x => {
+                if (CurritemCnt >= 1) {
+                    var ObjItem = ItemList.find(x => {
                         return x.IID.toString() === ItemId
                     });
-                    $("#AddItem").append("<tr><td>" + ObjItem[0].ItemName + first + Minushtml + "onclick='minus(\"" + ObjItem[0].IID + "\")'" + CountHtml + "id='C" + ObjItem[0].IID + "'" + PlusHtml + "onclick='plus(\"" + ObjItem[0].IID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P"+ObjItem[0].IID+"'>"+ ObjItem[0].ItemPrice+"</span>" + cartlasthtml);
+                    if (!ItemAlreadyAdded(ItemId)) {
+                        var Itemid = ObjItem.IID;
+                        $("#AddItem").append("<tr id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "'" + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ObjItem.ItemPrice + "</span>" + cartlasthtml);
+                    }
+                    else {
+                        $("#C"+ItemId).text(Cnt);
+                        
+                        var Price = parseFloat(ObjItem.ItemPrice);
+                        $("#P" + ItemId).text(Price * Cnt);
+                    }
+                    
+                }
+                else {
+
+                    $("tr" + ItemId).remove();
                 }
                 //$("#" + itemid).text(Cnt);
             },
@@ -396,6 +380,14 @@
                 $("#waiting").hide();
             }
         });
+    }
+    function ItemAlreadyAdded(Itemid) {
+        if ($('#tr'+Itemid).length) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     function SearchItem() {
         var input = document.getElementById("SearchItem");
