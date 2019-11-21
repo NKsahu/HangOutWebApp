@@ -8,7 +8,7 @@
         <h1 style="text-align:center"><b>ORGONIZATION</b> </h1>
         <hr />
     </div>
-    @if (new OrgType().IsAccess())
+    @if (new OrderType().IsAccess())
     {
         <a href="/HG_OrganizationDetails/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
     }

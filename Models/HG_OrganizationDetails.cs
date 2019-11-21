@@ -32,7 +32,8 @@ namespace HangOut.Models
         public int EntryBy { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime UpdateDate { get; set; }
-        public bool Status { get; set; }
+        public bool Status { get; set; }    
+        public int PaymentType { get; set; }// {'1':'prepaid','2':'postpaid'}
 
 
         public HG_OrganizationDetails()
@@ -40,6 +41,7 @@ namespace HangOut.Models
             EntryDate = DateTime.Now;
             UpdateDate = DateTime.Now;
             EntryBy = 0;
+            PaymentType = 1;
         }
         public int Save()
         {
@@ -54,7 +56,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.OrgID  == 0)
                 {
-                    Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status);";
+                    Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status,@PaymentType);";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy",int.Parse(HttpContext.Current.Request.Cookies["UserInfo"]["UserCode"]));
                     cmd.Parameters.AddWithValue("@EntryDate",System.DateTime.Now);
@@ -63,7 +65,7 @@ namespace HangOut.Models
                 else
                 {
 
-                    Query = "update  HG_OrganizationDetails set OrgTypes=@OrgTypes,HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status where OrgID =@OrgID ";
+                    Query = "update  HG_OrganizationDetails set OrgTypes=@OrgTypes,HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType where OrgID =@OrgID ";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@OrgID ", this.OrgID );
                     cmd.Parameters.AddWithValue("@UpdateDate", System.DateTime.Now);
@@ -88,6 +90,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@ACNO", this.ACNO);
                 cmd.Parameters.AddWithValue("@AcType", this.AcType);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
+                cmd.Parameters.AddWithValue("@PaymentType", this.PaymentType);
                 Row = cmd.ExecuteNonQuery();
                 this.OrgID  = Row;
             }
@@ -138,6 +141,7 @@ namespace HangOut.Models
                     ObjTmp.ACNO = SDR.GetString(18); 
                     ObjTmp.AcType = SDR.GetString(19); 
                     ObjTmp.Status = SDR.GetBoolean(23);
+                    ObjTmp.PaymentType =SDR.IsDBNull(24)?1: SDR.GetInt32(24);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -181,6 +185,7 @@ namespace HangOut.Models
                     ObjTmp.ACNO = SDR.GetString(18);
                     ObjTmp.AcType = SDR.GetString(19);
                     ObjTmp.Status = SDR.GetBoolean(23);
+                    ObjTmp.PaymentType = SDR.IsDBNull(24) ? 1 : SDR.GetInt32(24);
                 }
             }
             catch (System.Exception e)
@@ -253,6 +258,7 @@ namespace HangOut.Models
                     ObjTmp.ACNO = SDR.GetString(18);
                     ObjTmp.AcType = SDR.GetString(19);
                     ObjTmp.Status = SDR.GetBoolean(23);
+                    ObjTmp.PaymentType = SDR.IsDBNull(24) ? 1 : SDR.GetInt32(24);
                     ListTmp.Add(ObjTmp);
                 }
             }
