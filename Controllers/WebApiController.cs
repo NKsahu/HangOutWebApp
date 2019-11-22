@@ -125,13 +125,22 @@ namespace HangOut.Controllers
 
             double Amt = 0;
             int Count = 0;
-            foreach (Cart CartObj in Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId && x.OrgId==OrgId))
+            List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId);
+            int CurrCount = CurrItemsOfUser.Count;
+            if (CurrCount == 1 || CurrCount == 0)
+            {
+                HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
+                hG_Tables_Or_Sheat.Status = CurrCount==0?1:3;// Free:Progress(Occupied)
+                hG_Tables_Or_Sheat.save();
+            }
+            foreach (Cart CartObj in CurrItemsOfUser)
             {
                 HG_Items ObjItem = new HG_Items().GetOne((int)CartObj.ItemId);
                 Amt += CartObj.Count * ObjItem.Price;
                 Count += CartObj.Count;
             }
             Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
+
             if (Cnt == 0)
                 return Count + "," + Amt + "," + ItemId+","+"0";
             return Count + "," + Amt + "," + "0"+"," + CurrentItemobj.Count;
