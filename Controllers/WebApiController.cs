@@ -321,7 +321,7 @@ namespace HangOut.Controllers
             List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
             List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
             List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
-            string TableSheatPrefix = ObjOrg.OrgTypes == "1" ? "Table : " :"Sheat : ";
+           // string TableSheatPrefix = ObjOrg.OrgTypes == "1" ? "Table : " :"Sheat : ";
             List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
                 //string SideOrRowPrefix = ObjOrg.OrgTypes == "1" ? "Table" : "Sheat: ";
                 int TorSIndex = 0;
@@ -331,7 +331,8 @@ namespace HangOut.Controllers
                     HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
                     HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
                     JObject TableScreen = new JObject();
-                    TableScreen.Add("TableScreenInfo", TableSheatPrefix + hG_Tables_Or_Sheat.Table_or_SheetName + " " + hG_Floor_Or_ScreenMaster.Name + " " + hG_FloorSide_Or_RowName.FloorSide_or_RowName);
+                      string  name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " ";
+                    TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
                     JArray ItemsArray = new JArray();
