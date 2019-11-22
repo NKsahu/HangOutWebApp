@@ -132,7 +132,7 @@ namespace HangOut.Controllers
             }
             Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
             if (Cnt == 0)
-                return Count + "," + Amt + "," + ItemId+","+CurrentItemobj.Count;
+                return Count + "," + Amt + "," + ItemId+","+"0";
             return Count + "," + Amt + "," + "0"+"," + CurrentItemobj.Count;
         }
         [HttpPost]
@@ -332,7 +332,7 @@ namespace HangOut.Controllers
                     HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
                     HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
                     JObject TableScreen = new JObject();
-                      string  name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " ";
+                      string  name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " "+ "Ticket no." +order.OID;
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
