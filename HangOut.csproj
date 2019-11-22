@@ -309,6 +309,7 @@
     <Compile Include="Models\HG_Orders.cs" />
     <Compile Include="Models\HG_OrganizationDetails.cs" />
     <Compile Include="Models\HG_Tables_or_Sheat.cs" />
+    <Compile Include="Models\HG_Ticket.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\HG_OrderItem.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
