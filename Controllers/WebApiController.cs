@@ -630,17 +630,12 @@ namespace HangOut.Controllers
             {
               
                     HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
-                    List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
                     JObject Object = new JObject();
 
-                    Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
-                    Object.Add("OrganizationName", hG_OrganizationDetails.Name);
-                    Object.Add("TotalAmount", OrderItemList.Sum(X => X.Price));
-                    Object.Add("OID", orders.OID);
-                    Object.Add("Status", orders.Status);
+         
                     List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(orders.OID);
                     List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
-                    JArray ItemsArray = new JArray();
+                   
                     foreach (var OrderItem in hG_OrderItems)
                     {
                         HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
@@ -650,11 +645,10 @@ namespace HangOut.Controllers
                         itemobj.Add("ItemName", hG_Items.Items);
                         itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
-                        ItemsArray.Add(itemobj);
+                        itemobj.Add("Amount", OrderItem.Price);
+                    Info.Add(itemobj);
                     }
-                    Object.Add("OrderList", ItemsArray);
 
-                    Info.Add(Object);
                 
             }
 
