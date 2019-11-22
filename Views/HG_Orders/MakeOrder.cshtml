@@ -178,7 +178,7 @@
     </div>
 </div>
 <div class="row tabcontent2" id="Home">
-    <input id="TableSearch" class="form-control" style="margin:15px; border:1px solid;" name="orderSearch" placeholder="Search Order Tables..." trim="" type="text">
+    <input id="TableSearch" class="form-control" onkeyup="SearchItem('TableSearch','TabAndTakeW')" style="margin:15px; border:1px solid;" name="orderSearch" placeholder="Search Order Tables...">
     <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
         <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)" ><span class="Pspan" id="All">All</span></p>
         <p class="card" onclick="FilterOrder(3);SelectedColor('card',this)"><span class="Pspan" id="TakeAway">Take Away</span></p>
@@ -200,8 +200,8 @@
 
 </div>
 <div class="row tabcontent2" id="News">
-    <div class="col-sm-12 col-md-8 col-lg-8">
-        <input id="ItemSearch" class="form-control" style="margin:0px;border:1px solid;" name="orderSearch" placeholder="Search Items..." trim="" type="text">
+    <div class="col-sm-12 col-md-7">
+        <input id="ItemSearch2" onkeyup="SearchItem('ItemSearch2','ItemsClass')" class="form-control" style="margin:0px;border:1px solid;" name="orderSearch" placeholder="Search Items..." trim="" type="text">
         <div class="row">
             <div class=" col-xs-4 col-md-3 sp-grid-items-scroll-with-noticebar" id="CategoryId">
               
@@ -221,7 +221,7 @@
 
 
     </div>
-    <div  class="col-sm-12 col-md-4 sp-billed-items">
+    <div  class="col-sm-12 col-md-5 sp-billed-items">
         <div  class="sp-bill">
             <p  class="sp-panel-header">
                 <span  class="sp-hide-if-sm-screen">
@@ -272,11 +272,11 @@
                     <!---->
                     <!---->
                     <!---->
-                    <div  class="btn-group btn-group-justified" role="group">
+                    <div  class="btn-group btn-group-justified" role="group" id="ChargeBtn">
                         <!---->
                         <div  class="btn-group" role="group" style="width:100%">
                             <!----><button  type="button" class="form-control btn btn-success sp-f2-hotkey">
-                                Charge ₹285.00
+                                Charge ₹<span id="FinalAmt">0</span>
                             </button>
 
                             <!---->
@@ -294,7 +294,7 @@
     var TablesList = null;
     var ItemList = null;
     var CurrentOrder = 0;// which means table or  takeaway id
-    var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell'";
+    var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
     var ItemHtmlFirstPrefix="><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
     var ItemHtmlSecond = "<hr class='sp-grid-text-break'> <span><small class='text-muted'>";
     var ItemHtmlLast = "</small> </span> </span></div></div>";
@@ -302,7 +302,7 @@
     var first = "</td ><td><div><div>";
     var Minushtml = "<span class='sp-quantity-adjust sp-no-user-select'";
     var CountHtml = ">−</span ><div class='sp-item-quantity text-center'><span ";
-    var PlusHtml = ">1</span></div > <span class='sp-quantity-adjust sp-no-user-select'";
+    var PlusHtml = "</span></div><span class='sp-quantity-adjust sp-no-user-select'";
     var Carthtmfirst=">+</span></div ></div ></td > <td class='sp-product-price'>";
     Carthtmfirst+="<span class='sp-padright-10'></span>"
     var Carthtmlsecond = "<span class='sp-price'>";
@@ -320,27 +320,7 @@
         }
 
     }
-    function AddToCart2(itemid) {
-        var Obj = {};
-        Obj.CID = 0;
-        Obj.OID = 0;
-        Obj.ItemId = itemid;
-        Obj.Cnt = Cnt;
-        Obj.TSTWID = CurrentOrder;
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/AddCart?Obj=" + JSON.stringify(Obj),
-            success: function (data) {
-                //var Count = data.split(",")[0];
-                $("#" + itemid).text(Cnt);
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-
-
-    }
+  
     function AddToCart(ItemId, Cnt) {
         var Obj = {};
         Obj.CID = 0;
@@ -353,18 +333,18 @@
             url: "/WebApi/AddCart?Obj=" + JSON.stringify(Obj),
             success: function (data) {
                 var CurritemCnt = parseInt(data.split(",")[3]);
+                $("#FinalAmt").text(data.split(",")[1]);
                 console.log("Count item" + CurritemCnt);
                 if (CurritemCnt >= 1) {
                     var ObjItem = ItemList.find(x => {
                         return x.IID.toString() === ItemId
                     });
+                    ObjItem.ItemCartValue = CurritemCnt;
                     if (!ItemAlreadyAdded(ItemId)) {
-                        var Itemid = ObjItem.IID;
-                        $("#AddItem").append("<tr id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "'" + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ObjItem.ItemPrice + "</span>" + cartlasthtml);
+                        AddItemToQue(ObjItem);
                     }
                     else {
                         $("#C"+ItemId).text(Cnt);
-                        
                         var Price = parseFloat(ObjItem.ItemPrice);
                         $("#P" + ItemId).text(Price * Cnt);
                     }
@@ -372,7 +352,7 @@
                 }
                 else {
 
-                    $("tr" + ItemId).remove();
+                    $("#tr" + ItemId).remove();
                 }
                 //$("#" + itemid).text(Cnt);
             },
@@ -380,6 +360,13 @@
                 $("#waiting").hide();
             }
         });
+    }
+    function AddItemToQue(ObjItem) {
+        if (ObjItem.ItemCartValue != '0') {
+            var Itemid = ObjItem.IID;
+            var ItemPrice = parseFloat(ObjItem.ItemPrice) * parseInt(ObjItem.ItemCartValue);
+            $("#AddItem").append("<tr id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "' >" + ObjItem.ItemCartValue + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ItemPrice + "</span>" + cartlasthtml);
+        }
     }
     function ItemAlreadyAdded(Itemid) {
         if ($('#tr'+Itemid).length) {
@@ -389,11 +376,10 @@
             return false;
         }
     }
-    function SearchItem() {
-        var input = document.getElementById("SearchItem");
+    function SearchItem(SearchItem,hideClsName) {
+        var input = document.getElementById(SearchItem);
         var filter = input.value.toLowerCase();
-        var nodes = document.getElementsByClassName('hidediv');
-
+        var nodes = document.getElementsByClassName(hideClsName);
         for (i = 0; i < nodes.length; i++) {
             if (nodes[i].innerText.toLowerCase().includes(filter)) {
                 nodes[i].style.display = "block";
@@ -463,7 +449,7 @@
     }
     function ShowOrders(list) {
         $("#OrderStatus").html('');
-        var html = "<div class='col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell'>";
+        var html = "<div class='col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell TabAndTakeW'>";
         html += "<div class='sp-grid-cell-contents highlight-color-58D68D'>";
         //html += "<span class='sp-grid-cell-text'>";
         var Second = "<hr class='sp-grid-text-break'>";
@@ -512,6 +498,7 @@
                 ItemList =[];
                 $("#CategoryId").html('');
                 $("#ItemList").html('');
+                $("#AddItem").html('');
                 var funSelected = "SelectedColor(\"card\",this)";
                 var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\""+0+"\")'><span class='Pspan'>All</span></p>";
                 $("#CategoryId").append(CategoryHtml);
@@ -521,7 +508,12 @@
                     var ItemsList = CategoryList[i].MenuItems;
                     for (j = 0; j < ItemsList.length; j++) {
                         ItemList.push(ItemsList[j]);
-                        $("#ItemList").append(ItemHtmlFirst + "onclick='AddToCart(\""+ItemsList[j].IID +"\",1)'"+ItemHtmlFirstPrefix + ItemsList[j].ItemName + ItemHtmlSecond + "₹" + ItemsList[j].ItemPrice + ItemHtmlLast);
+                        var ItemId = ItemsList[j].IID;
+                        var Name = ItemsList[j].ItemName;
+                        var Price = ItemsList[j].ItemPrice;
+                        var ItemCnt =parseInt(ItemsList[j].ItemCartValue);
+                        ShowItems(ItemsList[j]);
+                        AddItemToQue(ItemsList[j]);
                     }
 
                     //ItemList.concat(CategoryList.MenuItems);
@@ -538,8 +530,11 @@
     function FilterItems(list) {
         $("#ItemList").html('');
         for (j = 0; j < list.length; j++) {
-            $("#ItemList").append(ItemHtmlFirst + "onclick='AddToCart(\"" + list[j].IID + "\",1)'" + ItemHtmlFirstPrefix + list[j].ItemName + ItemHtmlSecond + "₹" + list[j].ItemPrice + ItemHtmlLast);
+            ShowItems(list[j]);
         }
+    }
+    function ShowItems(objitem) {
+        $("#ItemList").append(ItemHtmlFirst + "onclick='AddToCart(\"" + objitem.IID + "\",1)'" + ItemHtmlFirstPrefix + objitem.ItemName + ItemHtmlSecond + "₹" + objitem.ItemPrice + ItemHtmlLast);
     }
     function filterItemByCat(MenuId) {
         if (MenuId != "0") {
