@@ -125,7 +125,7 @@ namespace HangOut.Controllers
 
             double Amt = 0;
             int Count = 0;
-            foreach (Cart CartObj in Cart.List.FindAll(x => x.CID == CustID))
+            foreach (Cart CartObj in Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId && x.OrgId==OrgId))
             {
                 HG_Items ObjItem = new HG_Items().GetOne((int)CartObj.ItemId);
                 Amt += CartObj.Count * ObjItem.Price;
