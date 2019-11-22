@@ -130,10 +130,10 @@ namespace HangOut.Controllers
                 Amt += CartObj.Count * ObjItem.Price;
                 Count += CartObj.Count;
             }
-
+            Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
             if (Cnt == 0)
-                return Count + "," + Amt + "," + ItemId;
-            return Count + "," + Amt + "," + "0";
+                return Count + "," + Amt + "," + ItemId+","+CurrentItemobj.Count;
+            return Count + "," + Amt + "," + "0"+"," + CurrentItemobj.Count;
         }
         [HttpPost]
         public JObject GetCart(string Obj)
