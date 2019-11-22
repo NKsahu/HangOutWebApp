@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
-
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace HangOut.Models
 {
     public class HG_Ticket
     {
+        [Column("TID")]
         public Int64 TicketId { get; set; }
         public int TicketNo { get; set; }
         public int OrgId { get; set; }
+        [Column("OrderId")]
         public Int64 OID { get; set; }// order id
+        [Column("CreateDate")]
         public DateTime CreationDate { get; set; }
-
         public HG_Ticket()
         {
             CreationDate = DateTime.Now;
@@ -53,19 +56,29 @@ namespace HangOut.Models
             List<HG_Ticket> listtemp = new List<HG_Ticket>();
             DBCon con = new DBCon();
             SqlCommand cmd = new SqlCommand();
-            string query = "select * from HG_Ticket where OrgId ="+ CurrOrgID["OrgId"]+ " and CreateDate="+ onDate.ToString("yyyy/MM/dd")+"";
+            string query = "select * from HG_Ticket where OrgId ="+ CurrOrgID["OrgId"]+ " and CreateDate="+ onDate.Value.Date.ToString("MM/dd/yyyy");
             try
             {
-                cmd=new SqlCommand("")
+                cmd = new SqlCommand(query, con.Con);
+                SqlDataReader sqlDataReader = cmd.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    HG_Ticket hG_Ticket = new HG_Ticket();
+                    hG_Ticket.TicketNo = sqlDataReader.GetInt32(1);
+                    hG_Ticket.OrgId = sqlDataReader.GetInt32(2);
+                    hG_Ticket.OID = sqlDataReader.GetInt64(3);
+                    hG_Ticket.CreationDate = sqlDataReader.GetDateTime(4);
+                    listtemp.Add(hG_Ticket);
+                }
 
-            }catch(Exception e)
+            }
+            catch(Exception e)
             {
                 e.ToString();
-                
             }
             finally
             {
-
+                con.Con.Close(); con.Con.Dispose(); cmd.Dispose();
             }
 
             return listtemp;
