@@ -62,15 +62,17 @@ namespace HangOut.Controllers
         {
             JObject objParams = JObject.Parse(Obj);
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
-            System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OID").ToString());
+            System.Int64 OID = System.Int64.Parse(objParams.GetValue("OID").ToString());
+            System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OrgId").ToString());
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(objParams.GetValue("TSTWID").ToString());
             List<HG_Category> MenuList = new HG_Category().GetAll(OrgId: OrgId);
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
-            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId &&x.TableorSheatOrTaleAwayId== TableSheatTakeWayId);
+            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId &&x.TableorSheatOrTaleAwayId== TableSheatTakeWayId && x.OID==OID);
             JArray JMenuArray = new JArray();
             int count = 0;
             foreach(HG_Category menu in MenuList)
             {
+                double MenuItemPrice = 0.00;
                 List<HG_Items> ItemListByMenu = ListItems.FindAll(x => x.CategoryID == menu.CategoryID);
                 if (ItemListByMenu.Count > 0)
                 {
@@ -82,20 +84,22 @@ namespace HangOut.Controllers
                     int ItemiIndex = 0;
                     foreach (var Items in ItemListByMenu)
                     {
-                        List<Cart> cartCurrentItem = cartlist.FindAll(x => x.ItemId == Items.ItemID);
+                        Cart cartCurrentItem = cartlist.Find(x => x.ItemId == Items.ItemID);
                         JObject objItem = new JObject();
                         objItem.Add("IID", Items.ItemID);
                         objItem.Add("ItemName", Items.Items);
                         objItem.Add("ItemPrice", Items.Price);
                         objItem.Add("ItemQuntity", Items.Qty);
                         objItem.Add("ItemImage", Items.Image);
-                        objItem.Add("ItemCartValue", cartCurrentItem.Sum(x => x.Count));
+                        objItem.Add("ItemCartValue", cartCurrentItem.Count);
                         objItem.Add("MenuId", Items.CategoryID);
                         objItem.Add("ItemIndex", ItemiIndex++);
                         jarrayItem.Add(objItem);
+                        MenuItemPrice += Items.Price * cartCurrentItem.Count;
                     }
                     JobjMenu.Add("MenuItemCount", ItemListByMenu.Count);
                     JobjMenu.Add("MenuItems", jarrayItem);
+                    JobjMenu.Add("MenuItmPrice", MenuItemPrice);
                     JMenuArray.Add(JobjMenu);
                 }
             }
@@ -110,22 +114,22 @@ namespace HangOut.Controllers
             System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
             System.Int64 ItemId = System.Convert.ToInt64(ParaMeters["ItemId"].ToString());
             int Cnt = System.Convert.ToInt32(ParaMeters["Cnt"].ToString());
-            int OrgId = System.Convert.ToInt32(ParaMeters["OID"].ToString());
+            int OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
+            Int64 OID = System.Convert.ToInt64(ParaMeters["OID"]);
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
             Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
             if (ObjCart != null)
             {
                 ObjCart.Count = Cnt;
-                Cart.List.RemoveAll(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
+                Cart.List.RemoveAll(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId && x.OID==OID);
                 if (ObjCart.Count != 0)
                     Cart.List.Add(ObjCart);
             }
             else
-                Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, OrgId = OrgId ,TableorSheatOrTaleAwayId=TableSheatTakeWayId});
-
+                Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, OrgId = OrgId ,TableorSheatOrTaleAwayId=TableSheatTakeWayId,OID=OID});
             double Amt = 0;
             int Count = 0;
-            List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId);
+            List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId && x.OID==OID);
             int CurrCount = CurrItemsOfUser.Count;
             if (CurrCount == 1 || CurrCount == 0)
             {
@@ -139,7 +143,7 @@ namespace HangOut.Controllers
                 Amt += CartObj.Count * ObjItem.Price;
                 Count += CartObj.Count;
             }
-            Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
+            Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OID==OID);
 
             if (Cnt == 0)
                 return Count + "," + Amt + "," + ItemId+","+"0";
@@ -150,7 +154,7 @@ namespace HangOut.Controllers
         {
             JObject ParaMeters = JObject.Parse(Obj);
             System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
-            System.Int32 OrgId = System.Convert.ToInt32(ParaMeters["OID"].ToString());
+            System.Int32 OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
             double TotalPrice = 0.00;
             List<Cart> CartItems = Cart.List.FindAll(x => x.CID == CustID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
@@ -158,16 +162,20 @@ namespace HangOut.Controllers
             JArray jArray = new JArray();
             foreach (Cart Mycart in CartItems)
             {
-                HG_Items Items = ListItems.Find(x => x.ItemID == Mycart.ItemId);
-                JObject ObjItem = new JObject();
-                ObjItem.Add("IID", Items.ItemID);
-                ObjItem.Add("ItemName", Items.Items);
-                ObjItem.Add("ItemPrice", Items.Price);
-                ObjItem.Add("ItemQuntity", Items.Qty);
-                ObjItem.Add("ItemImage", Items.Image);
-                ObjItem.Add("ItemCartValue", Mycart.Count);
-                TotalPrice += Mycart.Count * Items.Price;
-                jArray.Add(ObjItem);
+               List<HG_Items> Items = ListItems.FindAll(x => x.ItemID == Mycart.ItemId);
+                foreach(HG_Items item in Items)
+                {
+                    JObject ObjItem = new JObject();
+                    ObjItem.Add("IID", item.ItemID);
+                    ObjItem.Add("ItemName", item.Items);
+                    ObjItem.Add("ItemPrice", item.Price);
+                    ObjItem.Add("ItemQuntity", item.Qty);
+                    ObjItem.Add("ItemImage", item.Image);
+                    ObjItem.Add("ItemCartValue", Mycart.Count);
+                    TotalPrice += Mycart.Count * item.Price;
+                    jArray.Add(ObjItem);
+
+                }
 
             }
             JObject ViewCartItem = new JObject();
@@ -654,8 +662,8 @@ namespace HangOut.Controllers
 
             return Info;
         }
-
-
+        //this method used for modify cart items not existings
+       
 
 
 
