@@ -228,6 +228,7 @@ namespace HangOut.Controllers
             listSheet = listSheet.FindAll(x => x.OrgId == OrgID);
             return JArray.FromObject(listSheet);
         }
+
         public JObject SettingPrivacyPolicy(string KeyName)
         {
             List<Settings> listsettings = new Settings().GetAll();
@@ -344,7 +345,7 @@ namespace HangOut.Controllers
                         itemobj.Add("OIID", OrderItem.OIID);
                         itemobj.Add("ItemID", OrderItem.FID);
                         itemobj.Add("ItemName", hG_Items.Items);
-                        itemobj.Add("Quantity", OrderItem.Qty);
+                        itemobj.Add("Quantity", OrderItem.Qty+"*"+OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
@@ -562,7 +563,7 @@ namespace HangOut.Controllers
                 // Settings settingsObj = new Settings().GetOne("Mgs");
                 // APICONTACT&senderid=FOODDO&msg=APIMSG
                 string Msg = "Your Otp For FooDo App Is " + OTPNumber+"";
-                HttpWebRequest webRequest =(HttpWebRequest) HttpWebRequest.Create("http://host6.hemsmedia.com/app/smsapi/index.php?key=25DC260CCC0CBF&campaign=0&routeid=5&type=text&contacts="+ MobileNO+ "&senderid=FOODDO&msg="+Msg);
+                HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create("http://app.telcob.cloud/app/smsapi/index.php?key=55DD67927E1B3E&campaign=0&routeid=4&type=text&contacts=" + MobileNO + "&senderid=FOODDO&msg=" + Msg);
                 webRequest.Method = "GET";
                 WebResponse webResp = webRequest.GetResponse();
                 Result.Add("Status", 200);
