@@ -4,6 +4,7 @@ using HangOut.Models.Common;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Net;
 
@@ -580,6 +581,33 @@ namespace HangOut.Controllers
             List<HG_Tables_or_Sheat> list = new HG_Tables_or_Sheat().GetAllWithTakeAwya(Type);
 
             return JArray.FromObject(list);
+        }
+
+
+
+        public JArray PastOrderInfo(int CID)
+        {
+            JArray Info = new JArray();
+            List<HG_Orders> OrderList = new HG_Orders().GetAll(CID: CID);
+
+            if(OrderList.Count>0)
+            {
+                foreach (HG_Orders orders in OrderList)
+                {
+                    HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
+                    List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
+                    JObject Object = new JObject();
+
+                    Object.Add("StartTime", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
+                    Object.Add("OrganizationName", hG_OrganizationDetails.Name);
+                    Object.Add("Amount", OrderItemList.Sum(X => X.Price));
+                    Object.Add("OrderNo", orders.OID);
+
+                    Info.Add(Object);
+                }
+            }
+            
+            return Info;
         }
 
 
