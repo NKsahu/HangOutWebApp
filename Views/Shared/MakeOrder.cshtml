@@ -256,6 +256,10 @@
                 <span class="sp-hide-if-sm-screen" id="TorTWID">
                     <!--Table name or take-away name-->
                 </span>
+                
+                <span class="badge badge-pill badge-secondary" style="padding:7px" id="FinalAmt">
+                    0.00
+                </span>
                 <small class="pull-right sp-bill-actions">
                     <!----><span style="float:right">
                         <!---->
@@ -297,12 +301,12 @@
                     <!---->
                     <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
                         <!---->
-                        <div class="btn-group" role="group" style="width:100% ;padding:20px" >
-                            <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                                RS <span id="FinalAmt">0</span> SUBMIT
+                        <div id="SubMitbtn" class="btn-group" role="group" style="width:100% ;padding:20px" >
+                            <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
+                                 SUBMIT
                             </button>
                         </div>
-                        <div class="btn-group" role="group" style="width:100%; padding:20px">
+                        <div id="InstantClear" class="btn-group" role="group" style="width:100%; padding:20px" onclick="INSTANTCLR()">
                             <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                                 INSTANT CLEAR
                             </button>
@@ -318,12 +322,12 @@
     var TablesList = null;
     var ItemList = null;
     var CurrentOrder = 0;// which means table or  takeaway id
+    var CurrOID = 0; //current Order Id;
     var finalAmt = 0.00;
     var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
     var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
     var ItemHtmlSecond = "<hr class='sp-grid-text-break'> <span><small class='text-muted'>";
     var ItemHtmlLast = "</small> </span> </span></div></div>";
-
     var first = "</td ><td><div><div>";
     var Minushtml = "<span class='sp-quantity-adjust sp-no-user-select'";
     var CountHtml = ">−</span ><div class='sp-item-quantity text-center'><span ";
@@ -345,14 +349,23 @@
         }
 
     }
-
+    function AddByItemClick(itemid) {
+        if ($("#C"+itemid).length > 0) {
+            var CartValue = parseInt($("#C"+itemid).text());
+            AddToCart(itemid, CartValue + 1);
+        }
+        else {
+            AddToCart(itemid,1);
+        }
+    }
     function AddToCart(ItemId, Cnt) {
         var Obj = {};
         Obj.CID = 0;
-        Obj.OID = 0;
+        Obj.OrgId = 0;
         Obj.ItemId = ItemId;
         Obj.Cnt = Cnt;
         Obj.TSTWID = CurrentOrder;
+        Obj.OID = CurrOID;
         $.ajax({
             type: 'POST',
             url: "/WebApi/AddCart?Obj=" + JSON.stringify(Obj),
@@ -392,7 +405,7 @@
         if (ObjItem.ItemCartValue != '0') {
             var Itemid = ObjItem.IID;
             var ItemPrice = parseFloat(ObjItem.ItemPrice) * parseInt(ObjItem.ItemCartValue);
-            $("#AddItem").append("<tr id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "' >" + ObjItem.ItemCartValue + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ItemPrice + "</span>" + cartlasthtml);
+            $("#AddItem").append("<tr class='ItemsTr' id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "' >" + ObjItem.ItemCartValue + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ItemPrice + "</span>" + cartlasthtml);
         }
 
     }
@@ -440,7 +453,7 @@
     function GeTablesTakeAwya() {
         $.ajax({
             type: 'POST',
-            url: "/WebApi/TableAndTakeAway?Type=1",
+            url: "/WebApi/TableAndTakeAway?Type=1&OrderById=0",
             success: function (data) {
                 TablesList = JSON.parse(data);
                 ShowOrders(TablesList);
@@ -520,22 +533,23 @@
             console.log("OccupiedList" + OccupiedList.length);
         }
     }
-    function GetItemList(OrderId) {
-        CurrentOrder = OrderId;
-        var Obj = {};
-        Obj.CID = 0;
-        Obj.OID = 0;
-        Obj.TSTWID = OrderId;
-        GetItemListByCategory(Obj)
+    function GetItemList(TableOrMWid) {
+        CurrentOrder = TableOrMWid;
+        GetItemListByCategory(CurrentOrder)
     }
-    function GetItemListByCategory(Obj) {
+    function GetItemListByCategory(TableOrMWid) {
         $("#Current").click();
         var ObjOrderName = TablesList.find(x => {
-            return x.Table_or_RowID == Obj.TSTWID;
+            return x.Table_or_RowID == TableOrMWid;
         });
         $("#TorTWID").text(ObjOrderName.Table_or_SheetName);
-       
-
+        //assign CurrOid of Perticuar Table Or Sheat or NewTakeAway 
+        CurrOID = ObjOrderName.CurrOID;
+        var Obj = {};
+        Obj.CID = 0;
+        Obj.OrgId = 0;
+        Obj.TSTWID = TableOrMWid;
+        Obj.OID = ObjOrderName.CurrOID;
         $.ajax({
             type: 'POST',
             url: "/WebApi/GetItemList?Obj=" + JSON.stringify(Obj),
@@ -547,6 +561,7 @@
                 $("#ItemList").html('');
                 $("#AddItem").html('');
                 var funSelected = "SelectedColor(\"card\",this)";
+                var TotalRs = 0.00;
                 var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + 0 + "\")'><span class='Pspan'>All</span></p>";
                 $("#CategoryId").append(CategoryHtml);
                 for (i = 0; i < CategoryList.length; i++) {
@@ -558,9 +573,11 @@
                         ShowItems(ItemsList[j]);
                         AddItemToQue(ItemsList[j]);
                     }
+                    TotalRs += CategoryList[i].MenuItmPrice;
+                   
 
                 }
-
+                $("#FinalAmt").text(TotalRs);
 
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -576,7 +593,7 @@
         }
     }
     function ShowItems(objitem) {
-        $("#ItemList").append(ItemHtmlFirst + "onclick='AddToCart(\"" + objitem.IID + "\",1)'" + ItemHtmlFirstPrefix + objitem.ItemName + ItemHtmlSecond + "₹" + objitem.ItemPrice + ItemHtmlLast);
+        $("#ItemList").append(ItemHtmlFirst + "onclick='AddByItemClick(\"" + objitem.IID + "\")'" + ItemHtmlFirstPrefix + objitem.ItemName + ItemHtmlSecond + "₹" + objitem.ItemPrice + ItemHtmlLast);
     }
     function filterItemByCat(MenuId) {
         if (MenuId != "0") {
@@ -610,5 +627,81 @@
                 return;
             }
         }
+    }
+    function PostOrder(Obj) {
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/PostOrder?Obj="+JSON.stringify(Obj),
+            success: function (data) {
+                var JsonObj = JSON.parse(data);
+                if (JsonObj.Status == 400) {
+                    $.alert({
+                        title: 'Alert!',
+                        content: JsonObj.MSG,
+                    });
+                }
+                else {
+                    var JsonMsg = JsonObj.MSG.split(",");
+                    $.alert({
+                        title: 'Alert!',
+                        content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
+                    });
+                    $("tr.ItemsTr").remove();
+                    for (var i = 0; i < TablesList.length; i++) {
+                        if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                            TablesList[i].CurrOID == JsonMsg[0];
+                            return;
+                        }
+                    }
+                }
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+
+
+    }
+    function SUBMIT() {
+        $.confirm({
+            title: 'SUBMIT TO CHEF',
+            content: 'Are You Sure',
+            buttons: {
+                btnClass: 'btn-primary',
+                confirm: function () {
+                    var Obj = {};
+                    Obj.CID = 0;
+                    Obj.OrgID = 0;
+                    Obj.TORSID = CurrentOrder;
+                    Obj.OID = CurrOID;
+                    PostOrder(Obj);
+                },
+                cancel: function () {
+                   
+                }
+            }
+        });
+    }
+    function INSTANTCLR() {
+        $.confirm({
+            title: 'INSTANT CLEAR',
+            content: 'Are You Sure',
+            buttons: {
+                btnClass:'btn-green',
+                confirm: function () {
+                   // $.alert('Confirmed!');
+                    var Obj = {};
+                    Obj.CID = 0;
+                    Obj.OrgID = 0;
+                    Obj.TORSID = CurrentOrder;
+                    Obj.OID = CurrOID;
+                    Obj.Status = 3;
+                    PostOrder(Obj);
+                },
+                cancel: function () {
+                   // $.alert('Canceled!');
+                }
+            }
+        });
     }
 </script>

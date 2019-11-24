@@ -13,8 +13,7 @@ namespace HangOut.Models.Common
 
       public  Cart()
         {
-            Count = 0;
-            OID = 0;
+           
 
         }
     }

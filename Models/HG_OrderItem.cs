@@ -17,13 +17,14 @@ namespace HangOut.Models
         public System.DateTime OrderDate { get; set; }
         public int UpdatedBy { get; set; }
         public System.DateTime UpdationDate { get; set; }
+        public int TickedNo { get; set; }
         public HG_OrderItem()
         {
             this.Qty = "0.00";
             this.OrderDate = System.DateTime.Now;
             this.UpdatedBy = 0;
             this.UpdationDate = System.DateTime.Now;
-           
+            this.TickedNo = 0;
         }
 
         public Int64 Save()
@@ -34,10 +35,10 @@ namespace HangOut.Models
             try
             {
                 if (this.OIID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate,TickedNo) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate,@TickedNo);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate where OIID=@OIID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate,TickedNo=@TickedNo where OIID=@OIID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OIID", this.OIID);
                 }
                 cmd.Parameters.AddWithValue("@FID", this.FID);
@@ -50,6 +51,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@OrderDate", this.OrderDate);
                 cmd.Parameters.AddWithValue("@UpdatedBy", this.UpdatedBy);
                 cmd.Parameters.AddWithValue("@UpdationDate", this.UpdationDate);
+                cmd.Parameters.AddWithValue("@TickedNo", this.TickedNo);
                 if (this.OIID == 0)
                 {
                     this.OIID = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -89,9 +91,10 @@ namespace HangOut.Models
                     ObjTmp.Qty = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
                     ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(7);
-                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? System.DateTime.Now : SDR.GetDateTime(8);
+                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? DateTime.Now : SDR.GetDateTime(8);
                     ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
-                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? System.DateTime.Now : SDR.GetDateTime(10);
+                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? DateTime.Now : SDR.GetDateTime(10);
+                    ObjTmp.TickedNo = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -123,6 +126,7 @@ namespace HangOut.Models
                     ObjTmp.OrderDate = SDR.IsDBNull(8) ? System.DateTime.Now : SDR.GetDateTime(8);
                     ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
                     ObjTmp.UpdationDate = SDR.IsDBNull(10) ? System.DateTime.Now : SDR.GetDateTime(10);
+                    ObjTmp.TickedNo = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
                   
                 }
             }

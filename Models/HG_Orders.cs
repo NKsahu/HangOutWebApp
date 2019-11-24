@@ -18,6 +18,7 @@ namespace HangOut.Models
         public Int64 Table_or_SheatId { get; set; }
         public HG_Orders()
         {
+            this.OID = 0;
             this.Status = "";
             this.Create_Date = System.DateTime.Now;//
             this.Update_Date = System.DateTime.Now;

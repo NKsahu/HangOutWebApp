@@ -85,17 +85,18 @@ namespace HangOut.Controllers
                     foreach (var Items in ItemListByMenu)
                     {
                         Cart cartCurrentItem = cartlist.Find(x => x.ItemId == Items.ItemID);
+                        int CurrCount = cartCurrentItem != null ? cartCurrentItem.Count :0;
                         JObject objItem = new JObject();
                         objItem.Add("IID", Items.ItemID);
                         objItem.Add("ItemName", Items.Items);
                         objItem.Add("ItemPrice", Items.Price);
                         objItem.Add("ItemQuntity", Items.Qty);
                         objItem.Add("ItemImage", Items.Image);
-                        objItem.Add("ItemCartValue", cartCurrentItem.Count);
+                        objItem.Add("ItemCartValue", CurrCount);
                         objItem.Add("MenuId", Items.CategoryID);
                         objItem.Add("ItemIndex", ItemiIndex++);
                         jarrayItem.Add(objItem);
-                        MenuItemPrice += Items.Price * cartCurrentItem.Count;
+                        MenuItemPrice += Items.Price * CurrCount;
                     }
                     JobjMenu.Add("MenuItemCount", ItemListByMenu.Count);
                     JobjMenu.Add("MenuItems", jarrayItem);
@@ -257,30 +258,43 @@ namespace HangOut.Controllers
         public JObject PostOrder(string Obj)
         {
             JObject Params = JObject.Parse(Obj);
-            System.Int64 CID = System.Int64.Parse(Params["CID"].ToString());
+            Int64 CID = Int64.Parse(Params["CID"].ToString());
             int OrgId = int.Parse(Params["OrgID"].ToString());
-            System.Int64 TableorSheatId=System.Int64.Parse(Params["TORSID"].ToString());
+            Int64 TableorSheatId=Int64.Parse(Params["TORSID"].ToString());
+            Int64 OID =Int64.Parse(Params["OID"].ToString());
+            int Status =Params["Status"]!=null?int.Parse(Params["Status"].ToString()):1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
             JObject PostResult = new JObject();
-            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId);
+            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId &&x.OID==OID);
             if (ListCart.Count <= 0)
             {
                 PostResult.Add("Status",400);
                 PostResult.Add("MSG","Add Atleast one Item");
                 return PostResult;
             }
-            HG_Orders ObjOrders = new HG_Orders()
+            System.Int64 NewOID = 0;
+            if (OID > 0)
             {
-                Create_By = CID,
-                Create_Date = System.DateTime.Now,
-                CID = CID,
-                Update_By = CID,
-                Status = "1",// order placed
-                OrgId = OrgId,
-                Table_or_SheatId = TableorSheatId
+                NewOID = OID;
+            }
+            else
+            {
+                HG_Orders ObjOrders = new HG_Orders()
+                {
+                    Create_By = CID,
+                    Create_Date = System.DateTime.Now,
+                    CID = CID,
+                    Update_By = CID,
+                    Status = "1",// order placed
+                    OrgId = OrgId,
+                    Table_or_SheatId = TableorSheatId
                 };
-                System.Int64 NewOID = ObjOrders.Save();
+                NewOID= ObjOrders.Save();
+            }
                 if (NewOID > 0)
                 {
+                List<HG_Ticket> list = new HG_Ticket().GetAll();
+                HG_Ticket objticket = new HG_Ticket() {OrgId=OrgId,OID=OID,TicketNo=list.Count+1 };
+                int Ticketno = objticket.save();
                     foreach (Cart Item in ListCart)
                     {
                     HG_Items ObjItem = new HG_Items().GetOne(ItemID: Item.ItemId);
@@ -291,7 +305,8 @@ namespace HangOut.Controllers
                             Count = Item.Count,
                             Qty = ObjItem.Qty,
                             OID = NewOID,
-                            Status = 1
+                            Status = Status,
+                            TickedNo= Ticketno
                         };
                         if (OrderItem.Save() <= 0)
                         {
@@ -303,7 +318,7 @@ namespace HangOut.Controllers
                         }
                     }
                 PostResult.Add("Status", 200);
-                PostResult.Add("MSG",NewOID.ToString());
+                PostResult.Add("MSG",NewOID.ToString()+","+Ticketno.ToString());
             }
             else
             {
@@ -311,8 +326,7 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG", "Unable To Place Order Try Again.");
                 return PostResult;
             }
-            
-            Cart.List.RemoveAll(x => x.CID == CID);
+            Cart.List.RemoveAll(x => x.CID == CID &&x.OID==OID && x.OrgId==OrgId);
             return PostResult;
         }
 
@@ -593,11 +607,22 @@ namespace HangOut.Controllers
             return JObject.FromObject(Result);
         }
 
-        public JArray TableAndTakeAway(int Type)
+        public JArray TableAndTakeAway(int Type,int OrderById)
         {
+            JArray jArray = new JArray();
+            DateTime fromdate = DateTime.Now;
             List<HG_Tables_or_Sheat> list = new HG_Tables_or_Sheat().GetAllWithTakeAwya(Type);
+            List<HG_Orders> Orderlist = new HG_Orders().GetListByGetDate(fromdate, DateTime.Now);
 
-            return JArray.FromObject(list);
+            foreach(var objtable in list)
+            {
+                HG_Orders order = Orderlist.Find(x => x.CID == OrderById && x.Table_or_SheatId == objtable.Table_or_RowID);
+                JObject jObject = new JObject();
+                jObject= JObject.FromObject(objtable);
+                jObject.Add("CurrOID", order!=null?order.OID:0);
+                jArray.Add(jObject);
+            }
+            return jArray;
         }
 
 
