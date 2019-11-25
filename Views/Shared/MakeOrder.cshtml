@@ -647,6 +647,7 @@
                         content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
                     });
                     $("tr.ItemsTr").remove();
+                    CurrOID = JsonMsg[0];
                     for (var i = 0; i < TablesList.length; i++) {
                         if (TablesList[i].Table_or_RowID == CurrentOrder) {
                             TablesList[i].CurrOID == JsonMsg[0];

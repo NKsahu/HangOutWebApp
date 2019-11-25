@@ -13,7 +13,7 @@ namespace HangOut.Models
         public string OrgTypes{ get; set; }
         public string HeadName{ get; set; }
         public string Name{ get; set; }
-        public string Address{ get; set; }
+        public string Address{ get; set; }// address 1
         public string City{ get; set; }
         public string State{ get; set; }
         public string PinCode{ get; set; }
@@ -24,7 +24,7 @@ namespace HangOut.Models
         public string Logo { get; set; }
         public DateTime DOR{ get; set; }
         public DateTime DOE { get; set; }
-        public string GSTNO { get; set; }
+        public string GSTNO { get; set; }//license1
         public string PANNO { get; set; }
         public string BankName{ get; set; }
         public string ACNO{ get; set; }
@@ -32,8 +32,13 @@ namespace HangOut.Models
         public int EntryBy { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime UpdateDate { get; set; }
-        public bool Status { get; set; }    
+        public bool Status { get; set; } 
         public int PaymentType { get; set; }// {'1':'prepaid','2':'postpaid'}
+        public string IvoiceHeading { get; set; }
+        public string AddressLin2 { get; set; }
+        public string AddressLine3 { get; set; }
+        public string Licence2 { get; set; }
+        public string License3 { get; set; }
 
 
         public HG_OrganizationDetails()
@@ -56,20 +61,20 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.OrgID  == 0)
                 {
-                    Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status,@PaymentType);";
+                    Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status,@PaymentType,@InvoiceHeading,@AddressLine2,@AddressLin3,@License2,@License3);";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy",int.Parse(HttpContext.Current.Request.Cookies["UserInfo"]["UserCode"]));
                     cmd.Parameters.AddWithValue("@EntryDate",System.DateTime.Now);
-                    cmd.Parameters.AddWithValue("@UpdateDate", System.DateTime.Now);
+                    
                 }
                 else
                 {
 
-                    Query = "update  HG_OrganizationDetails set OrgTypes=@OrgTypes,HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType where OrgID =@OrgID ";
+                    Query = "update  HG_OrganizationDetails set OrgTypes=@OrgTypes,HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType,InvoiceHeading=@InvoiceHeading,AddressLine2=@AddressLine2,AddressLin3=@AddressLin3,License2=@License2,License3=@License3 where OrgID =@OrgID ";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@OrgID ", this.OrgID );
-                    cmd.Parameters.AddWithValue("@UpdateDate", System.DateTime.Now);
                 }
+                cmd.Parameters.AddWithValue("@UpdateDate", System.DateTime.Now);
                 cmd.Parameters.AddWithValue("@OrgTypes", this.OrgTypes);
                 cmd.Parameters.AddWithValue("@HeadName", this.HeadName);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
