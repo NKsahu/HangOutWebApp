@@ -329,6 +329,56 @@ namespace HangOut.Controllers
             Cart.List.RemoveAll(x => x.CID == CID &&x.OID==OID && x.OrgId==OrgId);
             return PostResult;
         }
+        public JObject ShowOrderItems(int OID)
+        {
+            JObject jObject = new JObject();
+            List<HG_OrderItem> listitems = new HG_OrderItem().GetAll(OID);
+            if (listitems.Count == 0)
+            {
+                jObject.Add("Status", 400);
+                jObject.Add("MSG", "Make Order First");
+            }
+            else
+            {
+                jObject.Add("Status", 200);
+                jObject.Add("ListItems", JArray.FromObject(listitems));
+                jObject.Add("Total", listitems.Sum(x => x.Price));
+
+            }
+            
+
+            return jObject;
+        }
+        public JObject CompleteOrder(int TabOrShOrTwayId,int OID,int PaymentType,int UpdatedBy)
+        {
+            JObject jObject = new JObject();
+            HG_Orders order = new HG_Orders().GetOne(OID);
+            List<HG_OrderItem> listOrderitem = new HG_OrderItem().GetAll(order.OID);
+            HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat().GetOne(TabOrShOrTwayId);
+            if (order.OID > 0 && obj.Table_or_RowID>0)
+            {
+                order.Status = "3";//3 completed
+                order.Update_By = UpdatedBy;
+                obj.Status = 1;// free table
+                obj.Otp = OTPGeneretion.Generate();
+                order.Save();
+                obj.save();
+                foreach(var Oitems in listOrderitem)
+                {
+                    Oitems.Status = 3;
+                    Oitems.UpdatedBy = UpdatedBy;
+                    Oitems.Save();
+                }
+                jObject.Add("Status", 200);
+                jObject.Add("MSG", "Mark As Completed");
+            }
+            else
+            {
+                jObject.Add("Status", 400);
+                jObject.Add("MSG", "Order No Not Found");
+            }
+            return null;
+        }
 
         //Start Chef End Work
         public JArray ChefOrders(int OrgId,String Status)
@@ -584,9 +634,8 @@ namespace HangOut.Controllers
                 }
                 
             }
-            Random generator = new Random();
-            string  OTPNumber = generator.Next(100000, 999999).ToString("D6");
             OTPGeneretion ObjOtp = new OTPGeneretion();
+            string OTPNumber = OTPGeneretion.Generate().ToString();
             ObjOtp.MobileNO = MobileNO;
             ObjOtp.OTP = OTPNumber;
            

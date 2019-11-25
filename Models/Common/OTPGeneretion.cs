@@ -100,6 +100,13 @@ namespace HangOut.Models.Common
             }
             return R;
         }
+
+        public static int  Generate()
+        {
+            Random generator = new Random();
+            int OTPNumber = generator.Next(100000, 999999);
+            return OTPNumber;
+        }
     }
     
 }

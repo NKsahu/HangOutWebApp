@@ -273,13 +273,7 @@
             </p>
             <!---->
             <!----><div>
-                <form autocomplete="off" novalidate="" class="ng-pristine ">
-                    <div class="form-group">
-                        <input class="form-control " id="customerMobileLargeScreen" name="customerPhone" placeholder="Customer mobile number " spinputvalidator="" type="number">
-                        <!---->
-
-                    </div>
-                </form>
+                
                 <div>
                     <div class="sp-sold-items-scroll-with-noticebar">
                         <table class="table table-hover sp-product-list">
@@ -301,14 +295,19 @@
                     <!---->
                     <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
                         <!---->
-                        <div id="SubMitbtn" class="btn-group" role="group" style="width:100% ;padding:20px" >
+                        <div id="SubMitbtn" class="btn-group" role="group" style="width:100% ;padding:20px">
                             <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
-                                 SUBMIT
+                                SUBMIT
                             </button>
                         </div>
                         <div id="InstantClear" class="btn-group" role="group" style="width:100%; padding:20px" onclick="INSTANTCLR()">
                             <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                                 INSTANT CLEAR
+                            </button>
+                        </div>
+                        <div id="Charge" class="btn-group" role="group" style="width:100%; padding:20px" onclick="Charge()">
+                            <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                                Charge
                             </button>
                         </div>
                     </div>
@@ -317,6 +316,64 @@
 
         </div>
     </div>
+</div>
+<div id="PaymnetAndReceipt" class="row" style="display:none">
+    <div class="col-md-6">
+        <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
+            <!---->
+            <div id="ByCash" onclick="ByCash();" class="btn-group" role="group" style="width:50% ;padding:20px">
+                <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                    BY CASH
+                </button>
+            </div>
+            <div id="ByOnline" onclick="ByOnline();" class="btn-group" role="group" style="width:50%; padding:20px">
+                <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                    BY ONLINE
+                </button>
+            </div>
+
+        </div>
+
+        <div id="ShowItems">
+            <style>
+                #InvoiceItems,td {
+                    border: 1px solid black;
+                }
+            </style>
+<table id="InvoiceItems"  width="100%">
+    <thead>
+        <tr>
+            <th >ITEMNAME</th>
+            <th>QTY</th>
+            <th>AMOUNT</th>
+            <th>TICKET NO</th>
+        </tr>
+    </thead>
+    <tbody id="ItemsList">
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>TOTAL</td>
+            <td></td>
+            <td></td>
+            <td id="SumOfItem"></td>
+        </tr>
+    </tfoot>
+
+</table>
+        </div>
+    </div>
+    <div class="col-md-6"></div>
+    <div class="col-md-12">
+        <div id="PrintInvoice" onclick="GenInvoice()" class="btn-group" role="group" style="width:50% ;padding:20px">
+            <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                RECEIPT
+            </button>
+        </div>
+    </div>
+
+
 </div>
 <script>
     var TablesList = null;
@@ -441,6 +498,7 @@
         }
         document.getElementById(pageName).style.display = 'flex';
         elmnt.style.backgroundColor = color;
+        $("#PaymnetAndReceipt").hide();
     }
     function SelectedColor(classname, event) {
         var tablinks = document.getElementsByClassName(classname);
@@ -705,8 +763,116 @@
             }
         });
     }
-    function PrintReceipt(OId) {
-        var printHtml = "<div id='PrintInvoice'>";
-        printHtml+=""
+    function Charge() {
+        
+
+
+        //ByCash
+        //ByOnline
+        //ItemsList
+    //SumOfItem
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/ShowOrderItems?OID="+CurrOID,
+            success: function (data) {
+                var Jobje = JSON.parse(data);
+                if (Jobje.Status == 400) {
+                    $.alert({
+                        title: 'Alert!',
+                        content: Jobje.MSG,
+                    });
+                    return;
+                } else {
+                    var SumItems = 0.00;
+                    var List = Jobje.ListItems;
+                    for (var i = 0; i < List.length; i++) {
+
+                        var ObjItem = ItemList.find(x => {
+                            return x.IID == List[i].FID;
+                        });
+                        var td1 = "<tr><td>" + ObjItem.ItemName + "</td>";
+                        td1 += "<td>" + List[i].Qty + "</td>";
+                        td1 += "<td>" + List[i].Price + "</td>";
+                        td1 += "<td>" + List[i].TickedNo + "</td></tr>";
+                        SumItems += parseFloat(List[i].Price);
+                        $("#ItemsList").append(td1);
+                    }
+                    $("#SumOfItem").text(SumItems + " RS/-");
+                    $("#News").hide();
+                    $("#PaymnetAndReceipt").show();
+                }
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    function GenInvoice() {
+        $.ajax({
+            type: 'POST',
+            url: "/HG_Orders/PrintInvoice?OID="+CurrOID,
+            success: function (data) {
+                makedpt("invoice");
+                $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("invoice");
+                //var Jobje = JSON.parse(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    function ByCash() {
+        $.confirm({
+            title: 'BY CASH',
+            content: 'Mark Order Completed',
+            buttons: {
+                btnClass: 'btn-green',
+                confirm: function () {
+                    CompleteOrder(1)// bycash
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+        
+    }
+    function ByOnline() {
+        $.confirm({
+            title: 'BY ONLINE',
+            content: 'Mark Order Completed',
+            buttons: {
+                btnClass: 'btn-green',
+                confirm: function () {
+                    CompleteOrder(2)// by online
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+        
+    }
+    function CompleteOrder(PaymentType) {
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/CompleteOrder?TabOrShOrTwayId=" + CurrentOrder + "&OID=" + CurrOID + "&PaymentType=" + PaymentType +"&UpdatedBy=0",
+            success: function (data) {
+                ResetOrder(CurrentOrder, 1);
+                CurrentOrder = 0;
+               // CurrOID = 0;
+                for (var i = 0; i < TablesList.length; i++) {
+                    if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                        TablesList[i].CurrOID == 0;
+                        return;
+                    }
+                }
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
     }
 </script>

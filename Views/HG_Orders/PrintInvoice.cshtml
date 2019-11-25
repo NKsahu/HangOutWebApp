@@ -1,6 +1,7 @@
 ﻿@using HangOut.Models;
-@{ 
-    int OrgId =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
+@{
+    Layout = null;
+    int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
     Int64 OID = Int64.Parse(Request.QueryString["OID"]);
     HG_Orders order = new HG_Orders().GetOne(OID);
     List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAll(order.OID);
@@ -12,20 +13,87 @@
     string AddressLine3 = "Address3";
     string Phoneno = "4895632856";
     string GstNo = " ";
-    string Licence1 = " ";
     string Licence2 = " ";
+    string Licence3 = " ";
     string OrderNo = order.OID.ToString();
-    string 
+    double AmountTotal = 0.00;
+    DateTime OrderDate = order.Create_Date;
+    string PaymnetMode = "CASH/ONLINE";
+    string PoweredBy = "Powered By FooDo";
+    string TicketNos = "";
+    List<HG_Items> ItemList = new HG_Items().GetAll();
+    HashSet<string> hashTicket = new HashSet<string>(OrderItems.Select(x => x.TickedNo.ToString()).ToArray());
+    TicketNos = string.Join(",", hashTicket);
     if (OrgObj != null)
     {
         InvoiceHeading = OrgObj.IvoiceHeading;
         OrgName = OrgObj.Name;
+        AddressLine1 = OrgObj.Address;
+        AddressLine2 = OrgObj.AddressLin2;
+        AddressLine3 = OrgObj.AddressLine3;
+        Phoneno = OrgObj.Phone;
+        GstNo = OrgObj.GSTNO;
+        Licence2 = OrgObj.Licence2;
+        Licence3 = OrgObj.License3;
 
     }
-}
-@{
-    ViewBag.Title = "PrintInvoice";
+
+
 }
 
-<h2>PrintInvoice</h2>
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+<div id="printinvoice" style="border: 1px  solid ">
+    <h2 style="text-align:center">@InvoiceHeading</h2><br />
+    <h2 style="text-align:center">@OrgName</h2><br />
+    <h5>Adress 1:@AddressLine1</h5><br />
+    <h5>Adress 2:@AddressLine2</h5><br />
+    <h5>Adress 3:@AddressLine3</h5><br />
+
+    <h5>Phone :@Phoneno  GST : @GstNo</h5><br />
+    <h5>License1 :@Licence2  License2 :@Licence3</h5><br />
+    <hr />
+    <p>ORDER: </p>@OrderNo <p>Ticket No:</p><br />
+    <p>DATE: </p>@OrderDate.ToString("dd/MM/yy HH:mm") <p>MODE:</p>@PaymnetMode <br />
+                                                                                <table id="InvoiceItems" style="width:100%">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Item </th>
+                                                                                            <th>QTY</th>
+                                                                                            <th>AMT </th>
+
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @foreach (var items in OrderItems)
+                                                                                        {
+                                                                                            AmountTotal += items.Price;
+                                                                                            HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
+                                                                                            <tr>
+                                                                                                <td>@hG_Items.Items</td>
+                                                                                                <td>@items.Qty</td>
+                                                                                                <td>@items.Price</td>
+                                                                                            </tr>
+
+
+                                                                                        }
+                                                                                    </tbody>
+                                                                                    <tfoot>
+                                                                                        <tr>
+                                                                                            <td>TOTAL</td>
+                                                                                            <td> </td>
+                                                                                            <td>@AmountTotal.ToString("0.000")</td>
+                                                                                        </tr>
+                                                                                    </tfoot>
+
+                                                                                </table>
+
+
+
+
+</div>
+
 
