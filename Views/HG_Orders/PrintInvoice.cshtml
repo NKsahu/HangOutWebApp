@@ -1,0 +1,31 @@
+﻿@using HangOut.Models;
+@{ 
+    int OrgId =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
+    Int64 OID = Int64.Parse(Request.QueryString["OID"]);
+    HG_Orders order = new HG_Orders().GetOne(OID);
+    List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAll(order.OID);
+    HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
+    string InvoiceHeading = "Test-1";
+    string OrgName = "OrgName";
+    string AddressLine1 = "Address1";
+    string AddressLine2 = "Address2";
+    string AddressLine3 = "Address3";
+    string Phoneno = "4895632856";
+    string GstNo = " ";
+    string Licence1 = " ";
+    string Licence2 = " ";
+    string OrderNo = order.OID.ToString();
+    string 
+    if (OrgObj != null)
+    {
+        InvoiceHeading = OrgObj.IvoiceHeading;
+        OrgName = OrgObj.Name;
+
+    }
+}
+@{
+    ViewBag.Title = "PrintInvoice";
+}
+
+<h2>PrintInvoice</h2>
+

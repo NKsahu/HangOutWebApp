@@ -39,8 +39,6 @@ namespace HangOut.Models
         public string AddressLine3 { get; set; }
         public string Licence2 { get; set; }
         public string License3 { get; set; }
-
-
         public HG_OrganizationDetails()
         {
             EntryDate = DateTime.Now;
@@ -51,8 +49,6 @@ namespace HangOut.Models
         public int Save()
         {
             int Row = 0;
-
-
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             try
             {
@@ -96,6 +92,11 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@AcType", this.AcType);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@PaymentType", this.PaymentType);
+                cmd.Parameters.AddWithValue("@InvoiceHeading", this.IvoiceHeading);
+                cmd.Parameters.AddWithValue("@AddressLine2", this.AddressLin2);
+                cmd.Parameters.AddWithValue("@AddressLin3", this.AddressLine3);
+                cmd.Parameters.AddWithValue("@License2", this.Licence2);
+                cmd.Parameters.AddWithValue("@License3", this.License3);
                 Row = cmd.ExecuteNonQuery();
                 this.OrgID  = Row;
             }
@@ -147,6 +148,12 @@ namespace HangOut.Models
                     ObjTmp.AcType = SDR.GetString(19); 
                     ObjTmp.Status = SDR.GetBoolean(23);
                     ObjTmp.PaymentType =SDR.IsDBNull(24)?1: SDR.GetInt32(24);
+                    ObjTmp.IvoiceHeading= SDR.IsDBNull(25) ? "Test" : SDR.GetString(25);
+                    ObjTmp.AddressLin2 = SDR.IsDBNull(26) ? "Test" : SDR.GetString(26);
+                    ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? "Test" : SDR.GetString(27);
+                    ObjTmp.Licence2 = SDR.IsDBNull(28) ? "Test" : SDR.GetString(28);
+                    ObjTmp.License3 = SDR.IsDBNull(29) ? "Test" : SDR.GetString(29);
+
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -191,6 +198,11 @@ namespace HangOut.Models
                     ObjTmp.AcType = SDR.GetString(19);
                     ObjTmp.Status = SDR.GetBoolean(23);
                     ObjTmp.PaymentType = SDR.IsDBNull(24) ? 1 : SDR.GetInt32(24);
+                    ObjTmp.IvoiceHeading = SDR.IsDBNull(25) ? "Test" : SDR.GetString(25);
+                    ObjTmp.AddressLin2 = SDR.IsDBNull(26) ? "Test" : SDR.GetString(26);
+                    ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? "Test" : SDR.GetString(27);
+                    ObjTmp.Licence2 = SDR.IsDBNull(28) ? "Test" : SDR.GetString(28);
+                    ObjTmp.License3 = SDR.IsDBNull(29) ? "Test" : SDR.GetString(29);
                 }
             }
             catch (System.Exception e)
@@ -264,6 +276,11 @@ namespace HangOut.Models
                     ObjTmp.AcType = SDR.GetString(19);
                     ObjTmp.Status = SDR.GetBoolean(23);
                     ObjTmp.PaymentType = SDR.IsDBNull(24) ? 1 : SDR.GetInt32(24);
+                    ObjTmp.IvoiceHeading = SDR.IsDBNull(25) ? "Test" : SDR.GetString(25);
+                    ObjTmp.AddressLin2 = SDR.IsDBNull(26) ? "Test" : SDR.GetString(26);
+                    ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? "Test" : SDR.GetString(27);
+                    ObjTmp.Licence2 = SDR.IsDBNull(28) ? "Test" : SDR.GetString(28);
+                    ObjTmp.License3 = SDR.IsDBNull(29) ? "Test" : SDR.GetString(29);
                     ListTmp.Add(ObjTmp);
                 }
             }

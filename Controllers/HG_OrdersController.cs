@@ -28,6 +28,11 @@ namespace HangOut.Controllers
         {
             return View();
         }
-        
+        public ActionResult PrintInvoice(int OID)
+        {
+
+
+            return View();
+        }
     }
 }
