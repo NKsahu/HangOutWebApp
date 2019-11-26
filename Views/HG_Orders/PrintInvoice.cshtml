@@ -1,6 +1,7 @@
 ﻿@using HangOut.Models;
+@{    Layout = null;}
 @{
-    Layout = null;
+
     int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
     Int64 OID = Int64.Parse(Request.QueryString["OID"]);
     HG_Orders order = new HG_Orders().GetOne(OID);
@@ -8,13 +9,13 @@
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
-    string AddressLine1 = "Address1";
-    string AddressLine2 = "Address2";
-    string AddressLine3 = "Address3";
+    string AddressLine1 = "Near Raipur C.g Sankar Nagar ";
+    string AddressLine2 = "sankar nagar  Raipur C.g Sankar Nagar";
+    string AddressLine3 = "Near Raipur C.g Sankar Nagar";
     string Phoneno = "4895632856";
-    string GstNo = " ";
-    string Licence2 = " ";
-    string Licence3 = " ";
+    string GstNo = "ABCD1236589 ";
+    string Licence2 = "..................";
+    string Licence3 = "..................";
     string OrderNo = order.OID.ToString();
     double AmountTotal = 0.00;
     DateTime OrderDate = order.Create_Date;
@@ -24,7 +25,7 @@
     List<HG_Items> ItemList = new HG_Items().GetAll();
     HashSet<string> hashTicket = new HashSet<string>(OrderItems.Select(x => x.TickedNo.ToString()).ToArray());
     TicketNos = string.Join(",", hashTicket);
-    if (OrgObj != null)
+    if (OrgObj.OrgID>0)
     {
         InvoiceHeading = OrgObj.IvoiceHeading;
         OrgName = OrgObj.Name;
@@ -40,60 +41,84 @@
 
 
 }
-
 <style>
-    table, th, td {
-        border: 1px solid black;
+    @@media print {
+        body * {
+            visibility: hidden;
+        }
+
+        #section-to-print, #section-to-print * {
+            visibility: visible;
+        }
+
+        #section-to-print {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
     }
+
+
 </style>
-<div id="printinvoice" style="border: 1px  solid ;min-height:300px; ">
-    <h2 style="text-align:center">@InvoiceHeading</h2><br />
-    <h2 style="text-align:center">@OrgName</h2><br />
-    <h5>Adress 1:@AddressLine1</h5><br />
-    <h5>Adress 2:@AddressLine2</h5><br />
-    <h5>Adress 3:@AddressLine3</h5><br />
+<div style="min-height:25px">
+<button onclick="window.print()"> PRINT</button>
+</div>
+<div style="border:3px solid black " id="section-to-print">
+    <div style="border:1px solid black">
+        <h4 style="text-align:center">@InvoiceHeading</h4>
+        <h4 style="text-align:center">@OrgName</h4><br />
+        <h5 style="text-align:center">Adress 1:@AddressLine1</h5><br />
+        <h5 style="text-align:center">Adress 2:@AddressLine2</h5><br />
+        <h5 style="text-align:center">Adress 3:@AddressLine3</h5><br />
+        <h5 style="text-align:center">Phone :  @Phoneno     GST :   @GstNo</h5><br />
+        <h5 style="text-align:center">License1 : @Licence2    License2 :@Licence3</h5><br />
+    </div>
+    <div style="border:1px solid black ;text-align:center">
+        <h6><b>ORDER No:</b> @OrderNo      <b>Ticket No:</b> @TicketNos</h6><br />
+        <h6><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymnetMode </h6><br />
+    </div>
+    <table id="InvoiceItems" class="table">
+        <thead>
+            <tr>
+                <th>Item </th>
+                <th>QTY</th>
+                <th>AMT </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var items in OrderItems)
+            {
+                AmountTotal += items.Price;
+                HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
+                <tr>
+                    <td>@hG_Items.Items</td>
+                    <td>@items.Qty</td>
+                    <td>@items.Price</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td style="text-align:right">TOTAL</td>
+                <td> </td>
+                <td>@AmountTotal.ToString("0.000")</td>
+            </tr>
+        </tfoot>
+    </table>
 
-    <h5>Phone :@Phoneno  GST : @GstNo</h5><br />
-    <h5>License1 :@Licence2  License2 :@Licence3</h5><br />
-    <hr />
-    <p>ORDER: </p>@OrderNo <p>Ticket No:</p><br />
-    <p>DATE: </p>@OrderDate.ToString("dd/MM/yy HH:mm") <p>MODE:</p>@PaymnetMode <br />
-                                                                                <table id="InvoiceItems" style="width:100%">
-                                                                                    <thead>
-                                                                                        <tr>
-                                                                                            <th>Item </th>
-                                                                                            <th>QTY</th>
-                                                                                            <th>AMT </th>
-
-                                                                                        </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                        @foreach (var items in OrderItems)
-                                                                                        {
-                                                                                            AmountTotal += items.Price;
-                                                                                            HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
-                                                                                            <tr>
-                                                                                                <td>@hG_Items.Items</td>
-                                                                                                <td>@items.Qty</td>
-                                                                                                <td>@items.Price</td>
-                                                                                            </tr>
-
-
-                                                                                        }
-                                                                                    </tbody>
-                                                                                    <tfoot>
-                                                                                        <tr>
-                                                                                            <td>TOTAL</td>
-                                                                                            <td> </td>
-                                                                                            <td>@AmountTotal.ToString("0.000")</td>
-                                                                                        </tr>
-                                                                                    </tfoot>
-
-                                                                                </table>
-
-
-
+    <div style="border:1px solid black">
+        <h6>NOTE: </h6>
+        <div style="min-height:40px">
+            .........................................................................<br />
+            .........................................................................
+        </div>
+        <h6>Powered By FooDo</h6>
+    </div>
 
 </div>
+
+
+
+
 
 
