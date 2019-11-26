@@ -5,15 +5,13 @@
 @using HangOut.Models
 <div class="card">
     <div class="card-header">
-        <h4 style="text-align:center;color:#000000"><b>Menu </b></h4>
+        <h4 style="text-align:center;color:#000000"><b>Category</b></h4>
         <hr />
     </div>
     <div class="card-body">
 
         @using (Ajax.BeginForm("CreateEdit", "HG_Category", new {ID = Model.CategoryID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-            
-              
                 @Html.HiddenFor(model => model.CategoryID)
                 <div class="row">
 
@@ -46,9 +44,7 @@
                             @Html.EditorFor(model => model.Status)
                             @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                         </div>
-
                     </div>
-
                     <div class="col-sm-1">
                         @Html.Label("Save", new { @class = "text-white" })
                         <input type="submit" value="Save" class="btn btn-success" />

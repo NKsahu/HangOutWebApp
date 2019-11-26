@@ -8,11 +8,11 @@ namespace HangOut.Models
 {
     public class HG_Category
     {
-        [Display(Name ="Menu Id")]
+        [Display(Name ="Category Id")]
         public int CategoryID { get; set; }
         [Display(Name ="Organization")]
         public int OrgID { get; set; }
-        [Display(Name ="Menu ")]
+        [Display(Name ="Name")]
         public string Category { get; set; }
         public int EntryBy { get; set; }
         public DateTime EntryDate { get; set; }
