@@ -442,7 +442,7 @@
         </div>
         <div class="col-md-6"></div>
         <div class="col-md-12">
-            <div id="PrintInvoice" onclick="GenInvoice()" class="btn-group" role="group" style="width:50% ;padding:20px">
+            <div id="PrintInvoice"  onclick="GenInvoice()" class="btn-group" role="group" style="display:none">
                 <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                     SUBMIT
                 </button>
@@ -643,11 +643,12 @@
             //html += "<span class='sp-grid-cell-text'>";
             var Second = "<hr class='sp-grid-text-break'>";
             Second += " <small  class='text-muted'";// with Status Name
-            var Third = "</small> </span ></div > <p class='sp-slot-split-hidden'></p></div >";
+            var Third = "</small> </span ></div > <p style='text-align:center;font-size:small'";
             for (i = 0; i < list.length; i++) {
                 var Name = list[i].Table_or_SheetName;
                 var TableID = list[i].Table_or_RowID.toString();
                 var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
+                var Otp = list[i].Otp;
                 var clasName = "";
                 var ShowStatus = "";
                 if (Status == 1) {
@@ -661,7 +662,7 @@
                     clasName = "tableProgress";
                     ShowStatus = "Occupied";
                 }
-                $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS" + TableID + "'>" + ShowStatus + Third);
+                $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS" + TableID + "'>" + ShowStatus + Third + 'id=Otp' + TableID + ">" + Otp+"</p></div>");
             }
         }
         function FreeOrOccupied(Status) {
@@ -855,13 +856,7 @@
             });
         }
         function Charge() {
-
-
-
-            //ByCash
-            //ByOnline
-            //ItemsList
-            //SumOfItem
+            
             $.ajax({
                 type: 'POST',
                 url: "/WebApi/ShowOrderItems?OID=" + CurrOID,
@@ -869,35 +864,55 @@
                     var Jobje = JSON.parse(data);
                     if (Jobje.Status == 400) {
                         $.alert({
-                            title: 'FINALIIZE ORDER ?',
-                            content: 'please take action on selected item first',
+                            title: 'Alert !',
+                            content: 'NO TICKETS YET',
                         });
                         //Jobje.MSG
                         return;
-                    } else {
-                        var SumItems = 0.00;
-                        var Qty = 0;
-                        $("#ItemsList").html('');
-                        var List = Jobje.ListItems;
-                        for (var i = 0; i < List.length; i++) {
+                    }
+                    else if ($("tr.ItemsTr").length > 0) {
+                        $.alert({
+                            title: 'Alert !',
+                            content: 'please take action on selected item first',
+                        });
+                        return;
+                    }
+                    else {
+                        $.confirm({
+                            title: 'Alert !',
+                            content: 'FINALIZE ORDER ?',
+                            buttons: {
+                                btnClass: 'btn-green',
+                                confirm: function () {
+                                    var SumItems = 0.00;
+                                    var Qty = 0;
+                                    $("#ItemsList").html('');
+                                    var List = Jobje.ListItems;
+                                    for (var i = 0; i < List.length; i++) {
 
-                            var ObjItem = ItemList.find(x => {
-                                return x.IID == List[i].FID;
-                            });
-                            var td1 = "<tr><td>" + ObjItem.ItemName + "</td>";
-                            td1 += "<td>" + List[i].Count + "</td>";
-                            td1 += "<td>" + List[i].Price + "</td>";
-                            td1 += "<td>" + List[i].TickedNo + "</td></tr>";
-                            Qty += parseInt(List[i].Count);
-                            var total = (List[i].Count * parseFloat(List[i].Price));
-                            SumItems += total;
-                            $("#ItemsList").append(td1);
-                            
-                        }
-                        $("#SumOfQty").text(Qty);
-                        $("#SumOfItem").text(SumItems + " RS/-");
-                        $("#News").hide();
-                        $("#PaymnetAndReceipt").show();
+                                        var ObjItem = ItemList.find(x => {
+                                            return x.IID == List[i].FID;
+                                        });
+                                        var td1 = "<tr><td>" + ObjItem.ItemName + "</td>";
+                                        td1 += "<td>" + List[i].Count + "</td>";
+                                        td1 += "<td>" + List[i].Price + "</td>";
+                                        td1 += "<td>" + List[i].TickedNo + "</td></tr>";
+                                        Qty += parseInt(List[i].Count);
+                                        var total = (List[i].Count * parseFloat(List[i].Price));
+                                        SumItems += total;
+                                        $("#ItemsList").append(td1);
+
+                                    }
+                                    $("#SumOfQty").text(Qty);
+                                    $("#SumOfItem").text(SumItems + " Rs/-");
+                                    $("#News").hide();
+                                    $("#PaymnetAndReceipt").show(); 
+                                },
+                                cancel: function () {
+                                    // $.alert('Canceled!');
+                                }
+                            }
+                        });
                     }
 
                 },
@@ -968,19 +983,20 @@
                         });
                     }
                     else {
-                        $.alert({
-                            title: 'Order Completed',
-                            content: 'New Otp For Order is ' + Jobj.MSG,
-                        });
+                      
                         // CurrOID = 0;
+                        var OldOtp = 0;
                         for (var i = 0; i < TablesList.length; i++) {
                             if (TablesList[i].Table_or_RowID == CurrentOrder) {
                                 TablesList[i].CurrOID = 0;
+                                TablesList[i].Otp = Jobj.MSG;
                             }
                         }
-                        CurrentOrder = 0;
+                        $("#Otp" + CurrentOrder).text(Jobj.MSG);
                         ResetOrder(CurrentOrder, 1);
-
+                        CurrentOrder = 0;
+                        GenInvoice();
+                        $("#defaultOpen").click();
                     }
 
                 },

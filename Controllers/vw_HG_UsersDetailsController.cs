@@ -126,6 +126,11 @@ namespace HangOut.Controllers
         {
             return View();
         }
+
+        public  ActionResult privacyPolicy()
+        {
+            return View();
+        }
         
     }
 }

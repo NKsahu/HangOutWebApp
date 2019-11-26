@@ -104,7 +104,7 @@ namespace HangOut.Models.Common
         public static int  Generate()
         {
             Random generator = new Random();
-            int OTPNumber = generator.Next(100000, 999999);
+            int OTPNumber = generator.Next(1000, 9999);
             return OTPNumber;
         }
     }

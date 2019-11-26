@@ -98,7 +98,7 @@ namespace HangOut.Models
                     ObjTemp.CreateDate = SDR .GetDateTime(6);
                     ObjTemp.CreateBy = SDR .GetInt32(7);
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1: SDR.GetInt32(8);
-                    ObjTemp.Otp = SDR.IsDBNull(9) ? 00000 : SDR.GetInt32(9);
+                    ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     listTemp.Add(ObjTemp);
                 }
 
@@ -133,7 +133,7 @@ namespace HangOut.Models
                     ObjTemp.CreateDate = SDR.GetDateTime(6);
                     ObjTemp.CreateBy = SDR.GetInt32(7);
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1: SDR.GetInt32(8);
-                    ObjTemp.Otp = SDR.IsDBNull(9) ? 00000 : SDR.GetInt32(9);
+                    ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
 
 
                 }
@@ -170,7 +170,7 @@ namespace HangOut.Models
                     ObjTemp.CreateDate = SDR.GetDateTime(6);
                     ObjTemp.CreateBy = SDR.GetInt32(7);
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1 : SDR.GetInt32(8);
-                    ObjTemp.Otp = SDR.IsDBNull(9) ? 00000 : SDR.GetInt32(9);
+                    ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     TempList.Add(ObjTemp);
                 }
             }
@@ -236,7 +236,7 @@ namespace HangOut.Models
                     ObjTemp.CreateDate = SDR.GetDateTime(6);
                     ObjTemp.CreateBy = SDR.GetInt32(7);
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1 : SDR.GetInt32(8);
-                    ObjTemp.Otp = SDR.IsDBNull(9) ? 00000 : SDR.GetInt32(9);
+                    ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     listTemp.Add(ObjTemp);
                 }
 
