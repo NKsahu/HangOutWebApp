@@ -883,15 +883,29 @@
             type: 'POST',
             url: "/WebApi/CompleteOrder?TabOrShOrTwayId=" + CurrentOrder + "&OID=" + CurrOID + "&PaymentType=" + PaymentType +"&UpdatedBy=0",
             success: function (data) {
-                ResetOrder(CurrentOrder, 1);
-                CurrentOrder = 0;
-               // CurrOID = 0;
-                for (var i = 0; i < TablesList.length; i++) {
-                    if (TablesList[i].Table_or_RowID == CurrentOrder) {
-                        TablesList[i].CurrOID == 0;
-                        return;
-                    }
+                var Jobj = JSON.parse(data);
+                if (Jobj.Status == 400) {
+                    $.alert({
+                        title: 'Alert!',
+                        content: Jobj.MSG,
+                    });
                 }
+                else {
+                    ResetOrder(CurrentOrder, 1);
+                    CurrentOrder = 0;
+                    // CurrOID = 0;
+                    for (var i = 0; i < TablesList.length; i++) {
+                        if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                            TablesList[i].CurrOID == 0;
+                            return;
+                        }
+                    }
+                    $.alert({
+                        title: 'Order Completed',
+                        content: 'New Otp For Order is' + Jobj.MSG,
+                    });
+                }
+               
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
