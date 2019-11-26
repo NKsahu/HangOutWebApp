@@ -885,11 +885,12 @@
                                 return x.IID == List[i].FID;
                             });
                             var td1 = "<tr><td>" + ObjItem.ItemName + "</td>";
-                            td1 += "<td>" + List[i].Qty + "</td>";
+                            td1 += "<td>" + List[i].Count + "</td>";
                             td1 += "<td>" + List[i].Price + "</td>";
                             td1 += "<td>" + List[i].TickedNo + "</td></tr>";
-                            Qty += parseInt(List[i].Qty);
-                            SumItems += parseFloat(List[i].Price);
+                            Qty += parseInt(List[i].Count);
+                            var total = (List[i].Count * parseFloat(List[i].Price));
+                            SumItems += total;
                             $("#ItemsList").append(td1);
                             
                         }

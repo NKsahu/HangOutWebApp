@@ -46,7 +46,7 @@ namespace HangOut.Models
             }
             return this.TicketNo;
         }
-        public List<HG_Ticket> GetAll(DateTime ? onDate =null)
+        public List<HG_Ticket> GetAll(int OrgId,DateTime ? onDate =null)
         {
             if (!onDate.HasValue)
             {
@@ -56,7 +56,7 @@ namespace HangOut.Models
             List<HG_Ticket> listtemp = new List<HG_Ticket>();
             DBCon con = new DBCon();
             SqlCommand cmd = new SqlCommand();
-            string query = "select * from HG_Ticket where OrgId ="+ CurrOrgID["OrgId"]+ " and CreateDate='"+ onDate.Value.Date.ToString("MM/dd/yyyy")+"'";
+            string query = "select * from HG_Ticket where OrgId ="+OrgId.ToString()+ " and CreateDate='"+ onDate.Value.Date.ToString("MM/dd/yyyy")+"'";
             try
             {
                 cmd = new SqlCommand(query, con.Con);

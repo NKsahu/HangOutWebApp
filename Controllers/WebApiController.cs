@@ -292,7 +292,7 @@ namespace HangOut.Controllers
             }
                 if (NewOID > 0)
                 {
-                List<HG_Ticket> list = new HG_Ticket().GetAll();
+                List<HG_Ticket> list = new HG_Ticket().GetAll(OrgId);
                 HG_Ticket objticket = new HG_Ticket() {OrgId=OrgId,OID=OID,TicketNo=list.Count+1 };
                 int Ticketno = objticket.save();
                     foreach (Cart Item in ListCart)

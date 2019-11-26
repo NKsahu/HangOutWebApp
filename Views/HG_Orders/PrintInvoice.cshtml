@@ -89,12 +89,13 @@
         <tbody>
             @foreach (var items in OrderItems)
             {
-                AmountTotal += items.Price;
-               // Qty += items.Qty;
+                AmountTotal += items.Price *items.Count;
+                Qty += items.Count;
+                // Qty += items.Qty;
                 HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
                 <tr>
                     <td>@hG_Items.Items</td>
-                    <td>@items.Qty</td>
+                    <td>@items.Count</td>
                     <td>@items.Price</td>
                 </tr>
             }
@@ -102,7 +103,7 @@
         <tfoot>
             <tr>
                 <td style="text-align:right">TOTAL</td>
-                <td> </td>
+                <td>@Qty.ToString() </td>
                 <td>@AmountTotal.ToString("0.000")</td>
             </tr>
         </tfoot>
