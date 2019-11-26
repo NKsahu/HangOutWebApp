@@ -273,7 +273,7 @@
             <p class="card" onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
             <p class="card" onclick="FreeOrOccupied('1');SelectedColor('card',this)"><span class="Pspan" id="Free">Free </span></p>
             <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
-            <p class="card"><span class="Pspan" onclick="FilterOrder(4);SelectedColor('card',this)" id="Unpaid">Unpaid</span></p>
+            <p class="card" onclick="FilterOrder(4);SelectedColor('card',this)"><span class="Pspan"  id="Unpaid">Unpaid</span></p>
 
         </div>
         <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
@@ -325,14 +325,6 @@
                         0.00
                     </span>
                     <small class="pull-right sp-bill-actions">
-                        <!----><span style="float:right">
-                            <!---->
-                            <!----><a>Clear</a>
-                            <!---->
-                            <!---->
-                        </span>
-                        <!---->
-                        <!---->
                     </small>
                 </p>
                 <!---->
@@ -359,19 +351,19 @@
                         <!---->
                         <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
                             <!---->
-                            <div id="SubMitbtn" class="btn-group" role="group" style="width:100% ;padding:20px">
+                            <div id="SubMitbtn"  class="btn-group" role="group" style="width:50% ;padding:20px ;">
                                 <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
                                     SUBMIT
                                 </button>
                             </div>
-                            <div id="InstantClear" class="btn-group" role="group" style="width:100%; padding:20px" onclick="INSTANTCLR()">
+                            <div id="InstantClear" class="btn-group" role="group" style="width:50%; padding:20px" onclick="INSTANTCLR()">
                                 <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                                     INSTANT CLEAR
                                 </button>
                             </div>
                             <div id="Charge" class="btn-group" role="group" style="width:100%; padding:20px" onclick="Charge()">
                                 <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                                    Charge
+                                    CHARGE
                                 </button>
                             </div>
                         </div>
@@ -439,7 +431,7 @@
                     <tfoot>
                         <tr>
                             <td>TOTAL</td>
-                            <td></td>
+                            <td id="SumOfQty"></td>
                             <td id="SumOfItem"></td>
                             <td></td>
                         </tr>
@@ -452,7 +444,7 @@
         <div class="col-md-12">
             <div id="PrintInvoice" onclick="GenInvoice()" class="btn-group" role="group" style="width:50% ;padding:20px">
                 <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                    RECEIPT
+                    SUBMIT
                 </button>
             </div>
         </div>
@@ -478,11 +470,14 @@
         var Carthtmlsecond = "<span class='sp-price'>";
         var cartlasthtml = "</span ></td ><td><a class='sp-bill-actions'><span class='glyphicon glyphicon-pencil'></span></a ></td></tr>";
         document.getElementById("defaultOpen").click();
-        $("#TableClr2").click(function(){
+        $("#TableClr2").click(function () {
+            $("#ItemSearch2").val('');
             SearchItem('ItemSearch2', 'ItemsClass');
         });
-        $("#TableClr").click(function(){
+        $("#TableClr").click(function () {
+            $("#TableSearch").val('');
             SearchItem('TableSearch', 'TabAndTakeW');
+            console.log("AAYA");
         });
         function plus(itemid) {
             var CartValue = parseInt($("#C" + itemid).text());
@@ -633,6 +628,12 @@
                 ShowOrders(TableListOnly);
                 console.log("Table" + TablesList);
             }
+            else {
+                var TableListOnly = TablesList.filter(function (itm) {
+                    return itm.Type == '0';
+                });
+                ShowOrders(TableListOnly);
+            }
 
         }
         function ShowOrders(list) {
@@ -675,7 +676,7 @@
             }
             else if (Status == '2') {
                 var OccupiedList = TablesList.filter(function (x) {
-                    return x.Status == 2;
+                    return x.Status == 3;
                 });
                 ShowOrders(OccupiedList);
                 console.log("OccupiedList" + OccupiedList.length);
@@ -813,7 +814,7 @@
         }
         function SUBMIT() {
             $.confirm({
-                title: 'SUBMIT TO CHEF',
+                title: 'SEND TO CHEF ?',
                 content: 'Are You Sure',
                 buttons: {
                     btnClass: 'btn-primary',
@@ -833,7 +834,7 @@
         }
         function INSTANTCLR() {
             $.confirm({
-                title: 'INSTANT CLEAR',
+                title: 'ELEMINATE CHEF ?',
                 content: 'Are You Sure',
                 buttons: {
                     btnClass: 'btn-green',
@@ -868,12 +869,14 @@
                     var Jobje = JSON.parse(data);
                     if (Jobje.Status == 400) {
                         $.alert({
-                            title: 'Alert!',
-                            content: Jobje.MSG,
+                            title: 'FINALIIZE ORDER ?',
+                            content: 'please take action on selected item first',
                         });
+                        //Jobje.MSG
                         return;
                     } else {
                         var SumItems = 0.00;
+                        var Qty = 0;
                         $("#ItemsList").html('');
                         var List = Jobje.ListItems;
                         for (var i = 0; i < List.length; i++) {
@@ -885,9 +888,12 @@
                             td1 += "<td>" + List[i].Qty + "</td>";
                             td1 += "<td>" + List[i].Price + "</td>";
                             td1 += "<td>" + List[i].TickedNo + "</td></tr>";
+                            Qty += parseInt(List[i].Qty);
                             SumItems += parseFloat(List[i].Price);
                             $("#ItemsList").append(td1);
+                            
                         }
+                        $("#SumOfQty").text(Qty);
                         $("#SumOfItem").text(SumItems + " RS/-");
                         $("#News").hide();
                         $("#PaymnetAndReceipt").show();

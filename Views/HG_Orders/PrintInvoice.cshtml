@@ -18,6 +18,7 @@
     string Licence3 = "..................";
     string OrderNo = order.OID.ToString();
     double AmountTotal = 0.00;
+    int Qty = 0;
     DateTime OrderDate = order.Create_Date;
     string PaymnetMode = "CASH/ONLINE";
     string PoweredBy = "Powered By FooDo";
@@ -89,6 +90,7 @@
             @foreach (var items in OrderItems)
             {
                 AmountTotal += items.Price;
+               // Qty += items.Qty;
                 HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
                 <tr>
                     <td>@hG_Items.Items</td>
