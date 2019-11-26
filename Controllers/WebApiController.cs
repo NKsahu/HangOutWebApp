@@ -60,7 +60,10 @@ namespace HangOut.Controllers
         [HttpPost]
         public JArray GetItemList(string Obj)
         {
+
+
             JObject objParams = JObject.Parse(Obj);
+
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
             System.Int64 OID = System.Int64.Parse(objParams.GetValue("OID").ToString());
             System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OrgId").ToString());
