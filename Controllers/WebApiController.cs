@@ -278,6 +278,11 @@ namespace HangOut.Controllers
             if (OID > 0)
             {
                 NewOID = OID;
+                HG_Orders ObjOrders = new HG_Orders().GetOne(NewOID);
+                ObjOrders.Status = "1";
+                ObjOrders.Update_By = CID;
+                ObjOrders.Update_Date = DateTime.Now;
+                ObjOrders.Save();
             }
             else
             {
@@ -421,6 +426,7 @@ namespace HangOut.Controllers
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
+                    hG_OrderItems = hG_OrderItems.FindAll(x => x.Status != 3);//COMPLETED
                     JArray ItemsArray = new JArray();
                     int ItemIndex = 0;
                     foreach (var OrderItem in hG_OrderItems)
