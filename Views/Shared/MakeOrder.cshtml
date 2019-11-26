@@ -336,11 +336,33 @@
 
         <div id="ShowItems">
             <style>
-                #InvoiceItems,td {
-                    border: 1px solid black;
+                #InvoiceItems {
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                    #InvoiceItems td, #customers th {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                    }
+
+                #InvoiceItems tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                }
+
+                #InvoiceItems tr:hover {
+                    background-color: #ddd;
+                }
+
+                #InvoiceItems th {
+                    padding-top: 8px;
+                    padding-bottom: 5px;
+                    text-align: left;
+                    background-color: #4CAF50;
+                    color: white;
                 }
             </style>
-<table id="InvoiceItems"  width="100%">
+<table id="InvoiceItems"  >
     <thead>
         <tr>
             <th >ITEMNAME</th>
@@ -356,8 +378,8 @@
         <tr>
             <td>TOTAL</td>
             <td></td>
-            <td></td>
             <td id="SumOfItem"></td>
+            <td ></td>
         </tr>
     </tfoot>
 
