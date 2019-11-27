@@ -425,7 +425,7 @@
                         #InvoiceItems th {
                             padding-top: 8px;
                             padding-bottom: 5px;
-                            text-align: left;
+                            text-align: center;
                             background-color: #4CAF50;
                             color: white;
                         }
@@ -612,7 +612,8 @@
             event.style.backgroundColor = '#e2dbdb';
         }
         GeTablesTakeAwya();
-        function GeTablesTakeAwya() {
+     function GeTablesTakeAwya() {
+         console.log("table list");
             $.ajax({
                 type: 'POST',
                 url: "/WebApi/TableAndTakeAway?Type=1&OrderById=0",
@@ -1030,15 +1031,17 @@
          if (value == '1') {
              $("#OrderView").hide();
              $("#SeatView").show();
-
+             GeTablesTakeAwya();
          } else {
+             $("#OrderView").html('');
              $("#OrderView").show();
              $("#SeatView").hide();
-
+             $('#waiting').show();
              $.ajax({
                  type: 'GET',
                  url: "/HG_Orders/DashBoardOrders",
                  success: function (data) {
+                     $('#waiting').hide();
                      $("#OrderView").html(data);
                      GetOrders(0);
                  },

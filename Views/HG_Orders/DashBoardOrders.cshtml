@@ -1,9 +1,12 @@
 ﻿@{
     Layout = null;
 }
+<div style="width:100%; min-width:100%">
+    <h3 style="text-align:center"> Todays Orders</h3>
+</div>
 
-<h1 style="text-align:center !important">Todays Orders</h1>
 <div class="row" style="width:100%">
+
     <table class="table" id="InvoiceItems">
         <thead>
             <tr>
@@ -15,7 +18,7 @@
 
         </thead>
         <tbody id="Tbody"></tbody>
-        
+
     </table>
 
 </div>
@@ -26,7 +29,7 @@
     var PaymentStatus = 0;// unpaid list
     var LoginId = 0;
     var CurrOID = 0;
-    
+
     function GetOrders(PaymentStatus) {
         var Obj = {};
         Obj.OrgId = OrgId;
@@ -37,6 +40,13 @@
             success: function (data) {
                 OrderList = JSON.parse(data);
                 console.log(OrderList);
+                if (OrderList.length == 0) {
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'No Order Yet',
+                    });
+                    return;
+                }
                 ShowOrders(OrderList);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -53,8 +63,8 @@
         for (var i = 0; i < list.length; i++) {
             var OID = list[i].OID;
             var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].AMT + "</td><td>";
-            html += DetailsBtn+"style='width:100%'" + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><td>";
-            html += DetailsBtn+"style='width:50%'" + "onclick='ByCash2(" + OID + ")" + BycashClose+ DetailsBtn+"style='width:50%'" + "onclick='ByOnline2(" + OID + ")" +ByOnline+"</td></tr >";
+            html += DetailsBtn + "style='width:100%'" + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><td>";
+            html += DetailsBtn + "style='width:50%'" + "onclick='ByCash2(" + OID + ")" + BycashClose + DetailsBtn + "style='width:50%'" + "onclick='ByOnline2(" + OID + ")" + ByOnline + "</td></tr >";
             $("#Tbody").append(html);
 
         }
@@ -89,7 +99,7 @@
                 $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
                 showdpt("invoice");
                 $("#waiting").hide();
-                $("#"+CurrOID).remove();
+                $("#" + CurrOID).remove();
                 CurrOID = 0;
                 //var Jobje = JSON.parse(data);
             },

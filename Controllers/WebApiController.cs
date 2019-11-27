@@ -296,6 +296,7 @@ namespace HangOut.Controllers
                     OrgId = OrgId,
                     Table_or_SheatId = TableorSheatId,
                     PaymentStatus=0// unpaid
+                    
                 };
                 NewOID= ObjOrders.Save();
             }
@@ -307,15 +308,17 @@ namespace HangOut.Controllers
                     foreach (Cart Item in ListCart)
                     {
                     HG_Items ObjItem = new HG_Items().GetOne(ItemID: Item.ItemId);
-                        HG_OrderItem OrderItem = new HG_OrderItem()
-                        {
-                            FID = ObjItem.ItemID,
-                            Price = ObjItem.Price,
-                            Count = Item.Count,
-                            Qty = ObjItem.Qty,
-                            OID = NewOID,
-                            Status = Status,
-                            TickedNo= Ticketno
+                    HG_OrderItem OrderItem = new HG_OrderItem()
+                    {
+                        FID = ObjItem.ItemID,
+                        Price = ObjItem.Price,
+                        Count = Item.Count,
+                        Qty = ObjItem.Qty,
+                        OID = NewOID,
+                        Status = Status,
+                        TickedNo = Ticketno,
+                        OrgId = OrgId,
+                        ChefSeenBy = 0,
                         };
                         if (OrderItem.Save() <= 0)
                         {
@@ -412,25 +415,35 @@ namespace HangOut.Controllers
 
 
         //Start Chef End Work
-        public JArray ChefOrders(int OrgId,String Status)
+        public JArray ChefOrders(int OrgId,int ChefId,int Status)
         {
             JArray tableorSheatList = new JArray();
             try
             {
-            List<HG_Orders> Orderlist = new HG_Orders().GetAll(OrgId: OrgId);
+                List<HG_Orders> Orderlist = new List<HG_Orders>();
 
-               if(Status.Equals("1"))
+                List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAllByOrg(OrgId,ChefId);
+                if (Status == 0)
                 {
-                    Orderlist = Orderlist.FindAll(x => x.Status == Status);
-                    Orderlist = Orderlist.OrderBy(x => x.Create_Date).ToList();
-                    var  order  = Orderlist.First();
-                    Orderlist = Orderlist.FindAll(x => x.OID == order.OID);
+                    OrderItemList = OrderItemList.FindAll(x => x.Status != 3 && x.Status != 4);
+                    OrderItemList = OrderItemList.OrderBy(x => x.TickedNo).ToList();
+                    var ObjItem = OrderItemList.First();
+                    OrderItemList = OrderItemList.FindAll(x => x.TickedNo == ObjItem.TickedNo);
+                    HG_Orders order = new HG_Orders().GetOne(ObjItem.OID);
+                    Orderlist.Add(order);
                 }
                 else
                 {
-                    Orderlist = Orderlist.FindAll(x => x.Status == Status);
+                    OrderItemList = OrderItemList.FindAll(x => x.Status==Status &&x.ChefSeenBy==ChefId);
+                    HashSet<Int64> HashOID = new HashSet<Int64>(OrderItemList.Select(x => x.OID).ToArray());
+                    Orderlist = new HG_Orders().GetAll(OrgId);
+                    Orderlist = Orderlist.FindAll(x => HashOID.Contains(x.OID));
                 }
-             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+                
+               
+                // OrderItemList = OrderItemList.OrderBy(x => x.OrderDate).ToList();
+                //  var GroupBy
+                HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             int OrgType =int.Parse(ObjOrg.OrgTypes);
             List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
             List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
@@ -448,8 +461,7 @@ namespace HangOut.Controllers
                       string  name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " "+ "Ticket no." +order.OID;
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
-                    List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
-                    hG_OrderItems = hG_OrderItems.FindAll(x => x.Status != 3);//COMPLETED
+                    var hG_OrderItems = OrderItemList.FindAll(x => x.OID == order.OID);
                     JArray ItemsArray = new JArray();
                     int ItemIndex = 0;
                     foreach (var OrderItem in hG_OrderItems)
@@ -465,10 +477,22 @@ namespace HangOut.Controllers
                         ItemsArray.Add(itemobj);
                     }
                     TableScreen.Add("OID", order.OID);
-                    
                     TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
                     tableorSheatList.Add(TableScreen);
+                    if (tableorSheatList.Count == 1&& Status==0)
+                    {
+                        OrderItemList = OrderItemList.FindAll(x => x.Status == 1);
+                        foreach (var Orderitem in OrderItemList)
+                        {
+                            Orderitem.ChefSeenBy = ChefId;
+                            Orderitem.Status = 2;// processing
+                            Orderitem.UpdatedBy = ChefId;
+                            Orderitem.UpdationDate = DateTime.Now;
+                            Orderitem.Save();
+                        }
+
+                    }
                 }
               
            
@@ -480,6 +504,7 @@ namespace HangOut.Controllers
             return tableorSheatList;
 
         }
+       
         public JObject ChangeOrderItemStatus(String OIID, int Status,int UpdateBy)
         {
             HG_OrderItem hG_OrderItem = new HG_OrderItem().GetOne(Int64.Parse(OIID));

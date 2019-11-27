@@ -18,6 +18,8 @@ namespace HangOut.Models
         public int UpdatedBy { get; set; }
         public System.DateTime UpdationDate { get; set; }
         public int TickedNo { get; set; }
+        public int ChefSeenBy { get; set; }
+        public int OrgId { get; set; }
         public HG_OrderItem()
         {
             this.Qty = "0.00";
@@ -25,6 +27,7 @@ namespace HangOut.Models
             this.UpdatedBy = 0;
             this.UpdationDate = System.DateTime.Now;
             this.TickedNo = 0;
+            this.ChefSeenBy = 0;
         }
 
         public Int64 Save()
@@ -35,10 +38,10 @@ namespace HangOut.Models
             try
             {
                 if (this.OIID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate,TickedNo) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate,@TickedNo);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate,TickedNo,ChefSeenBy,OrgId) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate,@TickedNo,@ChefSeenBy,@OrgId);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate,TickedNo=@TickedNo where OIID=@OIID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate,TickedNo=@TickedNo,ChefSeenBy=@ChefSeenBy,OrgId=@OrgId where OIID=@OIID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OIID", this.OIID);
                 }
                 cmd.Parameters.AddWithValue("@FID", this.FID);
@@ -52,6 +55,8 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@UpdatedBy", this.UpdatedBy);
                 cmd.Parameters.AddWithValue("@UpdationDate", this.UpdationDate);
                 cmd.Parameters.AddWithValue("@TickedNo", this.TickedNo);
+                cmd.Parameters.AddWithValue("@ChefSeenBy", this.ChefSeenBy);
+                cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 if (this.OIID == 0)
                 {
                     this.OIID = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -95,6 +100,51 @@ namespace HangOut.Models
                     ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
                     ObjTmp.UpdationDate = SDR.IsDBNull(10) ? DateTime.Now : SDR.GetDateTime(10);
                     ObjTmp.TickedNo = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
+                    ObjTmp.ChefSeenBy = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
+                    ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
+
+                    ListTmp.Add(ObjTmp);
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
+            return (ListTmp);
+        }
+        public List<HG_OrderItem> GetAllByOrg(int OrgId,int ChefId=0,int ItemStatus=0)
+        {
+            System.Data.SqlClient.SqlCommand cmd = null;
+            System.Data.SqlClient.SqlDataReader SDR = null;
+            System.Collections.Generic.List<HG_OrderItem> ListTmp = new System.Collections.Generic.List<HG_OrderItem>();
+            DBCon Obj = new DBCon();
+            try
+            {
+                string Query = "SELECT * FROM HG_ORDERITEM WHERE OrgId=" + OrgId.ToString()+"";
+                if (ChefId > 0)
+                {
+                     Query+= " and (ChefSeenBy="+ChefId.ToString()+ " or ChefSeenBy=0)";
+                }
+                if (ItemStatus > 0)
+                {
+                    Query += " and Status=" + ItemStatus.ToString();
+                }
+                cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    HG_OrderItem ObjTmp = new HG_OrderItem();
+                    ObjTmp.OIID = SDR.GetInt64(0);
+                    ObjTmp.FID = SDR.GetInt64(1);
+                    ObjTmp.Price = SDR.GetDouble(2);
+                    ObjTmp.Count = SDR.GetInt32(3);
+                    ObjTmp.Qty = SDR.GetString(4);
+                    ObjTmp.OID = SDR.GetInt64(5);
+                    ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(7);
+                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? DateTime.Now : SDR.GetDateTime(8);
+                    ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
+                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? DateTime.Now : SDR.GetDateTime(10);
+                    ObjTmp.TickedNo = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
+                    ObjTmp.ChefSeenBy = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
+                    ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -127,7 +177,9 @@ namespace HangOut.Models
                     ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
                     ObjTmp.UpdationDate = SDR.IsDBNull(10) ? System.DateTime.Now : SDR.GetDateTime(10);
                     ObjTmp.TickedNo = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
-                  
+                    ObjTmp.ChefSeenBy = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
+                    ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
+
                 }
             }
             catch (System.Exception e) { e.ToString(); }
