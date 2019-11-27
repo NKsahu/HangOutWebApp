@@ -251,29 +251,41 @@
 </style>
 <div class="row">
     <div class="col-md-12 col-sm-12">
-       @Html.Label("Select Floor First",new {style="text-align:center" })
-        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(1), "Floor_or_ScreenID", "Name","0"),"Select ", new { @class = "form-control", })
+        @{
+            List<SelectListItem> list = new List<SelectListItem>();
+            SelectListItem sl1 = new SelectListItem { Text = "SEAT VIEW", Value = "1" };
+            SelectListItem sl2 = new SelectListItem { Text = "ORDER VIEW", Value = "2" };
+            list.Add(sl1);
+            list.Add(sl2);
+        }
+        @Html.DropDownList("DashBoard", list, new { @class = "form-control", })
     </div>
 </div>
-<div class="row">
-    <div class="col-xs-12 col-md-12 tab">
-        <button class=" tablink" onclick="openPage('Home', this, '#777')" id="defaultOpen">Orders</button>
-        <button class=" tablink" onclick="openPage('News', this, '#777')" id="Current">Current</button>
+<div class="row"  id="SeatView">
+    <div class="col-md-12 col-sm-12">
+        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(1), "Floor_or_ScreenID", "Name", "0"), "Select floor", new { @class = "form-control", })
     </div>
-</div>
-<div class="row tabcontent2" id="Home">
-    <div class="search-wrapper">
-        <form>
-            <input type="text" id="TableSearch" onchange="SearchItem('TableSearch','TabAndTakeW')" onkeyup="SearchItem('TableSearch','TabAndTakeW')" name="focus" required class="search-box" placeholder="Search Order Tables..." />
-            <button id="TableClr" class="close-icon" type="reset"></button>
-        </form></div>
+    <div class="row" style="width:100%">
+        <div class="col-xs-12 col-md-12 tab">
+            <button class=" tablink" onclick="openPage('Home', this, '#777')" id="defaultOpen">Orders</button>
+            <button class=" tablink" onclick="openPage('News', this, '#777')" id="Current">Current</button>
+        </div>
+    </div>
+
+    <div class="row tabcontent2" id="Home">
+        <div class="search-wrapper">
+            <form>
+                <input type="text" id="TableSearch" onchange="SearchItem('TableSearch','TabAndTakeW')" onkeyup="SearchItem('TableSearch','TabAndTakeW')" name="focus" required class="search-box" placeholder="Search Order Tables..." />
+                <button id="TableClr" class="close-icon" type="reset"></button>
+            </form>
+        </div>
         <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
             <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)"><span class="Pspan" id="All">All</span></p>
             <p class="card" onclick="FilterOrder(3);SelectedColor('card',this)"><span class="Pspan" id="TakeAway">Take Away</span></p>
             <p class="card" onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
             <p class="card" onclick="FreeOrOccupied('1');SelectedColor('card',this)"><span class="Pspan" id="Free">Free </span></p>
             <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
-            <p class="card" onclick="FilterOrder(4);SelectedColor('card',this)"><span class="Pspan"  id="Unpaid">Unpaid</span></p>
+            <p class="card" onclick="FilterOrder(4);SelectedColor('card',this)"><span class="Pspan" id="Unpaid">Unpaid</span></p>
 
         </div>
         <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
@@ -351,7 +363,7 @@
                         <!---->
                         <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
                             <!---->
-                            <div id="SubMitbtn"  class="btn-group" role="group" style="width:50% ;padding:20px ;">
+                            <div id="SubMitbtn" class="btn-group" role="group" style="width:50% ;padding:20px ;">
                                 <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
                                     SUBMIT
                                 </button>
@@ -442,7 +454,7 @@
         </div>
         <div class="col-md-6"></div>
         <div class="col-md-12">
-            <div id="PrintInvoice"  onclick="GenInvoice()" class="btn-group" role="group" style="display:none">
+            <div id="PrintInvoice" onclick="GenInvoice()" class="btn-group" role="group" style="display:none">
                 <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                     SUBMIT
                 </button>
@@ -451,7 +463,14 @@
 
 
     </div>
-    <script>
+</div>
+
+<div class="row" id="OrderView" >
+
+
+</div>
+
+ <script>
         var TablesList = null;
         var ItemList = null;
         var CurrentOrder = 0;// which means table or  takeaway id
@@ -1004,5 +1023,30 @@
                     $("#waiting").hide();
                 }
             });
-        }
+     }
+
+     $("#DashBoard").change(function () {
+         var value = $("#DashBoard").val();
+         if (value == '1') {
+             $("#OrderView").hide();
+             $("#SeatView").show();
+
+         } else {
+             $("#OrderView").show();
+             $("#SeatView").hide();
+
+             $.ajax({
+                 type: 'GET',
+                 url: "/HG_Orders/DashBoardOrders",
+                 success: function (data) {
+                     $("#OrderView").html(data);
+                     GetOrders(0);
+                 },
+                 error: function (jqXhr, textStatus, errorMessage) { // error callback
+                     $("#waiting").hide();
+                 }
+             });
+
+         }
+     });
     </script>

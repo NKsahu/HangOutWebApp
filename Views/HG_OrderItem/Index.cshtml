@@ -3,24 +3,56 @@
 @using HangOut.Models
 @{ string OID = Request.QueryString["OID"];
     Int64 OrderId = Int64.Parse(OID);
-   
-
     }
 
-@{List<HG_Items> listItem = new HG_Items().GetAll(); }
+@{
+    HG_Orders order = new HG_Orders().GetOne(OrderId);
+    List<HG_Items> listItem = new HG_Items().GetAll();
+    }
+<style>
+    .showDetails {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .showDetails td, .showDetails th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+    .showDetails tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .showDetails tr:hover {
+        background-color: #ddd;
+    }
+
+    .showDetails th {
+        padding-top: 8px;
+        padding-bottom: 5px;
+        background-color: #4CAF50;
+        color: white;
+    }
+</style>
 <div class="card">
+    <div style="padding:20px">
+        <h5>Order Date: @order.Create_Date.ToString("ddd-MMM-dd")</h5>
+        <h5>Order No:  @order.OID</h5>
+    </div>
     <div class="card-header">
-        <h1 class="text-center" style="color:#000000"><b>List OF Item</b></h1>
+        <h3>Details :</h3>
     </div>
     <div class="card-body">
-        <table class="table">
+        <table class="table showDetails">
             <thead>
                 <tr>
                     <th>
                         S.N
                     </th>
                     <th>
-                        @Html.DisplayName("Items")
+                        @Html.DisplayName("Item")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Qty)
@@ -31,9 +63,6 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
-
-
-                    
                 </tr>
             </thead>
             <tbody>
@@ -42,27 +71,48 @@
                 }
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        @{ sno++; }
-                        @sno
-                    </td>
-                    <td>
-                        @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
-                        @ObjOrder.Items
-                    </td>
-
-                    <td>
-                        @item.Qty
-                    </td>
-                    <td>
-                        @item.Price
-                    </td>
-                    <td>
-                        @item.Status
-                    </td>
-
-                </tr>
+                    <!-- //"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"-->
+                    string status = "";
+                    string backTrColr = "";
+                    if (item.Status == 1)
+                    {
+                        status = "Placed";
+                        backTrColr = "background-color:whilte";
+                    }
+                    else if (item.Status == 2)
+                    {
+                        status = "Processing";
+                        backTrColr = "background-color:yellow";
+                    }
+                    else if (item.Status == 3)
+                    {
+                        status = "Completed";
+                        backTrColr = "background-color:green";
+                    }
+                    else
+                    {
+                        backTrColr = "background-color:red";
+                        status = "Cancel";
+                    }
+                    <tr style="@(backTrColr)">
+                        <td>
+                            @{ sno++; }
+                            @sno
+                        </td>
+                        <td>
+                            @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
+                            @ObjOrder.Items
+                        </td>
+                        <td>
+                            @item.Count
+                        </td>
+                        <td>
+                            @item.Price
+                        </td>
+                        <td>
+                            @status
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

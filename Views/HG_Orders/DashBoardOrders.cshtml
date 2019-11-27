@@ -1,37 +1,9 @@
 ﻿@{
     Layout = null;
 }
-<style>
-    #InvoiceItems {
-        border-collapse: collapse;
-        width: 100%;
-    }
 
-        #InvoiceItems td, #InvoiceItems th {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align:center;
-        }
-
-        #InvoiceItems tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        #InvoiceItems tr:hover {
-            background-color: #ddd;
-        }
-
-        #InvoiceItems th {
-            padding-top: 8px;
-            padding-bottom: 5px;
-            background-color: #4CAF50;
-            color: white;
-        }
-</style>
-<h1 style="text-align:center">Todays Orders</h1>
-<div class="row">
-
-
+<h1 style="text-align:center !important">Todays Orders</h1>
+<div class="row" style="width:100%">
     <table class="table" id="InvoiceItems">
         <thead>
             <tr>
@@ -43,19 +15,8 @@
 
         </thead>
         <tbody id="Tbody"></tbody>
-        <tfoot>
-            <tr>
-                <th></th>
-                <th id="TotalAmt"></th>
-                <th></th>
-                <th> </th>
-
-            </tr>
-
-        </tfoot>
+        
     </table>
-
-
 
 </div>
 
@@ -65,7 +26,7 @@
     var PaymentStatus = 0;// unpaid list
     var LoginId = 0;
     var CurrOID = 0;
-    GetOrders(PaymentStatus);
+    
     function GetOrders(PaymentStatus) {
         var Obj = {};
         Obj.OrgId = OrgId;
@@ -85,28 +46,40 @@
     }
     function ShowOrders(list) {
         $("#Tbody").html('');
-        var DetailsBtn = "<button type='button' class='form-control btn-sm btn-success sp-f2-hotkey' ";
+        var DetailsBtn = "<button type='button' class=' btn-sm btn-success sp-f2-hotkey' ";
         var DeatilsClose = "'>DETAILS</button>";
-        var BycashClose = "'>BY CASH</button>";
         var BycashClose = "'>BY CASH</button>";
         var ByOnline = "'>BY ONLINE</button>";
         for (var i = 0; i < list.length; i++) {
             var OID = list[i].OID;
             var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].AMT + "</td><td>";
-            html += DetailsBtn + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><td>";
-            html += DetailsBtn + "onclick='Details(" + OID + ")"+"</td></tr >";
+            html += DetailsBtn+"style='width:100%'" + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><td>";
+            html += DetailsBtn+"style='width:50%'" + "onclick='ByCash2(" + OID + ")" + BycashClose+ DetailsBtn+"style='width:50%'" + "onclick='ByOnline2(" + OID + ")" +ByOnline+"</td></tr >";
             $("#Tbody").append(html);
 
         }
 
     }
     function Details(OID) {
-
-
-
+        //HG_OrderItem
+        //OID
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/HG_OrderItem/index?OID=" + OID,
+            success: function (data) {
+                makedpt("CurrOrder");
+                $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CurrOrder");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
 
     }
-    function GenInvoice() {
+    function GenInvoice2() {
         $("#waiting").show();
         $.ajax({
             type: 'POST',
@@ -125,7 +98,7 @@
             }
         });
     }
-    function ByCash(OID) {
+    function ByCash2(OID) {
         CurrOID = OID;
         $.confirm({
             title: 'BY CASH',
@@ -133,7 +106,7 @@
             buttons: {
                 btnClass: 'btn-green',
                 confirm: function () {
-                    CompleteOrder(1)// bycash
+                    CompleteOrder2(1)// bycash
                 },
                 cancel: function () {
                     // $.alert('Canceled!');
@@ -142,7 +115,7 @@
         });
 
     }
-    function ByOnline(OID) {
+    function ByOnline2(OID) {
         CurrOID = OID;
         $.confirm({
             title: 'BY ONLINE',
@@ -150,7 +123,7 @@
             buttons: {
                 btnClass: 'btn-green',
                 confirm: function () {
-                    CompleteOrder(2)// by online
+                    CompleteOrder2(2)// by online
                 },
                 cancel: function () {
                     // $.alert('Canceled!');
@@ -159,7 +132,7 @@
         });
 
     }
-    function CompleteOrder(PaymentType) {
+    function CompleteOrder2(PaymentType) {
         $.ajax({
             type: 'POST',
             url: "/WebApi/CompleteOrder?OID=" + CurrOID + "&PaymentType=" + PaymentType + "&UpdatedBy=" + LoginId,
@@ -172,7 +145,7 @@
                     });
                 }
                 else {
-                    GenInvoice();
+                    GenInvoice2();
                 }
 
             },
