@@ -358,12 +358,12 @@ namespace HangOut.Controllers
 
             return jObject;
         }
-        public JObject CompleteOrder(int TabOrShOrTwayId,int OID,int PaymentType,int UpdatedBy)
+        public JObject CompleteOrder(int OID,int PaymentType,int UpdatedBy)
         {
             JObject jObject = new JObject();
             HG_Orders order = new HG_Orders().GetOne(OID);
             List<HG_OrderItem> listOrderitem = new HG_OrderItem().GetAll(order.OID);
-            HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat().GetOne(TabOrShOrTwayId);
+            HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
             if (order.OID > 0 && obj.Table_or_RowID>0)
             {
                 order.Status = "3";//3 completed

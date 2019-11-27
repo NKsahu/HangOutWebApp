@@ -7,9 +7,10 @@
         width: 100%;
     }
 
-        #InvoiceItems td, #customers th {
+        #InvoiceItems td, #InvoiceItems th {
             border: 1px solid #ddd;
             padding: 8px;
+            text-align:center;
         }
 
         #InvoiceItems tr:nth-child(even) {
@@ -23,13 +24,13 @@
         #InvoiceItems th {
             padding-top: 8px;
             padding-bottom: 5px;
-            text-align: left;
             background-color: #4CAF50;
             color: white;
         }
 </style>
+<h1 style="text-align:center">Todays Orders</h1>
 <div class="row">
-    <h1 style="text-align:center">Todays Orders</h1>
+
 
     <table class="table" id="InvoiceItems">
         <thead>
@@ -62,6 +63,8 @@
     var OrderList = [];
     var OrgId = 0;
     var PaymentStatus = 0;// unpaid list
+    var LoginId = 0;
+    var CurrOID = 0;
     GetOrders(PaymentStatus);
     function GetOrders(PaymentStatus) {
         var Obj = {};
@@ -69,7 +72,7 @@
         Obj.PayStatus = PaymentStatus;
         $.ajax({
             type: 'POST',
-            url: "/WebApi/ShowOrderByStatus?Obj="+JSON.stringify(Obj),
+            url: "/WebApi/ShowOrderByStatus?Obj=" + JSON.stringify(Obj),
             success: function (data) {
                 OrderList = JSON.parse(data);
                 console.log(OrderList);
@@ -82,16 +85,101 @@
     }
     function ShowOrders(list) {
         $("#Tbody").html('');
+        var DetailsBtn = "<button type='button' class='form-control btn-sm btn-success sp-f2-hotkey' ";
+        var DeatilsClose = "'>DETAILS</button>";
+        var BycashClose = "'>BY CASH</button>";
+        var BycashClose = "'>BY CASH</button>";
+        var ByOnline = "'>BY ONLINE</button>";
         for (var i = 0; i < list.length; i++) {
             var OID = list[i].OID;
-            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].AMT + "</td><td></td><td></td></tr>";
-
+            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].AMT + "</td><td>";
+            html += DetailsBtn + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><td>";
+            html += DetailsBtn + "onclick='Details(" + OID + ")"+"</td></tr >";
             $("#Tbody").append(html);
 
         }
 
     }
+    function Details(OID) {
 
 
+
+
+    }
+    function GenInvoice() {
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/HG_Orders/PrintInvoice?OID=" + CurrOID,
+            success: function (data) {
+                makedpt("invoice");
+                $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("invoice");
+                $("#waiting").hide();
+                $("#"+CurrOID).remove();
+                CurrOID = 0;
+                //var Jobje = JSON.parse(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    function ByCash(OID) {
+        CurrOID = OID;
+        $.confirm({
+            title: 'BY CASH',
+            content: 'Mark Order Completed',
+            buttons: {
+                btnClass: 'btn-green',
+                confirm: function () {
+                    CompleteOrder(1)// bycash
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+
+    }
+    function ByOnline(OID) {
+        CurrOID = OID;
+        $.confirm({
+            title: 'BY ONLINE',
+            content: 'Mark Order Completed',
+            buttons: {
+                btnClass: 'btn-green',
+                confirm: function () {
+                    CompleteOrder(2)// by online
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+
+    }
+    function CompleteOrder(PaymentType) {
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/CompleteOrder?OID=" + CurrOID + "&PaymentType=" + PaymentType + "&UpdatedBy=" + LoginId,
+            success: function (data) {
+                var Jobj = JSON.parse(data);
+                if (Jobj.Status == 400) {
+                    $.alert({
+                        title: 'Alert!',
+                        content: Jobj.MSG,
+                    });
+                }
+                else {
+                    GenInvoice();
+                }
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
 
 </script>
