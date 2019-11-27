@@ -1,0 +1,80 @@
+﻿@{
+    Layout = null;
+}
+<style>
+    #InvoiceItems {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        #InvoiceItems td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #InvoiceItems tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #InvoiceItems tr:hover {
+            background-color: #ddd;
+        }
+
+        #InvoiceItems th {
+            padding-top: 8px;
+            padding-bottom: 5px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+</style>
+<div class="row">
+    <h1 style="text-align:center">Todays Orders</h1>
+
+    <table class="table" id="InvoiceItems">
+        <thead>
+            <tr>
+                <th>ORD NO.</th>
+                <th>AMT</th>
+                <th>DETAILS</th>
+                <th>PAYMENT MODES</th>
+            </tr>
+
+        </thead>
+        <tbody id="Tbody"></tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th id="TotalAmt"></th>
+                <th></th>
+                <th> </th>
+
+            </tr>
+
+        </tfoot>
+    </table>
+
+
+
+</div>
+
+<script>
+    var OrderList = [];
+    function GetOrders(PaymentStatus) {
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/TableAndTakeAway?Type=1&OrderById=0",
+            success: function (data) {
+                TablesList = JSON.parse(data);
+                ShowOrders(TablesList);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    
+
+
+
+</script>

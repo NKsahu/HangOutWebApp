@@ -34,5 +34,9 @@ namespace HangOut.Controllers
 
             return View();
         }
+        public ActionResult DashBoardOrders()
+        {
+            return View();
+        }
     }
 }

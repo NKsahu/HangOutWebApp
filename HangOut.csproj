@@ -366,6 +366,7 @@
     <Content Include="Views\Shared\MakeOrder.cshtml" />
     <Content Include="Views\HG_Orders\PrintInvoice.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\privacyPolicy.cshtml" />
+    <Content Include="Views\HG_Orders\DashBoardOrders.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
