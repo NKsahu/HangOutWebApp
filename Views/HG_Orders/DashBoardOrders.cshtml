@@ -60,12 +60,17 @@
 
 <script>
     var OrderList = [];
+    var OrgId = 0;
+    var PaymentStatus = 0;// unpaid list
     function GetOrders(PaymentStatus) {
+        var Obj = {};
+        Obj.OrgId = OrgId;
+        Obj.PayStatus = PaymentStatus;
         $.ajax({
             type: 'POST',
-            url: "/WebApi/TableAndTakeAway?Type=1&OrderById=0",
+            url: "/WebApi/ShowOrderByStatus?Obj="+JSON.stringify(Obj),
             success: function (data) {
-                TablesList = JSON.parse(data);
+                OrderList = JSON.parse(data);
                 ShowOrders(TablesList);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback

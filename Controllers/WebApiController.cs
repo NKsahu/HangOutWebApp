@@ -396,7 +396,7 @@ namespace HangOut.Controllers
             JObject Params = JObject.Parse(Obj);
             int OrgId = int.Parse(Params["OrgId"].ToString());
             int PaymentStatus = int.Parse(Params["PayStatus"].ToString());
-            List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now.AddDays(-1), DateTime.Now);
             Orders = Orders.FindAll(x => x.OrgId == OrgId && x.PaymentStatus == PaymentStatus);
             JArray jArray = new JArray();
             foreach(var order in Orders)
