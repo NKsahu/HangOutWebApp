@@ -402,7 +402,7 @@ namespace HangOut.Controllers
             foreach(var order in Orders)
             {
                 JObject jObject = new JObject();
-                jObject = JObject.FromObject(jObject);
+                jObject = JObject.FromObject(order);
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
                 jObject.Add("AMT", hG_OrderItems.Sum(x => x.Price));
                 jArray.Add(jObject);

@@ -62,6 +62,7 @@
     var OrderList = [];
     var OrgId = 0;
     var PaymentStatus = 0;// unpaid list
+    GetOrders(PaymentStatus);
     function GetOrders(PaymentStatus) {
         var Obj = {};
         Obj.OrgId = OrgId;
@@ -71,14 +72,25 @@
             url: "/WebApi/ShowOrderByStatus?Obj="+JSON.stringify(Obj),
             success: function (data) {
                 OrderList = JSON.parse(data);
-                ShowOrders(TablesList);
+                console.log(OrderList);
+                ShowOrders(OrderList);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
             }
         });
     }
-    
+    function ShowOrders(list) {
+        $("#Tbody").html('');
+        for (var i = 0; i < list.length; i++) {
+            var OID = list[i].OID;
+            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].AMT + "</td><td></td><td></td></tr>";
+
+            $("#Tbody").append(html);
+
+        }
+
+    }
 
 
 
