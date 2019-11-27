@@ -294,7 +294,8 @@ namespace HangOut.Controllers
                     Update_By = CID,
                     Status = "1",// order placed
                     OrgId = OrgId,
-                    Table_or_SheatId = TableorSheatId
+                    Table_or_SheatId = TableorSheatId,
+                    PaymentStatus=0// unpaid
                 };
                 NewOID= ObjOrders.Save();
             }
@@ -367,6 +368,7 @@ namespace HangOut.Controllers
             {
                 order.Status = "3";//3 completed
                 order.Update_By = UpdatedBy;
+                order.PaymentStatus = PaymentType;// update payment status
                 obj.Status = 1;// free table
                 obj.Otp = OTPGeneretion.Generate();
                 order.Save();
