@@ -192,12 +192,67 @@
         width: 1%;
     }
     /* Style the tab content (and add height:100% for full page content) */
+    .search-box, .close-icon, .search-wrapper {
+        position: relative;
+        padding: 5px;
+    }
 
+    .search-wrapper {
+        width: 100%;
+        margin: auto;
+        
+    }
+    .search-box {
+        width: 80%;
+        border: 1px solid #ccc;
+        outline: 0;
+        border-radius: 15px;
+    }
+
+        .search-box:focus {
+            box-shadow: 0 0 15px 5px #b0e0ee;
+            border: 2px solid #bebede;
+        }
+
+    .close-icon {
+        border: 1px solid transparent;
+        background-color: transparent;
+        display: inline-block;
+        vertical-align: middle;
+        outline: 0;
+        cursor: pointer;
+    }
+
+        .close-icon:after {
+            content: "X";
+            display: block;
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            background-color: #FA9595;
+            z-index: 1;
+            right: 35px;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            padding: 2px;
+            border-radius: 50%;
+            text-align: center;
+            color: white;
+            font-weight: normal;
+            font-size: 12px;
+            box-shadow: 0 0 2px #E50F0F;
+            cursor: pointer;
+        }
+
+    .search-box:not(:valid) ~ .close-icon {
+        display: none;
+    }
 </style>
 <div class="row">
-    <div class="col-md-6">
-        @Html.Label("Select Floor")
-        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(1), "Floor_or_ScreenID", "Name", ""), "Select Floor", new { @class = "form-control", })
+    <div class="col-md-12 col-sm-12">
+       @Html.Label("Select Floor First",new {style="text-align:center" })
+        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(1), "Floor_or_ScreenID", "Name","0"),"Select ", new { @class = "form-control", })
     </div>
 </div>
 <div class="row">
@@ -207,672 +262,731 @@
     </div>
 </div>
 <div class="row tabcontent2" id="Home">
-    <input id="TableSearch" class="form-control" onkeyup="SearchItem('TableSearch','TabAndTakeW')" style="margin:15px; border:1px solid;" name="orderSearch" placeholder="Search Order Tables...">
-    <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
-        <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)"><span class="Pspan" id="All">All</span></p>
-        <p class="card" onclick="FilterOrder(3);SelectedColor('card',this)"><span class="Pspan" id="TakeAway">Take Away</span></p>
-        <p class="card" onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
-        <p class="card" onclick="FreeOrOccupied('1');SelectedColor('card',this)"><span class="Pspan" id="Free">Free </span></p>
-        <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
-        <p class="card"><span class="Pspan" onclick="FilterOrder(4);SelectedColor('card',this)" id="Unpaid">Unpaid</span></p>
+    <div class="search-wrapper">
+        <form>
+            <input type="text" id="TableSearch" onchange="SearchItem('TableSearch','TabAndTakeW')" onkeyup="SearchItem('TableSearch','TabAndTakeW')" name="focus" required class="search-box" placeholder="Search Order Tables..." />
+            <button id="TableClr" class="close-icon" type="reset"></button>
+        </form></div>
+        <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
+            <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)"><span class="Pspan" id="All">All</span></p>
+            <p class="card" onclick="FilterOrder(3);SelectedColor('card',this)"><span class="Pspan" id="TakeAway">Take Away</span></p>
+            <p class="card" onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
+            <p class="card" onclick="FreeOrOccupied('1');SelectedColor('card',this)"><span class="Pspan" id="Free">Free </span></p>
+            <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
+            <p class="card" onclick="FilterOrder(4);SelectedColor('card',this)"><span class="Pspan"  id="Unpaid">Unpaid</span></p>
 
-    </div>
-    <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
-        <div class="row" id="OrderStatus">
+        </div>
+        <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
+            <div class="row" id="OrderStatus">
+
+            </div>
 
         </div>
 
+        <!---->
+
+
     </div>
-
-    <!---->
-
-
-</div>
-<div class="row tabcontent2" id="News">
-    <div class="col-sm-12 col-md-7">
-        <input id="ItemSearch2" onkeyup="SearchItem('ItemSearch2','ItemsClass')" class="form-control" style="margin:0px;border:1px solid;" name="orderSearch" placeholder="Search Items..." trim="" type="text">
-        <div class="row">
-            <div class=" col-xs-4 col-md-3 sp-grid-items-scroll-with-noticebar" id="CategoryId">
-
-
-
+    <div class="row tabcontent2" id="News">
+        <div class="col-sm-12 col-md-7">
+            <div class="search-wrapper">
+                <form>
+                    <input type="text" id="ItemSearch2" onchange="SearchItem('ItemSearch2','ItemsClass')" onkeyup="SearchItem('ItemSearch2','ItemsClass')" name="focus" required class="search-box" trim="" placeholder="Search Items..." />
+                    <button id="TableClr2" class="close-icon" type="reset"></button>
+                </form>
             </div>
-            <div class=" col-xs-6 col-md-9 sp-grid-items-scroll-with-noticebar">
-                <div class="row" id="ItemList">
+            <div class="row">
+                <div class=" col-xs-4 col-md-3 sp-grid-items-scroll-with-noticebar" id="CategoryId">
+
+
+
+                </div>
+                <div class=" col-xs-6 col-md-9 sp-grid-items-scroll-with-noticebar">
+                    <div class="row" id="ItemList">
+
+
+                    </div>
 
 
                 </div>
 
-
             </div>
 
+
         </div>
-
-
-    </div>
-    <div class="col-sm-12 col-md-5 sp-billed-items">
-        <div class="sp-bill">
-            <p class="sp-panel-header">
-                <span class="sp-hide-if-sm-screen" id="TorTWID">
-                    <!--Table name or take-away name-->
-                </span>
-                
-                <span class="badge badge-pill badge-secondary" style="padding:7px" id="FinalAmt">
-                    0.00
-                </span>
-                <small class="pull-right sp-bill-actions">
-                    <!----><span style="float:right">
-                        <!---->
-                        <!----><a>Clear</a>
-                        <!---->
-                        <!---->
+        <div class="col-sm-12 col-md-5 sp-billed-items">
+            <div class="sp-bill">
+                <p class="sp-panel-header">
+                    <span class="sp-hide-if-sm-screen" id="TorTWID">
+                        <!--Table name or take-away name-->
                     </span>
-                    <!---->
-                    <!---->
-                </small>
-            </p>
-            <!---->
-            <!----><div>
-                
-                <div>
-                    <div class="sp-sold-items-scroll-with-noticebar">
-                        <table class="table table-hover sp-product-list">
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th class="sp-quantity-th">Quantity</th>
-                                    <th><span class="sp-padright-10"></span>Price</th>
 
-                                    <!---->
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="AddItem"></tbody>
-                        </table>
-                    </div>
-                    <!---->
-                    <!---->
-                    <!---->
-                    <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
+                    <span class="badge badge-pill badge-secondary" style="padding:7px" id="FinalAmt">
+                        0.00
+                    </span>
+                    <small class="pull-right sp-bill-actions">
+                    </small>
+                </p>
+                <!---->
+                <!----><div>
+
+                    <div>
+                        <div class="sp-sold-items-scroll-with-noticebar">
+                            <table class="table table-hover sp-product-list">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th class="sp-quantity-th">Quantity</th>
+                                        <th><span class="sp-padright-10"></span>Price</th>
+
+                                        <!---->
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="AddItem"></tbody>
+                            </table>
+                        </div>
                         <!---->
-                        <div id="SubMitbtn" class="btn-group" role="group" style="width:100% ;padding:20px">
-                            <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
-                                SUBMIT
-                            </button>
-                        </div>
-                        <div id="InstantClear" class="btn-group" role="group" style="width:100%; padding:20px" onclick="INSTANTCLR()">
-                            <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                                INSTANT CLEAR
-                            </button>
-                        </div>
-                        <div id="Charge" class="btn-group" role="group" style="width:100%; padding:20px" onclick="Charge()">
-                            <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                                Charge
-                            </button>
+                        <!---->
+                        <!---->
+                        <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
+                            <!---->
+                            <div id="SubMitbtn"  class="btn-group" role="group" style="width:50% ;padding:20px ;">
+                                <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
+                                    SUBMIT
+                                </button>
+                            </div>
+                            <div id="InstantClear" class="btn-group" role="group" style="width:50%; padding:20px" onclick="INSTANTCLR()">
+                                <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                                    INSTANT CLEAR
+                                </button>
+                            </div>
+                            <div id="Charge" class="btn-group" role="group" style="width:100%; padding:20px" onclick="Charge()">
+                                <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                                    CHARGE
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
-<div id="PaymnetAndReceipt" class="row" style="display:none">
-    <div class="col-md-6">
-        <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
-            <!---->
-            <div id="ByCash" onclick="ByCash();" class="btn-group" role="group" style="width:50% ;padding:20px">
+    <div id="PaymnetAndReceipt" class="row" style="display:none">
+        <div class="col-md-6">
+            <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
+                <!---->
+                <div id="ByCash" onclick="ByCash();" class="btn-group" role="group" style="width:50% ;padding:20px">
+                    <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                        BY CASH
+                    </button>
+                </div>
+                <div id="ByOnline" onclick="ByOnline();" class="btn-group" role="group" style="width:50%; padding:20px">
+                    <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                        BY ONLINE
+                    </button>
+                </div>
+
+            </div>
+
+            <div id="ShowItems">
+                <style>
+                    #InvoiceItems {
+                        border-collapse: collapse;
+                        width: 100%;
+                    }
+
+                        #InvoiceItems td, #customers th {
+                            border: 1px solid #ddd;
+                            padding: 8px;
+                        }
+
+                        #InvoiceItems tr:nth-child(even) {
+                            background-color: #f2f2f2;
+                        }
+
+                        #InvoiceItems tr:hover {
+                            background-color: #ddd;
+                        }
+
+                        #InvoiceItems th {
+                            padding-top: 8px;
+                            padding-bottom: 5px;
+                            text-align: left;
+                            background-color: #4CAF50;
+                            color: white;
+                        }
+                </style>
+                <table id="InvoiceItems">
+                    <thead>
+                        <tr>
+                            <th>ITEMNAME</th>
+                            <th>QTY</th>
+                            <th>AMOUNT</th>
+                            <th>TICKET NO</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ItemsList"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td>TOTAL</td>
+                            <td id="SumOfQty"></td>
+                            <td id="SumOfItem"></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-12">
+            <div id="PrintInvoice" onclick="GenInvoice()" class="btn-group" role="group" style="width:50% ;padding:20px">
                 <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                    BY CASH
+                    SUBMIT
                 </button>
             </div>
-            <div id="ByOnline" onclick="ByOnline();" class="btn-group" role="group" style="width:50%; padding:20px">
-                <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                    BY ONLINE
-                </button>
-            </div>
-
         </div>
 
-        <div id="ShowItems">
-            <style>
-                #InvoiceItems,td {
-                    border: 1px solid black;
-                }
-            </style>
-<table id="InvoiceItems"  width="100%">
-    <thead>
-        <tr>
-            <th >ITEMNAME</th>
-            <th>QTY</th>
-            <th>AMOUNT</th>
-            <th>TICKET NO</th>
-        </tr>
-    </thead>
-    <tbody id="ItemsList">
 
-    </tbody>
-    <tfoot>
-        <tr>
-            <td>TOTAL</td>
-            <td></td>
-            <td></td>
-            <td id="SumOfItem"></td>
-        </tr>
-    </tfoot>
-
-</table>
-        </div>
     </div>
-    <div class="col-md-6"></div>
-    <div class="col-md-12">
-        <div id="PrintInvoice" onclick="GenInvoice()" class="btn-group" role="group" style="width:50% ;padding:20px">
-            <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                RECEIPT
-            </button>
-        </div>
-    </div>
-
-
-</div>
-<script>
-    var TablesList = null;
-    var ItemList = null;
-    var CurrentOrder = 0;// which means table or  takeaway id
-    var CurrOID = 0; //current Order Id;
-    var finalAmt = 0.00;
-    var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
-    var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
-    var ItemHtmlSecond = "<hr class='sp-grid-text-break'> <span><small class='text-muted'>";
-    var ItemHtmlLast = "</small> </span> </span></div></div>";
-    var first = "</td ><td><div><div>";
-    var Minushtml = "<span class='sp-quantity-adjust sp-no-user-select'";
-    var CountHtml = ">−</span ><div class='sp-item-quantity text-center'><span ";
-    var PlusHtml = "</span></div><span class='sp-quantity-adjust sp-no-user-select'";
-    var Carthtmfirst = ">+</span></div ></div ></td > <td class='sp-product-price'>";
-    Carthtmfirst += "<span class='sp-padright-10'></span>"
-    var Carthtmlsecond = "<span class='sp-price'>";
-    var cartlasthtml = "</span ></td ><td><a class='sp-bill-actions'><span class='glyphicon glyphicon-pencil'></span></a ></td></tr>";
-    document.getElementById("defaultOpen").click();
-    function plus(itemid) {
-        var CartValue = parseInt($("#C" + itemid).text());
-        AddToCart(itemid, CartValue + 1);
-        //$("#" + add).text(CartValue+1);
-    }
-    function minus(itemid) {
-        var CartValue = parseInt($("#C" + itemid).text());
-        if (CartValue > 0) {
-            AddToCart(itemid, CartValue - 1);
-        }
-
-    }
-    function AddByItemClick(itemid) {
-        if ($("#C"+itemid).length > 0) {
-            var CartValue = parseInt($("#C"+itemid).text());
+    <script>
+        var TablesList = null;
+        var ItemList = null;
+        var CurrentOrder = 0;// which means table or  takeaway id
+        var CurrOID = 0; //current Order Id;
+        var finalAmt = 0.00;
+        var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
+        var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
+        var ItemHtmlSecond = "<hr class='sp-grid-text-break'> <span><small class='text-muted'>";
+        var ItemHtmlLast = "</small> </span> </span></div></div>";
+        var first = "</td ><td><div><div>";
+        var Minushtml = "<span class='sp-quantity-adjust sp-no-user-select'";
+        var CountHtml = ">−</span ><div class='sp-item-quantity text-center'><span ";
+        var PlusHtml = "</span></div><span class='sp-quantity-adjust sp-no-user-select'";
+        var Carthtmfirst = ">+</span></div ></div ></td > <td class='sp-product-price'>";
+        Carthtmfirst += "<span class='sp-padright-10'></span>"
+        var Carthtmlsecond = "<span class='sp-price'>";
+        var cartlasthtml = "</span ></td ><td><a class='sp-bill-actions'><span class='glyphicon glyphicon-pencil'></span></a ></td></tr>";
+        document.getElementById("defaultOpen").click();
+        $("#TableClr2").click(function () {
+            $("#ItemSearch2").val('');
+            SearchItem('ItemSearch2', 'ItemsClass');
+        });
+        $("#TableClr").click(function () {
+            $("#TableSearch").val('');
+            SearchItem('TableSearch', 'TabAndTakeW');
+            console.log("AAYA");
+        });
+        function plus(itemid) {
+            var CartValue = parseInt($("#C" + itemid).text());
             AddToCart(itemid, CartValue + 1);
+            //$("#" + add).text(CartValue+1);
         }
-        else {
-            AddToCart(itemid,1);
-        }
-    }
-    function AddToCart(ItemId, Cnt) {
-        var Obj = {};
-        Obj.CID = 0;
-        Obj.OrgId = 0;
-        Obj.ItemId = ItemId;
-        Obj.Cnt = Cnt;
-        Obj.TSTWID = CurrentOrder;
-        Obj.OID = CurrOID;
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/AddCart?Obj=" + JSON.stringify(Obj),
-            success: function (data) {
-                var CurritemCnt = parseInt(data.split(",")[3]);
-                $("#FinalAmt").html(data.split(",")[1]);
-                console.log("Count item" + CurritemCnt);
-                if (CurritemCnt >= 1) {
-                    var ObjItem = ItemList.find(x => {
-                        return x.IID.toString() === ItemId
-                    });
-                    ObjItem.ItemCartValue = CurritemCnt;
-                    if (!ItemAlreadyAdded(ItemId)) {
-                        AddItemToQue(ObjItem);
-                        ResetOrder(CurrentOrder, 3);
-                    }
-                    else {
-                        $("#C" + ItemId).text(Cnt);
-                        var Price = parseFloat(ObjItem.ItemPrice);
-                        $("#P" + ItemId).text(Price * Cnt);
-
-                    }
-
-                }
-                else {
-                    ResetOrder(CurrentOrder, 1); //free
-                    $("#tr" + ItemId).remove();
-                }
-                //$("#" + itemid).text(Cnt);
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
+        function minus(itemid) {
+            var CartValue = parseInt($("#C" + itemid).text());
+            if (CartValue > 0) {
+                AddToCart(itemid, CartValue - 1);
             }
-        });
-    }
-    function AddItemToQue(ObjItem) {
-        if (ObjItem.ItemCartValue != '0') {
-            var Itemid = ObjItem.IID;
-            var ItemPrice = parseFloat(ObjItem.ItemPrice) * parseInt(ObjItem.ItemCartValue);
-            $("#AddItem").append("<tr class='ItemsTr' id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "' >" + ObjItem.ItemCartValue + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ItemPrice + "</span>" + cartlasthtml);
-        }
-
-    }
-    function ItemAlreadyAdded(Itemid) {
-        if ($('#tr' + Itemid).length) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    function SearchItem(SearchItem, hideClsName) {
-        var input = document.getElementById(SearchItem);
-        var filter = input.value.toLowerCase();
-        var nodes = document.getElementsByClassName(hideClsName);
-        for (i = 0; i < nodes.length; i++) {
-            if (nodes[i].innerText.toLowerCase().includes(filter)) {
-                nodes[i].style.display = "block";
-            } else {
-                nodes[i].style.display = "none";
-            }
-        }
-    }
-    function openPage(pageName, elmnt, color) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent2");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablink");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].style.backgroundColor = "";
-        }
-        document.getElementById(pageName).style.display = 'flex';
-        elmnt.style.backgroundColor = color;
-        $("#PaymnetAndReceipt").hide();
-    }
-    function SelectedColor(classname, event) {
-        var tablinks = document.getElementsByClassName(classname);
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].style.backgroundColor = "";
-        }
-        event.style.backgroundColor = '#e2dbdb';
-    }
-    GeTablesTakeAwya();
-    function GeTablesTakeAwya() {
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/TableAndTakeAway?Type=1&OrderById=0",
-            success: function (data) {
-                TablesList = JSON.parse(data);
-                ShowOrders(TablesList);
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-
-    }
-    function FilterOrder(Status) {
-        //all
-        if (Status == '0') {
-            ShowOrders(TablesList);
-        }
-        else if (Status == '3') {
-            console.log(TablesList);
-            var TakeAwayList = TablesList.filter(function (itm) {
-                return itm.Type == '3';
-            });
-            ShowOrders(TakeAwayList);
 
         }
-        else if (Status == '1') {
-
-            var TableListOnly = TablesList.filter(function (itm) {
-                return itm.Type == '1';
-            });
-            ShowOrders(TableListOnly);
-            console.log("Table" + TablesList);
-        }
-
-    }
-    function ShowOrders(list) {
-        $("#OrderStatus").html('');
-        var html = "<div class='col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell TabAndTakeW'>";
-        html += "<div class='sp-grid-cell-contents  ";//here table color with >
-        //html += "<span class='sp-grid-cell-text'>";
-        var Second = "<hr class='sp-grid-text-break'>";
-        Second += " <small  class='text-muted'";// with Status Name
-        var Third = "</small> </span ></div > <p class='sp-slot-split-hidden'></p></div >";
-        for (i = 0; i < list.length; i++) {
-            var Name = list[i].Table_or_SheetName;
-            var TableID = list[i].Table_or_RowID.toString();
-            var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
-            var clasName = "";
-            var ShowStatus = "";
-            if (Status == 1) {
-                clasName = "tableFree";
-                ShowStatus = "Unoccupied";
-            } else if (Status == 2) {
-                clasName = "tableBooked";
-                ShowStatus = "Bill demanded";
+        function AddByItemClick(itemid) {
+            if ($("#C" + itemid).length > 0) {
+                var CartValue = parseInt($("#C" + itemid).text());
+                AddToCart(itemid, CartValue + 1);
             }
             else {
-                clasName = "tableProgress";
-                ShowStatus = "Occupied";
+                AddToCart(itemid, 1);
             }
-            $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS" + TableID + "'>" + ShowStatus + Third);
         }
-    }
-    function FreeOrOccupied(Status) {
+        function AddToCart(ItemId, Cnt) {
+            var Obj = {};
+            Obj.CID = 0;
+            Obj.OrgId = 0;
+            Obj.ItemId = ItemId;
+            Obj.Cnt = Cnt;
+            Obj.TSTWID = CurrentOrder;
+            Obj.OID = CurrOID;
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/AddCart?Obj=" + JSON.stringify(Obj),
+                success: function (data) {
+                    var CurritemCnt = parseInt(data.split(",")[3]);
+                    $("#FinalAmt").html(data.split(",")[1]);
+                    console.log("Count item" + CurritemCnt);
+                    if (CurritemCnt >= 1) {
+                        var ObjItem = ItemList.find(x => {
+                            return x.IID.toString() === ItemId
+                        });
+                        ObjItem.ItemCartValue = CurritemCnt;
+                        if (!ItemAlreadyAdded(ItemId)) {
+                            AddItemToQue(ObjItem);
+                            ResetOrder(CurrentOrder, 3);
+                        }
+                        else {
+                            $("#C" + ItemId).text(Cnt);
+                            var Price = parseFloat(ObjItem.ItemPrice);
+                            $("#P" + ItemId).text(Price * Cnt);
 
-        if (Status == '1') {
-            var FreeList = TablesList.filter(function (x) {
-                return x.Status == 1;
-            });
-            ShowOrders(FreeList);
-            console.log("FreeList" + FreeList.length);
+                        }
 
-        }
-        else if (Status == '2') {
-            var OccupiedList = TablesList.filter(function (x) {
-                return x.Status == 2;
-            });
-            ShowOrders(OccupiedList);
-            console.log("OccupiedList" + OccupiedList.length);
-        }
-    }
-    function GetItemList(TableOrMWid) {
-        CurrentOrder = TableOrMWid;
-        GetItemListByCategory(CurrentOrder)
-    }
-    function GetItemListByCategory(TableOrMWid) {
-        $("#Current").click();
-        var ObjOrderName = TablesList.find(x => {
-            return x.Table_or_RowID == TableOrMWid;
-        });
-        $("#TorTWID").text(ObjOrderName.Table_or_SheetName);
-        //assign CurrOid of Perticuar Table Or Sheat or NewTakeAway 
-        CurrOID = ObjOrderName.CurrOID;
-        var Obj = {};
-        Obj.CID = 0;
-        Obj.OrgId = 0;
-        Obj.TSTWID = TableOrMWid;
-        Obj.OID = ObjOrderName.CurrOID;
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/GetItemList?Obj=" + JSON.stringify(Obj),
-            success: function (data) {
-                var CategoryList = JSON.parse(data);
-                console.log(CategoryList);
-                ItemList = [];
-                $("#CategoryId").html('');
-                $("#ItemList").html('');
-                $("#AddItem").html('');
-                var funSelected = "SelectedColor(\"card\",this)";
-                var TotalRs = 0.00;
-                var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + 0 + "\")'><span class='Pspan'>All</span></p>";
-                $("#CategoryId").append(CategoryHtml);
-                for (i = 0; i < CategoryList.length; i++) {
-                    CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + CategoryList[i].MenuId + "\")'><span class='Pspan'>" + CategoryList[i].Name + "</span></p>";
-                    $("#CategoryId").append(CategoryHtml);
-                    var ItemsList = CategoryList[i].MenuItems;
-                    for (j = 0; j < ItemsList.length; j++) {
-                        ItemList.push(ItemsList[j]);
-                        ShowItems(ItemsList[j]);
-                        AddItemToQue(ItemsList[j]);
                     }
-                    TotalRs += CategoryList[i].MenuItmPrice;
-                   
-
+                    else {
+                        ResetOrder(CurrentOrder, 1); //free
+                        $("#tr" + ItemId).remove();
+                    }
+                    //$("#" + itemid).text(Cnt);
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
                 }
-                $("#FinalAmt").text(TotalRs);
-
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-
-    }
-    function FilterItems(list) {
-        $("#ItemList").html('');
-        for (j = 0; j < list.length; j++) {
-            ShowItems(list[j]);
-        }
-    }
-    function ShowItems(objitem) {
-        $("#ItemList").append(ItemHtmlFirst + "onclick='AddByItemClick(\"" + objitem.IID + "\")'" + ItemHtmlFirstPrefix + objitem.ItemName + ItemHtmlSecond + "₹" + objitem.ItemPrice + ItemHtmlLast);
-    }
-    function filterItemByCat(MenuId) {
-        if (MenuId != "0") {
-            var FilteredItemList = ItemList.filter(function (x) {
-                return x.MenuId == MenuId;
             });
-            FilterItems(FilteredItemList);
-        } else {
+        }
+        function AddItemToQue(ObjItem) {
+            if (ObjItem.ItemCartValue != '0') {
+                var Itemid = ObjItem.IID;
+                var ItemPrice = parseFloat(ObjItem.ItemPrice) * parseInt(ObjItem.ItemCartValue);
+                $("#AddItem").append("<tr class='ItemsTr' id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "' >" + ObjItem.ItemCartValue + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ItemPrice + "</span>" + cartlasthtml);
+            }
 
-            FilterItems(ItemList);
         }
-    }
-    function ResetOrder(OrderId, status) {
-        $("#TC" + OrderId).removeClass();
-        $("#TS" + OrderId).text('');
-        if (status == 1) {
-            $("#TC" + OrderId).addClass('sp-grid-cell-contents tableFree');
-            $("#TS" + OrderId).text('Unoccupied');
-        }
-        else if (status == 2) {
-            $("#TC" + OrderId).addClass('sp-grid-cell-contents tableBooked');
-            $("#TS" + OrderId).text('Bill demanded');
-        } else {
-            $("#TC" + OrderId).addClass('sp-grid-cell-contents tableProgress');
-            $("#TS" + OrderId).text('Occupied');
-        }
-
-        for (var i = 0; i < TablesList.length; i++) {
-            if (TablesList[i].Table_or_RowID == OrderId) {
-                TablesList[i].Status = status;
-                return;
+        function ItemAlreadyAdded(Itemid) {
+            if ($('#tr' + Itemid).length) {
+                return true;
+            }
+            else {
+                return false;
             }
         }
-    }
-    function PostOrder(Obj) {
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/PostOrder?Obj="+JSON.stringify(Obj),
-            success: function (data) {
-                var JsonObj = JSON.parse(data);
-                if (JsonObj.Status == 400) {
-                    $.alert({
-                        title: 'Alert!',
-                        content: JsonObj.MSG,
-                    });
+        function SearchItem(SearchItem, hideClsName) {
+            var input = document.getElementById(SearchItem);
+            var filter = input.value.toLowerCase();
+            var nodes = document.getElementsByClassName(hideClsName);
+            for (i = 0; i < nodes.length; i++) {
+                if (nodes[i].innerText.toLowerCase().includes(filter)) {
+                    nodes[i].style.display = "block";
+                } else {
+                    nodes[i].style.display = "none";
+                }
+            }
+        }
+        function openPage(pageName, elmnt, color) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent2");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+            document.getElementById(pageName).style.display = 'flex';
+            elmnt.style.backgroundColor = color;
+            $("#PaymnetAndReceipt").hide();
+        }
+        function SelectedColor(classname, event) {
+            var tablinks = document.getElementsByClassName(classname);
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+            event.style.backgroundColor = '#e2dbdb';
+        }
+        GeTablesTakeAwya();
+        function GeTablesTakeAwya() {
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/TableAndTakeAway?Type=1&OrderById=0",
+                success: function (data) {
+                    TablesList = JSON.parse(data);
+                    ShowOrders(TablesList);
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+
+        }
+        function FilterOrder(Status) {
+            //all
+            if (Status == '0') {
+                ShowOrders(TablesList);
+            }
+            else if (Status == '3') {
+                console.log(TablesList);
+                var TakeAwayList = TablesList.filter(function (itm) {
+                    return itm.Type == '3';
+                });
+                ShowOrders(TakeAwayList);
+
+            }
+            else if (Status == '1') {
+
+                var TableListOnly = TablesList.filter(function (itm) {
+                    return itm.Type == '1';
+                });
+                ShowOrders(TableListOnly);
+                console.log("Table" + TablesList);
+            }
+            else {
+                var TableListOnly = TablesList.filter(function (itm) {
+                    return itm.Type == '0';
+                });
+                ShowOrders(TableListOnly);
+            }
+
+        }
+        function ShowOrders(list) {
+            $("#OrderStatus").html('');
+            var html = "<div class='col-xs-6 col-sm-4 col-md-3 col-lg-2 sp-grid-cell TabAndTakeW'>";
+            html += "<div class='sp-grid-cell-contents  ";//here table color with >
+            //html += "<span class='sp-grid-cell-text'>";
+            var Second = "<hr class='sp-grid-text-break'>";
+            Second += " <small  class='text-muted'";// with Status Name
+            var Third = "</small> </span ></div > <p class='sp-slot-split-hidden'></p></div >";
+            for (i = 0; i < list.length; i++) {
+                var Name = list[i].Table_or_SheetName;
+                var TableID = list[i].Table_or_RowID.toString();
+                var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
+                var clasName = "";
+                var ShowStatus = "";
+                if (Status == 1) {
+                    clasName = "tableFree";
+                    ShowStatus = "Unoccupied";
+                } else if (Status == 2) {
+                    clasName = "tableBooked";
+                    ShowStatus = "Bill demanded";
                 }
                 else {
-                    var JsonMsg = JsonObj.MSG.split(",");
-                    $.alert({
-                        title: 'Alert!',
-                        content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
-                    });
-                    $("tr.ItemsTr").remove();
-                    CurrOID = JsonMsg[0];
-                    for (var i = 0; i < TablesList.length; i++) {
-                        if (TablesList[i].Table_or_RowID == CurrentOrder) {
-                            TablesList[i].CurrOID == JsonMsg[0];
-                            return;
+                    clasName = "tableProgress";
+                    ShowStatus = "Occupied";
+                }
+                $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS" + TableID + "'>" + ShowStatus + Third);
+            }
+        }
+        function FreeOrOccupied(Status) {
+
+            if (Status == '1') {
+                var FreeList = TablesList.filter(function (x) {
+                    return x.Status == 1;
+                });
+                ShowOrders(FreeList);
+                console.log("FreeList" + FreeList.length);
+
+            }
+            else if (Status == '2') {
+                var OccupiedList = TablesList.filter(function (x) {
+                    return x.Status == 3;
+                });
+                ShowOrders(OccupiedList);
+                console.log("OccupiedList" + OccupiedList.length);
+            }
+        }
+        function GetItemList(TableOrMWid) {
+            CurrentOrder = TableOrMWid;
+            GetItemListByCategory(CurrentOrder)
+        }
+        function GetItemListByCategory(TableOrMWid) {
+            $("#Current").click();
+            var ObjOrderName = TablesList.find(x => {
+                return x.Table_or_RowID == TableOrMWid;
+            });
+            $("#TorTWID").text(ObjOrderName.Table_or_SheetName);
+            //assign CurrOid of Perticuar Table Or Sheat or NewTakeAway
+            CurrOID = ObjOrderName.CurrOID;
+            var Obj = {};
+            Obj.CID = 0;
+            Obj.OrgId = 0;
+            Obj.TSTWID = TableOrMWid;
+            Obj.OID = ObjOrderName.CurrOID;
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/GetItemList?Obj=" + JSON.stringify(Obj),
+                success: function (data) {
+                    var CategoryList = JSON.parse(data);
+                    console.log(CategoryList);
+                    ItemList = [];
+                    $("#CategoryId").html('');
+                    $("#ItemList").html('');
+                    $("#AddItem").html('');
+                    var funSelected = "SelectedColor(\"card\",this)";
+                    var TotalRs = 0.00;
+                    var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + 0 + "\")'><span class='Pspan'>All</span></p>";
+                    $("#CategoryId").append(CategoryHtml);
+                    for (i = 0; i < CategoryList.length; i++) {
+                        CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + CategoryList[i].MenuId + "\")'><span class='Pspan'>" + CategoryList[i].Name + "</span></p>";
+                        $("#CategoryId").append(CategoryHtml);
+                        var ItemsList = CategoryList[i].MenuItems;
+                        for (j = 0; j < ItemsList.length; j++) {
+                            ItemList.push(ItemsList[j]);
+                            ShowItems(ItemsList[j]);
+                            AddItemToQue(ItemsList[j]);
+                        }
+                        TotalRs += CategoryList[i].MenuItmPrice;
+
+
+                    }
+                    $("#FinalAmt").text(TotalRs);
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+
+        }
+        function FilterItems(list) {
+            $("#ItemList").html('');
+            for (j = 0; j < list.length; j++) {
+                ShowItems(list[j]);
+            }
+        }
+        function ShowItems(objitem) {
+            $("#ItemList").append(ItemHtmlFirst + "onclick='AddByItemClick(\"" + objitem.IID + "\")'" + ItemHtmlFirstPrefix + objitem.ItemName + ItemHtmlSecond + "₹" + objitem.ItemPrice + ItemHtmlLast);
+        }
+        function filterItemByCat(MenuId) {
+            if (MenuId != "0") {
+                var FilteredItemList = ItemList.filter(function (x) {
+                    return x.MenuId == MenuId;
+                });
+                FilterItems(FilteredItemList);
+            } else {
+
+                FilterItems(ItemList);
+            }
+        }
+        function ResetOrder(OrderId, status) {
+            $("#TC" + OrderId).removeClass();
+            $("#TS" + OrderId).text('');
+            if (status == 1) {
+                $("#TC" + OrderId).addClass('sp-grid-cell-contents tableFree');
+                $("#TS" + OrderId).text('Unoccupied');
+            }
+            else if (status == 2) {
+                $("#TC" + OrderId).addClass('sp-grid-cell-contents tableBooked');
+                $("#TS" + OrderId).text('Bill demanded');
+            } else {
+                $("#TC" + OrderId).addClass('sp-grid-cell-contents tableProgress');
+                $("#TS" + OrderId).text('Occupied');
+            }
+
+            for (var i = 0; i < TablesList.length; i++) {
+                if (TablesList[i].Table_or_RowID == OrderId) {
+                    TablesList[i].Status = status;
+                    return;
+                }
+            }
+        }
+        function PostOrder(Obj) {
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/PostOrder?Obj=" + JSON.stringify(Obj),
+                success: function (data) {
+                    var JsonObj = JSON.parse(data);
+                    if (JsonObj.Status == 400) {
+                        $.alert({
+                            title: 'Alert!',
+                            content: JsonObj.MSG,
+                        });
+                    }
+                    else {
+                        var JsonMsg = JsonObj.MSG.split(",");
+                        $.alert({
+                            title: 'Alert!',
+                            content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
+                        });
+                        $("tr.ItemsTr").remove();
+                        CurrOID = JsonMsg[0];
+                        for (var i = 0; i < TablesList.length; i++) {
+                            if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                                TablesList[i].CurrOID = JsonMsg[0];
+                                return;
+                            }
                         }
                     }
-                }
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-
-
-    }
-    function SUBMIT() {
-        $.confirm({
-            title: 'SUBMIT TO CHEF',
-            content: 'Are You Sure',
-            buttons: {
-                btnClass: 'btn-primary',
-                confirm: function () {
-                    var Obj = {};
-                    Obj.CID = 0;
-                    Obj.OrgID = 0;
-                    Obj.TORSID = CurrentOrder;
-                    Obj.OID = CurrOID;
-                    PostOrder(Obj);
                 },
-                cancel: function () {
-                   
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
                 }
-            }
-        });
-    }
-    function INSTANTCLR() {
-        $.confirm({
-            title: 'INSTANT CLEAR',
-            content: 'Are You Sure',
-            buttons: {
-                btnClass:'btn-green',
-                confirm: function () {
-                   // $.alert('Confirmed!');
-                    var Obj = {};
-                    Obj.CID = 0;
-                    Obj.OrgID = 0;
-                    Obj.TORSID = CurrentOrder;
-                    Obj.OID = CurrOID;
-                    Obj.Status = 3;
-                    PostOrder(Obj);
-                },
-                cancel: function () {
-                   // $.alert('Canceled!');
+            });
+
+
+        }
+        function SUBMIT() {
+            $.confirm({
+                title: 'SEND TO CHEF ?',
+                content: 'Are You Sure',
+                buttons: {
+                    btnClass: 'btn-primary',
+                    confirm: function () {
+                        var Obj = {};
+                        Obj.CID = 0;
+                        Obj.OrgID = 0;
+                        Obj.TORSID = CurrentOrder;
+                        Obj.OID = CurrOID;
+                        PostOrder(Obj);
+                    },
+                    cancel: function () {
+
+                    }
                 }
-            }
-        });
-    }
-    function Charge() {
-        
+            });
+        }
+        function INSTANTCLR() {
+            $.confirm({
+                title: 'ELEMINATE CHEF ?',
+                content: 'Are You Sure',
+                buttons: {
+                    btnClass: 'btn-green',
+                    confirm: function () {
+                        // $.alert('Confirmed!');
+                        var Obj = {};
+                        Obj.CID = 0;
+                        Obj.OrgID = 0;
+                        Obj.TORSID = CurrentOrder;
+                        Obj.OID = CurrOID;
+                        Obj.Status = 3;
+                        PostOrder(Obj);
+                    },
+                    cancel: function () {
+                        // $.alert('Canceled!');
+                    }
+                }
+            });
+        }
+        function Charge() {
 
 
-        //ByCash
-        //ByOnline
-        //ItemsList
-    //SumOfItem
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/ShowOrderItems?OID="+CurrOID,
-            success: function (data) {
-                var Jobje = JSON.parse(data);
-                if (Jobje.Status == 400) {
-                    $.alert({
-                        title: 'Alert!',
-                        content: Jobje.MSG,
-                    });
-                    return;
-                } else {
-                    var SumItems = 0.00;
-                    var List = Jobje.ListItems;
-                    for (var i = 0; i < List.length; i++) {
 
-                        var ObjItem = ItemList.find(x => {
-                            return x.IID == List[i].FID;
+            //ByCash
+            //ByOnline
+            //ItemsList
+            //SumOfItem
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/ShowOrderItems?OID=" + CurrOID,
+                success: function (data) {
+                    var Jobje = JSON.parse(data);
+                    if (Jobje.Status == 400) {
+                        $.alert({
+                            title: 'FINALIIZE ORDER ?',
+                            content: 'please take action on selected item first',
                         });
-                        var td1 = "<tr><td>" + ObjItem.ItemName + "</td>";
-                        td1 += "<td>" + List[i].Qty + "</td>";
-                        td1 += "<td>" + List[i].Price + "</td>";
-                        td1 += "<td>" + List[i].TickedNo + "</td></tr>";
-                        SumItems += parseFloat(List[i].Price);
-                        $("#ItemsList").append(td1);
-                    }
-                    $("#SumOfItem").text(SumItems + " RS/-");
-                    $("#News").hide();
-                    $("#PaymnetAndReceipt").show();
-                }
-
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-    }
-    function GenInvoice() {
-        $.ajax({
-            type: 'POST',
-            url: "/HG_Orders/PrintInvoice?OID="+CurrOID,
-            success: function (data) {
-                makedpt("invoice");
-                $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("invoice");
-                //var Jobje = JSON.parse(data);
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-    }
-    function ByCash() {
-        $.confirm({
-            title: 'BY CASH',
-            content: 'Mark Order Completed',
-            buttons: {
-                btnClass: 'btn-green',
-                confirm: function () {
-                    CompleteOrder(1)// bycash
-                },
-                cancel: function () {
-                    // $.alert('Canceled!');
-                }
-            }
-        });
-        
-    }
-    function ByOnline() {
-        $.confirm({
-            title: 'BY ONLINE',
-            content: 'Mark Order Completed',
-            buttons: {
-                btnClass: 'btn-green',
-                confirm: function () {
-                    CompleteOrder(2)// by online
-                },
-                cancel: function () {
-                    // $.alert('Canceled!');
-                }
-            }
-        });
-        
-    }
-    function CompleteOrder(PaymentType) {
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/CompleteOrder?TabOrShOrTwayId=" + CurrentOrder + "&OID=" + CurrOID + "&PaymentType=" + PaymentType +"&UpdatedBy=0",
-            success: function (data) {
-                ResetOrder(CurrentOrder, 1);
-                CurrentOrder = 0;
-               // CurrOID = 0;
-                for (var i = 0; i < TablesList.length; i++) {
-                    if (TablesList[i].Table_or_RowID == CurrentOrder) {
-                        TablesList[i].CurrOID == 0;
+                        //Jobje.MSG
                         return;
+                    } else {
+                        var SumItems = 0.00;
+                        var Qty = 0;
+                        $("#ItemsList").html('');
+                        var List = Jobje.ListItems;
+                        for (var i = 0; i < List.length; i++) {
+
+                            var ObjItem = ItemList.find(x => {
+                                return x.IID == List[i].FID;
+                            });
+                            var td1 = "<tr><td>" + ObjItem.ItemName + "</td>";
+                            td1 += "<td>" + List[i].Count + "</td>";
+                            td1 += "<td>" + List[i].Price + "</td>";
+                            td1 += "<td>" + List[i].TickedNo + "</td></tr>";
+                            Qty += parseInt(List[i].Count);
+                            var total = (List[i].Count * parseFloat(List[i].Price));
+                            SumItems += total;
+                            $("#ItemsList").append(td1);
+                            
+                        }
+                        $("#SumOfQty").text(Qty);
+                        $("#SumOfItem").text(SumItems + " RS/-");
+                        $("#News").hide();
+                        $("#PaymnetAndReceipt").show();
+                    }
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+        }
+        function GenInvoice() {
+            $("#waiting").show();
+            $.ajax({
+                type: 'POST',
+                url: "/HG_Orders/PrintInvoice?OID=" + CurrOID,
+                success: function (data) {
+                    makedpt("invoice");
+                    $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
+                    showdpt("invoice");
+                    $("#waiting").hide();
+                    //var Jobje = JSON.parse(data);
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+        }
+        function ByCash() {
+            $.confirm({
+                title: 'BY CASH',
+                content: 'Mark Order Completed',
+                buttons: {
+                    btnClass: 'btn-green',
+                    confirm: function () {
+                        CompleteOrder(1)// bycash
+                    },
+                    cancel: function () {
+                        // $.alert('Canceled!');
                     }
                 }
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-    }
-</script>
+            });
+
+        }
+        function ByOnline() {
+            $.confirm({
+                title: 'BY ONLINE',
+                content: 'Mark Order Completed',
+                buttons: {
+                    btnClass: 'btn-green',
+                    confirm: function () {
+                        CompleteOrder(2)// by online
+                    },
+                    cancel: function () {
+                        // $.alert('Canceled!');
+                    }
+                }
+            });
+
+        }
+        function CompleteOrder(PaymentType) {
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/CompleteOrder?TabOrShOrTwayId=" + CurrentOrder + "&OID=" + CurrOID + "&PaymentType=" + PaymentType + "&UpdatedBy=0",
+                success: function (data) {
+                    var Jobj = JSON.parse(data);
+                    if (Jobj.Status == 400) {
+                        $.alert({
+                            title: 'Alert!',
+                            content: Jobj.MSG,
+                        });
+                    }
+                    else {
+                        $.alert({
+                            title: 'Order Completed',
+                            content: 'New Otp For Order is ' + Jobj.MSG,
+                        });
+                        // CurrOID = 0;
+                        for (var i = 0; i < TablesList.length; i++) {
+                            if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                                TablesList[i].CurrOID = 0;
+                            }
+                        }
+                        CurrentOrder = 0;
+                        ResetOrder(CurrentOrder, 1);
+
+                    }
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+        }
+    </script>

@@ -295,7 +295,7 @@ namespace HangOut.Controllers
             }
                 if (NewOID > 0)
                 {
-                List<HG_Ticket> list = new HG_Ticket().GetAll();
+                List<HG_Ticket> list = new HG_Ticket().GetAll(OrgId);
                 HG_Ticket objticket = new HG_Ticket() {OrgId=OrgId,OID=OID,TicketNo=list.Count+1 };
                 int Ticketno = objticket.save();
                     foreach (Cart Item in ListCart)
@@ -373,14 +373,14 @@ namespace HangOut.Controllers
                     Oitems.Save();
                 }
                 jObject.Add("Status", 200);
-                jObject.Add("MSG", "Mark As Completed");
+                jObject.Add("MSG", obj.Otp);
             }
             else
             {
                 jObject.Add("Status", 400);
                 jObject.Add("MSG", "Order No Not Found");
             }
-            return null;
+            return jObject;
         }
 
         //Start Chef End Work
@@ -668,7 +668,7 @@ namespace HangOut.Controllers
 
             foreach(var objtable in list)
             {
-                HG_Orders order = Orderlist.Find(x => x.CID == OrderById && x.Table_or_SheatId == objtable.Table_or_RowID);
+                HG_Orders order = Orderlist.Find(x => x.CID == OrderById && x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
                 JObject jObject = new JObject();
                 jObject= JObject.FromObject(objtable);
                 jObject.Add("CurrOID", order!=null?order.OID:0);
