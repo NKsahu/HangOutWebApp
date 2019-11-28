@@ -14,5 +14,10 @@ namespace HangOut.Controllers
 
             return View();
         }
+        public ActionResult AddMenu()
+        {
+
+            return View();
+        }
     }
 }

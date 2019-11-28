@@ -195,7 +195,10 @@ namespace HangOut.Controllers
             List<HG_Category> listcategory = new HG_Category().GetAll(OrgId:OrgId);
             return  JArray.FromObject(listcategory);
         }
-
+        public JArray OrderMenuList(int Orgid)
+        {
+            return JArray.FromObject(OrderMenu.GetAll(Orgid));
+        }
         public JObject ScanRestTable(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);

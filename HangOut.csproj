@@ -370,6 +370,7 @@
     <Content Include="Views\vw_HG_UsersDetails\privacyPolicy.cshtml" />
     <Content Include="Views\HG_Orders\DashBoardOrders.cshtml" />
     <Content Include="Views\OrderMenu\Index.cshtml" />
+    <Content Include="Views\OrderMenu\AddMenu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
