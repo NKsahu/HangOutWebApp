@@ -1,7 +1,89 @@
 ﻿
-@{
-    ViewBag.Title = "AddMenu";
+@{ 
+    Layout = null;
 }
+<style>
 
-<h2>AddMenu</h2>
+    #Nav ul, #nav-list ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
 
+        #Nav ul li, #nav-list ul li {
+            border: 1px solid #ddd;
+            margin-top: -1px; /* Prevent double borders */
+            background-color: #f6f6f6;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block;
+            position: relative;
+        }
+
+            #Nav ul li:hover, #nav-list ul li:hover {
+                background-color: #eee;
+            }
+</style>
+<div class="row" style="width:100%">
+
+    <div class="card-header" style="width:100%">
+        <h2 style="text-align:center; background-color:#5de79a"><b>Order Menu</b> </h2>
+        <hr />
+    </div>
+    <div class="row" style="width:100%">
+
+        <nav id="Nav" style="width:100%">
+            <ul id="nav-list" >
+                <li class="nav-list_item nav-about">
+                    <a href="#">About</a>
+
+                    <div id="about-drop">
+                        <ul>
+                            <li>...</li>
+                            <li>...</li>
+                            <li>...</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-list_item nav-industry">
+                    <a href="#">Industry</a>
+                    <div id="industry-drop">
+                        <ul>
+                            <li>...</li>
+                            <li>...</li>
+                            <li>...</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-list_item nav-application">
+                    <a href="# ">Application</a>
+
+                    <div id="application-drop">
+                        <ul>
+                            <li>...</li>
+                            <li>...</li>
+                            <li>...</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+</div>
+
+<script>
+   
+    $('.nav-list_item').click(function () {
+            $(this).find('ul').toggle();
+            $(this).siblings('li').find('ul').hide();
+        });
+
+      GetMenuOrders 
+
+   
+
+</script>

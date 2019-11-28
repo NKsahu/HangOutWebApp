@@ -54,7 +54,6 @@
 
 
     }
-
     function ShowOrderMenus(list) {
         $("#Menus").html('');
         $("#Menus").append('<block id="AddNew">Add New</block>');
@@ -62,6 +61,24 @@
             $("#Menus").append('<block id=' + list[i].id + '>' + list[i].MenuName+'</block>');
         }
 
+    }
+    $("#AddNew").click(function () {
+        AddOrderMenu();
+    })
+    function AddOrderMenu() {
+        $.ajax({
+            type: 'GET',
+            url: "/OrderMenu/AddMenu",
+            success: function (data) {
+                makedpt("AddOrderMenu");
+                $("#AddOrderMenu > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("AddOrderMenu");
+               
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+               
+            }
+        });
     }
 </script>
 
