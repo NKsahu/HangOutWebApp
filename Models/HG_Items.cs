@@ -36,10 +36,11 @@ namespace HangOut.Models
 
 
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            SqlCommand cmd = null;
             try
             {
                 Con.Open();
-                SqlCommand cmd = null;
+                
                 string Query = "";
                 if (this.ItemID == 0)
                 {
@@ -83,7 +84,9 @@ namespace HangOut.Models
                 
             }
             catch (Exception e) { e.ToString(); }
-            finally { Con.Close(); }
+            finally { Con.Close();
+                if (cmd != null) cmd.Dispose();
+            }
             return Row;
         }
 

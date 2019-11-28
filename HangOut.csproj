@@ -282,6 +282,7 @@
     <Compile Include="Controllers\HG_OrganizationDetailsController.cs" />
     <Compile Include="Controllers\HG_Tables_or_SheatController.cs" />
     <Compile Include="Controllers\HG_UserTypesController.cs" />
+    <Compile Include="Controllers\OrderMenuController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
     <Compile Include="Controllers\vw_HG_UsersDetailsController.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Models\HG_Ticket.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\HG_OrderItem.cs" />
+    <Compile Include="Models\OrderMenu.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -379,6 +381,7 @@
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
     <Folder Include="Views\HG_Order\" />
+    <Folder Include="Views\OrderMenu\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

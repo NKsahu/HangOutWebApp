@@ -15,8 +15,8 @@
 </div>
 <div class="row" style="width:100%">
     <div class="col-xs-12 col-md-12 tab">
-        <button class=" tablink2" onclick="SelectPage('UnPaidOrder', this, 'green')" id="UnPaidOrderId">Unpaid</button>
-        <button class=" tablink2" onclick="SelectPage('ChefOrder', this, 'green')" id="ChefOrderId">Chef Order</button>
+        <button class=" tablink2" onclick="SelectPage('UnPaidOrder', this, '#4CAF50')" id="UnPaidOrderId">Unpaid</button>
+        <button class=" tablink2" onclick="SelectPage('ChefOrder', this, '#4CAF50')" id="ChefOrderId">Chef Order</button>
     </div>
 </div>
 
@@ -245,8 +245,20 @@
         var DetailsBtn = "<button type='button' class='btn-sm btn-success sp-f2-hotkey' ";
         var DeatilsClose = "'>DETAILS</button>";
         for (var i = 0; i < list.length; i++) {
+            var PaymentStatus = "UnPaid";
+            switch (list[i].PaymentStatus) {
+                case 1:
+                    PaymentStatus = "By Cash";
+                    break;
+                case 2:
+                    PaymentStatus = "By Online";
+                    break;
+                case 3:
+                    PaymentStatus = "By FoodDo";
+                    break;
+            }
             var OID = list[i].OID;
-            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].AMT + "</td><td>"+list[i].PaymentStatus+"</td>";
+            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].AMT + "</td><td>" + PaymentStatus+"</td>";
             html +="<td>" +DetailsBtn + "style='width:100%'" + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><tr>";
             $("#Tbody2").append(html);
         }
