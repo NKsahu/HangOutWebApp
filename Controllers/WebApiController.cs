@@ -400,14 +400,21 @@ namespace HangOut.Controllers
             int OrgId = int.Parse(Params["OrgId"].ToString());
             int PaymentStatus = int.Parse(Params["PayStatus"].ToString());
             List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now.AddDays(-1), DateTime.Now);
-            Orders = Orders.FindAll(x => x.OrgId == OrgId && x.PaymentStatus == PaymentStatus);
+            Orders = Orders.FindAll(x => x.OrgId == OrgId);
+            if (PaymentStatus!=-1)
+                Orders = Orders.FindAll(x=>x.PaymentStatus == PaymentStatus);
             JArray jArray = new JArray();
             foreach(var order in Orders)
             {
                 JObject jObject = new JObject();
                 jObject = JObject.FromObject(order);
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
-                jObject.Add("AMT", hG_OrderItems.Sum(x => x.Price));
+                double ToTalAmt = 0.00;
+                foreach(var item in hG_OrderItems)
+                {
+                    ToTalAmt += item.Count * item.Price;
+                }
+                jObject.Add("AMT",ToTalAmt);
                 jArray.Add(jObject);
             }
             return jArray;
