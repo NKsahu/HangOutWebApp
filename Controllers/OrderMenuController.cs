@@ -11,6 +11,7 @@ namespace HangOut.Controllers
         // GET: OrderMenu
         public ActionResult Index()
         {
+
             return View();
         }
     }
