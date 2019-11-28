@@ -1,6 +1,7 @@
 ﻿
 @{ 
     Layout = null;
+    string OMId = Request.QueryString["OMId"].ToString();
 }
 <style>
 
@@ -27,63 +28,67 @@
             }
 </style>
 <div class="row" style="width:100%">
-
+    @Html.Hidden("OMId", OMId);
     <div class="card-header" style="width:100%">
         <h2 style="text-align:center; background-color:#5de79a"><b>Order Menu</b> </h2>
         <hr />
     </div>
     <div class="row" style="width:100%">
 
-        <nav id="Nav" style="width:100%">
-            <ul id="nav-list" >
-                <li class="nav-list_item nav-about">
-                    <a href="#">About</a>
-
-                    <div id="about-drop">
-                        <ul>
-                            <li>...</li>
-                            <li>...</li>
-                            <li>...</li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-list_item nav-industry">
-                    <a href="#">Industry</a>
-                    <div id="industry-drop">
-                        <ul>
-                            <li>...</li>
-                            <li>...</li>
-                            <li>...</li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-list_item nav-application">
-                    <a href="# ">Application</a>
-
-                    <div id="application-drop">
-                        <ul>
-                            <li>...</li>
-                            <li>...</li>
-                            <li>...</li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-
+       
+                <nav id="Nav" style="width:100%">
+                    <ul id="nav-list">
+                       
+                    </ul>
+                </nav>
+            
     </div>
 
 </div>
 
 <script>
-   
-    $('.nav-list_item').click(function () {
-            $(this).find('ul').toggle();
-            $(this).siblings('li').find('ul').hide();
+    var MenuOrderCategoryList = [];
+    
+
+    $(document).ready(function () {
+        var OMId = $("#OMId").val();
+        $.ajax({
+            type: 'GET',
+            url: "/WebApi/ShowOMCategories?OMId="+OMId,
+            success: function (data) {
+                MenuOrderCategoryList = JSON.parse(data);
+                ShowCategoryList(MenuOrderCategoryList);
+                
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+
+            }
         });
 
-      GetMenuOrders 
+        $('body').on('click', '.nav-list_item', function () {
+            $(this).find('ul').toggle();
+            $(this).siblings('li').find('ul').hide();
+    });
+       // $('.nav-list_item').click(function () {
+            
+       // });
+    });  
+    function ShowCategoryList(list) {
+      //  $("#nav-list").html('');
+        for (var i = 0; i < list.length; i++) {
+            var   Cate = '<li><div><input type="checkbox" style="border: 2px dotted #00f; display: block; background: #ff0000;" /></div></li>';
+             Cate += '<li class="nav-list_item nav-' + list[i].Category + '">';
+            var ShowCategory = '<a href="#">' + list[i].Category + '</a><div><ul>';
+            var Item = list[i].ItemList;
+            var ItemHtml = "";
+            for (var j = 0; j < Item.length; j++) {
+                ItemHtml += '<li>' + Item[j].Items + '</li>';
+            }
+            var close = '</ul></div></li>';
+                $("#nav-list").append(Cate+ShowCategory+ItemHtml+close)
+        }
 
+    }
    
 
 </script>

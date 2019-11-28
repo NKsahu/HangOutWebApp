@@ -68,7 +68,7 @@
     function AddOrderMenu() {
         $.ajax({
             type: 'GET',
-            url: "/OrderMenu/AddMenu",
+            url: "/OrderMenu/AddMenu?OMId=0",
             success: function (data) {
                 makedpt("AddOrderMenu");
                 $("#AddOrderMenu > .modal-dialog > .modal-content > .modal-body").html(data);

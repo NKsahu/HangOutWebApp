@@ -199,6 +199,30 @@ namespace HangOut.Controllers
         {
             return JArray.FromObject(OrderMenu.GetAll(Orgid));
         }
+        public JArray ShowOMCategories(int OMId)
+        {
+            JArray jArray = new JArray();
+            if (OMId == 0)
+            {
+                List<HG_Category> listcategory = new HG_Category().GetAll();
+                List<HG_Items> ListItems = new HG_Items().GetAll();
+                int Order = 1;
+                foreach(var category in listcategory)
+                {
+                    List<HG_Items> Items = ListItems.FindAll(x=>x.CategoryID==category.CategoryID);
+                    if (Items.Count > 0)
+                    {
+                        JObject jObject = JObject.FromObject(category);
+                        jObject.Add("ItemList", JArray.FromObject(Items));
+                        jArray.Add(jObject);
+                    }
+                    
+                }
+
+
+            }
+            return jArray;
+        }
         public JObject ScanRestTable(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);
