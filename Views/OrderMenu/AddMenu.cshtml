@@ -3,45 +3,145 @@
     Layout = null;
     string OMId = Request.QueryString["OMId"].ToString();
 }
-<style>
 
-    #Nav ul, #nav-list ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-
-        #Nav ul li, #nav-list ul li {
-            border: 1px solid #ddd;
-            margin-top: -1px; /* Prevent double borders */
-            background-color: #f6f6f6;
-            padding: 12px;
-            text-decoration: none;
-            font-size: 18px;
-            color: black;
-            display: block;
-            position: relative;
-        }
-
-            #Nav ul li:hover, #nav-list ul li:hover {
-                background-color: #eee;
-            }
-</style>
 <div class="row" style="width:100%">
-    @Html.Hidden("OMId", OMId);
+    @Html.Hidden("OMId", OMId)
     <div class="card-header" style="width:100%">
         <h2 style="text-align:center; background-color:#5de79a"><b>Order Menu</b> </h2>
-        <hr />
-    </div>
-    <div class="row" style="width:100%">
-
        
-                <nav id="Nav" style="width:100%">
-                    <ul id="nav-list">
-                       
-                    </ul>
-                </nav>
+    </div>
+    <div id="#admin-side-menu2"  class="row" style="width:100%">
+        <ul id="myaccordion" class="list-unstyled mb-0 " style="width:100%">
+            <li class="nav-item card" style="padding:15px">
+                <div class="row" style="width:100%">
+                    <div class="col-md-4">
+                        <label></label>
+                        <input type="text" class="form-control" min="0" name="FirstName" value="Category 1">
+                    </div>
+                    <div onclick="ChangeIcon(this)" class="col-md-2">
+                        <label></label>
+                        <a style="text-align:center" class="nav-link have-sub-menu collapsed" href="#" data-target="#ID" data-toggle="collapse">
+                            <i class="fas fa-plus" style="font-size:x-large"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-2">
+                        <label></label>
+                        <a style="text-align:center;color:dodgerblue" class="nav-link">
+                            <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-2">
+                        <label></label>
+                        <a style="text-align:center;color:dodgerblue" class="nav-link">
+                            <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <label></label>
+                        <input type="checkbox" class="form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+                    </div>
+                    <div class="col-md-1">
+                        <input type="hidden" class="form-control" min="0"  value="0">
+                    </div>
+                </div>
+                <ul id="ID" class="collapse list-unstyled " data-parent="#myaccordion">
+
+                    <li class="nav-item" data-parent="#myaccordion" OrderNo="1">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label></label>
+                                <a style="text-align:center;color:darkblue" class="nav-link">
+                                    Item1
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <a onclick="RowDown(this)" style="text-align:center;color:darkblue" class="nav-link">
+                                    <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <a onclick="RowUp(this)" style="text-align:center;color:darkblue" class="nav-link">
+                                    <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <input type="checkbox" class="form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+                            </div>
+                            <div class="col-md-1">
+                                <input type="hidden" class="form-control" min="0" value="0">
+                            </div>
+
+                        </div>
+                    </li>
+                    <li class="nav-item" data-parent="#myaccordion" OrderNo="2">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label></label>
+                                <a style="text-align:center;color:darkblue" class="nav-link">
+                                    Item2
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <a onclick="RowDown(this)" style="text-align:center;color:darkblue" class="nav-link">
+                                    <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <a onclick="RowUp(this)" style="text-align:center;color:darkblue" class="nav-link">
+                                    <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <input type="checkbox" class="form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+                            </div>
+                            <div class="col-md-1">
+                                <input type="hidden" class="form-control" min="0" value="0">
+                            </div>
+
+                        </div>
+                    </li>
+                    <li class="nav-item" data-parent="#myaccordion" OrderNo="3">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label></label>
+                                <a style="text-align:center;color:darkblue" class="nav-link">
+                                    Item3
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <a onclick="RowDown(this)" style="text-align:center;color:darkblue" class="nav-link">
+                                    <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <a onclick="RowUp(this)" style="text-align:center;color:darkblue" class="nav-link">
+                                    <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-1">
+                                <label></label>
+                                <input type="checkbox" class="form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+                            </div>
+                            <div class="col-md-1">
+                                <input type="hidden" class="form-control" min="0" value="0">
+                            </div>
+
+                        </div>
+                    </li>
+
+                </ul>
+            </li>
+
             
+        </ul>
     </div>
 
 </div>
@@ -72,18 +172,19 @@
     });  
     function ShowCategoryList(list) {
       //  $("#nav-list").html('');
-        for (var i = 0; i < list.length; i++) {
-            var   Cate = '<li><div><input type="checkbox" style="border: 2px dotted #00f; display: block; background: #ff0000;" /></div></li>';
-             Cate += '<li class="nav-list_item nav-' + list[i].Category + '">';
-            var ShowCategory = '<a href="#">' + list[i].Category + '</a><div><ul>';
-            var Item = list[i].ItemList;
-            var ItemHtml = "";
-            for (var j = 0; j < Item.length; j++) {
-                ItemHtml += '<li>' + Item[j].Items + '</li>';
-            }
-            var close = '</ul></div></li>';
-                $("#nav-list").append(Cate+ShowCategory+ItemHtml+close)
-        }
+        //for (var i = 0; i < list.length; i++) {
+        //    var Cate = '<li><div class="row">';
+        //    Cate +=' <input type="number" min="0" name="FirstName" value="0"> <input type = "checkbox" style = "border: 2px dotted #00f; display: block; background: #ff0000"/></div></li > ';
+        //     Cate += '<li class="nav-list_item nav-' + list[i].Category + '">';
+        //    var ShowCategory = '<a href="#">' + list[i].Category + '</a><div><ul>';
+        //    var Item = list[i].ItemList;
+        //    var ItemHtml = "";
+        //    for (var j = 0; j < Item.length; j++) {
+        //        ItemHtml += '<li>' + Item[j].Items + '</li>';
+        //    }
+        //    var close = '</ul></div></li>';
+        //        $("#nav-list").append(Cate+ShowCategory+ItemHtml+close)
+        //}
 
     }
    

@@ -84,5 +84,39 @@
         $(this).find('ul').toggle();
         $(this).siblings('li').find('ul').hide();
     });
+    function ChangeIcon(event) {
+        console.log("aaya");
+        if ($(event).find('a').find('i').hasClass('fa-plus')) {
+            $(event).find('a').find('i').removeClass('fa-plus');
+            $(event).find('a').find('i').addClass('fa-minus');
+        }
+        else {
+            $(event).find('a').find('i').removeClass('fa-minus');
+            $(event).find('a').find('i').addClass('fa-plus');
+        }
+    }
+
+    function RowUp(event) {
+       // var li = $(this).closest('li');
+        var li = $(event).parent('div').parent('div').parent('li');
+        var prev = li.prev();
+        if (prev.length) {
+            var OrderNo = li.attr('OrderNo');
+            console.log(OrderNo);
+            li.attr('OrderNo', OrderNo - 1);
+            li.detach().insertBefore(prev);
+        }
+    }
+    function RowDown(event) {
+        var li = $(event).parent('div').parent('div').parent('li');
+       // var li = $(this).closest('li');
+        var next = li.next();
+        if (next.length) {
+            var OrderNo = li.attr('OrderNo');
+            console.log(OrderNo);
+            li.attr('OrderNo', OrderNo +1);
+            li.detach().insertAfter(next);
+        }
+    }
 </script>
 
