@@ -22,12 +22,14 @@ namespace HangOut.Models
         public DateTime EntryDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public bool Status { get; set; }
+        public bool CurrentStatus { get; set; }
        public vw_HG_UsersDetails()
         {
             Status = true;
             OrgID = 0;
            UPhoto = "";
             EMail = "";
+            CurrentStatus = true;
         }
         
         public List<vw_HG_UsersDetails> GetAll(string Type="")
@@ -142,10 +144,10 @@ namespace HangOut.Models
                 string Quary = "";
                 if (this.UserCode == 0)
                 
-                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status);SELECT SCOPE_IDENTITY(); ";
+                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus);SELECT SCOPE_IDENTITY(); ";
                      else
                  
-                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,status=@status where UserCode=@UserCode;";
+                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,status=@status,CurrentStatus=@CurrentStatus where UserCode=@UserCode;";
 
                 cmd = new SqlCommand(Quary, Con);
                 cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
@@ -160,6 +162,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
+                cmd.Parameters.AddWithValue("@CurrentStatus", this.CurrentStatus);
                
                 if (this.UserCode == 0)
                 {

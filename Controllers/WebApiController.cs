@@ -494,12 +494,11 @@ namespace HangOut.Controllers
                     HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
                     HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
                     JObject TableScreen = new JObject();
-                      string  name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " "+ "Ticket no." +order.OID;
-                    TableScreen.Add("TableScreenInfo", name);
-                    TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
+                    
                     var hG_OrderItems = OrderItemList.FindAll(x => x.OID == order.OID);
                     JArray ItemsArray = new JArray();
                     int ItemIndex = 0;
+                    int ticketno = 0;
                     foreach (var OrderItem in hG_OrderItems)
                     {
                         HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
@@ -511,7 +510,12 @@ namespace HangOut.Controllers
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
+                        ticketno = OrderItem.TickedNo;
                     }
+                    string name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " " + "Ticket no. : " + ticketno;
+                    TableScreen.Add("TableScreenInfo", name);
+                    TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
+                    TableScreen.Add("TicketNo", ticketno);
                     TableScreen.Add("OID", order.OID);
                     TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
@@ -627,7 +631,7 @@ namespace HangOut.Controllers
             vw_HG_UsersDetails user_obj = new vw_HG_UsersDetails().GetSingleByUserId(UserCode);
             if (user_obj.Password.Equals(OldPassword))
             {
-                user_obj.Password = OldPassword;
+                user_obj.Password = NewPassword;
                 int check = user_obj.save();
                 if (check > 0)
                 {
@@ -833,7 +837,7 @@ namespace HangOut.Controllers
        
 
 
-
+       
 
 
 
