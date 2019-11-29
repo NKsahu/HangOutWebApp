@@ -545,34 +545,22 @@ namespace HangOut.Controllers
 
         }
        
-        public JObject ChangeOrderItemStatus(String OIID, int Status,int UpdateBy)
+        public JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy,string OID)
         {
-            HG_OrderItem hG_OrderItem = new HG_OrderItem().GetOne(Int64.Parse(OIID));
+
+
+            List<HG_OrderItem> OrderItemList  = new HG_OrderItem().GetAll(Int64.Parse(OID));
+            OrderItemList = OrderItemList.FindAll(x => x.TickedNo == TickedNo);
+
             JObject PostResult = new JObject();
-            if (hG_OrderItem != null)
+            foreach(HG_OrderItem hg in OrderItemList)
             {
-                hG_OrderItem.Status = Status;
-                hG_OrderItem.UpdatedBy = UpdateBy;
-
-                Int64 save = hG_OrderItem.Save();
-                if (save > 0)
-                {
-                    PostResult.Add("Status", "200");
-                    PostResult.Add("Msg", "Success");
-                }
-                else
-                {
-                    PostResult.Add("Status", "400");
-                    PostResult.Add("Msg", "Fail");
-                }
-
-            }
-            else
-            {
-                PostResult.Add("Status", "400");
-                PostResult.Add("Msg", "Order Item Not Found");
-            }
-
+                OrderItemList = OrderItemList.FindAll(x => x.OID == TickedNo);
+            
+                    
+                    
+             }
+          
             return PostResult;
 
         }
@@ -791,7 +779,8 @@ namespace HangOut.Controllers
 
             return Info;
         }
-        //this method used for modify cart items not existings
+
+
        
 
 
