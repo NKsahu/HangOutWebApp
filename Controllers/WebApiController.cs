@@ -576,49 +576,7 @@ namespace HangOut.Controllers
             return PostResult;
 
         }
-        public JObject ChangeOrderStatus(String OID, String Status, int UpdateBy)
-        {
-            JObject PostResult = new JObject();
 
-            HG_Orders hG_Order = new HG_Orders().GetOne(Int64.Parse(OID));
-            List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(Int64.Parse(OID));
-            if (hG_Order != null && OrderItemList.Count > 0)
-            {
-                hG_Order.Status = Status;
-                hG_Order.Update_By = UpdateBy;
-                Int64 save = hG_Order.Save();
-
-                if (save > 0)
-                {
-
-
-                    foreach (HG_OrderItem orderItem in OrderItemList)
-                    {
-
-                        orderItem.Status = int.Parse(Status);
-                        orderItem.UpdatedBy = UpdateBy;
-                        orderItem.Save();
-                    }
-                    PostResult.Add("Status", "200");
-                    PostResult.Add("Msg", "Success");
-
-                }
-                else
-                {
-                    PostResult.Add("Status", "400");
-                    PostResult.Add("Msg", "Fail");
-                }
-            }
-            else
-            {
-                PostResult.Add("Status", "400");
-                PostResult.Add("Msg", "Order Not Found.");
-            }
-
-
-            return PostResult;
-
-        }
         //End Chef End Work
 
         public JObject ChangePassWord(string Obj)
