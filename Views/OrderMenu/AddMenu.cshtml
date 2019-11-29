@@ -18,7 +18,7 @@
                 <div class="row" style="width:100%">
                     <div class="col-md-4">
                         <label></label>
-                        <input type="text" class="form-control" min="0" name="FirstName" value="Category 1">
+                        <input type="text"  class="form-control Category" min="0" name="FirstName" value="Category 1">
                     </div>
                     <div onclick="ChangeIcon(this)" class="col-md-2">
                         <label></label>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-md-1">
                         <label></label>
-                        <input type="checkbox" class="form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+                        <input type="checkbox" class="form-control CheckStatus" style="border: 2px dotted #00f; display: block; background: #ff0000" />
                     </div>
                 </div>
                 <ul id="ID" class="collapse list-unstyled " data-parent="#myaccordion">
@@ -109,7 +109,7 @@
         for (var i = 0; i < list.length; i++) {
             var OrdNo = i + 1;
             var MainLi = '<li class="nav-item card" style="padding:15px" OrderNo="' + OrdNo +'"><div class="row" style="width:100%" >';
-            var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control"  id="' + list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
+            var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control Category"  id="' + list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
             var CatePlusIcn = '<div onclick="ChangeIcon(this)" class="col-md-2"><label></label><a style="text-align:center" class="nav-link have-sub-menu collapsed" href="#" data-target="#C'+list[i].CategoryID+'" data-toggle="collapse"><i class="fas fa-plus" style="font-size:x-large"></i></a></div >';
             var CatDownIcon = '<div class="col-md-2"><label></label><a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-down" style="font-size:x-large"></i></a></div>';
             var CatUpIcon = '<div class="col-md-2"><label></label><a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-up" style="font-size:x-large"></i></a></div >';
@@ -130,6 +130,8 @@
             $('#myaccordion2').append(mainlist);
        }
 
+
+        SaveMenu();
     }
     function SaveMenu() {
         var OrderMenuJson = {};
@@ -140,8 +142,13 @@
         OrderMenuJson.OrderMenu = OrderMenuObj;
         //==========
         var lis = document.getElementById("myaccordion2").getElementsByTagName("li");
-        for (var i = items.length; i--;) {
-           
+        for (var i = 0; i < lis.length;i++) {
+            var li = $(lis[i]);
+            var OrderNo = li.attr('OrderNo');
+            var CateName = li.find('.Category').id;
+            var Categoryname = li.find('.Category').val();
+
+            console.log("Loop OrderNo" + OrderNo + " CateName" + CateName + " name" + Categoryname);
         }
 
     }
