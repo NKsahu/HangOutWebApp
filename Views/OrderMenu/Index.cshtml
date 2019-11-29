@@ -1,0 +1,84 @@
+﻿@{
+    Layout = null;
+}
+<style>
+    div.scrollmenu {
+        background-color: #333;
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+        div.scrollmenu block {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-left: solid 1px #5de79a;
+            text-decoration: none;
+        }
+
+            div.scrollmenu a:hover {
+                background-color: #777;
+            }
+
+</style>
+
+<div class="row" style="width:100%">
+    <div class="card-header" style="width:100%">
+        <h3 style="text-align:center; background-color:#5de79a"><b>Order Menu</b> </h3>
+        <hr />
+    </div>
+    <div class="scrollmenu" id="Menus">
+        <block id="AddNew">Add New</block>
+    </div>
+
+</div>
+
+<script>
+    var OrderMenuList = [];
+    LoadOrderMenus();
+    function LoadOrderMenus() {
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/OrderMenuList?OrgId=0",
+            success: function (data) {
+                OrderMenuList = JSON.parse(data);
+                if (OrderMenuList.length>0) {
+                    ShowOrderMenus(OrderMenuList);
+                }
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+
+
+    }
+    function ShowOrderMenus(list) {
+        $("#Menus").html('');
+        $("#Menus").append('<block id="AddNew">Add New</block>');
+        for (var i = 0; i < list.length; i++) {
+            $("#Menus").append('<block id=' + list[i].id + '>' + list[i].MenuName+'</block>');
+        }
+
+    }
+    $("#AddNew").click(function () {
+        AddOrderMenu();
+    })
+    function AddOrderMenu() {
+        $.ajax({
+            type: 'GET',
+            url: "/OrderMenu/AddMenu?OMId=0",
+            success: function (data) {
+                makedpt("AddOrderMenu");
+                $("#AddOrderMenu > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("AddOrderMenu");
+               
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+               
+            }
+        });
+    }
+</script>
+

@@ -1,35 +1,73 @@
 ﻿@{
     Layout = null;
 }
+<style>
+    #table-scroll {
+        height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+        margin-top: 20px;
+    }
+</style>
 <div style="width:100%; min-width:100%">
     <h3 style="text-align:center"> Todays Orders</h3>
 </div>
-
 <div class="row" style="width:100%">
-
-    <table class="table" id="InvoiceItems">
-        <thead>
-            <tr>
-                <th>ORD NO.</th>
-                <th>AMT</th>
-                <th>DETAILS</th>
-                <th>PAYMENT MODES</th>
-            </tr>
-
-        </thead>
-        <tbody id="Tbody"></tbody>
-
-    </table>
-
+    <div class="col-xs-12 col-md-12 tab">
+        <button class=" tablink2" onclick="SelectPage('UnPaidOrder', this, '#4CAF50')" id="UnPaidOrderId">Unpaid</button>
+        <button class=" tablink2" onclick="SelectPage('ChefOrder', this, '#4CAF50')" id="ChefOrderId">Chef Order</button>
+    </div>
 </div>
+
+<div class="row tabcontent3" id="UnPaidOrder" style="width:100%">
+
+    <div class="row" style="width:100%">
+        <div id="table-scroll">
+            <table class="table" id="InvoiceItems">
+                <thead>
+                    <tr>
+                        <th>ORD NO.</th>
+                        <th>AMT</th>
+                        <th>DETAILS</th>
+                        <th>PAYMENT MODES</th>
+                    </tr>
+
+                </thead>
+                <tbody id="Tbody"></tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row tabcontent3" id="ChefOrder" style="width:100%">
+    <div id="table-scroll">
+        <table class="table" id="InvoiceItems">
+            <thead>
+                <tr>
+                    <th>ORD NO.</th>
+                    <th>AMT</th>
+                    <th>PAYMENT MODE</th>
+                    <th>DETAILS</th>
+                </tr>
+
+            </thead>
+            <tbody id="Tbody2"></tbody>
+
+        </table>
+    </div>
+</div>
+
 
 <script>
     var OrderList = [];
+    var ChefOrderList = [];
     var OrgId = 0;
     var PaymentStatus = 0;// unpaid list
     var LoginId = 0;
     var CurrOID = 0;
-
+    $("#UnPaidOrderId").click();
     function GetOrders(PaymentStatus) {
         var Obj = {};
         Obj.OrgId = OrgId;
@@ -48,6 +86,30 @@
                     return;
                 }
                 ShowOrders(OrderList);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    function ChefOrders(PaymentStatus) {
+        var Obj = {};
+        Obj.OrgId = OrgId;
+        Obj.PayStatus = PaymentStatus;
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/ShowOrderByStatus?Obj=" + JSON.stringify(Obj),
+            success: function (data) {
+                ChefOrderList = JSON.parse(data);
+                console.log(OrderList);
+                if (ChefOrderList.length == 0) {
+                    $.alert({
+                        title: 'Alert!',
+                        content: 'No Order Yet',
+                    });
+                    return;
+                }
+                ShowChefOrders(ChefOrderList);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
@@ -164,5 +226,44 @@
             }
         });
     }
+    function SelectPage(pageName, elmnt, color) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent3");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablink2");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";
+        }
+        document.getElementById(pageName).style.display = 'flex';
+        elmnt.style.backgroundColor = color;
 
+    }
+    function ShowChefOrders(list) {
+        $("#Tbody2").html('');
+        var DetailsBtn = "<button type='button' class='btn-sm btn-success sp-f2-hotkey' ";
+        var DeatilsClose = "'>DETAILS</button>";
+        for (var i = 0; i < list.length; i++) {
+            var PaymentStatus = "UnPaid";
+            switch (list[i].PaymentStatus) {
+                case 1:
+                    PaymentStatus = "By Cash";
+                    break;
+                case 2:
+                    PaymentStatus = "By Online";
+                    break;
+                case 3:
+                    PaymentStatus = "By FoodDo";
+                    break;
+            }
+            var OID = list[i].OID;
+            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].AMT + "</td><td>" + PaymentStatus+"</td>";
+            html +="<td>" +DetailsBtn + "style='width:100%'" + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><tr>";
+            $("#Tbody2").append(html);
+        }
+    }
+    $("#ChefOrderId").click(function () {
+        ChefOrders(-1);// chef orders
+    });
 </script>

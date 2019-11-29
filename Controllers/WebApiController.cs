@@ -195,7 +195,34 @@ namespace HangOut.Controllers
             List<HG_Category> listcategory = new HG_Category().GetAll(OrgId:OrgId);
             return  JArray.FromObject(listcategory);
         }
+        public JArray OrderMenuList(int Orgid)
+        {
+            return JArray.FromObject(OrderMenu.GetAll(Orgid));
+        }
+        public JArray ShowOMCategories(int OMId)
+        {
+            JArray jArray = new JArray();
+            if (OMId == 0)
+            {
+                List<HG_Category> listcategory = new HG_Category().GetAll();
+                List<HG_Items> ListItems = new HG_Items().GetAll();
+                int Order = 1;
+                foreach(var category in listcategory)
+                {
+                    List<HG_Items> Items = ListItems.FindAll(x=>x.CategoryID==category.CategoryID);
+                    if (Items.Count > 0)
+                    {
+                        JObject jObject = JObject.FromObject(category);
+                        jObject.Add("ItemList", JArray.FromObject(Items));
+                        jArray.Add(jObject);
+                    }
+                    
+                }
 
+
+            }
+            return jArray;
+        }
         public JObject ScanRestTable(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);
@@ -400,14 +427,23 @@ namespace HangOut.Controllers
             int OrgId = int.Parse(Params["OrgId"].ToString());
             int PaymentStatus = int.Parse(Params["PayStatus"].ToString());
             List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now.AddDays(-1), DateTime.Now);
-            Orders = Orders.FindAll(x => x.OrgId == OrgId && x.PaymentStatus == PaymentStatus);
+            Orders = Orders.FindAll(x => x.Status != "3");//not completed
+            Orders = Orders.FindAll(x => x.OrgId == OrgId);
+            if (PaymentStatus!=-1)
+                Orders = Orders.FindAll(x=>x.PaymentStatus == PaymentStatus);
             JArray jArray = new JArray();
             foreach(var order in Orders)
             {
+                
                 JObject jObject = new JObject();
                 jObject = JObject.FromObject(order);
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
-                jObject.Add("AMT", hG_OrderItems.Sum(x => x.Price));
+                double ToTalAmt = 0.00;
+                foreach(var item in hG_OrderItems)
+                {
+                    ToTalAmt += item.Count * item.Price;
+                }
+                jObject.Add("AMT",ToTalAmt);
                 jArray.Add(jObject);
             }
             return jArray;
