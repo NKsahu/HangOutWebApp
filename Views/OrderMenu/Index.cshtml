@@ -80,5 +80,9 @@
             }
         });
     }
+    $('body').on('click', '.nav-list_item', function () {
+        $(this).find('ul').toggle();
+        $(this).siblings('li').find('ul').hide();
+    });
 </script>
 
