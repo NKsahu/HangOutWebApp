@@ -553,38 +553,14 @@ namespace HangOut.Controllers
             OrderItemList = OrderItemList.FindAll(x => x.TickedNo == TickedNo);
 
             JObject PostResult = new JObject();
-        
-            foreach (HG_OrderItem hG in OrderItemList)
+            foreach(HG_OrderItem hg in OrderItemList)
             {
-
-                if(hG.OIID.ToString().Contains(CheckedID))
-                {
-                    hG.Status = 3;
-                }
-                else
-                {
-                    hG.Status = 4;
-                }
-                  hG.UpdatedBy = UpdateBy;
+                OrderItemList = OrderItemList.FindAll(x => x.OID == TickedNo);
             
-                    Int64 save = hG.Save();
-                    if (save > 0)
-                    {
+                    
+                    
+             }
           
-                        PostResult.Add("Status", "200");
-                        PostResult.Add("Msg", "Success");
-                    }
-                    else
-                    {
-                      
-                        PostResult.Add("Status", "400");
-                        PostResult.Add("Msg", "Fail");
-                    }
-
-
-            }
-
-
             return PostResult;
 
         }
