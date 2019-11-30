@@ -101,9 +101,12 @@
         var li = $(event).parent('div').parent('div').parent('li');
         var prev = li.prev();
         if (prev.length) {
-            var OrderNo = li.attr('OrderNo');
-            console.log(OrderNo);
-            li.attr('OrderNo', OrderNo - 1);
+
+            var OrderNoCur = parseInt(li.attr('OrderNo'));
+            var OrderNoPre = parseInt(prev.attr('OrderNo'));
+            console.log(OrderNoCur);
+            li.attr('OrderNo', OrderNoCur - 1);
+            prev.attr('OrderNo', OrderNoPre + 1);
             li.detach().insertBefore(prev);
         }
     }
@@ -112,9 +115,11 @@
        // var li = $(this).closest('li');
         var next = li.next();
         if (next.length) {
-            var OrderNo = li.attr('OrderNo');
-            console.log(OrderNo);
-            li.attr('OrderNo', OrderNo +1);
+            var OrderNoCurr = parseInt(li.attr('OrderNo'));
+            var OrderNoNxt = parseInt(next.attr('OrderNo'));
+            console.log(OrderNoCurr);
+            li.attr('OrderNo', OrderNoCurr + 1);
+            next.attr('OrderNo', OrderNoNxt - 1);
             li.detach().insertAfter(next);
         }
     }
