@@ -500,6 +500,7 @@ namespace HangOut.Controllers
                     var hG_OrderItems = OrderItemList.FindAll(x => x.OID == order.OID);
                     JArray ItemsArray = new JArray();
                     int ItemIndex = 0;
+                    int ticketno = 0;
                     foreach (var OrderItem in hG_OrderItems)
                     {
                         HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
@@ -511,7 +512,9 @@ namespace HangOut.Controllers
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
+                        ticketno = OrderItem.TickedNo;
                     }
+                    TableScreen.Add("TicketNo", ticketno);
                     TableScreen.Add("OID", order.OID);
                     TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
