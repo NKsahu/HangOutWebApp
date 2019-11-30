@@ -12,7 +12,7 @@
         @using (Ajax.BeginForm("CreateEdit", "vw_HG_UsersDetails", new { UserCode = Model.UserCode }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.UserCode)
-
+            @Html.HiddenFor(model => model.CurrentStatus)
         <div class="row">
 
 
@@ -73,6 +73,15 @@
                 </div>
 
             </div>
+            @*<div class="col-sm-4">
+                @Html.LabelFor(model => model.CurrentStatus, htmlAttributes: new { @class = "control-label  " })
+
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.CurrentStatus)
+                    @Html.ValidationMessageFor(model => model.CurrentStatus, "", new { @class = "text-danger" })
+                </div>
+
+            </div>*@
 
 
             <div class="col-sm-1 ">

@@ -40,6 +40,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
+                    <th>@Html.DisplayNameFor(model => model.CurrentStatus)</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -86,6 +87,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
+                    <td> @Html.DisplayName("")</td>
                     <td>
                         <a href="/vw_HG_UsersDetails/CreateEdit?ID=@item.UserCode" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
                        
