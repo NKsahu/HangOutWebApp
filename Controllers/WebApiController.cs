@@ -512,7 +512,7 @@ namespace HangOut.Controllers
                         ItemsArray.Add(itemobj);
                         ticketno = OrderItem.TickedNo;
                     }
-                    string name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " " + "Ticket no." + ticketno;
+                    string name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " " + "Ticket no. : " + ticketno;
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     TableScreen.Add("TicketNo", ticketno);
