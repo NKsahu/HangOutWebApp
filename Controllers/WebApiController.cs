@@ -627,7 +627,7 @@ namespace HangOut.Controllers
             vw_HG_UsersDetails user_obj = new vw_HG_UsersDetails().GetSingleByUserId(UserCode);
             if (user_obj.Password.Equals(OldPassword))
             {
-                user_obj.Password = OldPassword;
+                user_obj.Password = NewPassword;
                 int check = user_obj.save();
                 if (check > 0)
                 {
