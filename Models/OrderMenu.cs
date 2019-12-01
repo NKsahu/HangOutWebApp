@@ -14,6 +14,11 @@ namespace HangOut.Models
         public DateTime UpdateDate { get; set; }
         public int OrgId { get; set; }
         public bool Status { get; set; }
+        public OrderMenu()
+        {
+            Status = false;
+
+        }
         public int save()
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];

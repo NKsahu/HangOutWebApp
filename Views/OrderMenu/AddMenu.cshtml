@@ -14,11 +14,11 @@
     </div>
     <div id="#admin-side-menu2"  class="row" style="width:100%">
         <ul id="myaccordion2" class="list-unstyled mb-0 " style="width:100%">
-            <li class="nav-item card" style="padding:15px" OrderNo="1">
+            <li class="nav-item card mainList" style="padding:15px" OrderNo="1">
                 <div class="row" style="width:100%">
                     <div class="col-md-4">
                         <label></label>
-                        <input type="text"  class="form-control Category" min="0" name="FirstName" value="Category 1">
+                        <input type="text"  class="form-control Category" id="0" CategoryId="0"  value="Category 1">
                     </div>
                     <div onclick="ChangeIcon(this)" class="col-md-2">
                         <label></label>
@@ -108,8 +108,8 @@
         $('#myaccordion2').html('');
         for (var i = 0; i < list.length; i++) {
             var OrdNo = i + 1;
-            var MainLi = '<li class="nav-item card" style="padding:15px" OrderNo="' + OrdNo +'"><div class="row" style="width:100%" >';
-            var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control Category"  id="' + list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
+            var MainLi = '<li class="nav-item card mainList" style="padding:15px" OrderNo="' + OrdNo +'"><div class="row" style="width:100%" >';
+            var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control Category"  id="' + list[i].CategoryID+'" CategoryId="'+list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
             var CatePlusIcn = '<div onclick="ChangeIcon(this)" class="col-md-2"><label></label><a style="text-align:center" class="nav-link have-sub-menu collapsed" href="#" data-target="#C'+list[i].CategoryID+'" data-toggle="collapse"><i class="fas fa-plus" style="font-size:x-large"></i></a></div >';
             var CatDownIcon = '<div class="col-md-2"><label></label><a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-down" style="font-size:x-large"></i></a></div>';
             var CatUpIcon = '<div class="col-md-2"><label></label><a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-up" style="font-size:x-large"></i></a></div >';
@@ -141,14 +141,26 @@
         OrderMenuObj.MenuName = $("#OrderMenuName").val().replace(' ', '');
         OrderMenuJson.OrderMenu = OrderMenuObj;
         //==========
-        var lis = document.getElementById("myaccordion2").getElementsByTagName("li");
+        var lis = document.getElementById("myaccordion2").getElementsByClassName("mainList");
         for (var i = 0; i < lis.length;i++) {
             var li = $(lis[i]);
-            var OrderNo = li.attr('OrderNo');
-            var CateName = li.find('.Category').id;
+            var CatOrderNo = li.attr('OrderNo');
+            var MenuCId = li.find('.Category').attr('id');
+            var CategoryId=li.find('.Category').attr('CategoryId');
             var Categoryname = li.find('.Category').val();
+          //  var CheckStatus = li.find('.CheckStatus').val();
+            console.log("Loop catOrderNo" + CatOrderNo + " MenuCId" + MenuCId + " name" + Categoryname + "CheckStatus");
 
-            console.log("Loop OrderNo" + OrderNo + " CateName" + CateName + " name" + Categoryname);
+            //===========
+            var ChileLI = lis[i].getElementsByTagName('li');
+            for (var j = 0; j<ChileLI.length; j++) {
+
+                var childLis = $(ChileLI[j]);
+                var OrdNo = childLis.attr("OrderNo");
+                console.log("child OrdNo  " + OrdNo);
+
+            }
+
         }
 
     }
