@@ -149,8 +149,9 @@
     function ShowOrderMenus(list) {
         $("#Menus").html('');
         $("#Menus").append('<block id="AddNew" onclick="AddOrderMenu(0)">Add New</block>');
-        for (var i = 0; i < list.length; i++) {
-            $("#Menus").append('<block onclick="AddOrderMenu(' + list[i].id + ')" id=' + list[i].id + '>' + list[i].MenuName + '</block>');
+        var MenuList = list.MenuList;
+        for (var i = 0; i < MenuList.length; i++) {
+            $("#Menus").append('<block onclick="AddOrderMenu(' + MenuList[i].id + ')" id=' + MenuList[i].id + '>' + MenuList[i].MenuName + '</block>');
         }
 
     }

@@ -208,7 +208,7 @@ namespace HangOut.Controllers
             {
 
                 JObject jObject = JObject.FromObject(Floors);
-                jObject.Add("TableSheatList", JArray.FromObject(Floors));
+                jObject.Add("TableSheatList", JArray.FromObject(tableOrSheatlist.FindAll(x=>x.Floor_or_ScreenId== Floors.Floor_or_ScreenID)));
                 jArray.Add(jObject);
             }
             OrderMenus.Add("FloorList", jArray);
