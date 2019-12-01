@@ -111,11 +111,11 @@
         for (var i = 0; i < list.length; i++) {
             var OrdNo = i + 1;
             var MainLi = '<li class="nav-item card mainList" style="padding:15px" OrderNo="' + OrdNo +'"><div class="row" style="width:100%" >';
-            var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control Category"  id="' + list[i].CategoryID+'" CategoryId="'+list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
+            var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control Category"  id="0" CategoryId="'+list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
             var CatePlusIcn = '<div onclick="ChangeIcon(this)" class="col-md-2"><label></label><a style="text-align:center" class="nav-link have-sub-menu collapsed" href="#" data-target="#C'+list[i].CategoryID+'" data-toggle="collapse"><i class="fas fa-plus" style="font-size:x-large"></i></a></div >';
             var CatDownIcon = '<div class="col-md-2"><label></label><a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-down" style="font-size:x-large"></i></a></div>';
             var CatUpIcon = '<div class="col-md-2"><label></label><a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-up" style="font-size:x-large"></i></a></div >';
-            var CatCheckStatus = '<div class="col-md-1"><label></label><input type="checkbox" class="form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+            var CatCheckStatus = '<div class="col-md-1"><label></label><input type="checkbox" class="form-control CheckStatus" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
             var ItemList = list[i].ItemList;
             var ItemUl = '<ul id="C'+list[i].CategoryID+'" class="collapse list-unstyled " data-parent="#myaccordion">';
             for (var j = 0; j < ItemList.length; j++) {
@@ -159,8 +159,8 @@
             var MenuCId = li.find('.Category').attr('id');
             var CategoryId=li.find('.Category').attr('CategoryId');
             var Categoryname = li.find('.Category').val();
-            var CheckStatus = li.find('.CheckStatus').val();
-            console.log("Loop catOrderNo" + CatOrderNo + " MenuCId" + MenuCId + " name" + Categoryname + "CheckStatus");
+            var CheckStatus = li.find('.CheckStatus').is(':checked');
+            console.log("Loop catOrderNo" + CatOrderNo + " MenuCId" + MenuCId + " name" + Categoryname + "CheckStatus"+CheckStatus);
             var ListItems = [];
             //===========
             var ChileLI = lis[i].getElementsByTagName('li');
@@ -168,7 +168,7 @@
 
                 var childLis = $(ChileLI[j]);
                 var OrdNo = childLis.attr("OrderNo");
-                var ItemStatus = childLis.find('.ItemStatus').val();
+                var ItemStatus = childLis.find('.ItemStatus').is(':checked');
                 var Id = childLis.attr('id');
                 var Itmid = childLis.attr('Itmid');
                 console.log("child OrdNo  " + OrdNo);
@@ -195,12 +195,12 @@
         $.ajax({
             type: 'POST',
             url: "/WebApi/SaveOrderMenu",
-            data: JSON.stringify(OrderMenuObj);
+            data: JSON.stringify(OrderMenuObj),
             contentType: "application/json",
             success: function (data) {
-                //MenuOrderCategoryList = JSON.parse(data);
-               // ShowCategoryList(MenuOrderCategoryList);
-
+                var OMId = parseInt(data);
+                $("#Menus").append('<block id=' + OMId + '>' + OMName+ '</block>');
+                hidedpt("AddOrderMenu");
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
 

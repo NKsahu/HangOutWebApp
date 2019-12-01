@@ -34,7 +34,7 @@ namespace HangOut.Models
                 {
                     Query = "Insert into  OrderMenu  values(@MenuName,@CreatedBy,@UpdatedBy,@UpdatetionDate,@OrgId,@Status); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, Con);
-                    cmd.Parameters.AddWithValue("@CreatedBy", this.CreateBy);
+                    cmd.Parameters.AddWithValue("@CreatedBy",int.Parse(CurrOrgID["UserCode"]));
                 }
                 else
                 {
@@ -43,7 +43,7 @@ namespace HangOut.Models
                     cmd.Parameters.AddWithValue("@MenuID", this.id);
                 }
                 cmd.Parameters.AddWithValue("@MenuName", this.MenuName);
-                cmd.Parameters.AddWithValue("@UpdatedBy", this.UpdatedBy);
+                cmd.Parameters.AddWithValue("@UpdatedBy", int.Parse(CurrOrgID["UserCode"]));
                 cmd.Parameters.AddWithValue("@UpdatetionDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@OrgId", int.Parse(CurrOrgID["OrgId"]));
                 cmd.Parameters.AddWithValue("@Status", this.Status);

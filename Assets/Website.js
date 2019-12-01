@@ -74,7 +74,7 @@ function makedpt(id, h, w) {
     }
 }
 function showdpt(id) {
-    modaladded = true;
+   // modaladded = true;
     window.location.hash = id;
     $("#" + id).show();
    // $("#" + id).display = "block";
@@ -82,8 +82,11 @@ function showdpt(id) {
 
 }
 function hidedpt(id) {
-    $("#" + id).hide();
-    $("#" + id).remove();
-    alert('id' + id);
+    $('#'+id).modal('hide');
+    $("#"+id).hide();
+    $("#"+id).remove();
+    $("#" + id).display = "none";
+    $('.modal-backdrop').remove();
+   // alert('id' + id);
 
 }

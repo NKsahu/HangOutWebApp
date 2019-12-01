@@ -226,12 +226,28 @@ namespace HangOut.Controllers
         [HttpPost]
         public int SaveOrderMenu([System.Web.Http.FromBody] OrderMenu ordermenu)
         {
-            OrderMenu orderMenu = JsonConvert.DeserializeObject<OrderMenu>(objMenu);
-            if (orderMenu.id == 0)
+          // OrderMenu orderMenu = JsonConvert.DeserializeObject<OrderMenu>(objMenu);
+            if (ordermenu.id == 0)
             {
+                ordermenu.id = ordermenu.save();
+
+                foreach(OrderMenuCategory orderMenuCategory in ordermenu.OderMenuCategry)
+                {
+
+                    orderMenuCategory.OrderMenuid = ordermenu.id;
+                    orderMenuCategory.id = orderMenuCategory.save();
+                    foreach(var OrderItem in orderMenuCategory.OrdCatItems)
+                    {
+                        OrderItem.OderMenuId = ordermenu.id;
+                        OrderItem.OrdMenuCatId = orderMenuCategory.id;
+                        OrderItem.id = OrderItem.save();
+                    }
+
+                }
+
 
             }
-            return orderMenu.id;
+            return ordermenu.id;
         }
         public JObject ScanRestTable(string Obj)
         {

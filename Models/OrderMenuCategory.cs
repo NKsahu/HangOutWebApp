@@ -27,7 +27,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.id == 0)
                 {
-                    Query = "Insert into  OrdMenuCategory  values(@CategoryId,@DispalyName,@OrderNo,@OrderMenuId,@Status,);";
+                    Query = "Insert into  OrdMenuCategory  values(@CategoryId,@DispalyName,@OrderNo,@OrderMenuId,@Status);select SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, Con);
                     
                 }

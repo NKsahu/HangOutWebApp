@@ -29,7 +29,7 @@
         <hr />
     </div>
     <div class="scrollmenu" id="Menus">
-        <block id="AddNew">Add New</block>
+        <block id="AddNew" >Add New</block>
     </div>
 
 </div>
@@ -56,15 +56,13 @@
     }
     function ShowOrderMenus(list) {
         $("#Menus").html('');
-        $("#Menus").append('<block id="AddNew">Add New</block>');
+        $("#Menus").append('<block id="AddNew" onclick="AddOrderMenu()">Add New</block>');
         for (var i = 0; i < list.length; i++) {
             $("#Menus").append('<block id=' + list[i].id + '>' + list[i].MenuName+'</block>');
         }
 
     }
-    $("#AddNew").click(function () {
-        AddOrderMenu();
-    })
+    
     function AddOrderMenu() {
         $.ajax({
             type: 'GET',

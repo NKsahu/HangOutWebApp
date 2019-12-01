@@ -25,7 +25,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.id == 0)
                 {
-                    Query = "Insert into  OrderMenuCatItems values(@ItemId,@OrderNo,@OrdMenuCatId,,@OderMenuId,@Status,);";
+                    Query = "Insert into  OrderMenuCatItems values(@ItemId,@OrderNo,@OrdMenuCatId,@OderMenuId,@Status);select SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, Con);
                 }
                 else
