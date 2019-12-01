@@ -195,9 +195,24 @@ namespace HangOut.Controllers
             List<HG_Category> listcategory = new HG_Category().GetAll(OrgId:OrgId);
             return  JArray.FromObject(listcategory);
         }
-        public JArray OrderMenuList(int Orgid)
+        public JObject OrderMenuList(int Orgid)
         {
-            return JArray.FromObject(OrderMenu.GetAll(Orgid));
+            HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(Orgid);
+            int OrgType = orgobj.OrgTypes != null ? int.Parse(orgobj.OrgTypes) : 1;
+            List<HG_Floor_or_ScreenMaster> floorOrScreens = new HG_Floor_or_ScreenMaster().GetAll(OrgType);
+            List<HG_Tables_or_Sheat> tableOrSheatlist = new HG_Tables_or_Sheat().GetAll(OrgType);
+            JObject OrderMenus = new JObject();
+            OrderMenus.Add("MenuList",JArray.FromObject(OrderMenu.GetAll(Orgid)));
+            JArray jArray = new JArray();
+            foreach (HG_Floor_or_ScreenMaster Floors in floorOrScreens)
+            {
+
+                JObject jObject = JObject.FromObject(Floors);
+                jObject.Add("TableSheatList", JArray.FromObject(Floors));
+                jArray.Add(jObject);
+            }
+            OrderMenus.Add("FloorList", jArray);
+            return OrderMenus;
         }
         public JArray ShowOMCategories(int OMId)
         {
