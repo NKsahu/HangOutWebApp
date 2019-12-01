@@ -211,7 +211,7 @@
             success: function (data) {
                 var OMId = parseInt(data);
                 if (parseInt(OrderMenuObj.id) ==0) {
-                    $("#Menus").append('<block id=' + OMId + '>' + OMName + '</block>');
+                    $("#Menus").append('<block onclick="AddOrderMenu(' + OMId + ')" id=' + OMId + '>' + OMName + '</block>');
                 }
                 hidedpt("AddOrderMenu");
                 $('#waiting').hide();
