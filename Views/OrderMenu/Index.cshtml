@@ -56,17 +56,17 @@
     }
     function ShowOrderMenus(list) {
         $("#Menus").html('');
-        $("#Menus").append('<block id="AddNew" onclick="AddOrderMenu()">Add New</block>');
+        $("#Menus").append('<block id="AddNew" onclick="AddOrderMenu("0")">Add New</block>');
         for (var i = 0; i < list.length; i++) {
-            $("#Menus").append('<block id=' + list[i].id + '>' + list[i].MenuName+'</block>');
+            $("#Menus").append('<block onclick="AddOrderMenu(' + list[i].id+')" id=' + list[i].id + '>' + list[i].MenuName+'</block>');
         }
 
     }
     
-    function AddOrderMenu() {
+    function AddOrderMenu(OMID) {
         $.ajax({
             type: 'GET',
-            url: "/OrderMenu/AddMenu?OMId=0",
+            url: "/OrderMenu/AddMenu?OMId=" + OMID,
             success: function (data) {
                 makedpt("AddOrderMenu");
                 $("#AddOrderMenu > .modal-dialog > .modal-content > .modal-body").html(data);

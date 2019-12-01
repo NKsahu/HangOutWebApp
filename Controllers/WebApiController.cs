@@ -206,17 +206,64 @@ namespace HangOut.Controllers
             {
                 List<HG_Category> listcategory = new HG_Category().GetAll();
                 List<HG_Items> ListItems = new HG_Items().GetAll();
-                int Order = 1;
                 foreach(var category in listcategory)
                 {
                     List<HG_Items> Items = ListItems.FindAll(x=>x.CategoryID==category.CategoryID);
                     if (Items.Count > 0)
                     {
                         JObject jObject = JObject.FromObject(category);
-                        jObject.Add("ItemList", JArray.FromObject(Items));
+                        jObject.Add("CheckSts", false);
+                        jObject.Add("id", 0);
+                        jObject.Add("MenuId", 0);
+                        jObject.Add("MenuName", " ");
+                        JArray itemJarray = new JArray();
+                        foreach (var item in Items)
+                        {
+                           JObject ItmjObject = JObject.FromObject(item);
+                            ItmjObject.Add("id", 0);
+                            ItmjObject.Add("CheckSts",false);
+                            itemJarray.Add(ItmjObject);
+                        }
+                        jObject.Add("ItemList", itemJarray);
                         jArray.Add(jObject);
                     }
                     
+                }
+
+
+            }
+            else
+            {
+               List<OrderMenu> orderMenulist = OrderMenu.GetAll();
+                OrderMenu obj = orderMenulist.Find(x => x.id == OMId);
+                List<OrderMenuCategory> orderMenuCategories = OrderMenuCategory.GetAll(obj.id);
+                List<OrdMenuCtgItems> ListCatItems = OrdMenuCtgItems.GetAll(obj.id);
+                orderMenuCategories = orderMenuCategories.OrderBy(x => x.OrderNo).ToList();
+                List<HG_Items> ListOfItem = new HG_Items().GetAll();
+                foreach (var ordecategory in orderMenuCategories)
+                {
+                    JObject jobj = new JObject();
+                    jobj.Add("id", ordecategory.id);
+                    jobj.Add("CategoryID", ordecategory.CategoryId);
+                    jobj.Add("Category", ordecategory.DisplayName);
+                    jobj.Add("CheckSts", ordecategory.Status);
+                    jobj.Add("MenuId", obj.id);
+                    jobj.Add("MenuName",obj.MenuName);
+                    var ListCateItems = ListCatItems.FindAll(x => x.OrdMenuCatId == ordecategory.id);
+                    ListCateItems = ListCateItems.OrderBy(x => x.OrderNo).ToList();
+                    JArray OrderCategoryItems = new JArray();
+                    foreach(var Categoryitm in ListCateItems)
+                    {
+                        var Item = ListOfItem.Find(x => x.ItemID == Categoryitm.ItemId);
+                        JObject itemObj = JObject.FromObject(Item);
+                        itemObj.Add("CheckSts", Categoryitm.Status);
+                        itemObj.Add("id", Categoryitm.id);
+                        OrderCategoryItems.Add(itemObj);
+                        //  list[i].CategoryID + '" value="' + list[i].Category + '
+                        //id  ItemList[j].ItemID   ItemList[j].Items  CheckSts
+                    }
+                    jobj.Add("ItemList", OrderCategoryItems);
+                    jArray.Add(jobj);
                 }
 
 
@@ -227,8 +274,7 @@ namespace HangOut.Controllers
         public int SaveOrderMenu([System.Web.Http.FromBody] OrderMenu ordermenu)
         {
           // OrderMenu orderMenu = JsonConvert.DeserializeObject<OrderMenu>(objMenu);
-            if (ordermenu.id == 0)
-            {
+          
                 ordermenu.id = ordermenu.save();
 
                 foreach(OrderMenuCategory orderMenuCategory in ordermenu.OderMenuCategry)
@@ -244,9 +290,6 @@ namespace HangOut.Controllers
                     }
 
                 }
-
-
-            }
             return ordermenu.id;
         }
         public JObject ScanRestTable(string Obj)

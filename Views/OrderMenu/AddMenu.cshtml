@@ -107,24 +107,34 @@
        // });
     });  
     function ShowCategoryList(list) {
+        var MenuObj = list[0];
+        console.log("AAya");
+        $("#OrderMenuName").val(MenuObj.MenuName);
+        $("#OrderMenuName").attr('OMId', MenuObj.MenuId);
         $('#myaccordion2').html('');
         for (var i = 0; i < list.length; i++) {
             var OrdNo = i + 1;
             var MainLi = '<li class="nav-item card mainList" style="padding:15px" OrderNo="' + OrdNo +'"><div class="row" style="width:100%" >';
-            var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control Category"  id="0" CategoryId="'+list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
+            var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control Category"  id="' + list[i].id+'" CategoryId="'+list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
             var CatePlusIcn = '<div onclick="ChangeIcon(this)" class="col-md-2"><label></label><a style="text-align:center" class="nav-link have-sub-menu collapsed" href="#" data-target="#C'+list[i].CategoryID+'" data-toggle="collapse"><i class="fas fa-plus" style="font-size:x-large"></i></a></div >';
             var CatDownIcon = '<div class="col-md-2"><label></label><a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-down" style="font-size:x-large"></i></a></div>';
             var CatUpIcon = '<div class="col-md-2"><label></label><a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-up" style="font-size:x-large"></i></a></div >';
-            var CatCheckStatus = '<div class="col-md-1"><label></label><input type="checkbox" class="form-control CheckStatus" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+           var CatCheckStatus = '<div class="col-md-1"><label></label><input type="checkbox" class="form-control CheckStatus" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+            if (list[i].CheckSts == true) {
+             CatCheckStatus = '<div class="col-md-1"><label></label><input type="checkbox" checked class="form-control CheckStatus" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+            } 
             var ItemList = list[i].ItemList;
             var ItemUl = '<ul id="C'+list[i].CategoryID+'" class="collapse list-unstyled " data-parent="#myaccordion">';
             for (var j = 0; j < ItemList.length; j++) {
                 var OrdN = j + 1;
-                var ItemLi = '<li class="nav-item" data-parent="#myaccordion" id="0" Itmid="' + ItemList[j].ItemID+'" OrderNo="' +OrdN+'"><div class="row">';
+                var ItemLi = '<li class="nav-item" data-parent="#myaccordion" id="' + ItemList[j].id+'" Itmid="' + ItemList[j].ItemID+'" OrderNo="' +OrdN+'"><div class="row">';
                 var DisaplyItm = '<div class="col-md-2"><label></label><a style="text-align:center;color:darkblue" class="nav-link">' + ItemList[j].Items+'</a></div >';
                 var ItemRowDown = '<div class="col-md-1"><label></label><a onclick="RowDown(this)" style="text-align:center;color:darkblue" class="nav-link"><i class="fas fa-arrow-down" style="font-size:x-large"></i></a></div>';
                 var ItemRowUp = '<div class="col-md-1"><label></label><a onclick="RowUp(this)" style="text-align:center;color:darkblue" class="nav-link"><i class="fas fa-arrow-up" style="font-size:x-large"></i></a></div >';
                 var ItemCheck = '<div class="col-md-1"><label></label><input type="checkbox" class="form-control ItemStatus" style="border: 2px dotted #00f; display: block; background: #ff0000"/></div ></div></li >';
+                if (ItemList[j].CheckSts == true) {
+                  ItemCheck = '<div class="col-md-1"><label></label><input type="checkbox" checked class="form-control ItemStatus" style="border: 2px dotted #00f; display: block; background: #ff0000"/></div ></div></li >';
+                }
                 ItemUl += ItemLi + DisaplyItm + ItemRowDown + ItemRowUp + ItemCheck;
             }
             var CloseItemLi = '</ul></li>';
@@ -199,7 +209,9 @@
             contentType: "application/json",
             success: function (data) {
                 var OMId = parseInt(data);
-                $("#Menus").append('<block id=' + OMId + '>' + OMName+ '</block>');
+                if (parseInt(OrderMenuObj.id) > 0) {
+                    $("#Menus").append('<block id=' + OMId + '>' + OMName + '</block>');
+                }
                 hidedpt("AddOrderMenu");
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
