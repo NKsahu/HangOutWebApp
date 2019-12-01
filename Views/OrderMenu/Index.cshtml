@@ -4,10 +4,10 @@
 <style>
     div.scrollmenu {
         background-color: #333;
-        overflow: auto;
+        overflow-x: auto;
         white-space: nowrap;
     }
-
+    
         div.scrollmenu block {
             display: inline-block;
             color: white;
@@ -16,11 +16,23 @@
             border-left: solid 1px #5de79a;
             text-decoration: none;
         }
+    div.scrollTables {
+        background-color: white;
+        overflow: auto;
+        white-space: nowrap;
+    }
+    div.scrollTables blockTable {
+        display: inline-block;
+        text-align: center;
+       width:35%;
+       height:300px;
+        border-right: solid 2px #f00;
+        text-decoration: none;
+    }
 
-            div.scrollmenu a:hover {
-                background-color: #777;
-            }
-
+        div.scrollmenu a:hover {
+            background-color: #777;
+        }
 </style>
 
 <div class="row" style="width:100%">
@@ -29,11 +41,91 @@
         <hr />
     </div>
     <div class="scrollmenu" id="Menus">
-        <block id="AddNew" onclick="AddOrderMenu(0)" >Add New</block>
+        <block id="AddNew" onclick="AddOrderMenu(0)">Add New</block>
     </div>
 
 </div>
+<div class=" scrollTables" style="padding-top:50px" id="Floor">
 
+    <blockTable>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 style="text-align:right">Floor1</h4>
+            </div>
+            <div class="col-md-2">
+                <input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+            </div>
+            </div>
+        <div class="row" id="AddSeat">
+            <div class="col-md-3 card" style="padding:5px">Table 1</div>
+            <div class="col-md-3 card" style="padding:5px"> Table 2</div>
+            <div class="col-md-3 card" style="padding:5px">Table 3</div>
+            <div class="col-md-3 card" style="padding:5px">Table 4</div>
+            <div class="col-md-3 card" style="padding:5px">Table 5</div>
+            <div class="col-md-3 card" style="padding:5px">Table 6</div>
+            <div class="col-md-3 card" style="padding:5px">Table 7</div>
+            <div class="col-md-3 card" style="padding:5px">Table 8</div>
+            <div class="col-md-3 card" style="padding:5px">Table 9</div>
+            <div class="col-md-3 card" style="padding:5px">Table 10</div>
+        </div>
+</blockTable>
+    <blockTable>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 style="text-align:right">Floor2</h4>
+            </div>
+            <div class="col-md-2">
+                <input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 card" style="padding:5px">Table 1</div>
+            <div class="col-md-3 card" style="padding:5px"> Table 2</div>
+            <div class="col-md-3 card" style="padding:5px">Table 3</div>
+            <div class="col-md-3 card" style="padding:5px">Table 4</div>
+            <div class="col-md-3 card" style="padding:5px">Table 5</div>
+            <div class="col-md-3 card" style="padding:5px">Table 6</div>
+            <div class="col-md-3 card" style="padding:5px">Table 7</div>
+            <div class="col-md-3 card" style="padding:5px">Table 8</div>
+            <div class="col-md-3 card" style="padding:5px">Table 9</div>
+            <div class="col-md-3 card" style="padding:5px">Table 10</div>
+        </div>
+    </blockTable>
+    <blockTable>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 style="text-align:right">Floor3</h4>
+            </div>
+            <div class="col-md-2">
+                <input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 card" style="padding:5px">Table 1</div>
+            <div class="col-md-3 card" style="padding:5px"> Table 2</div>
+            <div class="col-md-3 card" style="padding:5px">Table 3</div>
+            <div class="col-md-3 card" style="padding:5px">Table 4</div>
+            <div class="col-md-3 card" style="padding:5px">Table 5</div>
+            <div class="col-md-3 card" style="padding:5px">Table 6</div>
+            <div class="col-md-3 card" style="padding:5px">Table 7</div>
+            <div class="col-md-3 card" style="padding:5px">Table 8</div>
+            <div class="col-md-3 card" style="padding:5px">Table 9</div>
+            <div class="col-md-3 card" style="padding:5px">Table 10</div>
+        </div>
+    </blockTable>
+    
+</div>
+<div class="row">
+    <div class="col-md-5">
+
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-danger form-control">Apply</button>
+    </div>
+    <div class="col-md-5">
+
+    </div>
+</div>
 <script>
     var OrderMenuList = [];
     LoadOrderMenus();
@@ -43,7 +135,7 @@
             url: "/WebApi/OrderMenuList?OrgId=0",
             success: function (data) {
                 OrderMenuList = JSON.parse(data);
-                if (OrderMenuList.length>0) {
+                if (OrderMenuList.length > 0) {
                     ShowOrderMenus(OrderMenuList);
                 }
             },
@@ -58,11 +150,11 @@
         $("#Menus").html('');
         $("#Menus").append('<block id="AddNew" onclick="AddOrderMenu(0)">Add New</block>');
         for (var i = 0; i < list.length; i++) {
-            $("#Menus").append('<block onclick="AddOrderMenu(' + list[i].id+')" id=' + list[i].id + '>' + list[i].MenuName+'</block>');
+            $("#Menus").append('<block onclick="AddOrderMenu(' + list[i].id + ')" id=' + list[i].id + '>' + list[i].MenuName + '</block>');
         }
 
     }
-    
+
     function AddOrderMenu(OMID) {
         $('#waiting').show();
         $.ajax({
@@ -72,10 +164,10 @@
                 makedpt("AddOrderMenu");
                 $("#AddOrderMenu > .modal-dialog > .modal-content > .modal-body").html(data);
                 showdpt("AddOrderMenu");
-               
+
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
-               
+
             }
         });
     }
@@ -96,7 +188,7 @@
     }
 
     function RowUp(event) {
-       // var li = $(this).closest('li');
+        // var li = $(this).closest('li');
         var li = $(event).parent('div').parent('div').parent('li');
         var prev = li.prev();
         if (prev.length) {
@@ -111,7 +203,7 @@
     }
     function RowDown(event) {
         var li = $(event).parent('div').parent('div').parent('li');
-       // var li = $(this).closest('li');
+        // var li = $(this).closest('li');
         var next = li.next();
         if (next.length) {
             var OrderNoCurr = parseInt(li.attr('OrderNo'));
@@ -122,6 +214,6 @@
             li.detach().insertAfter(next);
         }
     }
-    
+
 </script>
 
