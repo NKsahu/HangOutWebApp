@@ -56,7 +56,7 @@
     }
     function ShowOrderMenus(list) {
         $("#Menus").html('');
-        $("#Menus").append('<block id="AddNew" onclick="AddOrderMenu("0")">Add New</block>');
+        $("#Menus").append('<block id="AddNew" onclick="AddOrderMenu(0)">Add New</block>');
         for (var i = 0; i < list.length; i++) {
             $("#Menus").append('<block onclick="AddOrderMenu(' + list[i].id+')" id=' + list[i].id + '>' + list[i].MenuName+'</block>');
         }
@@ -64,6 +64,7 @@
     }
     
     function AddOrderMenu(OMID) {
+        $('#waiting').show();
         $.ajax({
             type: 'GET',
             url: "/OrderMenu/AddMenu?OMId=" + OMID,

@@ -142,10 +142,11 @@
             $('#myaccordion2').append(mainlist);
        }
 
-
+        $('#waiting').hide();
        // SaveMenu();
     }
     function SaveMenu() {
+        $('#waiting').show();
         var OMName = $("#OrderMenuName").val().replace(' ', '');
         if (OMName == null || OMName == "") {
             $.alert({
@@ -209,13 +210,14 @@
             contentType: "application/json",
             success: function (data) {
                 var OMId = parseInt(data);
-                if (parseInt(OrderMenuObj.id) > 0) {
+                if (parseInt(OrderMenuObj.id) ==0) {
                     $("#Menus").append('<block id=' + OMId + '>' + OMName + '</block>');
                 }
                 hidedpt("AddOrderMenu");
+                $('#waiting').hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
-
+                $('#waiting').hide();
             }
         });
 
