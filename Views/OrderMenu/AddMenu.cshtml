@@ -45,7 +45,7 @@
                 </div>
                 <ul id="ID" class="collapse list-unstyled " data-parent="#myaccordion">
 
-                    <li class="nav-item" data-parent="#myaccordion" OrderNo="1">
+                    <li class="nav-item" data-parent="#myaccordion" id="0" Itmid="0" OrderNo="1">
                         <div class="row">
                             <div class="col-md-2">
                                 <label></label>
@@ -67,7 +67,7 @@
                             </div>
                             <div class="col-md-1">
                                 <label></label>
-                                <input type="checkbox" class="form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+                                <input type="checkbox" class="form-control ItemStatus" style="border: 2px dotted #00f; display: block; background: #ff0000" />
                             </div>
                         </div>
                     </li>
@@ -118,11 +118,11 @@
             var ItemUl = '<ul id="C'+list[i].CategoryID+'" class="collapse list-unstyled " data-parent="#myaccordion">';
             for (var j = 0; j < ItemList.length; j++) {
                 var OrdN = j + 1;
-                var ItemLi = '<li class="nav-item" data-parent="#myaccordion" OrderNo="' +OrdN+'"><div class="row">';
+                var ItemLi = '<li class="nav-item" data-parent="#myaccordion" id="0" Itmid="' + ItemList[j].ItemID+'" OrderNo="' +OrdN+'"><div class="row">';
                 var DisaplyItm = '<div class="col-md-2"><label></label><a style="text-align:center;color:darkblue" class="nav-link">' + ItemList[j].Items+'</a></div >';
                 var ItemRowDown = '<div class="col-md-1"><label></label><a onclick="RowDown(this)" style="text-align:center;color:darkblue" class="nav-link"><i class="fas fa-arrow-down" style="font-size:x-large"></i></a></div>';
                 var ItemRowUp = '<div class="col-md-1"><label></label><a onclick="RowUp(this)" style="text-align:center;color:darkblue" class="nav-link"><i class="fas fa-arrow-up" style="font-size:x-large"></i></a></div >';
-                var ItemCheck = '<div class="col-md-1"><label></label><input type="checkbox" class="form-control" style="border: 2px dotted #00f; display: block; background: #ff0000"/></div ></div></li >';
+                var ItemCheck = '<div class="col-md-1"><label></label><input type="checkbox" class="form-control ItemStatus" style="border: 2px dotted #00f; display: block; background: #ff0000"/></div ></div></li >';
                 ItemUl += ItemLi + DisaplyItm + ItemRowDown + ItemRowUp + ItemCheck;
             }
             var CloseItemLi = '</ul></li>';
@@ -131,7 +131,7 @@
        }
 
 
-        SaveMenu();
+       // SaveMenu();
     }
     function SaveMenu() {
         var OrderMenuJson = {};
@@ -158,14 +158,17 @@
 
                 var childLis = $(ChileLI[j]);
                 var OrdNo = childLis.attr("OrderNo");
+                var ItemStatus = childLis.find('.ItemStatus').val();
+                var Id = childLis.attr('id');
+                var Itmid = childLis.attr('Itmid');
                 console.log("child OrdNo  " + OrdNo);
                 var ObjItemMenu = {};
-                ObjItemMenu.id = "";
-                ObjItemMenu.ItemId = "";
+                ObjItemMenu.id = Id;
+                ObjItemMenu.ItemId = Itmid;
                 ObjItemMenu.OrderNo = OrdNo;
                 ObjItemMenu.OrdMenuCatId = MenuCId;
                 ObjItemMenu.OderMenuId = OrderMenuObj.id;
-                ObjItemMenu.Status = "";
+                ObjItemMenu.Status = ItemStatus;
                 ListItems.push(ObjItemMenu);
             }
             var ObjCateMnu = {};
@@ -179,7 +182,20 @@
 
         }
         OrderMenuObj.OderMenuCategry = ListCategry;
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/SaveOrderMenu",
+            data: JSON.stringify(OrderMenuObj),
+            contentType: "application/json",
+            success: function (data) {
+                MenuOrderCategoryList = JSON.parse(data);
+                ShowCategoryList(MenuOrderCategoryList);
 
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+
+            }
+        });
 
     }
 

@@ -223,6 +223,16 @@ namespace HangOut.Controllers
             }
             return jArray;
         }
+        [HttpPost]
+        public int SaveOrderMenu(string objMenu)
+        {
+            OrderMenu orderMenu = JsonConvert.DeserializeObject<OrderMenu>(objMenu);
+            if (orderMenu.id == 0)
+            {
+
+            }
+            return orderMenu.id;
+        }
         public JObject ScanRestTable(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);
