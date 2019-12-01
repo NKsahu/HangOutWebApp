@@ -33,6 +33,9 @@
         div.scrollmenu a:hover {
             background-color: #777;
         }
+    block.selected {
+        color: green;
+    }
 </style>
 
 <div class="row" style="width:100%">
@@ -41,7 +44,7 @@
         <hr />
     </div>
     <div class="scrollmenu" id="Menus">
-        <block id="AddNew" onclick="AddOrderMenu(0)">Add New</block>
+        <block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>
     </div>
 
 </div>
@@ -109,10 +112,10 @@
     function ShowOrderMenus(list) {
         $("#Menus").html('');
         $("#Floor").html('');
-        $("#Menus").append('<block id="AddNew" onclick="AddOrderMenu(0)">Add New</block>');
+        $("#Menus").append('<block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>');
         var MenuList = list.MenuList;
         for (var i = 0; i < MenuList.length; i++) {
-            $("#Menus").append('<block onclick="AddOrderMenu(' + MenuList[i].id + ')" id=' + MenuList[i].id + '>' + MenuList[i].MenuName + '</block>');
+            $("#Menus").append('<block ondblclick="AddOrderMenu(' + MenuList[i].id + ')" id=' + MenuList[i].id + '>' + MenuList[i].MenuName + '</block>');
         }
         var categorylist = list.FloorList;
         
@@ -196,6 +199,9 @@
             li.detach().insertAfter(next);
         }
     }
-
+    $('block').click(function () {
+        $('block').css('background:color', 'black');
+        $(this).css('background:color', 'green');
+    });
 </script>
 
