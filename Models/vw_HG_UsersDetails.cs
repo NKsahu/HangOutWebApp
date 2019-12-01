@@ -63,6 +63,12 @@ namespace HangOut.Models
                     ObjTmp.UserId = SDR.GetString(4);
                     ObjTmp.Password = SDR.GetString(5);
                     ObjTmp.EMail =SDR.IsDBNull(6)?"": SDR.GetString(6);
+                    ObjTmp.UPhoto = SDR.IsDBNull(7) ? "" : SDR.GetString(7);
+                    ObjTmp.EntryBy = SDR.GetInt32(8);
+                    ObjTmp.EntryDate = SDR.GetDateTime(9);
+                    ObjTmp.UpdateDate = SDR.GetDateTime(10);
+                    ObjTmp.Status = SDR.GetBoolean(11);
+                    ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     listOfuser.Add(ObjTmp);
                 }
             }
@@ -95,6 +101,12 @@ namespace HangOut.Models
                     ObjTmp.UserId = SDR.GetString(4);
                     ObjTmp.Password = SDR.GetString(5);
                     ObjTmp.EMail = SDR.GetString(6);
+                    ObjTmp.UPhoto = SDR.IsDBNull(7) ? "" : SDR.GetString(7);
+                    ObjTmp.EntryBy = SDR.GetInt32(8);
+                    ObjTmp.EntryDate = SDR.GetDateTime(9);
+                    ObjTmp.UpdateDate = SDR.GetDateTime(10);
+                    ObjTmp.Status = SDR.GetBoolean(11);
+                    ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
 
                 }
             }
@@ -126,6 +138,12 @@ namespace HangOut.Models
                     ObjTmp.UserId = SDR.GetString(4);
                     ObjTmp.Password = SDR.GetString(5);
                     ObjTmp.EMail = SDR.GetString(6);
+                    ObjTmp.UPhoto = SDR.IsDBNull(7) ? "" : SDR.GetString(7);
+                    ObjTmp.EntryBy = SDR.GetInt32(8);
+                    ObjTmp.EntryDate = SDR.GetDateTime(9);
+                    ObjTmp.UpdateDate = SDR.GetDateTime(10);
+                    ObjTmp.Status = SDR.GetBoolean(11);
+                    ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
 
                 }
             }
@@ -209,6 +227,12 @@ namespace HangOut.Models
                     ObjTmp.UserId = SDR.GetString(4);
                     ObjTmp.Password = SDR.GetString(5);
                     ObjTmp.EMail = SDR.GetString(6);
+                    ObjTmp.UPhoto = SDR.IsDBNull(7) ? "" : SDR.GetString(7);
+                    ObjTmp.EntryBy = SDR.GetInt32(8);
+                    ObjTmp.EntryDate = SDR.GetDateTime(9);
+                    ObjTmp.UpdateDate = SDR.GetDateTime(10);
+                    ObjTmp.Status = SDR.GetBoolean(11);
+                    ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
 
                 }
             }
