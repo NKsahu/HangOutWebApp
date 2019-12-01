@@ -69,50 +69,8 @@
             <div class="col-md-3 card" style="padding:5px">Table 10</div>
         </div>
 </blockTable>
-    <blockTable>
-        <div class="row">
-            <div class="col-md-6">
-                <h4 style="text-align:right">Floor2</h4>
-            </div>
-            <div class="col-md-2">
-                <input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3 card" style="padding:5px">Table 1</div>
-            <div class="col-md-3 card" style="padding:5px"> Table 2</div>
-            <div class="col-md-3 card" style="padding:5px">Table 3</div>
-            <div class="col-md-3 card" style="padding:5px">Table 4</div>
-            <div class="col-md-3 card" style="padding:5px">Table 5</div>
-            <div class="col-md-3 card" style="padding:5px">Table 6</div>
-            <div class="col-md-3 card" style="padding:5px">Table 7</div>
-            <div class="col-md-3 card" style="padding:5px">Table 8</div>
-            <div class="col-md-3 card" style="padding:5px">Table 9</div>
-            <div class="col-md-3 card" style="padding:5px">Table 10</div>
-        </div>
-    </blockTable>
-    <blockTable>
-        <div class="row">
-            <div class="col-md-6">
-                <h4 style="text-align:right">Floor3</h4>
-            </div>
-            <div class="col-md-2">
-                <input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3 card" style="padding:5px">Table 1</div>
-            <div class="col-md-3 card" style="padding:5px"> Table 2</div>
-            <div class="col-md-3 card" style="padding:5px">Table 3</div>
-            <div class="col-md-3 card" style="padding:5px">Table 4</div>
-            <div class="col-md-3 card" style="padding:5px">Table 5</div>
-            <div class="col-md-3 card" style="padding:5px">Table 6</div>
-            <div class="col-md-3 card" style="padding:5px">Table 7</div>
-            <div class="col-md-3 card" style="padding:5px">Table 8</div>
-            <div class="col-md-3 card" style="padding:5px">Table 9</div>
-            <div class="col-md-3 card" style="padding:5px">Table 10</div>
-        </div>
-    </blockTable>
+    
+   
     
 </div>
 <div class="row">
@@ -164,16 +122,19 @@
             FloorHtml += '<input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
             var TablesOrSheat = ' <div class="row">';
             var TableSHaetList = categorylist[i].TableSheatList;
-            //TablesOrSheat = TableSHaetList.length == 0 ? '<div class="row"><div class="col-md-3 card"></div>' : TablesOrSheat;
+            //TablesOrSheat = TableSHaetList.length == 0 ? '<div class="row"><div class="col-md-3 card"><p style="display:none">table 2 </p></div>' : TablesOrSheat;
             for (var j = 0; j < TableSHaetList.length; j++) {
-                TablesOrSheat += '<div class="col-md-3 "><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
+                TablesOrSheat += '<div class="col-md-3 card"><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
             }
+            TablesOrSheat += '<div class="col-md-3 "><p><i class="fa fa-plus" aria-hidden="true"></i> </p></div>';
             TablesOrSheat += "</div>";
             FloorHtml += TablesOrSheat;
             FloorHtml += '</blockTable>';
             $("#Floor").append(FloorHtml);
+            
         }
-        
+        var AddNew = '<blockTable><div class="row"><div class="col-md-12"> <i class="fa fa-plus" aria-hidden="true"></i></div></div></blockTable>';
+        $("#Floor").append(AddNew);
     }
 
     function AddOrderMenu(OMID) {
