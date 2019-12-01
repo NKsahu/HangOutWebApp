@@ -224,7 +224,7 @@ namespace HangOut.Controllers
             return jArray;
         }
         [HttpPost]
-        public int SaveOrderMenu(string objMenu)
+        public int SaveOrderMenu([System.Web.Http.FromBody] OrderMenu ordermenu)
         {
             OrderMenu orderMenu = JsonConvert.DeserializeObject<OrderMenu>(objMenu);
             if (orderMenu.id == 0)

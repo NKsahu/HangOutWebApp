@@ -76,6 +76,8 @@
                 </ul>
             </li>
         </ul>
+
+        <button style="text-align:center"  onclick="SaveMenu()" class="btn-success btn-sm form-control" >Submit</button>
     </div>
 
 </div>
@@ -134,11 +136,19 @@
        // SaveMenu();
     }
     function SaveMenu() {
+        var OMName = $("#OrderMenuName").val().replace(' ', '');
+        if (OMName == null || OMName == "") {
+            $.alert({
+                title: 'Alert!',
+                content: 'Menu Name Requiered',
+            });
+            return;
+        }
         var OrderMenuJson = {};
         //========
         var OrderMenuObj = {};
         OrderMenuObj.id = $("#OrderMenuName").attr('OMId');
-        OrderMenuObj.MenuName = $("#OrderMenuName").val().replace(' ', '');
+        OrderMenuObj.MenuName = OMName;
         OrderMenuJson.OrderMenu = OrderMenuObj;
         //==========
         var ListCategry = [];
@@ -185,11 +195,11 @@
         $.ajax({
             type: 'POST',
             url: "/WebApi/SaveOrderMenu",
-            data: JSON.stringify(OrderMenuObj),
+            data: JSON.stringify(OrderMenuObj);
             contentType: "application/json",
             success: function (data) {
-                MenuOrderCategoryList = JSON.parse(data);
-                ShowCategoryList(MenuOrderCategoryList);
+                //MenuOrderCategoryList = JSON.parse(data);
+               // ShowCategoryList(MenuOrderCategoryList);
 
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
