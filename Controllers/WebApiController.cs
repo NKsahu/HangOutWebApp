@@ -884,7 +884,7 @@ namespace HangOut.Controllers
             return jsonResult;
         }
 
-       public JObject ONLINEOFFLINE(string CEFID,int TicketNO)
+       public JObject ONLINEOFFLINE(string CHEFID,int TicketNO)
         {
                JObject jObject = new JObject();
                  HG_OrderItem  tableorder = new HG_OrderItem().GetOne(TicketNO);
@@ -894,7 +894,7 @@ namespace HangOut.Controllers
             Int64 save = tableorder.Save();
             if(save>0)
             {
-                vw_HG_UsersDetails userdetails = new vw_HG_UsersDetails().GetSingleByUserId(int.Parse(CEFID));
+                vw_HG_UsersDetails userdetails = new vw_HG_UsersDetails().GetSingleByUserId(int.Parse(CHEFID));
                 userdetails.CurrentStatus = false;
                 userdetails.save();
                 jObject.Add("Status", 200);
