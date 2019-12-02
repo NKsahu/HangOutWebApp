@@ -122,23 +122,39 @@
         $("#Floor").html('');
         $("#Menus").append('<block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>');
         var MenuList = list.MenuList;
+        var SelectedMenu = -5;
         for (var i = 0; i < MenuList.length; i++) {
-            $("#Menus").append('<block class="ShowMenu" onclick="ActiveMenu(this)" ondblclick="AddOrderMenu(' + MenuList[i].id + ')" id=' + MenuList[i].id + '>' + MenuList[i].MenuName + '</block>');
+            var Addcls = "";
+            if (MenuList[i].Status == true) {
+                Addcls = "SelectedMenu";
+                SelectedMenu = MenuList[i].id;
+            }
+            $("#Menus").append('<block class="ShowMenu ' + Addcls+'" onclick="ActiveMenu(this)" ondblclick="AddOrderMenu(' + MenuList[i].id + ')" id=' + MenuList[i].id + '>' + MenuList[i].MenuName + '</block>');
         }
         var categorylist = list.FloorList;
         
         for (var i = 0; i < categorylist.length; i++) {
             var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
             FloorHtml += '<h4 style="text-align:right">' + categorylist[i].Name + '</h4> </div><div class="col-md-6">';
-            FloorHtml += '<input type="checkbox" class=" form-control Checkbox" onclick="ActiveScrn(this)" id="' + categorylist[i].Floor_or_ScreenID+'" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
             var TablesOrSheat = ' <div class="row">';
             var TableSHaetList = categorylist[i].TableSheatList;
-            //TablesOrSheat = TableSHaetList.length == 0 ? '<div class="row"><div class="col-md-3 card"><p style="display:none">table 2 </p></div>' : TablesOrSheat;
+            var TotalSelectedTble = 0;
             for (var j = 0; j < TableSHaetList.length; j++) {
-                TablesOrSheat += '<div class="col-md-3 card" onclick="ActiveTable(this)" id="' + TableSHaetList[j].Table_or_RowID+'" childs="'+categorylist[i].Floor_or_ScreenID+'" ><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
+                var Tablecls = "";
+                if (TableSHaetList[j].OMID == SelectedMenu) {
+                    Tablecls = "SelectedTable";
+                    TotalSelectedTble += 1;
+                }
+                TablesOrSheat += '<div class="col-md-3 card ' + Tablecls+'"  onclick="ActiveTable(this)" id="' + TableSHaetList[j].Table_or_RowID+'" childs="'+categorylist[i].Floor_or_ScreenID+'" ><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
             }
+
             TablesOrSheat += '<div class="col-md-3 "><p><i class="fa fa-plus" aria-hidden="true"></i> </p></div>';
             TablesOrSheat += "</div>";
+            var CheckBoxCls = "";
+            if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
+                CheckBoxCls = "checked";
+            }
+            FloorHtml += '<input type="checkbox" '+CheckBoxCls+' class=" form-control Checkbox" onclick="ActiveScrn(this)" id="' + categorylist[i].Floor_or_ScreenID + '" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
             FloorHtml += TablesOrSheat;
             FloorHtml += '</blockTable>';
             $("#Floor").append(FloorHtml);
@@ -224,7 +240,6 @@
             for (var i = 0; i < ListTables.length; i++) {
                 var table = $(ListTables[i]);
                 table.addClass('SelectedTable');
-
             }
 
         }
@@ -257,6 +272,7 @@
         }
         var Menu = $(lis[0]);
         var MenuId = Menu.attr('id');
+        var menuName = Menu.text();
         var TableList = [];
         var SelectedTables = document.getElementsByClassName("SelectedTable");
         for (var i = 0; i < SelectedTables.length; i++) {
@@ -272,7 +288,13 @@
             url: "/WebApi/ActiveMenu?SObj="+JSON.stringify(Jobj),
             contentType: "application/json",
             success: function (data) {
-                var OMId = parseInt(data);
+                var status = parseInt(data);
+                if (status > 0) {
+                    $.alert({
+                        title: 'Alert',
+                        content: '' + menuName +' is Active',
+                    });
+                }
                 $("#waiting").hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback

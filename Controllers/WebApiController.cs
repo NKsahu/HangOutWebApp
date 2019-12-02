@@ -309,6 +309,7 @@ namespace HangOut.Controllers
         }
         public int ActiveMenu(string SObj)
         {
+            int status = 0;
             JObject Obj = JObject.Parse(SObj);
             int MenuId =int.Parse(Obj["OMID"].ToString());
             int OrgId = int.Parse(Obj["OrgId"].ToString());
@@ -322,21 +323,28 @@ namespace HangOut.Controllers
             foreach(var menu in orderMenulist)
             {
                 menu.Status = false;
-                menu.save();
+             int id=   menu.save();
+                if (id > 0) status = 1;
             }
             JArray jArray = JArray.FromObject(Obj["TorSIDs"]);
             Int64[] items = jArray.Select(jv => (Int64)jv).ToArray();
             HashSet<Int64> hashKeys = new HashSet<Int64>(items);
             List<HG_Tables_or_Sheat> TorSlist = new HG_Tables_or_Sheat().GetAll(int.Parse(OrgType));
-            TorSlist = TorSlist.FindAll(x => hashKeys.Contains(x.Table_or_RowID));
-            foreach (var TorSobj in TorSlist)
+            List<HG_Tables_or_Sheat>  OnlyApplytoTorS = TorSlist.FindAll(x => hashKeys.Contains(x.Table_or_RowID));
+            foreach (var TorSobj in OnlyApplytoTorS)
             {
                 TorSobj.OMID = MenuId;
                 TorSobj.save();
 
             }
+            TorSlist = TorSlist.FindAll(x => ! hashKeys.Contains(x.Table_or_RowID));
+            foreach (var TorSobj in TorSlist)
+            {
+                TorSobj.OMID = 0;
+                TorSobj.save();
 
-            return 0;
+            }
+            return status;
         }
         public JObject ScanRestTable(string Obj)
         {
