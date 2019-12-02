@@ -51,12 +51,12 @@ namespace HangOut.Controllers
             }
             return View(ObjTable);
         }
-        [HttpPost]
+       // [HttpPost]
         public ActionResult CreateEdit(HG_Tables_or_Sheat ObjTable)
         {
             Int64 i = ObjTable.save();
             if (i > 0)
-                return RedirectToAction("Index",new { Type= 1});
+                return Json(ObjTable,JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
         public ActionResult Delete(int ID)

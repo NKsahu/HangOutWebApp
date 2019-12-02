@@ -159,6 +159,7 @@ namespace HangOut.Controllers
             JObject ParaMeters = JObject.Parse(Obj);
             System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
             System.Int32 OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
+           // Int64 OID= System.Int64.Parse(ParaMeters["OID"].ToString());
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
             double TotalPrice = 0.00;
             List<Cart> CartItems = Cart.List.FindAll(x => x.CID == CustID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
@@ -166,10 +167,8 @@ namespace HangOut.Controllers
             JArray jArray = new JArray();
             foreach (Cart Mycart in CartItems)
             {
-               List<HG_Items> Items = ListItems.FindAll(x => x.ItemID == Mycart.ItemId);
-                foreach(HG_Items item in Items)
-                {
-                    JObject ObjItem = new JObject();
+                HG_Items item = ListItems.Find(x => x.ItemID == Mycart.ItemId);
+                JObject ObjItem = new JObject();
                     ObjItem.Add("IID", item.ItemID);
                     ObjItem.Add("ItemName", item.Items);
                     ObjItem.Add("ItemPrice", item.Price);
@@ -178,8 +177,6 @@ namespace HangOut.Controllers
                     ObjItem.Add("ItemCartValue", Mycart.Count);
                     TotalPrice += Mycart.Count * item.Price;
                     jArray.Add(ObjItem);
-
-                }
 
             }
             JObject ViewCartItem = new JObject();
