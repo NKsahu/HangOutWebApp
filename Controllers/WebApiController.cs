@@ -300,6 +300,7 @@ namespace HangOut.Controllers
             JObject jObject = JObject.FromObject(TableRowObj);
             HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
             jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
+            jObject.Add("PaymentType", objOrg.PaymentType);
             return jObject;
         }
         public JArray CartList(string CID)
@@ -848,7 +849,25 @@ namespace HangOut.Controllers
 
             return Info;
         }
+         
+        public JObject TableOTPCheker(string  TableID , int TableOTP)
+        {
+            JObject jsonResult = new JObject();
+            HG_Tables_or_Sheat listtable = new HG_Tables_or_Sheat().GetOne(Int64.Parse(TableID));
+       
+            if(listtable.Otp == TableOTP)
+            {
+                jsonResult.Add("Status", 200);
+                jsonResult.Add("Msg", "  Successful");
+            }
+            else
+            {
+                jsonResult.Add("Status", 400);
+                jsonResult.Add("Msg", "  UNSuccessful");
+            }
 
+            return jsonResult;
+        }
 
        
 
