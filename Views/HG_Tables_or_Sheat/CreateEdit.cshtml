@@ -13,11 +13,13 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("CreateEdit", "HG_Tables_or_Sheat", new { Table_or_RowID = Model.Table_or_RowID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEdit", "HG_Tables_or_Sheat", new { Table_or_RowID = Model.Table_or_RowID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ">.modal-dialog>.modal-content>.modal-body", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.Table_or_RowID)
             @Html.HiddenFor(model => model.Status)
             @Html.HiddenFor(model => model.CreateDate)
+            @Html.HiddenFor(model=>model.Otp)
+            @Html.HiddenFor(model=>model.OMID)
             <div class="row">
 
 

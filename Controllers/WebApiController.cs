@@ -337,6 +337,7 @@ namespace HangOut.Controllers
             {
                 TorSobj.OMID = 0;
                 TorSobj.save();
+
             }
             return status;
         }
@@ -593,10 +594,7 @@ namespace HangOut.Controllers
                     Orderlist = new HG_Orders().GetAll(OrgId);
                     Orderlist = Orderlist.FindAll(x => HashOID.Contains(x.OID));
                 }
-                
-               
-                // OrderItemList = OrderItemList.OrderBy(x => x.OrderDate).ToList();
-                //  var GroupBy
+                Orderlist = Orderlist.FindAll(x => x.Create_Date.Date >= DateTime.Now.Date).ToList();
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             int OrgType =int.Parse(ObjOrg.OrgTypes);
             List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
@@ -662,23 +660,49 @@ namespace HangOut.Controllers
             return tableorSheatList;
 
         }
-       
-        public JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy,string OID)
+       // this method used for update item status by chef
+        public JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy,int OID)
         {
-
-
-            List<HG_OrderItem> OrderItemList  = new HG_OrderItem().GetAll(Int64.Parse(OID));
+            List<HG_OrderItem> OrderItemList  = new HG_OrderItem().GetAll(OID);
             OrderItemList = OrderItemList.FindAll(x => x.TickedNo == TickedNo);
-
-            JObject PostResult = new JObject();
-            foreach(HG_OrderItem hg in OrderItemList)
+            HashSet<Int64> OIIDHash = new HashSet<Int64>();
+            OIIDHash.Add(0);
+            if (CheckedID.Contains(","))
             {
-                OrderItemList = OrderItemList.FindAll(x => x.OID == TickedNo);
-            
-                    
-                    
+                var OIDSarray = CheckedID.Replace(" ", "").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                foreach(var OIds in OIDSarray)
+                {
+                    OIIDHash.Add(Int64.Parse(OIds));
+                }
+            }
+            bool status = false;
+            JObject PostResult = new JObject();
+            foreach(HG_OrderItem OrderitemObj in OrderItemList)
+            {
+
+                if (OIIDHash.Contains(OrderitemObj.OIID)){
+
+                    OrderitemObj.Status = 3;//completed
+                }
+                else
+                {
+                    OrderitemObj.Status = 4;// canceld
+                }
+                OrderitemObj.UpdatedBy = UpdateBy;
+                OrderitemObj.Save();
+                if (OrderitemObj.OIID > 0)
+                {
+                    status = true;
+                }
              }
-          
+            if (status)
+            {
+                PostResult.Add("Status", 200);
+            }
+            else
+            {
+                PostResult.Add("Status", 400);
+            }
             return PostResult;
 
         }
@@ -917,7 +941,7 @@ namespace HangOut.Controllers
             return jsonResult;
         }
 
-       public JObject ONLINEOFFLINE(int CHEFID,int TicketNO,int OrgId)
+       public JObject ONLINEOFFLINE(int CHEFID,int TicketNO,int OrgId,bool ChefStatus)
         {
                JObject jObject = new JObject();
             List<HG_OrderItem> tableorderlist = new HG_OrderItem().GetAllByOrg(OrgId, ChefId: CHEFID);
@@ -928,12 +952,13 @@ namespace HangOut.Controllers
                 OrderItem.Save();
             }
                vw_HG_UsersDetails userdetails = new vw_HG_UsersDetails().GetSingleByUserId(CHEFID);
-                userdetails.CurrentStatus = false;
+                userdetails.CurrentStatus = ChefStatus;
                 userdetails.save();
                 jObject.Add("Status", 200);
 
             return jObject;
         }
+
 
 
        
