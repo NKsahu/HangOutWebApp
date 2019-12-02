@@ -2,6 +2,13 @@
     Layout = null;
 }
 <style>
+    .SelectedMenu {
+        background-color: #a9bf1a;
+    }
+    .SelectedTable {
+        background-color: #a9bf1a;
+    }
+
     div.scrollmenu {
         background-color: #333;
         overflow-x: auto;
@@ -44,7 +51,7 @@
         <hr />
     </div>
     <div class="scrollmenu" id="Menus">
-        <block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>
+        <block id="AddNew" class="ShowMenu" ondblclick="AddOrderMenu(0)">Add New</block>
     </div>
 
 </div>
@@ -81,7 +88,7 @@
 
     </div>
     <div class="col-md-2">
-        <button class="btn btn-danger form-control">Apply</button>
+        <button class="btn btn-danger form-control " onclick="Apply()">Apply</button>
     </div>
     <div class="col-md-5">
 
@@ -89,6 +96,7 @@
 </div>
 <script>
     var OrderMenuList = {};
+    var OrgId = 0;
     LoadOrderMenus();
     function LoadOrderMenus() {
         $.ajax({
@@ -115,19 +123,19 @@
         $("#Menus").append('<block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>');
         var MenuList = list.MenuList;
         for (var i = 0; i < MenuList.length; i++) {
-            $("#Menus").append('<block ondblclick="AddOrderMenu(' + MenuList[i].id + ')" id=' + MenuList[i].id + '>' + MenuList[i].MenuName + '</block>');
+            $("#Menus").append('<block class="ShowMenu" onclick="ActiveMenu(this)" ondblclick="AddOrderMenu(' + MenuList[i].id + ')" id=' + MenuList[i].id + '>' + MenuList[i].MenuName + '</block>');
         }
         var categorylist = list.FloorList;
         
         for (var i = 0; i < categorylist.length; i++) {
             var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
             FloorHtml += '<h4 style="text-align:right">' + categorylist[i].Name + '</h4> </div><div class="col-md-6">';
-            FloorHtml += '<input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+            FloorHtml += '<input type="checkbox" class=" form-control Checkbox" onclick="ActiveScrn(this)" id="' + categorylist[i].Floor_or_ScreenID+'" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
             var TablesOrSheat = ' <div class="row">';
             var TableSHaetList = categorylist[i].TableSheatList;
             //TablesOrSheat = TableSHaetList.length == 0 ? '<div class="row"><div class="col-md-3 card"><p style="display:none">table 2 </p></div>' : TablesOrSheat;
             for (var j = 0; j < TableSHaetList.length; j++) {
-                TablesOrSheat += '<div class="col-md-3 card"><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
+                TablesOrSheat += '<div class="col-md-3 card" onclick="ActiveTable(this)" id="' + TableSHaetList[j].Table_or_RowID+'" childs="'+categorylist[i].Floor_or_ScreenID+'" ><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
             }
             TablesOrSheat += '<div class="col-md-3 "><p><i class="fa fa-plus" aria-hidden="true"></i> </p></div>';
             TablesOrSheat += "</div>";
@@ -199,9 +207,79 @@
             li.detach().insertAfter(next);
         }
     }
-    $('block').click(function () {
-        $('block').css('background:color', 'black');
-        $(this).css('background:color', 'green');
-    });
+    function ActiveMenu(event) {
+      //  console.log('aaya');
+        var lis = document.getElementsByClassName("ShowMenu");
+        for (var i = 0; i < lis.length; i++) {
+            var li = $(lis[i]);
+            li.removeClass('SelectedMenu');
+        }
+       // console.log('aaya3');
+        $(event).addClass('SelectedMenu');
+    }
+    function ActiveScrn(event) {
+        var Idname = $(event).attr('id');
+        var ListTables = document.querySelectorAll("[childs='" + Idname + "']");
+        if ($(event).is(':checked')) {
+            for (var i = 0; i < ListTables.length; i++) {
+                var table = $(ListTables[i]);
+                table.addClass('SelectedTable');
+
+            }
+
+        }
+        else {
+            for (var i = 0; i < ListTables.length; i++) {
+                var table = $(ListTables[i]);
+                table.removeClass('SelectedTable');
+
+            }
+        }
+    }
+    function ActiveTable(event) {
+
+        if ($(event).hasClass('SelectedTable')) {
+            $(event).removeClass('SelectedTable');
+        }
+        else {
+            $(event).addClass('SelectedTable');
+        }
+    }
+    function Apply() {
+        console.log("test");
+        var lis = document.getElementsByClassName("SelectedMenu");
+        if (lis.length < 1) {
+            $.alert({
+                title: 'Alert!',
+                content: 'Active Menu First',
+            });
+            return;
+        }
+        var Menu = $(lis[0]);
+        var MenuId = Menu.attr('id');
+        var TableList = [];
+        var SelectedTables = document.getElementsByClassName("SelectedTable");
+        for (var i = 0; i < SelectedTables.length; i++) {
+          TableList.push($(SelectedTables[i]).attr('id'));
+        }
+        var Jobj = {};
+        Jobj.OMID = MenuId;
+        Jobj.TorSIDs = TableList;
+        Jobj.OrgId = OrgId;
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/WebApi/ActiveMenu?SObj="+JSON.stringify(Jobj),
+            contentType: "application/json",
+            success: function (data) {
+                var OMId = parseInt(data);
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
 </script>
 

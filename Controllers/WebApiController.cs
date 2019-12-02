@@ -307,6 +307,37 @@ namespace HangOut.Controllers
                 }
             return ordermenu.id;
         }
+        public int ActiveMenu(string SObj)
+        {
+            JObject Obj = JObject.Parse(SObj);
+            int MenuId =int.Parse(Obj["OMID"].ToString());
+            int OrgId = int.Parse(Obj["OrgId"].ToString());
+            HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(OrgId);
+            string OrgType = hG_OrganizationDetails.OrgTypes !=null ? hG_OrganizationDetails.OrgTypes : "1";
+            List <OrderMenu> orderMenulist = OrderMenu.GetAll();
+            OrderMenu orderMenu = orderMenulist.Find(x => x.id == MenuId);
+            orderMenu.Status = true;
+            orderMenu.save();
+            orderMenulist = orderMenulist.FindAll(x => x.id != MenuId);
+            foreach(var menu in orderMenulist)
+            {
+                menu.Status = false;
+                menu.save();
+            }
+            JArray jArray = JArray.FromObject(Obj["TorSIDs"]);
+            Int64[] items = jArray.Select(jv => (Int64)jv).ToArray();
+            HashSet<Int64> hashKeys = new HashSet<Int64>(items);
+            List<HG_Tables_or_Sheat> TorSlist = new HG_Tables_or_Sheat().GetAll(int.Parse(OrgType));
+            TorSlist = TorSlist.FindAll(x => hashKeys.Contains(x.Table_or_RowID));
+            foreach (var TorSobj in TorSlist)
+            {
+                TorSobj.OMID = MenuId;
+                TorSobj.save();
+
+            }
+
+            return 0;
+        }
         public JObject ScanRestTable(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);
