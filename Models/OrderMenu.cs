@@ -14,6 +14,7 @@ namespace HangOut.Models
         public DateTime UpdateDate { get; set; }
         public int OrgId { get; set; }
         public bool Status { get; set; }
+        public List<OrderMenuCategory> OderMenuCategry { get; set; }
         public OrderMenu()
         {
             Status = false;

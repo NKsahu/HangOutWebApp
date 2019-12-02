@@ -141,6 +141,7 @@
         OrderMenuObj.MenuName = $("#OrderMenuName").val().replace(' ', '');
         OrderMenuJson.OrderMenu = OrderMenuObj;
         //==========
+        var ListCategry = [];
         var lis = document.getElementById("myaccordion2").getElementsByClassName("mainList");
         for (var i = 0; i < lis.length;i++) {
             var li = $(lis[i]);
@@ -148,9 +149,9 @@
             var MenuCId = li.find('.Category').attr('id');
             var CategoryId=li.find('.Category').attr('CategoryId');
             var Categoryname = li.find('.Category').val();
-          //  var CheckStatus = li.find('.CheckStatus').val();
+            var CheckStatus = li.find('.CheckStatus').val();
             console.log("Loop catOrderNo" + CatOrderNo + " MenuCId" + MenuCId + " name" + Categoryname + "CheckStatus");
-
+            var ListItems = [];
             //===========
             var ChileLI = lis[i].getElementsByTagName('li');
             for (var j = 0; j<ChileLI.length; j++) {
@@ -158,10 +159,27 @@
                 var childLis = $(ChileLI[j]);
                 var OrdNo = childLis.attr("OrderNo");
                 console.log("child OrdNo  " + OrdNo);
-
+                var ObjItemMenu = {};
+                ObjItemMenu.id = "";
+                ObjItemMenu.ItemId = "";
+                ObjItemMenu.OrderNo = OrdNo;
+                ObjItemMenu.OrdMenuCatId = MenuCId;
+                ObjItemMenu.OderMenuId = OrderMenuObj.id;
+                ObjItemMenu.Status = "";
+                ListItems.push(ObjItemMenu);
             }
+            var ObjCateMnu = {};
+            ObjCateMnu.id = MenuCId;
+            ObjCateMnu.CategoryId = CategoryId;
+            ObjCateMnu.DisplayName = Categoryname;
+            ObjCateMnu.OrderNo = CatOrderNo;
+            ObjCateMnu.Status = CheckStatus;
+            ObjCateMnu.OrdCatItems = ListItems;
+            ListCategry.push(ObjCateMnu);
 
         }
+        OrderMenuObj.OderMenuCategry = ListCategry;
+
 
     }
 

@@ -14,6 +14,7 @@ namespace HangOut.Models
         public int OrderNo { get; set; }
         public int OrderMenuid { get; set; }
         public bool Status { get; set; }
+        public List<OrdMenuCtgItems> OrdCatItems { get; set; }
         public int save()
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
