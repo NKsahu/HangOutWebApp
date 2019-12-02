@@ -887,7 +887,7 @@ namespace HangOut.Controllers
        public JObject ONLINEOFFLINE(string CHEFID,int TicketNO)
         {
                JObject jObject = new JObject();
-                 HG_OrderItem  tableorder = new HG_OrderItem().GetOne(TicketNO);
+                 HG_OrderItem  tableorder = new HG_OrderItem().GetOne(TicketNo:TicketNO);
                  tableorder.Status= 1;
             tableorder.ChefSeenBy = 0;
 
