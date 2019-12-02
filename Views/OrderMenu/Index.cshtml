@@ -148,7 +148,7 @@
                 TablesOrSheat += '<div class="col-md-3 card ' + Tablecls+'"  onclick="ActiveTable(this)" id="' + TableSHaetList[j].Table_or_RowID+'" childs="'+categorylist[i].Floor_or_ScreenID+'" ><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
             }
 
-            TablesOrSheat += '<div class="col-md-3 "><p><i class="fa fa-plus" aria-hidden="true"></i> </p></div>';
+            TablesOrSheat += '<div class="col-md-3 " onclick="AddTorS(this)" id="Add' + categorylist[i].Floor_or_ScreenID+'"><p><i class="fa fa-plus" aria-hidden="true"></i></p></div>';
             TablesOrSheat += "</div>";
             var CheckBoxCls = "";
             if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
@@ -295,6 +295,23 @@
                         content: '' + menuName +' is Active',
                     });
                 }
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function AddTorS(event) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Tables_or_Sheat/CreateEdit?ID=0",
+            success: function (data) {
+                makedpt("CreateTorS");
+                $("#CreateTorS > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateTorS");
                 $("#waiting").hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
