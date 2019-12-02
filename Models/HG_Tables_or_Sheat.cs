@@ -21,9 +21,11 @@ namespace HangOut.Models
         public int CreateBy { get; set; }
         public int Status { get; set; }// {"1":free,"2":"BOOKED",3:"PROGRESS"}
         public int Otp { get; set; }
+        public int OMID { get; set; } //order menu id
         public HG_Tables_or_Sheat()
         {
             Status = 1;
+            OMID = 0;
             CreateDate = DateTime.Now;
         }
         public Int64 save()
@@ -36,9 +38,9 @@ namespace HangOut.Models
                 SqlCommand cmd = null;
                 string Query = "";
                 if (this.Table_or_RowID == 0)
-                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_SheetName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy,@Status,@Otp);SELECT SCOPE_IDENTITY();";
+                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_SheetName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy,@Status,@Otp,@OMID);SELECT SCOPE_IDENTITY();";
                 else
-                    Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_SheetName =@Table_or_SheetName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy,Status=@Status,Otp=@Otp Where Table_or_RowID=@Table_or_RowID;";
+                    Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_SheetName =@Table_or_SheetName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy,Status=@Status,Otp=@Otp,OMID=@OMID Where Table_or_RowID=@Table_or_RowID;";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", this.Table_or_RowID);
                 cmd.Parameters.AddWithValue("@OrgId", this. OrgId);
@@ -50,6 +52,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@CreateBy", this.CreateBy);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@Otp", this.Otp);
+                cmd.Parameters.AddWithValue("@OMID", this.OMID);
                 if (this.Table_or_RowID == 0)
                 {
                     Row = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -99,6 +102,7 @@ namespace HangOut.Models
                     ObjTemp.CreateBy = SDR .GetInt32(7);
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1: SDR.GetInt32(8);
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
+                    ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
                     listTemp.Add(ObjTemp);
                 }
 
@@ -134,6 +138,7 @@ namespace HangOut.Models
                     ObjTemp.CreateBy = SDR.GetInt32(7);
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1: SDR.GetInt32(8);
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
+                    ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
 
 
                 }
@@ -171,6 +176,7 @@ namespace HangOut.Models
                     ObjTemp.CreateBy = SDR.GetInt32(7);
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1 : SDR.GetInt32(8);
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
+                    ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
                     TempList.Add(ObjTemp);
                 }
             }
@@ -237,6 +243,7 @@ namespace HangOut.Models
                     ObjTemp.CreateBy = SDR.GetInt32(7);
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1 : SDR.GetInt32(8);
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
+                    ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
                     listTemp.Add(ObjTemp);
                 }
 

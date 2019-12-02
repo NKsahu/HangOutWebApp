@@ -18,7 +18,6 @@ namespace HangOut.Models
         public string Type { get; set; }
         public int OrgID { get; set; }
 
-
         public int save()
         {
             int Row = 0;
