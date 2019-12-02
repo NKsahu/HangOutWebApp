@@ -95,8 +95,10 @@
     </div>
 </div>
 <script>
-    var OrderMenuList = {};
     var OrgId = 0;
+    var TblShetList = [];
+    var categorylist = [];
+    var MenuList = [];
     LoadOrderMenus();
     function LoadOrderMenus() {
         $.ajax({
@@ -104,7 +106,7 @@
             url: "/WebApi/OrderMenuList?OrgId=0",
             success: function (data) {
                 
-                OrderMenuList = JSON.parse(data);
+              var  OrderMenuList = JSON.parse(data);
                 console.log("AYA");
                // if (OrderMenuList.length > 0) {
                     ShowOrderMenus(OrderMenuList);
@@ -121,17 +123,17 @@
         $("#Menus").html('');
         $("#Floor").html('');
         $("#Menus").append('<block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>');
-        var MenuList = list.MenuList;
+         MenuList = list.MenuList;
         var SelectedMenu = -5;
         for (var i = 0; i < MenuList.length; i++) {
             var Addcls = "";
             if (MenuList[i].Status == true) {
-                Addcls = "SelectedMenu";
+               // Addcls = "SelectedMenu";
                 SelectedMenu = MenuList[i].id;
             }
-            $("#Menus").append('<block class="ShowMenu ' + Addcls+'" onclick="ActiveMenu(this)" ondblclick="AddOrderMenu(' + MenuList[i].id + ')" id=' + MenuList[i].id + '>' + MenuList[i].MenuName + '</block>');
+            $("#Menus").append('<block class="ShowMenu ' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddOrderMenu(' + MenuList[i].id + ')" OMID=' + MenuList[i].id+' id="M' + MenuList[i].id + '">' + MenuList[i].MenuName + '</block>');
         }
-        var categorylist = list.FloorList;
+         categorylist = list.FloorList;
         
         for (var i = 0; i < categorylist.length; i++) {
             var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
@@ -140,21 +142,22 @@
             var TableSHaetList = categorylist[i].TableSheatList;
             var TotalSelectedTble = 0;
             for (var j = 0; j < TableSHaetList.length; j++) {
+                TblShetList.push(TableSHaetList[j]);
                 var Tablecls = "";
                 if (TableSHaetList[j].OMID == SelectedMenu) {
-                    Tablecls = "SelectedTable";
+                   // Tablecls = "SelectedTable";
                     TotalSelectedTble += 1;
                 }
-                TablesOrSheat += '<div class="col-md-3 card ' + Tablecls+'"  onclick="ActiveTable(this)" id="' + TableSHaetList[j].Table_or_RowID+'" childs="'+categorylist[i].Floor_or_ScreenID+'" ><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
+                TablesOrSheat += '<div class="col-md-3 card ' + Tablecls + '"  onclick="ActiveTable(this)" TSID="'+TableSHaetList[j].Table_or_RowID+'" id="TS' + TableSHaetList[j].Table_or_RowID+'" childs="'+categorylist[i].Floor_or_ScreenID+'" ><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
             }
 
             TablesOrSheat += '<div class="col-md-3 " onclick="AddTorS(this)" id="Add' + categorylist[i].Floor_or_ScreenID+'"><p><i class="fa fa-plus" aria-hidden="true"></i></p></div>';
             TablesOrSheat += "</div>";
             var CheckBoxCls = "";
             if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
-                CheckBoxCls = "checked";
+               // CheckBoxCls = "checked";
             }
-            FloorHtml += '<input type="checkbox" '+CheckBoxCls+' class=" form-control Checkbox" onclick="ActiveScrn(this)" id="' + categorylist[i].Floor_or_ScreenID + '" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+            FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="'+categorylist[i].Floor_or_ScreenID+'" id="FS' + categorylist[i].Floor_or_ScreenID + '" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
             FloorHtml += TablesOrSheat;
             FloorHtml += '</blockTable>';
             $("#Floor").append(FloorHtml);
@@ -173,7 +176,6 @@
                 makedpt("AddOrderMenu");
                 $("#AddOrderMenu > .modal-dialog > .modal-content > .modal-body").html(data);
                 showdpt("AddOrderMenu");
-
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
 
@@ -224,12 +226,24 @@
         }
     }
     function ActiveMenu(event) {
-      //  console.log('aaya');
+        console.log("h");
+        for (var i = 0; i < TblShetList.length; i++) {
+            $("#TS" + TblShetList[i].Table_or_RowID).removeClass('SelectedTable');
+        }
         var lis = document.getElementsByClassName("ShowMenu");
         for (var i = 0; i < lis.length; i++) {
             var li = $(lis[i]);
             li.removeClass('SelectedMenu');
         }
+        var MenuId =parseInt($(event).attr("OMID"));
+        var SelectedTables = TblShetList.filter(function (x) {
+            return x.OMID == MenuId;
+        });
+        for (var i = 0; i < SelectedTables.length; i++) {
+            $("#TS" + SelectedTables[i].Table_or_RowID).addClass('SelectedTable');
+        }
+       // var TotalSelectedCount = SelectedTables.length;
+
        // console.log('aaya3');
         $(event).addClass('SelectedMenu');
     }
@@ -271,12 +285,20 @@
             return;
         }
         var Menu = $(lis[0]);
-        var MenuId = Menu.attr('id');
+        var MenuId =parseInt(Menu.attr('OMID'));
         var menuName = Menu.text();
         var TableList = [];
         var SelectedTables = document.getElementsByClassName("SelectedTable");
         for (var i = 0; i < SelectedTables.length; i++) {
-          TableList.push($(SelectedTables[i]).attr('id'));
+            for (var j = 0; j < TblShetList.length; j++) {
+                if (TblShetList[j].Table_or_RowID == $(SelectedTables[i]).attr('TSID')) {
+                    TblShetList[j].OMID = MenuId;
+                    break;
+                }
+
+            }
+
+          TableList.push($(SelectedTables[i]).attr('TSID'));
         }
         var Jobj = {};
         Jobj.OMID = MenuId;

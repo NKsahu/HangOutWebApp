@@ -319,17 +319,12 @@ namespace HangOut.Controllers
             OrderMenu orderMenu = orderMenulist.Find(x => x.id == MenuId);
             orderMenu.Status = true;
             orderMenu.save();
-            orderMenulist = orderMenulist.FindAll(x => x.id != MenuId);
-            foreach(var menu in orderMenulist)
-            {
-                menu.Status = false;
-             int id=   menu.save();
-                if (id > 0) status = 1;
-            }
+            List<HG_Tables_or_Sheat> TorSlist = new HG_Tables_or_Sheat().GetAll(int.Parse(OrgType));
+            var AlreadySelectedList = TorSlist.FindAll(x => x.OMID == MenuId);
             JArray jArray = JArray.FromObject(Obj["TorSIDs"]);
             Int64[] items = jArray.Select(jv => (Int64)jv).ToArray();
             HashSet<Int64> hashKeys = new HashSet<Int64>(items);
-            List<HG_Tables_or_Sheat> TorSlist = new HG_Tables_or_Sheat().GetAll(int.Parse(OrgType));
+            var RemovedTorSList = AlreadySelectedList.FindAll(x => !hashKeys.Contains(x.Table_or_RowID));
             List<HG_Tables_or_Sheat>  OnlyApplytoTorS = TorSlist.FindAll(x => hashKeys.Contains(x.Table_or_RowID));
             foreach (var TorSobj in OnlyApplytoTorS)
             {
@@ -337,12 +332,11 @@ namespace HangOut.Controllers
                 TorSobj.save();
 
             }
-            TorSlist = TorSlist.FindAll(x => ! hashKeys.Contains(x.Table_or_RowID));
-            foreach (var TorSobj in TorSlist)
+            
+            foreach (var TorSobj in RemovedTorSList)
             {
                 TorSobj.OMID = 0;
                 TorSobj.save();
-
             }
             return status;
         }
