@@ -252,6 +252,9 @@
 <div class="row">
     <div class="col-md-12 col-sm-12">
         @{
+            var cookei = Request.Cookies["UserInfo"];
+            var UserCode = cookei["UserCode"];
+            var OrgId = cookei["OrgId"];
             List<SelectListItem> list = new List<SelectListItem>();
             SelectListItem sl1 = new SelectListItem { Text = "SEAT VIEW", Value = "1" };
             SelectListItem sl2 = new SelectListItem { Text = "ORDER VIEW", Value = "2" };
@@ -259,6 +262,8 @@
             list.Add(sl2);
         }
         @Html.DropDownList("DashBoard", list, new { @class = "form-control", })
+        @Html.Hidden("COID", OrgId)
+        @Html.Hidden("CUC", UserCode)
     </div>
 </div>
 <div class="row"  id="SeatView">
@@ -472,6 +477,8 @@
 </div>
 
  <script>
+     var OrgId = 0;
+     var LoginId = 0;
         var TablesList = null;
         var ItemList = null;
         var CurrentOrder = 0;// which means table or  takeaway id
@@ -498,7 +505,11 @@
             $("#TableSearch").val('');
             SearchItem('TableSearch', 'TabAndTakeW');
             console.log("AAYA");
-        });
+     });
+     $(document).ready(function () {
+         OrgId = $("#COID").val();
+         LoginId = $("#CUC").val();
+     });
         function plus(itemid) {
             var CartValue = parseInt($("#C" + itemid).text());
             AddToCart(itemid, CartValue + 1);
@@ -522,8 +533,8 @@
         }
         function AddToCart(ItemId, Cnt) {
             var Obj = {};
-            Obj.CID = 0;
-            Obj.OrgId = 0;
+            Obj.CID = LoginId;
+            Obj.OrgId = OrgId;
             Obj.ItemId = ItemId;
             Obj.Cnt = Cnt;
             Obj.TSTWID = CurrentOrder;
@@ -617,7 +628,7 @@
          console.log("table list");
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/TableAndTakeAway?Type=1&OrderById=0",
+                url: "/WebApi/TableAndTakeAway?Type=1&OrderById="+LoginId,
                 success: function (data) {
                     TablesList = JSON.parse(data);
                     ShowOrders(TablesList);
@@ -730,8 +741,8 @@
             //assign CurrOid of Perticuar Table Or Sheat or NewTakeAway
             CurrOID = ObjOrderName.CurrOID;
             var Obj = {};
-            Obj.CID = 0;
-            Obj.OrgId = 0;
+            Obj.CID =LoginId;
+            Obj.OrgId = OrgId;
             Obj.TSTWID = TableOrMWid;
             Obj.OID = ObjOrderName.CurrOID;
             $.ajax({
@@ -855,8 +866,8 @@
                     btnClass: 'btn-primary',
                     confirm: function () {
                         var Obj = {};
-                        Obj.CID = 0;
-                        Obj.OrgID = 0;
+                        Obj.CID = LoginId;
+                        Obj.OrgID = OrgId;
                         Obj.TORSID = CurrentOrder;
                         Obj.OID = CurrOID;
                         PostOrder(Obj);
@@ -876,8 +887,8 @@
                     confirm: function () {
                         // $.alert('Confirmed!');
                         var Obj = {};
-                        Obj.CID = 0;
-                        Obj.OrgID = 0;
+                        Obj.CID = LoginId;
+                        Obj.OrgID = OrgId;
                         Obj.TORSID = CurrentOrder;
                         Obj.OID = CurrOID;
                         Obj.Status = 3;
@@ -1007,7 +1018,7 @@
         function CompleteOrder(PaymentType) {
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/CompleteOrder?OID=" + CurrOID + "&PaymentType=" + PaymentType + "&UpdatedBy=0",
+                url: "/WebApi/CompleteOrder?OID=" + CurrOID + "&PaymentType=" + PaymentType + "&UpdatedBy="+LoginId,
                 success: function (data) {
                     var Jobj = JSON.parse(data);
                     if (Jobj.Status == 400) {
