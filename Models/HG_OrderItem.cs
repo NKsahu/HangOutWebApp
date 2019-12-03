@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 
 namespace HangOut.Models
 {
@@ -75,15 +76,24 @@ namespace HangOut.Models
             return Row;
         }
 
-        public List<HG_OrderItem> GetAll(Int64 OID)
+        public List<HG_OrderItem> GetAll(Int64 OID=0)
         {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
             System.Collections.Generic.List<HG_OrderItem> ListTmp = new System.Collections.Generic.List<HG_OrderItem>();
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM HG_ORDERITEM WHERE OID="+OID.ToString()+" and Deleted=0 ORDER BY OIID DESC";
+                string Query = "SELECT * FROM HG_ORDERITEM";
+                if (OID > 0)
+                {
+                    Query = "SELECT * FROM HG_ORDERITEM WHERE OID=" + OID.ToString() + " and Deleted=0 ";
+                }
+                else if(int.Parse(CurrOrgID["OrgId"]) > 0)
+                {
+                 Query = "SELECT * FROM HG_ORDERITEM WHERE OrgId=" + CurrOrgID["OrgId"] + " and Deleted=0 ";
+                }
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

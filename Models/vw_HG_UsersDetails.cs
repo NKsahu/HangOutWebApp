@@ -29,6 +29,7 @@ namespace HangOut.Models
             OrgID = 0;
            UPhoto = "";
             EMail = "";
+            UserName = "";
             CurrentStatus = true;
         }
         

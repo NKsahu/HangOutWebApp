@@ -2,7 +2,10 @@
 @{
 
     Layout = null;
+    int Sn = 1;
+
     List<HG_Orders> orderList = new List<HG_Orders>();
+    List<HG_OrderItem> OrderItmlist = new List<HG_OrderItem>();
     List<vw_HG_UsersDetails> UserList = new List<vw_HG_UsersDetails>();
     if (Request.QueryString["Type"] == "1")
     {
@@ -12,6 +15,7 @@
             <div class="card-body">
                 <div class="container">
                     <div class="row">
+
                         <div class="col-md-3">
                             @Html.Label("Payment Mode")
                             @{
@@ -75,9 +79,27 @@
                 $("#Search").click(function () {
                     Search();
                 });
-
+                
             });
+            function Details(OID) {
+                //HG_OrderItem
+                //OID
+                $("#waiting").show();
+                $.ajax({
+                    type: 'POST',
+                    url: "/HG_OrderItem/index?OID=" + OID,
+                    success: function (data) {
+                        makedpt("CurrOrder");
+                        $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                        showdpt("CurrOrder");
+                        $("#waiting").hide();
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) { // error callback
+                        $("#waiting").hide();
+                    }
+                });
 
+            }
         </script>
     }
 
@@ -89,48 +111,67 @@
         DateTime FromDate = DateTime.Parse(Request.QueryString["Fdate"]);
         DateTime Todate = DateTime.Parse(Request.QueryString["Tdate"]);
         orderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
+        OrderItmlist = new HG_OrderItem().GetAll(0);
+        // OrderItmlist = OrderItmlist.FindAll(x => (x.OrderDate.Date >= FromDate.Date) || (x.OrderDate.Date <= Todate.Date)).ToList();
         if (PaymentMode != 0)
         {
             orderList = orderList.FindAll(x => x.PaymentStatus == PaymentMode);
         }
         UserList = new vw_HG_UsersDetails().GetAll();
     }
-}
-<div class="col" id="List2">
-    <div class="card">
-        <div class="card-header">Ledger Details </div>
-        <div class="card-body">
-            <table class="table table-hover table-bordered text-center" id="TBLID">
-                <thead>
-                    <tr>
-                        <th> S.N </th>
-                        <th> DateTime </th>
-                        <th> Order No </th>
-                        <th> Received By</th>
-                        <th> AMT (RS)</th>
-                        <th> Shift Payment T-Mode</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var ObjOrder in orderList)
-                    {
-
+    <div class="col" id="List2">
+        <div class="card">
+            <div class="card-header">Ledger Details </div>
+            <div class="card-body">
+                <table class="table table-hover table-bordered text-center" id="TBLID">
+                    <thead>
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <th> S.N </th>
+                            <th> DateTime </th>
+                            <th> Order No </th>
+                            <th> Received By</th>
+                            <th> AMT (RS)</th>
+                            <th>Details</th>
+                            <th> Shift Payment T-Mode</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ObjOrder in orderList)
+                        {
+                            string Receivedby = " ";
+                            var User = UserList.Find(x => x.UserCode == ObjOrder.PayReceivedBy);
+                            if (User != null)
+                            {
+                                Receivedby = User.UserName;
+                            }
+                            double TotalAmt = 0.00;
+                            var CurntOrderItms = OrderItmlist.FindAll(x => x.OID == ObjOrder.OID);
+                            for (int i = 0; i < CurntOrderItms.Count; i++)
+                            {
+                                TotalAmt += (CurntOrderItms[i].Count * CurntOrderItms[i].Price);
+                            }
+                            <tr>
+                                <td>@(Sn++)</td>
+                                <td>@ObjOrder.Create_Date.ToString("dd/MM hh:mm:ss tt")</td>
+                                <td>@ObjOrder.OID</td>
+                                <td>@Receivedby</td>
+                                <td>@TotalAmt.ToString("0.00")</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning" onclick="Details('@ObjOrder.OID');"><i class="fas fa-eye"></i></button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning"><i class="fas fa-history"></i></button>
+                                </td>
+                            </tr>
 
 
-                    }
+                        }
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
+}
 
