@@ -594,6 +594,10 @@ namespace HangOut.Controllers
                 Orderlist = Orderlist.FindAll(x => x.Create_Date.Date >= DateTime.Now.Date).ToList();
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             int OrgType =int.Parse(ObjOrg.OrgTypes);
+                if (ObjOrg.PaymentType == 1)//if prepaid than visible after payment completed
+                {
+                    Orderlist = Orderlist.FindAll(x => x.PaymentStatus != 0);
+                }
             List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
             List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
             List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
