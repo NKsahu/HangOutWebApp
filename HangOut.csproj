@@ -373,6 +373,7 @@
     <Content Include="Views\HG_Orders\DashBoardOrders.cshtml" />
     <Content Include="Views\OrderMenu\Index.cshtml" />
     <Content Include="Views\OrderMenu\AddMenu.cshtml" />
+    <Content Include="Views\HG_Orders\Ledger.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
