@@ -514,6 +514,7 @@ namespace HangOut.Controllers
             {
                 order.Status = "3";//3 completed
                 order.Update_By = UpdatedBy;
+                order.PayReceivedBy = UpdatedBy;
                 order.PaymentStatus = PaymentType;// update payment status
                 obj.Status = 1;// free table
                 obj.Otp = OTPGeneretion.Generate();
