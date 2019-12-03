@@ -1,6 +1,11 @@
 ﻿@{
     Layout = null;
 }
+@{ 
+    var cookei = Request.Cookies["UserInfo"];
+    var UserCode = cookei["UserCode"];
+    var OrgId= cookei["OrgId"];
+}
 <style>
     #table-scroll {
         height: 300px;
@@ -10,6 +15,8 @@
         margin-top: 20px;
     }
 </style>
+@Html.Hidden("COID", OrgId)
+@Html.Hidden("CUC", UserCode)
 <div style="width:100%; min-width:100%">
     <h3 style="text-align:center"> Todays Orders</h3>
 </div>
@@ -64,8 +71,8 @@
     var OrderList = [];
     var ChefOrderList = [];
     var OrgId = 0;
-    var PaymentStatus = 0;// unpaid list
     var LoginId = 0;
+    var PaymentStatus = 0;// unpaid list
     var CurrOID = 0;
     $("#UnPaidOrderId").click();
     function GetOrders(PaymentStatus) {
@@ -265,5 +272,9 @@
     }
     $("#ChefOrderId").click(function () {
         ChefOrders(-1);// chef orders
+    });
+    $(document).ready(function () {
+         OrgId = $("#COID").val();
+         LoginId = $("#CUC").val();
     });
 </script>
