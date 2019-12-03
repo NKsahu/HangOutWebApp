@@ -51,7 +51,7 @@ namespace HangOut.Controllers
             }
             return View(ObjTable);
         }
-       // [HttpPost]
+        [HttpPost]
         public ActionResult CreateEdit(HG_Tables_or_Sheat ObjTable)
         {
             Int64 i = ObjTable.save();

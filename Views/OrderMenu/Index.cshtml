@@ -248,7 +248,7 @@
         $(event).addClass('SelectedMenu');
     }
     function ActiveScrn(event) {
-        var Idname = $(event).attr('id');
+        var Idname = $(event).attr('FSID');
         var ListTables = document.querySelectorAll("[childs='" + Idname + "']");
         if ($(event).is(':checked')) {
             for (var i = 0; i < ListTables.length; i++) {
