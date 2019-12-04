@@ -175,12 +175,13 @@ namespace HangOut.Models
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
             List<HG_Orders> ListTmp = new List<HG_Orders>();
-            var theDate = new DateTime(Todate.Year, Todate.Month, Todate.Day, 23, 59, 00);
+            //Formdate= new DateTime(Formdate.Year, Formdate.Month, Formdate.Day, 0, 0, 00);
+           // var theDate = new DateTime(Todate.Year, Todate.Month, Todate.Day, 23, 59, 00);
             HG_Orders ObjTmp = null;
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("yyyy/MM/dd")+"' and '"+ theDate.ToString("yyyy/MM/dd HH:mm:ss")+"' ORDER BY OID DESC";
+                string Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("yyyy/MM/dd")+"' and '"+ Todate.ToString("yyyy/MM/dd HH:mm:ss")+"' ORDER BY OID DESC";
                 cmd = new SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

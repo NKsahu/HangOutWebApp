@@ -101,24 +101,24 @@
 
             }
         </script>
-    }
+                                }
 
 
-    else
-    {
+                                else
+                                {
 
-        int PaymentMode = int.Parse(Request.QueryString["PMode"]);
-        DateTime FromDate = DateTime.Parse(Request.QueryString["Fdate"]);
-        DateTime Todate = DateTime.Parse(Request.QueryString["Tdate"]);
-        orderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
-        OrderItmlist = new HG_OrderItem().GetAll(0);
-        // OrderItmlist = OrderItmlist.FindAll(x => (x.OrderDate.Date >= FromDate.Date) || (x.OrderDate.Date <= Todate.Date)).ToList();
-        if (PaymentMode != 0)
-        {
-            orderList = orderList.FindAll(x => x.PaymentStatus == PaymentMode);
-        }
-        UserList = new vw_HG_UsersDetails().GetAll();
-    }
+                                    int PaymentMode = int.Parse(Request.QueryString["PMode"]);
+                                    DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd/MM/yyyy HH:mm:ss",System.Globalization.CultureInfo.InvariantCulture);
+                                    DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture));
+                                    orderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
+                                    OrderItmlist = new HG_OrderItem().GetAll(0);
+                                    // OrderItmlist = OrderItmlist.FindAll(x => (x.OrderDate.Date >= FromDate.Date) || (x.OrderDate.Date <= Todate.Date)).ToList();
+                                    if (PaymentMode != 0)
+                                    {
+                                        orderList = orderList.FindAll(x => x.PaymentStatus == PaymentMode);
+                                    }
+                                    UserList = new vw_HG_UsersDetails().GetAll();
+                                }
     <div class="col" id="List2">
         <div class="card">
             <div class="card-header">Ledger Details </div>
