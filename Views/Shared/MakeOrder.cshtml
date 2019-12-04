@@ -901,7 +901,7 @@
             });
         }
         function Charge() {
-            
+            console.log("Curr OID +" + CurrOID);
             $.ajax({
                 type: 'POST',
                 url: "/WebApi/ShowOrderItems?OID=" + CurrOID,
