@@ -970,6 +970,34 @@ namespace HangOut.Controllers
         }
 
 
+        public JObject CheckChefOnlineOffline(int CHEFID)
+        {
+            JObject jObject = new JObject();
+          
+            vw_HG_UsersDetails userdetails = new vw_HG_UsersDetails().GetSingleByUserId(CHEFID);
+            if(userdetails!=null)
+            {
+                if (userdetails.CurrentStatus)
+                {
+                    jObject.Add("Status", 200);
+                    jObject.Add("Msg", "Online");
+
+                }
+                else
+                {
+                    jObject.Add("Status", 400);
+                    jObject.Add("Msg", "Offline");
+                }
+            }
+            else
+            {
+                jObject.Add("Status", 600);
+                jObject.Add("Msg", "UserNotExits");
+            }
+            return jObject;
+        }
+
+
 
 
 
