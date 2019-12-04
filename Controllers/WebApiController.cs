@@ -942,27 +942,36 @@ namespace HangOut.Controllers
             return jsonResult;
         }
 
-       public JObject ONLINEOFFLINE(int CHEFID,int TicketNO,int OrgId,bool ChefStatus)
+        public JObject ONLINEOFFLINE(int CHEFID, int TicketNO, int OrgId, bool ChefStatus)
         {
-               JObject jObject = new JObject();
+            JObject jObject = new JObject();
             List<HG_OrderItem> tableorderlist = new HG_OrderItem().GetAllByOrg(OrgId, ChefId: CHEFID);
             tableorderlist = tableorderlist.FindAll(x => x.TickedNo == TicketNO);
-            foreach(var OrderItem in tableorderlist)
+            foreach (var OrderItem in tableorderlist)
             {
                 OrderItem.ChefSeenBy = 0;
                 OrderItem.Save();
             }
-               vw_HG_UsersDetails userdetails = new vw_HG_UsersDetails().GetSingleByUserId(CHEFID);
-                userdetails.CurrentStatus = ChefStatus;
-                userdetails.save();
+            vw_HG_UsersDetails userdetails = new vw_HG_UsersDetails().GetSingleByUserId(CHEFID);
+            userdetails.CurrentStatus = ChefStatus;
+            Int64 save = userdetails.save();
+            if (save > 0)
+            {
                 jObject.Add("Status", 200);
+
+            }
+            else
+            {
+                jObject.Add("Status", 400);
+
+            }
 
             return jObject;
         }
 
 
 
-       
+
 
 
 
