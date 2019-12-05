@@ -82,7 +82,7 @@
     function GetOrders(PaymentStatus) {
         var Obj = {};
         Obj.OrgId = OrgId;
-        Obj.IsChef = 1;
+        Obj.IsChef = 0;
         $.ajax({
             type: 'POST',
             url: "/WebApi/ShowOrderByStatus?Obj=" + JSON.stringify(Obj),
