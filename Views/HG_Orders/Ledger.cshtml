@@ -3,7 +3,7 @@
 
     Layout = null;
     int Sn = 1;
-
+    var ObjOrgId = Request.Cookies["UserInfo"];
     List<HG_Orders> orderList = new List<HG_Orders>();
     List<HG_OrderItem> OrderItmlist = new List<HG_OrderItem>();
     List<vw_HG_UsersDetails> UserList = new List<vw_HG_UsersDetails>();
@@ -39,6 +39,7 @@
                             @Html.Label("To Date")
                             @Html.TextBox("Tdate", DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
                         </div>
+                        @Html.Hidden("OrgId", ObjOrgId["OrgId"]);
                         <div class="col-sm-2">
                             <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
                         </div>
@@ -60,8 +61,9 @@
                     var Pmode = $("#PMode").val();
                     var Fdate = $("#Fdate").val();
                     var Tdate = $("#Tdate").val();
+                    var OrgId = $("#OrgId").val();
                     $.ajax({
-                        url: "/HG_Orders/Ledger?Type=2&PMode=" + Pmode + "&Fdate=" + Fdate + "&Tdate=" + Tdate,
+                        url: "/HG_Orders/Ledger?Type=2&PMode=" + Pmode + "&Fdate=" + Fdate + "&Tdate=" + Tdate +"&OrgId="+OrgId,
                         type: "GET",
                         success: function (data) {
                             $("#waiting").hide();
@@ -106,13 +108,13 @@
 
                                 else
                                 {
-
+                                   int OrgId = int.Parse(Request.QueryString["OrgId"].ToString());
                                     int PaymentMode = int.Parse(Request.QueryString["PMode"]);
                                     DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy",System.Globalization.CultureInfo.InvariantCulture);
                                     DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     orderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
+                                    orderList = orderList.FindAll(x => x.OrgId == OrgId);
                                     OrderItmlist = new HG_OrderItem().GetAll(0);
-                                    // OrderItmlist = OrderItmlist.FindAll(x => (x.OrderDate.Date >= FromDate.Date) || (x.OrderDate.Date <= Todate.Date)).ToList();
                                     if (PaymentMode != 0)
                                     {
                                         orderList = orderList.FindAll(x => x.PaymentStatus == PaymentMode);
