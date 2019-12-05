@@ -108,8 +108,8 @@
                                 {
 
                                     int PaymentMode = int.Parse(Request.QueryString["PMode"]);
-                                    DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd/MM/yyyy HH:mm:ss",System.Globalization.CultureInfo.InvariantCulture);
-                                    DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd/MM/yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture));
+                                    DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy",System.Globalization.CultureInfo.InvariantCulture);
+                                    DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     orderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
                                     OrderItmlist = new HG_OrderItem().GetAll(0);
                                     // OrderItmlist = OrderItmlist.FindAll(x => (x.OrderDate.Date >= FromDate.Date) || (x.OrderDate.Date <= Todate.Date)).ToList();
