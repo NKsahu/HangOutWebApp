@@ -541,23 +541,25 @@ namespace HangOut.Controllers
         {
             JObject Params = JObject.Parse(Obj);
             int OrgId = int.Parse(Params["OrgId"].ToString());
-            int PaymentStatus = int.Parse(Params["PayStatus"].ToString());
-            List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now.AddDays(-1), DateTime.Now);
+            int IsChef = int.Parse(Params["IsChef"].ToString());
+            List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             Orders = Orders.FindAll(x => x.Status != "3");//not completed
             Orders = Orders.FindAll(x => x.OrgId == OrgId);
-            if (PaymentStatus != -1)// unpaid and other
+            HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
+            if (orgobj != null && orgobj.PaymentType == 1)// prepaid and is chef orders
             {
-                Orders = Orders.FindAll(x => x.PaymentStatus == PaymentStatus);
-            }
-            else
-            {
-                //chef orders==
-                HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
-                if (orgobj != null && orgobj.PaymentType == 1)
+
+                if (IsChef == 1)
                 {
                     Orders = Orders.FindAll(x => x.PaymentStatus > 0);
                 }
+                else
+                {
+
+                   
+                }
             }
+          
             
             JArray jArray = new JArray();
             foreach(var order in Orders)
