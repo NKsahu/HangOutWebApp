@@ -678,6 +678,7 @@ namespace HangOut.Controllers
        // this method used for update item status by chef
         public JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy,int OID)
         {
+            HG_Orders order = new HG_Orders().GetOne(OID);
             List<HG_OrderItem> OrderItemList  = new HG_OrderItem().GetAll(OID);
             OrderItemList = OrderItemList.FindAll(x => x.TickedNo == TickedNo);
             HashSet<Int64> OIIDHash = new HashSet<Int64>();
@@ -712,6 +713,18 @@ namespace HangOut.Controllers
              }
             if (status)
             {
+                HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
+                if (ObjOrg.PaymentType==1)// prepaid
+                {
+                    order.Status ="3";// completed
+                    order.Update_By = UpdateBy;
+                }
+                else
+                {//postpaid
+                    order.Status = "2";// processing
+                    order.Update_By = UpdateBy;
+                }
+                order.Save();
                 PostResult.Add("Status", 200);
             }
             else
