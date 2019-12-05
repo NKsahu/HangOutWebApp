@@ -75,6 +75,10 @@
     var PaymentStatus = 0;// unpaid list
     var CurrOID = 0;
     $("#UnPaidOrderId").click();
+    $(document).ready(function () {
+        OrgId = $("#COID").val();
+        LoginId = $("#CUC").val();
+    });
     function GetOrders(PaymentStatus) {
         var Obj = {};
         Obj.OrgId = OrgId;
@@ -273,8 +277,5 @@
     $("#ChefOrderId").click(function () {
         ChefOrders(-1);// chef orders
     });
-    $(document).ready(function () {
-         OrgId = $("#COID").val();
-         LoginId = $("#CUC").val();
-    });
+    
 </script>

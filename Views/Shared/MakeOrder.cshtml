@@ -623,7 +623,7 @@
             }
             event.style.backgroundColor = '#e2dbdb';
         }
-        GeTablesTakeAwya();
+     setTimeout(function () { GeTablesTakeAwya() }, 1000);
      function GeTablesTakeAwya() {
          console.log("table list");
             $.ajax({
@@ -1068,7 +1068,7 @@
                  success: function (data) {
                      $('#waiting').hide();
                      $("#OrderView").html(data);
-                     GetOrders(0);
+                     setTimeout(function () { GetOrders(0) },1000);
                  },
                  error: function (jqXhr, textStatus, errorMessage) { // error callback
                      $("#waiting").hide();

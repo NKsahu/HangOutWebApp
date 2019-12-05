@@ -10,7 +10,7 @@ namespace HangOut.Models
     {
         
         public int OrgID { get; set; }
-        public string OrgTypes{ get; set; }
+        public string OrgTypes{ get; set; }// restuarant 2 means threater
         public string HeadName{ get; set; }
         public string Name{ get; set; }
         public string Address{ get; set; }// address 1
@@ -61,17 +61,15 @@ namespace HangOut.Models
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy",int.Parse(HttpContext.Current.Request.Cookies["UserInfo"]["UserCode"]));
                     cmd.Parameters.AddWithValue("@EntryDate",System.DateTime.Now);
-                    
+                    cmd.Parameters.AddWithValue("@OrgTypes", this.OrgTypes);
                 }
                 else
                 {
-
-                    Query = "update  HG_OrganizationDetails set OrgTypes=@OrgTypes,HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType,InvoiceHeading=@InvoiceHeading,AddressLine2=@AddressLine2,AddressLin3=@AddressLin3,License2=@License2,License3=@License3 where OrgID =@OrgID ";
+                    Query = "update  HG_OrganizationDetails set HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType,InvoiceHeading=@InvoiceHeading,AddressLine2=@AddressLine2,AddressLin3=@AddressLin3,License2=@License2,License3=@License3 where OrgID =@OrgID ";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@OrgID ", this.OrgID );
                 }
                 cmd.Parameters.AddWithValue("@UpdateDate", System.DateTime.Now);
-                cmd.Parameters.AddWithValue("@OrgTypes", this.OrgTypes);
                 cmd.Parameters.AddWithValue("@HeadName", this.HeadName);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
                 cmd.Parameters.AddWithValue("@Address", this.Address);

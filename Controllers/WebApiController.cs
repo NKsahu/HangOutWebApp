@@ -539,15 +539,26 @@ namespace HangOut.Controllers
 
         public JArray ShowOrderByStatus(string Obj)
         {
-
             JObject Params = JObject.Parse(Obj);
             int OrgId = int.Parse(Params["OrgId"].ToString());
             int PaymentStatus = int.Parse(Params["PayStatus"].ToString());
             List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now.AddDays(-1), DateTime.Now);
             Orders = Orders.FindAll(x => x.Status != "3");//not completed
             Orders = Orders.FindAll(x => x.OrgId == OrgId);
-            if (PaymentStatus!=-1)
-                Orders = Orders.FindAll(x=>x.PaymentStatus == PaymentStatus);
+            if (PaymentStatus != -1)// unpaid and other
+            {
+                Orders = Orders.FindAll(x => x.PaymentStatus == PaymentStatus);
+            }
+            else
+            {
+                //chef orders==
+                HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
+                if (orgobj != null && orgobj.PaymentType == 1)
+                {
+                    Orders = Orders.FindAll(x => x.PaymentStatus > 0);
+                }
+            }
+            
             JArray jArray = new JArray();
             foreach(var order in Orders)
             {
