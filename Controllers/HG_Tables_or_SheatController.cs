@@ -56,7 +56,7 @@ namespace HangOut.Controllers
         {
             Int64 i = ObjTable.save();
             if (i > 0)
-                return Json(ObjTable,JsonRequestBehavior.AllowGet);
+                return RedirectToAction("Index", new { Type = 1 });
             return RedirectToAction("Error");
         }
         public ActionResult Delete(int ID)

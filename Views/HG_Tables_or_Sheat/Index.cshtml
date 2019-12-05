@@ -12,7 +12,7 @@
         <h1 style="text-align:center"><b>TABLES</b> </h1>
         <hr />
     </div>
-    @*<a href="/HG_Tables_or_Sheat/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>*@
+    <a href="/HG_Tables_or_Sheat/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
     <div class="card-body">
         <table class=" table table-bordered table-hover w-100" id="TBLID">
             <thead>
@@ -20,6 +20,9 @@
                     <th>Qr Code</th>
                     <th>
                         @Html.DisplayName("Table Code")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Table Otp")
                     </th>
                     <th>
                         @Html.DisplayName("Organization ")
@@ -33,8 +36,8 @@
                     <th>
                         @Html.DisplayName("Floor Side")
                     </th>
-                     
-                   
+
+
                     <th></th>
                 </tr>
             </thead>
@@ -42,31 +45,33 @@
                 @foreach (var item in Model)
                 {
                     string ImgName = QrCode.GenerateQr(item.Table_or_RowID,Path: "QRImgTorR");
-                    <tr>
-                        <td><img src="~/QRImgTorR/@ImgName" width="60" height="60"/></td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Table_or_RowID)
-                        </td>
-                        <td>
-                            @{ HG_OrganizationDetails Objorg = listorgonization.Find(x => x.OrgID == item.OrgId);}
-                            @Objorg.Name
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Table_or_SheetName)
-                        </td>
-                        <td>
-                            @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);}
-                            @ObjScreen.Name
-                        </td>
-                        <td>
-                             @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x. ID == item.FloorSide_or_RowNoID);}
-                            @Objfloor.FloorSide_or_RowName
-                        </td>
-                        <td>
-                            <a href=" /HG_Tables_or_Sheat/CreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" > Edit</a>
-                            <a href="/HG_Tables_or_Sheat/Delete?ID=@item.Table_or_RowID" class="btn btn-danger btn-sm "> Delete</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td><img src="~/QRImgTorR/@ImgName" width="60" height="60" /></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Table_or_RowID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Otp)
+                    </td>
+                    <td>
+                        @{ HG_OrganizationDetails Objorg = listorgonization.Find(x => x.OrgID == item.OrgId);}
+                        @Objorg.Name
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Table_or_SheetName)
+                    </td>
+                    <td>
+                        @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);}
+                        @ObjScreen.Name
+                    </td>
+                    <td>
+                        @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x.ID == item.FloorSide_or_RowNoID);}
+                        @Objfloor.FloorSide_or_RowName
+                    </td>
+                    <td>
+                        <a href=" /HG_Tables_or_Sheat/CreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

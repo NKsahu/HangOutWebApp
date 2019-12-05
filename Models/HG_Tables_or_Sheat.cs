@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
+using HangOut.Models.Common;
 using System.Web;
 
 using System.ComponentModel.DataAnnotations;
@@ -38,7 +38,10 @@ namespace HangOut.Models
                 SqlCommand cmd = null;
                 string Query = "";
                 if (this.Table_or_RowID == 0)
+                {
                     Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_SheetName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy,@Status,@Otp,@OMID);SELECT SCOPE_IDENTITY();";
+                    this.Otp = OTPGeneretion.Generate();
+                }
                 else
                     Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_SheetName =@Table_or_SheetName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy,Status=@Status,Otp=@Otp,OMID=@OMID Where Table_or_RowID=@Table_or_RowID;";
                 cmd = new SqlCommand(Query, Con);
