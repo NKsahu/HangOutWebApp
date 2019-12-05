@@ -877,21 +877,47 @@ namespace HangOut.Controllers
         public JArray PastOrderMainList(int CID)
         {
             JArray Info = new JArray();
+            
             List<HG_Orders> OrderList = new HG_Orders().GetAll(CID: CID);
 
             if(OrderList.Count>0)
             {
+
                 foreach (HG_Orders orders in OrderList)
                 {
+                   
                     HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
                     List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
+                    double price = 0.00;
+                    HashSet<int> Token = new HashSet<int>();
+                    for(int i=0;i< OrderItemList.Count; i++)
+                    {
+                        price += (OrderItemList[i].Count * OrderItemList[i].Price);
+                        Token.Add(OrderItemList[i].TickedNo);
+                    }
                     JObject Object = new JObject();
-
                     Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                     Object.Add("OrganizationName", hG_OrganizationDetails.Name);
-                    Object.Add("TotalAmount", OrderItemList.Sum(X => X.Price));
+                    Object.Add("TotalAmount", price);
+                    Object.Add("TicketNo", string.Join(",", Token));
                     Object.Add("OID", orders.OID);
                     Object.Add("Status", orders.Status);
+                    if (orders.PaymentStatus == 1)
+                    {
+                        Object.Add("PayStatus", "CASH");
+                    }
+                    else if (orders.PaymentStatus == 2)
+                    {
+                        Object.Add("PayStatus", "ONLINE");
+                    }
+                    else if (orders.PaymentStatus == 3)
+                    {
+                        Object.Add("PayStatus", "foodDo");
+                    }
+                    else
+                    {
+                        Object.Add("PayStatus", "UNPAID");
+                    }
 
                     Info.Add(Object);
                 }
@@ -981,7 +1007,7 @@ namespace HangOut.Controllers
             return jObject;
         }
 
-
+        // THIS FUNCTION SET SAFE ONLINE OFFLINE MODES
         public JObject CheckChefOnlineOffline(int CHEFID)
         {
             JObject jObject = new JObject();
@@ -1009,8 +1035,7 @@ namespace HangOut.Controllers
             return jObject;
         }
 
-
-
+       
 
 
 
