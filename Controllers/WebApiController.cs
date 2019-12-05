@@ -510,30 +510,44 @@ namespace HangOut.Controllers
             HG_Orders order = new HG_Orders().GetOne(OID);
             List<HG_OrderItem> listOrderitem = new HG_OrderItem().GetAll(order.OID);
             HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
-            if (order.OID > 0 && obj.Table_or_RowID>0)
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
+            if(ObjOrg.PaymentType==1)// prepaid case only accept payment 
             {
-                order.Status = "3";//3 completed
+                order.PaymentStatus = PaymentType;
                 order.Update_By = UpdatedBy;
-                order.PayReceivedBy = UpdatedBy;
-                order.PaymentStatus = PaymentType;// update payment status
-                obj.Status = 1;// free table
-                obj.Otp = OTPGeneretion.Generate();
                 order.Save();
-                obj.save();
-                foreach(var Oitems in listOrderitem)
-                {
-                    Oitems.Status = 3;
-                    Oitems.UpdatedBy = UpdatedBy;
-                    Oitems.Save();
-                }
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
             }
             else
             {
-                jObject.Add("Status", 400);
-                jObject.Add("MSG", "Order No Not Found");
+                if (order.OID > 0 && obj.Table_or_RowID > 0)
+                {
+                    order.Status = "3";//3 order completed
+                    order.Update_By = UpdatedBy;
+                    order.PayReceivedBy = UpdatedBy;
+                    order.PaymentStatus = PaymentType;// update payment status
+                    obj.Status = 1;// free table
+                    obj.Otp = OTPGeneretion.Generate();
+                    order.Save();
+                    obj.save();
+                    foreach (var Oitems in listOrderitem)
+                    {
+                        Oitems.Status = 3;//comleted item
+                        Oitems.UpdatedBy = UpdatedBy;
+                        Oitems.Save();
+                    }
+                    jObject.Add("Status", 200);
+                    jObject.Add("MSG", obj.Otp);
+                }
+                else
+                {
+                    jObject.Add("Status", 400);
+                    jObject.Add("MSG", "Order No Not Found");
+                }
             }
+
+            
             return jObject;
         }
 
@@ -548,19 +562,26 @@ namespace HangOut.Controllers
             HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
             if (orgobj != null && orgobj.PaymentType == 1)// prepaid and is chef orders
             {
-
                 if (IsChef == 1)
                 {
-                    Orders = Orders.FindAll(x => x.PaymentStatus > 0);
+                    Orders = Orders.FindAll(x => x.PaymentStatus > 0);// only seen paid orders
                 }
                 else
                 {
-
-                   
+                    Orders = Orders.FindAll(x => x.PaymentStatus ==0);// only seen unpaid orders
                 }
             }
-          
-            
+            else// postpaid
+            {
+                if (IsChef == 1)
+                {
+                    Orders = Orders.FindAll(x => x.Status=="1");// only seen placed ordersw
+                }
+                else
+                {
+                 Orders = Orders.FindAll(x => x.Status=="2");// only seen completed by chef
+                }
+            }
             JArray jArray = new JArray();
             foreach(var order in Orders)
             {
