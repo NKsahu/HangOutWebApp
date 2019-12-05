@@ -515,6 +515,7 @@ namespace HangOut.Controllers
             {
                 order.PaymentStatus = PaymentType;
                 order.Update_By = UpdatedBy;
+                order.PayReceivedBy = UpdatedBy;
                 order.Save();
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
@@ -735,10 +736,15 @@ namespace HangOut.Controllers
             if (status)
             {
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
+                HG_Tables_or_Sheat TorSObj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
                 if (ObjOrg.PaymentType==1)// prepaid
                 {
                     order.Status ="3";// completed
                     order.Update_By = UpdateBy;
+                    // free table 
+                    TorSObj.Status = 1;
+                    TorSObj.Otp = OTPGeneretion.Generate();
+                    TorSObj.save();
                 }
                 else
                 {//postpaid
