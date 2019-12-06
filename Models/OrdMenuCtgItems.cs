@@ -11,7 +11,7 @@ namespace HangOut.Models
         public Int64 id { get; set; }
         public Int64 ItemId { get; set; }
         public int OrderNo {get;set;}
-        public int OrdMenuCatId { get; set; }
+        public int OrdMenuCatId { get; set; }// it is Id Of OrderMenuCategory table  primary key
         public int OderMenuId { get; set; }
         public bool Status { get; set; }
         public Int64 save()

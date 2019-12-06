@@ -108,6 +108,41 @@ namespace HangOut.Models
 
             return (ListTmp);
         }
+        public static OrderMenu Getone(int Menuid)
+        {
+            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+          OrderMenu ObjTmp =new OrderMenu();
+            string Query = "SELECT TOP 1 * FROM  OrderMenu where MenuID=" +Menuid.ToString() + "";
+            try
+            {
+                cmd = new SqlCommand(Query, Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    int index = 0;
+                    ObjTmp.id = SDR.GetInt32(index++);
+                    ObjTmp.MenuName = SDR.GetString(index++);
+                    ObjTmp.CreateBy = SDR.GetInt32(index++);
+                    ObjTmp.UpdatedBy = SDR.GetInt32(index++);
+                    ObjTmp.UpdateDate = SDR.GetDateTime(index++);
+                    ObjTmp.OrgId = SDR.GetInt32(index++);
+                    ObjTmp.Status = SDR.GetBoolean(index++);
+                   
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally
+            {
+                Con.Close();
+                if (!SDR.IsClosed)
+                    SDR.Close();
+            }
 
+            return (ObjTmp);
+        }
     }
 }

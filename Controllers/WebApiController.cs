@@ -60,55 +60,102 @@ namespace HangOut.Controllers
         [HttpPost]
         public JArray GetItemList(string Obj)
         {
-
-
             JObject objParams = JObject.Parse(Obj);
-
+            JArray JMenuArray = new JArray();
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
             System.Int64 OID = System.Int64.Parse(objParams.GetValue("OID").ToString());
             System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OrgId").ToString());
-            System.Int64 TableSheatTakeWayId = System.Int64.Parse(objParams.GetValue("TSTWID").ToString());
-            List<HG_Category> MenuList = new HG_Category().GetAll(OrgId: OrgId);
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
-            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId &&x.TableorSheatOrTaleAwayId== TableSheatTakeWayId && x.OID==OID);
-            JArray JMenuArray = new JArray();
-            int count = 0;
-            foreach(HG_Category menu in MenuList)
+            System.Int64 TableSheatTakeWayId = System.Int64.Parse(objParams.GetValue("TSTWID").ToString());
+            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OID == OID);
+            HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
+            if (ObjTorS.Type !="3")// not takeaway
             {
-                double MenuItemPrice = 0.00;
-                List<HG_Items> ItemListByMenu = ListItems.FindAll(x => x.CategoryID == menu.CategoryID);
-                if (ItemListByMenu.Count > 0)
+                OrderMenu ObjMenu = OrderMenu.Getone(OrgId);
+                List<OrderMenuCategory> ListCategry = OrderMenuCategory.GetAll(ObjMenu.id);
+                List<OrdMenuCtgItems> ListMenuItems = OrdMenuCtgItems.GetAll(ObjMenu.id);
+                ListCategry = ListCategry.FindAll(x => x.Status == true);
+                ListCategry = ListCategry.OrderBy(x => x.OrderNo).ToList();
+                ListMenuItems = ListMenuItems.FindAll(x => x.Status = true);
+                int count = 0;
+                foreach (var OrderMenuObj in ListCategry)
                 {
-                    JObject JobjMenu = new JObject();
-                    JArray jarrayItem = new JArray();
-                    JobjMenu.Add("MenuId", menu.CategoryID);
-                    JobjMenu.Add("Name", menu.Category);
-                    JobjMenu.Add("MenuIndex", count++);
-                    int ItemiIndex = 0;
-                    foreach (var Items in ItemListByMenu)
+                    double MenuItemPrice = 0.00;
+                    var OrderMenuItems = ListMenuItems.FindAll(x => x.OrdMenuCatId == OrderMenuObj.id);
+                    if (OrderMenuItems.Count > 0)
                     {
-                        Cart cartCurrentItem = cartlist.Find(x => x.ItemId == Items.ItemID);
-                        int CurrCount = cartCurrentItem != null ? cartCurrentItem.Count :0;
-                        JObject objItem = new JObject();
-                        objItem.Add("IID", Items.ItemID);
-                        objItem.Add("ItemName", Items.Items);
-                        objItem.Add("ItemPrice", Items.Price);
-                        objItem.Add("ItemQuntity", Items.Qty);
-                        objItem.Add("ItemImage", Items.Image);
-                        objItem.Add("ItemCartValue", CurrCount);
-                        objItem.Add("MenuId", Items.CategoryID);
-                        objItem.Add("ItemIndex", ItemiIndex++);
-                        jarrayItem.Add(objItem);
-                        MenuItemPrice += Items.Price * CurrCount;
+                        JObject JobjMenu = new JObject();
+                        JArray jarrayItem = new JArray();
+                        JobjMenu.Add("MenuId", OrderMenuObj.CategoryId);
+                        JobjMenu.Add("Name", OrderMenuObj.DisplayName);
+                        JobjMenu.Add("MenuIndex", count++);
+                        int ItemiIndex = 0;
+                        OrderMenuItems = OrderMenuItems.OrderBy(x => x.OrderNo).ToList();
+                        foreach (var MenuItmObj in OrderMenuItems)
+                        {
+                            var Items = ListItems.Find(x => x.ItemID == MenuItmObj.ItemId);
+                            Cart cartCurrentItem = cartlist.Find(x => x.ItemId == Items.ItemID);
+                            int CurrCount = cartCurrentItem != null ? cartCurrentItem.Count : 0;
+                            JObject objItem = new JObject();
+                            objItem.Add("IID", Items.ItemID);
+                            objItem.Add("ItemName", Items.Items);
+                            objItem.Add("ItemPrice", Items.Price);
+                            objItem.Add("ItemQuntity", Items.Qty);
+                            objItem.Add("ItemImage", Items.Image);
+                            objItem.Add("ItemCartValue", CurrCount);
+                            objItem.Add("MenuId", Items.CategoryID);
+                            objItem.Add("ItemIndex", ItemiIndex++);
+                            jarrayItem.Add(objItem);
+                            MenuItemPrice += Items.Price * CurrCount;
+                        }
+                        JobjMenu.Add("MenuItemCount", OrderMenuItems.Count);
+                        JobjMenu.Add("MenuItems", jarrayItem);
+                        JobjMenu.Add("MenuItmPrice", MenuItemPrice);
+                        JMenuArray.Add(JobjMenu);
                     }
-                    JobjMenu.Add("MenuItemCount", ItemListByMenu.Count);
-                    JobjMenu.Add("MenuItems", jarrayItem);
-                    JobjMenu.Add("MenuItmPrice", MenuItemPrice);
-                    JMenuArray.Add(JobjMenu);
+
+                }
+
+            }
+            else
+            {
+                List<HG_Category> MenuList = new HG_Category().GetAll(OrgId: OrgId);
+                int count = 0;
+                foreach (HG_Category menu in MenuList)
+                {
+                    double MenuItemPrice = 0.00;
+                    List<HG_Items> ItemListByMenu = ListItems.FindAll(x => x.CategoryID == menu.CategoryID);
+                    if (ItemListByMenu.Count > 0)
+                    {
+                        JObject JobjMenu = new JObject();
+                        JArray jarrayItem = new JArray();
+                        JobjMenu.Add("MenuId", menu.CategoryID);
+                        JobjMenu.Add("Name", menu.Category);
+                        JobjMenu.Add("MenuIndex", count++);
+                        int ItemiIndex = 0;
+                        foreach (var Items in ItemListByMenu)
+                        {
+                            Cart cartCurrentItem = cartlist.Find(x => x.ItemId == Items.ItemID);
+                            int CurrCount = cartCurrentItem != null ? cartCurrentItem.Count : 0;
+                            JObject objItem = new JObject();
+                            objItem.Add("IID", Items.ItemID);
+                            objItem.Add("ItemName", Items.Items);
+                            objItem.Add("ItemPrice", Items.Price);
+                            objItem.Add("ItemQuntity", Items.Qty);
+                            objItem.Add("ItemImage", Items.Image);
+                            objItem.Add("ItemCartValue", CurrCount);
+                            objItem.Add("MenuId", Items.CategoryID);
+                            objItem.Add("ItemIndex", ItemiIndex++);
+                            jarrayItem.Add(objItem);
+                            MenuItemPrice += Items.Price * CurrCount;
+                        }
+                        JobjMenu.Add("MenuItemCount", ItemListByMenu.Count);
+                        JobjMenu.Add("MenuItems", jarrayItem);
+                        JobjMenu.Add("MenuItmPrice", MenuItemPrice);
+                        JMenuArray.Add(JobjMenu);
+                    }
                 }
             }
-
-          
             return JMenuArray;
         }
         [HttpPost]
