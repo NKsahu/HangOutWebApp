@@ -8,7 +8,7 @@ namespace HangOut.Models.Common
 {
     public class QrCode
     {
-        public static string GenerateQr(System.Int64 QrId,string ShowLabel = "",string Path="")
+        public static string GenerateQr(string QrId,string ShowLabel = "",string Path="")
         {
             string ImageName = "";
             var QCwriter = new BarcodeWriter();

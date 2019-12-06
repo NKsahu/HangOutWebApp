@@ -5,7 +5,6 @@
 }
 @using HangOut.Models
 @{ List<HG_FloorSide_or_RowName> listfloor = new HG_FloorSide_or_RowName().GetAll(1);}
-@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(1);}
 @{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll(1);}
  <div class="card">
     <div class="card-header">
@@ -17,15 +16,11 @@
         <table class=" table table-bordered table-hover w-100" id="TBLID">
             <thead>
                 <tr>
-                    <th>Qr Code</th>
                     <th>
-                        @Html.DisplayName("Table Code")
+                        @Html.DisplayName("Qr Code")
                     </th>
                     <th>
-                        @Html.DisplayName("Table Otp")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Organization ")
+                        @Html.DisplayName("Otp")
                     </th>
                     <th>
                         @Html.DisplayName("Table Name")
@@ -44,18 +39,11 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    string ImgName = QrCode.GenerateQr(item.Table_or_RowID,Path: "QRImgTorR");
+                    string ImgName = QrCode.GenerateQr(item.QrCode,Path: "QRImgTorR");
                 <tr>
                     <td><img src="~/QRImgTorR/@ImgName" width="60" height="60" /></td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Table_or_RowID)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Otp)
-                    </td>
-                    <td>
-                        @{ HG_OrganizationDetails Objorg = listorgonization.Find(x => x.OrgID == item.OrgId);}
-                        @Objorg.Name
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Table_or_SheetName)

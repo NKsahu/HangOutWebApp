@@ -22,11 +22,13 @@ namespace HangOut.Models
         public int Status { get; set; }// {"1":free,"2":"BOOKED",3:"PROGRESS"}
         public int Otp { get; set; }
         public int OMID { get; set; } //order menu id
+        public string QrCode { get; set; } //QrCode
         public HG_Tables_or_Sheat()
         {
             Status = 1;
             OMID = 0;
             CreateDate = DateTime.Now;
+            QrCode = "";
         }
         public Int64 save()
         {
@@ -39,11 +41,11 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.Table_or_RowID == 0)
                 {
-                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_SheetName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy,@Status,@Otp,@OMID);SELECT SCOPE_IDENTITY();";
+                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_SheetName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy,@Status,@Otp,@OMID,@QrCode);SELECT SCOPE_IDENTITY();";
                     this.Otp = OTPGeneretion.Generate();
                 }
                 else
-                    Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_SheetName =@Table_or_SheetName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy,Status=@Status,Otp=@Otp,OMID=@OMID Where Table_or_RowID=@Table_or_RowID;";
+                Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_SheetName =@Table_or_SheetName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy,Status=@Status,Otp=@Otp,OMID=@OMID,QrCode=@QrCode Where Table_or_RowID=@Table_or_RowID;";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", this.Table_or_RowID);
                 cmd.Parameters.AddWithValue("@OrgId", this. OrgId);
@@ -56,6 +58,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@Otp", this.Otp);
                 cmd.Parameters.AddWithValue("@OMID", this.OMID);
+                cmd.Parameters.AddWithValue("@QrCode", this.QrCode);
                 if (this.Table_or_RowID == 0)
                 {
                     Row = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -106,6 +109,7 @@ namespace HangOut.Models
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1: SDR.GetInt32(8);
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
+                    ObjTemp.QrCode = SDR.IsDBNull(11) ? "0": SDR.GetString(11);
                     listTemp.Add(ObjTemp);
                 }
 
@@ -115,7 +119,7 @@ namespace HangOut.Models
 
             return (listTemp);
         }
-        public HG_Tables_or_Sheat GetOne(Int64 Table_or_RowID)
+        public HG_Tables_or_Sheat GetOne(Int64 Table_or_RowID=0,string QrOcde="")
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -125,9 +129,16 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_Tables_or_Sheat where Table_or_RowID=@Table_or_RowID";
+                string Query = "";
+                if (Table_or_RowID > 0)
+                {
+                    Query = "SELECT * FROM  HG_Tables_or_Sheat where Table_or_RowID="+Table_or_RowID.ToString();
+                }
+                else
+                {
+                    Query = "SELECT * FROM  HG_Tables_or_Sheat where QrCode=" + QrOcde;
+                }
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@Table_or_RowID", Table_or_RowID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -142,6 +153,7 @@ namespace HangOut.Models
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1: SDR.GetInt32(8);
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
+                    ObjTemp.QrCode = SDR.IsDBNull(11) ? "0" : SDR.GetString(11);
 
 
                 }
@@ -180,6 +192,7 @@ namespace HangOut.Models
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1 : SDR.GetInt32(8);
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
+                    ObjTemp.QrCode = SDR.IsDBNull(11) ? "0" : SDR.GetString(11);
                     TempList.Add(ObjTemp);
                 }
             }
@@ -247,6 +260,7 @@ namespace HangOut.Models
                     ObjTemp.Status = SDR.IsDBNull(8) ? 1 : SDR.GetInt32(8);
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
+                    ObjTemp.QrCode = SDR.IsDBNull(11) ? "0" : SDR.GetString(11);
                     listTemp.Add(ObjTemp);
                 }
 
