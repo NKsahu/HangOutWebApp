@@ -342,8 +342,19 @@ namespace HangOut.Controllers
         {
             JObject ParaMeters = JObject.Parse(Obj);
             string QrCode =ParaMeters.GetValue("TID").ToString();
+            int CID = int.Parse(ParaMeters.GetValue("CID").ToString());
             HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
+           List<HG_Orders> CustOrdrList = new HG_Orders().GetAll(CID: CID);
             JObject jObject = JObject.FromObject(TableRowObj);
+            HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status== "1");
+            if (orders == null)
+            {
+                jObject.Add("OID", 0);
+            }
+            else
+            {
+                jObject.Add("OID", orders.OID);
+            }
             HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
             jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
             jObject.Add("PaymentType", objOrg.PaymentType);
@@ -411,6 +422,10 @@ namespace HangOut.Controllers
             int Status =Params["Status"]!=null?int.Parse(Params["Status"].ToString()):1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
             JObject PostResult = new JObject();
             List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId &&x.OID==OID);
+            HG_Orders ObjOrders = new HG_Orders().GetOne(OID);
+            if(ObjOrders.Status=="3"|| ObjOrders.Status == "4"){// if order is completed or Order then Take New order
+                OID = 0;
+            }
             if (ListCart.Count <= 0)
             {
                 PostResult.Add("Status",400);
@@ -421,7 +436,6 @@ namespace HangOut.Controllers
             if (OID > 0)
             {
                 NewOID = OID;
-                HG_Orders ObjOrders = new HG_Orders().GetOne(NewOID);
                 ObjOrders.Status = "1";
                 ObjOrders.Update_By = CID;
                 ObjOrders.Update_Date = DateTime.Now;
@@ -429,7 +443,7 @@ namespace HangOut.Controllers
             }
             else
             {
-                HG_Orders ObjOrders = new HG_Orders()
+                HG_Orders ObjOrder = new HG_Orders()
                 {
                     Create_By = CID,
                     Create_Date = System.DateTime.Now,
@@ -441,12 +455,12 @@ namespace HangOut.Controllers
                     PaymentStatus=0// unpaid
                     
                 };
-                NewOID= ObjOrders.Save();
+                NewOID= ObjOrder.Save();
             }
                 if (NewOID > 0)
                 {
                 List<HG_Ticket> list = new HG_Ticket().GetAll(OrgId);
-                HG_Ticket objticket = new HG_Ticket() {OrgId=OrgId,OID=OID,TicketNo=list.Count+1 };
+                HG_Ticket objticket = new HG_Ticket() {OrgId=OrgId,OID=NewOID,TicketNo=list.Count+1 };
                 int Ticketno = objticket.save();
                     foreach (Cart Item in ListCart)
                     {
@@ -481,7 +495,7 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG", "Unable To Place Order Try Again.");
                 return PostResult;
             }
-            Cart.List.RemoveAll(x => x.CID == CID &&x.OID==OID && x.OrgId==OrgId);
+            Cart.List.RemoveAll(x => x.CID == CID && x.OrgId==OrgId);
             return PostResult;
         }
         public JObject ShowOrderItems(int OID)
