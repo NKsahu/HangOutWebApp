@@ -136,7 +136,7 @@ namespace HangOut.Models
                 }
                 else
                 {
-                    Query = "SELECT * FROM  HG_Tables_or_Sheat where QrCode=" + QrOcde;
+                    Query = "SELECT * FROM  HG_Tables_or_Sheat where QrCode='" + QrOcde+"'";
                 }
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();

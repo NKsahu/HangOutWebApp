@@ -20,6 +20,9 @@
                         @Html.DisplayName("Qr Code")
                     </th>
                     <th>
+                        @Html.DisplayName("Qr Number")
+                    </th>
+                    <th>
                         @Html.DisplayName("Otp")
                     </th>
                     <th>
@@ -42,6 +45,9 @@
                     string ImgName = QrCode.GenerateQr(item.QrCode,Path: "QRImgTorR");
                 <tr>
                     <td><img src="~/QRImgTorR/@ImgName" width="60" height="60" /></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QrCode)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Otp)
                     </td>
