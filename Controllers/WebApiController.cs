@@ -719,87 +719,73 @@ namespace HangOut.Controllers
             return tableorSheatList;
 
         }
-        public JArray ChefComplCanceOdr()
+        public JArray ChefComCaclOrd(int OrgId, int ChefId, int Status)
         {
-            OrderItemList = OrderItemList.FindAll(x => x.Status == Status && x.ChefSeenBy == ChefId);
-            OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
-            // HashSet<int> HashOID = new HashSet<int>(OrderItemList.Select(x => x.TickedNo).ToArray());
-            var GroupByTicketNo = OrderItemList.GroupBy(x => x.TickedNo);
-            foreach (var Ticket in GroupByTicketNo)
+            JArray tableorSheatList = new JArray();
+            try
             {
-                var Firstorder = Ticket.First();
-                Orderlist.Add(new HG_Orders().GetOne(Firstorder.OID));
-            }
-            //  Orderlist = new HG_Orders().GetAll(OrgId);
-            //Orderlist = Orderlist.FindAll(x => HashOID.Contains(x.OID));
-        }
-        Orderlist = Orderlist.FindAll(x => x.Create_Date.Date == DateTime.Now.Date).ToList();
-        HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
-        int OrgType = int.Parse(ObjOrg.OrgTypes);
-                if (ObjOrg.PaymentType == 1)//if prepaid than visible after payment completed
+               
+                List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAllByOrg(OrgId, ChefId);
+               
+                    OrderItemList = OrderItemList.FindAll(x => x.Status == Status && x.ChefSeenBy == ChefId);
+                    OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
+                    // HashSet<int> HashOID = new HashSet<int>(OrderItemList.Select(x => x.TickedNo).ToArray());
+                    var GroupByTicketNo = OrderItemList.GroupBy(x => x.TickedNo);
+                HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+                int OrgType = int.Parse(ObjOrg.OrgTypes);
+                List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
+                List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
+                List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
+                List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
+                int TorSIndex = 0;
+                foreach (var TicketitmList in GroupByTicketNo)
                 {
-                    Orderlist = Orderlist.FindAll(x => x.PaymentStatus != 0);
-                }
-    List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
-    List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
-    List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
-    // string TableSheatPrefix = ObjOrg.OrgTypes == "1" ? "Table : " :"Sheat : ";
-    List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
-    //string SideOrRowPrefix = ObjOrg.OrgTypes == "1" ? "Table" : "Sheat: ";
-    int TorSIndex = 0;
-              foreach(var order in Orderlist)
-                {
-                    HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
-    HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
-    HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
-    JObject TableScreen = new JObject();
-
-    var hG_OrderItems = OrderItemList.FindAll(x => x.OID == order.OID);
-    JArray ItemsArray = new JArray();
-    int ItemIndex = 0;
-    int ticketno = 0;
-                    foreach (var OrderItem in hG_OrderItems)
+                    JArray ItemsArray = new JArray();
+                    int ItemIndex = 0;
+                    int ticketno = 0;
+                    Int64 OrdId = 0;
+                    var OrderItmListTicketWise = TicketitmList.ToList();
+                    foreach (var OrderItem in OrderItmListTicketWise)
                     {
                         HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
-    JObject itemobj = new JObject();
-    itemobj.Add("OIID", OrderItem.OIID);
+                        JObject itemobj = new JObject();
+                        itemobj.Add("OIID", OrderItem.OIID);
                         itemobj.Add("ItemID", OrderItem.FID);
                         itemobj.Add("ItemName", hG_Items.Items);
-                        itemobj.Add("Quantity", OrderItem.Qty+"*"+OrderItem.Count);
+                        itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
+                       
                         ItemsArray.Add(itemobj);
                         ticketno = OrderItem.TickedNo;
+                        OrdId = OrderItem.OID;
                     }
-string name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " " + "Ticket no. : " + ticketno;
-TableScreen.Add("TableScreenInfo", name);
+                    HG_Orders order = new HG_Orders().GetOne(OrdId);
+                    HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
+                    HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
+                    HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
+                    JObject TableScreen = new JObject();
+                    string name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " " + "Ticket no. : " + ticketno;
+                    TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     TableScreen.Add("TicketNo", ticketno);
                     TableScreen.Add("OID", order.OID);
                     TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
                     tableorSheatList.Add(TableScreen);
-                    if (tableorSheatList.Count == 1&& Status==0)
-                    {
-                        OrderItemList = OrderItemList.FindAll(x => x.Status == 1);
-                        foreach (var Orderitem in OrderItemList)
-                        {
-                            Orderitem.ChefSeenBy = ChefId;
-                            Orderitem.Status = 2;// processing
-                            Orderitem.UpdatedBy = ChefId;
-                            Orderitem.UpdationDate = DateTime.Now;
-                            Orderitem.Save();
-                        }
-
-                    }
+                    
                 }
-              
-           
-            }
 
+
+            }
+            catch (System.Exception e)
+            {
+
+            }
+            return tableorSheatList;
 
         }
-       // this method used for update item status by chef
+        // this method used for update item status by chef
         public JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy,int OID)
         {
             HG_Orders order = new HG_Orders().GetOne(OID);
