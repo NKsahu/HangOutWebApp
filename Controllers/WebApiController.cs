@@ -71,7 +71,7 @@ namespace HangOut.Controllers
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
             if (ObjTorS.Type !="3")// not takeaway
             {
-                OrderMenu ObjMenu = OrderMenu.Getone(OrgId);
+                OrderMenu ObjMenu = OrderMenu.Getone(ObjTorS.OMID);
                 List<OrderMenuCategory> ListCategry = OrderMenuCategory.GetAll(ObjMenu.id);
                 List<OrdMenuCtgItems> ListMenuItems = OrdMenuCtgItems.GetAll(ObjMenu.id);
                 ListCategry = ListCategry.FindAll(x => x.Status == true);
