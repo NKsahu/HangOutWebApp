@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    var OrgObj = Request.Cookies["UserInfo"];
 }
 <style>
     .SelectedMenu {
@@ -44,7 +45,7 @@
         color: green;
     }
 </style>
-
+@Html.Hidden("COrgId",OrgObj["OrgId"])
 <div class="row" style="width:100%">
     <div class="card-header" style="width:100%">
         <h3 style="text-align:center; background-color:#5de79a"><b>Order Menu</b> </h3>
@@ -67,16 +68,7 @@
             </div>
             </div>
         <div class="row" id="AddSeat">
-            <div class="col-md-3 card" style="padding:5px">Table 1</div>
-            <div class="col-md-3 card" style="padding:5px"> Table 2</div>
-            <div class="col-md-3 card" style="padding:5px">Table 3</div>
-            <div class="col-md-3 card" style="padding:5px">Table 4</div>
-            <div class="col-md-3 card" style="padding:5px">Table 5</div>
-            <div class="col-md-3 card" style="padding:5px">Table 6</div>
-            <div class="col-md-3 card" style="padding:5px">Table 7</div>
-            <div class="col-md-3 card" style="padding:5px">Table 8</div>
-            <div class="col-md-3 card" style="padding:5px">Table 9</div>
-            <div class="col-md-3 card" style="padding:5px">Table 10</div>
+            
         </div>
 </blockTable>
     
@@ -95,256 +87,258 @@
     </div>
 </div>
 <script>
-    var OrgId = 0;
-    var TblShetList = [];
-    var categorylist = [];
-    var MenuList = [];
-    LoadOrderMenus();
-    function LoadOrderMenus() {
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/OrderMenuList?OrgId=0",
-            success: function (data) {
-                
-              var  OrderMenuList = JSON.parse(data);
-                console.log("AYA");
-               // if (OrderMenuList.length > 0) {
+    $(document).ready(function () {
+
+        var OrgId = $("#COrgId").val();
+        var TblShetList = [];
+        var categorylist = [];
+        var MenuList = [];
+        function LoadOrderMenus() {
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/OrderMenuList?OrgId="+OrgId,
+                success: function (data) {
+                    var OrderMenuList = JSON.parse(data);
                     ShowOrderMenus(OrderMenuList);
-               // }
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-
-
-    }
-    function ShowOrderMenus(list) {
-        $("#Menus").html('');
-        $("#Floor").html('');
-        $("#Menus").append('<block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>');
-         MenuList = list.MenuList;
-        var SelectedMenu = -5;
-        for (var i = 0; i < MenuList.length; i++) {
-            var Addcls = "";
-            if (MenuList[i].Status == true) {
-               // Addcls = "SelectedMenu";
-                SelectedMenu = MenuList[i].id;
-            }
-            $("#Menus").append('<block class="ShowMenu ' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddOrderMenu(' + MenuList[i].id + ')" OMID=' + MenuList[i].id+' id="M' + MenuList[i].id + '">' + MenuList[i].MenuName + '</block>');
-        }
-         categorylist = list.FloorList;
-        
-        for (var i = 0; i < categorylist.length; i++) {
-            var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
-            FloorHtml += '<h4 style="text-align:right">' + categorylist[i].Name + '</h4> </div><div class="col-md-6">';
-            var TablesOrSheat = ' <div class="row">';
-            var TableSHaetList = categorylist[i].TableSheatList;
-            var TotalSelectedTble = 0;
-            for (var j = 0; j < TableSHaetList.length; j++) {
-                TblShetList.push(TableSHaetList[j]);
-                var Tablecls = "";
-                if (TableSHaetList[j].OMID == SelectedMenu) {
-                   // Tablecls = "SelectedTable";
-                    TotalSelectedTble += 1;
+                    // }
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
                 }
-                TablesOrSheat += '<div class="col-md-3 card ' + Tablecls + '"  onclick="ActiveTable(this)" TSID="'+TableSHaetList[j].Table_or_RowID+'" id="TS' + TableSHaetList[j].Table_or_RowID+'" childs="'+categorylist[i].Floor_or_ScreenID+'" ><p>' + TableSHaetList[j].Table_or_SheetName+'</p></div>';
-            }
-
-            TablesOrSheat += '<div class="col-md-3 " onclick="AddTorS(this)" id="Add' + categorylist[i].Floor_or_ScreenID+'"><p><i class="fa fa-plus" aria-hidden="true"></i></p></div>';
-            TablesOrSheat += "</div>";
-            var CheckBoxCls = "";
-            if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
-               // CheckBoxCls = "checked";
-            }
-            FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="'+categorylist[i].Floor_or_ScreenID+'" id="FS' + categorylist[i].Floor_or_ScreenID + '" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
-            FloorHtml += TablesOrSheat;
-            FloorHtml += '</blockTable>';
-            $("#Floor").append(FloorHtml);
-            
-        }
-        var AddNew = '<blockTable><div class="row"><div class="col-md-12"> <i class="fa fa-plus" aria-hidden="true"></i></div></div></blockTable>';
-        $("#Floor").append(AddNew);
-    }
-
-    function AddOrderMenu(OMID) {
-        $('#waiting').show();
-        $.ajax({
-            type: 'GET',
-            url: "/OrderMenu/AddMenu?OMId=" + OMID,
-            success: function (data) {
-                makedpt("AddOrderMenu");
-                $("#AddOrderMenu > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("AddOrderMenu");
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-
-            }
-        });
-    }
-    $('body').on('click', '.nav-list_item', function () {
-        $(this).find('ul').toggle();
-        $(this).siblings('li').find('ul').hide();
-    });
-    function ChangeIcon(event) {
-        console.log("aaya");
-        if ($(event).find('a').find('i').hasClass('fa-plus')) {
-            $(event).find('a').find('i').removeClass('fa-plus');
-            $(event).find('a').find('i').addClass('fa-minus');
-        }
-        else {
-            $(event).find('a').find('i').removeClass('fa-minus');
-            $(event).find('a').find('i').addClass('fa-plus');
-        }
-    }
-
-    function RowUp(event) {
-        // var li = $(this).closest('li');
-        var li = $(event).parent('div').parent('div').parent('li');
-        var prev = li.prev();
-        if (prev.length) {
-
-            var OrderNoCur = parseInt(li.attr('OrderNo'));
-            var OrderNoPre = parseInt(prev.attr('OrderNo'));
-            console.log(OrderNoCur);
-            li.attr('OrderNo', OrderNoCur - 1);
-            prev.attr('OrderNo', OrderNoPre + 1);
-            li.detach().insertBefore(prev);
-        }
-    }
-    function RowDown(event) {
-        var li = $(event).parent('div').parent('div').parent('li');
-        // var li = $(this).closest('li');
-        var next = li.next();
-        if (next.length) {
-            var OrderNoCurr = parseInt(li.attr('OrderNo'));
-            var OrderNoNxt = parseInt(next.attr('OrderNo'));
-            console.log(OrderNoCurr);
-            li.attr('OrderNo', OrderNoCurr + 1);
-            next.attr('OrderNo', OrderNoNxt - 1);
-            li.detach().insertAfter(next);
-        }
-    }
-    function ActiveMenu(event) {
-        console.log("h");
-        for (var i = 0; i < TblShetList.length; i++) {
-            $("#TS" + TblShetList[i].Table_or_RowID).removeClass('SelectedTable');
-        }
-        var lis = document.getElementsByClassName("ShowMenu");
-        for (var i = 0; i < lis.length; i++) {
-            var li = $(lis[i]);
-            li.removeClass('SelectedMenu');
-        }
-        var MenuId =parseInt($(event).attr("OMID"));
-        var SelectedTables = TblShetList.filter(function (x) {
-            return x.OMID == MenuId;
-        });
-        for (var i = 0; i < SelectedTables.length; i++) {
-            $("#TS" + SelectedTables[i].Table_or_RowID).addClass('SelectedTable');
-        }
-       // var TotalSelectedCount = SelectedTables.length;
-
-       // console.log('aaya3');
-        $(event).addClass('SelectedMenu');
-    }
-    function ActiveScrn(event) {
-        var Idname = $(event).attr('FSID');
-        var ListTables = document.querySelectorAll("[childs='" + Idname + "']");
-        if ($(event).is(':checked')) {
-            for (var i = 0; i < ListTables.length; i++) {
-                var table = $(ListTables[i]);
-                table.addClass('SelectedTable');
-            }
-
-        }
-        else {
-            for (var i = 0; i < ListTables.length; i++) {
-                var table = $(ListTables[i]);
-                table.removeClass('SelectedTable');
-
-            }
-        }
-    }
-    function ActiveTable(event) {
-
-        if ($(event).hasClass('SelectedTable')) {
-            $(event).removeClass('SelectedTable');
-        }
-        else {
-            $(event).addClass('SelectedTable');
-        }
-    }
-    function Apply() {
-        console.log("test");
-        var lis = document.getElementsByClassName("SelectedMenu");
-        if (lis.length < 1) {
-            $.alert({
-                title: 'Alert!',
-                content: 'Active Menu First',
             });
-            return;
+
+
         }
-        var Menu = $(lis[0]);
-        var MenuId =parseInt(Menu.attr('OMID'));
-        var menuName = Menu.text();
-        var TableList = [];
-        var SelectedTables = document.getElementsByClassName("SelectedTable");
-        for (var i = 0; i < SelectedTables.length; i++) {
-            for (var j = 0; j < TblShetList.length; j++) {
-                if (TblShetList[j].Table_or_RowID == $(SelectedTables[i]).attr('TSID')) {
-                    TblShetList[j].OMID = MenuId;
-                    break;
+        function ShowOrderMenus(list) {
+            $("#Menus").html('');
+            $("#Floor").html('');
+            $("#Menus").append('<block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>');
+            MenuList = list.MenuList;
+            var SelectedMenu = -5;
+            for (var i = 0; i < MenuList.length; i++) {
+                var Addcls = "";
+                if (MenuList[i].Status == true) {
+                    // Addcls = "SelectedMenu";
+                    SelectedMenu = MenuList[i].id;
+                }
+                $("#Menus").append('<block class="ShowMenu ' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddOrderMenu(' + MenuList[i].id + ')" OMID=' + MenuList[i].id + ' id="M' + MenuList[i].id + '">' + MenuList[i].MenuName + '</block>');
+            }
+            categorylist = list.FloorList;
+
+            for (var i = 0; i < categorylist.length; i++) {
+                var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
+                FloorHtml += '<h4 style="text-align:right">' + categorylist[i].Name + '</h4> </div><div class="col-md-6">';
+                var TablesOrSheat = ' <div class="row">';
+                var TableSHaetList = categorylist[i].TableSheatList;
+                var TotalSelectedTble = 0;
+                for (var j = 0; j < TableSHaetList.length; j++) {
+                    TblShetList.push(TableSHaetList[j]);
+                    var Tablecls = "";
+                    if (TableSHaetList[j].OMID == SelectedMenu) {
+                        // Tablecls = "SelectedTable";
+                        TotalSelectedTble += 1;
+                    }
+                    TablesOrSheat += '<div class="col-md-3 card ' + Tablecls + '"  onclick="ActiveTable(this)" TSID="' + TableSHaetList[j].Table_or_RowID + '" id="TS' + TableSHaetList[j].Table_or_RowID + '" childs="' + categorylist[i].Floor_or_ScreenID + '" ><p>' + TableSHaetList[j].Table_or_SheetName + '</p></div>';
+                }
+
+                TablesOrSheat += '<div class="col-md-3 " onclick="AddTorS(this)" id="Add' + categorylist[i].Floor_or_ScreenID + '"><p><i class="fa fa-plus" aria-hidden="true"></i></p></div>';
+                TablesOrSheat += "</div>";
+                var CheckBoxCls = "";
+                if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
+                    // CheckBoxCls = "checked";
+                }
+                FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="' + categorylist[i].Floor_or_ScreenID + '" id="FS' + categorylist[i].Floor_or_ScreenID + '" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+                FloorHtml += TablesOrSheat;
+                FloorHtml += '</blockTable>';
+                $("#Floor").append(FloorHtml);
+
+            }
+            var AddNew = '<blockTable><div class="row"><div class="col-md-12"> <i class="fa fa-plus" aria-hidden="true"></i></div></div></blockTable>';
+            $("#Floor").append(AddNew);
+        }
+        function AddOrderMenu(OMID) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/OrderMenu/AddMenu?OMId=" + OMID,
+                success: function (data) {
+                    makedpt("AddOrderMenu");
+                    $("#AddOrderMenu > .modal-dialog > .modal-content > .modal-body").html(data);
+                    showdpt("AddOrderMenu");
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+
+                }
+            });
+        }
+        $('body').on('click', '.nav-list_item', function () {
+            $(this).find('ul').toggle();
+            $(this).siblings('li').find('ul').hide();
+        });
+        function ChangeIcon(event) {
+            console.log("aaya");
+            if ($(event).find('a').find('i').hasClass('fa-plus')) {
+                $(event).find('a').find('i').removeClass('fa-plus');
+                $(event).find('a').find('i').addClass('fa-minus');
+            }
+            else {
+                $(event).find('a').find('i').removeClass('fa-minus');
+                $(event).find('a').find('i').addClass('fa-plus');
+            }
+        }
+        function RowUp(event) {
+            // var li = $(this).closest('li');
+            var li = $(event).parent('div').parent('div').parent('li');
+            var prev = li.prev();
+            if (prev.length) {
+
+                var OrderNoCur = parseInt(li.attr('OrderNo'));
+                var OrderNoPre = parseInt(prev.attr('OrderNo'));
+                console.log(OrderNoCur);
+                li.attr('OrderNo', OrderNoCur - 1);
+                prev.attr('OrderNo', OrderNoPre + 1);
+                li.detach().insertBefore(prev);
+            }
+        }
+        function RowDown(event) {
+            var li = $(event).parent('div').parent('div').parent('li');
+            // var li = $(this).closest('li');
+            var next = li.next();
+            if (next.length) {
+                var OrderNoCurr = parseInt(li.attr('OrderNo'));
+                var OrderNoNxt = parseInt(next.attr('OrderNo'));
+                console.log(OrderNoCurr);
+                li.attr('OrderNo', OrderNoCurr + 1);
+                next.attr('OrderNo', OrderNoNxt - 1);
+                li.detach().insertAfter(next);
+            }
+        }
+        function ActiveMenu(event) {
+            console.log("h");
+            for (var i = 0; i < TblShetList.length; i++) {
+                $("#TS" + TblShetList[i].Table_or_RowID).removeClass('SelectedTable');
+            }
+            var lis = document.getElementsByClassName("ShowMenu");
+            for (var i = 0; i < lis.length; i++) {
+                var li = $(lis[i]);
+                li.removeClass('SelectedMenu');
+            }
+            var MenuId = parseInt($(event).attr("OMID"));
+            var SelectedTables = TblShetList.filter(function (x) {
+                return x.OMID == MenuId;
+            });
+            for (var i = 0; i < SelectedTables.length; i++) {
+                $("#TS" + SelectedTables[i].Table_or_RowID).addClass('SelectedTable');
+            }
+            // var TotalSelectedCount = SelectedTables.length;
+
+            // console.log('aaya3');
+            $(event).addClass('SelectedMenu');
+        }
+        function ActiveScrn(event) {
+            var Idname = $(event).attr('FSID');
+            var ListTables = document.querySelectorAll("[childs='" + Idname + "']");
+            if ($(event).is(':checked')) {
+                for (var i = 0; i < ListTables.length; i++) {
+                    var table = $(ListTables[i]);
+                    table.addClass('SelectedTable');
                 }
 
             }
+            else {
+                for (var i = 0; i < ListTables.length; i++) {
+                    var table = $(ListTables[i]);
+                    table.removeClass('SelectedTable');
 
-          TableList.push($(SelectedTables[i]).attr('TSID'));
-        }
-        var Jobj = {};
-        Jobj.OMID = MenuId;
-        Jobj.TorSIDs = TableList;
-        Jobj.OrgId = OrgId;
-        $("#waiting").show();
-        $.ajax({
-            type: 'POST',
-            url: "/WebApi/ActiveMenu?SObj="+JSON.stringify(Jobj),
-            contentType: "application/json",
-            success: function (data) {
-                var status = parseInt(data);
-                if (status > 0) {
-                    $.alert({
-                        title: 'Alert',
-                        content: '' + menuName +' is Active',
-                    });
                 }
-                $("#waiting").hide();
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $('#waiting').hide();
             }
-        });
+        }
+        function ActiveTable(event) {
 
-    }
-    function AddTorS(event) {
-        $("#waiting").show();
-        $.ajax({
-            type: 'GET',
-            url: "/HG_Tables_or_Sheat/CreateEdit?ID=0",
-            success: function (data) {
-                makedpt("CreateTorS");
-                $("#CreateTorS > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("CreateTorS");
-                $("#waiting").hide();
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $('#waiting').hide();
+            if ($(event).hasClass('SelectedTable')) {
+                $(event).removeClass('SelectedTable');
             }
-        });
+            else {
+                $(event).addClass('SelectedTable');
+            }
+        }
+        function Apply() {
+            console.log("test");
+            var lis = document.getElementsByClassName("SelectedMenu");
+            if (lis.length < 1) {
+                $.alert({
+                    title: 'Alert!',
+                    content: 'Active Menu First',
+                });
+                return;
+            }
+            var Menu = $(lis[0]);
+            var MenuId = parseInt(Menu.attr('OMID'));
+            var menuName = Menu.text();
+            var TableList = [];
+            var SelectedTables = document.getElementsByClassName("SelectedTable");
+            for (var i = 0; i < SelectedTables.length; i++) {
+                for (var j = 0; j < TblShetList.length; j++) {
+                    if (TblShetList[j].Table_or_RowID == $(SelectedTables[i]).attr('TSID')) {
+                        TblShetList[j].OMID = MenuId;
+                        break;
+                    }
 
-    }
+                }
 
-    function LoadIndex() {
+                TableList.push($(SelectedTables[i]).attr('TSID'));
+            }
+            var Jobj = {};
+            Jobj.OMID = MenuId;
+            Jobj.TorSIDs = TableList;
+            Jobj.OrgId = OrgId;
+            $("#waiting").show();
+            $.ajax({
+                type: 'POST',
+                url: "/WebApi/ActiveMenu?SObj=" + JSON.stringify(Jobj),
+                contentType: "application/json",
+                success: function (data) {
+                    var status = parseInt(data);
+                    if (status > 0) {
+                        $.alert({
+                            title: 'Alert',
+                            content: '' + menuName + ' is Active',
+                        });
+                    }
+                    $("#waiting").hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $('#waiting').hide();
+                }
+            });
 
-    }
+        }
+        function AddTorS(event) {
+            $("#waiting").show();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_Tables_or_Sheat/CreateEdit?ID=0",
+                success: function (data) {
+                    makedpt("CreateTorS");
+                    $("#CreateTorS > .modal-dialog > .modal-content > .modal-body").html(data);
+                    showdpt("CreateTorS");
+                    $("#waiting").hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $('#waiting').hide();
+                }
+            });
+
+        }
+        function LoadIndex() {
+
+        }
+
+        setTimeout(function () { LoadOrderMenus(); }, 500);
+    });
+   
+    
+    
+    
 </script>
 

@@ -772,6 +772,13 @@
 
 
                     }
+                    if (CategoryList.length == 0) {
+
+                        $.alert({
+                            title: 'Alert!',
+                            content: "Menu Not Applied in Table",
+                        });
+                    }
                     $("#FinalAmt").text(TotalRs);
 
                 },
