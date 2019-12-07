@@ -467,6 +467,7 @@ namespace HangOut.Controllers
             Int64 TableorSheatId=Int64.Parse(Params["TORSID"].ToString());
             Int64 OID =Int64.Parse(Params["OID"].ToString());
             int Status =Params["Status"]!=null?int.Parse(Params["Status"].ToString()):1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
+            HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
             JObject PostResult = new JObject();
             List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId &&x.OID==OID);
             HG_Orders ObjOrders = new HG_Orders().GetOne(OID);
@@ -499,8 +500,9 @@ namespace HangOut.Controllers
                     Status = "1",// order placed
                     OrgId = OrgId,
                     Table_or_SheatId = TableorSheatId,
-                    PaymentStatus=0// unpaid
-                    
+                    PaymentStatus = 0,// unpaid
+                    TableOtp = ObjTorS.Otp
+
                 };
                 NewOID= ObjOrder.Save();
             }

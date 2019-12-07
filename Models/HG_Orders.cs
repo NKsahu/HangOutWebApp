@@ -18,6 +18,7 @@ namespace HangOut.Models
         public Int64 Table_or_SheatId { get; set; }
         public int PaymentStatus { get; set; }//{'0':'unpaid',1:'PaidBycash','2':'by online','3':'ByFoodPaymeGateway'}
         public int PayReceivedBy { get; set; }
+        public int TableOtp { get; set; }
         public HG_Orders()
         {
             this.OID = 0;
@@ -38,10 +39,10 @@ namespace HangOut.Models
             try
             {
                 if (this.OID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId,Table_or_SheatId,PaymentStatus,PayReceivedBy) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId,Table_or_SheatId,PaymentStatus,PayReceivedBy,TableOtp) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy where OID=@OID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp where OID=@OID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
                 }
 
@@ -56,6 +57,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Table_or_SheatId", this.Table_or_SheatId);
                 cmd.Parameters.AddWithValue("@PaymentStatus", this.PaymentStatus);
                 cmd.Parameters.AddWithValue("@PayReceivedBy", this.PayReceivedBy);
+                cmd.Parameters.AddWithValue("@TableOtp", this.TableOtp);
                 if (this.OID == 0)
                 {
                     R = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -106,7 +108,9 @@ namespace HangOut.Models
                         OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8),
                         Table_or_SheatId=SDR.IsDBNull(9)?0:SDR.GetInt64(9),
                         PaymentStatus=SDR.IsDBNull(10)?0:SDR.GetInt32(10),
-                        PayReceivedBy=SDR.IsDBNull(11)?0:SDR.GetInt32(11)
+                        PayReceivedBy=SDR.IsDBNull(11)?0:SDR.GetInt32(11),
+                        TableOtp=SDR.IsDBNull(12)?0:SDR.GetInt32(12)
+                        
                     };
                     ListTmp.Add(ObjTmp);
                 }
@@ -140,8 +144,9 @@ namespace HangOut.Models
                  ObjTemp.Update_Date = SDR.GetDateTime(6);
                  ObjTemp.OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8);
                 ObjTemp.Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9);
-                    ObjTemp.PaymentStatus = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
-                    ObjTemp.PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
+                ObjTemp.PaymentStatus = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
+                ObjTemp.PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
+                    ObjTemp.TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
                 }
             }
             catch (System.Exception e){ e.ToString(); }
@@ -198,8 +203,9 @@ namespace HangOut.Models
                         OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8),
                         Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9),
                         PaymentStatus=SDR.IsDBNull(10)?0:SDR.GetInt32(10),
-                       PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11)
-                };
+                       PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11),
+                        TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12)
+                    };
                     ListTmp.Add(ObjTmp);
                 }
             }
