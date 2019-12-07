@@ -578,7 +578,7 @@ namespace HangOut.Controllers
 
             return jObject;
         }
-        public JObject CompleteOrder(int OID=0,int TorSid=0,int PaymentType,int UpdatedBy)
+        public JObject CompleteOrder(int PaymentType,int UpdatedBy, int OID = 0, int TorSid = 0)
         {
             JObject jObject = new JObject();
             HG_Orders order = new HG_Orders().GetOne(OID);
