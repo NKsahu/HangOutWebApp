@@ -2,10 +2,11 @@
     @using HangOut.Models.DynamicList;
 @{
     Layout = null;
+    
 }
 <div class=" card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>ORGONIZATION</b> </h1>
+        <h3 style="text-align:center"><b>Details</b> </h3>
         <hr />
     </div>
     @if (new OrderType().IsAccess())
@@ -72,7 +73,12 @@
                             @Html.DisplayFor(modelItem => item.OrgID)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.OrgTypes)
+                            @{ 
+                                string type = "";
+                                type = OrgType.List.Find(x => x.id == item.OrgTypes).Name;
+
+                            }
+                            @type
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.HeadName)
@@ -110,7 +116,6 @@
                         </td>
                         <td>
                             <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                             
                         </td>
                     </tr>
                 }
