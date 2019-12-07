@@ -547,20 +547,29 @@ namespace HangOut.Controllers
             Cart.List.RemoveAll(x => x.CID == CID && x.OrgId==OrgId);
             return PostResult;
         }
-        public JObject ShowOrderItems(int TOrSId)
+        public JObject ShowOrderItems(int TOrSId,int OrgId=0)
         {
             JObject jObject = new JObject();
             List<HG_Orders> ListOrders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             ListOrders = ListOrders.FindAll(x => x.Table_or_SheatId == TOrSId &&(x.Status=="1"||x.Status=="2"));// placed or Processing
+            ListOrders = ListOrders.FindAll(x => x.PaymentStatus == 0);
             List<HG_OrderItem> listitems = new List<HG_OrderItem>();
+            
+            List<HG_Items> items = new HG_Items().GetAll(OrgId);
             foreach (var OrderObj in ListOrders)
             {
                 listitems.AddRange(new HG_OrderItem().GetAll(OrderObj.OID));
+                
             }
             double TotalPrice = 0.00;
-            foreach(var OrderItm in listitems)
+            JArray jArray = new JArray();
+            foreach (var OrderItm in listitems)
             {
                 TotalPrice += (OrderItm.Count * OrderItm.Price);
+                JObject jobj = JObject.FromObject(OrderItm);
+                HG_Items hG_Items = items.Find(x => x.ItemID == OrderItm.FID);
+                jobj.Add("ItemName", hG_Items.Items);
+                jArray.Add(jobj);
             }
             if (listitems.Count == 0)
             {
@@ -570,7 +579,7 @@ namespace HangOut.Controllers
             else
             {
                 jObject.Add("Status", 200);
-                jObject.Add("ListItems", JArray.FromObject(listitems));
+                jObject.Add("ListItems", jArray);
                 jObject.Add("Total", TotalPrice);
 
             }
