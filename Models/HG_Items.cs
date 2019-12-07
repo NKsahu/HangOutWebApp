@@ -15,6 +15,7 @@ namespace HangOut.Models
         public string Image { get; set; }
         public int CategoryID { get; set; }
         public int OrgID { get; set; }
+        [Display(Name ="Item")]
         public string Items { get; set; }
         public double Price { get; set; }
         public string Qty { get; set; }
@@ -29,6 +30,7 @@ namespace HangOut.Models
             Image = "";
             EntryDate = System.DateTime.Now;
             EntryBy = 0;
+            Status = true;
         }
         public int Save()
         {
