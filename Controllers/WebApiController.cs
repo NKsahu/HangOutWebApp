@@ -1099,12 +1099,12 @@ namespace HangOut.Controllers
             if (status > 0 && status == 1)//ongoing orders
             {
                 OrderList = OrderList.FindAll(x => x.Status == "1" || x.Status == "2");
-                OrderList = OrderList.FindAll(x => x.Create_Date.Date == DateTime.Now.Date);
+                OrderList = OrderList.FindAll(x => x.Create_Date.Date == DateTime.Now.Date).ToList();
             }
             else if (status > 0 && status == 3)//completed
             {
                 OrderList = OrderList.FindAll(x => x.Status == "3");
-                OrderList = OrderList.FindAll(x => x.Create_Date.Date == DateTime.Now.Date);
+                OrderList = OrderList.FindAll(x => x.Create_Date.Date == DateTime.Now.Date).ToList();
             }
 
             if(OrderList.Count>0)
