@@ -12,8 +12,9 @@ namespace HangOut.Models
         public int UserCode { get; set; } // Every User Uniqe Id Auto generated
         public int OrgID { get; set; }
         public string UserType { get; set; }
+        [Display(Name = "Name")]
         public string UserName { get; set; }// only for dispaly
-        [Display(Name ="LoginID")]
+        [Display(Name ="Mobile No")]
         public string UserId { get; set; }// used for Login as Authentication
         public string Password { get; set; }
         public string EMail { get; set; }
@@ -87,7 +88,7 @@ namespace HangOut.Models
             vw_HG_UsersDetails ObjTmp = null;
             try
             {
-                string Query = "SELECT TOP 1 * FROM HG_UsersDetails WHERE UserID = @UserID AND Password = @Password and Status=1 ;";
+                string Query = "SELECT TOP 1 * FROM HG_UsersDetails WHERE UserID = @UserID AND Password = @Password ;";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@UserID", UserId);
                 cmd.Parameters.AddWithValue("@Password", Password);

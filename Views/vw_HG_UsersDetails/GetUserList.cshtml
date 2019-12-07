@@ -2,15 +2,15 @@
     @{ Layout = null;}
 @using HangOut.Models
 @{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll();}
-@{ List<HG_OrganizationDetails> listorgo = new HG_OrganizationDetails().GetAll();}
+
 <div class="card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>LIST OF USERS </b> </h1>
+        <h1 style="text-align:center"><b>USERS </b> </h1>
         <hr />
     </div>
     <a href="/vw_HG_UsersDetails/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
     <div class="card-body">
-        <table class="table table-bordered table-hover w-100" id="TBLID">
+        <table class="table " id="TBLID">
             <thead>
                 <tr>
                     <th>
@@ -21,13 +21,10 @@
                         @Html.DisplayNameFor(model => model.UserType)
                     </th>
                     <th>
-                        @Html.DisplayName( "Orgonzation ID")
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => model.UserName)
                     </th>
                     <th>
-                        @Html.DisplayName("User Login")
+                        @Html.DisplayName("Mobile No")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Password)
@@ -35,12 +32,11 @@
                     <th>
                         @Html.DisplayNameFor(model => model.EMail)
                     </th>
-                    
                      
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
-                    <th>@Html.DisplayNameFor(model => model.CurrentStatus)</th>
+                   
                     <th></th>
                 </tr>
                 </thead>
@@ -56,21 +52,7 @@
                         @{ HG_UserTypes objuser = listuser.Find(x => x.UserType == item.UserType);}
                         @objuser.UserTypeName
                     </td>
-                    <td>
-                        @{ HG_OrganizationDetails ObjOrg = listorgo.Find(x => x.OrgID == item.OrgID);
-                            if (ObjOrg == null)
-                            {
-
-                            }
-                            else
-                            {
-                                @ObjOrg.Name
-                            }
-
-                        }
-
-
-                    </td>
+                    
                     <td>
                         @Html.DisplayFor(modelItem => item.UserName)
                     </td>
@@ -87,10 +69,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
-                    <td> @Html.DisplayName("")</td>
+                  
                     <td>
                         <a href="/vw_HG_UsersDetails/CreateEdit?ID=@item.UserCode" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                       
                     </td>
                 </tr>
                 }

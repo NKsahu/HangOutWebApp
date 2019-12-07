@@ -98,6 +98,10 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(vw_HG_UsersDetails Objuser)
         {
+            if (Objuser.EMail == null)
+            {
+                Objuser.EMail = "";
+            }
             if(Objuser.UserType!="A"&& Objuser.UserType != "SA")
             {
                 if (Objuser.OrgID <= 0)
@@ -105,7 +109,11 @@ namespace HangOut.Controllers
                     return Json(new { msg = "Please Select Organization First" });
                 }
             }
-
+            vw_HG_UsersDetails ObjUserAlreadyExist = new vw_HG_UsersDetails().MobileAlreadyExist(Objuser.UserId);
+            if (ObjUserAlreadyExist.UserCode > 0)
+            {
+                return Json(new { msg = "Mobile Number Already Taken" });
+            }
             int i = Objuser.save();
                 if(i>0)
             

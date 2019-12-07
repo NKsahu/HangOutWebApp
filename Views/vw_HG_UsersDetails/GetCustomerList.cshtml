@@ -5,7 +5,7 @@
 @{ List<HG_OrganizationDetails> listorgo = new HG_OrganizationDetails().GetAll();}
 <div class="card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>LIST OF CUSTOMER </b> </h1>
+        <h1 style="text-align:center"><b> CUSTOMER </b> </h1>
         <hr />
     </div>
     <div class="card-body">
@@ -20,7 +20,7 @@
                         @Html.DisplayNameFor(model => model.UserName)
                     </th>
                     <th>
-                        @Html.DisplayName("User Login")
+                        @Html.DisplayNameFor(model=>model.UserId)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Password)
