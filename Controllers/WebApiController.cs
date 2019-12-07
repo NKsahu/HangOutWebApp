@@ -1213,7 +1213,13 @@ namespace HangOut.Controllers
             }
             return jObject;
         }
-
+        public JArray FloorScreen(int OrgID)
+        {
+            HG_OrganizationDetails orgonization = new HG_OrganizationDetails().GetOne(OrgID);
+          
+            List<HG_Floor_or_ScreenMaster> floorlist = new HG_Floor_or_ScreenMaster().GetAll(int.Parse(orgonization.OrgTypes), OrgID);
+            return JArray.FromObject(floorlist);
+        }
        
 
 
