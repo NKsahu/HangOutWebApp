@@ -31,7 +31,6 @@ namespace HangOut.Controllers
             Obj = Obj.Checkvw_HG_UsersDetails();
              if (Obj != null)
             {
-                Session["ID"] = Obj .UserCode;
                 HttpCookie cookie = new HttpCookie("UserInfo");
                 cookie.Values.Add("UserCode", Obj.UserCode.ToString());
                 cookie.Values.Add("UserName", Obj.UserName);
@@ -62,7 +61,7 @@ namespace HangOut.Controllers
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
-            Session.Abandon(); // it will clear the session at the end of request
+            
             if (Request.Cookies["UserInfo"] != null)
             {
                 var c = new HttpCookie("UserInfo");

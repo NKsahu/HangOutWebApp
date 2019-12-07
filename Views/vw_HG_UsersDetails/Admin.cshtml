@@ -1,13 +1,27 @@
 ﻿@using HangOut.Models.Common;
+@using HangOut.Models;
+@{ 
+    string OrgName = "Welcome";
+    int Orgid =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
+    HG_OrganizationDetails ObgOrg = new HG_OrganizationDetails().GetOne(Orgid);
+    if (ObgOrg.OrgID > 0)
+    {
+        OrgName = ObgOrg.Name;
+    }
+}
 <!-- header -->
 <header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #33bb6f, #30bb66, #30bb5b, #31bb50, #33bb44);z-index:1;">
-    <div class="col-md-8 col-12 text-md-left text-center mt-0">
-        <a class="text-white navbar-brand pl-3" style="font-size:15px;">@Request.Cookies["UserInfo"]["UserName"]</a>
+    <div class="col-md-5 col-12 text-md-left text-center mt-0">
+        <a class="text-white navbar-brand pl-3" style="font-size:15px;">foodDo</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
+
+    </div>
+    <div class="col-md-2 col-12  text-center mt-0">
+        <a class="text-white text-center navbar-brand pl-3" style="font-size:18px;">@OrgName</a>
     </div>
 
-    <div class="col-md-4 col-12  text-md-right text-center p-md-2 p-2 border-top    mt-0"> 
-        <div class="btn-group mt-0">   
+    <div class="col-md-5 col-12  text-md-right text-center p-md-2 p-2 border-top    mt-0">
+        <div class="btn-group mt-0">
             <a href="/vw_HG_UsersDetails/Admin" class="text-white m-1"><i class="fas fa-tachometer-alt"></i></a>
             <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
             <div class="dropdown-menu dropdown-menu-right text-center pb-0">

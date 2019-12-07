@@ -24,6 +24,7 @@ namespace HangOut.Models
         {
             EntryBy = 0;
             EntryDate = DateTime.Now;
+            Status = true;
         }
 
 
@@ -43,7 +44,6 @@ namespace HangOut.Models
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
-
                 }
                 else
                 {
