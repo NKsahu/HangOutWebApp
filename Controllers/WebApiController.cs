@@ -1091,11 +1091,21 @@ namespace HangOut.Controllers
 
 
 
-        public JArray PastOrderMainList(int CID)
+        public JArray PastOrderMainList(int CID,int status=0)
         {
             JArray Info = new JArray();
             
             List<HG_Orders> OrderList = new HG_Orders().GetAll(CID: CID);
+            if (status > 0 && status == 1)//ongoing orders
+            {
+                OrderList = OrderList.FindAll(x => x.Status == "1" || x.Status == "2");
+                OrderList = OrderList.FindAll(x => x.Create_Date.Date == DateTime.Now.Date);
+            }
+            else if (status > 0 && status == 3)//completed
+            {
+                OrderList = OrderList.FindAll(x => x.Status == "3");
+                OrderList = OrderList.FindAll(x => x.Create_Date.Date == DateTime.Now.Date);
+            }
 
             if(OrderList.Count>0)
             {
