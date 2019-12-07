@@ -547,10 +547,21 @@ namespace HangOut.Controllers
             Cart.List.RemoveAll(x => x.CID == CID && x.OrgId==OrgId);
             return PostResult;
         }
-        public JObject ShowOrderItems(int OID)
+        public JObject ShowOrderItems(int TOrSId)
         {
             JObject jObject = new JObject();
-            List<HG_OrderItem> listitems = new HG_OrderItem().GetAll(OID);
+            List<HG_Orders> ListOrders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            ListOrders = ListOrders.FindAll(x => x.Table_or_SheatId == TOrSId &&(x.Status=="1"||x.Status=="2"));// placed or Processing
+            List<HG_OrderItem> listitems = new List<HG_OrderItem>();
+            foreach (var OrderObj in ListOrders)
+            {
+                listitems.AddRange(new HG_OrderItem().GetAll(OrderObj.OID));
+            }
+            double TotalPrice = 0.00;
+            foreach(var OrderItm in listitems)
+            {
+                TotalPrice += (OrderItm.Count * OrderItm.Price);
+            }
             if (listitems.Count == 0)
             {
                 jObject.Add("Status", 400);
@@ -560,14 +571,14 @@ namespace HangOut.Controllers
             {
                 jObject.Add("Status", 200);
                 jObject.Add("ListItems", JArray.FromObject(listitems));
-                jObject.Add("Total", listitems.Sum(x => x.Price));
+                jObject.Add("Total", TotalPrice);
 
             }
             
 
             return jObject;
         }
-        public JObject CompleteOrder(int OID,int PaymentType,int UpdatedBy)
+        public JObject CompleteOrder(int OID=0,int TorSid=0,int PaymentType,int UpdatedBy)
         {
             JObject jObject = new JObject();
             HG_Orders order = new HG_Orders().GetOne(OID);
@@ -1033,13 +1044,16 @@ namespace HangOut.Controllers
             return JObject.FromObject(Result);
         }
 
-        public JArray TableAndTakeAway(int Type,int OrderById)
+        public JArray TableAndTakeAway(int Type,int OrderById,int FloorId=0)
         {
             JArray jArray = new JArray();
             DateTime fromdate = DateTime.Now;
             List<HG_Tables_or_Sheat> list = new HG_Tables_or_Sheat().GetAllWithTakeAwya(Type);
             List<HG_Orders> Orderlist = new HG_Orders().GetListByGetDate(fromdate, DateTime.Now);
-
+            if (FloorId > 0)
+            {
+                list = list.FindAll(x => x.Floor_or_ScreenId == FloorId);
+            }
             foreach(var objtable in list)
             {
                 HG_Orders order = Orderlist.Find(x => x.CID == OrderById && x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");

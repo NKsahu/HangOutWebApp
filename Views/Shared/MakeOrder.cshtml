@@ -908,10 +908,10 @@
             });
         }
         function Charge() {
-            console.log("Curr OID +" + CurrOID);
+            console.log("Curr TorSid +" + CurrentOrder);
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/ShowOrderItems?OID=" + CurrOID,
+                url: "/WebApi/ShowOrderItems?TOrSId=" + CurrentOrder,
                 success: function (data) {
                     var Jobje = JSON.parse(data);
                     if (Jobje.Status == 400) {
@@ -949,12 +949,12 @@
                                         td1 += "<td>" + List[i].Count + "</td>";
                                         td1 += "<td>" + List[i].Price + "</td>";
                                         td1 += "<td>" + List[i].TickedNo + "</td></tr>";
-                                        Qty += parseInt(List[i].Count);
-                                        var total = (List[i].Count * parseFloat(List[i].Price));
-                                        SumItems += total;
+                                       // Qty += parseInt(List[i].Count);
+                                      //  var total = (List[i].Count * parseFloat(List[i].Price));
                                         $("#ItemsList").append(td1);
 
                                     }
+                                    SumItems = parseFloat(Jobje.Total);
                                     $("#SumOfQty").text(Qty);
                                     $("#SumOfItem").text(SumItems + " Rs/-");
                                     $("#News").hide();
@@ -1025,7 +1025,7 @@
         function CompleteOrder(PaymentType) {
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/CompleteOrder?OID=" + CurrOID + "&PaymentType=" + PaymentType + "&UpdatedBy="+LoginId,
+                url: "/WebApi/CompleteOrder?OID=0&TorSid="+CurrentOrder+"&PaymentType=" + PaymentType + "&UpdatedBy="+LoginId,
                 success: function (data) {
                     var Jobj = JSON.parse(data);
                     if (Jobj.Status == 400) {
