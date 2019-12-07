@@ -977,7 +977,7 @@
             $("#waiting").show();
             $.ajax({
                 type: 'POST',
-                url: "/HG_Orders/PrintInvoice?OID=" + CurrOID,
+                url: "/HG_Orders/PrintInvoice?TorSid=" + CurrentOrder,
                 success: function (data) {
                     makedpt("invoice");
                     $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -1025,7 +1025,7 @@
         function CompleteOrder(PaymentType) {
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/CompleteOrder?OID=0&TorSid="+CurrentOrder+"&PaymentType=" + PaymentType + "&UpdatedBy="+LoginId,
+                url: "/WebApi/CompleteOrder?PaymentType="+PaymentType+"&UpdatedBy="+LoginId+"&OID=0&TorSid="+CurrentOrder,
                 success: function (data) {
                     var Jobj = JSON.parse(data);
                     if (Jobj.Status == 400) {
@@ -1046,7 +1046,7 @@
                         }
                         $("#Otp" + CurrentOrder).text(Jobj.MSG);
                         ResetOrder(CurrentOrder, 1);
-                        CurrentOrder = 0;
+                      //  CurrentOrder = 0;
                         GenInvoice();
                         $("#defaultOpen").click();
                     }

@@ -3,6 +3,7 @@
 @{
 
     int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
+    //PrintInvoice
     Int64 OID = Int64.Parse(Request.QueryString["OID"]);
     HG_Orders order = new HG_Orders().GetOne(OID);
     List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAll(order.OID);

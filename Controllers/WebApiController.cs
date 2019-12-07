@@ -581,47 +581,71 @@ namespace HangOut.Controllers
         public JObject CompleteOrder(int PaymentType,int UpdatedBy, int OID = 0, int TorSid = 0)
         {
             JObject jObject = new JObject();
-            HG_Orders order = new HG_Orders().GetOne(OID);
-            List<HG_OrderItem> listOrderitem = new HG_OrderItem().GetAll(order.OID);
-            HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
-            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
-            if(ObjOrg.PaymentType==1)// prepaid case only accept payment 
+            List<HG_Orders> OrderList = new List<HG_Orders>();
+            HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat();
+            if (OID > 0)
             {
-                order.PaymentStatus = PaymentType;
-                order.Update_By = UpdatedBy;
-                order.PayReceivedBy = UpdatedBy;
-                order.Save();
+                HG_Orders order = new HG_Orders().GetOne(OID);
+                obj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
+                OrderList.Add(order);
+            }
+            else if (TorSid > 0)
+            {
+                OrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                OrderList = OrderList.FindAll(x => x.Table_or_SheatId == TorSid && (x.Status == "1" || x.Status == "2"));
+                obj = new HG_Tables_or_Sheat().GetOne(TorSid);
+
+            }
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(obj.OrgId);
+            bool Status = false;
+            foreach(var order in OrderList)
+            {
+                if (ObjOrg.PaymentType == 1)// prepaid case only accept payment 
+                {
+                    order.PaymentStatus = PaymentType;
+                    order.Update_By = UpdatedBy;
+                    order.PayReceivedBy = UpdatedBy;
+                    order.Save();
+                    Status = true;
+                }
+                else
+                {
+                    if (order.OID > 0 && obj.Table_or_RowID > 0)
+                    {
+                        order.Status = "3";//3 order completed
+                        order.Update_By = UpdatedBy;
+                        order.PayReceivedBy = UpdatedBy;
+                        order.PaymentStatus = PaymentType;// update payment status
+                        order.Save();
+
+                        Status = true;
+                        
+                    }
+                    else
+                    {
+                        Status = false;
+                        
+                    }
+                }
+
+            }
+
+            if (Status)
+            {
+                if (ObjOrg.PaymentType!=1)
+                {
+                    obj.Status = 1;// free table
+                    obj.Otp = OTPGeneretion.Generate();
+                    obj.save();
+                }
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
             }
             else
             {
-                if (order.OID > 0 && obj.Table_or_RowID > 0)
-                {
-                    order.Status = "3";//3 order completed
-                    order.Update_By = UpdatedBy;
-                    order.PayReceivedBy = UpdatedBy;
-                    order.PaymentStatus = PaymentType;// update payment status
-                    obj.Status = 1;// free table
-                    obj.Otp = OTPGeneretion.Generate();
-                    order.Save();
-                    obj.save();
-                    foreach (var Oitems in listOrderitem)
-                    {
-                        Oitems.Status = 3;//comleted item
-                        Oitems.UpdatedBy = UpdatedBy;
-                        Oitems.Save();
-                    }
-                    jObject.Add("Status", 200);
-                    jObject.Add("MSG", obj.Otp);
-                }
-                else
-                {
-                    jObject.Add("Status", 400);
-                    jObject.Add("MSG", "Order No Not Found");
-                }
+                jObject.Add("Status", 400);
+                jObject.Add("MSG", "Order Number Not Found");
             }
-
             
             return jObject;
         }
