@@ -3,10 +3,30 @@
 @{
 
     int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
-    //PrintInvoice
+    //PrintInvoice TorSid
+
     Int64 OID = Int64.Parse(Request.QueryString["OID"]);
-    HG_Orders order = new HG_Orders().GetOne(OID);
-    List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAll(order.OID);
+    List<HG_Orders> orderlist = new List<HG_Orders>();
+    List<HG_OrderItem> OrderItems = new List<HG_OrderItem>();
+    DateTime OrderDate = DateTime.Now;
+    if (Request.QueryString["TorSid"] != null)
+    {
+        Int64 TorSid = Int64.Parse(Request.QueryString["TorSid"]);
+        int OldOtp = int.Parse(Request.QueryString["OldOtp"]);
+        orderlist = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+        orderlist = orderlist.FindAll(x => x.Table_or_SheatId == TorSid && x.TableOtp == OldOtp);
+
+    }
+    else
+    {
+
+        HG_Orders order = new HG_Orders().GetOne(OID);
+        orderlist.Add(order);
+        OrderItems.AddRange(new HG_OrderItem().GetAll(order.OID));
+        OrderDate = order.Create_Date;
+    }
+
+
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
@@ -17,10 +37,10 @@
     string GstNo = "ABCD1236589 ";
     string Licence2 = "..................";
     string Licence3 = "..................";
-    string OrderNo = order.OID.ToString();
+    HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
+    string OrderNo = string.Join(",", OrdesHash);
     double AmountTotal = 0.00;
     int Qty = 0;
-    DateTime OrderDate = order.Create_Date;
     string PaymnetMode = "CASH/ONLINE";
     string PoweredBy = "Powered By FooDo";
     string TicketNos = "";
@@ -116,7 +136,7 @@
             .........................................................................<br />
             .........................................................................
         </div>
-        <h6>Powered By FooDo</h6>
+        <h6>@PoweredBy</h6>
     </div>
 
 </div>

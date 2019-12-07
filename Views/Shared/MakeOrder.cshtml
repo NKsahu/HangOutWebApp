@@ -973,11 +973,11 @@
                 }
             });
         }
-        function GenInvoice() {
+        function GenInvoice(oldOtp) {
             $("#waiting").show();
             $.ajax({
                 type: 'POST',
-                url: "/HG_Orders/PrintInvoice?TorSid=" + CurrentOrder,
+                url: "/HG_Orders/PrintInvoice?TorSid="+CurrentOrder+"&OldOtp="+oldOtp+"&OID=0",
                 success: function (data) {
                     makedpt("invoice");
                     $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -1035,19 +1035,18 @@
                         });
                     }
                     else {
-                      
                         // CurrOID = 0;
                         var OldOtp = 0;
                         for (var i = 0; i < TablesList.length; i++) {
                             if (TablesList[i].Table_or_RowID == CurrentOrder) {
                                 TablesList[i].CurrOID = 0;
+                                OldOtp = TablesList[i].Otp;
                                 TablesList[i].Otp = Jobj.MSG;
                             }
                         }
                         $("#Otp" + CurrentOrder).text(Jobj.MSG);
                         ResetOrder(CurrentOrder, 1);
-                      //  CurrentOrder = 0;
-                        GenInvoice();
+                        GenInvoice(OldOtp);
                         $("#defaultOpen").click();
                     }
 
