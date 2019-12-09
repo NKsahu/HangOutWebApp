@@ -65,6 +65,7 @@ namespace HangOut.Controllers
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
             System.Int64 OID = System.Int64.Parse(objParams.GetValue("OID").ToString());
             System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OrgId").ToString());
+            System.Int32 CategoryID = System.Int32.Parse(objParams.GetValue("CategoryID").ToString());
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(objParams.GetValue("TSTWID").ToString());
             List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OID == OID);
@@ -73,6 +74,10 @@ namespace HangOut.Controllers
             {
                 OrderMenu ObjMenu = OrderMenu.Getone(ObjTorS.OMID);
                 List<OrderMenuCategory> ListCategry = OrderMenuCategory.GetAll(ObjMenu.id);
+                if(CategoryID>0)
+                {
+                    ListCategry = ListCategry.FindAll(x => x.CategoryId == CategoryID);
+                }
                 List<OrdMenuCtgItems> ListMenuItems = OrdMenuCtgItems.GetAll(ObjMenu.id);
                 ListCategry = ListCategry.FindAll(x => x.Status == true);
                 ListCategry = ListCategry.OrderBy(x => x.OrderNo).ToList();
@@ -120,6 +125,10 @@ namespace HangOut.Controllers
             else
             {
                 List<HG_Category> MenuList = new HG_Category().GetAll(OrgId: OrgId);
+                if (CategoryID > 0)
+                {
+                    MenuList = MenuList.FindAll(x => x.CategoryID == CategoryID);
+                }
                 int count = 0;
                 foreach (HG_Category menu in MenuList)
                 {
