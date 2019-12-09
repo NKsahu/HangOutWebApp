@@ -11,9 +11,12 @@
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEdit", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-           
+
             @Html.HiddenFor(model => model.ItemID)
-           
+            @Html.HiddenFor(model => model.Qty)
+            @Html.HiddenFor(model => model.ItemMode)
+            @Html.HiddenFor(model => model.Discount)
+
             <div class="row">
                 <div class="col text-center">
                     @if (Model.ItemID > 0)
@@ -25,7 +28,7 @@
                     else
                     {
                         <img id="DemoUser" src="~/Assets/fork.png" width="110" height="110" class="mb-4" /><br />
-                        <input type="file" id="FoodImg" name="FoodImg" value="0" required accept="image/jpeg" onChange="document.getElementById('DemoUser').src = window.URL.createObjectURL(this.files[0])" />
+                        <input type="file" id="FoodImg" name="FoodImg" value="0" accept="image/jpeg" onChange="document.getElementById('DemoUser').src = window.URL.createObjectURL(this.files[0])" />
                     }
 
                 </div>
@@ -46,7 +49,7 @@
                 </div>
                 <div class="col-sm-4">
                     @Html.Label("Category Name")
-                    @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required", val=Model.CategoryID })
+                    @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required", val = Model.CategoryID })
                     @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
 
                 </div>
@@ -66,29 +69,10 @@
 
                 </div>
 
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
 
-                </div>
 
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.ItemMode, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.EditorFor(model => model.ItemMode, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.ItemMode, "", new { @class = "text-danger" })
-
-                </div>
-
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
-
-                </div>
 
                 <div class="col-sm-4">
                     @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })

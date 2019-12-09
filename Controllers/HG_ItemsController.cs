@@ -31,6 +31,17 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_Items Objitem, System.Web.HttpPostedFileBase FoodImg)
         {
+            if (Objitem.Qty == null)
+            {
+                Objitem.Qty = "";
+
+            }
+            if (Objitem.ItemMode == null)
+            {
+                Objitem.ItemMode = "";
+
+            }
+           
             Objitem.EntryBy =System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             int i = Objitem.Save();
             if (i > 0 && FoodImg!=null)
