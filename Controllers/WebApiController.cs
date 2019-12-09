@@ -1166,40 +1166,69 @@ namespace HangOut.Controllers
         }
 
 
-        public JArray PastOrderSubList(int OID,string Status)
+
+        public JObject PastOrderSubList(int OID, string Status)
         {
+
+            JObject Object = new JObject();
             JArray Info = new JArray();
-           HG_Orders orders = new HG_Orders().GetOne(OID);
+            HG_Orders orders = new HG_Orders().GetOne(OID);
 
-            if (orders!= null && orders.Status==Status)
+            if (orders != null && orders.Status == Status)
             {
-              
-                    HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
-                    JObject Object = new JObject();
+                HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
+                List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(orders.OID);
+                List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
+                double price = 0.00;
+                HashSet<int> Token = new HashSet<int>();
+                for (int i = 0; i < hG_OrderItems.Count; i++)
+                {
+                    price += (hG_OrderItems[i].Count * hG_OrderItems[i].Price);
+                    Token.Add(hG_OrderItems[i].TickedNo);
+                }
+                Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
+                Object.Add("OrganizationName", hG_OrganizationDetails.Name);
+                Object.Add("TotalAmount", price);
+                Object.Add("TicketNo", string.Join(",", Token));
+                Object.Add("OID", orders.OID);
+                Object.Add("Status", orders.Status);
+                if (orders.PaymentStatus == 1)
+                {
+                    Object.Add("PayStatus", "CASH");
+                }
+                else if (orders.PaymentStatus == 2)
+                {
+                    Object.Add("PayStatus", "ONLINE");
+                }
+                else if (orders.PaymentStatus == 3)
+                {
+                    Object.Add("PayStatus", "foodDo");
+                }
+                else
+                {
+                    Object.Add("PayStatus", "UNPAID");
+                }
 
-         
-                    List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(orders.OID);
-                    List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
-                   
-                    foreach (var OrderItem in hG_OrderItems)
-                    {
-                        HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
-                        JObject itemobj = new JObject();
-                        itemobj.Add("OIID", OrderItem.OIID);
-                        itemobj.Add("ItemID", OrderItem.FID);
-                        itemobj.Add("ItemName", hG_Items.Items);
-                        itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
-                        itemobj.Add("Status", OrderItem.Status);
-                        itemobj.Add("Amount", OrderItem.Price);
+                foreach (var OrderItem in hG_OrderItems)
+                {
+                    HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
+                    JObject itemobj = new JObject();
+                    itemobj.Add("OIID", OrderItem.OIID);
+                    itemobj.Add("ItemID", OrderItem.FID);
+                    itemobj.Add("ItemName", hG_Items.Items);
+                    itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
+                    itemobj.Add("Status", OrderItem.Status);
+                    itemobj.Add("Amount", OrderItem.Price);
                     Info.Add(itemobj);
-                    }
+                }
 
-                
+
             }
+            Object.Add("OrderDetails", Info);
 
-            return Info;
+            return Object;
         }
-         
+
         public JObject TableOTPCheker(string  TableID , int TableOTP)
         {
             JObject jsonResult = new JObject();
