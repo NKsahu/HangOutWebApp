@@ -49,6 +49,7 @@ namespace HangOut.Models
             Address= "";
             AddressLin2 = "";
             AddressLine3 = "";
+            Status = true;
             this.Logo = "";
         }
         public int Save()

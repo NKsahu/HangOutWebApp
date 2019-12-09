@@ -29,8 +29,70 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_OrganizationDetails Objitem)
         {
-
-
+            if (Objitem.Email == null)
+            {
+                Objitem.Email="";
+            }
+            if (Objitem.PANNO == null)
+            {
+                Objitem.PANNO = "";
+            }
+            if (Objitem.IvoiceHeading == null)
+            {
+                Objitem.IvoiceHeading = "";
+            }
+            if (Objitem.Address == null)
+            {
+                Objitem.Address = "";
+            }
+            if (Objitem.AddressLin2 == null)
+            {
+                Objitem.AddressLin2 = "";
+            }
+            if (Objitem.AddressLine3 == null)
+            {
+                Objitem.AddressLine3 = "";
+            }
+            if (Objitem.Licence2 == null)
+            {
+                Objitem.Licence2 = "";
+            }
+            if (Objitem.License3 == null)
+            {
+                Objitem.License3 = "";
+            }
+            if (Objitem.Logo == null)
+            {
+                Objitem.Logo = "";
+            }
+            if (Objitem.Cell == null)
+            {
+                Objitem.Cell = "";
+            }
+            if (Objitem.WebSite == null)
+            {
+                Objitem.WebSite = "";
+            }
+            if (Objitem.GSTNO == null)
+            {
+                Objitem.GSTNO = "";
+            }
+            if (Objitem.BankName == null)
+            {
+                Objitem.BankName = "";
+            }
+            if (Objitem.AcType == null)
+            {
+                Objitem.AcType = "";
+            }
+            if (Objitem.ACNO == null)
+            {
+                Objitem.ACNO = "";
+            }
+            if (Objitem.City == null)
+            {
+                Objitem.City = "0";
+            }
             int i = Objitem.Save();
 
             if (i > 0)
