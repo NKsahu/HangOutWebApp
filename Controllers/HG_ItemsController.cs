@@ -20,6 +20,7 @@ namespace HangOut.Controllers
 
             public ActionResult CreateEdit(int ID)
             {
+                
                 HG_Items Objitem = new HG_Items();
                 if (ID > 0)
                 {
@@ -31,6 +32,25 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_Items Objitem, System.Web.HttpPostedFileBase FoodImg)
         {
+            if (Objitem.Qty == null)
+            {
+                Objitem.Qty = "";
+
+            }
+            if (Objitem.ItemMode == null)
+            {
+                Objitem.ItemMode = "";
+
+            }
+            if (Objitem.OrgID == 0)
+            {
+                var OrgObj = Request.Cookies["UserInfo"];
+                Objitem.OrgID = int.Parse(OrgObj["OrgId"]);
+            }
+            if (Objitem.CategoryID == 0)
+            {
+                return Json(new { msg = "Select Item Category Name" });
+            }
             Objitem.EntryBy =System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             int i = Objitem.Save();
             if (i > 0 && FoodImg!=null)

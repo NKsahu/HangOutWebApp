@@ -81,9 +81,7 @@
             position: absolute;
             left: 0;
             top: 0;
-            size: 297mm 210mm;
-            margin: 25mm;
-            margin-right: 45mm;
+            
         }
     }
     .table td {
@@ -100,11 +98,11 @@
     <div style="border:1px solid black">
         <h4 style="text-align:center">@InvoiceHeading</h4>
         <h4 style="text-align:center">@OrgName</h4>
-        <h5 style="text-align:center">Adress 1:@AddressLine1</h5>
-        <h5 style="text-align:center">Adress 2:@AddressLine2</h5>
-        <h5 style="text-align:center">Adress 3:@AddressLine3</h5>
-        <h5 style="text-align:center">Phone :  @Phoneno     GST :   @GstNo</h5>
-        <h5 style="text-align:center">License1 : @Licence2    License2 :@Licence3</h5>
+        <h5 style="text-align:center">@AddressLine1</h5>
+        <h5 style="text-align:center">@AddressLine2</h5>
+        <h5 style="text-align:center">@AddressLine3</h5>
+        <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
+        <h5 style="text-align:center">@Licence2      @Licence3</h5>
     </div>
     <div style="border:1px solid black ;text-align:center">
         <h6><b>ORDER No:</b> @OrderNo      <b>Ticket No:</b> @TicketNos</h6>
@@ -136,7 +134,7 @@
             <tr style="min-width:inherit">
                 <td>TOTAL</td>
                 <td>@Qty.ToString() </td>
-                <td>@AmountTotal.ToString("0.000")</td>
+                <td>@AmountTotal.ToString("0.00")</td>
             </tr>
         </tfoot>
     </table>
