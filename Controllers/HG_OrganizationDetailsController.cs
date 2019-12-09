@@ -54,6 +54,16 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult PrintSetup(int Id)
+        {
+            //var OrgId =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
+            HG_OrganizationDetails Objitem = new HG_OrganizationDetails();
+            if (Id > 0)
+            {
+                Objitem = Objitem.GetOne(Id);
+            }
 
+            return View(Objitem);
+        }
     }
 }

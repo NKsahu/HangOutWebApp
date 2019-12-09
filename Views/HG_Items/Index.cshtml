@@ -4,10 +4,10 @@
     Layout = null;
 }
 @{ List<HG_Category> listitems = new HG_Category().GetAll();}
-@{List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();  }
+
 <div class="card">
     <div class="card-header">
-        <h5 style="text-align:center"><b>ITEM</b> </h5>
+        <h3 style="text-align:center"><b>ITEM</b> </h3>
         <hr />
     </div>
     <a href="/HG_Items/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>

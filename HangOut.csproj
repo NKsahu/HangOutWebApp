@@ -374,6 +374,7 @@
     <Content Include="Views\OrderMenu\Index.cshtml" />
     <Content Include="Views\OrderMenu\AddMenu.cshtml" />
     <Content Include="Views\HG_Orders\Ledger.cshtml" />
+    <Content Include="Views\HG_OrganizationDetails\PrintSetup.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
