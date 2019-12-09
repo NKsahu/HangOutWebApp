@@ -78,7 +78,7 @@ namespace HangOut.Controllers
                 List<OrdMenuCtgItems> ListMenuItems = OrdMenuCtgItems.GetAll(ObjMenu.id);
                 ListCategry = ListCategry.FindAll(x => x.Status == true);
                 ListCategry = ListCategry.OrderBy(x => x.OrderNo).ToList();
-                ListMenuItems = ListMenuItems.FindAll(x => x.Status = true);
+                ListMenuItems = ListMenuItems.FindAll(x => x.Status == true);
                 int count = 0;
                 foreach (var OrderMenuObj in ListCategry)
                 {
