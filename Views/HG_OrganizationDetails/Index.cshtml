@@ -22,9 +22,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.OrgID)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OrgTypes)
-                    </th>
+                    
                     <th>
                         @Html.DisplayNameFor(model => model.HeadName)
                     </th>
@@ -37,28 +35,12 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Phone)
                     </th>
-
-
-                    <th>
-                        @Html.DisplayNameFor(model => model.WebSite)
-                    </th>
-
                     <th>
                         @Html.DisplayNameFor(model => model.GSTNO)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PANNO)
-                    </th>
+                   
                     <th>
                         @Html.DisplayNameFor(model => model.BankName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ACNO)
-                    </th>
-
-
-                    <th>
-                        @Html.DisplayNameFor(model => model.Status)
                     </th>
                     <th></th>
                 </tr>
@@ -72,14 +54,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.OrgID)
                         </td>
-                        <td>
-                            @{ 
-                                string type = "";
-                                type = OrgType.List.Find(x => x.id == item.OrgTypes).Name;
-
-                            }
-                            @type
-                        </td>
+                        
                         <td>
                             @Html.DisplayFor(modelItem => item.HeadName)
                         </td>
@@ -93,29 +68,18 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Phone)
                         </td>
-
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.WebSite)
-                        </td>
+                     
                         <td>
                             @Html.DisplayFor(modelItem => item.GSTNO)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PANNO)
-                        </td>
+                      
                         <td>
                             @Html.DisplayFor(modelItem => item.BankName)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ACNO)
-                        </td>
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
+                     
                         <td>
                             <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                            <a href=" /HG_OrganizationDetails/PrintSetup?Id=@item.OrgID" class="btn btn-success btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting">Print Setup</a>
                         </td>
                     </tr>
                 }
