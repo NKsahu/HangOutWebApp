@@ -17,10 +17,15 @@ namespace HangOut.Models
         public int OrgID { get; set; }
         [Display(Name ="Item")]
         public string Items { get; set; }
+
+
         public int ServingSize { get; set; } //1 :Full Plate ,2 half Plate
         public double FullPrice { get; set; }
         public double HalfPrice { get; set; }
-        public double Price { get; set; }
+        public int WithAddons { get; set; } //{1 NO ,2 YES}
+
+
+        public double Price { get; set; }// final price
         public string Qty { get; set; }
         public string ItemMode { get; set; }//{1 VEG ,2 NON-VEG
         [Display(Name = "Tax %")]
