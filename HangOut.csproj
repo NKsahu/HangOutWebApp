@@ -375,6 +375,8 @@
     <Content Include="Views\OrderMenu\AddMenu.cshtml" />
     <Content Include="Views\HG_Orders\Ledger.cshtml" />
     <Content Include="Views\HG_OrganizationDetails\PrintSetup.cshtml" />
+    <Content Include="Views\HG_Tables_or_Sheat\CreateTakeAway.cshtml" />
+    <Content Include="Views\HG_Tables_or_Sheat\TakeAwayIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
