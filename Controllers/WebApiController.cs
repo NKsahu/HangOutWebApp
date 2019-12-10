@@ -566,7 +566,6 @@ namespace HangOut.Controllers
             }
             double TotalPrice = 0.00;
             JArray jArray = new JArray();
-            listitems = listitems.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
             foreach (var OrderItm in listitems)
             {
                 TotalPrice += (OrderItm.Count * OrderItm.Price);
@@ -789,6 +788,7 @@ namespace HangOut.Controllers
                     JArray ItemsArray = new JArray();
                     
                     int ticketno = 0;
+                    int ItemIndex = 0;
                     foreach (var OrderItem in hG_OrderItems)
                     {
                         HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
@@ -798,6 +798,7 @@ namespace HangOut.Controllers
                         itemobj.Add("ItemName", hG_Items.Items);
                         itemobj.Add("Quantity", OrderItem.Qty+"*"+OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
+                        itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
                         ticketno = OrderItem.TickedNo;
                     }
@@ -1110,7 +1111,7 @@ namespace HangOut.Controllers
             }
             foreach(var objtable in list)
             {
-                HG_Orders order = Orderlist.Find(x => x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
+                HG_Orders order = Orderlist.Find(x => x.CID == OrderById && x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
                 JObject jObject = new JObject();
                 jObject= JObject.FromObject(objtable);
                 jObject.Add("CurrOID", order!=null?order.OID:0);
