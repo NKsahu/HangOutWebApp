@@ -1,8 +1,12 @@
 ﻿@model HangOut.Models.vw_HG_UsersDetails
  @{ Layout = null;}
 @using HangOut.Models
-@{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll(); }
-@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
+@{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll();
+    List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();
+    var UserTypeList = new HG_UserTypes().GetAll();
+    UserTypeList = UserTypeList.FindAll(x => x.UserType != "CUST");
+
+    }
 <div class="card">
     <div class="card-header">
         <h4 style="text-align:center;color:#000000"><b>LIST OF USER  </b></h4>
@@ -14,12 +18,10 @@
             @Html.HiddenFor(model => model.UserCode)
             @Html.HiddenFor(model => model.CurrentStatus)
         <div class="row">
-
-
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.UserType, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.DropDownListFor(model => model.UserType, new SelectList(new HG_UserTypes().GetAll(), "UserType", "UserTypeName", Model.UserType), "Select User Type", new { @class = "form-control" ,required= "required" })
+                @Html.DropDownListFor(model => model.UserType, new SelectList(UserTypeList, "UserType", "UserTypeName", Model.UserType), "Select User Type", new { @class = "form-control" ,required= "required" })
                 @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
 
             </div>
@@ -37,7 +39,6 @@
                 @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
 
             </div>
-
             <div class="col-sm-4">
                 @Html.Label("Mobile No", htmlAttributes: new { @class = "control-label  " })
 
@@ -45,13 +46,10 @@
                 @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
 
             </div>
-
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label  " })
-
                 @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                 @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-
             </div>
 
             <div class="col-sm-4">
@@ -73,17 +71,6 @@
                 </div>
 
             </div>
-            @*<div class="col-sm-4">
-                @Html.LabelFor(model => model.CurrentStatus, htmlAttributes: new { @class = "control-label  " })
-
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.CurrentStatus)
-                    @Html.ValidationMessageFor(model => model.CurrentStatus, "", new { @class = "text-danger" })
-                </div>
-
-            </div>*@
-
-
             <div class="col-sm-1 ">
                 @Html.Label("SAVE", new { @class = "text-white" })
                 <input type="submit" value="SaVe" class="btn btn-success" />

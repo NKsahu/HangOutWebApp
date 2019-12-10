@@ -17,10 +17,14 @@ namespace HangOut.Models
         public int OrgID { get; set; }
         [Display(Name ="Item")]
         public string Items { get; set; }
+        public int ServingSize { get; set; } //1 :Full Plate ,2 half Plate
+        public double FullPrice { get; set; }
+        public double HalfPrice { get; set; }
         public double Price { get; set; }
         public string Qty { get; set; }
-        public string ItemMode { get; set; }
-        public double Discount { get; set; }
+        public string ItemMode { get; set; }//{1 VEG ,2 NON-VEG
+        [Display(Name = "Tax %")]
+        public double Tax { get; set; }// it is tax in decimal value
         public int EntryBy { get; set; }
         public DateTime EntryDate { get; set; }
         public DateTime UpdateDate { get; set; }
@@ -68,7 +72,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Price", this.Price);
                 cmd.Parameters.AddWithValue("@Plates", this.Qty);
                 cmd.Parameters.AddWithValue("@ItemMode ", this.ItemMode);
-                cmd.Parameters.AddWithValue("@Discount ", this.Discount);
+                cmd.Parameters.AddWithValue("@Discount ", this.Tax);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@Item_Img", this.Image);
                 if (this.ItemID == 0)
@@ -124,7 +128,7 @@ namespace HangOut.Models
                     ObjTmp.Price = SDR.GetDouble(4);
                     ObjTmp.Qty = SDR.GetString(5);
                     ObjTmp.ItemMode = SDR.GetString(6);
-                    ObjTmp.Discount = SDR.GetDouble(7);
+                    ObjTmp.Tax = SDR.GetDouble(7);
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.Image = SDR.GetString(12);
                     ListTmp.Add(ObjTmp);
@@ -158,7 +162,7 @@ namespace HangOut.Models
                     ObjTmp.Price = SDR.GetDouble(4);
                     ObjTmp.Qty = SDR.GetString(5);
                     ObjTmp.ItemMode = SDR.GetString(6);
-                    ObjTmp.Discount = SDR.GetDouble(7);
+                    ObjTmp.Tax = SDR.GetDouble(7);
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.Image = SDR.GetString(12);
                 }
