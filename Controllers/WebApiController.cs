@@ -724,6 +724,7 @@ namespace HangOut.Controllers
                 if (Status == 0)
                 {
                     OrderItemList = OrderItemList.FindAll(x => x.Status != 3 && x.Status != 4);
+                    OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now).ToList();
                     OrderItemList = OrderItemList.OrderBy(x => x.TickedNo).ToList();
                     var ObjItem = OrderItemList.First();
                     OrderItemList = OrderItemList.FindAll(x => x.TickedNo == ObjItem.TickedNo);
