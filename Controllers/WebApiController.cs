@@ -1067,7 +1067,7 @@ namespace HangOut.Controllers
             {
                 // Settings settingsObj = new Settings().GetOne("Mgs");
                 // APICONTACT&senderid=FOODDO&msg=APIMSG
-                string Msg = "YOUR OTP FOR FOODO APP IS " + OTPNumber+"";
+                string Msg = "YOUR OTP FOR foodDo APP IS " + OTPNumber+"";
                 HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create("http://app.telcob.cloud/app/smsapi/index.php?key=55DD67927E1B3E&campaign=0&routeid=4&type=text&contacts=" + MobileNO + "&senderid=FOODDO&msg=" + Msg);
                 webRequest.Method = "GET";
                 WebResponse webResp = webRequest.GetResponse();
