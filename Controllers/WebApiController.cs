@@ -566,6 +566,7 @@ namespace HangOut.Controllers
             }
             double TotalPrice = 0.00;
             JArray jArray = new JArray();
+            listitems = listitems.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
             foreach (var OrderItm in listitems)
             {
                 TotalPrice += (OrderItm.Count * OrderItm.Price);
@@ -1109,7 +1110,7 @@ namespace HangOut.Controllers
             }
             foreach(var objtable in list)
             {
-                HG_Orders order = Orderlist.Find(x => x.CID == OrderById && x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
+                HG_Orders order = Orderlist.Find(x => x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
                 JObject jObject = new JObject();
                 jObject= JObject.FromObject(objtable);
                 jObject.Add("CurrOID", order!=null?order.OID:0);
