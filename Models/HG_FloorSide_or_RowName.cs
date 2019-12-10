@@ -14,7 +14,10 @@ namespace HangOut.Models
         public string Type { get; set; }
         public int OrgID { get; set; }
         
-
+        public HG_FloorSide_or_RowName()
+        {
+            RowSize = 0;
+        }
         public int save()
         {
             int Row = 0;
