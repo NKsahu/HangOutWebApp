@@ -41,7 +41,6 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    string ImgName = QrCode.GenerateQr(item.Table_or_RowID, Path: "QRImgTorR");
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.Table_or_RowID)
@@ -84,7 +83,6 @@
                         </td>
                             <td>
                                 <a href=" /HG_Tables_or_Sheat/SheetCreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                                <a href="/HG_Tables_or_Sheat/Delete?ID=@item.Table_or_RowID" class="btn btn-danger btn-sm "> Delete</a>
                             </td>
                         </tr>
                             }

@@ -40,6 +40,11 @@ namespace HangOut.Controllers
             {
              Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             }
+            if (Objitem.OrgID == 0)
+            {
+                var ObjOrg = Request.Cookies["UserInfo"];
+                Objitem.OrgID = int.Parse(ObjOrg["OrgId"]);
+            }
             int i = Objitem.Save();
             if (i > 0)
                 return RedirectToAction("Index");
