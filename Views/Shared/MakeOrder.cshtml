@@ -940,12 +940,13 @@
                                     var List = Jobje.ListItems;
                                     for (var i = 0; i < List.length; i++) {
 
-                                        var ObjItem = ItemList.find(x => {
-                                            return x.IID == List[i].FID;
-                                        });
-                                        var td1 = "<tr><td>" + ObjItem.ItemName + "</td>";
+                                       // var ObjItem = ItemList.find(x => {
+                                      //      return x.IID == List[i].FID;
+                                      //  });
+                                        var Price = parseFloat(List[i].Price) * parseInt(List[i].Count);
+                                        var td1 = "<tr><td>" + List[i].ItemName + "</td>";
                                         td1 += "<td>" + List[i].Count + "</td>";
-                                        td1 += "<td>" + List[i].Price + "</td>";
+                                        td1 += "<td>" + Price + "</td>";
                                         td1 += "<td>" + List[i].TickedNo + "</td></tr>";
                                        // Qty += parseInt(List[i].Count);
                                       //  var total = (List[i].Count * parseFloat(List[i].Price));
