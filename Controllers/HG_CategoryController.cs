@@ -42,6 +42,7 @@ namespace HangOut.Controllers
             }
             if (Objitem.OrgID == 0)
             {
+
                 var ObjOrg = Request.Cookies["UserInfo"];
                 Objitem.OrgID = int.Parse(ObjOrg["OrgId"]);
             }

@@ -394,9 +394,9 @@ namespace HangOut.Controllers
             string QrCode =ParaMeters.GetValue("TID").ToString();
             int CID = int.Parse(ParaMeters.GetValue("CID").ToString());
             HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
-           List<HG_Orders> CustOrdrList = new HG_Orders().GetAll(CID: CID);
+            List<HG_Orders> CustOrdrList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             JObject jObject = JObject.FromObject(TableRowObj);
-            HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status== "1");
+            HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status!="3");
             if (orders == null)
             {
                 jObject.Add("OID", 0);
