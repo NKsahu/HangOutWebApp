@@ -61,7 +61,11 @@ namespace HangOut.Controllers
             List<HG_Tables_or_Sheat> ListOfTables = new HG_Tables_or_Sheat().GetAll(1);// table
             ListOfTables = ListOfTables.FindAll(x => x.Table_or_RowID != ObjTable.Table_or_RowID);
             ListOfTables = ListOfTables.FindAll(x => x.QrCode != "0");
-
+            if (ObjTable.OrgId == 0)
+            {
+                var ObjOrg = Request.Cookies["UserInfo"];
+                ObjTable.OrgId = int.Parse(ObjOrg["OrgId"]);
+            }
             HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListOfTables.Find(x => x.QrCode == ObjTable.QrCode);
             if (hG_Tables_Or_Sheat != null && hG_Tables_Or_Sheat.Table_or_RowID > 0)
             {
