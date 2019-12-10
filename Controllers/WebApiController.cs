@@ -724,6 +724,7 @@ namespace HangOut.Controllers
                 if (Status == 0)
                 {
                     OrderItemList = OrderItemList.FindAll(x => x.Status != 3 && x.Status != 4);
+                    OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
                     OrderItemList = OrderItemList.OrderBy(x => x.TickedNo).ToList();
                     var ObjItem = OrderItemList.First();
                     OrderItemList = OrderItemList.FindAll(x => x.TickedNo == ObjItem.TickedNo);
@@ -764,6 +765,7 @@ namespace HangOut.Controllers
                     HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
                     if (hG_FloorSide_Or_RowName == null)
                     {
+                        hG_FloorSide_Or_RowName = new HG_FloorSide_or_RowName();
                         hG_FloorSide_Or_RowName.FloorSide_or_RowName = " ";
                     }
                     else
@@ -771,6 +773,7 @@ namespace HangOut.Controllers
                         HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
                         if (hG_Floor_Or_ScreenMaster == null)
                         {
+                            hG_Floor_Or_ScreenMaster = new HG_Floor_or_ScreenMaster();
                             hG_Floor_Or_ScreenMaster.Name = "";
                         }
                         else
@@ -783,7 +786,7 @@ namespace HangOut.Controllers
                     
                     var hG_OrderItems = OrderItemList.FindAll(x => x.OID == order.OID);
                     JArray ItemsArray = new JArray();
-                    int ItemIndex = 0;
+                    
                     int ticketno = 0;
                     foreach (var OrderItem in hG_OrderItems)
                     {
@@ -794,7 +797,6 @@ namespace HangOut.Controllers
                         itemobj.Add("ItemName", hG_Items.Items);
                         itemobj.Add("Quantity", OrderItem.Qty+"*"+OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
-                        itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
                         ticketno = OrderItem.TickedNo;
                     }

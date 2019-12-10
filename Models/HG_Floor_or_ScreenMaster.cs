@@ -17,7 +17,10 @@ namespace HangOut.Models
         public int UpdateionDate { get; set; }
         public string Type { get; set; }
         public int OrgID { get; set; }
-
+        public HG_Floor_or_ScreenMaster()
+        {
+            UpdateionDate =0;
+        }
         public int save()
         {
             int Row = 0;
