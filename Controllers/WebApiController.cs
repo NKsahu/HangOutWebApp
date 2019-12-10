@@ -794,7 +794,6 @@ namespace HangOut.Controllers
                         itemobj.Add("ItemName", hG_Items.Items);
                         itemobj.Add("Quantity", OrderItem.Qty+"*"+OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
-                        itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
                         ticketno = OrderItem.TickedNo;
                     }
