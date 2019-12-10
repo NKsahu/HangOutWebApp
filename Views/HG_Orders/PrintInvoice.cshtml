@@ -33,11 +33,11 @@
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
-    string AddressLine1 = "Near Raipur C.g Sankar Nagar ";
-    string AddressLine2 = "sankar nagar  Raipur C.g Sankar Nagar";
-    string AddressLine3 = "Near Raipur C.g Sankar Nagar";
-    string Phoneno = "4895632856";
-    string GstNo = "ABCD1236589 ";
+    string AddressLine1 = "";
+    string AddressLine2 = "";
+    string AddressLine3 = "";
+    string Phoneno = "";
+    string GstNo = "";
     string Licence2 = "..................";
     string Licence3 = "..................";
     HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
@@ -84,11 +84,7 @@
             
         }
     }
-    .table td {
-        width: auto;
-        overflow: hidden;
-        word-wrap: break-word;
-    }
+    
 
 </style>
 <div style="min-height:25px">
@@ -104,8 +100,8 @@
         <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
         <h5 style="text-align:center">@Licence2      @Licence3</h5>
     </div>
-    <div style="border:1px solid black ;text-align:center">
-        <h6><b>ORDER No:</b> @OrderNo      <b>Ticket No:</b> @TicketNos</h6>
+    <div style="border:0.5px solid black ;text-align:center">
+        <h6><b>ORDER No:</b> @OrderNo   <b>Ticket No:</b> @TicketNos</h6>
         <h6><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymnetMode </h6>
     </div>
     <table id="InvoiceItems" class="table col-sm-12" >
@@ -131,17 +127,17 @@
             }
         </tbody>
         <tfoot>
-            <tr style="min-width:inherit">
+            <tr>
                 <td>TOTAL</td>
                 <td>@Qty.ToString() </td>
-                <td>@AmountTotal.ToString("0.00")</td>
+                <td>@AmountTotal.ToString()</td>
             </tr>
         </tfoot>
     </table>
 
-    <div style="border:1px solid black">
+    <div style="border:0.5px solid black">
         <h6>NOTE: </h6>
-        <div style="min-height:40px">
+        <div>
             .........................................................................<br />
             .........................................................................
         </div>
