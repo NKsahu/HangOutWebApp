@@ -15,8 +15,6 @@
 
             @Html.HiddenFor(model => model.ItemID)
             @Html.HiddenFor(model => model.Qty)
-           
-
             <div class="row">
                 <div class="col text-center">
                     @if (Model.ItemID > 0)
@@ -96,6 +94,7 @@
                         @Html.ValidationMessageFor(model => model.ItemMode, "", new { @class = "text-danger", required = "required" })
                     </div>
                 </div>
+
 
                 <div class="col-md-3">
                     @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })

@@ -18,7 +18,8 @@ namespace HangOut.Models
         public DateTime EntryDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public bool Status { get; set; }
-
+        public int CategoryType { get; set; } //1 Item category  ,2 AddonCategory
+        
 
      public   HG_Category()
         {
@@ -39,7 +40,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.CategoryID == 0)
                 {
-                    Query = "Insert into  HG_Category  values( @OrgID ,@Category ,@EntryBy,@EntryDate,@UpdateDate,@Status);";
+                    Query = "Insert into  HG_Category  values( @OrgID ,@Category ,@EntryBy,@EntryDate,@UpdateDate,@Status,@CategoryType);";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
@@ -47,8 +48,7 @@ namespace HangOut.Models
                 }
                 else
                 {
-
-                    Query = "update  HG_Category set   OrgID =@OrgID ,Category=@Category,UpdateDate=@UpdateDate,Status=@Status where CategoryID=@CategoryID";
+                    Query = "update  HG_Category set   OrgID =@OrgID ,Category=@Category,UpdateDate=@UpdateDate,Status=@Status,CategoryType=@CategoryType where CategoryID=@CategoryID";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@CategoryID", this.CategoryID);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
@@ -56,6 +56,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                 cmd.Parameters.AddWithValue("@Category", this.Category);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
+                cmd.Parameters.AddWithValue("@CategoryType", this.CategoryType);
                 Row = cmd.ExecuteNonQuery();
             }
             catch (Exception e) { e.ToString(); }
@@ -63,7 +64,7 @@ namespace HangOut.Models
             return Row;
         }
 
-        public List<HG_Category> GetAll(int OrgId=0)
+        public List<HG_Category> GetAll(int OrgId=0,int CategoryType=1)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -71,14 +72,14 @@ namespace HangOut.Models
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<HG_Category> ListTmp = new List<HG_Category>();
-            string Query = "SELECT * FROM  HG_Category ORDER BY CategoryID DESC";
+            string Query = "SELECT * FROM  HG_Category where CategoryType="+CategoryType.ToString()+"  ORDER BY CategoryID DESC";
             if (OrgId > 0)
             {
-                Query = "SELECT * FROM  HG_Category where OrgID="+OrgId.ToString()+"ORDER BY CategoryID DESC";
+                Query = "SELECT * FROM  HG_Category where OrgID="+OrgId.ToString()+ " and CategoryType=" + CategoryType.ToString() + " ORDER BY CategoryID DESC";
             }
             else if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
             {
-                Query = "SELECT * FROM  HG_Category where OrgID=" + CurrOrgID["OrgId"] + "ORDER BY CategoryID DESC";
+                Query = "SELECT * FROM  HG_Category where OrgID=" + CurrOrgID["OrgId"] + "and CategoryType=" + CategoryType.ToString() + " ORDER BY CategoryID DESC";
 
             }
             try
@@ -92,6 +93,7 @@ namespace HangOut.Models
                     ObjTmp.OrgID = SDR.GetInt32(1);
                     ObjTmp.Category = SDR.GetString(2);
                     ObjTmp.Status = SDR.GetBoolean(6);
+                    ObjTmp.CategoryType = SDR.GetInt32(7);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -119,8 +121,9 @@ namespace HangOut.Models
                     ObjTmp.CategoryID = SDR.GetInt32(0);
                     ObjTmp.OrgID = SDR.GetInt32(1);
                     ObjTmp.Category = SDR.GetString(2);
-                    ObjTmp.Status = SDR.GetBoolean(3);
-                    
+                    ObjTmp.Status = SDR.GetBoolean(6);
+                    ObjTmp.CategoryType = SDR.GetInt32(7);
+
                 }
             }
             catch (System.Exception e)
