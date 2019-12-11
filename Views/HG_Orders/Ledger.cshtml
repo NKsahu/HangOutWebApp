@@ -1,8 +1,9 @@
-﻿@using HangOut.Models;
+﻿@using HangOut.Models
 @{
 
     Layout = null;
     int Sn = 1;
+    double TotalAmtsum = 0.00;
     var ObjOrgId = Request.Cookies["UserInfo"];
     List<HG_Orders> orderList = new List<HG_Orders>();
     List<HG_OrderItem> OrderItmlist = new List<HG_OrderItem>();
@@ -132,6 +133,7 @@
                             <th> DateTime </th>
                             <th> Order No </th>
                             <th> Received By</th>
+                            <th> MODE</th>
                             <th> AMT (RS)</th>
                             <th>Details</th>
                             <th> Shift Payment T-Mode</th>
@@ -141,6 +143,7 @@
                         @foreach (var ObjOrder in orderList)
                         {
                             string Receivedby = " ";
+                            string PaymentStatus = "UnPaid";
                             var User = UserList.Find(x => x.UserCode == ObjOrder.PayReceivedBy);
                             if (User != null)
                             {
@@ -152,11 +155,29 @@
                             {
                                 TotalAmt += (CurntOrderItms[i].Count * CurntOrderItms[i].Price);
                             }
+                            if (ObjOrder.PaymentStatus == 0)
+                            {
+                                // PaymentStatus
+                            }
+                            else if (ObjOrder.PaymentStatus == 1)
+                            {
+                                PaymentStatus = "ByCash";
+                            }
+                            else if (ObjOrder.PaymentStatus == 2)
+                            {
+                                PaymentStatus = "ByOnline";
+                            }
+                            else
+                            {
+                                PaymentStatus = "ByFoodDo";
+                            }
+                            TotalAmtsum += TotalAmt;
                             <tr>
                                 <td>@(Sn++)</td>
                                 <td>@ObjOrder.Create_Date.ToString("dd/MM hh:mm:ss tt")</td>
                                 <td>@ObjOrder.OID</td>
                                 <td>@Receivedby</td>
+                                <td>@PaymentStatus</td>
                                 <td>@TotalAmt.ToString("0.00")</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning" onclick="Details('@ObjOrder.OID');"><i class="fas fa-eye"></i></button>
@@ -170,6 +191,18 @@
                         }
 
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>@TotalAmtsum.ToString("0.00")</td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
