@@ -37,15 +37,18 @@ namespace HangOut.Controllers
                 Objitem.Qty = "";
 
             }
-            if (Objitem.ItemMode == null)
+            if (Objitem.Type == 0)
             {
-                Objitem.ItemMode = "";
-
+                Objitem.Type = 1;
             }
             if (Objitem.OrgID == 0)
             {
                 var OrgObj = Request.Cookies["UserInfo"];
                 Objitem.OrgID = int.Parse(OrgObj["OrgId"]);
+            }
+            if (Objitem.ApplyAddOn == 2&&Objitem.AddOnCatId==0)
+            {
+                return Json(new { msg = "Select Addon Category " });
             }
             if (Objitem.CategoryID == 0)
             {
