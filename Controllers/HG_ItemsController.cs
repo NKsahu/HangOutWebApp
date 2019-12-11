@@ -9,7 +9,7 @@ namespace HangOut.Controllers
     {
          
         
-            // GET: HG_Items
+            // GET: HG_Items index
 
             public ActionResult Index()
             {
@@ -75,12 +75,28 @@ namespace HangOut.Controllers
             return RedirectToAction("Error");
 
         }
-
-
-
         public ActionResult Error()
         {
             return View();
+        }
+
+        //Addon Items Index
+        public ActionResult AddOnItmIndex()
+        {
+            HG_Items Objitem = new HG_Items();
+            List<HG_Items> Listitem = Objitem.GetAll(Type:2);
+            return View(Listitem);
+        }
+        // Addon Items Create
+
+        public ActionResult CreateEditAddOn(int ID)
+        {
+            HG_Items Objitem = new HG_Items();
+            if (ID > 0)
+            {
+                Objitem = Objitem.GetOne(ID);
+            }
+            return View(Objitem);
         }
 
     }

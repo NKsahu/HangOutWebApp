@@ -379,6 +379,8 @@
     <Content Include="Views\HG_Tables_or_Sheat\TakeAwayIndex.cshtml" />
     <Content Include="Views\HG_Category\AddonsIndex.cshtml" />
     <Content Include="Views\HG_Category\CreateEditAddon.cshtml" />
+    <Content Include="Views\HG_Items\AddOnItmIndex.cshtml" />
+    <Content Include="Views\HG_Items\CreateEditAddOn.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
