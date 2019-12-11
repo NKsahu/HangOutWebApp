@@ -27,7 +27,6 @@ namespace HangOut.Models
         public DateTime EntryDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public bool Status { get; set; }
-
         public int ServingSize { get; set; } //1 :Full Plate ,2 half Plate
         public double FullPrice { get; set; }
         public double HalfPrice { get; set; }

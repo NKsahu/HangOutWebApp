@@ -7,28 +7,28 @@ namespace HangOut.Controllers
     [LoginFilter]
     public class HG_ItemsController : Controller
     {
-         
-        
-            // GET: HG_Items index
 
-            public ActionResult Index()
-            {
-                HG_Items Objitem = new HG_Items();
-                List<HG_Items> Listitem = Objitem.GetAll();
-                return View(Listitem);
-            }
 
-            public ActionResult CreateEdit(int ID)
+        // GET: HG_Items index
+
+        public ActionResult Index()
+        {
+            HG_Items Objitem = new HG_Items();
+            List<HG_Items> Listitem = Objitem.GetAll();
+            return View(Listitem);
+        }
+
+        public ActionResult CreateEdit(int ID)
+        {
+
+            HG_Items Objitem = new HG_Items();
+            if (ID > 0)
             {
-                
-                HG_Items Objitem = new HG_Items();
-                if (ID > 0)
-                {
                 Objitem = Objitem.GetOne(ID);
-                }
-
-                return View(Objitem);
             }
+
+            return View(Objitem);
+        }
         [HttpPost]
         public ActionResult CreateEdit(HG_Items Objitem, System.Web.HttpPostedFileBase FoodImg)
         {
@@ -51,15 +51,15 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "Select Item Category Name" });
             }
-            Objitem.EntryBy =System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
+            Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             int i = Objitem.Save();
-            if (i > 0 && FoodImg!=null)
+            if (i > 0 && FoodImg != null)
             {
                 FoodImg.SaveAs(System.IO.Path.Combine(Server.MapPath("~/FoodImg/"), i + ".jpg"));
             }
             if (Objitem.Image.Equals(""))
             {
-                Objitem.Image = "/FoodImg/"+i+".jpg";
+                Objitem.Image = "/FoodImg/" + i + ".jpg";
                 if (Objitem.Save() < 1)
                     return Json(new { msg = "Error in Update Items" });
             }
@@ -84,7 +84,7 @@ namespace HangOut.Controllers
         public ActionResult AddOnItmIndex()
         {
             HG_Items Objitem = new HG_Items();
-            List<HG_Items> Listitem = Objitem.GetAll(Type:2);
+            List<HG_Items> Listitem = Objitem.GetAll(Type: 2);
             return View(Listitem);
         }
         // Addon Items Create
@@ -99,5 +99,31 @@ namespace HangOut.Controllers
             return View(Objitem);
         }
 
+        [HttpPost]
+        public ActionResult CreateEditAddOn(HG_Items Objitem)
+        {
+            if (Objitem.Qty == null)
+            {
+                Objitem.Qty = "";
+
+            }
+            if (Objitem.ItemMode == null)
+            {
+                Objitem.ItemMode = "";
+
+            }
+            if (Objitem.OrgID == 0)
+            {
+                var OrgObj = Request.Cookies["UserInfo"];
+                Objitem.OrgID = int.Parse(OrgObj["OrgId"]);
+            }
+            if (Objitem.CategoryID == 0)
+            {
+                return Json(new { msg = "Select Item Category Name" });
+            }
+            Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
+            int i = Objitem.Save();
+            return RedirectToAction("Index");
+        }
     }
 }
