@@ -4,13 +4,12 @@
     Layout = null;
 }
 @using HangOut.Models
-@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
 <div class="card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>FLOOR  </b> </h1>
+        <h1 style="text-align:center"><b>FLOOR</b> </h1>
         <hr />
     </div>
-    <a href="/HG_Floor_or_ScreenMaster/CreateEdit?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <button class="btn btn-success" onclick="CreateEdit('0')"><i class="fa fa-plus">ADD</i></button>
     <div class="card-body">
         <table class="table table-bordered table-hover w-100" id="TBLID">
             <thead>
@@ -21,32 +20,21 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
-                    
-                    
-                    <th>
-                        @Html.DisplayName("Orgonization" )
-                    </th>
                     <th></th>
                 </tr>
                 </thead>
-            <tbody>
+            <tbody id="Tbody">
                 @foreach (var item in Model)
                 {
-                    <tr>
+                    <tr id="@item.Floor_or_ScreenID">
                         <td>
                             @Html.DisplayFor(modelItem => item.Floor_or_ScreenID)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                          
-                         <td>
-                             @{ HG_OrganizationDetails ObjOrg = listorgonization.Find(x => x.OrgID == item.OrgID);}
-                             @ObjOrg.Name
-                         </td>
                         <td>
-                            <a href=" /HG_Floor_or_ScreenMaster/CreateEdit?ID=@item.Floor_or_ScreenID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                            <a href="/HG_Floor_or_ScreenMaster/Delete?ID=@item.Floor_or_ScreenID" class="btn btn-danger btn-sm "> Delete</a>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.Floor_or_ScreenID)"> Edit</button>
                         </td>
                     </tr>
                 }
@@ -54,3 +42,33 @@
         </table>
     </div>
 </div>
+
+<script>
+    function JsonSuccess(Jobj) {
+        var Jitmobj = Jobj;
+        var HtmlStr = "<tr id='" + Jitmobj.Floor_or_ScreenID+"'>";
+        HtmlStr += '<td>' + Jitmobj.Floor_or_ScreenID+'</td>';
+        HtmlStr += '<td>' + Jitmobj.Name+'</td>';
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID+')"> Edit</button></td></tr>';
+        $("#Tbody").append(HtmlStr);
+    }
+
+    function CreateEdit(ID) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Floor_or_ScreenMaster/CreateEdit?ID="+ID+"",
+            success: function (data) {
+                makedpt("CreateFS");
+                $("#CreateFS > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateFS");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+
+</script>
