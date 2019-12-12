@@ -178,6 +178,7 @@
     <Content Include="Assets\Select2\js\i18n\en.js" />
     <Content Include="Assets\Select2\js\select2.full.min.js" />
     <Content Include="Assets\Select2\js\select2.min.js" />
+    <Content Include="Assets\shortcut.js" />
     <Content Include="Assets\Website.js" />
     <Content Include="Global.asax" />
     <Content Include="Image\app_icon.png" />

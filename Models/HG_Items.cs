@@ -32,6 +32,7 @@ namespace HangOut.Models
         [Display(Name ="AddOn Category")]
         public int AddOnCatId { get; set; }// addon category id
         public int Type { get; set; }// {1 : food-items  2 :AddOn items
+        [Display(Name ="AddOn Type")]
         public int AddOnType { get; set; }// {0 None, 1 Base 2 Addons}
         public HG_Items()
         {

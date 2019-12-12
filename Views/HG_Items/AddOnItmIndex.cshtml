@@ -2,6 +2,7 @@
 @using HangOut.Models
 @{
     Layout = null;
+    var CatId = Request.QueryString["CatId"];
 }
 
 
@@ -10,9 +11,9 @@
         <h3 style="text-align:center"><b>Addon Items</b> </h3>
         <hr />
     </div>
-    <a href="/HG_Items/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+    <button onclick="CreateAddOnItm(@CatId)" class="btn btn-success"><i class="fa fa-plus">ADD</i></button>
     <div class="card-body">
-        <table class="table table-hover w-100" id="TBLID">
+        <table class="table " id="TBLID2">
             <thead>
                 <tr>
                     <th>
@@ -21,13 +22,11 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Price)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Status)
-                    </th>
+                    <th>@Html.DisplayNameFor(model=>model.Tax)</th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="Tbody">
                 @foreach (var item in Model)
                 {
                     <tr>
@@ -37,9 +36,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Price)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
+                        
                         <td>
                             <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
                         </td>
@@ -49,3 +46,37 @@
         </table>
     </div>
 </div>
+<script>
+    function CreateAddOnItm(CatId) {
+
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/CreateEditAddOn?ID=0&CatId=" + CatId,
+            success: function (data) {
+                makedpt("AddOnCreate");
+                $("#AddOnCreate > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("AddOnCreate");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+
+    }
+    
+    var AddOnresult = function (data) {
+        var JsonObj = JSON.parse(data);
+        console.log(JsonObj);
+
+        var Htmlstr = '<tr>';
+        Htmlstr += Htmlstr + '<td>' + JsonObj.Items + '</td>';
+        Htmlstr += Htmlstr + '<td>' + JsonObj.Price + '</td>';
+        Htmlstr += Htmlstr + '<td>' + JsonObj.Tax + '</td>';
+        Htmlstr += Htmlstr + '<td>' + JsonObj.Tax + '</td>';
+        };
+
+
+</script>

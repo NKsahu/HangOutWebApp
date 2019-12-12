@@ -50,6 +50,29 @@ function Onfail(msg) {
                          $("#WarningModel .modal-body").html(msg);
                         $("#WarningModel").modal();
 }
+shortcut.add("Esc", function () {
+    if ($(".modal").length > 1) {
+
+        // $(".modal:visible:last").hide();
+        $(".modal:visible:last").remove();
+        $('.modal-backdrop').remove();
+        //$(".modal").last().prev().hide();
+    };
+});
+var modaladded = false;
+$(window).on('hashchange', function (event) {
+    if ($(".modal:visible").length > 0 && !modaladded) {
+
+
+        $(".modal:visible:last").remove();
+        $('.modal-backdrop').remove();
+
+    }
+    else {
+        modaladded = false;
+    }
+});
+
 function makedpt(id, h, w) {
     cloned = $('#myModal');
     $("#" + id).remove();
@@ -74,7 +97,7 @@ function makedpt(id, h, w) {
     }
 }
 function showdpt(id) {
-   // modaladded = true;
+   modaladded = true;
     window.location.hash = id;
     $("#" + id).show();
    // $("#" + id).display = "block";

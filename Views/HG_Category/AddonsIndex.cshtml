@@ -2,10 +2,6 @@
 @{
     Layout = null;
 }
-@using HangOut.Models
-
-
-
 <div class="card">
     <div class="card-header">
         <h3 style="text-align:center"><b>AddOn Category </b> </h3>
@@ -13,12 +9,14 @@
     </div>
     <a href="/HG_Category/CreateEditAddon?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
     <div class="card-body">
-        <table class="table  " id="TBLID">
+        <table class="table table-hover w-100 " id="TBLID">
             <thead>
                 <tr>
-
                     <th>
                         @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th>
+                        @Html.DisplayName("AddOn Items")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
@@ -35,11 +33,13 @@
                             @Html.DisplayFor(modelItem => item.Category)
                         </td>
                         <td>
+                            <button id="@item.CategoryID" onclick="AddOnIndex(@item.CategoryID)" class="btn btn-info btn-sm "> Add </button>
+                        </td>
+                        <td>
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
                         <td>
                             <a href=" /HG_Category/CreateEditAddon?ID=@item.CategoryID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-
                         </td>
                     </tr>
                 }
@@ -47,3 +47,25 @@
         </table>
     </div>
 </div>
+<script>
+    
+    function AddOnIndex(CatId) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/AddOnItmIndex?CatId=" + CatId,
+            success: function (data) {
+                makedpt("AddOnIndex");
+                $("#AddOnIndex > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("AddOnIndex");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+
+    }
+    
+</script>

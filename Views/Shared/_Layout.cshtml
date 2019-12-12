@@ -16,6 +16,7 @@
 
     <script src="~/Assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
     <script src="~/Assets/AjaxForm/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Assets/shortcut.js"></script>
     <script src="~/Assets/Website.js"></script>
     <script src="~/Assets/autonumeric.js"></script>
 
@@ -82,7 +83,7 @@
 </body>
 </html>
 <script>
-
+   
     $("body").on('DOMSubtreeModified', "#DynamicData", function () {
         //=======Date Picker ============
         $(".DateField").datepicker();
@@ -110,13 +111,13 @@
         $('.auto').autoNumeric('init', {
             vMax: '100000000000000000000', vMin: '-100000000000000000000', aSep: ''
         });
-
         $('.autodouble').each(function () {
-                $(this).autoNumeric('init', {
-                    vMax: '100000000000000000000.00', vMin: '-100000000000000000000.00', aSep: ''
-                });
+            $(this).autoNumeric('init', {
+                vMax: '100000000000000000000.00', vMin: '-100000000000000000000.00', aSep: ''
+            });
 
         });
+       
         if (!$.fn.DataTable.isDataTable('#TBLID')) {
             LoadDataTable();
         }

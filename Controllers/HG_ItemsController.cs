@@ -84,20 +84,27 @@ namespace HangOut.Controllers
         }
 
         //Addon Items Index
-        public ActionResult AddOnItmIndex()
+        public ActionResult AddOnItmIndex(int CatId)
         {
             HG_Items Objitem = new HG_Items();
             List<HG_Items> Listitem = Objitem.GetAll(Type: 2);
+            Listitem = Listitem.FindAll(x => x.CategoryID == CatId);
             return View(Listitem);
         }
         // Addon Items Create
 
-        public ActionResult CreateEditAddOn(int ID)
+        public ActionResult CreateEditAddOn(int ID,int CatId=0)
         {
             HG_Items Objitem = new HG_Items();
             if (ID > 0)
             {
                 Objitem = Objitem.GetOne(ID);
+            }
+            else
+            {
+                HG_Category hG_Category = new HG_Category().GetOne(CatId);
+                Objitem.CategoryID = hG_Category.CategoryID;
+                Objitem.OrgID = hG_Category.OrgID;
             }
             return View(Objitem);
         }
@@ -110,10 +117,9 @@ namespace HangOut.Controllers
                 Objitem.Qty = "";
 
             }
-            if (Objitem.ItemMode == null)
+            if (Objitem.Type == 0)
             {
-                Objitem.ItemMode = "";
-
+                Objitem.Type = 2; //addon items
             }
             if (Objitem.OrgID == 0)
             {
