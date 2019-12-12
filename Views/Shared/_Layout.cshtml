@@ -13,7 +13,7 @@
     <!-- JS -->
     <script src="~/Assets/jQuery/jquery-3.4.1.min.js"></script>
 
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
     <script src="~/Assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
     @*<script src="~/Assets/AjaxForm/jquery.unobtrusive-ajax.min.js"></script>*@
     <script src="~/Assets/shortcut.js"></script>
@@ -52,7 +52,7 @@
     @RenderBody()
 
     <!--Warning Model-->
-    <div class="modal fade bd-example-modal-sm pr-0" id="WarningModel" tabindex="-1" role="dialog" aria-labelledby="WarningModel" aria-hidden="true">
+    <div class="modal fade bd-example-modal-sm pr-0" id="WarningModel" tabindex="-1" style="z-index:100000" role="dialog" aria-labelledby="WarningModel" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content border border-warning text-center">
                 <div class="modal-header pt-2 pb-2 bg-secondary " style="text-align:center !important;">
@@ -77,13 +77,13 @@
         </div>
     </div>
 
-   
+
 
     <!--pop up modal en-->
 </body>
 </html>
 <script>
-   
+
     $("body").on('DOMSubtreeModified', "#DynamicData", function () {
         //=======Date Picker ============
         $(".DateField").datepicker();
@@ -117,7 +117,7 @@
             });
 
         });
-       
+
         if (!$.fn.DataTable.isDataTable('#TBLID')) {
             LoadDataTable();
         }
@@ -137,7 +137,7 @@
     //===cal datatable=====
 
     function LoadDataTable() {
-     var table=$("#TBLID").DataTable({
+        var table = $("#TBLID").DataTable({
 
             "scrollY": "300px",
             "scrollCollapse": true,
@@ -145,7 +145,7 @@
             "sScrollX": "100%",
             "bScrollCollapse": true,
             "dom": 'Bfrtip',
-         "buttons": ['excel', 'pdf', { extend: 'print', title: 'Impression', exportOptions: { columns: ':visible' } },]
+            "buttons": ['excel', 'pdf', { extend: 'print', title: 'Impression', exportOptions: { columns: ':visible' } },]
 
         });
         table.buttons.exportData({
@@ -156,3 +156,4 @@
 
 
 </script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>

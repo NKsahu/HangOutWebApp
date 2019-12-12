@@ -11,7 +11,7 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST",  LoadingElementId = "waiting", OnSuccess = "alert('saved');AddOnresult" }))
+        @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST",  LoadingElementId = "waiting", OnSuccess = "" }))
         {
             @Html.HiddenFor(model => model.ItemID)
             @Html.HiddenFor(model => model.Qty)
@@ -19,6 +19,7 @@
            
             @Html.HiddenFor(model => model.AddOnCatId)
             @Html.HiddenFor(model => model.ApplyAddOn)
+            @Html.HiddenFor(model=>model.ItemDiscription)
             //public int ApplyAddOn { get; set; } //{1 NO ,2 YES}
             //  public int AddOnCatId { get; set; }// addon category id
            @Html.HiddenFor(model => model.OrgID)
@@ -138,10 +139,6 @@
         //    $('#waiting').hide();
         //};
         
-    
-
-    function AddOnresult(data) {
-        alert('HTTP Status Code: ' + data + "  " + data);
-    }
+   
 </script>
 

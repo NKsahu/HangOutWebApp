@@ -484,7 +484,7 @@
         var finalAmt = 0.00;
         var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
         var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
-        var ItemHtmlSecond = "<hr class='sp-grid-text-break'> <span><small class='text-muted'>";
+        var ItemHtmlSecond = " <span><small class='text-muted'>";
         var ItemHtmlLast = "</small> </span> </span></div></div>";
         var first = "</td ><td><div><div>";
         var Minushtml = "<span class='sp-quantity-adjust sp-no-user-select'";
@@ -792,8 +792,16 @@
                 ShowItems(list[j]);
             }
         }
-        function ShowItems(objitem) {
-            $("#ItemList").append(ItemHtmlFirst + "onclick='AddByItemClick(\"" + objitem.IID + "\")'" + ItemHtmlFirstPrefix + objitem.ItemName + ItemHtmlSecond + "₹" + objitem.ItemPrice + ItemHtmlLast);
+     function ShowItems(objitem) {
+         console.log("AAYA");
+         var PrefixItemHtmlSecond = "";
+         if (objitem.ItemMode === "1") {
+             PrefixItemHtmlSecond = "<hr class='sp-grid-text-break' style='background:green'>";
+         }
+         else {
+             PrefixItemHtmlSecond = "<hr class='sp-grid-text-break' style='background:red'>";
+         }
+         $("#ItemList").append(ItemHtmlFirst + "onclick='AddByItemClick(\"" + objitem.IID + "\")'" + ItemHtmlFirstPrefix + objitem.ItemName + PrefixItemHtmlSecond+ ItemHtmlSecond + "₹" + objitem.ItemPrice + ItemHtmlLast);
         }
         function filterItemByCat(MenuId) {
             if (MenuId != "0") {

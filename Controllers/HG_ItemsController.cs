@@ -37,6 +37,10 @@ namespace HangOut.Controllers
                 Objitem.Qty = "";
 
             }
+            if (Objitem.ItemDiscription == null)
+            {
+                Objitem.ItemDiscription = "";
+            }
             if (Objitem.Type == 0)
             {
                 Objitem.Type = 1;
@@ -110,12 +114,16 @@ namespace HangOut.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreateEditAddOn(HG_Items Objitem)
+        public ActionResult CreateEditAddOn(HG_Items Objitem)
         {
             if (Objitem.Qty == null)
             {
                 Objitem.Qty = "";
 
+            }
+            if (Objitem.ItemDiscription == null)
+            {
+                Objitem.ItemDiscription = "";
             }
             if (Objitem.Type == 0)
             {
@@ -132,7 +140,7 @@ namespace HangOut.Controllers
             }
             Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             int i = Objitem.Save();
-            return new JsonResult(){JsonRequestBehavior= JsonRequestBehavior.AllowGet, Data=Objitem};
+            return Json(new {Objitem},JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -10,6 +10,7 @@ window.addEventListener("submit", function (e) {
             xhr.open(form.method, form.action);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log("AAYA");
                     var JObj = "";
                     try {
                         JObj = JSON.parse(xhr.responseText);
@@ -35,6 +36,9 @@ window.addEventListener("submit", function (e) {
                             $("#waiting").hide();
                             $('#CreateModel').modal('toggle');
                         }
+                    }
+                    else if (JObj!=null) {
+                        JsonSuccess(JObj);
                     }
                 }
             };

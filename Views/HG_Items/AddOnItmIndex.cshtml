@@ -20,9 +20,13 @@
                         @Html.DisplayNameFor(model => model.Items)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.AddOnType)
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Price)
                     </th>
-                    <th>@Html.DisplayNameFor(model=>model.Tax)</th>
+                    <th>@Html.DisplayNameFor(model => model.Tax)</th>
+                    <th>@Html.DisplayNameFor(model => model.Status)</th>
                     <th></th>
                 </tr>
             </thead>
@@ -33,16 +37,27 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Items)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
 
+                    @{
+                        if (item.AddOnType == 1)//, 1 Base 2 Addons}
+                        {
+                            <td>Base</td>
+                        }
+                        else
+                        {
+                            <td>AddOn</td>
+                        }
+                    }
                     <td>
                         @Html.DisplayFor(modelItem => item.Tax)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>
                         <button onclick="CreateAddOnItm(@item.ItemID,0)" class="btn btn-sm btn-warning"> Edit</button>
-                   
+
                     </td>
                 </tr>
                 }
@@ -51,8 +66,14 @@
     </div>
 </div>
 <script>
+    var AddTr = false;
     function CreateAddOnItm(ID,CatId) {
-
+        if (ID == '0'||ID==='0') {
+            AddTr = true;
+        }
+        else {
+            AddTr = false;
+        }
         $('#waiting').show();
         $.ajax({
             type: 'GET',
@@ -71,18 +92,34 @@
 
     }
     
-    var AddOnresult = function (data) {
-        alert("hii");
-        var JsonObj = JSON.parse(data);
-        console.log("ObjAddon="+JsonObj);
+    function JsonSuccess(data) {
+       // alert("hii");
+        var JsonObj = data.Objitem;
+        console.log("ObjAddon=" + data);
         var Htmlstr = '<tr>';
-        Htmlstr += Htmlstr + '<td>' + JsonObj.Items + '</td>';
-        Htmlstr += Htmlstr + '<td>' + JsonObj.Price + '</td>';
-        Htmlstr += Htmlstr + '<td>' + JsonObj.Tax + '</td>';
-        Htmlstr += Htmlstr + '<td>' + '<button onclick="CreateAddOnItm(' + JsonObj.ItemID + ',0)" class="btn btn-sm btn-warning"> Edit</button></td>';
-        $("#Tbody").append(Htmlstr);
+        Htmlstr += '<td>' + JsonObj.Items + '</td>';
+        if (JsonObj.AddOnType == 1) {
+            Htmlstr += '<td>Base</td>';
+        }
+        else {
+            Htmlstr += '<td>AddOn</td>';
+        }
+        Htmlstr +='<td>' + JsonObj.Tax + '</td>';
+        Htmlstr += '<td>' + JsonObj.Price + '</td>';
+        if (JsonObj.Status == 'True') {
+            Htmlstr += '<td><input checked ="checked" class="check-box" disabled="disabled" type= "checkbox"></td>';
+        }
+        else {
+            Htmlstr += '<td><input  class="check-box" disabled="disabled" type= "checkbox"></td>';
+        }
+        Htmlstr += '<td>' + '<button onclick="CreateAddOnItm(' + JsonObj.ItemID + ',0)" class="btn btn-sm btn-warning"> Edit</button></td></tr>';
+        if (AddTr) {
+            $("#Tbody").append(Htmlstr);
+        }
+        
+        hidedpt("AddOnCreate");
         $('#waiting').hide();
-        };
+        }
 
 
 </script>

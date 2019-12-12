@@ -34,6 +34,8 @@ namespace HangOut.Models
         public int Type { get; set; }// {1 : food-items  2 :AddOn items
         [Display(Name ="AddOn Type")]
         public int AddOnType { get; set; }// {0 None, 1 Base 2 Addons}
+        [Display(Name = "Discription")]
+        public string ItemDiscription { get; set; }
         public HG_Items()
         {
             Image = "";
@@ -57,7 +59,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.ItemID == 0)
                 {
-                    Query = "Insert into  HG_Items  values(@CategoryID,@OrgID,@Items,@Price,@Plates,@ItemMode,@Discount,@EntryBy,@EntryDate,@UpdateDate,@Status,@Item_Img,@ApplyAddOn,@CostPrice,@AddOnCatId,@Type,@AddOnType); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  HG_Items  values(@CategoryID,@OrgID,@Items,@Price,@Plates,@ItemMode,@Discount,@EntryBy,@EntryDate,@UpdateDate,@Status,@Item_Img,@ApplyAddOn,@CostPrice,@AddOnCatId,@Type,@AddOnType,@ItmDiscriptn); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
@@ -65,7 +67,7 @@ namespace HangOut.Models
                 }
                 else
                 {
-                    Query = "update  HG_Items set CategoryID=@CategoryID,OrgID =@OrgID,Items=@Items,Price=@Price,Plates=@Plates,ItemMode=@ItemMode,Discount=@Discount,EntryBy=@EntryBy,UpdateDate=@UpdateDate,Status=@Status,Item_Img=@Item_Img,ApplyAddOn=@ApplyAddOn,CostPrice=@CostPrice,AddOnCatId=@AddOnCatId,Type=@Type,AddOnType=@AddOnType where ItemID=@ItemID";
+                    Query = "update  HG_Items set CategoryID=@CategoryID,OrgID =@OrgID,Items=@Items,Price=@Price,Plates=@Plates,ItemMode=@ItemMode,Discount=@Discount,EntryBy=@EntryBy,UpdateDate=@UpdateDate,Status=@Status,Item_Img=@Item_Img,ApplyAddOn=@ApplyAddOn,CostPrice=@CostPrice,AddOnCatId=@AddOnCatId,Type=@Type,AddOnType=@AddOnType,ItmDiscriptn=@ItmDiscriptn where ItemID=@ItemID";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
                     cmd.Parameters.AddWithValue("@EntryBy", EntryBy);
@@ -85,6 +87,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@AddOnCatId", this.AddOnCatId);
                 cmd.Parameters.AddWithValue("@Type", this.Type);
                 cmd.Parameters.AddWithValue("@AddOnType", this.AddOnType);
+                cmd.Parameters.AddWithValue("@ItmDiscriptn", this.ItemDiscription);
                 if (this.ItemID == 0)
                 {
                     Row = System.Convert.ToInt32(cmd.ExecuteScalar());
@@ -146,6 +149,7 @@ namespace HangOut.Models
                     ObjTmp.AddOnCatId = SDR.GetInt32(15);
                     ObjTmp.Type = SDR.GetInt32(16);
                     ObjTmp.AddOnType = SDR.GetInt32(17);
+                    ObjTmp.ItemDiscription = SDR.GetString(18);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -184,6 +188,7 @@ namespace HangOut.Models
                     ObjTmp.AddOnCatId = SDR.GetInt32(15);
                     ObjTmp.Type = SDR.GetInt32(16);
                     ObjTmp.AddOnType = SDR.GetInt32(17);
+                    ObjTmp.ItemDiscription = SDR.GetString(18);
                 }
             }
             catch (System.Exception e)
