@@ -11,7 +11,7 @@
         <h3 style="text-align:center"><b>Addon Items</b> </h3>
         <hr />
     </div>
-    <button onclick="CreateAddOnItm(@CatId)" class="btn btn-success"><i class="fa fa-plus">ADD</i></button>
+    <button onclick="CreateAddOnItm(0,@CatId)" class="btn btn-success"><i class="fa fa-plus">ADD</i></button>
     <div class="card-body">
         <table class="table " id="TBLID2">
             <thead>
@@ -29,30 +29,34 @@
             <tbody id="Tbody">
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Items)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        
-                        <td>
-                            <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Items)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tax)
+                    </td>
+                    <td>
+                        <button onclick="CreateAddOnItm(@item.ItemID,0)" class="btn btn-sm btn-warning"> Edit</button>
+                   
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
 <script>
-    function CreateAddOnItm(CatId) {
+    function CreateAddOnItm(ID,CatId) {
 
         $('#waiting').show();
         $.ajax({
             type: 'GET',
-            url: "/HG_Items/CreateEditAddOn?ID=0&CatId=" + CatId,
+            url: "/HG_Items/CreateEditAddOn?ID="+ID+"&CatId=" + CatId,
             success: function (data) {
                 makedpt("AddOnCreate");
                 $("#AddOnCreate > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -68,14 +72,16 @@
     }
     
     var AddOnresult = function (data) {
+        alert("hii");
         var JsonObj = JSON.parse(data);
-        console.log(JsonObj);
-
+        console.log("ObjAddon="+JsonObj);
         var Htmlstr = '<tr>';
         Htmlstr += Htmlstr + '<td>' + JsonObj.Items + '</td>';
         Htmlstr += Htmlstr + '<td>' + JsonObj.Price + '</td>';
         Htmlstr += Htmlstr + '<td>' + JsonObj.Tax + '</td>';
-        Htmlstr += Htmlstr + '<td>' + JsonObj.Tax + '</td>';
+        Htmlstr += Htmlstr + '<td>' + '<button onclick="CreateAddOnItm(' + JsonObj.ItemID + ',0)" class="btn btn-sm btn-warning"> Edit</button></td>';
+        $("#Tbody").append(Htmlstr);
+        $('#waiting').hide();
         };
 
 

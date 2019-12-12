@@ -110,7 +110,7 @@ namespace HangOut.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateEditAddOn(HG_Items Objitem)
+        public JsonResult CreateEditAddOn(HG_Items Objitem)
         {
             if (Objitem.Qty == null)
             {
@@ -132,7 +132,7 @@ namespace HangOut.Controllers
             }
             Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             int i = Objitem.Save();
-            return RedirectToAction("Index");
+            return new JsonResult(){JsonRequestBehavior= JsonRequestBehavior.AllowGet, Data=Objitem};
         }
     }
 }

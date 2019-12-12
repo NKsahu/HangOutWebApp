@@ -4,19 +4,19 @@
     Layout = null;
     var CurrentOrg = Request.Cookies["UserInfo"];
 }
+
 <div class="card">
     <div class="card-header">
         <h3 style="text-align:center;color:#000000"><b>ADDON-ITEM</b></h3>
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST",  LoadingElementId = "waiting", OnSuccess = "AddOnresult()" }))
+        @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST",  LoadingElementId = "waiting", OnSuccess = "alert('saved');AddOnresult" }))
         {
             @Html.HiddenFor(model => model.ItemID)
             @Html.HiddenFor(model => model.Qty)
             @Html.HiddenFor(model => model.Type)
-            @Html.HiddenFor(model => model.AddOnType)
-
+           
             @Html.HiddenFor(model => model.AddOnCatId)
             @Html.HiddenFor(model => model.ApplyAddOn)
             //public int ApplyAddOn { get; set; } //{1 NO ,2 YES}
@@ -105,7 +105,7 @@
             </div>
             <div class="col-sm-1">
                 @Html.Label("Save", new { @class = "text-white " })
-                <input type="submit" value="Save" class="btn btn-success form-control" />
+                <input type="submit" value="Save" class="btn btn-success " />
 
             </div>
         </div>
@@ -113,7 +113,7 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
+    
         $("#CostPrice,#Tax").change(
             function(){
                 CalculateTax();
@@ -125,9 +125,23 @@
             var taxAmt = (CostPrice * TaxPercentage) / 100;
             $("#Price").val(CostPrice + taxAmt).change();
         }
-       
-    });
+        //var AddOnresult = function (data) {
+        //    alert("hii");
+        //    var JsonObj = JSON.parse(data);
+        //    console.log("ObjAddon=" + JsonObj);
+        //    var Htmlstr = '<tr>';
+        //    Htmlstr += Htmlstr + '<td>' + JsonObj.Items + '</td>';
+        //    Htmlstr += Htmlstr + '<td>' + JsonObj.Price + '</td>';
+        //    Htmlstr += Htmlstr + '<td>' + JsonObj.Tax + '</td>';
+        //    Htmlstr += Htmlstr + '<td>' + '<button onclick="CreateAddOnItm(' + JsonObj.ItemID + ',0)" class="btn btn-sm btn-warning"> Edit</button></td>';
+        //    $("#Tbody").append(Htmlstr);
+        //    $('#waiting').hide();
+        //};
+        
+    
 
-
+    function AddOnresult(data) {
+        alert('HTTP Status Code: ' + data + "  " + data);
+    }
 </script>
 
