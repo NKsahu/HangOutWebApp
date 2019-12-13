@@ -7,7 +7,7 @@
 @{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll(2);}
 <div class="card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>SHEETS</b> </h1>
+        <h1 style="text-align:center"><b>SEAT</b> </h1>
         <hr />
     </div>
     <button  onclick="CreateEdit('0')" class="btn btn-success"><i class="fa fa-plus">ADD</i></button>
@@ -19,7 +19,7 @@
                         @Html.DisplayNameFor(model=>model.QrCode)
                     </th>
                     <th>
-                        @Html.DisplayName("Sheet  Name")
+                        @Html.DisplayName("Seat  Name")
                     </th>
                     <th>
                         @Html.DisplayName("Screen Number")
