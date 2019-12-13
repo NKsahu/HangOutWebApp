@@ -4,7 +4,7 @@
     Layout = null;
 }
 @using HangOut.Models
-@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
+
 <div class="card">
     <div class="card-header">
         <h1 style="text-align:center"><b> ROW NAME</b> </h1>
@@ -16,17 +16,13 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayName("Row ID")
+                        @Html.DisplayName("Row ")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.RowSize)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Type)
-                    </th>
-                    <th>
-                        @Html.DisplayName("Orgonization")
-                    </th>
+                   
+                   
                     <th></th>
                 </tr>
             </thead>
@@ -40,13 +36,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.RowSize)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Type)
-                        </td>
-                        <td>
-                            @{ HG_OrganizationDetails ObjOrg = listorgonization.Find(x => x.OrgID == item.OrgID);}
-                            @ObjOrg.Name
-                        </td>
+                        
                         <td>
                             <a href="/HG_FloorSide_or_RowName/RowCreateEdit?ID=@item.ID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
                         </td>

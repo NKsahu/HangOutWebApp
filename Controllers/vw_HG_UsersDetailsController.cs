@@ -109,7 +109,7 @@ namespace HangOut.Controllers
                 }
             }
             vw_HG_UsersDetails ObjUserAlreadyExist = new vw_HG_UsersDetails().MobileAlreadyExist(Objuser.UserId);
-            if (ObjUserAlreadyExist.UserCode > 0)
+            if (ObjUserAlreadyExist.UserCode > 0 && ObjUserAlreadyExist.UserCode!= Objuser.UserCode)
             {
                 return Json(new { msg = "Mobile Number Already Taken" });
             }

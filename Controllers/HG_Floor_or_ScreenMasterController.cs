@@ -39,7 +39,7 @@ namespace HangOut.Controllers
         {
             int i = Objfloor.save();
             if (i > 0)
-                return RedirectToAction("ScreenIndex",new { Type=2});
+                return Json(new { Objfloor }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
         public ActionResult CreateEdit(int ID)
