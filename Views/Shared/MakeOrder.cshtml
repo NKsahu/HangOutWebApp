@@ -254,21 +254,44 @@
         @{
             var cookei = Request.Cookies["UserInfo"];
             var UserCode = cookei["UserCode"];
-            var OrgId = cookei["OrgId"];
+            var OrgId =int.Parse(cookei["OrgId"]);
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgID: OrgId);
+            string FloorOrScren = " ";
+            int OrgType = 0;
+            if (ObjOrg.OrgID > 0 && ObjOrg.OrgTypes == "2")
+            {
+                FloorOrScren = "Screen";
+                OrgType = 2;//theater
+            }
+            else
+            {
+                FloorOrScren = "Floor";
+                OrgType = 1;// restruant or Admins
+            }
             List<SelectListItem> list = new List<SelectListItem>();
             SelectListItem sl1 = new SelectListItem { Text = "SEAT VIEW", Value = "1" };
             SelectListItem sl2 = new SelectListItem { Text = "ORDER VIEW", Value = "2" };
-            list.Add(sl1);
-            list.Add(sl2);
+            if (OrgType == 1)
+            {
+                list.Add(sl1);
+                list.Add(sl2);
+            }
+            else
+            {
+                list.Add(sl2);
+                list.Add(sl1);
+            }
+
         }
         @Html.DropDownList("DashBoard", list, new { @class = "form-control", })
         @Html.Hidden("COID", OrgId)
         @Html.Hidden("CUC", UserCode)
+        @Html.Hidden("OrgType",OrgType)
     </div>
 </div>
 <div class="row"  id="SeatView">
     <div class="col-md-12 col-sm-12">
-        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(1), "Floor_or_ScreenID", "Name", "0"), "Select floor", new { @class = "form-control",onchange="FilterTables(this)" })
+        @Html.DropDownList("ForSID", new SelectList(new HG_Floor_or_ScreenMaster().GetAll(OrgType), "Floor_or_ScreenID", "Name", "0"),FloorOrScren, new { @class = "form-control",onchange="FilterTables(this)" })
     </div>
     <div class="row" style="width:100%">
         <div class="col-xs-12 col-md-12 tab">
@@ -477,10 +500,11 @@
  <script>
      var OrgId = 0;
      var LoginId = 0;
-        var TablesList = null;
-        var ItemList = null;
-        var CurrentOrder = 0;// which means table or  takeaway id
-        var CurrOID = 0; //current Order Id;
+     var OrgType = 0;
+     var TablesList = null;
+     var ItemList = null;
+     var CurrentOrder = 0;// which means table or  takeaway id
+     var CurrOID = 0; //current Order Id;
         var finalAmt = 0.00;
         var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
         var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
@@ -507,6 +531,7 @@
      $(document).ready(function () {
          OrgId = $("#COID").val();
          LoginId = $("#CUC").val();
+         OrgType = $("#OrgType").val();
      });
         function plus(itemid) {
             var CartValue = parseInt($("#C" + itemid).text());
@@ -621,12 +646,12 @@
             }
             event.style.backgroundColor = '#e2dbdb';
         }
-     setTimeout(function () { GeTablesTakeAwya() }, 1000);
+    // setTimeout(function () { GeTablesTakeAwya() }, 1000);
      function GeTablesTakeAwya() {
          console.log("table list");
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/TableAndTakeAway?Type=1&OrderById="+LoginId,
+                url: "/WebApi/TableAndTakeAway?Type="+OrgType+"&OrderById="+LoginId,
                 success: function (data) {
                     TablesList = JSON.parse(data);
                     ShowOrders(TablesList);
@@ -664,10 +689,16 @@
 
             }
             else if (Status == '1') {
-
-                var TableListOnly = TablesList.filter(function (itm) {
-                    return itm.Type == '1';
-                });
+                if (OrgType == "1") {
+                    var TableListOnly = TablesList.filter(function (itm) {
+                        return itm.Type == '1';
+                    });
+                }
+                else {
+                    var TableListOnly = TablesList.filter(function (itm) {
+                        return itm.Type == '2';
+                    });
+                }
                 ShowOrders(TableListOnly);
                 console.log("Table" + TablesList);
             }
@@ -774,7 +805,7 @@
 
                         $.alert({
                             title: 'Alert!',
-                            content: "Menu Not Applied in Table",
+                            content: "Menu Not Applied.",
                         });
                     }
                     $("#FinalAmt").text(TotalRs);
@@ -1063,13 +1094,14 @@
                 }
             });
      }
-
-     $("#DashBoard").change(function () {
+     DashBoard();
+     function DashBoard() {
          var value = $("#DashBoard").val();
          if (value == '1') {
              $("#OrderView").hide();
              $("#SeatView").show();
-             GeTablesTakeAwya();
+             //GeTablesTakeAwya();
+             setTimeout(function () { GeTablesTakeAwya() }, 500);
          } else {
              $("#OrderView").html('');
              $("#OrderView").show();
@@ -1081,7 +1113,7 @@
                  success: function (data) {
                      $('#waiting').hide();
                      $("#OrderView").html(data);
-                     setTimeout(function () { GetOrders(0) },1000);
+                     setTimeout(function () { GetOrders(OrgId) }, 500);
                  },
                  error: function (jqXhr, textStatus, errorMessage) { // error callback
                      $("#waiting").hide();
@@ -1089,5 +1121,8 @@
              });
 
          }
+     }
+     $("#DashBoard").change(function () {
+         DashBoard();
      });
     </script>

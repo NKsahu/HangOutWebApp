@@ -79,7 +79,7 @@
         OrgId = $("#COID").val();
         LoginId = $("#CUC").val();
     });
-    function GetOrders(PaymentStatus) {
+    function GetOrders(OrgId) {
         var Obj = {};
         Obj.OrgId = OrgId;
         Obj.IsChef = 0;
@@ -96,7 +96,7 @@
                     });
                     return;
                 }
-                ShowOrders(OrderList);
+                ShowOrdersDash(OrderList);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
@@ -128,7 +128,7 @@
             }
         });
     }
-    function ShowOrders(list) {
+    function ShowOrdersDash(list) {
         $("#Tbody").html('');
         var DetailsBtn = "<button type='button' class=' btn-sm btn-success sp-f2-hotkey' ";
         var DeatilsClose = "'>DETAILS</button>";

@@ -124,7 +124,7 @@ namespace HangOut.Models
             }
             else if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
             {
-                Query = "SELECT * FROM  HG_Items where OrgID=" + CurrOrgID["OrgId"] + " Type=" + Type.ToString() + " ORDER BY ItemID DESC";
+                Query = "SELECT * FROM  HG_Items where OrgID=" + CurrOrgID["OrgId"] + "and Type=" + Type.ToString() + " ORDER BY ItemID DESC";
 
             }
             try

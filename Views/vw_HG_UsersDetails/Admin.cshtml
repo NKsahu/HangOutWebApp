@@ -3,10 +3,12 @@
 @{ 
     string OrgName = "Welcome";
     int Orgid =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
+    string OrgType = "0";
     HG_OrganizationDetails ObgOrg = new HG_OrganizationDetails().GetOne(Orgid);
     if (ObgOrg.OrgID > 0)
     {
         OrgName = ObgOrg.Name;
+        OrgType = ObgOrg.OrgTypes;
     }
 }
 <!-- header -->
@@ -51,6 +53,14 @@
                 if(UserType!="SA" && UserType != "A")
                 {
                     ADMINMenuList = ADMINMenuList.FindAll(x => x.User_Types.Contains(UserType));
+                    if (OrgType == "2")
+                    {
+                        ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Restuarant"));
+                    }
+                    else
+                    {
+                        ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Theater"));
+                    }
                 }
                 ADMINMenuList = ADMINMenuList.OrderBy(x => x.MenuOrderNo).ToList();
                 List<UsersMenu> AdminSubMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId != 0);

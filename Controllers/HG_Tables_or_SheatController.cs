@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace HangOut.Controllers
 {
@@ -35,9 +36,32 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult SheetCreateEdit(HG_Tables_or_Sheat ObjTable)
         {
+            if (ObjTable.QrCode == null || ObjTable.QrCode == "")
+            {
+                return Json(new { msg = "Please Enter Qr Code" });
+            }
+            List<HG_Tables_or_Sheat> ListOfTables = new HG_Tables_or_Sheat().GetAll(1);// table
+            ListOfTables = ListOfTables.FindAll(x => x.Table_or_RowID != ObjTable.Table_or_RowID);
+            ListOfTables = ListOfTables.FindAll(x => x.QrCode != "0");
+            if (ObjTable.OrgId == 0)
+            {
+                var ObjOrg = Request.Cookies["UserInfo"];
+                ObjTable.OrgId = int.Parse(ObjOrg["OrgId"]);
+            }
+            HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListOfTables.Find(x => x.QrCode == ObjTable.QrCode);
+            if (hG_Tables_Or_Sheat != null && hG_Tables_Or_Sheat.Table_or_RowID > 0)
+            {
+                return Json(new { msg = "Qr Code Already Used For Sheat " + hG_Tables_Or_Sheat.Table_or_SheetName });
+            }
             Int64 i = ObjTable.save();
             if (i > 0)
-                return RedirectToAction("SheetIndex", new { Type = 2 });
+            {
+                HG_Floor_or_ScreenMaster ObjScr = new HG_Floor_or_ScreenMaster().GetOne(ObjTable.Floor_or_ScreenId);
+                JObject jObject = JObject.FromObject(ObjTable);
+                jObject.Add("ScreenName",ObjScr.Name);
+                return Json(new {data=jObject.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+                
             return RedirectToAction("Error");
         }
         public ActionResult CreateEdit(int ID)
