@@ -48,8 +48,12 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@UpdateionDate", this.UpdateionDate);
                 cmd.Parameters.AddWithValue("@Type", this.Type);
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
-                 if(this.Floor_or_ScreenID ==0)
-                Row =System.Convert.ToInt32(cmd.ExecuteScalar()) ;
+                 if(this.Floor_or_ScreenID == 0)
+                {
+                    Row = System.Convert.ToInt32(cmd.ExecuteScalar());
+                    this.Floor_or_ScreenID = Row;
+                }
+                
                  else if(cmd.ExecuteNonQuery()>0)
                 {
                     Row = this.Floor_or_ScreenID;

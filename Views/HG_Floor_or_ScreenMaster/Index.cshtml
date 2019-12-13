@@ -44,16 +44,31 @@
 </div>
 
 <script>
+    var AddTr = false;
     function JsonSuccess(Jobj) {
-        var Jitmobj = Jobj;
+        hidedpt("CreateFS");
+        var Jitmobj = Jobj.Objfloor;
         var HtmlStr = "<tr id='" + Jitmobj.Floor_or_ScreenID+"'>";
         HtmlStr += '<td>' + Jitmobj.Floor_or_ScreenID+'</td>';
         HtmlStr += '<td>' + Jitmobj.Name+'</td>';
-        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID+')"> Edit</button></td></tr>';
-        $("#Tbody").append(HtmlStr);
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID + ')"> Edit</button></td></tr>';
+        if (AddTr) {
+            $("#Tbody").append(HtmlStr);
+        }
+        else {
+            $('#' + Jitmobj.Floor_or_ScreenID).remove();
+            $("#Tbody").append(HtmlStr);
+        }
+       
+        $('#waiting').hide();
     }
 
     function CreateEdit(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
         $('#waiting').show();
         $.ajax({
             type: 'GET',

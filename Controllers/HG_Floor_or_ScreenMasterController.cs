@@ -56,7 +56,7 @@ namespace HangOut.Controllers
         {
             int i = Objfloor.save();
             if (i > 0)
-                return RedirectToAction("Index" , new { Type=1});
+                return Json(new { Objfloor }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
 
         }
