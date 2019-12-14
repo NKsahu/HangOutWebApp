@@ -599,6 +599,7 @@ namespace HangOut.Controllers
             JObject jObject = new JObject();
             List<HG_Orders> OrderList = new List<HG_Orders>();
             HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat();
+            List<HG_OrderItem> OrdrItmsList = new List<HG_OrderItem>();
             if (OID > 0)
             {
                 HG_Orders order = new HG_Orders().GetOne(OID);
@@ -623,6 +624,17 @@ namespace HangOut.Controllers
                     order.PayReceivedBy = UpdatedBy;
                     order.Save();
                     Status = true;
+                    OrdrItmsList=new HG_OrderItem().GetAll(order.OID);
+                    var CompltedOrCacelOdrItms = OrdrItmsList.FindAll(x => x.Status == 3 || x.Status == 4);
+                    if (CompltedOrCacelOdrItms.Count == OrdrItmsList.Count)
+                    {
+                        obj.Status = 1;// free table
+                        obj.Otp = OTPGeneretion.Generate();
+                        obj.save();
+                        order.Status = "3";//completed
+                        order.Save();
+
+                    }
                 }
                 else
                 {
@@ -648,11 +660,16 @@ namespace HangOut.Controllers
 
             if (Status)
             {
+               
                 if (ObjOrg.PaymentType!=1)
                 {
                     obj.Status = 1;// free table
                     obj.Otp = OTPGeneretion.Generate();
                     obj.save();
+                }
+                else
+                {
+                    
                 }
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
