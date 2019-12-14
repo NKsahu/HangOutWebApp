@@ -65,7 +65,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.OrgID  == 0)
                 {
-                    Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status,@PaymentType,@InvoiceHeading,@AddressLine2,@AddressLin3,@License2,@License3);";
+                    Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status,@PaymentType,@InvoiceHeading,@AddressLine2,@AddressLin3,@License2,@License3,@PrintRemark,@CustomerOrdering);";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy",int.Parse(HttpContext.Current.Request.Cookies["UserInfo"]["UserCode"]));
                     cmd.Parameters.AddWithValue("@EntryDate",System.DateTime.Now);
@@ -73,7 +73,7 @@ namespace HangOut.Models
                 }
                 else
                 {
-                    Query = "update  HG_OrganizationDetails set HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType,InvoiceHeading=@InvoiceHeading,AddressLine2=@AddressLine2,AddressLin3=@AddressLin3,License2=@License2,License3=@License3 where OrgID =@OrgID ";
+                    Query = "update  HG_OrganizationDetails set HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType,InvoiceHeading=@InvoiceHeading,AddressLine2=@AddressLine2,AddressLin3=@AddressLin3,License2=@License2,License3=@License3,PrintRemark=@PrintRemark,CustomerOrdering=@CustomerOrdering where OrgID =@OrgID ";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@OrgID ", this.OrgID );
                 }
@@ -103,6 +103,8 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@AddressLin3", this.AddressLine3);
                 cmd.Parameters.AddWithValue("@License2", this.Licence2);
                 cmd.Parameters.AddWithValue("@License3", this.License3);
+                cmd.Parameters.AddWithValue("@CustomerOrdering", this.CustomerOrdering);
+                cmd.Parameters.AddWithValue("@PrintRemark", this.PrintRemark);
                 Row = cmd.ExecuteNonQuery();
                 this.OrgID  = Row;
             }
@@ -159,6 +161,8 @@ namespace HangOut.Models
                     ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? "  " : SDR.GetString(27);
                     ObjTmp.Licence2 = SDR.IsDBNull(28) ? "  " : SDR.GetString(28);
                     ObjTmp.License3 = SDR.IsDBNull(29) ? "  " : SDR.GetString(29);
+                    ObjTmp.PrintRemark = SDR.GetString(30);
+                    ObjTmp.CustomerOrdering = SDR.GetBoolean(31);
 
                     ListTmp.Add(ObjTmp);
                 }
@@ -209,6 +213,8 @@ namespace HangOut.Models
                     ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? "   " : SDR.GetString(27);
                     ObjTmp.Licence2 = SDR.IsDBNull(28) ? "   " : SDR.GetString(28);
                     ObjTmp.License3 = SDR.IsDBNull(29) ? "   " : SDR.GetString(29);
+                    ObjTmp.PrintRemark = SDR.GetString(30);
+                    ObjTmp.CustomerOrdering = SDR.GetBoolean(31);
                 }
             }
             catch (System.Exception e)
@@ -287,6 +293,8 @@ namespace HangOut.Models
                     ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? "Test" : SDR.GetString(27);
                     ObjTmp.Licence2 = SDR.IsDBNull(28) ? "Test" : SDR.GetString(28);
                     ObjTmp.License3 = SDR.IsDBNull(29) ? "Test" : SDR.GetString(29);
+                    ObjTmp.PrintRemark = SDR.GetString(28);
+                    ObjTmp.CustomerOrdering = SDR.GetBoolean(29);
                     ListTmp.Add(ObjTmp);
                 }
             }

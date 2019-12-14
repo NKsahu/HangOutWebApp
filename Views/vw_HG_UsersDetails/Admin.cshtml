@@ -5,12 +5,78 @@
     int Orgid =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
     string OrgType = "0";
     HG_OrganizationDetails ObgOrg = new HG_OrganizationDetails().GetOne(Orgid);
+    string CustomerOrdrn = "";
     if (ObgOrg.OrgID > 0)
     {
         OrgName = ObgOrg.Name;
         OrgType = ObgOrg.OrgTypes;
     }
+    if (ObgOrg.CustomerOrdering)
+    {
+        CustomerOrdrn = "checked";
+    }
 }
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 28px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 20px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
 <!-- header -->
 <header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #33bb6f, #30bb66, #30bb5b, #31bb50, #33bb44);z-index:1;">
     <div class="col-md-5 col-12 text-md-left text-center mt-0">
@@ -21,8 +87,13 @@
     <div class="col-md-2 col-12  text-center mt-0">
         <a class="text-white text-center navbar-brand pl-3" style="font-size:35px;font-weight:bold;">@OrgName</a>
     </div>
-
-    <div class="col-md-5 col-12  text-md-right text-center p-md-2 p-2  mt-0">
+    <div class="col-md-2 col-12  text-center mt-0">
+        <label class="switch" data-toggle="tooltip" title="Allow Customer Ordering">
+            <input type="checkbox" @CustomerOrdrn  onchange="SetCustmrOrd(this)">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    <div class="col-md-3 col-12  text-md-right text-center p-md-2 p-2  mt-0">
         <div class="btn-group mt-0">
             <a href="/vw_HG_UsersDetails/Admin" class="text-white m-1"><i class="fas fa-tachometer-alt"></i></a>
             <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
@@ -34,7 +105,7 @@
                         border: none !important;
                         background: none !important;
                     }
-                </style>
+</style>
             </div>
         </div>
 
@@ -178,7 +249,28 @@
         });
 
     });
+    function SetCustmrOrd(event) {
+      //  var Status = $(event).val();
+        var OrdSts = false;
+        if (event.checked) {
+            OrdSts = true;
+            $(event).attr('checked', true);
+        }
+        else {
+            $(event).prop('checked', false);
+        }
+        $.ajax({
+            url: "/HG_OrganizationDetails/SetOrderStatus?OrderStatus=" + OrdSts,
+            type: "GET",
+            success: function (data) {
+                // alert("AAYA");
+               // window.location = "/vw_HG_UsersDetails/vw_HG_UsersDetails";
+            },
+            error: function (Xr, Status, ErrorMsg) {
 
+            }
+        });
 
+    }
 </script>
 

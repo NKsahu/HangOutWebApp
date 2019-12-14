@@ -132,5 +132,26 @@ namespace HangOut.Controllers
 
             return View(Objitem);
         }
+
+        public JsonResult SetOrderStatus(bool OrderStatus)
+        {
+            var ObjOrg = Request.Cookies["UserInfo"];
+            int OrgId = int.Parse(ObjOrg["OrgId"]);
+            HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
+
+            if (OrgObj.OrgID > 0)
+            {
+                OrgObj.CustomerOrdering = OrderStatus;
+                OrgObj.Save();
+
+                return Json(new { msg = "1" }, JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+                return Json(new { msg = "0" }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
     }
 }

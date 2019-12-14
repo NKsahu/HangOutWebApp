@@ -90,15 +90,15 @@
     <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
 </div>
 <div style="border:2px solid black " id="section-to-print">
-    <div style="border:1px dotted black">
+    <div style="border:1px dotted black;" >
         <div >
             <h4 style="text-align:center">@InvoiceHeading</h4>
             <h4 style="text-align:center">@OrgName</h4>
             <h5 style="text-align:center">@AddressLine1</h5>
-            <h5 style="text-align:center">@AddressLine2</h5>
-            <h5 style="text-align:center">@AddressLine3</h5>
+            <h6 style="text-align:center">@AddressLine2</h6>
+            <h6 style="text-align:center">@AddressLine3</h6>
             <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
-            <h5 style="text-align:center">@Licence2      @Licence3</h5>
+            <h6 style="text-align:center">@Licence2      @Licence3</h6>
         </div>
         <div style="text-align:center">
             <h6><b>ORDER No:</b> @OrderNo   <b>Ticket No:</b> @TicketNos</h6>
@@ -244,20 +244,21 @@
         printWindow.close();
     }
     function PrintElem() {
-        var Section = '<style>body {font-size:10px;font-family:Calibri;} #section-to-print {width:100%; } table{font-size: 10px;font-family:Calibri}</style>';
+        var Section = '<style>{ #section-to-print {width:100%; } table{font-size: 14px;font-family:Calibri}</style>';
         Section+=  $('#section-to-print').html();
         console.log("Section  " + Section);
         Popup(Section);
     }
 
     function Popup(data) {
-        var myWindow = window.open('', 'Receipt', 'height=400,width=600');
-        myWindow.document.write('<html><head><title>Receipt</title>');
+       // var myWindow = window.open('', 'Receipt', 'height=400,width=600');
+        var myWindow = window.open('text/plain');
+      //  myWindow.document.write('<html>');
         /*optional stylesheet*/ //myWindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-        myWindow.document.write('<style type="text/css"> *, html {margin:0;padding:0;} </style>');
-        myWindow.document.write('</head><body style="width:100%">');
+       // myWindow.document.write('<style type="text/css"> *, html {margin:0;padding:0;} </style>');
+     //   myWindow.document.write('<body>');
         myWindow.document.write(data);
-        myWindow.document.write('</body></html>');
+       // myWindow.document.write('</body></html>');
         myWindow.document.close(); // necessary for IE >= 10
         myWindow.onload = function () { // necessary if the div contain images
             myWindow.focus(); // necessary for IE >= 10
