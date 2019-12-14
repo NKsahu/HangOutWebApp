@@ -66,87 +66,207 @@
 
 
 }
+
 <style>
     @@media print {
         body * {
             visibility: hidden;
         }
-
-        #section-to-print, #section-to-print * {
-            visibility: visible;
-
-        }
-
         #section-to-print {
-            position: absolute;
-            left: 0;
-            top: 0;
-            
+            width: 21cm;
+            height: 29.7cm;
+            margin: 30mm 45mm 30mm 45mm;
         }
+            #section-to-print * {
+                visibility: visible;
+            }
     }
-    
 
 </style>
+
+
 <div style="min-height:25px">
-<button onclick="window.print();"> PRINT</button>
+    <button onclick="window.print();"> PRINT (A-4) </button>
+    <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
 </div>
-<div style="border:3px solid black " id="section-to-print">
-    <div style="border:1px solid black">
-        <h4 style="text-align:center">@InvoiceHeading</h4>
-        <h4 style="text-align:center">@OrgName</h4>
-        <h5 style="text-align:center">@AddressLine1</h5>
-        <h5 style="text-align:center">@AddressLine2</h5>
-        <h5 style="text-align:center">@AddressLine3</h5>
-        <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
-        <h5 style="text-align:center">@Licence2      @Licence3</h5>
-    </div>
-    <div style="border:0.5px solid black ;text-align:center">
-        <h6><b>ORDER No:</b> @OrderNo   <b>Ticket No:</b> @TicketNos</h6>
-        <h6><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymnetMode </h6>
-    </div>
-    <table id="InvoiceItems" class="table col-sm-12" >
-        <thead>
-            <tr>
-                <th>Item </th>
-                <th>QTY</th>
-                <th>AMT </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var items in OrderItems)
-            {
-                AmountTotal += items.Price *items.Count;
-                Qty += items.Count;
-                // Qty += items.Qty;
-                HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
-                <tr>
-                    <td>@hG_Items.Items</td>
-                    <td>@items.Count</td>
-                    <td>@items.Price</td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td>TOTAL</td>
-                <td>@Qty.ToString() </td>
-                <td>@AmountTotal.ToString()</td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <div style="border:0.5px solid black">
-        <h6>NOTE: </h6>
-        <div>
-            .........................................................................<br />
-            .........................................................................
+<div style="border:2px solid black " id="section-to-print">
+    <div style="border:1px dotted black">
+        <div >
+            <h4 style="text-align:center">@InvoiceHeading</h4>
+            <h4 style="text-align:center">@OrgName</h4>
+            <h5 style="text-align:center">@AddressLine1</h5>
+            <h5 style="text-align:center">@AddressLine2</h5>
+            <h5 style="text-align:center">@AddressLine3</h5>
+            <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
+            <h5 style="text-align:center">@Licence2      @Licence3</h5>
         </div>
-        <h6>@PoweredBy</h6>
+        <div style="text-align:center">
+            <h6><b>ORDER No:</b> @OrderNo   <b>Ticket No:</b> @TicketNos</h6>
+            <h6><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymnetMode </h6>
+        </div>
+        <table id="InvoiceItems"  class="table col-sm-12">
+            <thead>
+                <tr>
+                    <th>Item </th>
+                    <th>QTY</th>
+                    <th>AMT </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var items in OrderItems)
+                {
+                    AmountTotal += items.Price * items.Count;
+                    Qty += items.Count;
+                    // Qty += items.Qty;
+                    HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
+                    <tr>
+                        <td>@hG_Items.Items</td>
+                        <td>@items.Count</td>
+                        <td>@items.Price</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>TOTAL</td>
+                    <td>@Qty.ToString() </td>
+                    <td>@AmountTotal.ToString()</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div>
+            <h6>NOTE: </h6>
+            <div>
+                .........................................................................<br />
+                .........................................................................
+            </div>
+            <h6>@PoweredBy</h6>
+        </div>
     </div>
-
 </div>
 
+<script>
+    function printstr(text1, col1, align) {
 
+        if (align === null) {
+            align = "center";
+        }
+
+        var text = text1.split(",");
+        var col = col1.split(",");
+
+        var arr = new Array();
+        var i = 0;
+        var rtrstr = "";
+        for (i = 0; i < text.length; i++) {
+
+            var t = text[i]; //item name
+            var c = parseInt(col[i]); //length of column
+            var textlenght = t.length;
+            var totalspace = c - textlenght;
+            var prefixspace = 0;
+            var suffixspace = 0;
+            switch (align) {
+                case "center":
+                    prefixspace = parseInt(totalspace / 2);
+                    suffixspace = parseInt(totalspace / 2);
+                    var remainingspace = totalspace - (prefixspace + suffixspace);
+                    prefixspace = prefixspace + remainingspace;
+                    break;
+                case "left":
+                    prefixspace = 0;
+                    suffixspace = parseInt(totalspace);
+                    break;
+                case "right":
+                    prefixspace = parseInt(totalspace);
+                    suffixspace = 0;
+                    break;
+                default:
+                    prefixspace = parseInt(totalspace / 2);
+                    suffixspace = parseInt(totalspace / 2);
+                    var remainingspace = totalspace - (prefixspace + suffixspace);
+                    prefixspace = prefixspace + remainingspace;
+                    break;
+            }
+
+
+
+            for (j = 0; j < prefixspace; j++) {
+
+                rtrstr += " ";
+
+            }
+
+            rtrstr += t;
+            for (j = 0; j < suffixspace; j++) {
+
+                rtrstr += " ";
+
+
+            }
+
+
+        }
+
+        return rtrstr + "\n";
+
+    }
+    function ConvertDateJA(d) {
+        var date = d;
+        var dd = date.getDate();
+        var m = date.getMonth() + 1;
+        var y = date.getFullYear();
+        var h = date.getHours();
+        var mm = date.getMinutes();
+        var s = date.getSeconds();
+        return (dd <= 9 ? '0' + dd : dd) + '/' + (m <= 9 ? '0' + m : m) + '/' + y;
+        //return curr_year + "-"  + curr_month + "-" + curr_date;
+    }
+    function PrintToken() {
+        zpl = "";
+        zpl += printstr("TOKEN -" + Token_number, "34");
+        zpl += printstr("----------------------------------", "34");
+        zpl += printstr("DATE: " + ConvertDateJA(new Date()), "34");
+        zpl += printstr("TIME: " + new Date().toLocaleTimeString(), "34");
+        zpl += printstr("----------------------------------", "34");
+        zpl += printstr("BUILTY NO " + Builty_number, "34");
+        zpl += printstr("----------------------------------", "34");
+        zpl += printstr("TRUCK NO : " + Truck_number, "34");
+        zpl += printstr("----------------------------------", "34");
+
+        var printWindow = window.open();
+        printWindow.document.open('text/plain');
+
+        printWindow.document.write("<pre>" + zpl + "</pre>");
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    }
+    function PrintElem() {
+        var Section = '<style>body {font-size:10px;font-family:Calibri;} #section-to-print {width:100%; } table{font-size: 10px;font-family:Calibri}</style>';
+        Section+=  $('#section-to-print').html();
+        console.log("Section  " + Section);
+        Popup(Section);
+    }
+
+    function Popup(data) {
+        var myWindow = window.open('', 'Receipt', 'height=400,width=600');
+        myWindow.document.write('<html><head><title>Receipt</title>');
+        /*optional stylesheet*/ //myWindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+        myWindow.document.write('<style type="text/css"> *, html {margin:0;padding:0;} </style>');
+        myWindow.document.write('</head><body style="width:100%">');
+        myWindow.document.write(data);
+        myWindow.document.write('</body></html>');
+        myWindow.document.close(); // necessary for IE >= 10
+        myWindow.onload = function () { // necessary if the div contain images
+            myWindow.focus(); // necessary for IE >= 10
+            myWindow.print();
+            myWindow.close();
+        };
+    }
+
+</script>
 
 
 

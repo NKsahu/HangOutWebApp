@@ -478,7 +478,7 @@ namespace HangOut.Controllers
             JObject PostResult = new JObject();
             List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId &&x.OID==OID);
             HG_Orders ObjOrders = new HG_Orders().GetOne(OID);
-            if(ObjOrders.Status=="3"|| ObjOrders.Status == "4"){// if order is completed or Order then Take New order
+            if(ObjOrders.Status=="3"|| ObjOrders.Status == "4" ||ObjOrders.PaymentStatus!=0){// if order is completed or Order then Take New order
                 OID = 0;
             }
             if (ListCart.Count <= 0)

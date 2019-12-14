@@ -39,6 +39,8 @@ namespace HangOut.Models
         public string AddressLine3 { get; set; }
         public string Licence2 { get; set; }
         public string License3 { get; set; }
+        public string PrintRemark { get; set; }
+        public bool CustomerOrdering { get; set; }
         public HG_OrganizationDetails()
         {
             EntryDate = DateTime.Now;

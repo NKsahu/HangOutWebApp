@@ -93,6 +93,11 @@ namespace HangOut.Controllers
             {
                 Objitem.City = "0";
             }
+            if (Objitem.PrintRemark == null)
+            {
+                Objitem.PrintRemark = "";
+            }
+            
             int i = Objitem.Save();
 
             if (i > 0)
