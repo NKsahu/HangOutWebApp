@@ -1,7 +1,7 @@
 ﻿@using HangOut.Models.Common;
 @using HangOut.Models;
 @{ 
-    string OrgName = "Welcome";
+    string OrgName = "THIK KAR DIYA HU PRIYAL JI";
     int Orgid =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
     string OrgType = "0";
     HG_OrganizationDetails ObgOrg = new HG_OrganizationDetails().GetOne(Orgid);
@@ -79,21 +79,19 @@
 </style>
 <!-- header -->
 <header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #33bb6f, #30bb66, #30bb5b, #31bb50, #33bb44);z-index:1;">
-    <div class="col-md-5 col-12 text-md-left text-center mt-0">
+    <div class="col-md-3 col-12 text-md-left text-center mt-0">
         <a class="text-white navbar-brand pl-3" style="font-size:15px;">foodDo</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
 
     </div>
-    <div class="col-md-2 col-12  text-center mt-0">
-        <a class="text-white text-center navbar-brand pl-3" style="font-size:35px;font-weight:bold;">@OrgName</a>
-    </div>
-    <div class="col-md-2 col-12  text-center mt-0">
-        <label class="switch" data-toggle="tooltip" title="Allow Customer Ordering">
-            <input type="checkbox" @CustomerOrdrn  onchange="SetCustmrOrd(this)">
-            <span class="slider round"></span>
-        </label>
+    <div class="col-md-6 col-12  text-center mt-0" style="overflow:hidden">
+        <a class="text-white text-center navbar-brand pl-3" style="font-size:32px;font-weight:bold;">@OrgName</a>
     </div>
     <div class="col-md-3 col-12  text-md-right text-center p-md-2 p-2  mt-0">
+        <label class="switch" data-toggle="tooltip" title="Allow Customer Ordering">
+            <input type="checkbox" @CustomerOrdrn onchange="SetCustmrOrd(this)">
+            <span class="slider round"></span>
+        </label>
         <div class="btn-group mt-0">
             <a href="/vw_HG_UsersDetails/Admin" class="text-white m-1"><i class="fas fa-tachometer-alt"></i></a>
             <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
@@ -105,7 +103,7 @@
                         border: none !important;
                         background: none !important;
                     }
-</style>
+                </style>
             </div>
         </div>
 

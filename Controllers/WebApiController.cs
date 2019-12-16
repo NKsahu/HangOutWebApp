@@ -554,6 +554,44 @@ namespace HangOut.Controllers
             Cart.List.RemoveAll(x => x.CID == CID && x.OrgId==OrgId);
             return PostResult;
         }
+
+        //cancel order
+        public JObject CancelOrder(Int64 OID ,int UpdatedBy = 0)
+        {
+            JObject result = new JObject();
+            HG_Orders hG_Orders = new HG_Orders().GetOne(OID);
+            if (hG_Orders.OID < 1)
+            {
+                result.Add("Status", 400);
+                result.Add("MSG", "Order Not Found");
+                return result;
+            }
+            if (hG_Orders.Status == "3")
+            {
+                result.Add("Status", 400);
+                result.Add("MSG", "Can't Cancel Order. Order Already Completed");
+                return result;
+            }
+            if (hG_Orders.PaymentStatus > 0)
+            {
+                result.Add("Status", 400);
+                result.Add("MSG", "Can't Cancel Order. Payment Has Been Done");
+                return result;
+            }
+            else
+            {
+                if (UpdatedBy == 0)
+                {
+                    var UserInfo = Request.Cookies["UserInfo"];
+                    UpdatedBy = int.Parse(UserInfo["UserCode"]);
+                }
+                hG_Orders.Status = "4";
+                hG_Orders.Update_By = UpdatedBy;
+
+                result.Add("Status", 200);
+                return result;
+            }
+        }
         public JObject ShowOrderItems(int TOrSId,int OrgId=0)
         {
             JObject jObject = new JObject();

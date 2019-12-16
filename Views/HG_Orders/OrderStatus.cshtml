@@ -1,0 +1,223 @@
+﻿@using HangOut.Models
+@{
+
+                Layout = null;
+                int Sn = 1;
+                double TotalAmtsum = 0.00;
+                var ObjOrgId = Request.Cookies["UserInfo"];
+                var OrgId = int.Parse(ObjOrgId["OrgId"]);
+                List<HG_Orders> orderList = new List<HG_Orders>();
+
+                if (Request.QueryString["Type"] == "1")
+                {
+                    orderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                    orderList = orderList.FindAll(x => x.OrgId == OrgId);
+        <div class="card">
+            <div class="card-header text-center"><b>Filter</b></div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("From Date")
+                            @Html.TextBox("Fdate", DateTime.Now.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.Label("To Date")
+                            @Html.TextBox("Tdate", DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+                        </div>
+                        @Html.Hidden("OrgId", ObjOrgId["OrgId"]);
+                        <div class="col-sm-2">
+                            <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col" id="List">
+
+
+        </div>
+        <script>
+            $(document).ready(function () {
+        function Search() {
+            $("#waiting").show();
+            var Fdate = $("#Fdate").val();
+            var Tdate = $("#Tdate").val();
+            var OrgId = $("#OrgId").val();
+                    $.ajax({
+            url: "/HG_Orders/OrderStatus?Type=2&Fdate=" + Fdate + "&Tdate=" + Tdate +"&OrgId="+OrgId,
+                        type: "GET",
+                        success: function (data) {
+                            $("#waiting").hide();
+                            $("#List2").html("");
+                            $("#List").html("");
+                            $("#List").html(data);
+
+                },
+                        error: function (jqXhr, textStatus, errorMessage) { // error callback
+                            $("#waiting").hide();
+                }
+
+            });
+    }
+                $("#Search").click(function () {
+        Search();
+    });
+
+            });
+            function Details(OID) {
+                //HG_OrderItem
+                //OID
+                $("#waiting").show();
+                $.ajax({
+        type: 'POST',
+                    url: "/HG_OrderItem/index?OID=" + OID,
+                    success: function (data) {
+                makedpt("CurrOrder");
+                        $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CurrOrder");
+                        $("#waiting").hide();
+            },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                        $("#waiting").hide();
+            }
+        });
+
+    }
+
+    function CancelOrder(OID) {
+                $.confirm({
+        title: 'Are You Sure',
+                    content: 'Cancel Order',
+                    buttons: {
+            btnClass: 'btn-green',
+                        confirm: function () {
+                            $("#waiting").show();
+                            $.ajax({
+                    type: 'POST',
+                                url: "/WebAPi/CancelOrder?OID=" + OID,
+                                success: function (data) {
+                            var Result = JSON.parse(data);
+                            if (Result.Status == 200) {
+                                        $.alert({
+                                title: 'Success',
+                                            content: 'Order Canceled',
+                                        });
+                                        $('#Can' + OID).hide();
+
+                            }
+                            else {
+                                        $.alert({
+                                title: 'Error',
+                                            content: '' + Result.MSG,
+                                        });
+                            }
+                                    $("#waiting").hide();
+                        },
+                                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                                    $("#waiting").hide();
+                        },
+                            });
+                },
+                                cancel: function() {
+
+                }
+            }
+        });
+
+    }
+        </script>
+    }
+
+
+    else
+    {
+        
+    DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+    DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+    orderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
+    orderList = orderList.FindAll(x => x.OrgId == OrgId);
+    }
+    <div class="col" id="List2">
+        <div class="card">
+            <div class="card-header">Order Details </div>
+            <div class="card-body">
+                <table class="table table-hover table-bordered text-center" id="TBLID">
+                    <thead>
+                        <tr>
+                            <th> S.N </th>
+                            <th> DateTime </th>
+                            <th> Order No </th>
+                            <th>PayMent Status</th>
+                            <th> AMT (RS)</th>
+                            <th>Details</th>
+                            <th>Cancel </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ObjOrder in orderList)
+                        {
+                            string PaymentStatus = "Unpaid";
+                            double TotalAmt = 0.00;
+                            var CurntOrderItms = new HG_OrderItem().GetAll(ObjOrder.OID);
+                            CurntOrderItms = CurntOrderItms.FindAll(x => x.Status != 4);
+                            for (int i = 0; i < CurntOrderItms.Count; i++)
+                            {
+                                TotalAmt += (CurntOrderItms[i].Count * CurntOrderItms[i].Price);
+                            }
+                            if (ObjOrder.PaymentStatus == 0)
+                            {
+                                // PaymentStatus
+                            }
+                            else if (ObjOrder.PaymentStatus == 1)
+                            {
+                                PaymentStatus = "ByCash";
+                            }
+                            else if (ObjOrder.PaymentStatus == 2)
+                            {
+                                PaymentStatus = "ByOnline";
+                            }
+                            else
+                            {
+                                PaymentStatus = "ByFoodDo";
+                            }
+                            TotalAmtsum += TotalAmt;
+                            <tr>
+                                <td>@(Sn++)</td>
+                                <td>@ObjOrder.Create_Date.ToString("dd/MM hh:mm:ss tt")</td>
+                                <td>@ObjOrder.OID</td>
+                                <td>@PaymentStatus</td>
+                                <td>@TotalAmt.ToString("0.00")</td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" onclick="Details('@ObjOrder.OID');"><i class="fas fa-eye"></i></button>
+                                </td>
+                                <td>
+                                    <button id="Can@(ObjOrder.OID)" class="btn btn-sm btn-warning" onclick="CancelOrder('@ObjOrder.OID');">Cancel</button>
+                                </td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Total</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>@TotalAmtsum.ToString("0.00")</td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </div>
+}
+
