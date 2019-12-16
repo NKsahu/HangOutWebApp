@@ -217,6 +217,7 @@ namespace HangOut.Controllers
             System.Int32 OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
            // Int64 OID= System.Int64.Parse(ParaMeters["OID"].ToString());
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
+            HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(OrgId);
             double TotalPrice = 0.00;
             List<Cart> CartItems = Cart.List.FindAll(x => x.CID == CustID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
@@ -238,6 +239,7 @@ namespace HangOut.Controllers
             JObject ViewCartItem = new JObject();
             ViewCartItem.Add("TotalPrice", TotalPrice);
             ViewCartItem.Add("ListGetCart", jArray);
+            ViewCartItem.Add("OrderingStatus", objOrg.CustomerOrdering);
             return ViewCartItem;
         }
 
@@ -413,6 +415,7 @@ namespace HangOut.Controllers
             }
             HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
             jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
+            jObject.Add("OrderingStatus", objOrg.CustomerOrdering);
             jObject.Add("PaymentType", objOrg.PaymentType);
             return jObject;
         }

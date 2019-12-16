@@ -40,7 +40,7 @@ namespace HangOut.Models
         public string Licence2 { get; set; }
         public string License3 { get; set; }
         public string PrintRemark { get; set; }
-        public bool CustomerOrdering { get; set; }
+        public bool CustomerOrdering { get; set; }// true means enable ordering else  Ordering not Allowed
         public HG_OrganizationDetails()
         {
             EntryDate = DateTime.Now;
