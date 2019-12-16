@@ -408,12 +408,15 @@ namespace HangOut.Controllers
                 }
             return ordermenu.id;
         }
-        public int ActiveMenu(string SObj)
+        public int ActiveMenu([System.Web.Http.FromBody] ActiveMenu activeMenu)
         {
+            //var Jobj = { };
+            //Jobj.OMID = MenuId;
+            //Jobj.TorSIDs = TableList;
+            //Jobj.OrgId = OrgId;
             int status = 0;
-            JObject Obj = JObject.Parse(SObj);
-            int MenuId =int.Parse(Obj["OMID"].ToString());
-            int OrgId = int.Parse(Obj["OrgId"].ToString());
+            int MenuId = activeMenu.OMID;
+            int OrgId = activeMenu.OrgId;
             HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(OrgId);
             string OrgType = hG_OrganizationDetails.OrgTypes !=null ? hG_OrganizationDetails.OrgTypes : "1";
             List <OrderMenu> orderMenulist = OrderMenu.GetAll();
@@ -422,8 +425,7 @@ namespace HangOut.Controllers
             orderMenu.save();
             List<HG_Tables_or_Sheat> TorSlist = new HG_Tables_or_Sheat().GetAll(int.Parse(OrgType));
             var AlreadySelectedList = TorSlist.FindAll(x => x.OMID == MenuId);
-            JArray jArray = JArray.FromObject(Obj["TorSIDs"]);
-            Int64[] items = jArray.Select(jv => (Int64)jv).ToArray();
+            Int64[] items = activeMenu.TorSIDs;
             HashSet<Int64> hashKeys = new HashSet<Int64>(items);
             var RemovedTorSList = AlreadySelectedList.FindAll(x => !hashKeys.Contains(x.Table_or_RowID));
             List<HG_Tables_or_Sheat>  OnlyApplytoTorS = TorSlist.FindAll(x => hashKeys.Contains(x.Table_or_RowID));

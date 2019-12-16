@@ -295,7 +295,8 @@
             
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/ActiveMenu?SObj=" + JSON.stringify(Jobj),
+                url: "/WebApi/ActiveMenu",
+                data: JSON.stringify(Jobj),
                 contentType: "application/json",
                 success: function (data) {
                     var status = parseInt(data);
