@@ -33,7 +33,8 @@
         display: inline-block;
         text-align: center;
        width:35%;
-       height:300px;
+       height:250px;
+       overflow-y:auto;
         border-right: solid 2px #f00;
         text-decoration: none;
     }
@@ -56,7 +57,7 @@
     </div>
 
 </div>
-<div class=" scrollTables" style="padding-top:50px" id="Floor">
+<div class=" scrollTables"  id="Floor">
 
     <blockTable>
         <div class="row">
@@ -270,6 +271,7 @@
                 });
                 return;
             }
+            $("#waiting").show();
             var Menu = $(lis[0]);
             var MenuId = parseInt(Menu.attr('OMID'));
             var menuName = Menu.text();
@@ -290,19 +292,19 @@
             Jobj.OMID = MenuId;
             Jobj.TorSIDs = TableList;
             Jobj.OrgId = OrgId;
-            $("#waiting").show();
+            
             $.ajax({
                 type: 'POST',
                 url: "/WebApi/ActiveMenu?SObj=" + JSON.stringify(Jobj),
                 contentType: "application/json",
                 success: function (data) {
                     var status = parseInt(data);
-                    if (status > 0) {
+                   // if (status > 0) {
                         $.alert({
                             title: 'Alert',
                             content: '' + menuName + ' is Active',
                         });
-                    }
+                    //}
                     $("#waiting").hide();
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback

@@ -146,7 +146,7 @@
        // SaveMenu();
     }
     function SaveMenu() {
-        $('#waiting').show();
+        
         var OMName = $("#OrderMenuName").val().replace(' ', '');
         if (OMName == null || OMName == "") {
             $.alert({
@@ -155,6 +155,7 @@
             });
             return;
         }
+        $('#waiting').show();
         var OrderMenuJson = {};
         OMName = $("#OrderMenuName").val();
         //========

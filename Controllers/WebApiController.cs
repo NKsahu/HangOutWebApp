@@ -310,6 +310,8 @@ namespace HangOut.Controllers
                 List<OrdMenuCtgItems> ListCatItems = OrdMenuCtgItems.GetAll(obj.id);
                 orderMenuCategories = orderMenuCategories.OrderBy(x => x.OrderNo).ToList();
                 List<HG_Items> ListOfItem = new HG_Items().GetAll();
+                List<HG_Category> categoryList = new HG_Category().GetAll();
+                HashSet<int> CategoryHash = new HashSet<int>(orderMenuCategories.Select(x => x.CategoryId).ToArray());
                 foreach (var ordecategory in orderMenuCategories)
                 {
                     JObject jobj = new JObject();
@@ -332,8 +334,52 @@ namespace HangOut.Controllers
                         //  list[i].CategoryID + '" value="' + list[i].Category + '
                         //id  ItemList[j].ItemID   ItemList[j].Items  CheckSts
                     }
+                    HashSet<Int64> SelectedItms = new HashSet<Int64>(ListCateItems.Select(x => x.ItemId).ToArray());
+                    var UnSelectedItmList = ListOfItem.FindAll(x =>!SelectedItms.Contains(x.ItemID)&& x.CategoryID== ordecategory.CategoryId);
+                    foreach (var Item in UnSelectedItmList)
+                    {
+                      //  var Item = ListOfItem.Find(x => x.ItemID == Categoryitm.ItemId);
+                        JObject itemObj = JObject.FromObject(Item);
+                        itemObj.Add("CheckSts", false);
+                        itemObj.Add("id", 0);
+                        OrderCategoryItems.Add(itemObj);
+                        //  list[i].CategoryID + '" value="' + list[i].Category + '
+                        //id  ItemList[j].ItemID   ItemList[j].Items  CheckSts
+                    }
+
                     jobj.Add("ItemList", OrderCategoryItems);
                     jArray.Add(jobj);
+                }
+
+                categoryList = categoryList.FindAll(x => !CategoryHash.Contains(x.CategoryID));
+                foreach (var ordecategory in categoryList)
+                {
+                    JObject jobj = new JObject();
+                    jobj.Add("id", 0);
+                    jobj.Add("CategoryID", ordecategory.CategoryID);
+                    jobj.Add("Category", ordecategory.Category);
+                    jobj.Add("CheckSts", false);
+                    jobj.Add("MenuId", obj.id);
+                    jobj.Add("MenuName", obj.MenuName);
+                    JArray OrderCategoryItems = new JArray();
+                    var ItemList = ListOfItem.FindAll(x => x.CategoryID == ordecategory.CategoryID);
+                    foreach (var Item in ItemList)
+                    {
+                        //  var Item = ListOfItem.Find(x => x.ItemID == Categoryitm.ItemId);
+                        JObject itemObj = JObject.FromObject(Item);
+                        itemObj.Add("CheckSts", false);
+                        itemObj.Add("id", 0);
+                        OrderCategoryItems.Add(itemObj);
+                        //  list[i].CategoryID + '" value="' + list[i].Category + '
+                        //id  ItemList[j].ItemID   ItemList[j].Items  CheckSts
+                    }
+                    if (ItemList.Count > 0)
+                    {
+                        jobj.Add("ItemList", OrderCategoryItems);
+                        jArray.Add(jobj);
+
+                    }
+                   
                 }
 
 
@@ -496,7 +542,7 @@ namespace HangOut.Controllers
             if (OID > 0)
             {
                 NewOID = OID;
-                ObjOrders.Status = "1";
+                ObjOrders.Status ="1";// Placed
                 ObjOrders.Update_By = CID;
                 ObjOrders.Update_Date = DateTime.Now;
                 ObjOrders.Save();
@@ -509,7 +555,7 @@ namespace HangOut.Controllers
                     Create_Date = System.DateTime.Now,
                     CID = CID,
                     Update_By = CID,
-                    Status = "1",// order placed
+                    Status = "1",//Placed
                     OrgId = OrgId,
                     Table_or_SheatId = TableorSheatId,
                     PaymentStatus = 0,// unpaid
@@ -732,29 +778,54 @@ namespace HangOut.Controllers
             int OrgId = int.Parse(Params["OrgId"].ToString());
             int IsChef = int.Parse(Params["IsChef"].ToString());
             List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            List<HG_Orders> OrderToShow = new List<HG_Orders>();
             Orders = Orders.FindAll(x => x.Status != "3");//not completed
             Orders = Orders.FindAll(x => x.OrgId == OrgId);
             HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
+            List<HG_OrderItem> hG_OrderItems = new List<HG_OrderItem>();
             if (orgobj != null && orgobj.PaymentType == 1)// prepaid and is chef orders
             {
                 if (IsChef == 1)
                 {
                     Orders = Orders.FindAll(x => x.PaymentStatus > 0);// only seen paid orders
+                    OrderToShow = Orders;
                 }
                 else
                 {
                     Orders = Orders.FindAll(x => x.PaymentStatus ==0);// only seen unpaid orders
+                    OrderToShow = Orders;
                 }
             }
             else// postpaid
             {
                 if (IsChef == 1)
                 {
-                    Orders = Orders.FindAll(x => x.Status=="1");// only seen placed ordersw
+                    //Orders = Orders.FindAll(x => x.Status=="1");// only seen placed ordersw
+                    foreach(var Order in Orders)
+                    {
+                        var OrderItms = new HG_OrderItem().GetAll(Order.OID);
+                        hG_OrderItems.AddRange(OrderItms);
+                        // var completedorCancel = OrderItms.FindAll(x => x.Status != 3);
+                        OrderItms = OrderItms.FindAll(x => x.Status != 3 && x.Status != 4);
+                        if (OrderItms.Count>0)
+                        {
+                            OrderToShow.Add(Order);
+                        }
+                    }
                 }
                 else
                 {
-                 Orders = Orders.FindAll(x => x.Status=="2");// only seen completed by chef
+                    foreach (var Order in Orders)
+                    {
+                        var OrderItms = new HG_OrderItem().GetAll(Order.OID);
+                        hG_OrderItems.AddRange(OrderItms);
+                       var  Completeditems = OrderItms.FindAll(x => x.Status == 3 || x.Status == 4);//all completed or cancel
+                        if (OrderItms.Count== Completeditems.Count)
+                        {
+                            OrderToShow.Add(Order);
+                        }
+                    }
+                   
                 }
             }
             JArray jArray = new JArray();
@@ -762,13 +833,13 @@ namespace HangOut.Controllers
             List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(TYpe, OrgId);
             List<HG_FloorSide_or_RowName> ListFlorSideOrRow = new HG_FloorSide_or_RowName().GetAll(TYpe, OrgId);
             List<HG_Floor_or_ScreenMaster> ListFlrScrn = new HG_Floor_or_ScreenMaster().GetAll(TYpe, OrgId);
-            foreach(var order in Orders)
+            foreach(var order in OrderToShow)
             {
                 JObject jObject = new JObject();
                 jObject = JObject.FromObject(order);
-                List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
+              var  ShowOrderItems = hG_OrderItems.FindAll(x => x.OID == order.OID);
                 double ToTalAmt = 0.00;
-                foreach(var item in hG_OrderItems)
+                foreach(var item in ShowOrderItems)
                 {
                     ToTalAmt += item.Count * item.Price;
                 }
@@ -782,7 +853,7 @@ namespace HangOut.Controllers
                     if (objFs != null)
                     {
                         Seating += objFs.Name;
-                        HG_FloorSide_or_RowName ObjFsRn = ListFlorSideOrRow.Find(x => x.ID == objFs.Floor_or_ScreenID);
+                        HG_FloorSide_or_RowName ObjFsRn = ListFlorSideOrRow.Find(x => x.ID == objTorS.FloorSide_or_RowNoID);
                         if (ObjFsRn != null)
                         {
                             Seating += " " + ObjFsRn.FloorSide_or_RowName;
