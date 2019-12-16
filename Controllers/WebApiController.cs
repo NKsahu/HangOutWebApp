@@ -753,9 +753,12 @@ namespace HangOut.Controllers
                 }
             }
             JArray jArray = new JArray();
+            int TYpe = int.Parse(orgobj.OrgTypes);
+            List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(TYpe, OrgId);
+            List<HG_FloorSide_or_RowName> ListFlorSideOrRow = new HG_FloorSide_or_RowName().GetAll(TYpe, OrgId);
+            List<HG_Floor_or_ScreenMaster> ListFlrScrn = new HG_Floor_or_ScreenMaster().GetAll(TYpe, OrgId);
             foreach(var order in Orders)
             {
-                
                 JObject jObject = new JObject();
                 jObject = JObject.FromObject(order);
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(order.OID);
@@ -765,6 +768,24 @@ namespace HangOut.Controllers
                     ToTalAmt += item.Count * item.Price;
                 }
                 jObject.Add("AMT",ToTalAmt);
+                string Seating = " ";
+                HG_Tables_or_Sheat objTorS = ListTorS.Find(x => x.Table_or_RowID==order.Table_or_SheatId);
+                if (objTorS != null)
+                {
+                    string TorSName = objTorS.Table_or_SheetName;
+                    HG_Floor_or_ScreenMaster objFs = ListFlrScrn.Find(x => x.Floor_or_ScreenID == objTorS.Floor_or_ScreenId);
+                    if (objFs != null)
+                    {
+                        Seating += objFs.Name;
+                        HG_FloorSide_or_RowName ObjFsRn = ListFlorSideOrRow.Find(x => x.ID == objFs.Floor_or_ScreenID);
+                        if (ObjFsRn != null)
+                        {
+                            Seating += " " + ObjFsRn.FloorSide_or_RowName;
+                        }
+                    }
+                    Seating += " " + TorSName;
+                }
+                jObject.Add("TableorSheatName", Seating);
                 jArray.Add(jObject);
             }
             return jArray;
@@ -1158,11 +1179,13 @@ namespace HangOut.Controllers
             return JObject.FromObject(Result);
         }
 
-        public JArray TableAndTakeAway(int Type,int OrderById,int FloorId=0)
+        public JArray TableAndTakeAway(int Type,int OrderById,int FloorId=0,int OrgId=0)
         {
             JArray jArray = new JArray();
             DateTime fromdate = DateTime.Now;
             List<HG_Tables_or_Sheat> list = new HG_Tables_or_Sheat().GetAllWithTakeAwya(Type);
+            List<HG_FloorSide_or_RowName> FloorSideRowList = new HG_FloorSide_or_RowName().GetAll(Type, OrgId);
+            List<HG_Floor_or_ScreenMaster> FloorScrenList = new HG_Floor_or_ScreenMaster().GetAll(Type, OrgId);
             List<HG_Orders> Orderlist = new HG_Orders().GetListByGetDate(fromdate, DateTime.Now);
             if (FloorId > 0)
             {
@@ -1172,8 +1195,33 @@ namespace HangOut.Controllers
             {
                 HG_Orders order = Orderlist.Find(x => x.CID == OrderById && x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
                 JObject jObject = new JObject();
-                jObject= JObject.FromObject(objtable);
-                jObject.Add("CurrOID", order!=null?order.OID:0);
+                jObject = JObject.FromObject(objtable);
+                if (order != null && order.OID > 0)
+                {
+                    jObject.Add("CurrOID",order.OID);
+                    
+                }
+                else
+                {
+                    jObject.Add("CurrOID",0);
+                    jObject["Status"]= 1;
+
+                }
+                string Seating = "";
+                HG_Floor_or_ScreenMaster floor_Or_ScreenMaster = FloorScrenList.Find(x => x.Floor_or_ScreenID == objtable.Floor_or_ScreenId);
+                if (floor_Or_ScreenMaster != null)
+                {
+                    Seating += floor_Or_ScreenMaster.Name;
+                    HG_FloorSide_or_RowName OBJFsideOrRowName = FloorSideRowList.Find(x => x.ID == objtable.FloorSide_or_RowNoID);
+                    if (OBJFsideOrRowName != null)
+                    {
+                        Seating += " " + OBJFsideOrRowName.FloorSide_or_RowName;
+                    }
+                }
+                Seating += " " + objtable.Table_or_SheetName;
+                // public int Status { get; set; }// {"1":free,"2":"BOOKED",3:"PROGRESS"}
+                //  public string Table_or_SheetName { get; set; }
+                jObject["Table_or_SheetName"] = Seating;
                 jArray.Add(jObject);
             }
             return jArray;
