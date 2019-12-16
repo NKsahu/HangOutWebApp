@@ -151,6 +151,7 @@
                             <th> S.N </th>
                             <th> DateTime </th>
                             <th> Order No </th>
+                            <th>Status</th>
                             <th>PayMent Status</th>
                             <th> AMT (RS)</th>
                             <th>Details</th>
@@ -162,6 +163,7 @@
                         {
                             string PaymentStatus = "Unpaid";
                             double TotalAmt = 0.00;
+                            string Status = "";
                             var CurntOrderItms = new HG_OrderItem().GetAll(ObjOrder.OID);
                             CurntOrderItms = CurntOrderItms.FindAll(x => x.Status != 4);
                             for (int i = 0; i < CurntOrderItms.Count; i++)
@@ -185,10 +187,28 @@
                                 PaymentStatus = "ByFoodDo";
                             }
                             TotalAmtsum += TotalAmt;
+                            // order status
+                            if (ObjOrder.Status == "3")
+                            {
+                                Status = "Completed";
+                            }
+                            else if (ObjOrder.Status == "4")
+                            {
+                                Status = "Canceled";
+                            }
+                            else if (ObjOrder.Status == "2")
+                            {
+                                Status = "Running";
+                            }
+                            else
+                            {
+                                Status = "Placed";
+                            }
                             <tr>
                                 <td>@(Sn++)</td>
                                 <td>@ObjOrder.Create_Date.ToString("dd/MM hh:mm:ss tt")</td>
                                 <td>@ObjOrder.OID</td>
+                                <td>@Status</td>
                                 <td>@PaymentStatus</td>
                                 <td>@TotalAmt.ToString("0.00")</td>
                                 <td>
@@ -205,6 +225,7 @@
                     <tfoot>
                         <tr>
                             <td>Total</td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
