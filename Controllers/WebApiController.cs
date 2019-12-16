@@ -108,6 +108,7 @@ namespace HangOut.Controllers
                             objItem.Add("MenuId", Items.CategoryID);
                             objItem.Add("ItemIndex", ItemiIndex++);
                             objItem.Add("ItemMode", Items.ItemMode);
+                            objItem.Add("CostPrice", Items.CostPrice);
                             objItem.Add("Info", Items.ItemDiscription);
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -151,6 +152,7 @@ namespace HangOut.Controllers
                             objItem.Add("ItemCartValue", CurrCount);
                             objItem.Add("MenuId", Items.CategoryID);
                             objItem.Add("ItemIndex", ItemiIndex++);
+                            objItem.Add("CostPrice", Items.CostPrice);
                             objItem.Add("ItemMode", Items.ItemMode);
                             objItem.Add("Info", Items.ItemDiscription);
                             jarrayItem.Add(objItem);
