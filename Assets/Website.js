@@ -60,7 +60,8 @@ shortcut.add("Esc", function () {
         // $(".modal:visible:last").hide();
         $(".modal:visible:last").remove();
         $('.modal-backdrop').remove();
-        //$(".modal").last().prev().hide();
+        $('body').removeAttr('class');
+        $('body').removeAttr('style');
     };
 });
 var modaladded = false;
@@ -70,6 +71,8 @@ $(window).on('hashchange', function (event) {
 
         $(".modal:visible:last").remove();
         $('.modal-backdrop').remove();
+        $('body').removeAttr('class');
+        $('body').removeAttr('style');
 
     }
     else {
@@ -114,6 +117,9 @@ function hidedpt(id) {
     $("#"+id).remove();
     $("#" + id).display = "none";
     $('.modal-backdrop').remove();
+   // $('body').removeClass('modal-open');
+    $('body').removeAttr('class');
+    $('body').removeAttr('style');
    // alert('id' + id);
 
 }

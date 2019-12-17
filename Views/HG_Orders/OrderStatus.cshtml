@@ -1,25 +1,26 @@
 ﻿@using HangOut.Models
 @{
 
-    Layout = null;
-    int Sn = 1;
-    int OrgType = 1;
-    double TotalAmtsum = 0.00;
-    var ObjOrgId = Request.Cookies["UserInfo"];
-    var OrgId = int.Parse(ObjOrgId["OrgId"]);
-    string TrName = "Table No";
-    HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
-    if (ObjOrg.OrgID > 0&& ObjOrg.OrgTypes=="2")
-    {
-        OrgType = 2;
-        TrName = "Sheat No";
-    }
-    List<HG_Orders> orderList = new List<HG_Orders>();
-    List<HG_Tables_or_Sheat> ListTables = new HG_Tables_or_Sheat().GetAll(OrgType);
-    if (Request.QueryString["Type"] == "1")
-    {
-        orderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-        orderList = orderList.FindAll(x => x.OrgId == OrgId);
+                Layout = null;
+                int Sn = 1;
+                int OrgType = 1;
+                double TotalAmtsum = 0.00;
+                var ObjOrgId = Request.Cookies["UserInfo"];
+                var OrgId = int.Parse(ObjOrgId["OrgId"]);
+                HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+                if (ObjOrg.OrgID > 0&& ObjOrg.OrgTypes=="2")
+                {
+                    OrgType = 2;
+
+                }
+                List<HG_Orders> orderList = new List<HG_Orders>();
+                List<HG_Tables_or_Sheat> ListTables = new HG_Tables_or_Sheat().GetAll(OrgType);
+                List<HG_Floor_or_ScreenMaster> ListFlrScr = new HG_Floor_or_ScreenMaster().GetAll(OrgType);
+                List<HG_FloorSide_or_RowName> ListFsideRoName = new HG_FloorSide_or_RowName().GetAll(OrgType);
+                if (Request.QueryString["Type"] == "1")
+                {
+                    orderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                    orderList = orderList.FindAll(x => x.OrgId == OrgId);
         <div class="card">
             <div class="card-header text-center"><b>Filter</b></div>
             <div class="card-body">
@@ -33,7 +34,7 @@
                             @Html.Label("To Date")
                             @Html.TextBox("Tdate", DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
                         </div>
-                        @Html.Hidden("OrgId", ObjOrgId["OrgId"]);
+                        @Html.Hidden("OrgId", ObjOrgId["OrgId"])
                         <div class="col-sm-2">
                             <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
                         </div>
@@ -97,7 +98,7 @@
 
     }
 
-    function CancelOrder(OID) {
+            function CancelOrder(OID) {
                 $.confirm({
         title: 'Are You Sure',
                     content: 'Cancel Order',
@@ -137,7 +138,27 @@
             }
         });
 
-    }
+            }
+
+            function PrintInvoice(OID) {
+
+                $("#waiting").show();
+                $.ajax({
+                    type: 'POST',
+                    url: "/HG_Orders/PrintInvoice?&OID="+OID,
+                    success: function (data) {
+                        makedpt("invoice");
+                        $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
+                        showdpt("invoice");
+                        $("#waiting").hide();
+                        //var Jobje = JSON.parse(data);
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) { // error callback
+                        $("#waiting").hide();
+                    }
+                });
+
+            }
         </script>
     }
 
@@ -163,9 +184,10 @@
                             <th>Status</th>
                             <th>PayMent Status</th>
                             <th> AMT (RS)</th>
-                            <th>@TrName</th>
+                            <th>Sheating</th>
                             <th>Details</th>
                             <th>Cancel </th>
+                            <th>Print</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -174,9 +196,26 @@
                             string PaymentStatus = "Unpaid";
                             double TotalAmt = 0.00;
                             string Status = "";
+                            string Seating = "";
+                            HG_Tables_or_Sheat ObjTableSheat = ListTables.Find(x => x.Table_or_RowID == ObjOrder.Table_or_SheatId);
+                            if (ObjTableSheat != null)
+                            {
+                                var ScrOrFlrobj = ListFlrScr.Find(x => x.Floor_or_ScreenID == ObjTableSheat.Floor_or_ScreenId);
+                                if (ScrOrFlrobj != null)
+                                {
+                                    Seating += ScrOrFlrobj.Name;
+                                    var FlrSideOrRowNo = ListFsideRoName.Find(x => x.ID == ObjTableSheat.FloorSide_or_RowNoID);
+                                    if (FlrSideOrRowNo != null)
+                                    {
+                                        Seating += " " + FlrSideOrRowNo.FloorSide_or_RowName;
+                                    }
+
+                                }
+                                Seating += " " + ObjTableSheat.Table_or_SheetName;
+                            }
                             var CurntOrderItms = new HG_OrderItem().GetAll(ObjOrder.OID);
                             CurntOrderItms = CurntOrderItms.FindAll(x => x.Status != 4);
-                            HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(ObjOrder.Table_or_SheatId);
+                          //  HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(ObjOrder.Table_or_SheatId);
                             for (int i = 0; i < CurntOrderItms.Count; i++)
                             {
                                 TotalAmt += (CurntOrderItms[i].Count * CurntOrderItms[i].Price);
@@ -215,21 +254,24 @@
                             {
                                 Status = "Placed";
                             }
-                            <tr>
-                                <td>@(Sn++)</td>
-                                <td>@ObjOrder.Create_Date.ToString("dd/MM hh:mm:ss tt")</td>
-                                <td>@ObjOrder.OID</td>
-                                <td>@Status</td>
-                                <td>@PaymentStatus</td>
-                                <td>@TotalAmt.ToString("0.00")</td>
-                                <td>@ObjTorS.Table_or_SheetName</td>
-                                <td>
-                                    <button class="btn btn-sm btn-success" onclick="Details('@ObjOrder.OID');"><i class="fas fa-eye"></i></button>
-                                </td>
-                                <td>
-                                    <button id="Can@(ObjOrder.OID)" class="btn btn-sm btn-warning" onclick="CancelOrder('@ObjOrder.OID');">Cancel</button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>@(Sn++)</td>
+                            <td>@ObjOrder.Create_Date.ToString("dd/MM hh:mm")</td>
+                            <td>@ObjOrder.OID</td>
+                            <td>@Status</td>
+                            <td>@PaymentStatus</td>
+                            <td>@TotalAmt.ToString("0.00")</td>
+                            <td>@Seating</td>
+                            <td>
+                                <button class="btn btn-sm btn-success" onclick="Details('@ObjOrder.OID');"><i class="fas fa-eye"></i></button>
+                            </td>
+                            <td>
+                                <button id="Can@(ObjOrder.OID)" class="btn btn-sm btn-warning" onclick="CancelOrder('@ObjOrder.OID');">Cancel</button>
+                            </td>
+                            <td>
+                                <button  class="btn btn-sm btn-outline-info" onclick="PrintInvoice('@ObjOrder.OID');">Invoice</button>
+                            </td>
+                        </tr>
 
                         }
 
@@ -241,8 +283,9 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
                             <td>@TotalAmtsum.ToString("0.00")</td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
 
