@@ -322,6 +322,7 @@
     <Compile Include="Models\HG_Ticket.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\HG_OrderItem.cs" />
+    <Compile Include="Models\JoinFoodDo.cs" />
     <Compile Include="Models\OrderMenu.cs" />
     <Compile Include="Models\OrderMenuCategory.cs" />
     <Compile Include="Models\OrdMenuCtgItems.cs" />
