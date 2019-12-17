@@ -16,6 +16,7 @@
         orderlist = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
         orderlist = orderlist.FindAll(x => x.Table_or_SheatId == TorSid && x.PaymentStatus!=0);
         var orderObj = orderlist.First();
+        orderlist = orderlist.FindAll(X => X.OID == orderObj.OID);
         OrderItems.AddRange(new HG_OrderItem().GetAll(orderObj.OID));
 
     }

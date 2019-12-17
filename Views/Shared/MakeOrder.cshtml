@@ -387,20 +387,20 @@
                             </table>
                         </div>
                         
-                        <div class="btn-group btn-group-justified" role="group" id="ChargeBtn">
+                        <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn">
                             <!---->
-                            <div id="SubMitbtn" class="btn-group" role="group" style="width:50% ;padding:10px ;">
+                            <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
                                 <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
                                     send to CHEF
                                 </button>
                             </div>
-                            <div id="InstantClear" class="btn-group" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
+                            <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
                                 <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                                     bypass CHEF
                                 </button>
                             </div>
                             <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px" onclick="Charge()">
-                                <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                                <button type="button" class="form-control btn btn-success sp-f2-hotkey" id="FinalAmtCharge">
                                     CHARGE
                                 </button>
                             </div>
@@ -503,6 +503,7 @@
      var OrgType = 0;
      var TablesList = null;
      var ItemList = null;
+     var ChargeAmt = 0.00;
      var CurrentOrder = 0;// which means table or  takeaway id
      var CurrOID = 0; //current Order Id;
         var finalAmt = 0.00;
@@ -567,12 +568,14 @@
                 url: "/WebApi/AddCart?Obj=" + JSON.stringify(Obj),
                 success: function (data) {
                     var CurritemCnt = parseInt(data.split(",")[3]);
-                    $("#FinalAmt").html(data.split(",")[1]);
+                    var FinlAmt = parseFloat(data.split(",")[1]);
+                    $("#FinalAmt").html(FinlAmt);
                     console.log("Count item" + CurritemCnt);
+                    var ObjItem = ItemList.find(x => {
+                        return x.IID.toString() === ItemId
+                    });
                     if (CurritemCnt >= 1) {
-                        var ObjItem = ItemList.find(x => {
-                            return x.IID.toString() === ItemId
-                        });
+                       
                         ObjItem.ItemCartValue = CurritemCnt;
                         if (!ItemAlreadyAdded(ItemId)) {
                             AddItemToQue(ObjItem);
@@ -590,6 +593,8 @@
                         ResetOrder(CurrentOrder, 1); //free
                         $("#tr" + ItemId).remove();
                     }
+                    var finalChargeToShow = ChargeAmt + FinlAmt;
+                    $("#FinalAmtCharge").text('CHARGE' + finalChargeToShow + ' /RS');
                     //$("#" + itemid).text(Cnt);
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -761,7 +766,8 @@
             CurrentOrder = TableOrMWid;
             GetItemListByCategory(CurrentOrder)
         }
-        function GetItemListByCategory(TableOrMWid) {
+     function GetItemListByCategory(TableOrMWid) {
+         $("#waiting").show();
             $("#Current").click();
             var ObjOrderName = TablesList.find(x => {
                 return x.Table_or_RowID == TableOrMWid;
@@ -779,13 +785,15 @@
                 url: "/WebApi/GetItemList?Obj=" + JSON.stringify(Obj),
                 success: function (data) {
                     var CategoryList = JSON.parse(data);
-                    console.log(CategoryList);
+                   // console.log(CategoryList);
+                    $("#waiting").hide();
                     ItemList = [];
                     $("#CategoryId").html('');
                     $("#ItemList").html('');
                     $("#AddItem").html('');
                     var funSelected = "SelectedColor(\"card\",this)";
                     var TotalRs = 0.00;
+                    ChargeAmt = 0.00;
                     var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + 0 + "\")'><span class='Pspan'>All</span></p>";
                     $("#CategoryId").append(CategoryHtml);
                     for (i = 0; i < CategoryList.length; i++) {
@@ -798,9 +806,13 @@
                             AddItemToQue(ItemsList[j]);
                         }
                         TotalRs += CategoryList[i].MenuItmPrice;
-
+                        ChargeAmt = CategoryList[i].TableAmt;
 
                     }
+                   // ChargeAmt += TotalRs;
+                    var Dispalamt = ChargeAmt + TotalRs;
+                    console.log('chanrge');
+                    $("#FinalAmtCharge").text('CHARGE ' + Dispalamt + '/RS');
                     if (CategoryList.length == 0) {
 
                         $.alert({

@@ -62,14 +62,23 @@ namespace HangOut.Controllers
         {
             JObject objParams = JObject.Parse(Obj);
             JArray JMenuArray = new JArray();
-            System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
-           // System.Int64 OID = System.Int64.Parse(objParams.GetValue("OID").ToString());
-            System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OrgId").ToString());
-             
+            Int64 CID = Int64.Parse(objParams.GetValue("CID").ToString());
+            Int32 OrgId = Int32.Parse(objParams.GetValue("OrgId").ToString());
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
-            System.Int64 TableSheatTakeWayId = System.Int64.Parse(objParams.GetValue("TSTWID").ToString());
-            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
+            Int64 TableSheatTakeWayId =Int64.Parse(objParams.GetValue("TSTWID").ToString());
+            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
+            List<HG_Orders> TodaysOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            HG_Orders ObjOrder = TodaysOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId && x.TableOtp == ObjTorS.Otp &&x.PaymentStatus==0);
+            double CurrentTableAmt = 0.00;
+            if (ObjOrder != null)
+            {
+                var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
+                for(var i=0;i< OrderItems.Count; i++)
+                {
+                    CurrentTableAmt += OrderItems[i].Count * OrderItems[i].Price;
+                }
+            }
             if (ObjTorS.Type !="3")// not takeaway
             {
                 OrderMenu ObjMenu = OrderMenu.Getone(ObjTorS.OMID);
@@ -116,6 +125,7 @@ namespace HangOut.Controllers
                         JobjMenu.Add("MenuItemCount", OrderMenuItems.Count);
                         JobjMenu.Add("MenuItems", jarrayItem);
                         JobjMenu.Add("MenuItmPrice", MenuItemPrice);
+                        JobjMenu.Add("TableAmt", CurrentTableAmt);
                         JMenuArray.Add(JobjMenu);
                     }
 
@@ -161,6 +171,7 @@ namespace HangOut.Controllers
                         JobjMenu.Add("MenuItemCount", ItemListByMenu.Count);
                         JobjMenu.Add("MenuItems", jarrayItem);
                         JobjMenu.Add("MenuItmPrice", MenuItemPrice);
+                        JobjMenu.Add("TableAmt", CurrentTableAmt);
                         JMenuArray.Add(JobjMenu);
                     }
                 }
