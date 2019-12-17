@@ -21,11 +21,11 @@ namespace HangOut.Models
         public int TickedNo { get; set; }
         public int ChefSeenBy { get; set; }
         public int OrgId { get; set; }
+        public Int64 OrdById { get; set; }// Item order by id
+        public double TaxInItm { get; set; }
         public HG_OrderItem()
         {
             this.Qty = "0.00";
-            this.OrderDate = System.DateTime.Now;
-            this.UpdatedBy = 0;
             this.UpdationDate = System.DateTime.Now;
             this.TickedNo = 0;
             this.ChefSeenBy = 0;
@@ -38,8 +38,11 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-                if (this.OIID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate,TickedNo,ChefSeenBy,OrgId) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate,@TickedNo,@ChefSeenBy,@OrgId);select SCOPE_IDENTITY();", Obj.Con);
+                if (this.OIID == 0) { 
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate,TickedNo,ChefSeenBy,OrgId,OrdById,TaxInItm) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate,@TickedNo,@ChefSeenBy,@OrgId,@OrdById,@TaxInItm);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd.Parameters.AddWithValue("@OrdById", this.OrdById);
+                    cmd.Parameters.AddWithValue("@TaxInItm", this.TaxInItm);
+            }
                 else
                 {
                     cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate,TickedNo=@TickedNo,ChefSeenBy=@ChefSeenBy,OrgId=@OrgId where OIID=@OIID", Obj.Con);
@@ -58,6 +61,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@TickedNo", this.TickedNo);
                 cmd.Parameters.AddWithValue("@ChefSeenBy", this.ChefSeenBy);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
+               
                 if (this.OIID == 0)
                 {
                     this.OIID = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -105,14 +109,15 @@ namespace HangOut.Models
                     ObjTmp.Count = SDR.GetInt32(3);
                     ObjTmp.Qty = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
-                    ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(7);
+                    ObjTmp.Status = SDR.IsDBNull(7) ? 1 : SDR.GetInt32(7);
                     ObjTmp.OrderDate = SDR.IsDBNull(8) ? DateTime.Now : SDR.GetDateTime(8);
                     ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
                     ObjTmp.UpdationDate = SDR.IsDBNull(10) ? DateTime.Now : SDR.GetDateTime(10);
                     ObjTmp.TickedNo = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
                     ObjTmp.ChefSeenBy = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
                     ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
-
+                    ObjTmp.OrdById = SDR.GetInt64(14);
+                    ObjTmp.TaxInItm = SDR.GetDouble(15);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -148,13 +153,15 @@ namespace HangOut.Models
                     ObjTmp.Count = SDR.GetInt32(3);
                     ObjTmp.Qty = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
-                    ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(7);
+                    ObjTmp.Status = SDR.IsDBNull(7) ? 1 : SDR.GetInt32(7);
                     ObjTmp.OrderDate = SDR.IsDBNull(8) ? DateTime.Now : SDR.GetDateTime(8);
                     ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
                     ObjTmp.UpdationDate = SDR.IsDBNull(10) ? DateTime.Now : SDR.GetDateTime(10);
                     ObjTmp.TickedNo = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
                     ObjTmp.ChefSeenBy = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
                     ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
+                    ObjTmp.OrdById = SDR.GetInt64(14);
+                    ObjTmp.TaxInItm = SDR.GetDouble(15);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -186,13 +193,15 @@ namespace HangOut.Models
                     ObjTmp.Count = SDR.GetInt32(3);
                     ObjTmp.Qty = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
-                    ObjTmp.Status = SDR.IsDBNull(7) ? 0 : SDR.GetInt32(7);
-                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? System.DateTime.Now : SDR.GetDateTime(8);
+                    ObjTmp.Status = SDR.IsDBNull(7) ? 1 : SDR.GetInt32(7);
+                    ObjTmp.OrderDate = SDR.IsDBNull(8) ? DateTime.Now : SDR.GetDateTime(8);
                     ObjTmp.UpdatedBy = SDR.IsDBNull(9) ? 0 : SDR.GetInt32(9);
-                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? System.DateTime.Now : SDR.GetDateTime(10);
+                    ObjTmp.UpdationDate = SDR.IsDBNull(10) ? DateTime.Now : SDR.GetDateTime(10);
                     ObjTmp.TickedNo = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
                     ObjTmp.ChefSeenBy = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
                     ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
+                    ObjTmp.OrdById = SDR.GetInt64(14);
+                    ObjTmp.TaxInItm = SDR.GetDouble(15);
 
                 }
             }

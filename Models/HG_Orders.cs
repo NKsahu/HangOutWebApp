@@ -6,25 +6,25 @@ namespace HangOut.Models
 {
     public class HG_Orders
     {
-        public System.Int64 OID { get; set; }
-        public System.Int64 CID { get; set; }
+        public Int64 OID { get; set; }
+        public Int64 CID { get; set; }
         public string Status { get; set; } //Order-Placed=1,Order-running:2 Order-Completed=3,Order-Cancelled=4,
-        public System.Int64 Create_By { get; set; }
-        public System.DateTime Create_Date { get; set; }
-        public System.Int64 Update_By { get; set; }
-        public System.DateTime Update_Date { get; set; }
+        public Int64 Create_By { get; set; }
+        public DateTime Create_Date { get; set; }
+        public Int64 Update_By { get; set; }
+        public DateTime Update_Date { get; set; }
         public bool Deleted { get; set; }
         public int OrgId { get; set; }
         public Int64 Table_or_SheatId { get; set; }
         public int PaymentStatus { get; set; }//{'0':'unpaid',1:'PaidBycash','2':'by online','3':'ByFoodPaymeGateway'}
         public int PayReceivedBy { get; set; }
         public int TableOtp { get; set; }
+        public string OrderByIds { get; set; }//  Order by IDS comma seprated
         public HG_Orders()
         {
             this.OID = 0;
             this.Status = "";
-            this.Create_Date = System.DateTime.Now;//
-            this.Update_Date = System.DateTime.Now;
+            this.Update_Date = DateTime.Now;
             this.OrgId = 0;
             this.Update_By = 0;
             this.Table_or_SheatId = 0;
@@ -39,10 +39,10 @@ namespace HangOut.Models
             try
             {
                 if (this.OID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId,Table_or_SheatId,PaymentStatus,PayReceivedBy,TableOtp) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId,Table_or_SheatId,PaymentStatus,PayReceivedBy,TableOtp,OrderByIds) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp,@OrderByIds);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp where OID=@OID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp,OrderByIds=@OrderByIds where OID=@OID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
                 }
 
@@ -51,13 +51,14 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Create_By", this.Create_By);
                 cmd.Parameters.AddWithValue("@Create_Date", this.Create_Date);
                 cmd.Parameters.AddWithValue("@Update_By", this.Update_By);
-                cmd.Parameters.AddWithValue("@Update_Date", System.DateTime.Now);
+                cmd.Parameters.AddWithValue("@Update_Date", DateTime.Now);
                 cmd.Parameters.AddWithValue("@Deleted", this.Deleted);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 cmd.Parameters.AddWithValue("@Table_or_SheatId", this.Table_or_SheatId);
                 cmd.Parameters.AddWithValue("@PaymentStatus", this.PaymentStatus);
                 cmd.Parameters.AddWithValue("@PayReceivedBy", this.PayReceivedBy);
                 cmd.Parameters.AddWithValue("@TableOtp", this.TableOtp);
+                cmd.Parameters.AddWithValue("@OrderByIds", this.OrderByIds);
                 if (this.OID == 0)
                 {
                     R = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -109,8 +110,8 @@ namespace HangOut.Models
                         Table_or_SheatId=SDR.IsDBNull(9)?0:SDR.GetInt64(9),
                         PaymentStatus=SDR.IsDBNull(10)?0:SDR.GetInt32(10),
                         PayReceivedBy=SDR.IsDBNull(11)?0:SDR.GetInt32(11),
-                        TableOtp=SDR.IsDBNull(12)?0:SDR.GetInt32(12)
-                        
+                        TableOtp=SDR.IsDBNull(12)?0:SDR.GetInt32(12),
+                        OrderByIds=SDR.GetString(13)
                     };
                     ListTmp.Add(ObjTmp);
                 }
@@ -146,7 +147,8 @@ namespace HangOut.Models
                 ObjTemp.Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9);
                 ObjTemp.PaymentStatus = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
                 ObjTemp.PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
-                    ObjTemp.TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
+                ObjTemp.TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
+                    ObjTemp.OrderByIds = SDR.GetString(13);
                 }
             }
             catch (System.Exception e){ e.ToString(); }
@@ -204,8 +206,9 @@ namespace HangOut.Models
                         Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9),
                         PaymentStatus=SDR.IsDBNull(10)?0:SDR.GetInt32(10),
                        PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11),
-                        TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12)
-                    };
+                        TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12),
+                        OrderByIds = SDR.GetString(13)
+                };
                     ListTmp.Add(ObjTmp);
                 }
             }

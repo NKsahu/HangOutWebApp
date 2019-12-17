@@ -449,7 +449,12 @@ namespace HangOut.Controllers
             JObject ParaMeters = JObject.Parse(Obj);
             string QrCode =ParaMeters.GetValue("TID").ToString();
             int CID = int.Parse(ParaMeters.GetValue("CID").ToString());
+            string Type = ParaMeters.GetValue("Type").ToString();
             HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
+            if(TableRowObj.Type!= Type)
+            {
+                TableRowObj = new HG_Tables_or_Sheat();
+            }
             List<HG_Orders> CustOrdrList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             JObject jObject = JObject.FromObject(TableRowObj);
             HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status!="3");
@@ -534,6 +539,16 @@ namespace HangOut.Controllers
             if(ObjOrders.Status=="3"|| ObjOrders.Status == "4" ||ObjOrders.PaymentStatus!=0){// if order is completed or Order then Take New order
                 OID = 0;
             }
+
+
+            //check customer ordering enable
+            HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
+            if (OrgObj.CustomerOrdering==false)
+            {
+                PostResult.Add("Status", 400);
+                PostResult.Add("MSG", "Customer Ordering is UnActive");
+                return PostResult;
+            }
             if (ListCart.Count <= 0)
             {
                 PostResult.Add("Status",400);
@@ -554,7 +569,7 @@ namespace HangOut.Controllers
                 HG_Orders ObjOrder = new HG_Orders()
                 {
                     Create_By = CID,
-                    Create_Date = System.DateTime.Now,
+                    Create_Date =DateTime.Now,
                     CID = CID,
                     Update_By = CID,
                     Status = "1",//Placed
@@ -585,6 +600,9 @@ namespace HangOut.Controllers
                         TickedNo = Ticketno,
                         OrgId = OrgId,
                         ChefSeenBy = 0,
+                        OrderDate = DateTime.Now,
+                        OrdById = CID,
+                        TaxInItm=ObjItem.Tax
                         };
                         if (OrderItem.Save() <= 0)
                         {
