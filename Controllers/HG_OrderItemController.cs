@@ -17,5 +17,11 @@ namespace HangOut.Controllers
 
             return View(listorder);
         }
+
+        public ActionResult Paytm()
+        {
+
+            return View();
+        }
     }
 }

@@ -1,0 +1,45 @@
+﻿@using paytm;
+@{
+    Layout = null;
+
+    String merchantKey = "O&BSeciOz8DyVqnd";
+    Dictionary<string, string> parameters = new Dictionary<string, string>();
+    parameters.Add("MID", "foodDo64649685764159");
+    parameters.Add("CHANNEL_ID", "WAP");
+    parameters.Add("INDUSTRY_TYPE_ID", "Retail");
+    parameters.Add("WEBSITE", "APPSTAGING");
+    parameters.Add("EMAIL", "");
+    parameters.Add("MOBILE_NO", "");
+    parameters.Add("CUST_ID", "0");
+    parameters.Add("ORDER_ID", "gdfgdfgdfgdfgdfg76567567yrtyggty");
+    parameters.Add("TXN_AMOUNT", "2.00");
+    string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
+    bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
+    
+    string paytmURL = "https://securegw-stage.paytm.in/theia/processTransaction?orderid=gdfgdfgdfgdfgdfg76567567yrtyggty";
+    string outputHTML = "<html>";
+    outputHTML += "<head>";
+    outputHTML += "<title> Merchant Check Out Page </title> ";
+    outputHTML += "</head>";
+    outputHTML += "<body>";
+    outputHTML += "<center><h1>Please do not refresh this page...</h1></center>";
+    outputHTML += "<form method='post' action='" + paytmURL + "' name='f1'>";
+    outputHTML += "<table border='1'>";
+    outputHTML += "<tbody>";
+    foreach (string key in parameters.Keys)
+    {
+        outputHTML += "<input type ='hidden' name = '" + key + "' value = '" + parameters[key] + "' > ";
+
+    }
+    outputHTML += " <input type ='hidden' name = 'CHECKSUMHASH' value = '" + checksum + "' > ";
+    outputHTML += "</tbody> ";
+    outputHTML += "</table> ";
+    outputHTML += "<script type = 'text/javascript'>";
+    outputHTML += "document.f1.submit();";
+    outputHTML += "</script>";
+    outputHTML += "</form > ";
+    outputHTML += "</body > ";
+    outputHTML += "</html > ";
+    Response.Write(outputHTML);
+
+}
