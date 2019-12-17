@@ -828,11 +828,23 @@ namespace HangOut.Controllers
                 {
                     Orders = Orders.FindAll(x => x.PaymentStatus > 0);// only seen paid orders
                     OrderToShow = Orders;
+                    foreach (var Order in Orders)
+                    {
+                        var OrderItms = new HG_OrderItem().GetAll(Order.OID);
+                        hG_OrderItems.AddRange(OrderItms);
+                    }
                 }
                 else
                 {
                     Orders = Orders.FindAll(x => x.PaymentStatus ==0);// only seen unpaid orders
                     OrderToShow = Orders;
+
+                    foreach(var Order in Orders)
+                    {
+                        var OrderItms = new HG_OrderItem().GetAll(Order.OID);
+                        hG_OrderItems.AddRange(OrderItms);
+                    }
+                    
                 }
             }
             else// postpaid
@@ -1312,13 +1324,17 @@ namespace HangOut.Controllers
             List<HG_FloorSide_or_RowName> FloorSideRowList = new HG_FloorSide_or_RowName().GetAll(Type, OrgId);
             List<HG_Floor_or_ScreenMaster> FloorScrenList = new HG_Floor_or_ScreenMaster().GetAll(Type, OrgId);
             List<HG_Orders> Orderlist = new HG_Orders().GetListByGetDate(fromdate, DateTime.Now);
+            if (OrgId > 0)
+            {
+                Orderlist = Orderlist.FindAll(x => x.OrgId == OrgId);
+            }
             if (FloorId > 0)
             {
                 list = list.FindAll(x => x.Floor_or_ScreenId == FloorId);
             }
             foreach(var objtable in list)
             {
-                HG_Orders order = Orderlist.Find(x => x.CID == OrderById && x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
+                HG_Orders order = Orderlist.Find(x =>x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
                 JObject jObject = new JObject();
                 jObject = JObject.FromObject(objtable);
                 if (order != null && order.OID > 0)
