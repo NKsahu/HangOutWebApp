@@ -1595,7 +1595,7 @@ namespace HangOut.Controllers
             List<HG_Floor_or_ScreenMaster> floorlist = new HG_Floor_or_ScreenMaster().GetAll(int.Parse(orgonization.OrgTypes), OrgID);
             return JArray.FromObject(floorlist);
         }
-       
+       [HttpPost]
         public string GetCheckSum(string CID,string OID,string Amount)
         {
 
