@@ -767,14 +767,25 @@ namespace HangOut.Controllers
                 {
                     if (order.OID > 0 && obj.Table_or_RowID > 0)
                     {
-                        order.Status = "3";//3 order completed
+                        var OrderItems = new HG_OrderItem().GetAll(order.OID);
+                        
                         order.Update_By = UpdatedBy;
                         order.PayReceivedBy = UpdatedBy;
                         order.PaymentStatus = PaymentType;// update payment status
                         order.Save();
+                        //
+                        var CompletedOrCancelItems = OrderItems.FindAll(x => x.Status == 3 || x.Status == 4);// completed or canceled
+                        if (OrderItems.Count == CompletedOrCancelItems.Count)
+                        {
+                            obj.Status = 1;// free table
+                            obj.Otp = OTPGeneretion.Generate();
+                            obj.save();
 
+                            order.Status = "3";//3 order completed
+                            order.Save();
+                          
+                        }
                         Status = true;
-                        
                     }
                     else
                     {
@@ -787,17 +798,7 @@ namespace HangOut.Controllers
 
             if (Status)
             {
-               
-                if (ObjOrg.PaymentType!=1)
-                {
-                    obj.Status = 1;// free table
-                    obj.Otp = OTPGeneretion.Generate();
-                    obj.save();
-                }
-                else
-                {
-                    
-                }
+              
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
             }
@@ -1098,8 +1099,8 @@ namespace HangOut.Controllers
         public JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy,int OID)
         {
             HG_Orders order = new HG_Orders().GetOne(OID);
-            List<HG_OrderItem> OrderItemList  = new HG_OrderItem().GetAll(OID);
-            OrderItemList = OrderItemList.FindAll(x => x.TickedNo == TickedNo);
+            List<HG_OrderItem> OrderItemListAll  = new HG_OrderItem().GetAll(OID);
+           var OrderItemList = OrderItemListAll.FindAll(x => x.TickedNo == TickedNo);
             HashSet<Int64> OIIDHash = new HashSet<Int64>();
             OIIDHash.Add(0);
             if (CheckedID.Contains(","))
@@ -1146,6 +1147,14 @@ namespace HangOut.Controllers
                 else
                 {//postpaid
                     order.Status = "2";// processing
+                    var completedOrCancelorderItems = OrderItemListAll.FindAll(x => x.Status == 3 || x.Status == 4);//cancel and Completed
+                    if (OrderItemListAll.Count == completedOrCancelorderItems.Count && order.PaymentStatus != 0)
+                    {
+                        order.Status ="3";
+                        TorSObj.Status = 1;
+                        TorSObj.Otp = OTPGeneretion.Generate();
+                        TorSObj.save();
+                    }
                     order.Update_By = UpdateBy;
                 }
                 order.Save();
