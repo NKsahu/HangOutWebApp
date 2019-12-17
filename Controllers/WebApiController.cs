@@ -7,7 +7,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System;
 using System.Net;
-
+using paytm;
 
 namespace HangOut.Controllers
 {
@@ -1596,7 +1596,21 @@ namespace HangOut.Controllers
             return JArray.FromObject(floorlist);
         }
        
+        public string GetCheckSum(string CID,string OID,string Amount)
+        {
 
+            String merchantKey = "O&BSeciOz8DyVqnd";
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("MID", "foodDo64649685764159");
+            parameters.Add("CHANNEL_ID", "WAP");
+            parameters.Add("INDUSTRY_TYPE_ID", "Retail");
+            parameters.Add("WEBSITE", "APPSTAGING");
+            parameters.Add("CUST_ID", CID);
+            parameters.Add("ORDER_ID", OID);
+            parameters.Add("TXN_AMOUNT",Amount);
+            string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
+            return checksum;
+        }
 
 
 
