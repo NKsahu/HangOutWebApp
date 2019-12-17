@@ -1611,10 +1611,13 @@ namespace HangOut.Controllers
             parameters.Add("CHANNEL_ID", "WAP");
             parameters.Add("INDUSTRY_TYPE_ID", "Retail");
             parameters.Add("WEBSITE", "APPSTAGING");
+            parameters.Add("EMAIL", "");
+            parameters.Add("MOBILE_NO", "");
             parameters.Add("CUST_ID", CID);
             parameters.Add("ORDER_ID", OID);
             parameters.Add("TXN_AMOUNT",Amount);
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
+           bool status =  CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
             return checksum;
         }
 
