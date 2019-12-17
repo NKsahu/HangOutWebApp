@@ -638,9 +638,16 @@ namespace HangOut.Controllers
                     var UserInfo = Request.Cookies["UserInfo"];
                     UpdatedBy = int.Parse(UserInfo["UserCode"]);
                 }
-                hG_Orders.Status = "4";
+                hG_Orders.Status = "4";//CANCEL ORDER
                 hG_Orders.Update_By = UpdatedBy;
+                var OrderItem = new HG_OrderItem().GetAll(hG_Orders.OID);
+                foreach(var ObjOitem in OrderItem)
+                {
+                    ObjOitem.Status = 4;//cancel all items
+                    ObjOitem.UpdatedBy = UpdatedBy;
+                    ObjOitem.Save();
 
+                }
                 result.Add("Status", 200);
                 return result;
             }
