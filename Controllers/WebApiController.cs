@@ -232,6 +232,7 @@ namespace HangOut.Controllers
                     ObjItem.Add("ItemQuntity", item.Qty);
                     ObjItem.Add("ItemImage", item.Image);
                     ObjItem.Add("ItemCartValue", Mycart.Count);
+                ObjItem.Add("ItemMode", item.ItemMode);
                     TotalPrice += Mycart.Count * item.Price;
                     jArray.Add(ObjItem);
 
