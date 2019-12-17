@@ -188,6 +188,7 @@ namespace HangOut.Controllers
             else
                 Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, OrgId = OrgId ,TableorSheatOrTaleAwayId=TableSheatTakeWayId});
             double Amt = 0;
+            double Totaltax = 0.00;
             int Count = 0;
             List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId);
             int CurrCount = CurrItemsOfUser.Count;
@@ -201,13 +202,14 @@ namespace HangOut.Controllers
             {
                 HG_Items ObjItem = new HG_Items().GetOne((int)CartObj.ItemId);
                 Amt += CartObj.Count * ObjItem.Price;
+                Totaltax += ObjItem.Tax;
                 Count += CartObj.Count;
             }
             Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
 
             if (Cnt == 0)
-                return Count + "," + Amt + "," + ItemId+","+"0";
-            return Count + "," + Amt + "," + "0"+"," + CurrentItemobj.Count;
+                return Count + "," + Amt + "," + ItemId+","+"0"+","+ Totaltax;
+            return Count + "," + Amt + "," + "0" + "," + CurrentItemobj.Count + "," + Totaltax;
         }
         [HttpPost]
         public JObject GetCart(string Obj)
@@ -745,6 +747,7 @@ namespace HangOut.Controllers
             }
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(obj.OrgId);
             bool Status = false;
+            int ChangeOtpTbl = 0;
             foreach(var order in OrderList)
             {
                 if (ObjOrg.PaymentType == 1)// prepaid case only accept payment 
@@ -763,6 +766,7 @@ namespace HangOut.Controllers
                         obj.save();
                         order.Status = "3";//completed
                         order.Save();
+                        ChangeOtpTbl = 1;
 
                     }
                 }
@@ -783,7 +787,7 @@ namespace HangOut.Controllers
                             obj.Status = 1;// free table
                             obj.Otp = OTPGeneretion.Generate();
                             obj.save();
-
+                            ChangeOtpTbl = 1;
                             order.Status = "3";//3 order completed
                             order.Save();
                           
@@ -804,6 +808,7 @@ namespace HangOut.Controllers
               
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
+                jObject.Add("ChangeOtp", ChangeOtpTbl);
             }
             else
             {

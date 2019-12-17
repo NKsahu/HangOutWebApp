@@ -951,6 +951,18 @@
                 url: "/WebApi/ShowOrderItems?TOrSId=" + CurrentOrder,
                 success: function (data) {
                     var Jobje = JSON.parse(data);
+                    var TableShaetStatus = TablesList.find(x => {
+                        return x.Table_or_RowID == CurrentOrder;
+                    });
+
+                    if (Jobje.Status == 400 && TableShaetStatus.Status!=1) {
+                        $.alert({
+                            title: 'Alert !',
+                            content: 'Already Charged Add More Item To Charge Again',
+                        });
+                        //Jobje.MSG
+                        return;
+                    }
                     if (Jobje.Status == 400) {
                         $.alert({
                             title: 'Alert !',
@@ -1083,7 +1095,10 @@
                             }
                         }
                         $("#Otp" + CurrentOrder).text(Jobj.MSG);
-                        ResetOrder(CurrentOrder, 1);
+                        if (Jobj.ChangeOtp > 0) {
+                            ResetOrder(CurrentOrder, 1);
+                        }
+                        
                         GenInvoice(OldOtp);
                         $("#defaultOpen").click();
                     }

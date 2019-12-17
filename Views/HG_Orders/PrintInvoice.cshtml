@@ -15,8 +15,8 @@
         // int OldOtp = int.Parse(Request.QueryString["OldOtp"]);
         orderlist = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
         orderlist = orderlist.FindAll(x => x.Table_or_SheatId == TorSid && x.PaymentStatus!=0);
-        var orderObj= orderlist
-            OrderItems.AddRange(new HG_OrderItem().GetAll(Order.OID));
+        var orderObj = orderlist.First();
+        OrderItems.AddRange(new HG_OrderItem().GetAll(orderObj.OID));
 
     }
     else
