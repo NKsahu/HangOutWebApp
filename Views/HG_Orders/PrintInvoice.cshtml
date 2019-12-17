@@ -12,13 +12,12 @@
     if (Request.QueryString["TorSid"] != null)
     {
         Int64 TorSid = Int64.Parse(Request.QueryString["TorSid"]);
-        int OldOtp = int.Parse(Request.QueryString["OldOtp"]);
+        // int OldOtp = int.Parse(Request.QueryString["OldOtp"]);
         orderlist = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-        orderlist = orderlist.FindAll(x => x.Table_or_SheatId == TorSid && x.TableOtp == OldOtp);
-        foreach(var Order in orderlist)
-        {
+        orderlist = orderlist.FindAll(x => x.Table_or_SheatId == TorSid && x.PaymentStatus!=0);
+        var orderObj= orderlist
             OrderItems.AddRange(new HG_OrderItem().GetAll(Order.OID));
-        }
+
     }
     else
     {
