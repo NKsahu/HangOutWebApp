@@ -63,12 +63,12 @@ namespace HangOut.Controllers
             JObject objParams = JObject.Parse(Obj);
             JArray JMenuArray = new JArray();
             System.Int64 CID = System.Int64.Parse(objParams.GetValue("CID").ToString());
-            System.Int64 OID = System.Int64.Parse(objParams.GetValue("OID").ToString());
+           // System.Int64 OID = System.Int64.Parse(objParams.GetValue("OID").ToString());
             System.Int32 OrgId = System.Int32.Parse(objParams.GetValue("OrgId").ToString());
              
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(objParams.GetValue("TSTWID").ToString());
-            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OID == OID);
+            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
             if (ObjTorS.Type !="3")// not takeaway
             {
@@ -175,21 +175,21 @@ namespace HangOut.Controllers
             System.Int64 ItemId = System.Convert.ToInt64(ParaMeters["ItemId"].ToString());
             int Cnt = System.Convert.ToInt32(ParaMeters["Cnt"].ToString());
             int OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
-            Int64 OID = System.Convert.ToInt64(ParaMeters["OID"]);
+           // Int64 OID = System.Convert.ToInt64(ParaMeters["OID"]);
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
             Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
             if (ObjCart != null)
             {
                 ObjCart.Count = Cnt;
-                Cart.List.RemoveAll(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId && x.OID==OID);
+                Cart.List.RemoveAll(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
                 if (ObjCart.Count != 0)
                     Cart.List.Add(ObjCart);
             }
             else
-                Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, OrgId = OrgId ,TableorSheatOrTaleAwayId=TableSheatTakeWayId,OID=OID});
+                Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, OrgId = OrgId ,TableorSheatOrTaleAwayId=TableSheatTakeWayId});
             double Amt = 0;
             int Count = 0;
-            List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId && x.OID==OID);
+            List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId);
             int CurrCount = CurrItemsOfUser.Count;
             if (CurrCount == 1 || CurrCount == 0)
             {
@@ -203,7 +203,7 @@ namespace HangOut.Controllers
                 Amt += CartObj.Count * ObjItem.Price;
                 Count += CartObj.Count;
             }
-            Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OID==OID);
+            Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
 
             if (Cnt == 0)
                 return Count + "," + Amt + "," + ItemId+","+"0";
@@ -530,17 +530,25 @@ namespace HangOut.Controllers
             Int64 CID = Int64.Parse(Params["CID"].ToString());
             int OrgId = int.Parse(Params["OrgID"].ToString());
             Int64 TableorSheatId=Int64.Parse(Params["TORSID"].ToString());
-            Int64 OID =Int64.Parse(Params["OID"].ToString());
+          //  Int64 OID =Int64.Parse(Params["OID"].ToString());
             int Status =Params["Status"]!=null?int.Parse(Params["Status"].ToString()):1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
+            List<HG_Orders> ListOfOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            ListOfOrder = ListOfOrder.FindAll(x => x.OrgId == OrgId);
+            HG_Orders ObjOrders = ListOfOrder.Find(x => x.Table_or_SheatId == TableorSheatId && x.TableOtp == ObjTorS.Otp);
+           
             JObject PostResult = new JObject();
-            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId &&x.OID==OID);
-            HG_Orders ObjOrders = new HG_Orders().GetOne(OID);
-            if(ObjOrders.Status=="3"|| ObjOrders.Status == "4" ||ObjOrders.PaymentStatus!=0){// if order is completed or Order then Take New order
+            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId);
+            // HG_Orders ObjOrders = new HG_Orders().GetOne(OID);
+            Int64 OID = 0;
+            if (ObjOrders==null||ObjOrders.Status=="3"|| ObjOrders.Status == "4" ||ObjOrders.PaymentStatus!=0){// if order is completed or Order then Take New order
+
                 OID = 0;
             }
-
-
+            else
+            {
+                OID = ObjOrders.OID;
+            }
             //check customer ordering enable
             HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
             if (OrgObj.CustomerOrdering==false)
@@ -555,12 +563,13 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG","Add Atleast one Item");
                 return PostResult;
             }
-            System.Int64 NewOID = 0;
+            Int64 NewOID = 0;
             if (OID > 0)
             {
                 NewOID = OID;
                 ObjOrders.Status ="1";// Placed
                 ObjOrders.Update_By = CID;
+                ObjOrders.OrderByIds = ObjOrders.OrderByIds + CID.ToString() + ",";
                 ObjOrders.Update_Date = DateTime.Now;
                 ObjOrders.Save();
             }
@@ -576,7 +585,8 @@ namespace HangOut.Controllers
                     OrgId = OrgId,
                     Table_or_SheatId = TableorSheatId,
                     PaymentStatus = 0,// unpaid
-                    TableOtp = ObjTorS.Otp
+                    TableOtp = ObjTorS.Otp,
+                    OrderByIds=CID.ToString()+","
 
                 };
                 NewOID= ObjOrder.Save();
@@ -622,7 +632,7 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG", "Unable To Place Order Try Again.");
                 return PostResult;
             }
-            Cart.List.RemoveAll(x => x.CID == CID && x.OrgId==OrgId);
+            Cart.List.RemoveAll(x => x.CID == CID && x.OrgId==OrgId &&x.TableorSheatOrTaleAwayId==TableorSheatId);
             return PostResult;
         }
 
