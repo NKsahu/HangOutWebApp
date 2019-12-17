@@ -957,22 +957,22 @@ namespace HangOut.Controllers
                     HG_Orders order = new HG_Orders().GetOne(ObjItem.OID);
                     Orderlist.Add(order);
                 }
-                else
-                {
+                //else
+                //{
 
-                    OrderItemList = OrderItemList.FindAll(x => x.Status==Status &&x.ChefSeenBy==ChefId);
-                    OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
-                    // HashSet<int> HashOID = new HashSet<int>(OrderItemList.Select(x => x.TickedNo).ToArray());
-                    var GroupByTicketNo = OrderItemList.GroupBy(x => x.TickedNo);
-                    foreach(var Ticket in GroupByTicketNo)
-                    {
-                        var Firstorder = Ticket.First();
-                        Orderlist.Add(new HG_Orders().GetOne(Firstorder.OID));
-                    }
-                  //  Orderlist = new HG_Orders().GetAll(OrgId);
-                    //Orderlist = Orderlist.FindAll(x => HashOID.Contains(x.OID));
-                }
-                Orderlist = Orderlist.FindAll(x => x.Create_Date.Date == DateTime.Now.Date).ToList();
+                //    OrderItemList = OrderItemList.FindAll(x => x.Status==Status &&x.ChefSeenBy==ChefId);
+                //    OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
+                //    // HashSet<int> HashOID = new HashSet<int>(OrderItemList.Select(x => x.TickedNo).ToArray());
+                //    var GroupByTicketNo = OrderItemList.GroupBy(x => x.TickedNo);
+                //    foreach(var Ticket in GroupByTicketNo)
+                //    {
+                //        var Firstorder = Ticket.First();
+                //        Orderlist.Add(new HG_Orders().GetOne(Firstorder.OID));
+                //    }
+                //  //  Orderlist = new HG_Orders().GetAll(OrgId);
+                //    //Orderlist = Orderlist.FindAll(x => HashOID.Contains(x.OID));
+                //}
+               // Orderlist = Orderlist.FindAll(x => x.Create_Date.Date == DateTime.Now.Date).ToList();
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             int OrgType =int.Parse(ObjOrg.OrgTypes);
                 if (ObjOrg.PaymentType == 1)//if prepaid than visible after payment completed
