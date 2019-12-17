@@ -986,33 +986,25 @@ namespace HangOut.Controllers
                 int TorSIndex = 0;
               foreach(var order in Orderlist)
                 {
-                    string FloorOrScreenName = "";
+                    string Seating = "";
                     HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
-                    HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
-                    if (hG_FloorSide_Or_RowName == null)
-                    {
-                        hG_FloorSide_Or_RowName = new HG_FloorSide_or_RowName();
-                        hG_FloorSide_Or_RowName.FloorSide_or_RowName = " ";
-                    }
-                    else
+                    if (hG_Tables_Or_Sheat != null)
                     {
                         HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
-                        if (hG_Floor_Or_ScreenMaster == null)
+                        if (hG_Floor_Or_ScreenMaster != null)
                         {
-                            hG_Floor_Or_ScreenMaster = new HG_Floor_or_ScreenMaster();
-                            hG_Floor_Or_ScreenMaster.Name = "";
+                            Seating = hG_Floor_Or_ScreenMaster.Name;
                         }
-                        else
+                        HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
+                        if (hG_FloorSide_Or_RowName != null)
                         {
-                            FloorOrScreenName = hG_Floor_Or_ScreenMaster.Name;
+                            Seating += " " + hG_FloorSide_Or_RowName.FloorSide_or_RowName;
                         }
-
+                        Seating += " " + hG_Tables_Or_Sheat.Table_or_SheetName;
                     }
                     JObject TableScreen = new JObject();
-                    
                     var hG_OrderItems = OrderItemList.FindAll(x => x.OID == order.OID);
                     JArray ItemsArray = new JArray();
-                    
                     int ticketno = 0;
                     int ItemIndex = 0;
                     foreach (var OrderItem in hG_OrderItems)
@@ -1028,7 +1020,7 @@ namespace HangOut.Controllers
                         ItemsArray.Add(itemobj);
                         ticketno = OrderItem.TickedNo;
                     }
-                    string name = FloorOrScreenName + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " " + "Ticket no. : " + ticketno;
+                    string name = Seating + "Ticket no. : " + ticketno;
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     TableScreen.Add("TicketNo", ticketno);
@@ -1060,6 +1052,7 @@ namespace HangOut.Controllers
             return tableorSheatList;
 
         }
+        // chef past completed and cancel orders
         public JArray ChefComCaclOrd(int OrgId, int ChefId, int Status)
         {
             JArray tableorSheatList = new JArray();
@@ -1102,11 +1095,24 @@ namespace HangOut.Controllers
                         OrdId = OrderItem.OID;
                     }
                     HG_Orders order = new HG_Orders().GetOne(OrdId);
+                    string Seating = "";
                     HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
-                    HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
-                    HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
+                    if (hG_Tables_Or_Sheat != null)
+                    {
+                        HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
+                        if (hG_Floor_Or_ScreenMaster != null)
+                        {
+                            Seating = hG_Floor_Or_ScreenMaster.Name;
+                        }
+                        HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
+                        if (hG_FloorSide_Or_RowName != null)
+                        {
+                            Seating += " " + hG_FloorSide_Or_RowName.FloorSide_or_RowName;
+                        }
+                        Seating += " " + hG_Tables_Or_Sheat.Table_or_SheetName;
+                    }
                     JObject TableScreen = new JObject();
-                    string name = hG_Floor_Or_ScreenMaster.Name + "-" + hG_FloorSide_Or_RowName.FloorSide_or_RowName + "-" + hG_Tables_Or_Sheat.Table_or_SheetName + " " + "Ticket no. : " + ticketno;
+                    string name =Seating+ "Ticket no. : " + ticketno;
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     TableScreen.Add("TicketNo", ticketno);
