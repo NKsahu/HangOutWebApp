@@ -186,7 +186,7 @@ namespace HangOut.Controllers
             System.Int64 ItemId = System.Convert.ToInt64(ParaMeters["ItemId"].ToString());
             int Cnt = System.Convert.ToInt32(ParaMeters["Cnt"].ToString());
             int OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
-           // Int64 OID = System.Convert.ToInt64(ParaMeters["OID"]);
+            Int64 OID = System.Convert.ToInt64(ParaMeters["OID"]);
             System.Int64 TableSheatTakeWayId = System.Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
             Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
             if (ObjCart != null)
@@ -203,7 +203,7 @@ namespace HangOut.Controllers
             int Count = 0;
             List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId);
             int CurrCount = CurrItemsOfUser.Count;
-            if (CurrCount == 1 || CurrCount == 0)
+            if ((CurrCount == 1 || CurrCount == 0)&& OID==0)
             {
                 HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
                 hG_Tables_Or_Sheat.Status = CurrCount==0?1:3;// Free:Progress(Occupied)
