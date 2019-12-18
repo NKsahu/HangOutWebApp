@@ -19,7 +19,7 @@ namespace HangOut.Models
         public string Type { get; set; } // "1" means Table "2" Sheat //3 Take Away
         public  DateTime CreateDate { get; set; }
         public int CreateBy { get; set; }
-        public int Status { get; set; }// {"1":free,"2":"BOOKED",3:"PROGRESS"}
+        public int Status { get; set; }// {"1":free,"2":"BOOKED call for bill",3:"PROGRESS"}
         public int Otp { get; set; }
         public int OMID { get; set; } //order menu id
         public string QrCode { get; set; } //QrCode

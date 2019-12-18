@@ -255,6 +255,7 @@
             var cookei = Request.Cookies["UserInfo"];
             var UserCode = cookei["UserCode"];
             var OrgId =int.Parse(cookei["OrgId"]);
+            var Seating = "";
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgID: OrgId);
             string FloorOrScren = " ";
             int OrgType = 0;
@@ -262,11 +263,13 @@
             {
                 FloorOrScren = "Screen";
                 OrgType = 2;//theater
+                Seating = "SEATS";
             }
             else
             {
                 FloorOrScren = "Floor";
                 OrgType = 1;// restruant or Admins
+                Seating = "Tables";
             }
             List<SelectListItem> list = new List<SelectListItem>();
             SelectListItem sl1 = new SelectListItem { Text = "SEAT VIEW", Value = "1" };
@@ -310,10 +313,10 @@
         <div class="col-sm-12 col-md-3 sp-grid-items-scroll-with-noticebar">
             <p class="card" onclick="FilterOrder(0);SelectedColor('card',this)"><span class="Pspan" id="All">All</span></p>
             <p class="card" onclick="FilterOrder(3);SelectedColor('card',this)"><span class="Pspan" id="TakeAway">Take Away</span></p>
-            <p class="card" onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">Tables </span></p>
+            <p class="card" onclick="FilterOrder(1);SelectedColor('card',this)"><span class="Pspan" id="Tables">@Seating</span></p>
             <p class="card" onclick="FreeOrOccupied('1');SelectedColor('card',this)"><span class="Pspan" id="Free">UnOccupied </span></p>
-            <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
-            <p class="card" onclick="FilterOrder(4);SelectedColor('card',this)"><span class="Pspan" id="Unpaid">Unpaid</span></p>
+            <p class="card" onclick="FreeOrOccupied('3');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
+            <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Unpaid">Call For Bill</span></p>
 
         </div>
         <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
@@ -754,12 +757,19 @@
                 console.log("FreeList" + FreeList.length);
 
             }
-            else if (Status == '2') {
+            else if (Status == '3') {
                 var OccupiedList = TablesList.filter(function (x) {
                     return x.Status == 3;
                 });
                 ShowOrders(OccupiedList);
                 console.log("OccupiedList" + OccupiedList.length);
+            }
+            else if (Status == '2') {
+                var OccupiedList = TablesList.filter(function (x) {
+                    return x.Status == 2;
+                });
+                ShowOrders(OccupiedList);
+                console.log("Call For Bill" + OccupiedList.length);
             }
         }
         function GetItemList(TableOrMWid) {
