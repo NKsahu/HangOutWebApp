@@ -593,7 +593,10 @@
 
                     }
                     else {
-                        ResetOrder(CurrentOrder, 1); //free
+                        if (ChargeAmt <=0) {
+                            ResetOrder(CurrentOrder, 1); //free
+                        }
+                        
                         $("#tr" + ItemId).remove();
                     }
                     var finalChargeToShow = ChargeAmt + FinlAmt;
