@@ -42,8 +42,6 @@
 
                 </div>
             }
-
-
             <div class="col-md-2">
                 @Html.Label("Seat Number")
                 @Html.EditorFor(model => model.Table_or_SheetName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
@@ -93,8 +91,18 @@
     <script>
         $(document).ready(function () {
             Cal();
+            QrCodeMode();
             function Cal() {
                 $("#Type").parent('div').hide();
+            }
+            function QrCodeMode() {
+                //Table_or_RowID
+                var TableCode = $("#Table_or_RowID").val();
+                var QrCode = $("#QrCode").val();
+                if (TableCode != null && TableCode != "0" && QrCode != "" && QrCode != " " && QrCode != "0") {
+                    $("#QrCode").attr('readonly', 'readonly');
+                }
+
             }
 
         });

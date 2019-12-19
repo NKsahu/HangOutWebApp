@@ -90,69 +90,66 @@
     <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
 </div>
 <div style="border:2px solid black " id="section-to-print">
-    <div style="border:1px dotted black;" >
-        <div>
-            <h4 style="text-align:center">@InvoiceHeading</h4>
-            <h4 style="text-align:center">@OrgName</h4>
-            <h5 style="text-align:center">@AddressLine1</h5>
+    <div style="border:0.5px dotted black;" >
+        <ul style="list-style-type:none">
+            <li><p>@InvoiceHeading</p></li>
+            <li> <p>@OrgName</p></li>
+            <li>  <p style="text-align:center">@AddressLine1</p></li>
             @if (AddressLine2 != null && AddressLine2.Replace(" ", "") != "")
             {
-                <h6 style="text-align:center">@AddressLine2</h6>
+                <li><p style="text-align:center">@AddressLine2</p></li>
             }
             @if (AddressLine3 != null && AddressLine3.Replace(" ", "") != "")
             {
-                <h6 style="text-align:center">@AddressLine3</h6>
+                <li> <p style="text-align:center">@AddressLine3</p> </li>
             }
-            <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
+            <li><p style="text-align:center">Phone @Phoneno   @GstNo</p> </li>
             @if (Licence2 != null && Licence2.Replace(" ", "") != "")
             {
-                <h6 style="text-align:center">@Licence2      @Licence3</h6>
+                <li> <p style="text-align:center">@Licence2      @Licence3</p></li>
             }
-
-        </div>
-        <div style="text-align:center">
-            <h6><b>ORDER No:</b> @OrderNo   <b>Ticket No:</b> @TicketNos</h6>
-            <h6><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymentMode </h6>
-        </div>
-        <table id="InvoiceItems"  class="table col-sm-12">
-            <thead>
-                <tr>
-                    <th>Item </th>
-                    <th>QTY</th>
-                    <th>AMT </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var items in OrderItems)
-                {
-                    AmountTotal += items.Price * items.Count;
-                    Qty += items.Count;
-                    // Qty += items.Qty;
-                    HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
+                <li><p><b>ORDER No:</b> @OrderNo   <b>Ticket No:</b> @TicketNos</p></li>
+                <li><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymentMode</li>
+            <ul/>
+            <table id="InvoiceItems" class="table col-sm-12">
+                <thead>
                     <tr>
-                        <td>@hG_Items.Items</td>
-                        <td>@items.Count</td>
-                        <td>@items.Price</td>
+                        <th>Item </th>
+                        <th>QTY</th>
+                        <th>AMT </th>
                     </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td>TOTAL</td>
-                    <td>@Qty.ToString() </td>
-                    <td>@AmountTotal.ToString()</td>
-                </tr>
-            </tfoot>
-        </table>
-        <div>
-            <h6>NOTE: </h6>
+                </thead>
+                <tbody>
+                    @foreach (var items in OrderItems)
+                    {
+                        AmountTotal += items.Price * items.Count;
+                        Qty += items.Count;
+                        // Qty += items.Qty;
+                        HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
+                        <tr>
+                            <td>@hG_Items.Items</td>
+                            <td>@items.Count</td>
+                            <td>@items.Price</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>TOTAL</td>
+                        <td>@Qty.ToString() </td>
+                        <td>@AmountTotal.ToString()</td>
+                    </tr>
+                </tfoot>
+            </table>
             <div>
-                .........................................................................<br />
-                .........................................................................
+                <h6>NOTE: </h6>
+                <div>
+                    .........................................................................<br />
+                    .........................................................................
+                </div>
+                <h6>@PoweredBy</h6>
             </div>
-            <h6>@PoweredBy</h6>
-        </div>
-    </div>
+</div>
 </div>
 
 <script>
@@ -254,7 +251,7 @@
         printWindow.close();
     }
     function PrintElem() {
-        var Section ='<style>{ #section-to-print {width:100%; } table{font-size: 14px;font-family:Calibri}</style>';
+        var Section ='<style>{ #section-to-print {width:100%; } table{font-size: 14px;font-family:Calibri}</pstyle>';
         Section+=  $('#section-to-print').html();
         console.log("Section  " + Section);
         Popup(Section);
