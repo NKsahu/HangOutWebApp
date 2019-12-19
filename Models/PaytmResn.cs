@@ -41,19 +41,19 @@ namespace HangOut.Models
                 if (this.id == 0)
                 {
                     cmd = new SqlCommand("insert into PaytmTxn values(@OID,@OIDkey,@TxnId,@TxnSts,@TxtDate,@CID,@PaytmResp); SELECT SCOPE_IDENTITY();", con.Con);
-                    cmd.Parameters.AddWithValue("@OID", this.OID);
-                    cmd.Parameters.AddWithValue("@TxnId", this.TxnId);
-                    cmd.Parameters.AddWithValue("@TxnSts", this.TxnSts);
-                    cmd.Parameters.AddWithValue("@TxtDate", this.TxtDate);
-                    cmd.Parameters.AddWithValue("@CID", this.CID);
-                    cmd.Parameters.AddWithValue("@PaytmResp", this.PaytmResp);
                 }
                 else
                 {
-                    cmd = new SqlCommand("update PaytmTxn set OIDkey=@OIDkey where ID=@ID ", con.Con);
+                    cmd = new SqlCommand("update PaytmTxn set TxnId=@TxnId,TxnSts=@TxnSts,TxtDate=@TxtDate,CID=@CID,PaytmResp=@PaytmResp, OIDkey=@OIDkey where ID=@ID ", con.Con);
                     cmd.Parameters.AddWithValue("@ID", this.id);
                 }
                 cmd.Parameters.AddWithValue("@OIDkey", this.OIDkey);
+                cmd.Parameters.AddWithValue("@OID", this.OID);
+                cmd.Parameters.AddWithValue("@TxnId", this.TxnId);
+                cmd.Parameters.AddWithValue("@TxnSts", this.TxnSts);
+                cmd.Parameters.AddWithValue("@TxtDate", this.TxtDate);
+                cmd.Parameters.AddWithValue("@CID", this.CID);
+                cmd.Parameters.AddWithValue("@PaytmResp", this.PaytmResp);
                 if (this.id == 0)
                 {
                     this.id = Convert.ToInt32(cmd.ExecuteScalar());
@@ -81,7 +81,7 @@ namespace HangOut.Models
             List<PaytmResn> listtemp = new List<PaytmResn>();
             DBCon con = new DBCon();
             SqlCommand cmd = new SqlCommand();
-            string query = "select * from JoinFoodDo";
+            string query = "select * from PaytmTxn";
             try
             {
                 cmd = new SqlCommand(query, con.Con);
@@ -120,7 +120,7 @@ namespace HangOut.Models
             PaytmResn Temp = new PaytmResn();
             DBCon con = new DBCon();
             SqlCommand cmd = new SqlCommand();
-            string query = "select * from JoinFoodDo where ID=@ID";
+            string query = "select * from PaytmTxn where ID=@ID";
             try
             {
                 cmd = new SqlCommand(query, con.Con);
