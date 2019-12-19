@@ -1604,25 +1604,25 @@ namespace HangOut.Controllers
             List<HG_Floor_or_ScreenMaster> floorlist = new HG_Floor_or_ScreenMaster().GetAll(int.Parse(orgonization.OrgTypes), OrgID);
             return JArray.FromObject(floorlist);
         }
-       [HttpPost]
-        public string GetCheckSum(string CID,string OID,string Amount)
+        [HttpPost]
+        public string GetCheckSum(string CID, string OID, string Amount)
         {
 
-            String merchantKey = "O&BSeciOz8DyVqnd";
+            String merchantKey = "yB4HRdQ0vcb9XBrI";
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("MID", "foodDo62634269971979");
             parameters.Add("ORDER_ID", OID);
             parameters.Add("CUST_ID", CID);
-            parameters.Add("INDUSTRY_TYPE_ID", "Retail");
+            parameters.Add("INDUSTRY_TYPE_ID", "Retail105");
             parameters.Add("CHANNEL_ID", "WAP");
             parameters.Add("TXN_AMOUNT", Amount);
-            parameters.Add("WEBSITE", "APPSTAGING");
-        
+            parameters.Add("WEBSITE", "DEFAULT");
+
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
-            bool status =  CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
-           // string result = Paytm(OID);
+            bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
+            // string result = Paytm(OID);
             return checksum;
-            
+
         }
         public string Paytm(string OID)
         {
