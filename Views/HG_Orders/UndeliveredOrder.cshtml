@@ -1,0 +1,109 @@
+﻿@using HangOut.Models;
+@using HangOut.Models.DynamicList;
+@{
+    Layout = null;
+}
+@{
+    var UserInfo = Request.Cookies["UserInfo"];
+    var OrgId = int.Parse(UserInfo["OrgId"]);
+    double TotalAmtsum = 0.00;
+    HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+    int OrgTypeint = 0;
+    if (ObjOrg != null && ObjOrg.OrgTypes == "1")
+    {
+        OrgTypeint = 1;
+    }
+    else if(ObjOrg.OrgTypes=="2")
+    {
+        OrgTypeint = 2;
+    }
+    List<HG_Tables_or_Sheat> SeatingList = new List<HG_Tables_or_Sheat>();
+    List<HG_Floor_or_ScreenMaster> ListFrlScr = new List<HG_Floor_or_ScreenMaster>();
+    List<HG_FloorSide_or_RowName> ListFsideOrRowName = new List<HG_FloorSide_or_RowName>();
+    List<HG_Orders> ListOfTodayOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+    ListOfTodayOrder = ListOfTodayOrder.FindAll(x => x.Status == "3");//completed order
+    if (ListOfTodayOrder.Count > 0)
+    {
+        SeatingList = new HG_Tables_or_Sheat().GetAll(OrgTypeint);
+        ListFrlScr = new HG_Floor_or_ScreenMaster().GetAll(OrgTypeint);
+        ListFsideOrRowName = new HG_FloorSide_or_RowName().GetAll(OrgTypeint);
+    }
+}
+<div class="card">
+    <div class="card-header">Order Details </div>
+    <div class="card-body">
+        <table class="table table-hover table-bordered text-center" id="TBLID">
+            <thead>
+                <tr>
+                    <th> DateTime </th>
+                    <th> Order No </th>
+                    <th>PayMent Status</th>
+                    <th> AMT (RS)</th>
+                    <th>Sheating</th>
+                    <th>Details</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ObjOrder in ListOfTodayOrder)
+                {
+                    string PaymentStatus = "";
+                    double TotalAmt = 0.00;
+                    string Status = "";
+                    string Seating = "";
+                    HG_Tables_or_Sheat ObjTableSheat = SeatingList.Find(x => x.Table_or_RowID == ObjOrder.Table_or_SheatId);
+                    if (ObjTableSheat != null)
+                    {
+                        var ScrOrFlrobj = ListFrlScr.Find(x => x.Floor_or_ScreenID == ObjTableSheat.Floor_or_ScreenId);
+                        if (ScrOrFlrobj != null)
+                        {
+                            Seating += ScrOrFlrobj.Name;
+                            var FlrSideOrRowNo = ListFsideOrRowName.Find(x => x.ID == ObjTableSheat.FloorSide_or_RowNoID);
+                            if (FlrSideOrRowNo != null)
+                            {
+                                Seating += " " + FlrSideOrRowNo.FloorSide_or_RowName;
+                            }
+                        }
+                        Seating += " " + ObjTableSheat.Table_or_SheetName;
+                    }
+                    var CurntOrderItms = new HG_OrderItem().GetAll(ObjOrder.OID);
+                    CurntOrderItms = CurntOrderItms.FindAll(x => x.Status != 4);
+                    //  HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(ObjOrder.Table_or_SheatId);
+                    for (int i = 0; i < CurntOrderItms.Count; i++)
+                    {
+                        TotalAmt += (CurntOrderItms[i].Count * CurntOrderItms[i].Price);
+                    }
+                    PaymentStatus = OrgType.PaymentMode(ObjOrder.PaymentStatus);
+                    //TotalAmtsum += TotalAmt;
+                    // order status
+                    TotalAmtsum += TotalAmt;
+                    <tr>
+                        
+                        <td>@ObjOrder.Create_Date.ToString("dd/MM hh:mm")</td>
+                        <td>@ObjOrder.OID</td>
+                        <td>@PaymentStatus</td>
+                        <td>@TotalAmt.ToString("0.00")</td>
+                        <td>@Seating</td>
+                        <td>
+                            <button class="btn btn-sm btn-success" onclick="Details('@ObjOrder.OID');"><i class="fas fa-eye"></i></button>
+                        </td>
+                      
+                    </tr>
+
+                }
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td>@TotalAmtsum.ToString("0.00")</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+

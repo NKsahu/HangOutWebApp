@@ -396,6 +396,7 @@
     <Content Include="Views\HG_Items\CreateEditAddOn.cshtml" />
     <Content Include="Views\HG_Orders\OrderStatus.cshtml" />
     <Content Include="Views\HG_OrderItem\Paytm.cshtml" />
+    <Content Include="Views\HG_Orders\UndeliveredOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

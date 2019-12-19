@@ -45,6 +45,11 @@ namespace HangOut.Controllers
         }
         public ActionResult OrderStatus()
         {
+            return View();
+        }
+        public ActionResult UndeliveredOrder()
+        {
+
 
             return View();
         }
