@@ -22,6 +22,7 @@
     List<HG_FloorSide_or_RowName> ListFsideOrRowName = new List<HG_FloorSide_or_RowName>();
     List<HG_Orders> ListOfTodayOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
     ListOfTodayOrder = ListOfTodayOrder.FindAll(x => x.Status == "3");//completed order
+    ListOfTodayOrder = ListOfTodayOrder.FindAll(x => x.OrderApprovlSts == 0);
     if (ListOfTodayOrder.Count > 0)
     {
         SeatingList = new HG_Tables_or_Sheat().GetAll(OrgTypeint);
