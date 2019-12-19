@@ -603,7 +603,8 @@ namespace HangOut.Controllers
                     Table_or_SheatId = TableorSheatId,
                     PaymentStatus = 0,// unpaid
                     TableOtp = ObjTorS.Otp,
-                    OrderByIds=CID.ToString()+","
+                    OrderByIds=CID.ToString()+",",
+                    OrderApprovlSts=0
 
                 };
                 NewOID= ObjOrder.Save();
@@ -1614,7 +1615,7 @@ namespace HangOut.Controllers
             parameters.Add("INDUSTRY_TYPE_ID", "Retail");
             parameters.Add("CHANNEL_ID", "WAP");
             parameters.Add("TXN_AMOUNT", Amount);
-            parameters.Add("WEBSITE", "WEBSTAGING");
+            parameters.Add("WEBSITE", "APPSTAGING");
             parameters.Add("CALLBACK_URL", "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID='"+OID +"'");
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             bool status =  CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
