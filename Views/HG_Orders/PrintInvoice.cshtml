@@ -1,10 +1,10 @@
 ﻿@using HangOut.Models;
+@using HangOut.Models.DynamicList;
 @{    Layout = null;}
 @{
 
     int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
-    //PrintInvoice TorSid
-
+    string PaymentMode = "";
     Int64 OID = Int64.Parse(Request.QueryString["OID"]);
     List<HG_Orders> orderlist = new List<HG_Orders>();
     List<HG_OrderItem> OrderItems = new List<HG_OrderItem>();
@@ -18,18 +18,18 @@
         var orderObj = orderlist.First();
         orderlist = orderlist.FindAll(X => X.OID == orderObj.OID);
         OrderItems.AddRange(new HG_OrderItem().GetAll(orderObj.OID));
-
+        OID = orderObj.OID;
+        PaymentMode = OrgType.PaymentMode(orderObj.PaymentStatus);
     }
     else
     {
 
         HG_Orders order = new HG_Orders().GetOne(OID);
         orderlist.Add(order);
+        PaymentMode = OrgType.PaymentMode(order.PaymentStatus);
         OrderItems.AddRange(new HG_OrderItem().GetAll(order.OID));
         OrderDate = order.Create_Date;
     }
-
-
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
@@ -40,11 +40,11 @@
     string GstNo = "";
     string Licence2 = "..................";
     string Licence3 = "..................";
-    HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
-    string OrderNo = string.Join(",", OrdesHash);
+  //  HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
+    string OrderNo = OID.ToString();
     double AmountTotal = 0.00;
     int Qty = 0;
-    string PaymnetMode = "CASH/ONLINE";
+
     string PoweredBy = "Powered By FoodDo";
     string TicketNos = "";
     List<HG_Items> ItemList = new HG_Items().GetAll();
@@ -102,7 +102,7 @@
         </div>
         <div style="text-align:center">
             <h6><b>ORDER No:</b> @OrderNo   <b>Ticket No:</b> @TicketNos</h6>
-            <h6><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymnetMode </h6>
+            <h6><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymentMode </h6>
         </div>
         <table id="InvoiceItems"  class="table col-sm-12">
             <thead>
