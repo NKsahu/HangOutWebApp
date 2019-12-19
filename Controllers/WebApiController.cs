@@ -1177,12 +1177,16 @@ namespace HangOut.Controllers
                 HG_Tables_or_Sheat TorSObj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
                 if (ObjOrg.PaymentType==1)// prepaid
                 {
-                    order.Status ="3";// completed
-                    order.Update_By = UpdateBy;
-                    // free table 
-                    TorSObj.Status = 1;
-                    TorSObj.Otp = OTPGeneretion.Generate();
-                    TorSObj.save();
+                    var completedOrCancelorderItems = OrderItemListAll.FindAll(x => x.Status == 3 || x.Status == 4);//cancel and Completed
+                    if (OrderItemListAll.Count == completedOrCancelorderItems.Count)
+                    {
+                        order.Status = "3";
+                        TorSObj.Status = 1;
+                        TorSObj.Otp = OTPGeneretion.Generate();
+                        TorSObj.save();// free table 
+                        order.Update_By = UpdateBy;
+                    }
+                  
                 }
                 else
                 {//postpaid
