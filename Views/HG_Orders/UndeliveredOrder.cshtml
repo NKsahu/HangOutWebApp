@@ -30,7 +30,10 @@
     }
 }
 <div class="card">
-    <div class="card-header">Order Details </div>
+    <div class="card-header">
+        <h1 style="text-align:center"><b>Undelivered Orders</b> </h1>
+        <hr />
+    </div>
     <div class="card-body">
         <table class="table table-hover table-bordered text-center" id="TBLID">
             <thead>
@@ -41,7 +44,6 @@
                     <th> AMT (RS)</th>
                     <th>Sheating</th>
                     <th>Details</th>
-                    
                 </tr>
             </thead>
             <tbody>
@@ -49,7 +51,6 @@
                 {
                     string PaymentStatus = "";
                     double TotalAmt = 0.00;
-                    string Status = "";
                     string Seating = "";
                     HG_Tables_or_Sheat ObjTableSheat = SeatingList.Find(x => x.Table_or_RowID == ObjOrder.Table_or_SheatId);
                     if (ObjTableSheat != null)
