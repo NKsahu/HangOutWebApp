@@ -1175,6 +1175,7 @@ namespace HangOut.Controllers
             {
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
                 HG_Tables_or_Sheat TorSObj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
+                 OrderItemListAll = new HG_OrderItem().GetAll(OID);
                 if (ObjOrg.PaymentType==1)// prepaid
                 {
                     var completedOrCancelorderItems = OrderItemListAll.FindAll(x => x.Status == 3 || x.Status == 4);//cancel and Completed
