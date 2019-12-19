@@ -5,12 +5,17 @@ using System.Web;
 
 namespace HangOut.Models
 {
+    /*
+     this table is used for make order from customer app admin panel and captain end, and generate single order number globally
+     order number is auto increament 
+     */
+   
     public class HG_Orders
     {
         public Int64 OID { get; set; }
         public Int64 CID { get; set; }
         public string Status { get; set; } //Order-Placed=1,Order-running:2 Order-Completed=3,Order-Cancelled=4,
-        public Int64 Create_By { get; set; }
+        public Int64 Create_By { get; set; } // OrderApprovlSts is yes then approved by id place here
         public DateTime Create_Date { get; set; }
         public Int64 Update_By { get; set; }
         public DateTime Update_Date { get; set; }
@@ -21,6 +26,7 @@ namespace HangOut.Models
         public int PayReceivedBy { get; set; }
         public int TableOtp { get; set; }
         public string OrderByIds { get; set; }//  Order by IDS comma seprated
+        public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken OrderItems  or Not
         public HG_Orders()
         {
             this.OID = 0;
@@ -40,13 +46,12 @@ namespace HangOut.Models
             try
             {
                 if (this.OID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId,Table_or_SheatId,PaymentStatus,PayReceivedBy,TableOtp,OrderByIds) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp,@OrderByIds);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId,Table_or_SheatId,PaymentStatus,PayReceivedBy,TableOtp,OrderByIds,OrdAprovalSts) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp,@OrderByIds,@OrdAprovalSts);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp,OrderByIds=@OrderByIds where OID=@OID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp,OrderByIds=@OrderByIds,OrdAprovalSts=@OrdAprovalSts where OID=@OID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
                 }
-
                 cmd.Parameters.AddWithValue("@CID", this.CID);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@Create_By", this.Create_By);
@@ -60,6 +65,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@PayReceivedBy", this.PayReceivedBy);
                 cmd.Parameters.AddWithValue("@TableOtp", this.TableOtp);
                 cmd.Parameters.AddWithValue("@OrderByIds", this.OrderByIds);
+                cmd.Parameters.AddWithValue("@OrdAprovalSts", this.OrderApprovlSts);
                 if (this.OID == 0)
                 {
                     R = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -80,8 +86,8 @@ namespace HangOut.Models
 
         public List<HG_Orders> GetAll(int OrgId=0,int CID=0)
         {
-            System.Data.SqlClient.SqlCommand cmd = null;
-            System.Data.SqlClient.SqlDataReader SDR = null;
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
             List<HG_Orders> ListTmp = new List<HG_Orders>();
             HG_Orders ObjTmp = null;
             DBCon Obj = new DBCon();
@@ -112,7 +118,8 @@ namespace HangOut.Models
                         PaymentStatus=SDR.IsDBNull(10)?0:SDR.GetInt32(10),
                         PayReceivedBy=SDR.IsDBNull(11)?0:SDR.GetInt32(11),
                         TableOtp=SDR.IsDBNull(12)?0:SDR.GetInt32(12),
-                        OrderByIds=SDR.GetString(13)
+                        OrderByIds=SDR.GetString(13),
+                        OrderApprovlSts=SDR.GetInt32(14)
                     };
                     ListTmp.Add(ObjTmp);
                 }
@@ -149,7 +156,8 @@ namespace HangOut.Models
                 ObjTemp.PaymentStatus = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
                 ObjTemp.PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
                 ObjTemp.TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
-                    ObjTemp.OrderByIds = SDR.GetString(13);
+                ObjTemp.OrderByIds = SDR.GetString(13);
+                ObjTemp.OrderApprovlSts = SDR.GetInt32(14);
                 }
             }
             catch (System.Exception e){ e.ToString(); }
@@ -212,8 +220,9 @@ namespace HangOut.Models
                         PaymentStatus=SDR.IsDBNull(10)?0:SDR.GetInt32(10),
                        PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11),
                         TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12),
-                        OrderByIds = SDR.GetString(13)
-                };
+                        OrderByIds = SDR.GetString(13),
+                        OrderApprovlSts=SDR.GetInt32(14)
+                    };
                     ListTmp.Add(ObjTmp);
                 }
             }
