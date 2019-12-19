@@ -208,11 +208,11 @@ namespace HangOut.Models
                     ObjTmp.AcType = SDR.GetString(19);
                     ObjTmp.Status = SDR.GetBoolean(23);
                     ObjTmp.PaymentType = SDR.IsDBNull(24) ? 1 : SDR.GetInt32(24);
-                    ObjTmp.IvoiceHeading = SDR.IsDBNull(25) ? "  " : SDR.GetString(25);
-                    ObjTmp.AddressLin2 = SDR.IsDBNull(26) ? "   " : SDR.GetString(26);
-                    ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? "   " : SDR.GetString(27);
-                    ObjTmp.Licence2 = SDR.IsDBNull(28) ? "   " : SDR.GetString(28);
-                    ObjTmp.License3 = SDR.IsDBNull(29) ? "   " : SDR.GetString(29);
+                    ObjTmp.IvoiceHeading = SDR.IsDBNull(25) ? " " : SDR.GetString(25);
+                    ObjTmp.AddressLin2 = SDR.IsDBNull(26) ? " " : SDR.GetString(26);
+                    ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? " " : SDR.GetString(27);
+                    ObjTmp.Licence2 = SDR.IsDBNull(28) ? " " : SDR.GetString(28);
+                    ObjTmp.License3 = SDR.IsDBNull(29) ? " " : SDR.GetString(29);
                     ObjTmp.PrintRemark = SDR.GetString(30);
                     ObjTmp.CustomerOrdering = SDR.GetBoolean(31);
                 }
