@@ -1622,7 +1622,7 @@ namespace HangOut.Controllers
             parameters.Add("CHANNEL_ID", "WAP");
             parameters.Add("TXN_AMOUNT", Amount);
             parameters.Add("WEBSITE", "DEFAULT");
-
+            parameters.Add("CALLBACK_URL", "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID='" + OID + "'");
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
             // string result = Paytm(OID);
