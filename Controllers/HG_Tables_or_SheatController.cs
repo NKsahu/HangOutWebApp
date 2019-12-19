@@ -46,7 +46,7 @@ namespace HangOut.Controllers
                 var ObjOrg = Request.Cookies["UserInfo"];
                 ObjTable.OrgId = int.Parse(ObjOrg["OrgId"]);
             }
-            if(TorSAlreadyObj != null && TorSAlreadyObj.QrCode!="0" &&TorSAlreadyObj.Table_or_RowID!= ObjTable.Table_or_RowID)
+            if(TorSAlreadyObj != null && TorSAlreadyObj.QrCode!="0" && TorSAlreadyObj.Table_or_RowID>0 && TorSAlreadyObj.Table_or_RowID!= ObjTable.Table_or_RowID)
             {
                 string QrMsg = "Qr Code Already used ";
                 if (TorSAlreadyObj.OrgId != ObjTable.OrgId)
@@ -90,7 +90,7 @@ namespace HangOut.Controllers
                 var ObjOrg = Request.Cookies["UserInfo"];
                 ObjTable.OrgId = int.Parse(ObjOrg["OrgId"]);
             }
-            if (TorSAlreadyObj != null && TorSAlreadyObj.QrCode != "0" && TorSAlreadyObj.Table_or_RowID != ObjTable.Table_or_RowID)
+            if(TorSAlreadyObj != null && TorSAlreadyObj.QrCode!="0" && TorSAlreadyObj.Table_or_RowID>0 && TorSAlreadyObj.Table_or_RowID!= ObjTable.Table_or_RowID)
             {
                 string QrMsg= "Qr Code Already used ";
                 if(TorSAlreadyObj.OrgId!= ObjTable.OrgId)
