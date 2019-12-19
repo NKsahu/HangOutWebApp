@@ -958,10 +958,18 @@ namespace HangOut.Controllers
                     OrderItemList = OrderItemList.OrderBy(x => x.TickedNo).ToList();
                     if (ObjOrg.PaymentType == 1)
                     {
-                        foreach (var Orderitm in OrderItemList)
+                        var OrderItems = OrderItemList;
+                        foreach (var Orderitm in OrderItems)
                         {
 
+                            HG_Orders order = new HG_Orders().GetOne(Orderitm.OID);
+                            if (order != null && order.PaymentStatus != 0)
+                            {
+                                Orderlist.Add(order);
+                                OrderItemList = OrderItemList.FindAll(x=>x.TickedNo==Orderitm.TickedNo);
+                                break;
 
+                            }
 
                         }
                     }
@@ -970,16 +978,9 @@ namespace HangOut.Controllers
                         var ObjItem = OrderItemList.First();
                        OrderItemList = OrderItemList.FindAll(x => x.TickedNo == ObjItem.TickedNo);
                         HG_Orders order = new HG_Orders().GetOne(ObjItem.OID);
+                        Orderlist.Add(order);
                     }
-                    
-                 
-                    //Orderlist.Add(order);
-                }
-                
-                
-                if (ObjOrg.PaymentType == 1)//if prepaid than visible after payment completed
-                {
-                    Orderlist = Orderlist.FindAll(x => x.PaymentStatus != 0);
+
                 }
                 List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAllWithTakeAwya(OrgType, OrgId);//GetAll(OrgType, OrgId);
             List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
