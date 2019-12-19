@@ -1611,14 +1611,14 @@ namespace HangOut.Controllers
 
             String merchantKey = "O&BSeciOz8DyVqnd";
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("MID", "foodDo64649685764159");
+            parameters.Add("MID", "foodDo62634269971979");
             parameters.Add("ORDER_ID", OID);
             parameters.Add("CUST_ID", CID);
             parameters.Add("INDUSTRY_TYPE_ID", "Retail");
             parameters.Add("CHANNEL_ID", "WAP");
             parameters.Add("TXN_AMOUNT", Amount);
             parameters.Add("WEBSITE", "APPSTAGING");
-            parameters.Add("CALLBACK_URL", "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID='"+OID +"'");
+        
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             bool status =  CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
            // string result = Paytm(OID);
@@ -1630,7 +1630,7 @@ namespace HangOut.Controllers
             Dictionary<String, String> paytmParams = new Dictionary<String, String>();
             string responseData = string.Empty;
             /* Find your MID in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys */
-            paytmParams.Add("MID", "foodDo64649685764159");
+            paytmParams.Add("MID", "foodDo62634269971979");
 
             /* Enter your order id which needs to be check status for */
             paytmParams.Add("ORDERID", OID);
