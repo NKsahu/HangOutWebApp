@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using System;
 using System.Net;
 using paytm;
+using System.Web.Script.Serialization;
+using System.IO;
 
 namespace HangOut.Controllers
 {
@@ -1619,15 +1621,63 @@ namespace HangOut.Controllers
             parameters.Add("CALLBACK_URL", "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID='"+OID +"'");
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             bool status =  CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
+           // string result = Paytm(OID);
             return checksum;
-
-
-
-
-
- 
+            
         }
+        public string Paytm(string OID)
+        {
+            Dictionary<String, String> paytmParams = new Dictionary<String, String>();
+            string responseData = string.Empty;
+            /* Find your MID in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys */
+            paytmParams.Add("MID", "foodDo64649685764159");
 
+            /* Enter your order id which needs to be check status for */
+            paytmParams.Add("ORDERID", OID);
+
+            /**
+            * Generate checksum by parameters we have
+            * You can get Checksum DLL from https://developer.paytm.com/docs/checksum/
+            * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
+*/
+            String checksum = paytm.CheckSum.generateCheckSum("O&BSeciOz8DyVqnd", paytmParams);
+
+            /* put generated checksum value here */
+            paytmParams.Add("CHECKSUMHASH", checksum);
+
+            /* prepare JSON string for request */
+            String post_data = new JavaScriptSerializer().Serialize(paytmParams);
+
+            /* for Staging */
+            String url = "https://securegw-stage.paytm.in/order/status";
+
+            /* for Production */
+            // String url = "https://securegw.paytm.in/order/status";
+
+            try
+            {
+                HttpWebRequest connection = (HttpWebRequest)WebRequest.Create(url);
+                connection.Headers.Add("ContentType", "application/json");
+                connection.Method = "POST";
+                using (StreamWriter requestWriter = new StreamWriter(connection.GetRequestStream()))
+                {
+                    requestWriter.Write(post_data);
+                }
+               
+                using (StreamReader responseReader = new StreamReader(connection.GetResponse().GetResponseStream()))
+                {
+                    responseData = responseReader.ReadToEnd();
+                }
+                Response.Write(responseData);
+                // Response.Write("Request: " + post_data);
+            }
+            catch (Exception ex)
+            {
+                Response.Write(ex.Message.ToString());
+            }
+            return responseData;
+
+        }
 
 
 
