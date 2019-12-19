@@ -1548,6 +1548,7 @@ namespace HangOut.Controllers
             foreach (var OrderItem in tableorderlist)
             {
                 OrderItem.ChefSeenBy = 0;
+                OrderItem.Status = 1;
                 OrderItem.Save();
             }
             vw_HG_UsersDetails userdetails = new vw_HG_UsersDetails().GetSingleByUserId(CHEFID);
