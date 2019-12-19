@@ -1,10 +1,10 @@
 ﻿@using HangOut.Models;
+@using HangOut.Models.DynamicList;
 @{    Layout = null;}
 @{
 
     int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
-    //PrintInvoice TorSid
-
+    string PaymentMode = "";
     Int64 OID = Int64.Parse(Request.QueryString["OID"]);
     List<HG_Orders> orderlist = new List<HG_Orders>();
     List<HG_OrderItem> OrderItems = new List<HG_OrderItem>();
@@ -18,18 +18,18 @@
         var orderObj = orderlist.First();
         orderlist = orderlist.FindAll(X => X.OID == orderObj.OID);
         OrderItems.AddRange(new HG_OrderItem().GetAll(orderObj.OID));
-
+        OID = orderObj.OID;
+        PaymentMode = OrgType.PaymentMode(orderObj.PaymentStatus);
     }
     else
     {
 
         HG_Orders order = new HG_Orders().GetOne(OID);
         orderlist.Add(order);
+        PaymentMode = OrgType.PaymentMode(order.PaymentStatus);
         OrderItems.AddRange(new HG_OrderItem().GetAll(order.OID));
         OrderDate = order.Create_Date;
     }
-
-
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
@@ -38,13 +38,13 @@
     string AddressLine3 = "";
     string Phoneno = "";
     string GstNo = "";
-    string Licence2 = "..................";
-    string Licence3 = "..................";
-    HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
-    string OrderNo = string.Join(",", OrdesHash);
+    string Licence2 = "";
+    string Licence3 = "";
+  //  HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
+    string OrderNo = OID.ToString();
     double AmountTotal = 0.00;
     int Qty = 0;
-    string PaymnetMode = "CASH/ONLINE";
+
     string PoweredBy = "Powered By FoodDo";
     string TicketNos = "";
     List<HG_Items> ItemList = new HG_Items().GetAll();
@@ -75,41 +75,52 @@
         #section-to-print {
             width: 21cm;
             height: 29.7cm;
-            margin: 30mm 45mm 30mm 45mm;
+            margin: 0mm 0mm 0mm 0mm;
         }
             #section-to-print * {
                 visibility: visible;
             }
     }
-
+   tr,td,th{
+       text-align:center;
+   }
 </style>
 
 
-<div style="min-height:25px">
-    <button onclick="window.print();"> PRINT (A-4) </button>
+<div class="row">
+    <button id="A4Print" onclick="window.print();"> PRINT (A-4) </button>
     <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
 </div>
 <div style="border:2px solid black " id="section-to-print">
-    <div style="border:1px dotted black;" >
-        <div >
-            <h4 style="text-align:center">@InvoiceHeading</h4>
+    <div style="border:0.5px dotted black;" >
+        <div>
+            <h3 style="text-align:center">@InvoiceHeading</h3>
             <h4 style="text-align:center">@OrgName</h4>
-            <h5 style="text-align:center">@AddressLine1</h5>
-            <h6 style="text-align:center">@AddressLine2</h6>
-            <h6 style="text-align:center">@AddressLine3</h6>
+            <h4 style="text-align:center">@AddressLine1</h4>
+            @if (AddressLine2 != null && AddressLine2.Replace(" ", "") != "")
+            {
+                <p style="text-align:center">@AddressLine2</p>
+            }
+            @if (AddressLine3 != null && AddressLine3.Replace(" ", "") != "")
+            {
+                <p style="text-align:center">@AddressLine3</p>
+            }
             <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
-            <h6 style="text-align:center">@Licence2      @Licence3</h6>
+            @if (Licence2 != null && Licence2.Replace(" ", "") != "")
+            {
+                <p style="text-align:center">@Licence2  @Licence3</p>
+            }
         </div>
         <div style="text-align:center">
-            <h6><b>ORDER No:</b> @OrderNo   <b>Ticket No:</b> @TicketNos</h6>
-            <h6><b>DATE:</b> @OrderDate.ToString("dd/MM/yy HH:mm") <b> MODE:</b>@PaymnetMode </h6>
+            <p>Order No: @OrderNo Ticket No:@TicketNos</p>
+            <p>Date:@OrderDate.ToString("dd/MM/yy HH:mm") Mode :@PaymentMode</p>
         </div>
         <table id="InvoiceItems"  class="table col-sm-12">
             <thead>
                 <tr>
                     <th>Item </th>
-                    <th>QTY</th>
-                    <th>AMT </th>
+                    <th>Qty</th>
+                    <th>Amt </th>
                 </tr>
             </thead>
             <tbody>
@@ -128,14 +139,14 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td>TOTAL</td>
+                    <td>Total</td>
                     <td>@Qty.ToString() </td>
                     <td>@AmountTotal.ToString()</td>
                 </tr>
             </tfoot>
         </table>
         <div>
-            <h6>NOTE: </h6>
+            <h6>Note:</h6>
             <div>
                 .........................................................................<br />
                 .........................................................................
@@ -244,7 +255,7 @@
         printWindow.close();
     }
     function PrintElem() {
-        var Section = '<style>{ #section-to-print {width:100%; } table{font-size: 14px;font-family:Calibri}</style>';
+        var Section ='<style>{ #section-to-print {width:100%; } table{font-size: 10px;font-family:Calibri}</style>';
         Section+=  $('#section-to-print').html();
         console.log("Section  " + Section);
         Popup(Section);

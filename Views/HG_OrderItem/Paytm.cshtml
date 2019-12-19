@@ -11,12 +11,12 @@
     parameters.Add("EMAIL", "");
     parameters.Add("MOBILE_NO", "");
     parameters.Add("CUST_ID", "0");
-    parameters.Add("ORDER_ID", "gdfgdfgdfgdfgdfg76567567yrtyggty");
+    parameters.Add("ORDER_ID", "gdfgdfgdfgdfgdfg765675458");
     parameters.Add("TXN_AMOUNT", "2.00");
     string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
     bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
     
-    string paytmURL = "https://securegw-stage.paytm.in/theia/processTransaction?orderid=gdfgdfgdfgdfgdfg76567567yrtyggty";
+    string paytmURL = "https://securegw-stage.paytm.in/theia/processTransaction?orderid=gdfgdfgdfgdfgdfg765675458";
     string outputHTML = "<html>";
     outputHTML += "<head>";
     outputHTML += "<title> Merchant Check Out Page </title> ";

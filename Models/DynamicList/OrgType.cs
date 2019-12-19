@@ -31,5 +31,25 @@ namespace HangOut.Models.DynamicList
 
             return sl;
         }
+
+        public static string PaymentMode(int PMode)
+        {
+            string PayMode = "Unpaid";
+            if (PMode == 1)
+            {
+                PayMode = "ByCash";
+
+            }else if (PMode == 2)
+            {
+
+                PayMode = "ByOnline";
+            }
+            else if (PMode == 3)
+            {
+                PayMode = "ByFoodDo";
+            }
+
+            return PayMode;
+        }
     }
 }

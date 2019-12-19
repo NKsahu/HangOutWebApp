@@ -36,22 +36,24 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult SheetCreateEdit(HG_Tables_or_Sheat ObjTable)
         {
-            if (ObjTable.QrCode == null || ObjTable.QrCode == "")
+            if (ObjTable.QrCode == null || ObjTable.QrCode.Replace(" ","") == "")
             {
                 return Json(new { msg = "Please Enter Qr Code" });
             }
-            List<HG_Tables_or_Sheat> ListOfTables = new HG_Tables_or_Sheat().GetAll(1);// table
-            ListOfTables = ListOfTables.FindAll(x => x.Table_or_RowID != ObjTable.Table_or_RowID);
-            ListOfTables = ListOfTables.FindAll(x => x.QrCode != "0");
+            HG_Tables_or_Sheat TorSAlreadyObj = new HG_Tables_or_Sheat().GetOne(QrOcde:ObjTable.QrCode);
             if (ObjTable.OrgId == 0)
             {
                 var ObjOrg = Request.Cookies["UserInfo"];
                 ObjTable.OrgId = int.Parse(ObjOrg["OrgId"]);
             }
-            HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListOfTables.Find(x => x.QrCode == ObjTable.QrCode);
-            if (hG_Tables_Or_Sheat != null && hG_Tables_Or_Sheat.Table_or_RowID > 0)
+            if(TorSAlreadyObj != null && TorSAlreadyObj.QrCode!="0" && TorSAlreadyObj.Table_or_RowID>0 && TorSAlreadyObj.Table_or_RowID!= ObjTable.Table_or_RowID)
             {
-                return Json(new { msg = "Qr Code Already Used For Sheat " + hG_Tables_Or_Sheat.Table_or_SheetName });
+                string QrMsg = "Qr Code Already used ";
+                if (TorSAlreadyObj.OrgId != ObjTable.OrgId)
+                {
+                    QrMsg = "Qr Code Already used For Other Organization";
+                }
+                return Json(new { msg =QrMsg });
             }
             Int64 i = ObjTable.save();
             if (i > 0)
@@ -78,22 +80,24 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_Tables_or_Sheat ObjTable)
         {
-            if (ObjTable.QrCode == null || ObjTable.QrCode == "")
+            if (ObjTable.QrCode == null || ObjTable.QrCode.Replace(" ","") == "")
             {
                 return Json(new { msg = "Please Enter Qr Code" });
             }
-            List<HG_Tables_or_Sheat> ListOfTables = new HG_Tables_or_Sheat().GetAll(1);// table
-            ListOfTables = ListOfTables.FindAll(x => x.Table_or_RowID != ObjTable.Table_or_RowID);
-            ListOfTables = ListOfTables.FindAll(x => x.QrCode != "0");
+            HG_Tables_or_Sheat TorSAlreadyObj = new HG_Tables_or_Sheat().GetOne(QrOcde: ObjTable.QrCode);
             if (ObjTable.OrgId == 0)
             {
                 var ObjOrg = Request.Cookies["UserInfo"];
                 ObjTable.OrgId = int.Parse(ObjOrg["OrgId"]);
             }
-            HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListOfTables.Find(x => x.QrCode == ObjTable.QrCode);
-            if (hG_Tables_Or_Sheat != null && hG_Tables_Or_Sheat.Table_or_RowID > 0)
+            if(TorSAlreadyObj != null && TorSAlreadyObj.QrCode!="0" && TorSAlreadyObj.Table_or_RowID>0 && TorSAlreadyObj.Table_or_RowID!= ObjTable.Table_or_RowID)
             {
-                return Json(new { msg = "Qr Code Already Used For Table " + hG_Tables_Or_Sheat.Table_or_SheetName });
+                string QrMsg= "Qr Code Already used ";
+                if(TorSAlreadyObj.OrgId!= ObjTable.OrgId)
+                {
+                    QrMsg = "Qr Code Already used For Other Organization";
+                }
+                return Json(new { msg = QrMsg });
             }
             Int64 i = ObjTable.save();
             if (i > 0)

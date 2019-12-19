@@ -87,7 +87,7 @@
     $(document).ready(function () {
 
         Cal();
-        QrCodeMode();
+        //QrCodeMode();
         function Cal() {
             $("#Type").parent('div').hide();
         }
@@ -95,11 +95,10 @@
             //Table_or_RowID
             var TableCode = $("#Table_or_RowID").val();
             var QrCode = $("#QrCode").val();
-
-            if (TableCode != null && TableCode != "0" && QrCode != ""&&QrCode!="0"){
-
+            if (TableCode != null && TableCode != "0" && QrCode != "" && QrCode != " " && QrCode != "0") {
                 $("#QrCode").attr('readonly', 'readonly');
             }
+            
            
         }
     });
