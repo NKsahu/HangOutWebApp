@@ -24,6 +24,7 @@ namespace HangOut.Models
         public DateTime UpdateDate { get; set; }
         public bool Status { get; set; }
         public bool CurrentStatus { get; set; }
+        public string orgType { get; set; }// only for check OrgType not included in table column
        public vw_HG_UsersDetails()
         {
             Status = true;

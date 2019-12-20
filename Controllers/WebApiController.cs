@@ -35,6 +35,11 @@ namespace HangOut.Controllers
                     Objuser = new vw_HG_UsersDetails();
                    
                 }
+                if (Objuser.OrgID > 0)
+                {
+                    HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(Objuser.OrgID);
+                    Objuser.orgType = OrgObj.OrgTypes;
+                }
             }
            
             return JObject.FromObject(Objuser);
