@@ -1722,6 +1722,20 @@ namespace HangOut.Controllers
             return result;
         }
 
+        public JObject CustomerQueNumber(string Obj)
+        {
+            JObject ParamObj = JObject.Parse(Obj);
+            int CID = int.Parse(ParamObj.GetValue("CID").ToString());
+            Int64 TorSId = Int64.Parse(ParamObj.GetValue("TorSid").ToString());
+            int OrgId = int.Parse(ParamObj.GetValue("OrgId").ToString());
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+            int Type = int.Parse(ObjOrg.OrgTypes);
+            List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(Type, OrgId);
+            HG_Tables_or_Sheat ObjTorS = ListTorS.Find(x => x.Table_or_RowID == TorSId);
+            ListTorS = ListTorS.FindAll(x => x.Floor_or_ScreenId == ObjTorS.Floor_or_ScreenId);
+            HashSet<Int64> TorShash = new HashSet<Int64>(ListTorS.Select(x => x.Table_or_RowID).ToArray());
+            return new JObject();
+        }
 
     }
 }
