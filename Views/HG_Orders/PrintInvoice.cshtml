@@ -235,14 +235,14 @@
     }
     function PrintToken() {
         zpl = "";
-        zpl += printstr("TOKEN -" + Token_number, "34");
+        zpl += printstr("TOKEN -123456", "34");
         zpl += printstr("----------------------------------", "34");
         zpl += printstr("DATE: " + ConvertDateJA(new Date()), "34");
         zpl += printstr("TIME: " + new Date().toLocaleTimeString(), "34");
         zpl += printstr("----------------------------------", "34");
-        zpl += printstr("BUILTY NO " + Builty_number, "34");
+        zpl += printstr("BUILTY NO 125486457835484578", "34");
         zpl += printstr("----------------------------------", "34");
-        zpl += printstr("TRUCK NO : " + Truck_number, "34");
+        zpl += printstr("TRUCK NO : 148815448668" +, "34");
         zpl += printstr("----------------------------------", "34");
 
         var printWindow = window.open();
@@ -258,7 +258,9 @@
         var Section ='<style>{ #section-to-print {width:100%; } table{font-size: 10px;font-family:Calibri}</style>';
         Section+=  $('#section-to-print').html();
         console.log("Section  " + Section);
-        Popup(Section);
+
+        PrintToken();
+        //Popup(Section);
     }
 
     function Popup(data) {
