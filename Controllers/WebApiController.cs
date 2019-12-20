@@ -1611,7 +1611,7 @@ namespace HangOut.Controllers
             return JArray.FromObject(floorlist);
         }
         [HttpPost]
-        public string GetCheckSum(string CID, string OID, string Amount)
+        public string GetCheckSum(string CID, string OID, string Amount,string email,string mobile)
         {
 
             String merchantKey = "yB4HRdQ0vcb9XBrI";
@@ -1621,10 +1621,10 @@ namespace HangOut.Controllers
             parameters.Add("CUST_ID", CID);
             parameters.Add("INDUSTRY_TYPE_ID", "Retail105");
             parameters.Add("CHANNEL_ID", "WAP");
-            parameters.Add("TXN_AMOUNT", "1");
+            parameters.Add("TXN_AMOUNT", Amount);
             parameters.Add("WEBSITE", "APPPROD");
-            parameters.Add("EMAIL", "abc@gmail.com");
-            parameters.Add("MOBILE_NO", "7777777777");
+            parameters.Add("EMAIL", email);
+            parameters.Add("MOBILE_NO", mobile);
             parameters.Add("CALLBACK_URL", "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID='"+ OID + "'");
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
