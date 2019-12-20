@@ -1,25 +1,28 @@
-﻿@model IEnumerable<HangOut.Models.HG_OrderItem>
-@{ Layout = null;}
-@using HangOut.Models
-@{ string OID = Request.QueryString["OID"];
+﻿@{ Layout = null;}
+@using HangOut.Models;
+@using HangOut.Models.DynamicList;
+@{ 
+    string OID = Request.QueryString["OID"];
     Int64 OrderId = Int64.Parse(OID);
-    }
-
-@{
     HG_Orders order = new HG_Orders().GetOne(OrderId);
     List<HG_Items> listItem = new HG_Items().GetAll();
-    }
+    List<vw_HG_UsersDetails> UserList = new vw_HG_UsersDetails().GetAll();
+    List<HG_OrderItem> listorder = new HG_OrderItem().GetAll(OrderId);
+    var tokens = listorder.Select(x => x.TickedNo);
+    tokens = tokens.Distinct();
+    var Ticketnos = string.Join(",", tokens);
+}
 <style>
-    .showDetails {
+.showDetails {
         border-collapse: collapse;
-        width: 100%;
+    width: 100%;
     }
 
         .showDetails td, .showDetails th {
-            border: 1px solid #ddd;
+    border: 1px solid #ddd;
             padding: 8px;
-            text-align: center;
-        }
+        text-align: center;
+    }
 
     .showDetails tr:nth-child(even) {
         background-color: #f2f2f2;
@@ -38,8 +41,10 @@
 </style>
 <div class="card">
     <div style="padding:20px">
-        <h5>Order Date: @order.Create_Date.ToString("ddd-MMM-dd")</h5>
+        <h5>Order Date: @order.Create_Date.ToString("ddd-MMM-dd hh:mm")</h5>
         <h5>Order No:  @order.OID</h5>
+        <h5>Ticket No: @Ticketnos</h5>
+        <h5>Payment Mode: @OrgType.PaymentMode(order.PaymentStatus)</h5>
     </div>
     <div class="card-header">
         <h3>Details :</h3>
@@ -55,13 +60,19 @@
                         @Html.DisplayName("Item")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Qty)
+                        @Html.DisplayName("Qty")
                     </th>
                     <th>
                         @Html.DisplayName("AMT")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Status)
+                        @Html.DisplayName("Status")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Prepare By")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Placed By")
                     </th>
                 </tr>
             </thead>
@@ -69,11 +80,12 @@
                 @{
                     int sno = 0;
                 }
-                @foreach (var item in Model)
+                @foreach (var item in listorder)
                 {
                     <!-- //"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"-->
                     string status = "";
                     string backTrColr = "";
+                    string Prepa
                     if (item.Status == 1)
                     {
                         status = "Placed";
@@ -94,25 +106,27 @@
                         backTrColr = "background-color:red";
                         status = "Cancel";
                     }
-                    <tr style="@(backTrColr)">
-                        <td>
-                            @{ sno++; }
-                            @sno
-                        </td>
-                        <td>
-                            @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
-                            @ObjOrder.Items
-                        </td>
-                        <td>
-                            @item.Count
-                        </td>
-                        <td>
-                            @(item.Price*item.Count)
-                        </td>
-                        <td>
-                            @status
-                        </td>
-                    </tr>
+                <tr style="@(backTrColr)">
+                    <td>
+                        @{ sno++; }
+                        @sno
+                    </td>
+                    <td>
+                        @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
+                        @ObjOrder.Items
+                    </td>
+                    <td>
+                        @item.Count
+                    </td>
+                    <td>
+                        @(item.Price * item.Count)
+                    </td>
+                    <td>
+                        @status
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
                 }
             </tbody>
         </table>

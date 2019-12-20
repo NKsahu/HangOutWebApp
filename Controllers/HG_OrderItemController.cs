@@ -12,10 +12,10 @@ namespace HangOut.Controllers
         // GET: HG_OrderItem
         public ActionResult Index( Int64 OID)
         {
-            HG_OrderItem Objorder = new HG_OrderItem();
-            List<HG_OrderItem> listorder = Objorder.GetAll(OID);
+           // HG_OrderItem Objorder = new HG_OrderItem();
+           // List<HG_OrderItem> listorder = Objorder.GetAll(OID);
 
-            return View(listorder);
+            return View();
         }
 
         public ActionResult Paytm()
