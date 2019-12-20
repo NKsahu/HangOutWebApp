@@ -1627,7 +1627,7 @@ namespace HangOut.Controllers
             parameters.Add("INDUSTRY_TYPE_ID", "Retail105");
             parameters.Add("CHANNEL_ID", "WAP");
             parameters.Add("TXN_AMOUNT", Amount);
-            parameters.Add("WEBSITE", "APPPROD");
+            parameters.Add("WEBSITE", "DEFAULT");
             parameters.Add("EMAIL", email);
             parameters.Add("MOBILE_NO", mobile);
             parameters.Add("CALLBACK_URL", "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID='"+ OID + "'");
