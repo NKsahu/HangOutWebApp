@@ -1423,7 +1423,7 @@ namespace HangOut.Controllers
                 OrderList = OrderList.FindAll(x => x.Status == "3");
                 OrderList = OrderList.FindAll(x => x.Create_Date.Date == DateTime.Now.Date).ToList();
             }
-
+        //    List<HG_OrderItem> OrderItem=new HG_OrderItem().GetAll(CID)
             if(OrderList.Count>0)
             {
 
@@ -1433,10 +1433,14 @@ namespace HangOut.Controllers
                     HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
                     List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
                     double price = 0.00;
+                   // double CostPrice = 0.00;
+                    double tax = 0.00;
                     HashSet<int> Token = new HashSet<int>();
                     for(int i=0;i< OrderItemList.Count; i++)
                     {
                         price += (OrderItemList[i].Count * OrderItemList[i].Price);
+                        // CostPrice+= (OrderItemList[i].Count * OrderItemList[i].c);
+                        tax += OrderItemList[i].TaxInItm;
                         Token.Add(OrderItemList[i].TickedNo);
                     }
                     JObject Object = new JObject();
@@ -1446,6 +1450,7 @@ namespace HangOut.Controllers
                     Object.Add("TicketNo", string.Join(",", Token));
                     Object.Add("OID", orders.OID);
                     Object.Add("Status", orders.Status);
+                    Object.Add("Tax", tax);
                     if (orders.PaymentStatus == 1)
                     {
                         Object.Add("PayStatus", "CASH");
@@ -1485,11 +1490,13 @@ namespace HangOut.Controllers
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(orders.OID);
                 List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
                 double price = 0.00;
+                double tax = 0.00;
                 HashSet<int> Token = new HashSet<int>();
                 for (int i = 0; i < hG_OrderItems.Count; i++)
                 {
                     price += (hG_OrderItems[i].Count * hG_OrderItems[i].Price);
                     Token.Add(hG_OrderItems[i].TickedNo);
+                    tax += hG_OrderItems[i].TaxInItm;
                 }
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
@@ -1497,6 +1504,7 @@ namespace HangOut.Controllers
                 Object.Add("TicketNo", string.Join(",", Token));
                 Object.Add("OID", orders.OID);
                 Object.Add("Status", orders.Status);
+                Object.Add("Tax", tax);
                 if (orders.PaymentStatus == 1)
                 {
                     Object.Add("PayStatus", "CASH");
