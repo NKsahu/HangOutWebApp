@@ -2,20 +2,21 @@
 @{
     Layout = null;
 
-    String merchantKey = "O&BSeciOz8DyVqnd";
+    String merchantKey = "O&yB4HRdQ0vcb9XBrI";
     Dictionary<string, string> parameters = new Dictionary<string, string>();
-    parameters.Add("MID", "foodDo64649685764159");
+    parameters.Add("MID", "foodDo62634269971979");
+    parameters.Add("ORDER_ID", "sdfgdsfgdfgdffgdfg");
+    parameters.Add("CUST_ID", "545");
+    parameters.Add("INDUSTRY_TYPE_ID", "Retail105");
     parameters.Add("CHANNEL_ID", "WAP");
-    parameters.Add("INDUSTRY_TYPE_ID", "Retail");
-    parameters.Add("WEBSITE", "APPSTAGING");
+    parameters.Add("TXN_AMOUNT", "1.00");
+    parameters.Add("WEBSITE", "DEFAULT");
     parameters.Add("EMAIL", "");
-    parameters.Add("MOBILE_NO", "");
-    parameters.Add("CUST_ID", "0");
-    parameters.Add("ORDER_ID", "gdfgdfgdfgdfgdfg765675458");
-    parameters.Add("TXN_AMOUNT", "2.00");
+   // parameters.Add("MOBILE_NO", "");
+    parameters.Add("CALLBACK_URL", "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=sdfgdsfgdfgdffgdfg");
     string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
-    bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
-    
+   // bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
+
     string paytmURL = "https://securegw-stage.paytm.in/theia/processTransaction?orderid=gdfgdfgdfgdfgdfg765675458";
     string outputHTML = "<html>";
     outputHTML += "<head>";
