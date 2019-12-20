@@ -634,7 +634,7 @@ namespace HangOut.Controllers
                         Status = Status,
                         TickedNo = Ticketno,
                         OrgId = OrgId,
-                        ChefSeenBy = 0,
+                        ChefSeenBy = (Status!=3?(int)CID:0),
                         OrderDate = DateTime.Now,
                         OrdById = CID,
                         TaxInItm=ObjItem.Tax
