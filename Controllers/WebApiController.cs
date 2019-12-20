@@ -1621,16 +1621,17 @@ namespace HangOut.Controllers
 
             String merchantKey = "yB4HRdQ0vcb9XBrI";
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("MID", "foodDo62634269971979");
-            parameters.Add("ORDER_ID", OID);
+            parameters.Add("CALLBACK_URL", "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID='" + OID + "'");
+            parameters.Add("CHANNEL_ID", "WAP");
             parameters.Add("CUST_ID", CID);
             parameters.Add("INDUSTRY_TYPE_ID", "Retail105");
-            parameters.Add("CHANNEL_ID", "WAP");
+
+            parameters.Add("MID", "foodDo62634269971979");
+            parameters.Add("ORDER_ID", OID);
             parameters.Add("TXN_AMOUNT", Amount);
-            parameters.Add("WEBSITE", "DEFAULT");
-            parameters.Add("EMAIL", email);
-            parameters.Add("MOBILE_NO", mobile);
-            parameters.Add("CALLBACK_URL", "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID='"+ OID + "'");
+            parameters.Add("WEBSITE", "APPPROD");
+            //parameters.Add("EMAIL", email);
+            //parameters.Add("MOBILE_NO", mobile);
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
             // string result = Paytm(OID);
