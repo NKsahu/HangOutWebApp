@@ -1690,7 +1690,32 @@ namespace HangOut.Controllers
 
         }
 
-
+        [HttpPost]
+        public JObject JoinFoodDoTeam(string Obj)
+        {
+            JObject objParams = JObject.Parse(Obj);
+            JArray JMenuArray = new JArray();
+            int CID = int.Parse(objParams.GetValue("CID").ToString());
+            int JoinType = int.Parse(objParams.GetValue("JoinType").ToString());
+            int ProductType = int.Parse(objParams.GetValue("ProductType").ToString());
+            JoinFoodDo joinFoodDo = new JoinFoodDo();
+            joinFoodDo.JoinedUserd = CID;
+            joinFoodDo.JoinType = JoinType;
+            joinFoodDo.ProductType = ProductType;
+            joinFoodDo.JoinDate = DateTime.Now;
+            JObject result = new JObject();
+            if (joinFoodDo.save() > 0)
+            {
+                result.Add("Status", 200);
+                result.Add("MSG", "Joined successfully You Will receive call back soon");
+            }
+            else
+            {
+                result.Add("Status", 400);
+                result.Add("MSG", "Try after some time");
+            }
+            return result;
+        }
 
 
     }

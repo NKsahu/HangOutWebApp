@@ -10,9 +10,9 @@ namespace HangOut.Models
 
         public int JoinId { get; set; }
         public int JoinType { get; set; }// {1 :Business,2 : Team}
-        public int ProductType { get; set; }
-        public int JoinedUserd { get; set; }
-        public DateTime JoinDate { get; set; }
+        public int ProductType { get; set; }  //  0: none , 1 restuarn/ Cafe ,2: room service ,3: theater ,4 other
+        public int JoinedUserd { get; set; }// user id who joined
+        public DateTime JoinDate { get; set; } // joining date
 
 
         public JoinFoodDo()
