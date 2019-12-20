@@ -6,7 +6,9 @@
     Int64 OrderId = Int64.Parse(OID);
     HG_Orders order = new HG_Orders().GetOne(OrderId);
     List<HG_Items> listItem = new HG_Items().GetAll();
-    List<vw_HG_UsersDetails> UserList = new vw_HG_UsersDetails().GetAll();
+    //   List<vw_HG_UsersDetails> UserList = new vw_HG_UsersDetails().GetAll();
+    // UserList.AddRange(new vw_HG_UsersDetails().GetAll("CUST"));
+    List<HG_UserTypes> UsertypleList = new HG_UserTypes().GetAll();
     List<HG_OrderItem> listorder = new HG_OrderItem().GetAll(OrderId);
     var tokens = listorder.Select(x => x.TickedNo);
     tokens = tokens.Distinct();
@@ -50,7 +52,7 @@
         <h3>Details :</h3>
     </div>
     <div class="card-body">
-        <table class="table showDetails">
+        <table class="table showDetails" id="TBLID">
             <thead>
                 <tr>
                     <th>
@@ -69,23 +71,40 @@
                         @Html.DisplayName("Status")
                     </th>
                     <th>
-                        @Html.DisplayName("Prepare By")
+                        @Html.DisplayName("Placed By")
                     </th>
                     <th>
-                        @Html.DisplayName("Placed By")
+                        @Html.DisplayName("Prepare By")
                     </th>
                 </tr>
             </thead>
             <tbody>
                 @{
                     int sno = 0;
+                    var QtyTotal = 0;
+                    var AmtTotal = 0.00;
                 }
                 @foreach (var item in listorder)
                 {
                     <!-- //"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"-->
+                    double ItemPrice = item.Price * item.Count;
+                    QtyTotal += item.Count;
+                    AmtTotal += ItemPrice;
+                    string PrePareBy = "";
+                    string OrderPlacedBy = "";
+                    var PlacedByObj = new vw_HG_UsersDetails().GetSingleByUserId((int)item.OrdById);
+                    var PrepareByObj=new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
+                    if (PlacedByObj.UserCode > 0)
+                    {
+                        OrderPlacedBy = UsertypleList.Find(x => x.UserType == PlacedByObj.UserType).UserTypeName + " (" + PlacedByObj.UserName + " )";
+                    }
+                    if (PrepareByObj.UserCode > 0)
+                    {
+                        PrePareBy= UsertypleList.Find(x => x.UserType == PrepareByObj.UserType).UserTypeName + " (" + PrepareByObj.UserId + " )";
+                    }
                     string status = "";
                     string backTrColr = "";
-                    string Prepa
+
                     if (item.Status == 1)
                     {
                         status = "Placed";
@@ -119,16 +138,32 @@
                         @item.Count
                     </td>
                     <td>
-                        @(item.Price * item.Count)
+                       @ItemPrice.ToString("0.00")
                     </td>
                     <td>
                         @status
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td>@OrderPlacedBy</td>
+                    <td>@PrePareBy</td>
                 </tr>
                 }
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td>@QtyTotal</td>
+                    <td>@AmtTotal.ToString("0.00")</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+            </tfoot>
         </table>
     </div>
 </div>
+<script>
+
+    setTimeout(function () { LoadDataTable(); }, 500);
+</script>
