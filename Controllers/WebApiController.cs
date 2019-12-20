@@ -1734,7 +1734,24 @@ namespace HangOut.Controllers
             HG_Tables_or_Sheat ObjTorS = ListTorS.Find(x => x.Table_or_RowID == TorSId);
             ListTorS = ListTorS.FindAll(x => x.Floor_or_ScreenId == ObjTorS.Floor_or_ScreenId);
             HashSet<Int64> TorShash = new HashSet<Int64>(ListTorS.Select(x => x.Table_or_RowID).ToArray());
-            return new JObject();
+            List<HG_Orders> TodayOrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            TodayOrderList = TodayOrderList.FindAll(x => x.OrgId == OrgId);
+            TodayOrderList = TodayOrderList.FindAll(x => x.Status != "3");
+            TodayOrderList = TodayOrderList.FindAll(x => TorShash.Contains(x.Table_or_SheatId));
+            TodayOrderList = TodayOrderList.OrderBy(x => x.Create_Date).ToList();
+            var ObjOrder = TodayOrderList.FindIndex(x => x.Table_or_SheatId == TorSId && x.OrderByIds.Contains(CID.ToString()));
+            JObject result = new JObject();
+            if (ObjOrder == 0)
+            {
+                result.Add("Position", ObjOrder);
+                result.Add("MSG", "Completed");
+            }
+            else
+            {
+                result.Add("Position", ObjOrder);
+                result.Add("MSG", "One the Way");
+            }
+            return result;
         }
 
     }
