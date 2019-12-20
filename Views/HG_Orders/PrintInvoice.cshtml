@@ -71,6 +71,7 @@
     @@media print {
         body * {
             visibility: hidden;
+            
         }
         #section-to-print {
             width: 21cm;
@@ -81,9 +82,16 @@
                 visibility: visible;
             }
     }
+
+
    tr,td,th{
        text-align:center;
    }
+
+</style>
+<style>
+
+
 </style>
 
 
@@ -92,7 +100,7 @@
     <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
 </div>
 <div style="border:2px solid black " id="section-to-print">
-    <div style="border:0.5px dotted black;" >
+    <div id="PrintHeight" style="border:0.5px dotted black;" >
         <div>
             <h3 style="text-align:center">@InvoiceHeading</h3>
             <h4 style="text-align:center">@OrgName</h4>
@@ -115,12 +123,12 @@
             <p>Order No: @OrderNo Ticket No:@TicketNos</p>
             <p>Date:@OrderDate.ToString("dd/MM/yy HH:mm") Mode :@PaymentMode</p>
         </div>
-        <table id="InvoiceItems"  class="table col-sm-12">
+        <table id="InvoiceItems" style="width:100%"  class="table col-sm-12">
             <thead>
                 <tr>
-                    <th>Item </th>
-                    <th>Qty</th>
-                    <th>Amt </th>
+                    <th style="text-align:center">Item </th>
+                    <th style="text-align:center">Qty</th>
+                    <th style="text-align:center">Amt</th>
                 </tr>
             </thead>
             <tbody>
@@ -131,17 +139,17 @@
                     // Qty += items.Qty;
                     HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
                     <tr>
-                        <td>@hG_Items.Items</td>
-                        <td>@items.Count</td>
-                        <td>@items.Price</td>
+                        <td style="text-align:center">@hG_Items.Items</td>
+                        <td style="text-align:center">@items.Count</td>
+                        <td style="text-align:center">@items.Price</td>
                     </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <td>Total</td>
-                    <td>@Qty.ToString() </td>
-                    <td>@AmountTotal.ToString()</td>
+                    <td style="text-align:center">Total</td>
+                    <td style="text-align:center">@Qty.ToString() </td>
+                    <td style="text-align:center">@AmountTotal.ToString()</td>
                 </tr>
             </tfoot>
         </table>
@@ -235,16 +243,16 @@
     }
     function PrintToken() {
         zpl = "";
-        zpl += printstr("TOKEN -123456", "34");
+        zpl += printstr("<h1 style='padding:0px 0px 0px 0px !important;margin:0px;'>TOKEN -123456</h1>", "34","center");
         zpl += printstr("----------------------------------", "34");
         zpl += printstr("DATE: " + ConvertDateJA(new Date()), "34");
         zpl += printstr("TIME: " + new Date().toLocaleTimeString(), "34");
         zpl += printstr("----------------------------------", "34");
-        zpl += printstr("BUILTY NO 125486457835484578", "34");
+        zpl += printstr("BUILTY NO 1254864578354845785687697879807895675FGHFGHFGHFG", "34");
         zpl += printstr("----------------------------------", "34");
-        zpl += printstr("TRUCK NO : 148815448668" +, "34");
+        zpl += printstr("TRUCK NO : 148815448668" ,"34");
         zpl += printstr("----------------------------------", "34");
-
+        console.log("zpl==" + zpl);
         var printWindow = window.open();
         printWindow.document.open('text/plain');
 
@@ -255,12 +263,13 @@
         printWindow.close();
     }
     function PrintElem() {
-        var Section ='<style>{ #section-to-print {width:100%; } table{font-size: 10px;font-family:Calibri}</style>';
-        Section+=  $('#section-to-print').html();
+       // var Section ='<style>{ #section-to-print {width:58mm; } @@page { size: 58mm 100mm }</style>';
+       // $('#PrintHeight').css('height', '100mm');
+       var Section=  $('#section-to-print').html();
         console.log("Section  " + Section);
 
-        PrintToken();
-        //Popup(Section);
+       // PrintToken();
+        Popup(Section);
     }
 
     function Popup(data) {
@@ -268,7 +277,7 @@
         var myWindow = window.open('text/plain');
       //  myWindow.document.write('<html>');
         /*optional stylesheet*/ //myWindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-       // myWindow.document.write('<style type="text/css"> *, html {margin:0;padding:0;} </style>');
+        myWindow.document.write('<style type="text/css"> *, html,body {margin:0;padding:0;}</style>');
      //   myWindow.document.write('<body>');
         myWindow.document.write(data);
        // myWindow.document.write('</body></html>');
