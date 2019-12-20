@@ -138,7 +138,7 @@
         var ByOnline = "'>BY ONLINE</button>";
         for (var i = 0; i < list.length; i++) {
             var OID = list[i].OID;
-            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].TableorSheatName+"</td><td>" + list[i].AMT + "</td><td>";
+            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].TableorSheatName + "</td><td>" + list[i].AMT.toFixed(2) + "</td><td>";
             html += DetailsBtn + "style='width:100%'" + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><td>";
             html += DetailsBtn + "style='width:50%'" + "onclick='ByCash2(" + OID + ")" + BycashClose + DetailsBtn + "style='width:50%'" + "onclick='ByOnline2(" + OID + ")" + ByOnline + "</td></tr >";
             $("#Tbody").append(html);
@@ -272,7 +272,7 @@
                     break;
             }
             var OID = list[i].OID;
-            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].TableorSheatName+"</td><td>" + list[i].AMT + "</td><td>" + PaymentStatus+"</td>";
+            var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].TableorSheatName + "</td><td>" + list[i].AMT.toFixed(2) + "</td><td>" + PaymentStatus+"</td>";
             html +="<td>" +DetailsBtn + "style='width:100%'" + "onclick='Details(" + OID + ")" + DeatilsClose + "</td><tr>";
             $("#Tbody2").append(html);
         }
