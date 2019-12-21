@@ -1652,7 +1652,7 @@ namespace HangOut.Controllers
             parameters.Add("TXN_AMOUNT",Amount);
             parameters.Add("WEBSITE", "APPSTAGING");
             //parameters.Add("EMAIL", email);
-            parameters.Add("MOBILE_NO", mobile);
+            //parameters.Add("MOBILE_NO", mobile);
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
             // string result = Paytm(OID);
