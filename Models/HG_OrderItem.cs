@@ -9,7 +9,7 @@ namespace HangOut.Models
     {
         public System.Int64 OIID { get; set; }
         public System.Int64 FID { get; set; }//FID mean food ID
-        public double Price { get; set; }
+        public double Price { get; set; }// single item*count = price TotalWithTax
         public int Count { get; set; }
         public string Qty { get; set; }
         public System.Int64 OID { get; set; }
@@ -22,7 +22,9 @@ namespace HangOut.Models
         public int ChefSeenBy { get; set; }
         public int OrgId { get; set; }
         public Int64 OrdById { get; set; }// Item order by id
-        public double TaxInItm { get; set; }
+        public double TaxInItm { get; set; }//single item Tax*Count  =Tax
+        public double CostPrice { get; set; }// single cost price= CostPrice*count without tax
+
         public HG_OrderItem()
         {
             this.Qty = "0.00";
@@ -39,13 +41,13 @@ namespace HangOut.Models
             try
             {
                 if (this.OIID == 0) { 
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate,TickedNo,ChefSeenBy,OrgId,OrdById,TaxInItm) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate,@TickedNo,@ChefSeenBy,@OrgId,@OrdById,@TaxInItm);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERITEM (FID,Price,Count,Qty,OID,Deleted,Status,OrderDate,UpdatedBy,UpdationDate,TickedNo,ChefSeenBy,OrgId,OrdById,TaxInItm,CostPrice) VALUES (@FID,@Price,@Count,@Qty,@OID,@Deleted,@Status,@OrderDate,@UpdatedBy,@UpdationDate,@TickedNo,@ChefSeenBy,@OrgId,@OrdById,@TaxInItm,@CostPrice);select SCOPE_IDENTITY();", Obj.Con);
                     cmd.Parameters.AddWithValue("@OrdById", this.OrdById);
                     cmd.Parameters.AddWithValue("@TaxInItm", this.TaxInItm);
             }
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate,TickedNo=@TickedNo,ChefSeenBy=@ChefSeenBy,OrgId=@OrgId where OIID=@OIID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERITEM SET FID=@FID,Price=@Price,Count=@Count,Qty=@Qty,OID=@OID,Deleted=@Deleted,Status=@Status,UpdatedBy=@UpdatedBy,UpdationDate=@UpdationDate,TickedNo=@TickedNo,ChefSeenBy=@ChefSeenBy,OrgId=@OrgId,CostPrice=@CostPrice where OIID=@OIID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OIID", this.OIID);
                 }
                 cmd.Parameters.AddWithValue("@FID", this.FID);
@@ -61,7 +63,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@TickedNo", this.TickedNo);
                 cmd.Parameters.AddWithValue("@ChefSeenBy", this.ChefSeenBy);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
-               
+                cmd.Parameters.AddWithValue("@CostPrice", this.CostPrice);
                 if (this.OIID == 0)
                 {
                     this.OIID = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -118,6 +120,7 @@ namespace HangOut.Models
                     ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
                     ObjTmp.OrdById = SDR.GetInt64(14);
                     ObjTmp.TaxInItm = SDR.GetDouble(15);
+                    ObjTmp.CostPrice = SDR.GetDouble(16);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -162,6 +165,7 @@ namespace HangOut.Models
                     ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
                     ObjTmp.OrdById = SDR.GetInt64(14);
                     ObjTmp.TaxInItm = SDR.GetDouble(15);
+                    ObjTmp.CostPrice = SDR.GetDouble(16);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -202,6 +206,7 @@ namespace HangOut.Models
                     ObjTmp.OrgId = SDR.IsDBNull(13) ? 0 : SDR.GetInt32(13);
                     ObjTmp.OrdById = SDR.GetInt64(14);
                     ObjTmp.TaxInItm = SDR.GetDouble(15);
+                    ObjTmp.CostPrice = SDR.GetDouble(16);
 
                 }
             }
