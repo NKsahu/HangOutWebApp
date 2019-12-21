@@ -1510,13 +1510,16 @@ namespace HangOut.Controllers
                 List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
                 double price = 0.00;
                 double tax = 0.00;
+                double CostPrice = 0.00;
                 HashSet<int> Token = new HashSet<int>();
                 for (int i = 0; i < hG_OrderItems.Count; i++)
                 {
                     price += (hG_OrderItems[i].Count * hG_OrderItems[i].Price);
                     Token.Add(hG_OrderItems[i].TickedNo);
                     tax += hG_OrderItems[i].TaxInItm;
+                    
                 }
+
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
                 Object.Add("TotalAmount", price);
