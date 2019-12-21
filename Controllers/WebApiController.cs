@@ -572,7 +572,7 @@ namespace HangOut.Controllers
             else if (ObjOrders != null && ObjOrders.PaymentStatus != 0)
             {
                 PostResult.Add("Status", 400);
-                PostResult.Add("MSG", "Can't Modify Order After Payment First Complete Pending Order");
+                PostResult.Add("MSG", "Can't Modify Order After Payment ! First Complete Pending Order");
                 return PostResult;
             }
             else
