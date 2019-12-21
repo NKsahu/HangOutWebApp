@@ -253,6 +253,7 @@ namespace HangOut.Controllers
                     ObjItem.Add("IID", item.ItemID);
                     ObjItem.Add("ItemName", item.Items);
                     ObjItem.Add("ItemPrice", item.Price);
+                    ObjItem.Add("CostPrice", item.CostPrice);
                     ObjItem.Add("ItemQuntity", item.Qty);
                     ObjItem.Add("ItemImage", item.Image);
                     ObjItem.Add("ItemCartValue", Mycart.Count);
