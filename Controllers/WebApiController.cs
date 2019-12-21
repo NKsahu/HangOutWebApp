@@ -1639,11 +1639,7 @@ namespace HangOut.Controllers
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             //bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
             // string result = Paytm(OID);
-            return null;
-
-
-
-         
+            return checksum;
 
         }
         
