@@ -565,9 +565,15 @@ namespace HangOut.Controllers
             List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId);
             // HG_Orders ObjOrders = new HG_Orders().GetOne(OID);
             Int64 OID = 0;
-            if (ObjOrders==null||ObjOrders.Status=="3"|| ObjOrders.Status == "4" ||ObjOrders.PaymentStatus!=0){// if order is completed or Order then Take New order
+            if (ObjOrders==null||ObjOrders.Status=="3"|| ObjOrders.Status == "4"){// if order is completed or Canceled then Take New order
 
                 OID = 0;
+            }
+            else if (ObjOrders != null && ObjOrders.PaymentStatus != 0)
+            {
+                PostResult.Add("Status", 400);
+                PostResult.Add("MSG", "Can't Modify Order After Payment First Complete Pending Order");
+                return PostResult;
             }
             else
             {

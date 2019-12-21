@@ -136,8 +136,12 @@
 
     //===cal datatable=====
 
-    function LoadDataTable() {
-        var table = $("#TBLID").DataTable({
+    function LoadDataTable(TblId) {
+        var DTblId = TblId;
+        if(TblId == null) {
+            DTblId = "TBLID";
+        }
+        var table = $("#"+ DTblId).DataTable({
 
             "scrollY": "300px",
             "scrollCollapse": true,
@@ -146,7 +150,6 @@
             "bScrollCollapse": true,
             "dom": 'Bfrtip',
             "buttons": ['excel', 'pdf', { extend: 'print', title: 'Impression', exportOptions: { columns: ':visible' } },]
-
         });
         table.buttons.exportData({
             stripHtml: true
