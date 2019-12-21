@@ -260,7 +260,7 @@ namespace HangOut.Controllers
                     ObjItem.Add("ItemMode", item.ItemMode);
                     TotalPrice += Mycart.Count * item.Price;
                     TotalCostPrice+= Mycart.Count * item.CostPrice;
-                    TotalTax += item.Tax;
+                    TotalTax += item.Tax * Mycart.Count;
                     jArray.Add(ObjItem);
 
             }
