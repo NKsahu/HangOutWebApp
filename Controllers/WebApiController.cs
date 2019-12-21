@@ -265,9 +265,9 @@ namespace HangOut.Controllers
 
             }
             JObject ViewCartItem = new JObject();
-            ViewCartItem.Add("TotalCostPrice", Math.Round(TotalCostPrice,2));// without gst
-            ViewCartItem.Add("TotalTax", Math.Round(TotalTax,2));
-            ViewCartItem.Add("TotalPrice", Math.Round(TotalPrice,2));
+            ViewCartItem.Add("TotalCostPrice", Math.Round(TotalCostPrice,3));// without gst
+            ViewCartItem.Add("TotalTax", Math.Round(TotalTax,3));
+            ViewCartItem.Add("TotalPrice", Math.Round(TotalPrice,3));
             ViewCartItem.Add("ListGetCart", jArray);
             ViewCartItem.Add("OrderingStatus", objOrg.CustomerOrdering);
             return ViewCartItem;
