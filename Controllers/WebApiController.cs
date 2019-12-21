@@ -1632,7 +1632,7 @@ namespace HangOut.Controllers
             parameters.Add("WEBSITE", "APPSTAGING");
             //parameters.Add("EMAIL", email);
             //parameters.Add("MOBILE_NO", mobile);
-            //string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
+            string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
             //bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
             // string result = Paytm(OID);
             return null;
@@ -1642,59 +1642,7 @@ namespace HangOut.Controllers
          
 
         }
-        public string Paytm(string OID)
-        {
-            Dictionary<String, String> paytmParams = new Dictionary<String, String>();
-            string responseData = string.Empty;
-            /* Find your MID in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys */
-            paytmParams.Add("MID", "foodDo62634269971979");
-
-            /* Enter your order id which needs to be check status for */
-            paytmParams.Add("ORDERID", OID);
-
-            /**
-            * Generate checksum by parameters we have
-            * You can get Checksum DLL from https://developer.paytm.com/docs/checksum/
-            * Find your Merchant Key in your Paytm Dashboard at https://dashboard.paytm.com/next/apikeys 
-*/
-            String checksum = paytm.CheckSum.generateCheckSum("O&BSeciOz8DyVqnd", paytmParams);
-
-            /* put generated checksum value here */
-            paytmParams.Add("CHECKSUMHASH", checksum);
-
-            /* prepare JSON string for request */
-            String post_data = new JavaScriptSerializer().Serialize(paytmParams);
-
-            /* for Staging */
-            String url = "https://securegw-stage.paytm.in/order/status";
-
-            /* for Production */
-            // String url = "https://securegw.paytm.in/order/status";
-
-            try
-            {
-                HttpWebRequest connection = (HttpWebRequest)WebRequest.Create(url);
-                connection.Headers.Add("ContentType", "application/json");
-                connection.Method = "POST";
-                using (StreamWriter requestWriter = new StreamWriter(connection.GetRequestStream()))
-                {
-                    requestWriter.Write(post_data);
-                }
-               
-                using (StreamReader responseReader = new StreamReader(connection.GetResponse().GetResponseStream()))
-                {
-                    responseData = responseReader.ReadToEnd();
-                }
-                Response.Write(responseData);
-                // Response.Write("Request: " + post_data);
-            }
-            catch (Exception ex)
-            {
-                Response.Write(ex.Message.ToString());
-            }
-            return responseData;
-
-        }
+        
 
         [HttpPost]
         public JObject JoinFoodDoTeam(string Obj)
