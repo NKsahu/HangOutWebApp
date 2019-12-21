@@ -732,7 +732,6 @@ namespace HangOut.Controllers
             ListOrders = ListOrders.FindAll(x => x.Table_or_SheatId == TOrSId &&(x.Status=="1"||x.Status=="2"));// placed or Processing
             ListOrders = ListOrders.FindAll(x => x.PaymentStatus == 0);
             List<HG_OrderItem> listitems = new List<HG_OrderItem>();
-            
             List<HG_Items> items = new HG_Items().GetAll(OrgId);
             foreach (var OrderObj in ListOrders)
             {
@@ -740,10 +739,14 @@ namespace HangOut.Controllers
                 
             }
             double TotalPrice = 0.00;
+            double CostPrice = 0.00;
+            double Totaltax = 0.00;
             JArray jArray = new JArray();
             foreach (var OrderItm in listitems)
             {
                 TotalPrice += (OrderItm.Count * OrderItm.Price);
+                CostPrice += (OrderItm.Count * OrderItm.CostPrice);
+                Totaltax += (OrderItm.Count * OrderItm.TaxInItm);
                 JObject jobj = JObject.FromObject(OrderItm);
                 HG_Items hG_Items = items.Find(x => x.ItemID == OrderItm.FID);
                 jobj.Add("ItemName", hG_Items.Items);
@@ -758,8 +761,9 @@ namespace HangOut.Controllers
             {
                 jObject.Add("Status", 200);
                 jObject.Add("ListItems", jArray);
-                jObject.Add("Total", TotalPrice);
-
+                jObject.Add("CostPrice", Math.Round(CostPrice,2));
+                jObject.Add("Tax", Math.Round(Totaltax, 2));
+                jObject.Add("Total", Math.Round(TotalPrice, 2));
             }
             
 
