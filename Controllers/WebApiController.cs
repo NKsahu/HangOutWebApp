@@ -649,8 +649,9 @@ namespace HangOut.Controllers
                         ChefSeenBy = (Status!=3?0:(int)CID),
                         OrderDate = DateTime.Now,
                         OrdById = CID,
-                        TaxInItm=ObjItem.Tax
-                        };
+                        TaxInItm=ObjItem.Tax,
+                        CostPrice=ObjItem.CostPrice
+                    };
                         if (OrderItem.Save() <= 0)
                         {
                             HG_Orders order = new HG_Orders();
