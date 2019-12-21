@@ -243,6 +243,7 @@ namespace HangOut.Controllers
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
             JArray jArray = new JArray();
             double TotalTax = 0.00;
+            double TotalCostPrice = 0.00;
             foreach (Cart Mycart in CartItems)
             {
                 HG_Items item = ListItems.Find(x => x.ItemID == Mycart.ItemId);
@@ -255,14 +256,16 @@ namespace HangOut.Controllers
                     ObjItem.Add("ItemCartValue", Mycart.Count);
                     ObjItem.Add("ItemMode", item.ItemMode);
                     TotalPrice += Mycart.Count * item.Price;
+                    TotalCostPrice+= Mycart.Count * item.CostPrice;
                     TotalTax += item.Tax;
                     jArray.Add(ObjItem);
 
             }
             JObject ViewCartItem = new JObject();
+            ViewCartItem.Add("TotalCostPrice", TotalCostPrice);
+            ViewCartItem.Add("TotalTax", TotalTax);
             ViewCartItem.Add("TotalPrice", TotalPrice);
             ViewCartItem.Add("ListGetCart", jArray);
-            ViewCartItem.Add("TotalTax", TotalTax);
             ViewCartItem.Add("OrderingStatus", objOrg.CustomerOrdering);
             return ViewCartItem;
         }
