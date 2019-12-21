@@ -615,6 +615,7 @@ namespace HangOut.Controllers
                 {
                     Create_By = CID,
                     Create_Date =DateTime.Now,
+                    Update_Date=DateTime.Now,
                     CID = CID,
                     Update_By = CID,
                     Status = "1",//Placed
@@ -648,6 +649,8 @@ namespace HangOut.Controllers
                         OrgId = OrgId,
                         ChefSeenBy = (Status!=3?0:(int)CID),
                         OrderDate = DateTime.Now,
+                        UpdatedBy=0,
+                        UpdationDate=DateTime.Now,
                         OrdById = CID,
                         TaxInItm=ObjItem.Tax,
                         CostPrice=ObjItem.CostPrice

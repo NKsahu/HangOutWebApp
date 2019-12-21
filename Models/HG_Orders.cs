@@ -27,6 +27,7 @@ namespace HangOut.Models
         public int TableOtp { get; set; }
         public string OrderByIds { get; set; }//  Order by IDS comma seprated
         public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken OrderItems  or Not
+        public double RoundOffAmt { get; set; }
         public HG_Orders()
         {
             this.OID = 0;
@@ -36,6 +37,7 @@ namespace HangOut.Models
             this.Update_By = 0;
             this.Table_or_SheatId = 0;
             this.PayReceivedBy = 0;
+            this.RoundOffAmt=0.00;
         }
 
         public System.Int64 Save()
@@ -113,11 +115,11 @@ namespace HangOut.Models
                         Create_Date = SDR.GetDateTime(4),
                         Update_By = SDR.GetInt64(5),
                         Update_Date = SDR.GetDateTime(6),
-                        OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8),
-                        Table_or_SheatId=SDR.IsDBNull(9)?0:SDR.GetInt64(9),
-                        PaymentStatus=SDR.IsDBNull(10)?0:SDR.GetInt32(10),
-                        PayReceivedBy=SDR.IsDBNull(11)?0:SDR.GetInt32(11),
-                        TableOtp=SDR.IsDBNull(12)?0:SDR.GetInt32(12),
+                        OrgId =SDR.GetInt32(8),
+                        Table_or_SheatId=SDR.GetInt64(9),
+                        PaymentStatus=SDR.GetInt32(10),
+                        PayReceivedBy=SDR.GetInt32(11),
+                        TableOtp=SDR.GetInt32(12),
                         OrderByIds=SDR.GetString(13),
                         OrderApprovlSts=SDR.GetInt32(14)
                     };
@@ -151,11 +153,11 @@ namespace HangOut.Models
                  ObjTemp.Create_Date = SDR.GetDateTime(4);
                  ObjTemp.Update_By = SDR.GetInt64(5);
                  ObjTemp.Update_Date = SDR.GetDateTime(6);
-                 ObjTemp.OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8);
-                ObjTemp.Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9);
-                ObjTemp.PaymentStatus = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
-                ObjTemp.PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11);
-                ObjTemp.TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12);
+                 ObjTemp.OrgId =SDR.GetInt32(8);
+                ObjTemp.Table_or_SheatId = SDR.GetInt64(9);
+                ObjTemp.PaymentStatus = SDR.GetInt32(10);
+                ObjTemp.PayReceivedBy = SDR.GetInt32(11);
+                ObjTemp.TableOtp =SDR.GetInt32(12);
                 ObjTemp.OrderByIds = SDR.GetString(13);
                 ObjTemp.OrderApprovlSts = SDR.GetInt32(14);
                 }
@@ -215,11 +217,11 @@ namespace HangOut.Models
                         Create_Date = SDR.GetDateTime(4),
                         Update_By = SDR.GetInt64(5),
                         Update_Date = SDR.GetDateTime(6),
-                        OrgId = SDR.IsDBNull(8) ? 0 : SDR.GetInt32(8),
-                        Table_or_SheatId = SDR.IsDBNull(9) ? 0 : SDR.GetInt64(9),
-                        PaymentStatus=SDR.IsDBNull(10)?0:SDR.GetInt32(10),
-                       PayReceivedBy = SDR.IsDBNull(11) ? 0 : SDR.GetInt32(11),
-                        TableOtp = SDR.IsDBNull(12) ? 0 : SDR.GetInt32(12),
+                        OrgId =SDR.GetInt32(8),
+                        Table_or_SheatId = SDR.GetInt64(9),
+                        PaymentStatus=SDR.GetInt32(10),
+                       PayReceivedBy = SDR.GetInt32(11),
+                        TableOtp =SDR.GetInt32(12),
                         OrderByIds = SDR.GetString(13),
                         OrderApprovlSts=SDR.GetInt32(14)
                     };
