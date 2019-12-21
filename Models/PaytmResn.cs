@@ -18,18 +18,20 @@ namespace HangOut.Models
       //,[CID]
       //,[PaytmResponse]
 
-      public  int id { get; set; }
-      public Int64 OID { get; set; }
+      public  int id { get; set; } // 0 for insert id
+      public Int64 OID { get; set; } // oid primary key
         public string OIDkey { get; set; }
         public string TxnId { get; set; }
-        public int TxnSts { get; set; }
+        public int TxnSts { get; set; } // {0: failer ,1 means success}
         public DateTime TxtDate { get; set; }
         public Int64 CID { get; set; }// customer id
         public string PaytmResp { get; set; }
+        public string PaidAmount { get; set; }
         public PaytmResn()
         {
             id = 0;
             TxtDate = DateTime.Now;
+            TxnId = "";
 
         }
         public int save()
@@ -40,11 +42,11 @@ namespace HangOut.Models
             {
                 if (this.id == 0)
                 {
-                    cmd = new SqlCommand("insert into PaytmTxn values(@OID,@OIDkey,@TxnId,@TxnSts,@TxtDate,@CID,@PaytmResp); SELECT SCOPE_IDENTITY();", con.Con);
+                    cmd = new SqlCommand("insert into PaytmTxn values(@OID,@OIDkey,@TxnId,@TxnSts,@TxtDate,@CID,@PaytmResp,@PaidAmount); SELECT SCOPE_IDENTITY();", con.Con);
                 }
                 else
                 {
-                    cmd = new SqlCommand("update PaytmTxn set TxnId=@TxnId,TxnSts=@TxnSts,TxtDate=@TxtDate,CID=@CID,PaytmResp=@PaytmResp, OIDkey=@OIDkey where ID=@ID ", con.Con);
+                    cmd = new SqlCommand("update PaytmTxn set TxnId=@TxnId,TxnSts=@TxnSts,TxtDate=@TxtDate,CID=@CID,PaytmResp=@PaytmResp, OIDkey=@OIDkey,PaidAmount=@PaidAmount where ID=@ID ", con.Con);
                     cmd.Parameters.AddWithValue("@ID", this.id);
                 }
                 cmd.Parameters.AddWithValue("@OIDkey", this.OIDkey);
@@ -54,6 +56,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@TxtDate", this.TxtDate);
                 cmd.Parameters.AddWithValue("@CID", this.CID);
                 cmd.Parameters.AddWithValue("@PaytmResp", this.PaytmResp);
+                cmd.Parameters.AddWithValue("@PaidAmount", this.PaidAmount);
                 if (this.id == 0)
                 {
                     this.id = Convert.ToInt32(cmd.ExecuteScalar());
@@ -88,7 +91,7 @@ namespace HangOut.Models
                 SqlDataReader sqlDataReader = cmd.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
-                    int index = 0;
+                    int index = -1;
                     PaytmResn hG_Ticket = new PaytmResn();
                     hG_Ticket.id = sqlDataReader.GetInt32(++index);
                     hG_Ticket.OID = sqlDataReader.GetInt32(++index);
@@ -98,6 +101,7 @@ namespace HangOut.Models
                     hG_Ticket.TxtDate = sqlDataReader.GetDateTime(++index);
                     hG_Ticket.CID = sqlDataReader.GetInt64(++index);
                     hG_Ticket.PaytmResp = sqlDataReader.GetString(++index);
+                    hG_Ticket.PaidAmount = sqlDataReader.GetString(++index);
                     listtemp.Add(hG_Ticket);
                 }
 
@@ -114,21 +118,21 @@ namespace HangOut.Models
             return listtemp;
         }
 
-        public static PaytmResn Getone(int id)
+        public static PaytmResn Getone(Int64 OID)
         {
 
             PaytmResn Temp = new PaytmResn();
             DBCon con = new DBCon();
             SqlCommand cmd = new SqlCommand();
-            string query = "select * from PaytmTxn where ID=@ID";
+            string query = "select * from PaytmTxn where OID=@OID";
             try
             {
                 cmd = new SqlCommand(query, con.Con);
-                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.Parameters.AddWithValue("@OID", OID);
                 SqlDataReader sqlDataReader = cmd.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
-                    int index = 0;
+                    int index = -1;
                     PaytmResn hG_Ticket = new PaytmResn();
                     hG_Ticket.id = sqlDataReader.GetInt32(++index);
                     hG_Ticket.OID = sqlDataReader.GetInt32(++index);
@@ -138,7 +142,8 @@ namespace HangOut.Models
                     hG_Ticket.TxtDate = sqlDataReader.GetDateTime(++index);
                     hG_Ticket.CID = sqlDataReader.GetInt64(++index);
                     hG_Ticket.PaytmResp = sqlDataReader.GetString(++index);
-                    Temp=hG_Ticket;
+                    hG_Ticket.PaidAmount = sqlDataReader.GetString(++index);
+                    Temp =hG_Ticket;
                 }
 
             }

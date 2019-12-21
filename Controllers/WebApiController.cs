@@ -1707,5 +1707,24 @@ namespace HangOut.Controllers
             return result;
         }
 
+
+        public string PaytmPayMentStatus([System.Web.Http.FromBody] PaytmResn paytmResn)
+        {
+            JObject result = new JObject();
+            //    public int id { get; set; }
+            //public Int64 OID { get; set; }
+            //public string OIDkey { get; set; }
+            //public string TxnId { get; set; }
+            //public int TxnSts { get; set; }
+            //public DateTime TxtDate { get; set; }
+            //public Int64 CID { get; set; }// customer id
+            //public string PaytmResp { get; set; }
+            if (paytmResn.save() > 0 )
+            {
+
+            }
+            return "1";
+        }
+
     }
 }
