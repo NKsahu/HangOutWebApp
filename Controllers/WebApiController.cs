@@ -1645,7 +1645,7 @@ namespace HangOut.Controllers
         }
         [HttpPost]
         public string GetCheckSum(string CID, string OID, string Amount,string email,string mobile)
-        {
+        { 
 
             String merchantKey = "yB4HRdQ0vcb9XBrI";
             Dictionary<string, string> parameters = new Dictionary<string, string>();
