@@ -228,8 +228,8 @@ namespace HangOut.Controllers
             Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
 
             if (Cnt == 0)
-                return Count + ","+Math.Round(TotalFinlAmt, 2) + "," + ItemId+","+"0"+","+ Math.Round(Totaltax,2)+","+ Math.Round(Subtotal,2);
-            return Count + "," + Math.Round(TotalFinlAmt, 2) + "," + "0" + "," + CurrentItemobj.Count + "," + Math.Round(Totaltax, 2)+","+ Math.Round(Subtotal, 2);
+                return Count + ","+TotalFinlAmt + "," + ItemId+","+"0"+","+ Totaltax+","+Subtotal;
+            return Count + "," + TotalFinlAmt + "," + "0" + "," + CurrentItemobj.Count + "," +Totaltax+","+ Subtotal;
         }
         [HttpPost]
         public JObject GetCart(string Obj)
@@ -761,9 +761,9 @@ namespace HangOut.Controllers
             {
                 jObject.Add("Status", 200);
                 jObject.Add("ListItems", jArray);
-                jObject.Add("CostPrice", Math.Round(CostPrice,2));
-                jObject.Add("Tax", Math.Round(Totaltax, 2));
-                jObject.Add("Total", Math.Round(TotalPrice, 2));
+                jObject.Add("CostPrice", CostPrice);
+                jObject.Add("Tax", Totaltax);
+                jObject.Add("Total",TotalPrice);
             }
             
 
