@@ -124,7 +124,7 @@ namespace HangOut.Controllers
                             objItem.Add("MenuId", Items.CategoryID);
                             objItem.Add("ItemIndex", ItemiIndex++);
                             objItem.Add("ItemMode", Items.ItemMode);
-                            objItem.Add("CostPrice", Items.CostPrice);
+                            objItem.Add("CostPrice", Items.CostPrice);// without gst
                             objItem.Add("Info", Items.ItemDiscription);
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -169,7 +169,7 @@ namespace HangOut.Controllers
                             objItem.Add("ItemCartValue", CurrCount);
                             objItem.Add("MenuId", Items.CategoryID);
                             objItem.Add("ItemIndex", ItemiIndex++);
-                            objItem.Add("CostPrice", Items.CostPrice);
+                            objItem.Add("CostPrice", Items.CostPrice);// without gst
                             objItem.Add("ItemMode", Items.ItemMode);
                             objItem.Add("Info", Items.ItemDiscription);
                             jarrayItem.Add(objItem);
@@ -205,8 +205,9 @@ namespace HangOut.Controllers
             }
             else
                 Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, OrgId = OrgId ,TableorSheatOrTaleAwayId=TableSheatTakeWayId});
-            double Amt = 0;
+            double TotalFinlAmt = 0;
             double Totaltax = 0.00;
+            double Subtotal = 0.00;
             int Count = 0;
             List<Cart> CurrItemsOfUser = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId && x.OrgId == OrgId);
             int CurrCount = CurrItemsOfUser.Count;
@@ -219,15 +220,16 @@ namespace HangOut.Controllers
             foreach (Cart CartObj in CurrItemsOfUser)
             {
                 HG_Items ObjItem = new HG_Items().GetOne((int)CartObj.ItemId);
-                Amt += CartObj.Count * ObjItem.Price;
+                TotalFinlAmt += CartObj.Count * ObjItem.Price;
                 Totaltax += ObjItem.Tax;
                 Count += CartObj.Count;
+                Subtotal+= CartObj.Count * ObjItem.CostPrice;
             }
             Cart CurrentItemobj = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
 
             if (Cnt == 0)
-                return Count + "," + Amt + "," + ItemId+","+"0"+","+ Totaltax;
-            return Count + "," + Amt + "," + "0" + "," + CurrentItemobj.Count + "," + Totaltax;
+                return Count + ","+Math.Round(TotalFinlAmt, 2) + "," + ItemId+","+"0"+","+ Math.Round(Totaltax,2)+","+ Math.Round(Subtotal,2);
+            return Count + "," + Math.Round(TotalFinlAmt, 2) + "," + "0" + "," + CurrentItemobj.Count + "," + Math.Round(Totaltax, 2)+","+ Math.Round(Subtotal, 2);
         }
         [HttpPost]
         public JObject GetCart(string Obj)
@@ -262,9 +264,9 @@ namespace HangOut.Controllers
 
             }
             JObject ViewCartItem = new JObject();
-            ViewCartItem.Add("TotalCostPrice", TotalCostPrice);
-            ViewCartItem.Add("TotalTax", TotalTax);
-            ViewCartItem.Add("TotalPrice", TotalPrice);
+            ViewCartItem.Add("TotalCostPrice", Math.Round(TotalCostPrice,2));// without gst
+            ViewCartItem.Add("TotalTax", Math.Round(TotalTax,2));
+            ViewCartItem.Add("TotalPrice", Math.Round(TotalPrice,2));
             ViewCartItem.Add("ListGetCart", jArray);
             ViewCartItem.Add("OrderingStatus", objOrg.CustomerOrdering);
             return ViewCartItem;
@@ -1449,7 +1451,7 @@ namespace HangOut.Controllers
                     HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
                     List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
                     double price = 0.00;
-                   // double CostPrice = 0.00;
+                   double CostPrice = 0.00;
                     double tax = 0.00;
                     HashSet<int> Token = new HashSet<int>();
                     for(int i=0;i< OrderItemList.Count; i++)
@@ -1459,6 +1461,7 @@ namespace HangOut.Controllers
                         tax += OrderItemList[i].TaxInItm;
                         Token.Add(OrderItemList[i].TickedNo);
                     }
+                  //  CostPrice= price
                     JObject Object = new JObject();
                     Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                     Object.Add("OrganizationName", hG_OrganizationDetails.Name);
