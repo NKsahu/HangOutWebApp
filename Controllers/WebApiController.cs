@@ -1571,6 +1571,7 @@ namespace HangOut.Controllers
         {
             JObject jObject = new JObject();
             List<HG_OrderItem> tableorderlist = new HG_OrderItem().GetAllByOrg(OrgId, ChefId: CHEFID);
+            tableorderlist = tableorderlist.FindAll(x => x.Status != 3 && x.Status != 4);
             tableorderlist = tableorderlist.FindAll(x => x.TickedNo == TicketNO);
             foreach (var OrderItem in tableorderlist)
             {
