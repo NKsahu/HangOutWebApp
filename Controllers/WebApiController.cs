@@ -1402,6 +1402,10 @@ namespace HangOut.Controllers
                 if (order != null && order.OID > 0)
                 {
                     jObject.Add("CurrOID",order.OID);
+                    if (objtable.Status == 1)
+                    {
+                        jObject["Status"] = 3;// processing
+                    }
                     
                 }
                 else
