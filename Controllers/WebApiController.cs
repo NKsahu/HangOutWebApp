@@ -4,7 +4,7 @@ using HangOut.Models.Common;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Linq;
-using Newtonsoft.Json;
+using HangOut.Models.DynamicList;
 using System;
 using System.Net;
 using paytm;
@@ -1431,8 +1431,8 @@ namespace HangOut.Controllers
         public JArray PastOrderMainList(int CID,int status=0)
         {
             JArray Info = new JArray();
-            
-            List<HG_Orders> OrderList = new HG_Orders().GetAll(CID: CID);
+            List<HG_Orders> OrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            OrderList = OrderList.FindAll(x => x.OrderByIds.Contains(CID.ToString()));
             if (status > 0 && status == 1)//ongoing orders
             {
                 OrderList = OrderList.FindAll(x => x.Status == "1" || x.Status == "2");
@@ -1446,20 +1446,18 @@ namespace HangOut.Controllers
         //    List<HG_OrderItem> OrderItem=new HG_OrderItem().GetAll(CID)
             if(OrderList.Count>0)
             {
-
                 foreach (HG_Orders orders in OrderList)
                 {
-                   
                     HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
                     List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
                     double price = 0.00;
-                   double CostPrice = 0.00;
+                    double CostPrice = 0.00;
                     double tax = 0.00;
                     HashSet<int> Token = new HashSet<int>();
                     for(int i=0;i< OrderItemList.Count; i++)
                     {
                         price += (OrderItemList[i].Count * OrderItemList[i].Price);
-                        // CostPrice+= (OrderItemList[i].Count * OrderItemList[i].c);
+                        CostPrice+= (OrderItemList[i].Count * OrderItemList[i].CostPrice);
                         tax += OrderItemList[i].TaxInItm;
                         Token.Add(OrderItemList[i].TickedNo);
                     }
@@ -1467,28 +1465,13 @@ namespace HangOut.Controllers
                     JObject Object = new JObject();
                     Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                     Object.Add("OrganizationName", hG_OrganizationDetails.Name);
+                    Object.Add("CostPrice", CostPrice);
+                    Object.Add("Tax", tax);
                     Object.Add("TotalAmount", price);
                     Object.Add("TicketNo", string.Join(",", Token));
                     Object.Add("OID", orders.OID);
                     Object.Add("Status", orders.Status);
-                    Object.Add("Tax", tax);
-                    if (orders.PaymentStatus == 1)
-                    {
-                        Object.Add("PayStatus", "CASH");
-                    }
-                    else if (orders.PaymentStatus == 2)
-                    {
-                        Object.Add("PayStatus", "ONLINE");
-                    }
-                    else if (orders.PaymentStatus == 3)
-                    {
-                        Object.Add("PayStatus", "foodDo");
-                    }
-                    else
-                    {
-                        Object.Add("PayStatus", "UNPAID");
-                    }
-
+                    Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
                     Info.Add(Object);
                 }
             }
@@ -1500,11 +1483,9 @@ namespace HangOut.Controllers
 
         public JObject PastOrderSubList(int OID, string Status)
         {
-
             JObject Object = new JObject();
             JArray Info = new JArray();
             HG_Orders orders = new HG_Orders().GetOne(OID);
-
             if (orders != null && orders.Status == Status)
             {
                 HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
@@ -1518,34 +1499,18 @@ namespace HangOut.Controllers
                 {
                     price += (hG_OrderItems[i].Count * hG_OrderItems[i].Price);
                     Token.Add(hG_OrderItems[i].TickedNo);
-                    tax += hG_OrderItems[i].TaxInItm;
-                    
+                    tax += hG_OrderItems[i].TaxInItm* hG_OrderItems[i].Count;
+                    CostPrice+= (hG_OrderItems[i].Count * hG_OrderItems[i].CostPrice);
                 }
-
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
+                Object.Add("CostPrice", CostPrice);
+                Object.Add("Tax", tax);
                 Object.Add("TotalAmount", price);
                 Object.Add("TicketNo", string.Join(",", Token));
                 Object.Add("OID", orders.OID);
                 Object.Add("Status", orders.Status);
-                Object.Add("Tax", tax);
-                if (orders.PaymentStatus == 1)
-                {
-                    Object.Add("PayStatus", "CASH");
-                }
-                else if (orders.PaymentStatus == 2)
-                {
-                    Object.Add("PayStatus", "ONLINE");
-                }
-                else if (orders.PaymentStatus == 3)
-                {
-                    Object.Add("PayStatus", "foodDo");
-                }
-                else
-                {
-                    Object.Add("PayStatus", "UNPAID");
-                }
-
+                Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
                 foreach (var OrderItem in hG_OrderItems)
                 {
                     HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
@@ -1555,14 +1520,13 @@ namespace HangOut.Controllers
                     itemobj.Add("ItemName", hG_Items.Items);
                     itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
                     itemobj.Add("Status", OrderItem.Status);
+                    itemobj.Add("Tax", OrderItem.TaxInItm);
+                    itemobj.Add("CostPrice", OrderItem.CostPrice);
                     itemobj.Add("Amount", OrderItem.Price);
                     Info.Add(itemobj);
                 }
-
-
             }
             Object.Add("OrderDetails", Info);
-
             return Object;
         }
 
