@@ -572,7 +572,7 @@ namespace HangOut.Controllers
             else if (ObjOrders != null && ObjOrders.PaymentStatus != 0)
             {
                 PostResult.Add("Status", 400);
-                PostResult.Add("MSG", "Can't Modify Order After Payment First Complete Pending Order");
+                PostResult.Add("MSG", "Can't Modify Order After Payment ! First Complete Pending Order");
                 return PostResult;
             }
             else
@@ -699,6 +699,13 @@ namespace HangOut.Controllers
                 }
                 hG_Orders.Status = "4";//CANCEL ORDER
                 hG_Orders.Update_By = UpdatedBy;
+                HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(hG_Orders.Table_or_SheatId);
+                if (ObjTorS != null)
+                {
+                    ObjTorS.Status = 1;// free table
+                    ObjTorS.Otp = OTPGeneretion.Generate();
+                    ObjTorS.save();
+                }
                 var OrderItem = new HG_OrderItem().GetAll(hG_Orders.OID);
                 foreach(var ObjOitem in OrderItem)
                 {
