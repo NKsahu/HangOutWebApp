@@ -761,9 +761,9 @@ namespace HangOut.Controllers
             {
                 jObject.Add("Status", 200);
                 jObject.Add("ListItems", jArray);
-                jObject.Add("CostPrice", CostPrice);
-                jObject.Add("Tax", Totaltax);
-                jObject.Add("Total",TotalPrice);
+                jObject.Add("CostPrice", CostPrice.ToString("0.00"));
+                jObject.Add("Tax", Totaltax.ToString("0.00"));
+                jObject.Add("Total",TotalPrice.ToString("0.00"));
             }
             
 
@@ -1469,9 +1469,9 @@ namespace HangOut.Controllers
                     JObject Object = new JObject();
                     Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                     Object.Add("OrganizationName", hG_OrganizationDetails.Name);
-                    Object.Add("CostPrice", CostPrice);
-                    Object.Add("Tax", tax);
-                    Object.Add("TotalAmount", price);
+                    Object.Add("CostPrice", CostPrice.ToString("0.00"));
+                    Object.Add("Tax", tax.ToString("0.00"));
+                    Object.Add("TotalAmount", price.ToString("0.00"));
                     Object.Add("TicketNo", string.Join(",", Token));
                     Object.Add("OID", orders.OID);
                     Object.Add("Status", orders.Status);
@@ -1508,9 +1508,9 @@ namespace HangOut.Controllers
                 }
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
-                Object.Add("CostPrice", CostPrice);
-                Object.Add("Tax", tax);
-                Object.Add("TotalAmount", price);
+                Object.Add("CostPrice", CostPrice.ToString("0.00"));
+                Object.Add("Tax", tax.ToString("0.00"));
+                Object.Add("TotalAmount", price.ToString("0.00"));
                 Object.Add("TicketNo", string.Join(",", Token));
                 Object.Add("OID", orders.OID);
                 Object.Add("Status", orders.Status);
@@ -1525,8 +1525,8 @@ namespace HangOut.Controllers
                     itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
                     itemobj.Add("Status", OrderItem.Status);
                     itemobj.Add("Tax", OrderItem.TaxInItm);
-                    itemobj.Add("CostPrice", OrderItem.CostPrice);
-                    itemobj.Add("Amount", OrderItem.Price);
+                    itemobj.Add("CostPrice", OrderItem.CostPrice.ToString("0.00"));
+                    itemobj.Add("Amount", OrderItem.Price.ToString("0.00"));
                     Info.Add(itemobj);
                 }
             }
