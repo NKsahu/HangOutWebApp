@@ -221,7 +221,7 @@ namespace HangOut.Controllers
             {
                 HG_Items ObjItem = new HG_Items().GetOne((int)CartObj.ItemId);
                 TotalFinlAmt += CartObj.Count * ObjItem.Price;
-                Totaltax += ObjItem.Tax;
+                Totaltax += ObjItem.Tax* CartObj.Count;
                 Count += CartObj.Count;
                 Subtotal+= CartObj.Count * ObjItem.CostPrice;
             }
