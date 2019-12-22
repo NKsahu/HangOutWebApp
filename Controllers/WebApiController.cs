@@ -1077,7 +1077,6 @@ namespace HangOut.Controllers
 
                     }
                 }
-              
            
             }
             catch(System.Exception e)
@@ -1307,26 +1306,7 @@ namespace HangOut.Controllers
             }
             return Result;
         }
-        public JArray GetTableInfo(int OrgId,int OrgType)
-        {
-            List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
-            List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
-            List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
-            JArray TablesOrSheatList = new JArray();
-            foreach (var TableObj in ListTableOrSheat)
-            {
-                HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == TableObj.FloorSide_or_RowNoID);
-                HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == TableObj.Floor_or_ScreenId);
-                JObject TableScreen = new JObject();
-                string ForSname = hG_Floor_Or_ScreenMaster != null ? hG_Floor_Or_ScreenMaster.Name : "";
-                string FsideOrRname = hG_FloorSide_Or_RowName != null ? hG_FloorSide_Or_RowName.FloorSide_or_RowName : "";
-                TableScreen.Add("TableOrSheatName",ForSname + " "+ FsideOrRname+" "+ TableObj.Table_or_SheetName);
-                TableScreen.Add("TableSeatID", TableObj.Table_or_RowID);
-                TablesOrSheatList.Add(TableScreen);
-
-            }
-            return TablesOrSheatList;
-        }
+       
         public JObject OTPVerification(string MobileNO,string OtpNu)
         {
             OTPGeneretion ObjOtp = new OTPGeneretion();
@@ -1436,7 +1416,34 @@ namespace HangOut.Controllers
             }
             return jArray;
         }
+        public JArray FloorScreen(int OrgID)
+        {
+            HG_OrganizationDetails orgonization = new HG_OrganizationDetails().GetOne(OrgID);
 
+            List<HG_Floor_or_ScreenMaster> floorlist = new HG_Floor_or_ScreenMaster().GetAll(int.Parse(orgonization.OrgTypes), OrgID);
+            return JArray.FromObject(floorlist);
+        }
+        //dropdown captain end
+        public JArray GetTableInfo(int OrgId, int OrgType)
+        {
+            List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
+            List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
+            List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
+            JArray TablesOrSheatList = new JArray();
+            foreach (var TableObj in ListTableOrSheat)
+            {
+                HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == TableObj.FloorSide_or_RowNoID);
+                HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == TableObj.Floor_or_ScreenId);
+                JObject TableScreen = new JObject();
+                string ForSname = hG_Floor_Or_ScreenMaster != null ? hG_Floor_Or_ScreenMaster.Name : "";
+                string FsideOrRname = hG_FloorSide_Or_RowName != null ? hG_FloorSide_Or_RowName.FloorSide_or_RowName : "";
+                TableScreen.Add("TableOrSheatName", ForSname + " " + FsideOrRname + " " + TableObj.Table_or_SheetName);
+                TableScreen.Add("TableSeatID", TableObj.Table_or_RowID);
+                TablesOrSheatList.Add(TableScreen);
+
+            }
+            return TablesOrSheatList;
+        }
 
 
         public JArray PastOrderMainList(int CID,int status=0)
@@ -1616,35 +1623,7 @@ namespace HangOut.Controllers
             }
             return jObject;
         }
-        public JArray FloorScreen(int OrgID)
-        {
-            HG_OrganizationDetails orgonization = new HG_OrganizationDetails().GetOne(OrgID);
-          
-            List<HG_Floor_or_ScreenMaster> floorlist = new HG_Floor_or_ScreenMaster().GetAll(int.Parse(orgonization.OrgTypes), OrgID);
-            return JArray.FromObject(floorlist);
-        }
-        [HttpPost]
-        public string GetCheckSum(string CID, string OID, string Amount,string email,string mobile)
-        { 
-
-            String merchantKey = "yB4HRdQ0vcb9XBrI";
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("CALLBACK_URL", "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID="+OID+"");
-            parameters.Add("CHANNEL_ID","WAP");
-            parameters.Add("CUST_ID",CID);
-            parameters.Add("INDUSTRY_TYPE_ID","Retail105");
-            parameters.Add("MID", "foodDo62634269971979");
-            parameters.Add("ORDER_ID",OID);
-            parameters.Add("TXN_AMOUNT",Amount);
-            parameters.Add("WEBSITE", "APPSTAGING");
-            //parameters.Add("EMAIL", email);
-            //parameters.Add("MOBILE_NO", mobile);
-            string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
-            //bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
-            // string result = Paytm(OID);
-            return checksum;
-
-        }
+        
         
 
         [HttpPost]
@@ -1706,7 +1685,28 @@ namespace HangOut.Controllers
             return result;
         }
 
+        [HttpPost]
+        public string GetCheckSum(string CID, string OID, string Amount, string email, string mobile)
+        {
 
+            String merchantKey = "yB4HRdQ0vcb9XBrI";
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("CALLBACK_URL", "https://securegw.paytm.in/theia/paytmCallback?ORDER_ID=" + OID + "");
+            parameters.Add("CHANNEL_ID", "WAP");
+            parameters.Add("CUST_ID", CID);
+            parameters.Add("INDUSTRY_TYPE_ID", "Retail105");
+            parameters.Add("MID", "foodDo62634269971979");
+            parameters.Add("ORDER_ID", OID);
+            parameters.Add("TXN_AMOUNT", Amount);
+            parameters.Add("WEBSITE", "APPSTAGING");
+            //parameters.Add("EMAIL", email);
+            //parameters.Add("MOBILE_NO", mobile);
+            string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
+            //bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
+            // string result = Paytm(OID);
+            return checksum;
+
+        }
         public JObject PaytmPayMentStatus(JObject paytmResn)
         {
             string StringPaytmRsp = Newtonsoft.Json.JsonConvert.SerializeObject(paytmResn);
