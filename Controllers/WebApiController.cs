@@ -1711,9 +1711,10 @@ namespace HangOut.Controllers
             return checksum;
 
         }
-        public JObject PaytmPayMentStatus(JObject paytmResn)
+        public JObject PaytmPayMentStatus(string paytmResn)
         {
-            string StringPaytmRsp = Newtonsoft.Json.JsonConvert.SerializeObject(paytmResn);
+            JObject jObject = JObject.FromObject(paytmResn);
+            string StringPaytmRsp = Newtonsoft.Json.JsonConvert.SerializeObject(jObject);
            // JObject jObject = JObject.Parse(paytmResn);
             PaytmResn paytmResnObj = Newtonsoft.Json.JsonConvert.DeserializeObject<PaytmResn>(StringPaytmRsp);
            // PaytmResn paytmResnObj = new PaytmResn();

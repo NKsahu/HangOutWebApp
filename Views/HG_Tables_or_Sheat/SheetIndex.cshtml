@@ -3,8 +3,12 @@
     Layout = null;
 }
 @using HangOut.Models
-@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(2);}
-@{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll(2);}
+@{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(2);
+    List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll(2);
+    List<HG_FloorSide_or_RowName> ListRows = new HG_FloorSide_or_RowName().GetAll(2);
+
+    }
+
 <div class="card">
     <div class="card-header">
         <h1 style="text-align:center"><b>SEAT</b> </h1>
@@ -16,15 +20,18 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model=>model.QrCode)
+                        @Html.DisplayNameFor(model => model.QrCode)
                     </th>
                     <th>
                         @Html.DisplayName("Seat  Name")
                     </th>
                     <th>
+                        @Html.DisplayName("Row Number")
+                    </th>
+                    <th>
                         @Html.DisplayName("Screen Number")
                     </th>
-                    
+
                     <th></th>
                 </tr>
             </thead>
@@ -32,18 +39,30 @@
                 @foreach (var item in Model)
                 {
                 <tr id="@item.Table_or_RowID">
-                    
+
                     <td>
                         @Html.DisplayFor(modelItem => item.QrCode)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Table_or_SheetName)
+                        @Html.DisplayFor(modelItem => item.Floor_or_ScreenId)
+                    </td>
+                    <td>
+                        @{
+
+                            var ObjRow = ListRows.Find(x => x.ID == item.FloorSide_or_RowNoID);
+                            if (ObjRow == null)
+                            {
+                            }
+                            else
+                            {
+                                @ObjRow.FloorSide_or_RowName
+                            }
+                        }
                     </td>
                     <td>
                         @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);
                             if (ObjScreen == null)
                             {
-
                             }
                             else
                             {
@@ -55,7 +74,7 @@
 
                     </td>
                     <td>
-                        <button onclick="CreateEdit(@item.Table_or_RowID)"  class="btn btn-warning btn-sm "> Edit</button>
+                        <button onclick="CreateEdit(@item.Table_or_RowID)" class="btn btn-warning btn-sm "> Edit</button>
                     </td>
                 </tr>
                             }
