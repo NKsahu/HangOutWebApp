@@ -600,7 +600,7 @@
                         $("#tr" + ItemId).remove();
                     }
                     var finalChargeToShow = ChargeAmt + FinlAmt;
-                    $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow + ' /RS');
+                    $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
                     //$("#" + itemid).text(Cnt);
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -825,7 +825,7 @@
                    // ChargeAmt += TotalRs;
                     var Dispalamt = ChargeAmt + TotalRs;
                     console.log('chanrge');
-                    $("#FinalAmtCharge").text('CHARGE ' + Dispalamt + '/RS');
+                    $("#FinalAmtCharge").text('CHARGE ' + Dispalamt.toFixed(2) + '/RS');
                     if (CategoryList.length == 0) {
 
                         $.alert({
@@ -833,7 +833,7 @@
                             content: "Menu Not Applied.",
                         });
                     }
-                    $("#FinalAmt").text(TotalRs);
+                    $("#FinalAmt").text(TotalRs.toFixed(2));
 
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -1031,7 +1031,7 @@
                                     }
                                     SumItems = parseFloat(Jobje.Total);
                                     $("#SumOfQty").text(Qty);
-                                    $("#SumOfItem").text(SumItems + " Rs/-");
+                                    $("#SumOfItem").text(SumItems.toFixed(2) + " Rs/-");
                                     $("#News").hide();
                                     $("#PaymnetAndReceipt").show(); 
                                 },
