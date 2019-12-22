@@ -32,6 +32,7 @@ namespace HangOut.Models
             id = 0;
             TxtDate = DateTime.Now;
             TxnId = "";
+            TxnSts = 1;
 
         }
         public int save()
