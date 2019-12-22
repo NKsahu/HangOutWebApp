@@ -1726,6 +1726,8 @@ namespace HangOut.Controllers
             //public string PaytmResp { get; set; }
             if (paytmResnObj.save() > 0 )
             {
+                //BY  FOODDO PAYMENT
+                CompleteOrder(3, (int)paytmResnObj.CID, (int)paytmResnObj.OID);
                 result.Add("Status", 200);
             }
             else
