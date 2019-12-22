@@ -839,7 +839,7 @@ namespace HangOut.Controllers
             int IsChef = int.Parse(Params["IsChef"].ToString());
             List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             List<HG_Orders> OrderToShow = new List<HG_Orders>();
-            Orders = Orders.FindAll(x => x.Status != "3");//not completed
+            Orders = Orders.FindAll(x => x.Status != "3" &&x.Status!="4");//not completed not canceled
             Orders = Orders.FindAll(x => x.OrgId == OrgId);
             HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
             List<HG_OrderItem> hG_OrderItems = new List<HG_OrderItem>();

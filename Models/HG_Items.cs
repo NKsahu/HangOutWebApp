@@ -184,7 +184,7 @@ namespace HangOut.Models
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.Image = SDR.GetString(12);
                     ObjTmp.ApplyAddOn = SDR.GetInt32(13);
-                    ObjTmp.CostPrice = SDR.GetDouble(14);
+                    ObjTmp.CostPrice = SDR.GetDouble(14) == 0 ? SDR.GetDouble(4) : SDR.GetDouble(14);
                     ObjTmp.AddOnCatId = SDR.GetInt32(15);
                     ObjTmp.Type = SDR.GetInt32(16);
                     ObjTmp.AddOnType = SDR.GetInt32(17);
