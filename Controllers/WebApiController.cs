@@ -1732,11 +1732,11 @@ namespace HangOut.Controllers
             {
                 //BY  FOODDO PAYMENT
                 CompleteOrder(3, (int)paytmResnObj.CID, (int)paytmResnObj.OID);
-                result.Add("Status", 200);
+                result.Add("Status",200);
             }
             else
             {
-                result.Add("Status", 400);
+                result.Add("Status",400);
             }
             return result;
         }
