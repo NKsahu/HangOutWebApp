@@ -474,34 +474,7 @@ namespace HangOut.Controllers
             }
             return status;
         }
-        public JObject ScanRestTable(string Obj)
-        {
-            JObject ParaMeters = JObject.Parse(Obj);
-            string QrCode =ParaMeters.GetValue("TID").ToString();
-            int CID = int.Parse(ParaMeters.GetValue("CID").ToString());
-            string Type = ParaMeters.GetValue("Type").ToString();
-            HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
-            if(TableRowObj.Type!= Type)
-            {
-                TableRowObj = new HG_Tables_or_Sheat();
-            }
-            List<HG_Orders> CustOrdrList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-            JObject jObject = JObject.FromObject(TableRowObj);
-            HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status!="3");
-            if (orders == null)
-            {
-                jObject.Add("OID", 0);
-            }
-            else
-            {
-                jObject.Add("OID", orders.OID);
-            }
-            HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
-            jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
-            jObject.Add("OrderingStatus", objOrg.CustomerOrdering);
-            jObject.Add("PaymentType", objOrg.PaymentType);
-            return jObject;
-        }
+        
         public JArray CartList(string CID)
         {
             return JArray.FromObject( Cart.List.FindAll(x => x.CID == int.Parse(CID)));
@@ -539,13 +512,7 @@ namespace HangOut.Controllers
             listFloor = listFloor.FindAll(x => x.OrgID == OrgID);
             return JArray.FromObject(listFloor);
         }
-        [HttpPost]
-        public JArray GetSheetNumberBYRowList(int OrgID)
-        {
-            List<HG_Tables_or_Sheat> listSheet = new HG_Tables_or_Sheat().GetAll(2);// 2 for list of sheets
-            listSheet = listSheet.FindAll(x => x.OrgId == OrgID);
-            return JArray.FromObject(listSheet);
-        }
+        
 
         public JObject SettingPrivacyPolicy(string KeyName)
         {
@@ -1361,6 +1328,8 @@ namespace HangOut.Controllers
             return JObject.FromObject(Result);
         }
 
+
+        //===================================TABLE AND SCREEN SECTION =================
         public JArray TableAndTakeAway(int Type,int OrderById,int FloorId=0,int OrgId=0)
         {
             JArray jArray = new JArray();
@@ -1445,6 +1414,41 @@ namespace HangOut.Controllers
             return TablesOrSheatList;
         }
 
+        public JObject ScanRestTable(string Obj)
+        {
+            JObject ParaMeters = JObject.Parse(Obj);
+            string QrCode = ParaMeters.GetValue("TID").ToString();
+            int CID = int.Parse(ParaMeters.GetValue("CID").ToString());
+            string Type = ParaMeters.GetValue("Type").ToString();
+            HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
+            if (TableRowObj.Type != Type)
+            {
+                TableRowObj = new HG_Tables_or_Sheat();
+            }
+            List<HG_Orders> CustOrdrList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            JObject jObject = JObject.FromObject(TableRowObj);
+            HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status != "3");
+            if (orders == null)
+            {
+                jObject.Add("OID", 0);
+            }
+            else
+            {
+                jObject.Add("OID", orders.OID);
+            }
+            HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
+            jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
+            jObject.Add("OrderingStatus", objOrg.CustomerOrdering);
+            jObject.Add("PaymentType", objOrg.PaymentType);
+            return jObject;
+        }
+        [HttpPost]
+        public JArray GetSheetNumberBYRowList(int OrgID)
+        {
+            List<HG_Tables_or_Sheat> listSheet = new HG_Tables_or_Sheat().GetAll(2);// 2 for list of sheets
+            listSheet = listSheet.FindAll(x => x.OrgId == OrgID);
+            return JArray.FromObject(listSheet);
+        }
 
         public JArray PastOrderMainList(int CID,int status=0)
         {
