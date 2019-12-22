@@ -9,8 +9,9 @@ namespace HangOut.Controllers
     public class ReportsController : Controller
     {
         // GET: Reports
-        public ActionResult Index()
+        public ActionResult ChefUnengaged()
         {
+
             return View();
         }
     }

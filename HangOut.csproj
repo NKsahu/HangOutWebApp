@@ -400,6 +400,7 @@
     <Content Include="Views\HG_Orders\OrderStatus.cshtml" />
     <Content Include="Views\HG_OrderItem\Paytm.cshtml" />
     <Content Include="Views\HG_Orders\UndeliveredOrder.cshtml" />
+    <Content Include="Views\Reports\ChefUnengaged.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -412,7 +413,6 @@
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
     <Folder Include="Views\HG_Order\" />
-    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

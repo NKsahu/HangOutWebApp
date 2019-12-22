@@ -1,0 +1,111 @@
+﻿@using HangOut.Models;
+@{
+    Layout = null;
+}
+@{ 
+
+    List<vw_HG_UsersDetails> userlist = new vw_HG_UsersDetails().GetAll();
+    userlist = userlist.FindAll(x => x.UserType == "CH");
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3>Chef UnEnengaged</h3>
+    </div>
+    <div class="card-body">
+        <table class="table" id="ChefUnengaged">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("Chef Name")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Status")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Placed Items")
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in listorder)
+                {
+                    <!-- //"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"-->
+                    double ItemPrice = item.Price * item.Count;
+                    QtyTotal += item.Count;
+                    AmtTotal += ItemPrice;
+                    string PrePareBy = "";
+                    string OrderPlacedBy = "";
+                    var PlacedByObj = new vw_HG_UsersDetails().GetSingleByUserId((int)item.OrdById);
+                    var PrepareByObj = new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
+                    if (PlacedByObj.UserCode > 0)
+                    {
+                        OrderPlacedBy = UsertypleList.Find(x => x.UserType == PlacedByObj.UserType).UserTypeName + " (" + PlacedByObj.UserName + " )";
+                    }
+                    if (PrepareByObj.UserCode > 0)
+                    {
+                        PrePareBy = UsertypleList.Find(x => x.UserType == PrepareByObj.UserType).UserTypeName + " (" + PrepareByObj.UserId + " )";
+                    }
+                    string status = "";
+                    string backTrColr = "";
+
+                    if (item.Status == 1)
+                    {
+                        status = "Placed";
+                        backTrColr = "background-color:whilte";
+                    }
+                    else if (item.Status == 2)
+                    {
+                        status = "Processing";
+                        backTrColr = "background-color:yellow";
+                    }
+                    else if (item.Status == 3)
+                    {
+                        status = "Completed";
+                        backTrColr = "background-color:green";
+                    }
+                    else
+                    {
+                        backTrColr = "background-color:red";
+                        status = "Cancel";
+                    }
+                    <tr style="@(backTrColr)">
+                        <td>
+                            @{ sno++; }
+                            @sno
+                        </td>
+                        <td>
+                            @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
+                            @ObjOrder.Items
+                        </td>
+                        <td>
+                            @item.Count
+                        </td>
+                        <td>
+                            @ItemPrice.ToString("0.00")
+                        </td>
+                        <td>
+                            @status
+                        </td>
+                        <td>@OrderPlacedBy</td>
+                        <td>@PrePareBy</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td>@QtyTotal</td>
+                    <td>@AmtTotal.ToString("0.00")</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
