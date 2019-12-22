@@ -702,6 +702,7 @@ namespace HangOut.Controllers
             ListOrders = ListOrders.FindAll(x => x.Table_or_SheatId == TOrSId &&(x.Status=="1"||x.Status=="2"));// placed or Processing
             ListOrders = ListOrders.FindAll(x => x.PaymentStatus == 0);
             List<HG_OrderItem> listitems = new List<HG_OrderItem>();
+          
             List<HG_Items> items = new HG_Items().GetAll(OrgId);
             foreach (var OrderObj in ListOrders)
             {
@@ -724,7 +725,9 @@ namespace HangOut.Controllers
             }
             if (listitems.Count == 0)
             {
+                HG_Tables_or_Sheat objTorS = new HG_Tables_or_Sheat().GetOne(TOrSId);
                 jObject.Add("Status", 400);
+                jObject.Add("TorSsts", objTorS.Status);
                 jObject.Add("MSG", "Make Order First");
             }
             else
