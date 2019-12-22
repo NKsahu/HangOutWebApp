@@ -1707,8 +1707,10 @@ namespace HangOut.Controllers
         }
 
 
-        public string PaytmPayMentStatus([System.Web.Http.FromBody] PaytmResn paytmResn)
+        public JObject PaytmPayMentStatus(JObject paytmResn)
         {
+            string StringPaytmRsp = Newtonsoft.Json.JsonConvert.SerializeObject(paytmResn);
+            PaytmResn paytmResnObj = Newtonsoft.Json.JsonConvert.DeserializeObject<PaytmResn>(StringPaytmRsp);
             JObject result = new JObject();
             //    public int id { get; set; }
             //public Int64 OID { get; set; }
@@ -1718,11 +1720,15 @@ namespace HangOut.Controllers
             //public DateTime TxtDate { get; set; }
             //public Int64 CID { get; set; }// customer id
             //public string PaytmResp { get; set; }
-            if (paytmResn.save() > 0 )
+            if (paytmResnObj.save() > 0 )
             {
-
+                result.Add("Status", 200);
             }
-            return "1";
+            else
+            {
+                result.Add("Status", 400);
+            }
+            return result;
         }
 
     }
