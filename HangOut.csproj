@@ -295,6 +295,7 @@
     <Compile Include="Controllers\HG_Tables_or_SheatController.cs" />
     <Compile Include="Controllers\HG_UserTypesController.cs" />
     <Compile Include="Controllers\OrderMenuController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
     <Compile Include="Controllers\vw_HG_UsersDetailsController.cs" />
@@ -411,6 +412,7 @@
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
     <Folder Include="Views\HG_Order\" />
+    <Folder Include="Views\Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
