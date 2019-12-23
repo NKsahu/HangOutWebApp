@@ -1553,6 +1553,7 @@ namespace HangOut.Controllers
                 Object.Add("OrgType", hG_OrganizationDetails.OrgTypes);
                 Object.Add("SeatOrTblid", orders.Table_or_SheatId);
                 Object.Add("TableSeatname", ObjTorS.Table_or_SheetName);
+                Object.Add("OutLetType", hG_OrganizationDetails.PaymentType);
                 Object.Add("CostPrice", CostPrice.ToString("0.00"));
                 Object.Add("Tax", tax.ToString("0.00"));
                 Object.Add("TotalAmount", price.ToString("0.00"));
