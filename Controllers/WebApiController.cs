@@ -1553,6 +1553,7 @@ namespace HangOut.Controllers
                 Object.Add("OID", orders.OID);
                 Object.Add("Status", orders.Status);
                 Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
+                Object.Add("OrdAprvalSts", orders.OrderApprovlSts);
                 foreach (var OrderItem in hG_OrderItems)
                 {
                     HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
