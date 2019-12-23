@@ -56,7 +56,11 @@
                     </td>
                     <td>
                         @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);}
-                        @ObjScreen.Name
+                        @if (ObjScreen != null)
+                        {
+                            @ObjScreen.Name
+                        }
+
                     </td>
                     <td>
                         @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x.ID == item.FloorSide_or_RowNoID);}

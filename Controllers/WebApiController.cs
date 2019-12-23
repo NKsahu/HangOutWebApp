@@ -65,11 +65,11 @@ namespace HangOut.Controllers
 
         }
 
-        public void SendMsgCustomer(int UserId,Int64 OrderNo)
+        public void SendMsgCustomer(Int64 UserId,Int64 OrderNo)
         {
                 string[] topics = { UserId.ToString() };
                 // topics.Add(OrgId.ToString());
-                string Msg = "Your Order number is "+OrderNo+ "Completed";
+                string Msg = "Your Order number  "+OrderNo+ " is Completed";
                 string Title = "Order Completed";
             try
             {
@@ -80,6 +80,22 @@ namespace HangOut.Controllers
 
             }
         }
+        public JObject DeliveredToCustomer(string OID,string CustId)
+        {
+            Int64 Oid = Int64.Parse(OID);
+            Int64 CustmerId = Int64.Parse(CustId);
+            JObject result = new JObject();
+            HG_Orders ObjOrder = new HG_Orders().GetOne(Oid);
+            if (ObjOrder != null)
+            {
+                ObjOrder.OrderApprovlSts = 1;
+                ObjOrder.Create_By = CustmerId;
+                ObjOrder.Save();
+                result.Add("Status", 200);
+            }
+            return result;
+        }
+
         [HttpPost]
         public JArray GetItemList(string Obj)
         {
@@ -791,7 +807,7 @@ namespace HangOut.Controllers
                 if (ObjOrg.PaymentType == 1)// prepaid case only accept payment 
                 {
                     //send msg to chef
-                        SendMsgChef(ObjOrg.OrgID, order.OID);
+                        
                     order.PaymentStatus = PaymentType;
                     order.Update_By = UpdatedBy;
                     order.PayReceivedBy = UpdatedBy;
@@ -807,8 +823,9 @@ namespace HangOut.Controllers
                         order.Status = "3";//completed
                         order.Save();
                         ChangeOtpTbl = 1;
-
+                        SendMsgCustomer(order.CID,order.OID);
                     }
+                    SendMsgChef(ObjOrg.OrgID, order.OID);
                 }
                 else
                 {
@@ -830,7 +847,8 @@ namespace HangOut.Controllers
                             ChangeOtpTbl = 1;
                             order.Status = "3";//3 order completed
                             order.Save();
-                          
+                            SendMsgCustomer(order.CID, order.OID);
+
                         }
                         Status = true;
                     }
@@ -1211,7 +1229,7 @@ namespace HangOut.Controllers
                         TorSObj.Otp = OTPGeneretion.Generate();
                         TorSObj.save();// free table 
                         order.Update_By = UpdateBy;
-                        SendMsgCustomer((int)order.CID,order.OID);
+                        SendMsgCustomer(order.CID,order.OID);
                     }
                   
                 }
