@@ -64,6 +64,22 @@ namespace HangOut.Controllers
             return JObject.FromObject(Objuser);
 
         }
+
+        public void SendMsgCustomer(int UserId,Int64 OrderNo)
+        {
+                string[] topics = { UserId.ToString() };
+                // topics.Add(OrgId.ToString());
+                string Msg = "Your Order number is "+OrderNo+ "Completed";
+                string Title = "Order Completed";
+            try
+            {
+                PushNotification.SendNotification(topics, Msg, Title);
+            }
+            catch(Exception e)
+            {
+
+            }
+        }
         [HttpPost]
         public JArray GetItemList(string Obj)
         {
@@ -775,7 +791,7 @@ namespace HangOut.Controllers
                 if (ObjOrg.PaymentType == 1)// prepaid case only accept payment 
                 {
                     //send msg to chef
-                    SendMsgChef(ObjOrg.OrgID, order.OID);
+                        SendMsgChef(ObjOrg.OrgID, order.OID);
                     order.PaymentStatus = PaymentType;
                     order.Update_By = UpdatedBy;
                     order.PayReceivedBy = UpdatedBy;
@@ -1195,6 +1211,7 @@ namespace HangOut.Controllers
                         TorSObj.Otp = OTPGeneretion.Generate();
                         TorSObj.save();// free table 
                         order.Update_By = UpdateBy;
+                        SendMsgCustomer((int)order.CID,order.OID);
                     }
                   
                 }
@@ -1208,6 +1225,7 @@ namespace HangOut.Controllers
                         TorSObj.Status = 1;
                         TorSObj.Otp = OTPGeneretion.Generate();
                         TorSObj.save();
+                        SendMsgCustomer((int)order.CID, order.OID);
                     }
                     order.Update_By = UpdateBy;
                 }
@@ -1225,9 +1243,18 @@ namespace HangOut.Controllers
         public void SendMsgChef(int OrgId,Int64 OrdNo)
         {
             string[] topics = { OrgId.ToString() };
+           // topics.Add(OrgId.ToString());
             string Msg = "Order Place  Order No " + OrdNo.ToString();
             string Title = "New Order Placed";
-            // PushNotification.SendNotification(topics.ToList(), Msg, Title);
+            try
+            {
+                PushNotification.SendNotification(topics, Msg, Title);
+            }
+            catch(Exception e)
+            {
+
+            }
+             
         }
         //End Chef End Work
 

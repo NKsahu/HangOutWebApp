@@ -49,7 +49,7 @@
         @if (order.PaymentStatus == 3)
         {
             PaytmResn PatymRes = PaytmResn.Getone(order.OID);
-        @*<h5> TXNID : @PatymRes.TxnId   TxnAmount: @PatymRes.PaidAmount</h5>*@
+        <h5> TXNID : @PatymRes.TxnId   TxnAmount: @PatymRes.PaidAmount</h5>
         }
     </div>
     <div class="card-header">
