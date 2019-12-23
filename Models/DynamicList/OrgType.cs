@@ -20,14 +20,14 @@ namespace HangOut.Models.DynamicList
         public static List<SelectListItem> PaymentType()
         {
             List<SelectListItem> sl = new List<SelectListItem>();
-                        SelectListItem slobj = new SelectListItem();
-        slobj.Value = "1";
-                        slobj.Text = "Prepaid";
-                        SelectListItem slobj2 = new SelectListItem();
-        slobj2.Value = "2";
-                        slobj2.Text = "PostPaid";
-                        sl.Add(slobj);
-                        sl.Add(slobj2);
+            SelectListItem slobj = new SelectListItem();
+            slobj.Value = "1";
+            slobj.Text = "Prepaid";
+            SelectListItem slobj2 = new SelectListItem();
+            slobj2.Value = "2";
+            slobj2.Text = "PostPaid";
+            sl.Add(slobj);
+            sl.Add(slobj2);
 
             return sl;
         }
@@ -37,19 +37,28 @@ namespace HangOut.Models.DynamicList
             string PayMode = "Unpaid";
             if (PMode == 1)
             {
-                PayMode = "ByCash";
+                PayMode = "Cash";
 
-            }else if (PMode == 2)
+            }
+            else if (PMode == 2)
             {
 
-                PayMode = "ByOnline";
+                PayMode = "Online";
             }
             else if (PMode == 3)
             {
-                PayMode = "ByFoodDo";
+                PayMode = "FoodDo";
             }
 
             return PayMode;
+        }
+
+        public static double TotalTax(double Amt, double Tax, int Cnt)
+        {
+            double total = 0.00;
+
+            total = ((Amt * Tax) / 100) * Cnt;
+            return total;
         }
     }
 }

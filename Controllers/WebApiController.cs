@@ -253,7 +253,7 @@ namespace HangOut.Controllers
             {
                 HG_Items ObjItem = new HG_Items().GetOne((int)CartObj.ItemId);
                 TotalFinlAmt += CartObj.Count * ObjItem.Price;
-                Totaltax += ObjItem.Tax* CartObj.Count;
+                Totaltax += OrgType.TotalTax(ObjItem.CostPrice, ObjItem.Tax, CartObj.Count); //ObjItem.Tax* CartObj.Count;
                 Count += CartObj.Count;
                 Subtotal+= CartObj.Count * ObjItem.CostPrice;
             }
@@ -1500,7 +1500,7 @@ namespace HangOut.Controllers
                     {
                         price += (OrderItemList[i].Count * OrderItemList[i].Price);
                         CostPrice+= (OrderItemList[i].Count * OrderItemList[i].CostPrice);
-                        tax += OrderItemList[i].TaxInItm;
+                        tax += OrgType.TotalTax(OrderItemList[i].CostPrice, OrderItemList[i].TaxInItm, OrderItemList[i].Count);
                         Token.Add(OrderItemList[i].TickedNo);
                     }
                   //  CostPrice= price
@@ -1541,8 +1541,8 @@ namespace HangOut.Controllers
                 {
                     price += (hG_OrderItems[i].Count * hG_OrderItems[i].Price);
                     Token.Add(hG_OrderItems[i].TickedNo);
-                    tax += hG_OrderItems[i].TaxInItm* hG_OrderItems[i].Count;
-                    CostPrice+= (hG_OrderItems[i].Count * hG_OrderItems[i].CostPrice);
+                    tax += OrgType.TotalTax(hG_OrderItems[i].CostPrice, hG_OrderItems[i].TaxInItm, hG_OrderItems[i].Count);
+                    CostPrice += (hG_OrderItems[i].Count * hG_OrderItems[i].CostPrice);
                 }
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
@@ -1691,7 +1691,7 @@ namespace HangOut.Controllers
             HashSet<Int64> TorShash = new HashSet<Int64>(ListTorS.Select(x => x.Table_or_RowID).ToArray());
             List<HG_Orders> TodayOrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             TodayOrderList = TodayOrderList.FindAll(x => x.OrgId == OrgId);
-            TodayOrderList = TodayOrderList.FindAll(x => x.Status != "3");
+            TodayOrderList = TodayOrderList.FindAll(x => x.Status != "3" && x.Status!="4");
             TodayOrderList = TodayOrderList.FindAll(x => TorShash.Contains(x.Table_or_SheatId));
             TodayOrderList = TodayOrderList.OrderBy(x => x.Create_Date).ToList();
             var ObjOrder = TodayOrderList.FindIndex(x => x.Table_or_SheatId == TorSId && x.OrderByIds.Contains(CID.ToString()));
