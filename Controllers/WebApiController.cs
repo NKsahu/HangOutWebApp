@@ -527,13 +527,12 @@ namespace HangOut.Controllers
             Int64 CID = Int64.Parse(Params["CID"].ToString());
             int OrgId = int.Parse(Params["OrgID"].ToString());
             Int64 TableorSheatId=Int64.Parse(Params["TORSID"].ToString());
-          //  Int64 OID =Int64.Parse(Params["OID"].ToString());
             int Status =Params["Status"]!=null?int.Parse(Params["Status"].ToString()):1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
+            int CustomerOrdering= Params["OrdingSts"] != null ? int.Parse(Params["OrdingSts"].ToString()) : 0;
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
             List<HG_Orders> ListOfOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             ListOfOrder = ListOfOrder.FindAll(x => x.OrgId == OrgId);
             HG_Orders ObjOrders = ListOfOrder.Find(x => x.Table_or_SheatId == TableorSheatId && x.TableOtp == ObjTorS.Otp);
-           
             JObject PostResult = new JObject();
             List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId);
             // HG_Orders ObjOrders = new HG_Orders().GetOne(OID);
@@ -554,7 +553,7 @@ namespace HangOut.Controllers
             }
             //check customer ordering enable
             HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
-            if (OrgObj.CustomerOrdering==false)
+            if (OrgObj.CustomerOrdering==false&& CustomerOrdering==0)
             {
                 PostResult.Add("Status", 400);
                 PostResult.Add("MSG", "Customer Ordering is UnActive");
