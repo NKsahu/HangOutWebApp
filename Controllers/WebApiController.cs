@@ -911,6 +911,7 @@ namespace HangOut.Controllers
                 JObject jObject = new JObject();
                 jObject = JObject.FromObject(order);
               var  ShowOrderItems = hG_OrderItems.FindAll(x => x.OID == order.OID);
+                ShowOrderItems = ShowOrderItems.FindAll(x => x.Status != 4);//not canceled
                 double ToTalAmt = 0.00;
                 foreach(var item in ShowOrderItems)
                 {
