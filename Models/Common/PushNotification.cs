@@ -14,7 +14,7 @@ namespace HangOut.Models.Common
         {
             
     }
-        public string SendNotification(List<string> deviceRegIds, string message, string title)
+        public static string SendNotification(List<string> deviceRegIds, string message, string title)
         {
             string SERVER_API_KEY = "";
             var SENDER_ID = "";

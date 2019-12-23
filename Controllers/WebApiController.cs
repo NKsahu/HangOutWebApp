@@ -633,6 +633,11 @@ namespace HangOut.Controllers
                     }
                 PostResult.Add("Status", 200);
                 PostResult.Add("MSG",NewOID.ToString()+","+Ticketno.ToString());
+                //send firebase massage new ticket assign
+                string[] topics = { OrgId.ToString() };
+                string Msg = "Order Place With Ticket No " + Ticketno.ToString();
+                string Title = "New Ticket Placed";
+               // PushNotification.SendNotification(topics.ToList(), Msg, Title);
             }
             else
             {
