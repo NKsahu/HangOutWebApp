@@ -74,13 +74,15 @@
 
     else
     {
-       // int PaymentMode = int.Parse(Request.QueryString["PMode"]);
+        // int PaymentMode = int.Parse(Request.QueryString["PMode"]);
         DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
         DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
         OrderItmlist = new HG_OrderItem().GetAll(0);
         OrderItmlist = OrderItmlist.FindAll(x => x.OrderDate.Date >= FromDate.Date && x.OrderDate.Date <= Todate.Date).ToList();
+        OrderItmlist = OrderItmlist.FindAll(x => x.Status == 3);
         GroupByItems = OrderItmlist.GroupBy(x => x.FID);
         ItemList = new HG_Items().GetAll();
+
 
     }
     <div class="col" id="List2">

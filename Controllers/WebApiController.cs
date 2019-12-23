@@ -64,7 +64,6 @@ namespace HangOut.Controllers
             return JObject.FromObject(Objuser);
 
         }
-
         public void SendMsgCustomer(Int64 UserId,Int64 OrderNo)
         {
                 string[] topics = { UserId.ToString() };
@@ -96,6 +95,7 @@ namespace HangOut.Controllers
             return result;
         }
 
+        //=====================DISPALY ITEMS ADCART AND MENU ITEMS============
         [HttpPost]
         public JArray GetItemList(string Obj)
         {
@@ -507,51 +507,7 @@ namespace HangOut.Controllers
             return status;
         }
         
-        public JArray CartList(string CID)
-        {
-            return JArray.FromObject( Cart.List.FindAll(x => x.CID == int.Parse(CID)));
-        }
-        public JArray StateList()
-        {
-            List<State> StateList = new State().GetAll();
-            return JArray.FromObject(StateList);
-        }
-         [HttpPost]
-        public JArray CityListByStateId(int StateId)
-        {
-            List<City> citylist = new City().GetAllByState(StateId);
-            return JArray.FromObject(citylist);
-        }
-        [HttpPost]
-        public JArray GetTheaterListByCityCode(string CityCode)
-        {
-            List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(2);//2 for get list for theater
-            listorgonization = listorgonization.FindAll(x => x.City == CityCode);
-            return JArray.FromObject(listorgonization);
-                
-        }
-        [HttpPost]
-        public JArray GetScreenListByTheaterCode(int OrgID)
-        {
-            List<HG_Floor_or_ScreenMaster> listScreen = new HG_Floor_or_ScreenMaster().GetAll(2);//2 for get list for theater
-            listScreen = listScreen.FindAll(x => x.OrgID == OrgID);
-            return JArray.FromObject(listScreen);
-        }
-        [HttpPost]
-        public JArray GetRowListbyScreenCode(int OrgID)
-        {
-            List<HG_FloorSide_or_RowName> listFloor = new HG_FloorSide_or_RowName().GetAll(2);//2 get list forlist for row
-            listFloor = listFloor.FindAll(x => x.OrgID == OrgID);
-            return JArray.FromObject(listFloor);
-        }
         
-
-        public JObject SettingPrivacyPolicy(string KeyName)
-        {
-            List<Settings> listsettings = new Settings().GetAll();
-           Settings settingsObj = listsettings.Find(x => x.KeyName == KeyName);
-            return JObject.FromObject(settingsObj);
-        }
         // make order
         public JObject PostOrder(string Obj)
         {
@@ -1803,6 +1759,48 @@ namespace HangOut.Controllers
             }
             return result;
         }
+        public JArray CartList(string CID)
+        {
+            return JArray.FromObject(Cart.List.FindAll(x => x.CID == int.Parse(CID)));
+        }
+        public JArray StateList()
+        {
+            List<State> StateList = new State().GetAll();
+            return JArray.FromObject(StateList);
+        }
+        [HttpPost]
+        public JArray CityListByStateId(int StateId)
+        {
+            List<City> citylist = new City().GetAllByState(StateId);
+            return JArray.FromObject(citylist);
+        }
+        [HttpPost]
+        public JArray GetTheaterListByCityCode(string CityCode)
+        {
+            List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(2);//2 for get list for theater
+            listorgonization = listorgonization.FindAll(x => x.City == CityCode);
+            return JArray.FromObject(listorgonization);
 
+        }
+        [HttpPost]
+        public JArray GetScreenListByTheaterCode(int OrgID)
+        {
+            List<HG_Floor_or_ScreenMaster> listScreen = new HG_Floor_or_ScreenMaster().GetAll(2);//2 for get list for theater
+            listScreen = listScreen.FindAll(x => x.OrgID == OrgID);
+            return JArray.FromObject(listScreen);
+        }
+        [HttpPost]
+        public JArray GetRowListbyScreenCode(int OrgID)
+        {
+            List<HG_FloorSide_or_RowName> listFloor = new HG_FloorSide_or_RowName().GetAll(2);//2 get list forlist for row
+            listFloor = listFloor.FindAll(x => x.OrgID == OrgID);
+            return JArray.FromObject(listFloor);
+        }
+        public JObject SettingPrivacyPolicy(string KeyName)
+        {
+            List<Settings> listsettings = new Settings().GetAll();
+            Settings settingsObj = listsettings.Find(x => x.KeyName == KeyName);
+            return JObject.FromObject(settingsObj);
+        }
     }
 }

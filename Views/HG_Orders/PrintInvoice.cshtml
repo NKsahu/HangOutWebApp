@@ -30,6 +30,7 @@
         OrderItems.AddRange(new HG_OrderItem().GetAll(order.OID));
         OrderDate = order.Create_Date;
     }
+    OrderItems = OrderItems.FindAll(x => x.Status != 4); //not cancedled items
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
@@ -40,7 +41,7 @@
     string GstNo = "";
     string Licence2 = "";
     string Licence3 = "";
-  //  HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
+    //  HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
     string OrderNo = OID.ToString();
     double AmountTotal = 0.00;
     int Qty = 0;
