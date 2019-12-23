@@ -27,7 +27,7 @@ namespace HangOut.Models
         public int TableOtp { get; set; }
         public string OrderByIds { get; set; }//  Order by IDS comma seprated
         public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken OrderItems  or Not
-        
+          
         public HG_Orders()
         {
             this.OID = 0;
