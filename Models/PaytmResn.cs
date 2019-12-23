@@ -95,7 +95,7 @@ namespace HangOut.Models
                     int index = -1;
                     PaytmResn hG_Ticket = new PaytmResn();
                     hG_Ticket.id = sqlDataReader.GetInt32(++index);
-                    hG_Ticket.OID = sqlDataReader.GetInt32(++index);
+                    hG_Ticket.OID = sqlDataReader.GetInt64(++index);
                     hG_Ticket.OIDkey = sqlDataReader.GetString(++index);
                     hG_Ticket.TxnId = sqlDataReader.GetString(++index);
                     hG_Ticket.TxnSts = sqlDataReader.GetInt32(++index);
@@ -136,7 +136,7 @@ namespace HangOut.Models
                     int index = -1;
                     PaytmResn hG_Ticket = new PaytmResn();
                     hG_Ticket.id = sqlDataReader.GetInt32(++index);
-                    hG_Ticket.OID = sqlDataReader.GetInt32(++index);
+                    hG_Ticket.OID = sqlDataReader.GetInt64(++index);
                     hG_Ticket.OIDkey = sqlDataReader.GetString(++index);
                     hG_Ticket.TxnId = sqlDataReader.GetString(++index);
                     hG_Ticket.TxnSts = sqlDataReader.GetInt32(++index);

@@ -332,6 +332,7 @@
     <Compile Include="Models\OrderMenu.cs" />
     <Compile Include="Models\OrderMenuCategory.cs" />
     <Compile Include="Models\OrdMenuCtgItems.cs" />
+    <Compile Include="Models\OrgSetting.cs" />
     <Compile Include="Models\PaytmResn.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
