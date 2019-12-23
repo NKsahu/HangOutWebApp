@@ -16,8 +16,8 @@ namespace HangOut.Models.Common
     }
         public static string SendNotification(List<string> deviceRegIds, string message, string title)
         {
-            string SERVER_API_KEY = "";
-            var SENDER_ID = "";
+            string SERVER_API_KEY = "AAAA5_sPHX8:APA91bHDAXzfpWGrIXMebCCIySxJo7WY-t8ID4mylmgd-ZHRp65Ybbuk_HW0YZ_nOQkPYjUN83Y9OYv1Gh7WY6Kd8GEJ-xK3xaLz8Zt9BHwz59Ba4P6cwHX4XFd1f2krQYOEuV9hSy94";
+            var SENDER_ID = "996349517183";
             string regIds = string.Join("", "", deviceRegIds);
             WebRequest tRequest;
             tRequest = WebRequest.Create("https://android.googleapis.com/gcm/send");

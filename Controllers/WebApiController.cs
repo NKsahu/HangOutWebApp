@@ -530,6 +530,7 @@ namespace HangOut.Controllers
             int Status =Params["Status"]!=null?int.Parse(Params["Status"].ToString()):1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
             int CustomerOrdering= Params["OrdingSts"] != null ? int.Parse(Params["OrdingSts"].ToString()) : 0;
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             List<HG_Orders> ListOfOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             ListOfOrder = ListOfOrder.FindAll(x => x.OrgId == OrgId);
             HG_Orders ObjOrders = ListOfOrder.Find(x => x.Table_or_SheatId == TableorSheatId && x.TableOtp == ObjTorS.Otp);
@@ -633,10 +634,10 @@ namespace HangOut.Controllers
                 PostResult.Add("Status", 200);
                 PostResult.Add("MSG",NewOID.ToString()+","+Ticketno.ToString());
                 //send firebase massage new ticket assign
-                string[] topics = { OrgId.ToString() };
-                string Msg = "Order Place With Ticket No " + Ticketno.ToString();
-                string Title = "New Ticket Placed";
-               // PushNotification.SendNotification(topics.ToList(), Msg, Title);
+                if (ObjOrg.PaymentType == 2)// postpaid
+                {
+                    SendMsgChef(OrgId, NewOID);
+                }
             }
             else
             {
@@ -695,6 +696,7 @@ namespace HangOut.Controllers
                     ObjOitem.Save();
 
                 }
+                hG_Orders.Save();
                 result.Add("Status", 200);
                 return result;
             }
@@ -772,6 +774,8 @@ namespace HangOut.Controllers
             {
                 if (ObjOrg.PaymentType == 1)// prepaid case only accept payment 
                 {
+                    //send msg to chef
+                    SendMsgChef(ObjOrg.OrgID, order.OID);
                     order.PaymentStatus = PaymentType;
                     order.Update_By = UpdatedBy;
                     order.PayReceivedBy = UpdatedBy;
@@ -1218,6 +1222,13 @@ namespace HangOut.Controllers
 
         }
 
+        public void SendMsgChef(int OrgId,Int64 OrdNo)
+        {
+            string[] topics = { OrgId.ToString() };
+            string Msg = "Order Place  Order No " + OrdNo.ToString();
+            string Title = "New Order Placed";
+            // PushNotification.SendNotification(topics.ToList(), Msg, Title);
+        }
         //End Chef End Work
 
         public JObject ChangePassWord(string Obj)
@@ -1355,7 +1366,7 @@ namespace HangOut.Controllers
             }
             foreach(var objtable in list)
             {
-                HG_Orders order = Orderlist.Find(x =>x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3");
+                HG_Orders order = Orderlist.Find(x =>x.Table_or_SheatId == objtable.Table_or_RowID &&x.Status!="3" && x.Status != "4");
                 JObject jObject = new JObject();
                 jObject = JObject.FromObject(objtable);
                 if (order != null && order.OID > 0)

@@ -135,7 +135,7 @@
         var DetailsBtn = "<button type='button' class=' btn-sm btn-success sp-f2-hotkey' ";
         var DeatilsClose = "'>DETAILS</button>";
         var BycashClose = "'>BY CASH</button>";
-        var ByOnline = "'>BY ONLINE</button>";
+        var ByOnline = "'>By Card/Wallets</button>";
         for (var i = 0; i < list.length; i++) {
             var OID = list[i].OID;
             var html = "<tr id='" + OID + "'><td>" + OID + "</td><td>" + list[i].TableorSheatName + "</td><td>" + list[i].AMT.toFixed(2) + "</td><td>";
@@ -265,7 +265,7 @@
                     PaymentStatus = "By Cash";
                     break;
                 case 2:
-                    PaymentStatus = "By Online";
+                    PaymentStatus = "By Card/Wallets";
                     break;
                 case 3:
                     PaymentStatus = "By FoodDo";

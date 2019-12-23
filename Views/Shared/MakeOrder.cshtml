@@ -425,7 +425,7 @@
                 </div>
                 <div id="ByOnline" onclick="ByOnline();" class="btn-group" role="group" style="width:50%; padding:20px">
                     <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                        BY ONLINE
+                        By Card/Wallets
                     </button>
                 </div>
 
@@ -982,7 +982,7 @@
                         return x.Table_or_RowID == CurrentOrder;
                     });
 
-                    if (Jobje.Status == 400 && TableShaetStatus.Status!=1) {
+                    if (Jobje.Status == 400 && Jobje.TorSsts!=1) {
                         $.alert({
                             title: 'Alert !',
                             content: 'Already Charged Add More Item To Charge Again',
