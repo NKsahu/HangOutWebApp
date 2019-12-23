@@ -838,19 +838,19 @@ namespace HangOut.Controllers
             JObject Params = JObject.Parse(Obj);
             int OrgId = int.Parse(Params["OrgId"].ToString());
             int IsChef = int.Parse(Params["IsChef"].ToString());
-            List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+           List<HG_Orders> Orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             List<HG_Orders> OrderToShow = new List<HG_Orders>();
-            Orders = Orders.FindAll(x => x.Status != "3" &&x.Status!="4");//not completed not canceled
-            Orders = Orders.FindAll(x => x.OrgId == OrgId);
+          var  CurrentOrder = Orders.FindAll(x => x.Status != "3" &&x.Status!="4");//not completed not canceled
+            CurrentOrder = CurrentOrder.FindAll(x => x.OrgId == OrgId);
             HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
             List<HG_OrderItem> hG_OrderItems = new List<HG_OrderItem>();
             if (orgobj != null && orgobj.PaymentType == 1)// prepaid and is chef orders
             {
                 if (IsChef == 1)
                 {
-                    Orders = Orders.FindAll(x => x.PaymentStatus > 0);// only seen paid orders
-                    OrderToShow = Orders;
-                    foreach (var Order in Orders)
+                    CurrentOrder = CurrentOrder.FindAll(x => x.PaymentStatus > 0);// only seen paid orders
+                    OrderToShow = CurrentOrder;
+                    foreach (var Order in CurrentOrder)
                     {
                         var OrderItms = new HG_OrderItem().GetAll(Order.OID);
                         hG_OrderItems.AddRange(OrderItms);
@@ -858,10 +858,13 @@ namespace HangOut.Controllers
                 }
                 else
                 {
-                    Orders = Orders.FindAll(x => x.PaymentStatus ==0);// only seen unpaid orders
-                    OrderToShow = Orders;
+                    //auto cancel logic goes here=====
 
-                    foreach(var Order in Orders)
+                    //=========auto cancel order======
+                    CurrentOrder = CurrentOrder.FindAll(x => x.PaymentStatus ==0);// only seen unpaid orders
+                    OrderToShow = CurrentOrder;
+
+                    foreach(var Order in CurrentOrder)
                     {
                         var OrderItms = new HG_OrderItem().GetAll(Order.OID);
                         hG_OrderItems.AddRange(OrderItms);
@@ -874,7 +877,7 @@ namespace HangOut.Controllers
                 if (IsChef == 1)
                 {
                     //Orders = Orders.FindAll(x => x.Status=="1");// only seen placed ordersw
-                    foreach(var Order in Orders)
+                    foreach(var Order in CurrentOrder)
                     {
                         var OrderItms = new HG_OrderItem().GetAll(Order.OID);
                         hG_OrderItems.AddRange(OrderItms);
@@ -888,7 +891,7 @@ namespace HangOut.Controllers
                 }
                 else
                 {
-                    foreach (var Order in Orders)
+                    foreach (var Order in CurrentOrder)
                     {
                         var OrderItms = new HG_OrderItem().GetAll(Order.OID);
                         hG_OrderItems.AddRange(OrderItms);
