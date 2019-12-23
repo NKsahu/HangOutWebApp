@@ -1534,6 +1534,7 @@ namespace HangOut.Controllers
             if (orders != null && orders.Status == Status)
             {
                 HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
+                HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(orders.Table_or_SheatId);
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(orders.OID);
                 List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
                 double price = 0.00;
@@ -1549,6 +1550,9 @@ namespace HangOut.Controllers
                 }
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
+                Object.Add("OrgType", hG_OrganizationDetails.OrgTypes);
+                Object.Add("SeatOrTblid", orders.Table_or_SheatId);
+                Object.Add("TableSeatname", ObjTorS.Table_or_SheetName);
                 Object.Add("CostPrice", CostPrice.ToString("0.00"));
                 Object.Add("Tax", tax.ToString("0.00"));
                 Object.Add("TotalAmount", price.ToString("0.00"));
