@@ -1694,16 +1694,17 @@ namespace HangOut.Controllers
             TodayOrderList = TodayOrderList.FindAll(x => x.Status != "3" && x.Status!="4");
             TodayOrderList = TodayOrderList.FindAll(x => TorShash.Contains(x.Table_or_SheatId));
             TodayOrderList = TodayOrderList.OrderBy(x => x.Create_Date).ToList();
-            var ObjOrder = TodayOrderList.FindIndex(x => x.Table_or_SheatId == TorSId && x.OrderByIds.Contains(CID.ToString()));
+            var countnumber = TodayOrderList.FindIndex(x => x.Table_or_SheatId == TorSId && x.OrderByIds.Contains(CID.ToString()));
+            countnumber= countnumber+1;
             JObject result = new JObject();
-            if (ObjOrder == 0)
+            if (countnumber == 0)
             {
-                result.Add("Position", ObjOrder);
+                result.Add("Position", countnumber);
                 result.Add("MSG", "Completed");
             }
             else
             {
-                result.Add("Position", ObjOrder);
+                result.Add("Position", countnumber);
                 result.Add("MSG", "One the Way");
             }
             return result;
