@@ -1550,6 +1550,7 @@ namespace HangOut.Controllers
                 }
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
+                Object.Add("OrgId", hG_OrganizationDetails.OrgID);
                 Object.Add("OrgType", hG_OrganizationDetails.OrgTypes);
                 Object.Add("SeatOrTblid", orders.Table_or_SheatId);
                 Object.Add("TableSeatname", ObjTorS.Table_or_SheetName);
