@@ -308,6 +308,7 @@
     <Compile Include="Models\Common\City.cs" />
     <Compile Include="Models\Common\LoginFilter.cs" />
     <Compile Include="Models\Common\OTPGeneretion.cs" />
+    <Compile Include="Models\Common\PushNotification.cs" />
     <Compile Include="Models\Common\QrCode.cs" />
     <Compile Include="Models\Common\Select2PagedResult.cs" />
     <Compile Include="Models\Common\Select2Result.cs" />
