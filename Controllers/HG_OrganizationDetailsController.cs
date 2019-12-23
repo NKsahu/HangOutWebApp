@@ -153,5 +153,23 @@ namespace HangOut.Controllers
             }
 
         }
+
+        
+        public ActionResult OrgSettingEdit(int OrgId)
+        {
+            OrgSetting OrgSeting = OrgSetting.Getone(OrgId);
+            if (OrgSeting.OrgId==0)
+            {
+                OrgSeting = new OrgSetting();
+                OrgSeting.OrgId = OrgId;
+            }
+            return View(OrgSeting);
+        }
+
+        public JsonResult SaveSetting(OrgSetting ObjSetting)
+        {
+            ObjSetting.save();
+            return  Json(new { data="1" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

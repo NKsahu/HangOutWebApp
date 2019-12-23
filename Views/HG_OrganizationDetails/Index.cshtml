@@ -22,7 +22,7 @@
                     <th>
                         @Html.DisplayNameFor(model => model.OrgID)
                     </th>
-                    
+
                     <th>
                         @Html.DisplayNameFor(model => model.HeadName)
                     </th>
@@ -38,10 +38,11 @@
                     <th>
                         @Html.DisplayNameFor(model => model.GSTNO)
                     </th>
-                   
+
                     <th>
                         @Html.DisplayNameFor(model => model.BankName)
                     </th>
+                    <th>Setting</th>
                     <th></th>
                 </tr>
             </thead>
@@ -76,10 +77,12 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.BankName)
                         </td>
-                     
+                        <td>
+                            <a href=" /HG_OrganizationDetails/PrintSetup?Id=@item.OrgID" class="btn btn-success btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting">Print</a>
+                            <button class="btn  btn-info btn-sm" onclick="CreateEditSetting(@item.OrgID)">Order </button>
+                        </td>
                         <td>
                             <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                            <a href=" /HG_OrganizationDetails/PrintSetup?Id=@item.OrgID" class="btn btn-success btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting">Print Setup</a>
                         </td>
                     </tr>
                 }
@@ -87,3 +90,28 @@
         </table>
     </div>
 </div>
+
+<script>
+    function CreateEditSetting(ID) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_OrganizationDetails/OrgSettingEdit?OrgId=" + ID,
+            success: function (data) {
+                makedpt("CreateSetting");
+                $("#CreateSetting > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSetting");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function JsonSuccess(Jobj) {
+        hidedpt("CreateSetting");
+        $('#waiting').hide();
+    }
+
+</script>

@@ -1,0 +1,43 @@
+﻿@model HangOut.Models.OrgSetting
+@{
+    Layout = null;
+}
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:black"><b>Order Settings</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+
+        @using (Ajax.BeginForm("SaveSetting", "HG_OrganizationDetails", new { OrgID = Model.OrgId }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", }))
+        {
+            @Html.HiddenFor(model => model.id)
+            @Html.HiddenFor(model => model.OrgId)
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.Label("Min Order Amount", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.MinOrderAmt, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.MinOrderAmt, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("Delivery Charge", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.DeliveryCharge, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("Order auto Cancel Time", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.OrdCanlMinTime, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.OrdCanlMinTime, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-sm-1">
+                    @Html.Label("Save", new { @class = "text-white " })
+                    <input type="submit" value="Save" class="btn btn-success form-control" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    setTimeout(function () { $("#DynamicData").trigger('change'), 500 });
+</script>
