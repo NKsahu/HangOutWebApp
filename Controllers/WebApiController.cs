@@ -1535,6 +1535,7 @@ namespace HangOut.Controllers
             if (orders != null && orders.Status == Status)
             {
                 HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
+                OrgSetting orgSetting = OrgSetting.Getone(orders.OrgId);
                 HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(orders.Table_or_SheatId);
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(orders.OID);
                 List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
@@ -1544,10 +1545,7 @@ namespace HangOut.Controllers
                 HashSet<int> Token = new HashSet<int>();
                 for (int i = 0; i < hG_OrderItems.Count; i++)
                 {
-                    price += (hG_OrderItems[i].Count * hG_OrderItems[i].Price);
-                    Token.Add(hG_OrderItems[i].TickedNo);
-                    tax += OrgType.TotalTax(hG_OrderItems[i].CostPrice, hG_OrderItems[i].TaxInItm, hG_OrderItems[i].Count);
-                    CostPrice += (hG_OrderItems[i].Count * hG_OrderItems[i].CostPrice);
+                   
                 }
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
@@ -1556,14 +1554,22 @@ namespace HangOut.Controllers
                 Object.Add("SeatOrTblid", orders.Table_or_SheatId);
                 Object.Add("TableSeatname", ObjTorS.Table_or_SheetName);
                 Object.Add("OutLetType", hG_OrganizationDetails.PaymentType);
-                Object.Add("CostPrice", CostPrice.ToString("0.00"));
-                Object.Add("Tax", tax.ToString("0.00"));
-                Object.Add("TotalAmount", price.ToString("0.00"));
+               
                 Object.Add("TicketNo", string.Join(",", Token));
                 Object.Add("OID", orders.OID);
                 Object.Add("Status", orders.Status);
                 Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
                 Object.Add("OrdAprvalSts", orders.OrderApprovlSts);
+                if (hG_OrganizationDetails.OrgTypes == "1")//restuarnt
+                {
+                    Object.Add("ByCash", orgSetting.ByCash==1?"NO":"YES");
+                    Object.Add("ByOnline", orgSetting.ByOnline == 2? "YES" : "NO");
+                }
+                else if (hG_OrganizationDetails.OrgTypes == "2")// theater
+                {
+                    Object.Add("ByOnline", orgSetting.ByOnline == 1 ? "NO" : "YES");
+                    Object.Add("ByCash", orgSetting.ByCash == 2 ? "YES" : "NO");
+                }
                 foreach (var OrderItem in hG_OrderItems)
                 {
                     HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
@@ -1576,10 +1582,17 @@ namespace HangOut.Controllers
                     itemobj.Add("Tax", OrderItem.TaxInItm);
                     itemobj.Add("CostPrice", OrderItem.CostPrice.ToString("0.00"));
                     itemobj.Add("Amount", OrderItem.Price.ToString("0.00"));
+                    price += (OrderItem.Count * OrderItem.Price);
+                    Token.Add(OrderItem.TickedNo);
+                    tax += OrgType.TotalTax(OrderItem.CostPrice, OrderItem.TaxInItm, OrderItem.Count);
+                    CostPrice += (OrderItem.Count * OrderItem.CostPrice);
                     Info.Add(itemobj);
                 }
+                Object.Add("CostPrice", CostPrice.ToString("0.00"));
+                Object.Add("Tax", tax.ToString("0.00"));
+                Object.Add("TotalAmount", price.ToString("0.00"));
             }
-            Object.Add("OrderDetails", Info);
+           // Object.Add("OrderDetails", Info);
             return Object;
         }
 
