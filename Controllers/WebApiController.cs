@@ -1543,10 +1543,6 @@ namespace HangOut.Controllers
                 double tax = 0.00;
                 double CostPrice = 0.00;
                 HashSet<int> Token = new HashSet<int>();
-                for (int i = 0; i < hG_OrderItems.Count; i++)
-                {
-                   
-                }
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
                 Object.Add("OrgId", hG_OrganizationDetails.OrgID);
