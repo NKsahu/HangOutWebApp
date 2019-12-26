@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!-- JS -->
     <script src="~/Assets/jQuery/jquery-3.4.1.min.js"></script>
-    <script src="~/Assets/notify.js"></script>
     <script src="~/Assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
     @*<script src="~/Assets/AjaxForm/jquery.unobtrusive-ajax.min.js"></script>*@
     <script src="~/Assets/shortcut.js"></script>
@@ -76,8 +75,13 @@
             </div>
         </div>
     </div>
-
-
+    <!--Notification count-->
+    <div style="position:fixed;bottom:0px;right:0px;">
+        <div style="color:white;display:inline-block;position:relative;padding:2px 5px;">
+            <i style="color:black;padding:5px;" class="fas fa-bell" onclick="ShowPaymtAltdetails"></i>
+            <span class="button__badge" id="CountPymAlt">0</span>
+        </div>
+    </div>
 
     <!--pop up modal en-->
 </body>

@@ -1014,6 +1014,7 @@ namespace HangOut.Controllers
                     JArray ItemsArray = new JArray();
                     int ticketno = 0;
                     int ItemIndex = 0;
+                    double Amount = 0.00;
                     foreach (var OrderItem in hG_OrderItems)
                     {
                         HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
@@ -1025,9 +1026,15 @@ namespace HangOut.Controllers
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
+                        Amount += OrderItem.Price * OrderItem.Count;
                         ticketno = OrderItem.TickedNo;
                     }
-                    string name = Seating + "Ticket no. : " + ticketno;
+                    OrdNotice Order = OrdNotice.GetOne(order.OID);
+                    string name = Seating + " Ticket no. :" + ticketno;
+                    if (order.OID > 0 && order.CID > 0)
+                    {
+                        name += "/n <font style='font-color:red'>Cash :" + Amount.ToString("0.00") + "</font>";
+                    }
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     TableScreen.Add("TicketNo", ticketno);
@@ -1190,6 +1197,7 @@ namespace HangOut.Controllers
                         TorSObj.save();// free table 
                         order.Update_By = UpdateBy;
                         SendMsgCustomer(order.CID,order.OID);
+                        OrdNotice.ChangeAlertSts(OID, 0, 1);
                     }
                   
                 }
@@ -1204,6 +1212,7 @@ namespace HangOut.Controllers
                         TorSObj.Otp = OTPGeneretion.Generate();
                         TorSObj.save();
                         SendMsgCustomer((int)order.CID, order.OID);
+                        OrdNotice.ChangeAlertSts(OID, 0, 1);
                     }
                     order.Update_By = UpdateBy;
                 }
@@ -1829,22 +1838,30 @@ namespace HangOut.Controllers
             JObject ParamObj = JObject.Parse(Obj);
             int CID = int.Parse(ParamObj.GetValue("CID").ToString());
             Int64 OID = Int64.Parse(ParamObj.GetValue("OID").ToString());
-            CompleteOrder(1, CID, OID);
+            
             JObject result = new JObject();
-            // HG_Orders hG_Orders = new HG_Orders().GetOne(OID);
             OrdNotice ordNotice = new OrdNotice();
             ordNotice.OID = OID;
             ordNotice.Status = 0;
-            ordNotice.Type = 0;
+            ordNotice.Type = 0;//payment by cash
+            ordNotice.CID = CID;
             if (ordNotice.save() > 0)
             {
                 result.Add("Status", 200);
+                CompleteOrder(1, CID, OID);
             }
             else
             {
                 result.Add("Status", 400);
             }
             return result;
+        }
+        public JObject CountByCashUnverify()
+        {
+            List<OrdNotice> List = OrdNotice.GetAll(1);
+            JObject jObject = new JObject();
+            jObject.Add("Cnt", List.Count);
+            return jObject;
         }
     }
 }
