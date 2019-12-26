@@ -10,7 +10,7 @@ namespace HangOut.Models
     {
         
         public int OrgID { get; set; }
-        public string OrgTypes{ get; set; }// restuarant 2 means threater
+        public string OrgTypes{ get; set; }//1 mensa restuarant 2 means threater
         public string HeadName{ get; set; }
         public string Name{ get; set; }
         public string Address{ get; set; }// address 1

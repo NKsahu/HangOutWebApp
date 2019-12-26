@@ -30,14 +30,40 @@
                     @Html.EditorFor(model => model.OrdCanlMinTime, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
                     @Html.ValidationMessageFor(model => model.OrdCanlMinTime, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-sm-1">
-                    @Html.Label("Save", new { @class = "text-white " })
-                    <input type="submit" value="Save" class="btn btn-success form-control" />
+
+            </div>
+            <div class="row card">
+                <div class="card-header">
+                    <h3 style="text-align:center;color:black"><b>Payment Modes</b></h3>
                 </div>
+                @{ 
+                    List<SelectListItem> PaytModes = new List<SelectListItem>()
+                    {
+new SelectListItem{Text="NO",Value="1"},new SelectListItem{Text="YES",Value="2"}
+                    };
+                }
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("By Online", htmlAttributes: new { @class = "control-label  " })
+                            @Html.DropDownListFor(model => model.ByOnline, PaytModes,  new { @class = "form-control ", required = "required" })
+                            @Html.ValidationMessageFor(model => model.ByOnline, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.Label("By Cash", htmlAttributes: new { @class = "control-label  " })
+                            @Html.DropDownListFor(model => model.ByCash, PaytModes,new { @class = "form-control ", required = "required"  })
+                            @Html.ValidationMessageFor(model => model.ByCash, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                @Html.Label("Save", new { @class = "text-white " })
+                <input type="submit" value="Save" class="btn btn-success form-control" />
             </div>
         }
     </div>
-</div>
+        </div>
 <script>
     setTimeout(function () { $("#DynamicData").trigger('change'), 500 });
 </script>

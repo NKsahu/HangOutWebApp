@@ -157,11 +157,20 @@ namespace HangOut.Controllers
         
         public ActionResult OrgSettingEdit(int OrgId)
         {
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             OrgSetting OrgSeting = OrgSetting.Getone(OrgId);
             if (OrgSeting.OrgId==0)
             {
                 OrgSeting = new OrgSetting();
                 OrgSeting.OrgId = OrgId;
+                if (ObjOrg.OrgTypes =="1"&& OrgSeting.ByCash==0)//restruant
+                {
+                    OrgSeting.ByCash = 2;//yes
+                }
+                else if(ObjOrg.OrgTypes=="2" && OrgSeting.ByOnline == 0)
+                {
+                    OrgSeting.ByOnline = 2;//yes
+                }
             }
             return View(OrgSeting);
         }
