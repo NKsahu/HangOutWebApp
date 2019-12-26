@@ -1588,7 +1588,7 @@ namespace HangOut.Controllers
                 Object.Add("Tax", tax.ToString("0.00"));
                 Object.Add("TotalAmount", price.ToString("0.00"));
             }
-           // Object.Add("OrderDetails", Info);
+            Object.Add("OrderDetails", Info);
             return Object;
         }
 
