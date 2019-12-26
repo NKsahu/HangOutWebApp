@@ -1,7 +1,7 @@
 ﻿@using HangOut.Models.Common;
 @using HangOut.Models;
 @{ 
-    string OrgName = "THIK KAR DIYA HU PRIYAL JI";
+    string OrgName = "ADMIN";
     int Orgid =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
     string OrgType = "0";
     HG_OrganizationDetails ObgOrg = new HG_OrganizationDetails().GetOne(Orgid);
