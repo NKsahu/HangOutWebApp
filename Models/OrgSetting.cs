@@ -25,8 +25,7 @@ namespace HangOut.Models
                 if (this.id == 0)
                 {
                     cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime,@ByCash,@ByOnline); SELECT SCOPE_IDENTITY();", con.Con);
-                    cmd.Parameters.AddWithValue("@OrgId", this.OrgId
-);
+                    cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 }
                 else
                 {
