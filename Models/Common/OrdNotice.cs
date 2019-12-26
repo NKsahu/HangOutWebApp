@@ -18,6 +18,7 @@ namespace HangOut.Models.Common
         public int Status { get; set; }//0 unseen , 1 seen
         public int Type { get; set; }// 0 means Payment done By App-ByCash ,1-All order done by chef,
         public int CID { get; set; }
+        public int Orgid { get; set; }
         public int save()
         {
             DBCon con = new DBCon();
@@ -26,8 +27,8 @@ namespace HangOut.Models.Common
             {
                 if (this.ID == 0)
                 {
-                    cmd = new SqlCommand("insert into OrdNotifictin values(@OID,@Status,@Type,@CID); SELECT SCOPE_IDENTITY();", con.Con);
-                   // cmd.Parameters.AddWithValue("@OID", this.OID);
+                    cmd = new SqlCommand("insert into OrdNotifictin values(@OID,@Status,@Type,@CID,@Orgid); SELECT SCOPE_IDENTITY();", con.Con);
+                   cmd.Parameters.AddWithValue("@Orgid", this.Orgid);
                 }
                 else
                 {
@@ -80,6 +81,7 @@ namespace HangOut.Models.Common
                     hG_Ticket.Status= sqlDataReader.GetInt32(++index);
                     hG_Ticket.Type = sqlDataReader.GetInt32(++index);
                     hG_Ticket.CID = sqlDataReader.GetInt32(++index);
+                    hG_Ticket.Orgid = sqlDataReader.GetInt32(++index);
                     Temp.Add(hG_Ticket);
                 }
 
@@ -115,6 +117,7 @@ namespace HangOut.Models.Common
                         hG_Ticket.Status = sqlDataReader.GetInt32(++index);
                         hG_Ticket.Type = sqlDataReader.GetInt32(++index);
                         hG_Ticket.CID = sqlDataReader.GetInt32(++index);
+                        hG_Ticket.Orgid = sqlDataReader.GetInt32(++index);
                     Temp = hG_Ticket;
                 }
 

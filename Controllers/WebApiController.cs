@@ -694,15 +694,10 @@ namespace HangOut.Controllers
             JObject jObject = new JObject();
             List<HG_Orders> ListOrders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             ListOrders = ListOrders.FindAll(x => x.Table_or_SheatId == TOrSId &&(x.Status=="1"||x.Status=="2"));// placed or Processing
-            ListOrders = ListOrders.FindAll(x => x.PaymentStatus == 0);
+            HG_Orders order  = ListOrders.First(x => x.PaymentStatus == 0);
             List<HG_OrderItem> listitems = new List<HG_OrderItem>();
-          
             List<HG_Items> items = new HG_Items().GetAll(OrgId);
-            foreach (var OrderObj in ListOrders)
-            {
-                listitems.AddRange(new HG_OrderItem().GetAll(OrderObj.OID));
-                
-            }
+            listitems.AddRange(new HG_OrderItem().GetAll(order.OID));
             double TotalPrice = 0.00;
             double CostPrice = 0.00;
             double Totaltax = 0.00;
@@ -731,6 +726,7 @@ namespace HangOut.Controllers
                 jObject.Add("CostPrice", CostPrice.ToString("0.00"));
                 jObject.Add("Tax", Totaltax.ToString("0.00"));
                 jObject.Add("Total",TotalPrice.ToString("0.00"));
+                jObject.Add("OID", order.OID);
             }
             
 
@@ -1838,7 +1834,7 @@ namespace HangOut.Controllers
             JObject ParamObj = JObject.Parse(Obj);
             int CID = int.Parse(ParamObj.GetValue("CID").ToString());
             Int64 OID = Int64.Parse(ParamObj.GetValue("OID").ToString());
-            
+            int PaymetnById= int.Parse(ParamObj.GetValue("PaymntBtnClickBy").ToString());
             JObject result = new JObject();
             OrdNotice ordNotice = new OrdNotice();
             ordNotice.OID = OID;
@@ -1848,7 +1844,7 @@ namespace HangOut.Controllers
             if (ordNotice.save() > 0)
             {
                 result.Add("Status", 200);
-                CompleteOrder(1, CID, OID);
+                CompleteOrder(1, PaymetnById, OID);
             }
             else
             {
