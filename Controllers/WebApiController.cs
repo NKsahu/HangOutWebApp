@@ -736,7 +736,7 @@ namespace HangOut.Controllers
 
             return jObject;
         }
-        public JObject CompleteOrder(int PaymentType,int UpdatedBy, int OID = 0, int TorSid = 0)
+        public JObject CompleteOrder(int PaymentType,int UpdatedBy, Int64 OID = 0, int TorSid = 0)
         {
             JObject jObject = new JObject();
             List<HG_Orders> OrderList = new List<HG_Orders>();
@@ -1772,7 +1772,7 @@ namespace HangOut.Controllers
             if (paytmResnObj.save() > 0 )
             {
                 //BY  FOODDO PAYMENT
-                CompleteOrder(3, (int)paytmResnObj.CID, (int)paytmResnObj.OID);
+                CompleteOrder(3, (int)paytmResnObj.CID,paytmResnObj.OID);
                 result.Add("Status",200);
             }
             else
@@ -1823,6 +1823,28 @@ namespace HangOut.Controllers
             List<Settings> listsettings = new Settings().GetAll();
             Settings settingsObj = listsettings.Find(x => x.KeyName == KeyName);
             return JObject.FromObject(settingsObj);
+        }
+        public JObject ByCashPayment(string Obj)
+        {
+            JObject ParamObj = JObject.Parse(Obj);
+            int CID = int.Parse(ParamObj.GetValue("CID").ToString());
+            Int64 OID = Int64.Parse(ParamObj.GetValue("OID").ToString());
+            CompleteOrder(1, CID, OID);
+            JObject result = new JObject();
+            // HG_Orders hG_Orders = new HG_Orders().GetOne(OID);
+            OrdNotice ordNotice = new OrdNotice();
+            ordNotice.OID = OID;
+            ordNotice.Status = 0;
+            ordNotice.Type = 0;
+            if (ordNotice.save() > 0)
+            {
+                result.Add("Status", 200);
+            }
+            else
+            {
+                result.Add("Status", 400);
+            }
+            return result;
         }
     }
 }

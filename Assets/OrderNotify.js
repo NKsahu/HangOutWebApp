@@ -1,6 +1,6 @@
 ﻿$.notify.addStyle('foo', {
     html:
-        "<div style='background-color:#9100ff' class='card'><div class='card-header text-center'> Orders</div><div class='card-body'><div class='row' id='NotificationList'>"
+        "<div style='background-color:#99e878' class='card'><div class='card-header text-center'> Orders</div><div class='card-body'><div class='row' id='NotificationList'>"
         + "<div class='col-sm-12 col-md-12 text-center'>"
         + "<h5>Screen3 B table2 Order No:4 TICKET NO: 4,5,6</h5>"
         + "<div><h5>Bill Amt : 1000 Rs/-</h5><button style='text-align:right' class='btn-info'>Details </button></div>"
