@@ -178,6 +178,7 @@
     <Content Include="Assets\Login Assets\vendor\select2\select2.min.js" />
     <Content Include="Assets\MakeOrder.css" />
     <Content Include="Assets\Mystyle.css" />
+    <Content Include="Assets\notify.js" />
     <Content Include="Assets\Select2\css\select2.min.css" />
     <Content Include="Assets\Select2\js\i18n\en.js" />
     <Content Include="Assets\Select2\js\select2.full.min.js" />
