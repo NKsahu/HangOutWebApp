@@ -13,6 +13,8 @@ namespace HangOut.Models
         public double MinOrderAmt {get;set;}
         public double DeliveryCharge { get; set; }
         public int OrdCanlMinTime { get; set; }
+        public int ByCash { get; set; }//{1:'NO',2:'YES'}
+        public int ByOnline { get; set; }//{1:'NO',2:'YES'}
 
         public int save()
         {
@@ -22,18 +24,20 @@ namespace HangOut.Models
             {
                 if (this.id == 0)
                 {
-                    cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime); SELECT SCOPE_IDENTITY();", con.Con);
+                    cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime,@ByCash,@ByOnline); SELECT SCOPE_IDENTITY();", con.Con);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId
 );
                 }
                 else
                 {
-                    cmd = new SqlCommand("update OrgSettings set MinOrdAmt=@MinOrdAmt,DeleveryCharge=@DeleveryCharge,OrdCanMinTime=@OrdCanMinTime where ID=@ID ", con.Con);
+                    cmd = new SqlCommand("update OrgSettings set MinOrdAmt=@MinOrdAmt,DeleveryCharge=@DeleveryCharge,OrdCanMinTime=@OrdCanMinTime,ByCash=@ByCash,ByOnline=@ByOnline where ID=@ID ", con.Con);
                     cmd.Parameters.AddWithValue("@ID", this.id);
                 }
                 cmd.Parameters.AddWithValue("@MinOrdAmt", this.MinOrderAmt);
                 cmd.Parameters.AddWithValue("@DeleveryCharge", this.DeliveryCharge);
                 cmd.Parameters.AddWithValue("@OrdCanMinTime", this.OrdCanlMinTime);
+                cmd.Parameters.AddWithValue("@ByCash", this.ByCash);
+                cmd.Parameters.AddWithValue("@ByOnline", this.ByOnline);
                 if (this.id == 0)
                 {
                     this.id = Convert.ToInt32(cmd.ExecuteScalar());
@@ -77,6 +81,8 @@ namespace HangOut.Models
                     hG_Ticket.MinOrderAmt = sqlDataReader.GetDouble(++index);
                     hG_Ticket.DeliveryCharge = sqlDataReader.GetDouble(++index);
                     hG_Ticket.OrdCanlMinTime = sqlDataReader.GetInt32(++index);
+                    hG_Ticket.ByCash = sqlDataReader.GetInt32(++index);
+                    hG_Ticket.ByOnline = sqlDataReader.GetInt32(++index);
                     Temp = hG_Ticket;
                 }
 
