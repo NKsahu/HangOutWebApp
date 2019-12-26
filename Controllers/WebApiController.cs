@@ -1029,7 +1029,11 @@ namespace HangOut.Controllers
                     string name = Seating + " Ticket no. :" + ticketno;
                     if (order.OID > 0 && order.CID > 0)
                     {
-                        name += "/n <font style='font-color:red'>Cash :" + Amount.ToString("0.00") + "</font>";
+                        TableScreen.Add("Amt", Amount);
+                    }
+                    else
+                    {
+                        TableScreen.Add("Amt", 0);
                     }
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
@@ -1835,12 +1839,14 @@ namespace HangOut.Controllers
             int CID = int.Parse(ParamObj.GetValue("CID").ToString());
             Int64 OID = Int64.Parse(ParamObj.GetValue("OID").ToString());
             int PaymetnById= int.Parse(ParamObj.GetValue("PaymntBtnClickBy").ToString());
+            HG_Orders ObjOrder = new HG_Orders().GetOne(OID);
             JObject result = new JObject();
             OrdNotice ordNotice = new OrdNotice();
             ordNotice.OID = OID;
             ordNotice.Status = 0;
             ordNotice.Type = 0;//payment by cash
             ordNotice.CID = CID;
+            ordNotice.Orgid = ObjOrder.OrgId;
             if (ordNotice.save() > 0)
             {
                 result.Add("Status", 200);
@@ -1854,7 +1860,10 @@ namespace HangOut.Controllers
         }
         public JObject CountByCashUnverify()
         {
+            var CookiObj = Request.Cookies["UserInfo"];
+            var orgId = int.Parse(CookiObj["OrgId"]);
             List<OrdNotice> List = OrdNotice.GetAll(1);
+            List=List.FindAll(x => x.Orgid == orgId);
             JObject jObject = new JObject();
             jObject.Add("Cnt", List.Count);
             return jObject;

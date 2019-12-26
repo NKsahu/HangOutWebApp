@@ -2,7 +2,10 @@
 @using HangOut.Models;
 @{
     Layout = null;
-    List<OrdNotice> OrgListNotice=
+    var CoockieObj = Request.Cookies["UserInfo"];
+    int orgId = int.Parse(CoockieObj["OrgId"]);
+    List<OrdNotice> OrgListNotice = OrdNotice.GetAll(1);
+    OrgListNotice = OrgListNotice.FindAll(x => x.Orgid == orgId);
 }
 <div class="card">
     <div class="card-header">
@@ -12,8 +15,16 @@
     <div class="card-body">
 
         <div class="row">
+            @foreach( var Objnotice in OrgListNotice)
+            {
+                string seating = "";
+                HG_Orders Objorder = new HG_Orders().GetOne(Objnotice.OID);
 
+<div class="col-md-12">
+    <h5></h5>
+</div>
 
+            }
         </div>
     </div>
 </div>
