@@ -137,7 +137,7 @@ namespace HangOut.Models.Common
         public static void ChangeAlertSts(Int64 OID, int Status, int Type)
         {
             OrdNotice obj = OrdNotice.GetOne(OID);
-            if (obj.ID > 0)
+            if (obj!=null&&obj.ID > 0)
             {
                 obj.Status = Status;
                 obj.Type = Type;

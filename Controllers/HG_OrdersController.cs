@@ -53,6 +53,10 @@ namespace HangOut.Controllers
 
             return View();
         }
+        public ActionResult ByCashAlert()
+        {
+            return View();
+        }
       
     }
 }

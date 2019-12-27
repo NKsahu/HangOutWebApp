@@ -642,19 +642,26 @@ namespace HangOut.Controllers
         {
             JObject result = new JObject();
             HG_Orders hG_Orders = new HG_Orders().GetOne(OID);
+            OrdNotice ordNotice = OrdNotice.GetOne(OID);
             if (hG_Orders.OID < 1)
             {
                 result.Add("Status", 400);
                 result.Add("MSG", "Order Not Found");
                 return result;
             }
-            if (hG_Orders.Status == "3")
+            if (hG_Orders.Status == "4")
+            {
+                result.Add("Status", 400);
+                result.Add("MSG", "Already Canceled");
+                return result;
+            }
+            if (hG_Orders.Status == "3"&& (ordNotice==null||ordNotice.OID==0))
             {
                 result.Add("Status", 400);
                 result.Add("MSG", "Can't Cancel Order. Order Already Completed");
                 return result;
             }
-            if (hG_Orders.PaymentStatus > 0)
+            if (hG_Orders.PaymentStatus > 0 &&(ordNotice == null || ordNotice.OID == 0))
             {
                 result.Add("Status", 400);
                 result.Add("MSG", "Can't Cancel Order. Payment Has Been Done");
@@ -670,7 +677,7 @@ namespace HangOut.Controllers
                 hG_Orders.Status = "4";//CANCEL ORDER
                 hG_Orders.Update_By = UpdatedBy;
                 HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(hG_Orders.Table_or_SheatId);
-                if (ObjTorS != null)
+                if (ObjTorS != null &&hG_Orders.Create_Date.Date==DateTime.Now.Date&&hG_Orders.Status!="3")
                 {
                     ObjTorS.Status = 1;// free table
                     ObjTorS.Otp = OTPGeneretion.Generate();
@@ -685,6 +692,7 @@ namespace HangOut.Controllers
 
                 }
                 hG_Orders.Save();
+                OrdNotice.ChangeAlertSts(OID, 1, 1);
                 result.Add("Status", 200);
                 return result;
             }
@@ -694,10 +702,15 @@ namespace HangOut.Controllers
             JObject jObject = new JObject();
             List<HG_Orders> ListOrders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             ListOrders = ListOrders.FindAll(x => x.Table_or_SheatId == TOrSId &&(x.Status=="1"||x.Status=="2"));// placed or Processing
-            HG_Orders order  = ListOrders.First(x => x.PaymentStatus == 0);
+            ListOrders= ListOrders.FindAll(x => x.PaymentStatus == 0);
+            HG_Orders order  = ListOrders.FirstOrDefault();
             List<HG_OrderItem> listitems = new List<HG_OrderItem>();
             List<HG_Items> items = new HG_Items().GetAll(OrgId);
-            listitems.AddRange(new HG_OrderItem().GetAll(order.OID));
+            if (order != null)
+            {
+                listitems.AddRange(new HG_OrderItem().GetAll(order.OID));
+            }
+           
             double TotalPrice = 0.00;
             double CostPrice = 0.00;
             double Totaltax = 0.00;
@@ -987,7 +1000,7 @@ namespace HangOut.Controllers
             List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
             List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
                 int TorSIndex = 0;
-              foreach(var order in Orderlist)
+                foreach (var order in Orderlist)
                 {
                     string Seating = "";
                     HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
@@ -1018,7 +1031,7 @@ namespace HangOut.Controllers
                         itemobj.Add("OIID", OrderItem.OIID);
                         itemobj.Add("ItemID", OrderItem.FID);
                         itemobj.Add("ItemName", hG_Items.Items);
-                        itemobj.Add("Quantity", OrderItem.Qty+"*"+OrderItem.Count);
+                        itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
                         ItemsArray.Add(itemobj);
@@ -1027,13 +1040,22 @@ namespace HangOut.Controllers
                     }
                     OrdNotice Order = OrdNotice.GetOne(order.OID);
                     string name = Seating + " Ticket no. :" + ticketno;
-                    if (order.OID > 0 && order.CID > 0)
+                    if (order.OID > 0)
                     {
-                        TableScreen.Add("Amt", Amount);
-                    }
-                    else
-                    {
-                        TableScreen.Add("Amt", 0);
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(order.PayReceivedBy);
+                        if (ObjUser != null && ObjUser.UserType != "CA")// not captain
+                        {
+                            TableScreen.Add("Amt", Amount);
+                        }
+                        else if (ObjUser == null||ObjUser.UserCode<=0)
+                        {
+                            TableScreen.Add("Amt", Amount);
+                        }
+                        else
+                        {
+                            TableScreen.Add("Amt", 0);
+                        }
+                        
                     }
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
@@ -1866,6 +1888,15 @@ namespace HangOut.Controllers
             JObject jObject = new JObject();
             jObject.Add("Cnt", List.Count);
             return jObject;
+        }
+        public void OrdAcpted(Int64 OID)
+        {
+           OrdNotice.ChangeAlertSts(OID, 1, 1);
+            HG_Orders objorder = new HG_Orders().GetOne(OID);
+            var UserInfo = Request.Cookies["UserInfo"];
+            var UserCode = int.Parse(UserInfo["UserCode"]);
+            objorder.PayReceivedBy = UserCode;
+            objorder.Save();
         }
     }
 }

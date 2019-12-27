@@ -12,7 +12,7 @@
 }
 <div class="card">
     <div class="card-header">
-
+        <h3>ByCash Orders </h3>
     </div>
     <div class="card-body">
         <div class="row">
@@ -23,11 +23,11 @@
                 HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(Objorder.Table_or_SheatId);
                 HG_FloorSide_or_RowName ObjFSorRN = new HG_FloorSide_or_RowName().GetOne(ObjTorS.FloorSide_or_RowNoID);
                 HG_Floor_or_ScreenMaster ObjForScrn = new HG_Floor_or_ScreenMaster().GetOne(ObjTorS.Floor_or_ScreenId);
-                if (ObjForScrn.Floor_or_ScreenID > 0)
+                if (ObjForScrn!=null&&ObjForScrn.Floor_or_ScreenID > 0)
                 {
                     seating = ObjForScrn.Name;
                 }
-                if (ObjFSorRN.ID > 0)
+                if (ObjFSorRN!=null&& ObjFSorRN.ID > 0)
                 {
                     seating +=" "+ ObjFSorRN.FloorSide_or_RowName;
                 }
@@ -54,13 +54,13 @@
                 {
                     OrderBy= UserTypeList.Find(x => x.UserType == OrderByObj.UserType).UserTypeName +" "+ OrderByObj.UserName+"( " + OrderByObj.UserId + " )";
                 }
-                 <div class="col-md-12">
-                     <h5>@seating Order No: @Objorder.OID Ticket No: @Tockensary</h5>
-                     <div> <h5>Bill Amt: @Price.ToString("0.00")</h5> <button class="btn btn-sm btn-info">Details</button></div>
-                     <h5>order By @OrderBy</h5>
-                     <h5>Cash By @CashBy</h5>
-                     <div><button class="btn btn-sm btn-danger">Not Received</button>
-                          <button class="btn btn-sm btn-success">Received</button>
+                                 <div class="col-md-12" id="Ord@(Objorder.OID)" style="background-color:#79c57f">
+                     <h6>@seating Order No: @Objorder.OID Ticket No: @Tockensary</h6>
+                     <p>Bill Amt: @Price.ToString("0.00") <button onclick="ShowDetails(@Objorder.OID)" class="btn  btn-sm btn-info">Details</button></p> 
+                     <p>order By @OrderBy</p>
+                     <p>Cash By @CashBy</p>
+                     <div style="padding:5px;"><button style="float:left;" onclick="OrdReject(@Objorder.OID)" class="btn btn-sm btn-danger">Not Received</button>
+                          <button style="float:right"  class="btn btn-sm btn-success" onclick="OrdAcpted(@Objorder.OID)">Received</button>
                      </div>
 </div>
 
@@ -68,4 +68,71 @@
         </div>
     </div>
 </div>
+<script>
+    function OrdAcpted(OID) {
+        $.confirm({
+            title: 'Cash Charged',
+            content: 'Mark Order Completed',
+            buttons: {
+                btnClass: 'btn-green',
+                confirm: function () {
+                    $.ajax({
+                        url: "/WebApi/OrdAcpted?OID=" + OID,
+                        type: "GET",
+                        success: function (data) {
+                            $("#Ord" + OID).remove();
+                            $.alert({
+                                title: 'Alert',
+                                content: 'Completed Succesfully',
+                            });
+                        },
+                        error: function (Xr, Status, ErrorMsg) {
+
+                        }
+                    });
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+    }
+    function OrdReject(OID) {
+        $.confirm({
+            title: 'Cancel Order',
+            content: 'Order will be Canceled',
+            buttons: {
+                btnClass: 'btn btn-warning',
+                confirm: function () {
+                    $.ajax({
+                        url: "/WebApi/CancelOrder?OID=" + OID,
+                        type: "GET",
+                        success: function (data) {
+                            var Json = JSON.parse(data);
+                            if (Json.Status == 200) {
+                                $.alert({
+                                    title: 'Alert',
+                                    content: 'Canceled Succesfully',
+                                });
+                                $("#Ord" + OID).remove();
+                            }
+                            else {
+                                $.alert({
+                                    title: 'Alert',
+                                    content: '' + Json.MSG,
+                                });
+                            }
+                        },
+                        error: function (Xr, Status, ErrorMsg) {
+
+                        }
+                    });
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+    }
+</script>
 
