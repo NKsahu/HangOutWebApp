@@ -676,6 +676,7 @@ namespace HangOut.Controllers
                 }
                 hG_Orders.Status = "4";//CANCEL ORDER
                 hG_Orders.Update_By = UpdatedBy;
+                hG_Orders.PaymentStatus = 0;
                 HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(hG_Orders.Table_or_SheatId);
                 if (ObjTorS != null &&hG_Orders.Create_Date.Date==DateTime.Now.Date&&hG_Orders.Status!="3")
                 {

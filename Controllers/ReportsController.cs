@@ -14,5 +14,10 @@ namespace HangOut.Controllers
 
             return View();
         }
+        public ActionResult AllChefOrders()
+        {
+
+            return View();
+        }
     }
 }

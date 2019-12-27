@@ -174,7 +174,7 @@ namespace HangOut.Models
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ListTmp);
         }
-        public HG_OrderItem GetOne(Int64 OIID=0,int TicketNo=0)
+        public HG_OrderItem GetOne(Int64 OIID=0)
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
@@ -183,10 +183,10 @@ namespace HangOut.Models
             try
             {
                 string Query = "SELECT * FROM HG_ORDERITEM WHERE OIID=" + OIID.ToString() + " and Deleted=0 ";
-                if (TicketNo > 0)
-                {
-                    Query = "SELECT * FROM HG_ORDERITEM WHERE TickedNo=" + TicketNo.ToString() + " and Deleted=0 ";
-                }
+                //if (TicketNo > 0)
+                //{
+                //    Query = "SELECT * FROM HG_ORDERITEM WHERE TickedNo=" + TicketNo.ToString() + " and Deleted=0 ";
+                //}
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

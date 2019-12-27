@@ -408,6 +408,7 @@
     <Content Include="Views\Reports\ChefUnengaged.cshtml" />
     <Content Include="Views\HG_OrganizationDetails\OrgSettingEdit.cshtml" />
     <Content Include="Views\HG_Orders\ByCashAlert.cshtml" />
+    <Content Include="Views\Reports\AllChefOrders.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
