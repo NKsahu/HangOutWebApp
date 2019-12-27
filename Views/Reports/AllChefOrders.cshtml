@@ -1,19 +1,175 @@
 ﻿@using HangOut.Models;
+@using HangOut.Models.Common;
 @{
     Layout = null;
-    List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAllByOrg();
-
+    var Userinfo = Request.Cookies["UserInfo"];
+    int orgId = int.Parse(Userinfo["OrgId"]);
+    int Usercode = int.Parse(Userinfo["UserCode"]);
+    HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(orgId);
+    int OrgType = 1;
+    if (ObjOrg != null && ObjOrg.OrgTypes == "2")
+    {
+        OrgType = 2;
+    }
+    List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(OrgType);
+    List<HG_FloorSide_or_RowName> ListFsorRowNa = new HG_FloorSide_or_RowName().GetAll(OrgType);
+    List<HG_Floor_or_ScreenMaster> ListFrorScr = new HG_Floor_or_ScreenMaster().GetAll(OrgType);
+    List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAllByOrg(orgId,TodayOnly:true);
+    OrderItems = OrderItems.FindAll(x => x.Status != 3 && x.Status != 4);
+    OrderItems = OrderItems.FindAll(x => x.ChefSeenBy == 0);
+    List<HG_Orders> TodayOrdrlist = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+    TodayOrdrlist = TodayOrdrlist.FindAll(x => x.Status == "1" || x.Status == "2");
+    if (ObjOrg != null && ObjOrg.PaymentType == 1)
+    {
+        TodayOrdrlist = TodayOrdrlist.FindAll(x => x.PaymentStatus != 0);
+    }
+    HashSet<Int64> OIdsHash = new HashSet<Int64>(TodayOrdrlist.Select(x => x.OID).ToArray());
+    OrderItems = OrderItems.FindAll(x => OIdsHash.Contains(x.OID));
+    var GroupByTickets = OrderItems.GroupBy(x => x.TickedNo);
+    var ItemsList = new HG_Items().GetAll(orgId);
 }
-
-
+@Html.Hidden("UserCode", Usercode)
 <div class="card">
     <div class="card-header">
-        <h3>Cash Note Pad </h3>
+        <h3 class="text-center">Chef Orders </h3>
     </div>
     <div class="card-body">
         <div class="row">
+            @foreach(var TicketObj in GroupByTickets)
+                    {
+                        string Seating = "";
+                        var orderItems = TicketObj.ToList();
+                        var firstitm = orderItems.First();
+                        HG_Orders objOrder = new HG_Orders().GetOne(firstitm.OID);
+                        var ObjTorS = ListTorS.Find(x => x.Table_or_RowID == objOrder.Table_or_SheatId);
+                        if (ObjTorS != null)
+                        {
+                            var ObjFlrOrScr = ListFrorScr.Find(x => x.Floor_or_ScreenID == ObjTorS.Floor_or_ScreenId);
+                            if (ObjFlrOrScr != null)
+                            {
+                                Seating = ObjFlrOrScr.Name;
+                            }
+                            var ObjFsideOrRowName = ListFsorRowNa.Find(x => x.ID == ObjTorS.FloorSide_or_RowNoID);
+                            if (ObjFsideOrRowName != null)
+                            {
+                                Seating += " " + ObjFsideOrRowName.FloorSide_or_RowName;
+                            }
+                            Seating += " " + ObjTorS.Table_or_SheetName;
+                        }
+                        Seating += " Ticket No:" + TicketObj.Key;
+            <div class="col-md-12" id="@(TicketObj.Key)">
+                <h6>@Seating</h6>
+
+                @{
+                    var OrderObj = TodayOrdrlist.Find(x => x.OID == firstitm.OID);
+                    OrdNotice ObjNotice = OrdNotice.GetOne(OrderObj.OID);
+                    if (OrderObj.PaymentStatus == 1 &&ObjNotice!=null&&ObjNotice.OID>0)
+                    {
+                        double Amt = 0.00;
+                        for (int i = 0; i < orderItems.Count; i++)
+                        {
+                            Amt += orderItems[i].Price * orderItems[i].Count;
+                        }
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(OrderObj.PayReceivedBy);
+                        if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain
+                        {
+                            <p style="color:red">@Amt.ToString("0.00") Rs/</p>
+                        }
+                        else if (ObjUser == null || ObjUser.UserCode <= 0)
+                        {
+                            <p style="color:red">@Amt.ToString("0.00") Rs/</p>
+                        }
+                    }
 
 
+                }
+                <button onclick="MarkCompleteTicket(@TicketObj.Key)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Item Name</td>
+                            <td>Qty</td>
+                            <td>Status</td>
+                        </tr>
+                    </thead>
+                    <tbody id="Tickt@(TicketObj.Key)">
+                        @foreach (var items in orderItems)
+                        {
+                            var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
+                            <tr>
+                                <td>@FoodObj.Items</td>
+                                <td>@items.Count</td>
+                                <td><input class="CkeckorNot" type="checkbox" id="@items.OIID" OID="@items.OID" value="@items.OIID"></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
         </div>
     </div>
 </div>
+
+<script>
+    function MarkCompleteTicket(TicketNo) {
+        var canceledCount = 0;
+        var Checkdcount = 0;
+        var UpdatedBy = $("#UserCode").val();
+        var CheckedID = ",";
+        var OID = 0;
+        //JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy, int OID)
+        $("#Tickt"+TicketNo+" > tr").each(function (index, tr) {
+            console.log(index);
+            var value = $(tr).find('.CkeckorNot').is(":checked");
+            var OIID = $(tr).find('.CkeckorNot').val();
+            if (value) {
+                Checkdcount += 1;
+                CheckedID += OIID + ",";
+            }
+            else {
+                canceledCount += 1;
+            }
+            console.log(value);
+            OID = $(tr).find('.CkeckorNot').attr("OID");
+        });
+
+        $.confirm({
+            title: 'Mark Complete',
+            content: ''+canceledCount +" Item Will Canceled Are You Sure",
+            buttons: {
+                btnClass: 'btn-green',
+                confirm: function () {
+                    $.ajax({
+                        url: "/WebApi/ChangeOrderItemStatus?CheckedID=" + CheckedID + "&TickedNo=" + TicketNo + "&UpdateBy=" + UpdatedBy + "&OID=" + OID,
+                        type: "GET",
+                        success: function (data) {
+                           
+                            var Json = JSON.parse(data);
+                            if (Json.Status == 200) {
+                                $("#" + TicketNo).remove();
+                                $.alert({
+                                    title: 'Alert',
+                                    content: 'Completed Succesfully',
+                                });
+                            }
+                            else {
+                                $.alert({
+                                    title: 'Alert',
+                                    content: 'Unable To Completed Try Again',
+                                });
+                            }
+                            
+                        },
+                        error: function (Xr, Status, ErrorMsg) {
+
+                        }
+                    });
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+
+    }
+</script>

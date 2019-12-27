@@ -52,3 +52,22 @@ function ShowDetails(OID) {
     });
 
 }
+function ShowChefOrdre() {
+
+    $('#waiting').show();
+    $.ajax({
+        url: "/Reports/AllChefOrders",
+        type: "GET",
+        success: function (data) {
+            makedpt("AllChefOrders");
+            $("#AllChefOrders > .modal-dialog > .modal-content > .modal-body").html(data);
+            showdpt("AllChefOrders");
+            $('#waiting').hide();
+
+        },
+        error: function (Xr, Status, ErrorMsg) {
+            $('#waiting').hide();
+        }
+    });
+
+}

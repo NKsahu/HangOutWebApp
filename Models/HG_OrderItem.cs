@@ -129,7 +129,7 @@ namespace HangOut.Models
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ListTmp);
         }
-        public List<HG_OrderItem> GetAllByOrg(int OrgId,int ChefId=0,int ItemStatus=0)
+        public List<HG_OrderItem> GetAllByOrg(int OrgId,int ChefId=0,int ItemStatus=0,bool TodayOnly=false)
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
@@ -145,6 +145,12 @@ namespace HangOut.Models
                 if (ItemStatus > 0)
                 {
                     Query += " and Status=" + ItemStatus.ToString();
+                }
+                if (TodayOnly)
+                {
+                    var Formdate = DateTime.Now;
+                    var theDate = new DateTime(Formdate.Year, Formdate.Month, Formdate.Day, 23, 59, 00);
+                    Query = "SELECT * FROM HG_ORDERITEM WHERE OrderDate between '" + Formdate.ToString("MM/dd/yyyy") + "' and '" + theDate.ToString("MM/dd/yyyy HH:mm:ss") + "' and OrgId="+OrgId.ToString()+"";
                 }
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();

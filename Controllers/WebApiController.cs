@@ -1039,12 +1039,12 @@ namespace HangOut.Controllers
                         Amount += OrderItem.Price * OrderItem.Count;
                         ticketno = OrderItem.TickedNo;
                     }
-                    OrdNotice Order = OrdNotice.GetOne(order.OID);
+                    OrdNotice OrderNotice = OrdNotice.GetOne(order.OID);
                     string name = Seating + " Ticket no. :" + ticketno;
-                    if (order.OID > 0)
+                    if (order.OID > 0&& OrderNotice!=null&& OrderNotice.OID>0)
                     {
                         vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(order.PayReceivedBy);
-                        if (ObjUser != null && ObjUser.UserType != "CA")// not captain
+                        if (ObjUser != null && ObjUser.UserType != "CA"&&ObjUser.UserType!="ONR")// not captain
                         {
                             TableScreen.Add("Amt", Amount);
                         }
@@ -1057,6 +1057,10 @@ namespace HangOut.Controllers
                             TableScreen.Add("Amt", 0);
                         }
                         
+                    }
+                    else
+                    {
+                        TableScreen.Add("Amt", 0);
                     }
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
