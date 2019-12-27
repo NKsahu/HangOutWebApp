@@ -1838,7 +1838,6 @@ namespace HangOut.Controllers
             JObject ParamObj = JObject.Parse(Obj);
             int CID = int.Parse(ParamObj.GetValue("CID").ToString());
             Int64 OID = Int64.Parse(ParamObj.GetValue("OID").ToString());
-            int PaymetnById= int.Parse(ParamObj.GetValue("PaymntBtnClickBy").ToString());
             HG_Orders ObjOrder = new HG_Orders().GetOne(OID);
             JObject result = new JObject();
             OrdNotice ordNotice = new OrdNotice();
@@ -1850,7 +1849,7 @@ namespace HangOut.Controllers
             if (ordNotice.save() > 0)
             {
                 result.Add("Status", 200);
-                CompleteOrder(1, PaymetnById, OID);
+                CompleteOrder(1, CID, OID);
             }
             else
             {

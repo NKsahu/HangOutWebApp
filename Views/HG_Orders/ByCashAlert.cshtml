@@ -6,22 +6,62 @@
     int orgId = int.Parse(CoockieObj["OrgId"]);
     List<OrdNotice> OrgListNotice = OrdNotice.GetAll(1);
     OrgListNotice = OrgListNotice.FindAll(x => x.Orgid == orgId);
+    List<vw_HG_UsersDetails> userlist = new vw_HG_UsersDetails().GetAll();
+    List<HG_UserTypes> UserTypeList = new HG_UserTypes().GetAll();
+
 }
 <div class="card">
     <div class="card-header">
 
     </div>
-
     <div class="card-body">
-
         <div class="row">
             @foreach( var Objnotice in OrgListNotice)
             {
                 string seating = "";
                 HG_Orders Objorder = new HG_Orders().GetOne(Objnotice.OID);
-
-<div class="col-md-12">
-    <h5></h5>
+                HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(Objorder.Table_or_SheatId);
+                HG_FloorSide_or_RowName ObjFSorRN = new HG_FloorSide_or_RowName().GetOne(ObjTorS.FloorSide_or_RowNoID);
+                HG_Floor_or_ScreenMaster ObjForScrn = new HG_Floor_or_ScreenMaster().GetOne(ObjTorS.Floor_or_ScreenId);
+                if (ObjForScrn.Floor_or_ScreenID > 0)
+                {
+                    seating = ObjForScrn.Name;
+                }
+                if (ObjFSorRN.ID > 0)
+                {
+                    seating +=" "+ ObjFSorRN.FloorSide_or_RowName;
+                }
+                seating += " " + ObjTorS.Table_or_SheetName;
+                var OrderItms = new HG_OrderItem().GetAll(Objorder.OID);
+                OrderItms = OrderItms.FindAll(x => x.Status != 4);
+                double Price = 0.00;
+                HashSet<int> Tockens = new HashSet<int>();
+                for (int i = 0; i < OrderItms.Count; i++)
+                {
+                    Price += OrderItms[i].Count * OrderItms[i].Price;
+                    Tockens.Add(OrderItms[i].TickedNo);
+                }
+                string Tockensary = string.Join(",", Tockens);
+                string OrderBy = " ";
+                var ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(Objorder.PayReceivedBy);
+                var CashBy = "Customer";
+                var OrderByObj= new vw_HG_UsersDetails().GetSingleByUserId((int)Objorder.CID);
+                if (ObjUser.UserCode > 0)
+                {
+                    CashBy = UserTypeList.Find(x => x.UserType == ObjUser.UserType).UserTypeName;
+                }
+                if (OrderByObj != null)
+                {
+                    OrderBy= UserTypeList.Find(x => x.UserType == OrderByObj.UserType).UserTypeName +" "+ OrderByObj.UserName+"( " + OrderByObj.UserId + " )";
+                }
+                 <div class="col-md-12">
+                     <h5>@seating Order No: @Objorder.OID Ticket No: @Tockensary</h5>
+                     <div> <h5>Bill Amt: @Price.ToString("0.00")</h5> <button class="btn btn-sm btn-info">Details</button></div>
+                     <h5>order By @OrderBy</h5>
+                     <h5>Cash By @CashBy</h5>
+                     <div><button class="btn btn-sm btn-danger">Not Received</button>
+                          <button class="btn btn-sm btn-success">Received</button>
+                     </div>
 </div>
 
             }

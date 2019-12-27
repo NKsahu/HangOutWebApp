@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HangOut.Models.DynamicList;
+using System;
 using System.Collections.Generic;
 using System.Web;
 
@@ -213,6 +214,31 @@ namespace HangOut.Models
             catch (System.Exception e) { e.ToString(); }
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ObjTmp);
+        }
+        public static HG_OrderItem PaybleAmt(Int64 OID)
+        {
+            HG_OrderItem objOrdItm = new HG_OrderItem();
+            var OrderItms =new HG_OrderItem().GetAll(OID);
+            for(int i=0;i< OrderItms.Count; i++)
+            {
+                objOrdItm.CostPrice += OrderItms[i].Count * OrderItms[i].CostPrice;
+                objOrdItm.TaxInItm+= OrgType.TotalTax(OrderItms[i].CostPrice, OrderItms[i].TaxInItm, OrderItms[i].Count);
+                objOrdItm.Price+= OrderItms[i].Count * OrderItms[i].Price;
+            }
+            return objOrdItm;
+        }
+        public static HG_OrderItem ActualAmtToPay(Int64 OID)
+        {
+            HG_OrderItem objOrdItm = new HG_OrderItem();
+            var OrderItms = new HG_OrderItem().GetAll(OID);
+            OrderItms = OrderItms.FindAll(x => x.Status != 4);
+            for (int i = 0; i < OrderItms.Count; i++)
+            {
+                objOrdItm.CostPrice += OrderItms[i].Count * OrderItms[i].CostPrice;
+                objOrdItm.TaxInItm += OrgType.TotalTax(OrderItms[i].CostPrice, OrderItms[i].TaxInItm, OrderItms[i].Count);
+                objOrdItm.Price += OrderItms[i].Count * OrderItms[i].Price;
+            }
+            return objOrdItm;
         }
     }
 }
