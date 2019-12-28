@@ -52,6 +52,23 @@ namespace HangOut.Models.DynamicList
 
             return PayMode;
         }
+        public static string OrderStatus(string Sts)
+        {
+            string PayMode = "Placed";
+             if (Sts == "2")
+            {
+                PayMode = "Processing";
+            }
+            else if (Sts == "3")
+            {
+                PayMode = "Completed";
+            }
+            else if(Sts=="4")
+            {
+                PayMode = "Canceled";
+            }
+            return PayMode;
+        }
 
         public static double TotalTax(double Amt, double Tax, int Cnt)
         {

@@ -411,6 +411,7 @@
     <Content Include="Views\HG_Orders\ByCashAlert.cshtml" />
     <Content Include="Views\Reports\AllChefOrders.cshtml" />
     <Content Include="Views\Reports\PastOrderFilter.cshtml" />
+    <Content Include="Views\Reports\PastOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

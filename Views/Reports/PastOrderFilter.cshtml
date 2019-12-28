@@ -35,7 +35,7 @@
                         PlacedByLit.Add(objp2);
                         PlacedByLit.Add(objp3);
                     }
-                    @Html.DropDownList("PlacedBy", PlacedByLit, new { @class = "form-control " })
+                    @Html.DropDownList("PlacedBy", PlacedByLit, new { @class = "form-control" })
                 </div>
                 <div class="col-md-3">
                     @Html.Label("Order Status")
@@ -74,7 +74,20 @@
 </div>
 
 <div class="col" id="List">
+    <table class="table table-hover" id="TBLID">
+        <thead>
+            <tr>
+                <td>S.N</td>
+                <td>Order No</td>
+                <td>Date</td>
+                <td> Amt</td>
+                <td>Status</td>
+                <td>Payment Mode</td>
+            </tr>
+        </thead>
+        <tbody></tbody>
 
+    </table>
 
 </div>
 <script>
@@ -84,14 +97,13 @@
                     var Pmode = $("#PMode").val();
                     var Fdate = $("#Fdate").val();
                     var Tdate = $("#Tdate").val();
-                    
+                    var PlacedBy = $("#PlacedBy").val();
+                    var OrdSts = $("#OrdSts").val();
                     $.ajax({
-                        url: "/HG_Orders/Ledger?Type=2&PMode=" + Pmode + "&Fdate=" + Fdate + "&Tdate=" + Tdate +"&OrgId="+OrgId,
+                        url: "/Reports/PastOrder?PMode=" + Pmode + "&Fdate=" + Fdate + "&Tdate=" + Tdate + "&PlacedBy=" + PlacedBy + "&OrdSts=" + OrdSts,
                         type: "GET",
                         success: function (data) {
                             $("#waiting").hide();
-                            $("#List2").html("");
-                            $("#List").html("");
                             $("#List").html(data);
 
                         },

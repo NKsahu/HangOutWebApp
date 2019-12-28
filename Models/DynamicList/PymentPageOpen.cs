@@ -8,7 +8,7 @@ namespace HangOut.Models.DynamicList
     public class PymentPageOpen
     {
         public Int64 OID { get; set; }
-        public string CheckSum { get; set; }
+        public string CID { get; set; }
         public static List<PymentPageOpen> ListPytmPgOpen;
     }
 }

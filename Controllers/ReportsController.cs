@@ -23,5 +23,10 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult PastOrder()
+        {
+
+            return View();
+        }
     }
 }

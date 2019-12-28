@@ -1612,22 +1612,24 @@ namespace HangOut.Controllers
                 {
                     HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
                     JObject itemobj = new JObject();
+                    Token.Add(OrderItem.TickedNo);
                     itemobj.Add("OIID", OrderItem.OIID);
                     itemobj.Add("ItemID", OrderItem.FID);
                     itemobj.Add("ItemName", hG_Items.Items);
-                    itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
+                    itemobj.Add("Quantity",OrderItem.Count);
                     itemobj.Add("Status", OrderItem.Status);
-                    itemobj.Add("Tax", OrderItem.TaxInItm);
-                    itemobj.Add("CostPrice", OrderItem.CostPrice.ToString("0.00"));
-                    itemobj.Add("Amount", OrderItem.Price.ToString("0.00"));
-                    Token.Add(OrderItem.TickedNo);
+                    double taxprice= OrgType.TotalTax(OrderItem.CostPrice, OrderItem.TaxInItm, OrderItem.Count);
+                    double CostPriceItm= (OrderItem.Count * OrderItem.CostPrice);
+                    double TotlPrice= (OrderItem.Count * OrderItem.Price);
+                    itemobj.Add("Tax", taxprice.ToString("0.00"));
+                    itemobj.Add("CostPrice", CostPriceItm.ToString("0.00"));
+                    itemobj.Add("Amount", TotlPrice.ToString("0.00"));
                     if (OrderItem.Status != 4)
                     {
-                        tax += OrgType.TotalTax(OrderItem.CostPrice, OrderItem.TaxInItm, OrderItem.Count);
-                        CostPrice += (OrderItem.Count * OrderItem.CostPrice);
-                        price += (OrderItem.Count * OrderItem.Price);
+                        tax += taxprice;
+                        CostPrice += CostPriceItm;
+                        price += TotlPrice;
                     }
-                    
                     Info.Add(itemobj);
                 }
                 Object.Add("TicketNo", string.Join(",", Token));
@@ -1792,7 +1794,7 @@ namespace HangOut.Controllers
             parameters.Add("TXN_AMOUNT", Amount);
             parameters.Add("WEBSITE", "APPSTAGING");
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
-            PymentPageOpen.ListPytmPgOpen.Add(new PymentPageOpen { OID = RealOID, CheckSum = checksum });
+            PymentPageOpen.ListPytmPgOpen.Add(new PymentPageOpen { OID = RealOID, CID = CID });
             return checksum;
 
         }
