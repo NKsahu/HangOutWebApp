@@ -71,3 +71,19 @@ function ShowChefOrdre() {
     });
 
 }
+function UnseenChefOrdCnt() {
+    $.ajax({
+        url: "/WebApi/UnseenOrdCnt",
+        type: "GET",
+        success: function (data) {
+            var Jobj = JSON.parse(data);
+            var Count = Jobj.Cnt;
+            $("#ChefUnpaid").text(Count);
+        },
+        error: function (Xr, Status, ErrorMsg) {
+
+        }
+    });
+}
+setTimeout(function () { UnseenChefOrdCnt() }, 1000);
+setInterval(function () { UnseenChefOrdCnt(); }, 60000);

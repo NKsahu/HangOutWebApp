@@ -151,6 +151,12 @@
                                     title: 'Alert',
                                     content: 'Completed Succesfully',
                                 });
+                                var Cnt = parseInt($("#ChefUnpaid").text());
+                                if (Cnt > 0) {
+                                    Cnt = Cnt - 1;
+                                    $("#ChefUnpaid").text(Cnt);
+                                }
+                               
                             }
                             else {
                                 $.alert({

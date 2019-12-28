@@ -1202,6 +1202,7 @@ namespace HangOut.Controllers
                     OrderitemObj.Status = 4;// canceld
                 }
                 OrderitemObj.UpdatedBy = UpdateBy;
+                OrderitemObj.ChefSeenBy = UpdateBy;
                 OrderitemObj.Save();
                 if (OrderitemObj.OIID > 0)
                 {
@@ -1230,7 +1231,7 @@ namespace HangOut.Controllers
                 }
                 else
                 {//postpaid
-                    order.Status = "2";// processing
+                    //order.Status = "2";// processing
                     var completedOrCancelorderItems = OrderItemListAll.FindAll(x => x.Status == 3 || x.Status == 4);//cancel and Completed
                     if (OrderItemListAll.Count == completedOrCancelorderItems.Count && order.PaymentStatus != 0)
                     {
@@ -1902,6 +1903,18 @@ namespace HangOut.Controllers
             var UserCode = int.Parse(UserInfo["UserCode"]);
             objorder.PayReceivedBy = UserCode;
             objorder.Save();
+        }
+        public JObject UnseenOrdCnt(int OrgId=0)
+        {
+            if (OrgId == 0)
+            {
+                var UserInfo = Request.Cookies["UserInfo"];
+                OrgId  =int.Parse(UserInfo["OrgId"]);
+            }
+            int Count = HG_OrderItem.UnseenOrd(OrgId);
+            JObject reslt = new JObject();
+            reslt.Add("Cnt", Count);
+            return reslt;
         }
     }
 }

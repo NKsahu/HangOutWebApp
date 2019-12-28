@@ -246,5 +246,32 @@ namespace HangOut.Models
             }
             return objOrdItm;
         }
+        public static int UnseenOrd(int OrgId)
+        {
+            string Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE Status=1 and OID In(select OID from HG_Orders where   Convert(Date, Create_Date)= Convert(Date, GetDate()) and Status='1' and OrgId=" + OrgId.ToString()+" )";
+            int Count = 0;
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+            if (ObjOrg!=null&&ObjOrg.PaymentType == 1)
+            {
+              Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE Status=1 and OID In(select OID from HG_Orders where  Convert(Date, Create_Date)= Convert(Date, GetDate()) and Status='1' and PaymentStatus!= 0 and OrgId=" + OrgId.ToString() + " )";
+            }
+            System.Data.SqlClient.SqlCommand cmd = null;
+            System.Data.SqlClient.SqlDataReader SDR = null;
+            HG_OrderItem ObjTmp = new HG_OrderItem();
+            DBCon Obj = new DBCon();
+            try
+            {
+                cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    Count = SDR.GetInt32(0);
+
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
+            return Count;
+        }
     }
 }
