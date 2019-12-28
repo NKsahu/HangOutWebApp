@@ -292,7 +292,8 @@ namespace HangOut.Controllers
                     ObjItem.Add("ItemMode", item.ItemMode);
                     TotalPrice += Mycart.Count * item.Price;
                     TotalCostPrice+= Mycart.Count * item.CostPrice;
-                    TotalTax += item.Tax * Mycart.Count;
+                TotalTax += OrgType.TotalTax(item.CostPrice, item.Tax, Mycart.Count); //ObjItem.Tax* CartObj.Count;
+               // TotalTax += item.Tax * Mycart.Count;
                     jArray.Add(ObjItem);
 
             }
@@ -1593,7 +1594,6 @@ namespace HangOut.Controllers
                 Object.Add("TableSeatname", ObjTorS.Table_or_SheetName);
                 Object.Add("OutLetType", hG_OrganizationDetails.PaymentType);
                
-                Object.Add("TicketNo", string.Join(",", Token));
                 Object.Add("OID", orders.OID);
                 Object.Add("Status", orders.Status);
                 Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
@@ -1630,6 +1630,7 @@ namespace HangOut.Controllers
                     
                     Info.Add(itemobj);
                 }
+                Object.Add("TicketNo", string.Join(",", Token));
                 Object.Add("CostPrice", CostPrice.ToString("0.00"));
                 Object.Add("Tax", tax.ToString("0.00"));
                 Object.Add("TotalAmount", price.ToString("0.00"));
