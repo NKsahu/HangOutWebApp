@@ -82,8 +82,6 @@
         OrderItmlist = OrderItmlist.FindAll(x => x.Status == 3);
         GroupByItems = OrderItmlist.GroupBy(x => x.FID);
         ItemList = new HG_Items().GetAll();
-
-
     }
     <div class="col" id="List2">
         <div class="card">

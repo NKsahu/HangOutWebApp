@@ -30,7 +30,7 @@
         OrderItems.AddRange(new HG_OrderItem().GetAll(order.OID));
         OrderDate = order.Create_Date;
     }
-    OrderItems = OrderItems.FindAll(x => x.Status != 4); //not cancedled items
+   // OrderItems = OrderItems.FindAll(x => x.Status != 4); //not cancedled items
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
@@ -45,7 +45,6 @@
     string OrderNo = OID.ToString();
     double AmountTotal = 0.00;
     int Qty = 0;
-
     string PoweredBy = "Powered By FoodDo";
     string TicketNos = "";
     List<HG_Items> ItemList = new HG_Items().GetAll();
@@ -64,10 +63,7 @@
         Licence3 = OrgObj.License3;
 
     }
-
-
 }
-
 <style>
     @@media print {
         body * {
@@ -135,11 +131,16 @@
             <tbody>
                 @foreach (var items in OrderItems)
                 {
-                    AmountTotal += items.Price * items.Count;
-                    Qty += items.Count;
+                    string Style = "background-color:#e05c5c";
+                    if (items.Status != 4)
+                    {
+                        AmountTotal += items.Price * items.Count;
+                        Qty += items.Count;
+                        Style = "background-color:white";
+                    }
                     // Qty += items.Qty;
                     HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
-                    <tr>
+                    <tr style="@(Style)">
                         <td style="text-align:center">@hG_Items.Items</td>
                         <td style="text-align:center">@items.Count</td>
                         <td style="text-align:center">@items.Price</td>

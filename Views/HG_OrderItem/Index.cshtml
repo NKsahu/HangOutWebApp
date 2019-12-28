@@ -10,7 +10,7 @@
     // UserList.AddRange(new vw_HG_UsersDetails().GetAll("CUST"));
     List<HG_UserTypes> UsertypleList = new HG_UserTypes().GetAll();
     List<HG_OrderItem> listorder = new HG_OrderItem().GetAll(OrderId);
-    listorder = listorder.FindAll(x => x.Status != 4);
+   // listorder = listorder.FindAll(x => x.Status != 4);
     var tokens = listorder.Select(x => x.TickedNo);
     tokens = tokens.Distinct();
     var Ticketnos = string.Join(",", tokens);
@@ -93,8 +93,11 @@
                 {
                     <!-- //"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"-->
                     double ItemPrice = item.Price * item.Count;
-                    QtyTotal += item.Count;
-                    AmtTotal += ItemPrice;
+                    if (item.Status != 4)
+                    {
+                        QtyTotal += item.Count;
+                        AmtTotal += ItemPrice;
+                    }
                     string PrePareBy = "";
                     string OrderPlacedBy = "";
                     var PlacedByObj = new vw_HG_UsersDetails().GetSingleByUserId((int)item.OrdById);
