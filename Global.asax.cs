@@ -21,6 +21,7 @@ namespace HangOut
             Cart.List = new System.Collections.Generic.List<Cart>();
             OrderType.List = new OrderType().OrgTypeList();
             OrgType.List = new OrgType().ListOrgTypeList();
+            PymentPageOpen.ListPytmPgOpen = new System.Collections.Generic.List<PymentPageOpen>();
         }
     }
 }

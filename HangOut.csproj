@@ -320,6 +320,7 @@
     <Compile Include="Models\Common\UsersMenu.cs" />
     <Compile Include="Models\DBCon.cs" />
     <Compile Include="Models\DynamicList\OrgType.cs" />
+    <Compile Include="Models\DynamicList\PymentPageOpen.cs" />
     <Compile Include="Models\DynamicList\Type.cs" />
     <Compile Include="Models\HG_Category.cs" />
     <Compile Include="Models\HG_FloorSide_or_RowName.cs" />

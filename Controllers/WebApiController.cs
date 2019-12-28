@@ -554,6 +554,12 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG","Add Atleast one Item");
                 return PostResult;
             }
+            if (PymentPageOpen.ListPytmPgOpen.Find(x => x.OID==OID) != null)
+            {
+                PostResult.Add("Status", 400);
+                PostResult.Add("MSG", "Can't Change Order After Redirect To Payment Page");
+                return PostResult;
+            }
             Int64 NewOID = 0;
             if (OID > 0)
             {
@@ -1524,7 +1530,6 @@ namespace HangOut.Controllers
             else if (status > 0 && status == 3)//completed
             {
                 OrderList = OrderList.FindAll(x => x.Status == "3");
-                OrderList = OrderList.FindAll(x => x.Create_Date.Date == DateTime.Now.Date).ToList();
             }
         //    List<HG_OrderItem> OrderItem=new HG_OrderItem().GetAll(CID)
             if(OrderList.Count>0)
@@ -1533,6 +1538,7 @@ namespace HangOut.Controllers
                 {
                     HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
                     List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
+                    OrderItemList = OrderItemList.FindAll(x => x.Status != 4);// not canceled items
                     double price = 0.00;
                     double CostPrice = 0.00;
                     double tax = 0.00;
@@ -1558,7 +1564,6 @@ namespace HangOut.Controllers
                     Info.Add(Object);
                 }
             }
-            
             return Info;
         }
 
@@ -1615,10 +1620,14 @@ namespace HangOut.Controllers
                     itemobj.Add("Tax", OrderItem.TaxInItm);
                     itemobj.Add("CostPrice", OrderItem.CostPrice.ToString("0.00"));
                     itemobj.Add("Amount", OrderItem.Price.ToString("0.00"));
-                    price += (OrderItem.Count * OrderItem.Price);
                     Token.Add(OrderItem.TickedNo);
-                    tax += OrgType.TotalTax(OrderItem.CostPrice, OrderItem.TaxInItm, OrderItem.Count);
-                    CostPrice += (OrderItem.Count * OrderItem.CostPrice);
+                    if (OrderItem.Status != 4)
+                    {
+                        tax += OrgType.TotalTax(OrderItem.CostPrice, OrderItem.TaxInItm, OrderItem.Count);
+                        CostPrice += (OrderItem.Count * OrderItem.CostPrice);
+                        price += (OrderItem.Count * OrderItem.Price);
+                    }
+                    
                     Info.Add(itemobj);
                 }
                 Object.Add("CostPrice", CostPrice.ToString("0.00"));
@@ -1768,7 +1777,7 @@ namespace HangOut.Controllers
         }
 
         [HttpPost]
-        public string GetCheckSum(string CID, string OID, string Amount, string email, string mobile)
+        public string GetCheckSum(string CID, string OID, string Amount, string email, string mobile,Int64 RealOID = 0)
         {
 
             String merchantKey = "yB4HRdQ0vcb9XBrI";
@@ -1781,31 +1790,24 @@ namespace HangOut.Controllers
             parameters.Add("ORDER_ID", OID);
             parameters.Add("TXN_AMOUNT", Amount);
             parameters.Add("WEBSITE", "APPSTAGING");
-            //parameters.Add("EMAIL", email);
-            //parameters.Add("MOBILE_NO", mobile);
             string checksum = CheckSum.generateCheckSum(merchantKey, parameters);
-            //bool status = CheckSum.verifyCheckSum(merchantKey, parameters, checksum);
-            // string result = Paytm(OID);
+            PymentPageOpen.ListPytmPgOpen.Add(new PymentPageOpen { OID = RealOID, CheckSum = checksum });
             return checksum;
 
         }
+        public JObject CancelPageOpen(Int64 OID)
+        {
+            JObject result = new JObject();
+            PymentPageOpen.ListPytmPgOpen.RemoveAll(x => x.OID == OID);
+            result.Add("Status", 200);
+            return result;
+        }
         public JObject PaytmPayMentStatus(string paytmResn)
         {
-           // JObject jObject = JObject.FromObject(paytmResn);
-          //  string StringPaytmRsp = Newtonsoft.Json.JsonConvert.SerializeObject(jObject);
-           // JObject jObject = JObject.Parse(paytmResn);
             PaytmResn paytmResnObj = Newtonsoft.Json.JsonConvert.DeserializeObject<PaytmResn>(paytmResn);
            // PaytmResn paytmResnObj = new PaytmResn();
             //paytmResnObj.id=0
             JObject result = new JObject();
-            //    public int id { get; set; }
-            //public Int64 OID { get; set; }
-            //public string OIDkey { get; set; }
-            //public string TxnId { get; set; }
-            //public int TxnSts { get; set; }
-            //public DateTime TxtDate { get; set; }
-            //public Int64 CID { get; set; }// customer id
-            //public string PaytmResp { get; set; }
             if (paytmResnObj.save() > 0 )
             {
                 //BY  FOODDO PAYMENT
