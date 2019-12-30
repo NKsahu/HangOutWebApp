@@ -11,14 +11,17 @@
                     @Html.Label("Payment Mode")
                     @{
                         List<SelectListItem> li = new List<SelectListItem>();
-                        SelectListItem obj = new SelectListItem() { Text = "Select", Value = "0" };
+                        SelectListItem obj = new SelectListItem() { Text = "All", Value = "-1" };
+                        SelectListItem objCash = new SelectListItem() { Text = "UnPaid", Value = "0" };
                         SelectListItem obj1 = new SelectListItem() { Text = "Cash", Value = "1" };
-                        SelectListItem obj2 = new SelectListItem() { Text = "Online", Value = "2" };
+                        SelectListItem obj2 = new SelectListItem() { Text = "Bank/Wallet", Value = "2" };
                         SelectListItem obj3 = new SelectListItem() { Text = "FoodDo", Value = "3" };
                         li.Add(obj);
+                        li.Add(objCash);
                         li.Add(obj1);
                         li.Add(obj2);
                         li.Add(obj3);
+
                     }
                     @Html.DropDownList("PMode", li, new { @class = "form-control " })
                 </div>
@@ -26,7 +29,7 @@
                     @Html.Label("Placed By")
                     @{
                         List<SelectListItem> PlacedByLit = new List<SelectListItem>();
-                        SelectListItem objp = new SelectListItem() { Text = "Select", Value = "0" };
+                        SelectListItem objp = new SelectListItem() { Text = "All", Value = "0" };
                         SelectListItem objp1 = new SelectListItem() { Text = "OWNER", Value = "ONR" };
                         SelectListItem objp2 = new SelectListItem() { Text = "CAPTAIN", Value = "CA" };
                         SelectListItem objp3 = new SelectListItem() { Text = "CUSTOMER", Value = "CUST" };
@@ -41,7 +44,7 @@
                     @Html.Label("Order Status")
                     @{
                         List<SelectListItem> OrderStstList = new List<SelectListItem>();
-                        SelectListItem objpOsl = new SelectListItem() { Text = "Select", Value = "0" };
+                        SelectListItem objpOsl = new SelectListItem() { Text = "All", Value = "0" };
                         SelectListItem objp1Osl = new SelectListItem() { Text = "PLACED", Value = "1" };
                         SelectListItem objp2Osl = new SelectListItem() { Text = "PROCESSING", Value = "2" };
                         SelectListItem objp3Osl = new SelectListItem() { Text = "COMPLETED", Value = "3" };

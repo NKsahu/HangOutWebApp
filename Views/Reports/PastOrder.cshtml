@@ -11,7 +11,7 @@
         DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
         TodayOrderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
     }
-    if (Request.QueryString["PMode"] != null && Request.QueryString["PMode"]!="0")
+    if (Request.QueryString["PMode"] != null && Request.QueryString["PMode"]!="-1")
     {
         int PaymentMode = int.Parse(Request.QueryString["PMode"]);
         TodayOrderList = TodayOrderList.FindAll(x => x.PaymentStatus == PaymentMode);

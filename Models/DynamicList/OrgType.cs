@@ -43,7 +43,7 @@ namespace HangOut.Models.DynamicList
             else if (PMode == 2)
             {
 
-                PayMode = "Online";
+                PayMode = "Bank/Wallet";
             }
             else if (PMode == 3)
             {
