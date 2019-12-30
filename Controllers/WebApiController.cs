@@ -1726,17 +1726,29 @@ namespace HangOut.Controllers
             JArray JMenuArray = new JArray();
             int CID = int.Parse(objParams.GetValue("CID").ToString());
             int JoinType = int.Parse(objParams.GetValue("JoinType").ToString());
-            int ProductType = int.Parse(objParams.GetValue("ProductType").ToString());
+            string ProductType = objParams.GetValue("ProductType").ToString();
+            JObject result = new JObject();
+            List<JoinFoodDo> JoinedList = JoinFoodDo.GetAll(CID);
+            if (JoinedList.Count > 0)
+            {
+                JoinFoodDo joinFoodDoObj = JoinedList.Find(x => x.JoinType == JoinType);
+                if (joinFoodDoObj != null)
+                {
+                    result.Add("Status", 400);
+                    result.Add("MSG", "Already Joined");
+                    return result; ;
+                }
+            }
             JoinFoodDo joinFoodDo = new JoinFoodDo();
             joinFoodDo.JoinedUserd = CID;
             joinFoodDo.JoinType = JoinType;
             joinFoodDo.ProductType = ProductType;
             joinFoodDo.JoinDate = DateTime.Now;
-            JObject result = new JObject();
+           
             if (joinFoodDo.save() > 0)
             {
                 result.Add("Status", 200);
-                result.Add("MSG", "Joined successfully You Will receive call back soon");
+                result.Add("MSG", "Joined successfully. You will receive call back soon");
             }
             else
             {

@@ -16,9 +16,7 @@
         <table class=" table table-bordered table-hover w-100" id="TBLID">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DisplayName("Qr Code")
-                    </th>
+                   
                     <th>
                         @Html.DisplayName("Qr Number")
                     </th>
@@ -42,9 +40,9 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    string ImgName = QrCode.GenerateQr(item.QrCode,Path: "QRImgTorR");
-                <tr>
-                    <td><img src="~/QRImgTorR/@ImgName" width="60" height="60" /></td>
+                    
+                <tr id="@item.Table_or_RowID">
+                    
                     <td>
                         @Html.DisplayFor(modelItem => item.QrCode)
                     </td>
@@ -68,6 +66,7 @@
                     </td>
                     <td>
                         <a href=" /HG_Tables_or_Sheat/CreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                        <button class="btn btn-danger btn-sm " onclick="Delete(@item.Table_or_RowID)"> Delete</button>
                     </td>
                 </tr>
                 }
@@ -75,3 +74,27 @@
         </table>
     </div>
 </div>
+<script>
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_Tables_or_Sheat/Delete?ID=" + ID,
+                success: function (data) {
+                    var da = JSON.parse(data);
+                    console.log(da);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $('#waiting').hide();
+                }
+            });
+        }
+        
+    }
+    
+
+    
+
+</script>

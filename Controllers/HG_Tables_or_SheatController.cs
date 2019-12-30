@@ -108,11 +108,22 @@ namespace HangOut.Controllers
         }
         public ActionResult Delete(int ID)
         {
-            HG_Tables_or_Sheat ObjTable = new HG_Tables_or_Sheat();
-            //  int i = ObjTable.Dell(ID);
-            //  if(i>0)
-            return RedirectToAction("Index");
-            // return RedirectToAction("Error");
+            HG_Tables_or_Sheat ObjTable = new HG_Tables_or_Sheat().GetOne(ID);
+            if (ObjTable != null)
+            {
+                List<HG_Orders> listord = new HG_Orders().GetAll(ObjTable.OrgId);
+                listord = listord.FindAll(x => x.Table_or_SheatId == ObjTable.Table_or_RowID);
+                if (listord.Count > 0)
+                {
+                    return Json(new { msg = "Already Used in "+listord.Count.ToString()+" Orders" },JsonRequestBehavior.AllowGet);
+
+                }
+                else
+                {
+                    HG_Tables_or_Sheat.Dell(ObjTable.Table_or_RowID);
+                }
+            }
+           return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Error()
         {
