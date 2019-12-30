@@ -20,6 +20,8 @@ namespace HangOut.Models
         public HG_Floor_or_ScreenMaster()
         {
             UpdateionDate =0;
+            CreatonDate = DateTime.Now;
+
         }
          
         public int save()

@@ -195,9 +195,10 @@ namespace HangOut.Controllers
                 if (DT.Rows.Count > 0)
                 {
                     HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgID);
-                    List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(int.Parse(ObjOrg.OrgTypes), OrgID);
-                    List<HG_Floor_or_ScreenMaster> ListFlrScr = new HG_Floor_or_ScreenMaster().GetAll(int.Parse(ObjOrg.OrgTypes), OrgID);
-                    List<HG_FloorSide_or_RowName> ListFsideorRowName = new HG_FloorSide_or_RowName().GetAll(int.Parse(ObjOrg.OrgTypes), OrgID);
+                    int OrgType = int.Parse(ObjOrg.OrgTypes);
+                    List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(OrgType, OrgID);
+                    List<HG_Floor_or_ScreenMaster> ListFlrScr = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgID);
+                    List<HG_FloorSide_or_RowName> ListFsideorRowName = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgID);
                     foreach(DataRow Row in DT.Rows)
                     {
                         string FlrOrScrName =(Row[0]==null?"":Row[0].ToString());
@@ -211,8 +212,32 @@ namespace HangOut.Controllers
                         }
                         var ObjFlrScr = ListFlrScr.Find(x => x.Name.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
                         var ObjFsideOrRoName = ListFsideorRowName.Find(x => x.FloorSide_or_RowName.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
-
-
+                        if (ObjFlrScr == null)
+                        {
+                            ObjFlrScr = new HG_Floor_or_ScreenMaster();
+                            ObjFlrScr.Name = FlrOrScrName;
+                            ObjFlrScr.Type= ObjOrg.OrgTypes;
+                            ObjFlrScr.OrgID = OrgID;
+                            ObjFlrScr.save();
+                            ListFlrScr.Add(ObjFlrScr);
+                        }
+                        if (ObjFsideOrRoName == null)
+                        {
+                            ObjFsideOrRoName = new HG_FloorSide_or_RowName();
+                            ObjFsideOrRoName.FloorSide_or_RowName = FlrSideOrRowName;
+                            ObjFsideOrRoName.OrgID = OrgID;
+                            ObjFsideOrRoName.Type = ObjOrg.OrgTypes;
+                            ObjFsideOrRoName.save();
+                            ListFsideorRowName.Add(ObjFsideOrRoName);
+                        }
+                        HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat();
+                        hG_Tables_Or_Sheat.OrgId = OrgID;
+                        hG_Tables_Or_Sheat.Type = ObjOrg.OrgTypes;
+                        hG_Tables_Or_Sheat.Table_or_SheetName = TableorSheatName;
+                        hG_Tables_Or_Sheat.QrCode = QrCode;
+                        hG_Tables_Or_Sheat.Floor_or_ScreenId = ObjFlrScr.Floor_or_ScreenID;
+                        hG_Tables_Or_Sheat.FloorSide_or_RowNoID = ObjFsideOrRoName.ID;
+                        hG_Tables_Or_Sheat.save();
 
                     }
                 }
@@ -227,7 +252,7 @@ namespace HangOut.Controllers
                 return Json(new { msg = "Error " + e.Message });
             }
 
-            return Json("~/Image/");
+            return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

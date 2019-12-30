@@ -9,7 +9,7 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("Upload", "HG_OrganizationDetails", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("Upload", "HG_OrganizationDetails", null, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             <div class="row">
                 <div class="col-md-3">
@@ -29,3 +29,9 @@
         }
         </div>
     </div>
+<script>
+    function JsonSuccess(Jobj) {
+        $('#waiting').hide();
+        alert('Uploadede');
+    }
+</script>
