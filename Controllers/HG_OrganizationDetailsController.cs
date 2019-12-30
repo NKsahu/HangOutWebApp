@@ -190,8 +190,8 @@ namespace HangOut.Controllers
             }
             try
             {
-                UplXl.SaveAs(System.IO.Path.Combine(Server.MapPath("~/FoodImg/"), UplXl.FileName));
-                var DT = ReadExl.ReadExcelFileDT("~/FoodImg/" + UplXl.FileName);
+                UplXl.SaveAs(System.IO.Path.Combine(Server.MapPath("~/Image/"), UplXl.FileName));
+                var DT = ReadExl.ReadExcelFileDT("~/Image/" + UplXl.FileName);
                 if (DT.Rows.Count > 0)
                 {
                     HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgID);
@@ -199,18 +199,18 @@ namespace HangOut.Controllers
                     List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(OrgType, OrgID);
                     List<HG_Floor_or_ScreenMaster> ListFlrScr = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgID);
                     List<HG_FloorSide_or_RowName> ListFsideorRowName = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgID);
-                    foreach(DataRow Row in DT.Rows)
+                    for(int i=1;i<DT.Rows.Count;i++)
                     {
-                        string FlrOrScrName =(Row[0]==null?"":Row[0].ToString());
-                        string FlrSideOrRowName = (Row[1] == null ? "" : Row[1].ToString());
-                        string TableorSheatName = (Row[2] == null ? "" : Row[2].ToString());
-                        string QrCode = (Row[3] == null ? "" : Row[3].ToString());
+                        string FlrOrScrName =(DT.Rows[i][0]==null?"": DT.Rows[i][0].ToString());
+                        string FlrSideOrRowName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString());
+                        string TableorSheatName = (DT.Rows[i][2] == null ? "" : DT.Rows[i][2].ToString());
+                        string QrCode = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
                         HG_Tables_or_Sheat TorSAlreadyObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
                         if (TorSAlreadyObj != null && TorSAlreadyObj.QrCode != "0" && TorSAlreadyObj.Table_or_RowID > 0)
                         {
                             QrCode = "0";
                         }
-                        var ObjFlrScr = ListFlrScr.Find(x => x.Name.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
+                        var ObjFlrScr = ListFlrScr.Find(x => x.Name.ToUpper().Contains(FlrOrScrName.ToUpper()));
                         var ObjFsideOrRoName = ListFsideorRowName.Find(x => x.FloorSide_or_RowName.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
                         if (ObjFlrScr == null)
                         {
@@ -230,14 +230,19 @@ namespace HangOut.Controllers
                             ObjFsideOrRoName.save();
                             ListFsideorRowName.Add(ObjFsideOrRoName);
                         }
-                        HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat();
-                        hG_Tables_Or_Sheat.OrgId = OrgID;
-                        hG_Tables_Or_Sheat.Type = ObjOrg.OrgTypes;
-                        hG_Tables_Or_Sheat.Table_or_SheetName = TableorSheatName;
-                        hG_Tables_Or_Sheat.QrCode = QrCode;
-                        hG_Tables_Or_Sheat.Floor_or_ScreenId = ObjFlrScr.Floor_or_ScreenID;
-                        hG_Tables_Or_Sheat.FloorSide_or_RowNoID = ObjFsideOrRoName.ID;
-                        hG_Tables_Or_Sheat.save();
+                        var ObjTblOrShtExit = ListTorS.Find(x => x.Table_or_SheetName.ToUpper() == TableorSheatName.ToUpper());
+                        if (ObjTblOrShtExit == null)
+                        {
+                            HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat();
+                            hG_Tables_Or_Sheat.OrgId = OrgID;
+                            hG_Tables_Or_Sheat.Type = ObjOrg.OrgTypes;
+                            hG_Tables_Or_Sheat.Table_or_SheetName = TableorSheatName;
+                            hG_Tables_Or_Sheat.QrCode = QrCode;
+                            hG_Tables_Or_Sheat.Floor_or_ScreenId = ObjFlrScr.Floor_or_ScreenID;
+                            hG_Tables_Or_Sheat.FloorSide_or_RowNoID = ObjFsideOrRoName.ID;
+                            hG_Tables_Or_Sheat.save();
+                        }
+                        
 
                     }
                 }
