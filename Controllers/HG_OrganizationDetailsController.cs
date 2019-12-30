@@ -1,8 +1,10 @@
 ﻿using HangOut.Models;
-using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-
+using HangOut.Models.Common;
+using System;
+using System.Data;
+using System.Data.OleDb;
 namespace HangOut.Controllers
 {
     [HangOut.Models.Common.LoginFilter]
@@ -15,7 +17,6 @@ namespace HangOut.Controllers
             List<HG_OrganizationDetails> Listitem = Objitem.GetAll();
             return View(Listitem);
         }
-
         public ActionResult CreateEdit(int ID)
         {
             HG_OrganizationDetails Objitem = new HG_OrganizationDetails();
@@ -104,7 +105,6 @@ namespace HangOut.Controllers
                 return RedirectToAction("Index");
             return RedirectToAction("Error");
         }
-
         public ActionResult Delete(int ID)
         {
             HG_OrganizationDetails ObjCon = new HG_OrganizationDetails();
@@ -114,9 +114,6 @@ namespace HangOut.Controllers
             return RedirectToAction("Error");
 
         }
-
-
-
         public ActionResult Error()
         {
             return View();
@@ -132,7 +129,6 @@ namespace HangOut.Controllers
 
             return View(Objitem);
         }
-
         public JsonResult SetOrderStatus(bool OrderStatus)
         {
             var ObjOrg = Request.Cookies["UserInfo"];
@@ -153,8 +149,6 @@ namespace HangOut.Controllers
             }
 
         }
-
-        
         public ActionResult OrgSettingEdit(int OrgId)
         {
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
@@ -174,11 +168,66 @@ namespace HangOut.Controllers
             }
             return View(OrgSeting);
         }
-
         public JsonResult SaveSetting(OrgSetting ObjSetting)
         {
             ObjSetting.save();
             return  Json(new { data="1" }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Upload()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult Upload(int OrgID, System.Web.HttpPostedFileBase UplXl)
+        {
+            if (OrgID <= 0)
+            {
+                return Json(new { msg = "Select Organization First" });
+            }
+            if (UplXl==null)
+            {
+                return Json(new { msg = "Upload Excel File First" });
+            }
+            try
+            {
+                UplXl.SaveAs(System.IO.Path.Combine(Server.MapPath("~/FoodImg/"), UplXl.FileName));
+                var DT = ReadExl.ReadExcelFileDT("~/FoodImg/" + UplXl.FileName);
+                if (DT.Rows.Count > 0)
+                {
+                    HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgID);
+                    List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(int.Parse(ObjOrg.OrgTypes), OrgID);
+                    List<HG_Floor_or_ScreenMaster> ListFlrScr = new HG_Floor_or_ScreenMaster().GetAll(int.Parse(ObjOrg.OrgTypes), OrgID);
+                    List<HG_FloorSide_or_RowName> ListFsideorRowName = new HG_FloorSide_or_RowName().GetAll(int.Parse(ObjOrg.OrgTypes), OrgID);
+                    foreach(DataRow Row in DT.Rows)
+                    {
+                        string FlrOrScrName =(Row[0]==null?"":Row[0].ToString());
+                        string FlrSideOrRowName = (Row[1] == null ? "" : Row[1].ToString());
+                        string TableorSheatName = (Row[2] == null ? "" : Row[2].ToString());
+                        string QrCode = (Row[3] == null ? "" : Row[3].ToString());
+                        HG_Tables_or_Sheat TorSAlreadyObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
+                        if (TorSAlreadyObj != null && TorSAlreadyObj.QrCode != "0" && TorSAlreadyObj.Table_or_RowID > 0)
+                        {
+                            QrCode = "0";
+                        }
+                        var ObjFlrScr = ListFlrScr.Find(x => x.Name.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
+                        var ObjFsideOrRoName = ListFsideorRowName.Find(x => x.FloorSide_or_RowName.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
+
+
+
+                    }
+                }
+
+                else
+                {
+                    return Json(new { msg = "No Any Row Founds"});
+                }
+            }
+            catch(Exception e)
+            {
+                return Json(new { msg = "Error " + e.Message });
+            }
+
+            return Json("~/Image/");
         }
     }
 }

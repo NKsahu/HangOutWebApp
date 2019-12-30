@@ -12,7 +12,7 @@ namespace HangOut.Models.Common
     public class ReadExl
     {
 
-        public DataTable convertExcelToDatatable(string fpath)
+        public static DataTable convertExcelToDatatable(string fpath)
         {
             //var fileName = string.Format("{0}\\fileNameHere", Directory.GetCurrentDirectory());
             var connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", fpath);
@@ -26,7 +26,7 @@ namespace HangOut.Models.Common
             return data;
         }
 
-        public DataTable ReadExcelFileDT(string fpath)
+        public static DataTable ReadExcelFileDT(string fpath)
         {
             fpath = AppDomain.CurrentDomain.BaseDirectory + fpath.Replace("/", @"\");
             return convertExcelToDatatable(fpath);
