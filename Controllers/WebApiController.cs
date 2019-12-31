@@ -1956,7 +1956,7 @@ namespace HangOut.Controllers
                 foreach(var order in ListOrder)
                 {
                     double TimeDiffInMinutes = (DateTime.Now - order.Update_Date).TotalMinutes;
-                    if (TimeDiffInMinutes > 15)
+                    if (TimeDiffInMinutes > 10)
                     {
                         CancelOrder(order.OID, -1);// order auto cancel
                     }
