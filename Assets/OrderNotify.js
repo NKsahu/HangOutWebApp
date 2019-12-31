@@ -87,3 +87,22 @@ function UnseenChefOrdCnt() {
 }
 setTimeout(function () { UnseenChefOrdCnt() }, 1000);
 setInterval(function () { UnseenChefOrdCnt(); }, 60000);
+
+//===========order auto cancel=========
+function OrderAutoCancel() {
+
+  //  $('#waiting').show();
+    $.ajax({
+        url: "/WebApi/CheckForCancelOrd",
+        type: "GET",
+        success: function (data) {
+
+        },
+        error: function (Xr, Status, ErrorMsg) {
+           
+        }
+    });
+
+}
+setInterval(function () { OrderAutoCancel(); }, 600000);
+//OrderAutoCancel();

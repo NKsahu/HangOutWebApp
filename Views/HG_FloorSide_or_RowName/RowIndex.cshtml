@@ -29,7 +29,7 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
+                    <tr id="@item.ID">
                         <td>
                             @Html.DisplayFor(modelItem => item.FloorSide_or_RowName)
                         </td>
@@ -39,6 +39,8 @@
                         
                         <td>
                             <a href="/HG_FloorSide_or_RowName/RowCreateEdit?ID=@item.ID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.ID)"> Delete</button>
+
                         </td>
                     </tr>
                 }
@@ -46,3 +48,31 @@
         </table>
     </div>
 </div>
+<script>
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_FloorSide_or_RowName/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
+    }
+</script>

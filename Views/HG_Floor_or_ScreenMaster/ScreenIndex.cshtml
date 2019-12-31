@@ -37,6 +37,7 @@
                         
                         <td>
                             <button onclick="CreateEdit(@item.Floor_or_ScreenID)" class="btn btn-warning btn-sm "> Edit</button>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.Floor_or_ScreenID)"> Delete</button>
                         </td>
                     </tr>
                 }
@@ -52,7 +53,9 @@
         var HtmlStr = "<tr id='" + Jitmobj.Floor_or_ScreenID+"'>";
         HtmlStr += '<td>' + Jitmobj.Floor_or_ScreenID+'</td>';
         HtmlStr += '<td>' + Jitmobj.Name+'</td>';
-        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID + ')"> Edit</button></td></tr>';
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID + ')"> Edit</button>';
+        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Floor_or_ScreenID + ')"> Delete</button>';
+        HtmlStr += '</td ></tr >';
         if (AddTr) {
             $("#Tbody").append(HtmlStr);
         }
@@ -84,6 +87,34 @@
                 $('#waiting').hide();
             }
         });
+
+    }
+
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_Floor_or_ScreenMaster/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
 
     }
 

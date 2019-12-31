@@ -63,5 +63,25 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult Delete(int ID)
+        {
+            HG_FloorSide_or_RowName ObjFscr = new HG_FloorSide_or_RowName().GetOne(ID);
+            if (ObjFscr != null)
+            {
+                List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(int.Parse(ObjFscr.Type));
+                ListTorS = ListTorS.FindAll(x => x.FloorSide_or_RowNoID == ObjFscr.ID);
+                if (ListTorS.Count > 0)
+                {
+                    return Json(new { msg = "Already Used In Seating " }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    int id = HG_FloorSide_or_RowName.Dell(ID);
+                }
+            }
+            return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

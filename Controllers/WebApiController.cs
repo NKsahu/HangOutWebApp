@@ -8,9 +8,6 @@ using HangOut.Models.DynamicList;
 using System;
 using System.Net;
 using paytm;
-using System.Web.Script.Serialization;
-using System.IO;
-
 namespace HangOut.Controllers
 {
     public class WebApiController : Controller
@@ -1555,6 +1552,7 @@ namespace HangOut.Controllers
                     JObject Object = new JObject();
                     Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                     Object.Add("OrganizationName", hG_OrganizationDetails.Name);
+                    Object.Add("OutLetType", hG_OrganizationDetails.PaymentType);
                     Object.Add("CostPrice", CostPrice.ToString("0.00"));
                     Object.Add("Tax", tax.ToString("0.00"));
                     Object.Add("TotalAmount", price.ToString("0.00"));
@@ -1562,6 +1560,11 @@ namespace HangOut.Controllers
                     Object.Add("OID", orders.OID);
                     Object.Add("Status", orders.Status);
                     Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
+                    if (orders.PaymentStatus == 0)
+                    {
+                        Object.Add("LastOrdTime", (DateTime.Now-orders.Update_Date).TotalMinutes);
+                    }
+                    
                     Info.Add(Object);
                 }
             }
@@ -1600,12 +1603,12 @@ namespace HangOut.Controllers
                 Object.Add("OrdAprvalSts", orders.OrderApprovlSts);
                 if (hG_OrganizationDetails.OrgTypes == "1")//restuarnt
                 {
-                    Object.Add("ByCash", orgSetting.ByCash==1?"NO":"YES");
+                    Object.Add("ByCash","YES");//mandatory for restuarnt
                     Object.Add("ByOnline", orgSetting.ByOnline == 2? "YES" : "NO");
                 }
                 else if (hG_OrganizationDetails.OrgTypes == "2")// theater
                 {
-                    Object.Add("ByOnline", orgSetting.ByOnline == 1 ? "NO" : "YES");
+                    Object.Add("ByOnline","YES");//mandatory for theater
                     Object.Add("ByCash", orgSetting.ByCash == 2 ? "YES" : "NO");
                 }
                 foreach (var OrderItem in hG_OrderItems)
@@ -1932,6 +1935,35 @@ namespace HangOut.Controllers
             JObject reslt = new JObject();
             reslt.Add("Cnt", Count);
             return reslt;
+        }
+        public JObject CheckForCancelOrd(int Orgid=0)
+        {
+            if (Orgid == 0)
+            {
+                var ObjCookie = Request.Cookies["UserInfo"];
+                 Orgid = int.Parse(ObjCookie["OrgId"]);
+            }
+            
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(Orgid);
+           
+            if (ObjOrg != null && ObjOrg.PaymentType == 1)
+            {
+                List<HG_Orders> ListOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                ListOrder = ListOrder.FindAll(x => x.Status != "3" && x.Status != "4");
+                ListOrder = ListOrder.FindAll(X => X.OrgId == Orgid);
+                ListOrder = ListOrder.FindAll(x => x.PaymentStatus == 0);
+                //ListOrder = ListOrder.FindAll(x => x.Update_Date > DateTime.Now.AddMinutes(-15));
+                foreach(var order in ListOrder)
+                {
+                    double TimeDiffInMinutes = (DateTime.Now - order.Update_Date).TotalMinutes;
+                    if (TimeDiffInMinutes > 15)
+                    {
+                        CancelOrder(order.OID, -1);// order auto cancel
+                    }
+                    
+                }
+            }
+            return new JObject();
         }
     }
 }
