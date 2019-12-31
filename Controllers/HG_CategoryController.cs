@@ -60,12 +60,22 @@ namespace HangOut.Controllers
 
         public ActionResult Delete(int ID)
         {
-            HG_Category ObjCon = new HG_Category();
-            int d = ObjCon.Dell(ID);
-            if (d > 0)
-                return RedirectToAction("Index");
-            return RedirectToAction("Error");
-
+            List<HG_Items> Itemlist = new HG_Items().GetAll();
+            Itemlist = Itemlist.FindAll(x => x.CategoryID == ID);
+            if (Itemlist.Count > 0)
+            {
+                return Json(new { msg = "Category Already Used in Item List " }, JsonRequestBehavior.AllowGet);
+            }
+            List<OrderMenuCategory> listitem = OrderMenuCategory.GetAll(CategoryId: ID);
+            if (listitem.Count > 0)
+            {
+                return Json(new { msg = "Category Already Used in Order Menu Category " }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                int i = HG_Category.Dell(ID);
+            }
+            return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Error()
         {

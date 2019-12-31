@@ -199,7 +199,7 @@ namespace HangOut.Models
             return (ObjTmp);
         }
 
-        public int Dell(int ID)
+        public static int Dell(Int64 ID)
         {
             int R = 0;
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());

@@ -82,11 +82,20 @@
                 type: 'GET',
                 url: "/HG_Tables_or_Sheat/Delete?ID=" + ID,
                 success: function (data) {
-                    var da = JSON.parse(data);
-                    console.log(da);
+                  //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
                     $('#waiting').hide();
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
                     $('#waiting').hide();
                 }
             });

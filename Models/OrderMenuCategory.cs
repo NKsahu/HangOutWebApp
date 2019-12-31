@@ -63,7 +63,7 @@ namespace HangOut.Models
             return Row;
 
         }
-        public static List<OrderMenuCategory> GetAll(int OderMenuId)
+        public static List<OrderMenuCategory> GetAll(int OderMenuId=0,int CategoryId=0)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -72,7 +72,10 @@ namespace HangOut.Models
             SqlDataReader SDR = null;
             List<OrderMenuCategory> ListTmp = new List<OrderMenuCategory>();
              string   Query = "SELECT * FROM  OrdMenuCategory where OrderMenuId=" + OderMenuId.ToString() + " ";
-          
+            if (CategoryId > 0)
+            {
+                Query = "SELECT * FROM  OrdMenuCategory where CategoryId=" + CategoryId.ToString() + " ";
+            }
             try
             {
                 cmd = new SqlCommand(Query, Con);

@@ -73,14 +73,24 @@ namespace HangOut.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Delete(int ID)
+        public ActionResult Delete(System.Int64 ID)
         {
-            HG_Items ObjCon = new HG_Items();
-            int d = ObjCon.Dell(ID);
-            if (d > 0)
-                return RedirectToAction("Index");
-            return RedirectToAction("Error");
-
+            List<HG_OrderItem> orderList = new HG_OrderItem().GetAll();
+            orderList = orderList.FindAll(x => x.FID == ID);
+            if (orderList.Count > 0)
+            {
+                return Json(new { msg = "Item Already Used in Orders" },JsonRequestBehavior.AllowGet);
+            }
+            List<OrdMenuCtgItems> listitem = OrdMenuCtgItems.GetAll(ItemId: ID);
+            if (listitem.Count > 0)
+            {
+                return Json(new { msg = "Item Already Used in Order Menu " },JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                int i = HG_Items.Dell(ID);
+            }
+            return Json(new { data = "1" },JsonRequestBehavior.AllowGet);
         }
         public ActionResult Error()
         {

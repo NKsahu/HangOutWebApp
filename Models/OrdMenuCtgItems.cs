@@ -61,7 +61,7 @@ namespace HangOut.Models
 
 
         }
-        public static List<OrdMenuCtgItems> GetAll(int OderMenuId)
+        public static List<OrdMenuCtgItems> GetAll(int OderMenuId=0,Int64 ItemId=0)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -70,7 +70,10 @@ namespace HangOut.Models
             SqlDataReader SDR = null;
             List<OrdMenuCtgItems> ListTmp = new List<OrdMenuCtgItems>();
             string Query = "SELECT * FROM  OrderMenuCatItems where OderMenuId=" + OderMenuId.ToString() + " ";
-
+            if (ItemId > 0)
+            {
+                Query = "SELECT * FROM  OrderMenuCatItems where ItemId=" + ItemId.ToString() + " ";
+            }
             try
             {
                 cmd = new SqlCommand(Query, Con);

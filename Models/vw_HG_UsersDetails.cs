@@ -89,7 +89,7 @@ namespace HangOut.Models
             vw_HG_UsersDetails ObjTmp = null;
             try
             {
-                string Query = "SELECT TOP 1 * FROM HG_UsersDetails WHERE UserID = @UserID AND Password = @Password ;";
+                string Query = "SELECT TOP 1 * FROM HG_UsersDetails WHERE UserID = @UserID AND Password = @Password COLLATE Latin1_General_CS_AS;";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@UserID", UserId);
                 cmd.Parameters.AddWithValue("@Password", Password);

@@ -35,9 +35,7 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                   
-                   
+                <tr id="@item.ItemID">
                     <td>
                         @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
                         @objcategory.Category
@@ -54,6 +52,7 @@
                     </td>
                     <td>
                         <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                        <button class="btn btn-danger btn-sm " onclick="Delete(@item.ItemID)"> Delete</button>
                     </td>
                 </tr>
                 }
@@ -61,3 +60,34 @@
         </table>
     </div>
 </div>
+
+<script>
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_Items/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
+
+    }
+
+</script>

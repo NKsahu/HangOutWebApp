@@ -205,8 +205,9 @@ namespace HangOut.Controllers
                         string FlrSideOrRowName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString());
                         string TableorSheatName = (DT.Rows[i][2] == null ? "" : DT.Rows[i][2].ToString());
                         string QrCode = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
+                        string QrCodeOld = QrCode;
                         HG_Tables_or_Sheat TorSAlreadyObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
-                        if (TorSAlreadyObj != null && TorSAlreadyObj.QrCode != "0" && TorSAlreadyObj.Table_or_RowID > 0)
+                        if (TorSAlreadyObj != null && TorSAlreadyObj.QrCode != "0" && TorSAlreadyObj.QrCode !=""&& TorSAlreadyObj.Table_or_RowID > 0)
                         {
                             QrCode = "0";
                         }
@@ -230,7 +231,7 @@ namespace HangOut.Controllers
                             ObjFsideOrRoName.save();
                             ListFsideorRowName.Add(ObjFsideOrRoName);
                         }
-                        var ObjTblOrShtExit = ListTorS.Find(x => x.Table_or_SheetName.ToUpper() == TableorSheatName.ToUpper());
+                        var ObjTblOrShtExit = ListTorS.Find(x => x.Table_or_SheetName.ToUpper() == TableorSheatName.ToUpper() &&(x.Floor_or_ScreenId== ObjFlrScr.Floor_or_ScreenID) &&(x.FloorSide_or_RowNoID== ObjFsideOrRoName.ID));
                         if (ObjTblOrShtExit == null)
                         {
                             HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat();
@@ -241,6 +242,11 @@ namespace HangOut.Controllers
                             hG_Tables_Or_Sheat.Floor_or_ScreenId = ObjFlrScr.Floor_or_ScreenID;
                             hG_Tables_Or_Sheat.FloorSide_or_RowNoID = ObjFsideOrRoName.ID;
                             hG_Tables_Or_Sheat.save();
+                        }
+                        else if(ObjTblOrShtExit!=null&& (ObjTblOrShtExit.QrCode != QrCodeOld) && (QrCode != ""))
+                        {
+                            ObjTblOrShtExit.QrCode = QrCode;
+                            ObjTblOrShtExit.save();
                         }
                         
 

@@ -39,7 +39,6 @@
                 @foreach (var item in Model)
                 {
                 <tr id="@item.Table_or_RowID">
-
                     <td>
                         @Html.DisplayFor(modelItem => item.QrCode)
                     </td>
@@ -75,6 +74,7 @@
                     </td>
                     <td>
                         <button onclick="CreateEdit(@item.Table_or_RowID)" class="btn btn-warning btn-sm "> Edit</button>
+                        <button class="btn btn-danger btn-sm " onclick="Delete(@item.Table_or_RowID)"> Delete</button>
                     </td>
                 </tr>
                             }
@@ -127,5 +127,31 @@
 
     }
 
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_Tables_or_Sheat/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
 
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
+
+    }
 </script>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json.Linq;
+using System.Net;
 
 namespace HangOut.Controllers
 {
@@ -115,6 +116,7 @@ namespace HangOut.Controllers
                 listord = listord.FindAll(x => x.Table_or_SheatId == ObjTable.Table_or_RowID);
                 if (listord.Count > 0)
                 {
+                   // Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return Json(new { msg = "Already Used in "+listord.Count.ToString()+" Orders" },JsonRequestBehavior.AllowGet);
 
                 }
