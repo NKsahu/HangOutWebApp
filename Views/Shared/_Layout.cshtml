@@ -28,6 +28,10 @@
     <script src="~/Assets/shortcut.js"></script>
     <link href="~/Assets/jQuery/animate.css" rel="stylesheet" />
     <link href="~/Assets/Mystyle.css" rel="stylesheet" />
+    <!--notification----->
+    <link href="~/Assets/prettify.css" rel="stylesheet" />
+    <link href="~/Assets/notify.css" rel="stylesheet" />
+    <!--notification  end----->
     <!--JS Propmpts  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
@@ -82,7 +86,7 @@
             <span class="button__badge" id="CountPymAlt">0</span>
         </button>
         <button style="color:white;display:inline-block;position:relative;padding:5px 10px;" onclick="ShowChefOrdre()">
-            <i style="color:black;padding:5px;"  class="fas fa-utensils" aria-hidden="true"></i>
+            <i style="color:black;padding:5px;" class="fas fa-utensils" aria-hidden="true"></i>
             <span class="button__badge" id="ChefUnpaid">0</span>
         </button>
     </div>
@@ -139,17 +143,17 @@
     window.onunload = function () {
         null;
     };
-   // setTimeout("preventBack()", 0);
+    // setTimeout("preventBack()", 0);
     //============= End Disable Back button =============
 
     //===cal datatable=====
 
     function LoadDataTable(TblId) {
         var DTblId = TblId;
-        if(TblId == null) {
+        if (TblId == null) {
             DTblId = "TBLID";
         }
-        var table = $("#"+ DTblId).DataTable({
+        var table = $("#" + DTblId).DataTable({
 
             "scrollY": "300px",
             "scrollCollapse": true,
@@ -167,3 +171,5 @@
 </script>
 <script src="~/Assets/OrderNotify.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Assets/notify.js"></script>
+<script src="~/Assets/prettify.js"></script>

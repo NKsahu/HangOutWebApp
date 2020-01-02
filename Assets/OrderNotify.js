@@ -1,4 +1,4 @@
-﻿
+﻿var CheUnsenCnt = 0;
 function BycashStatusVerifiedCount() {
     $.ajax({
         url: "/WebApi/CountByCashUnverify",
@@ -6,6 +6,7 @@ function BycashStatusVerifiedCount() {
         success: function (data) {
             var Jobj = JSON.parse(data);
             var Count = Jobj.Cnt;
+            
             $("#CountPymAlt").text(Count);
         },
         error: function (Xr, Status, ErrorMsg) {
@@ -78,6 +79,7 @@ function UnseenChefOrdCnt() {
         success: function (data) {
             var Jobj = JSON.parse(data);
             var Count = Jobj.Cnt;
+            //CheUnsenCnt = Count;
             $("#ChefUnpaid").text(Count);
         },
         error: function (Xr, Status, ErrorMsg) {
@@ -85,8 +87,8 @@ function UnseenChefOrdCnt() {
         }
     });
 }
-setTimeout(function () { UnseenChefOrdCnt() }, 1000);
-setInterval(function () { UnseenChefOrdCnt(); }, 60000);
+setTimeout(function () { UnseenChefOrdCnt(), ChefNoticeAudio(); }, 1000);
+setInterval(function () { UnseenChefOrdCnt(), ChefNoticeAudio(); },10000);//60000
 
 //===========order auto cancel=========
 function OrderAutoCancel() {
@@ -106,3 +108,13 @@ function OrderAutoCancel() {
 }
 setInterval(function () { OrderAutoCancel(); }, 600000);
 //OrderAutoCancel();
+
+
+function ChefNoticeAudio() {
+    $("body").click()
+    let audio = new Audio('/Image/sharp.ogg');
+    audio.muted = false;
+    audio.play();
+    $.notify("Alert!");
+
+}

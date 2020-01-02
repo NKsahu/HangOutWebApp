@@ -52,6 +52,7 @@
         background-color: #4CAF50;
         color: white;
     }
+   
 </style>
 <div class="card">
     <div style="padding:5px;border:1px solid;">
@@ -145,11 +146,11 @@
                         status = "Cancel";
                     }
                 <tr style="@(backTrColr)">
-                    <td>
+                    <td >
                         @{ sno++; }
                         @sno
                     </td>
-                    <td>
+                    <td >
                         @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
                         @ObjOrder.Items
                     </td>
