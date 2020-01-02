@@ -269,6 +269,7 @@
     <Content Include="Assets\Login Assets\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
     <Content Include="Assets\Login Assets\vendor\bootstrap\css\bootstrap.css.map" />
     <Content Include="Assets\Login Assets\vendor\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Image\sharp.ogg" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

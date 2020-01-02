@@ -108,8 +108,9 @@
                         @foreach (var items in orderItems)
                         {
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
+                            double Amt = items.Price * items.Count;
                         <tr>
-                            <td><input class=" CkeckorNot" type="checkbox" id="@items.OIID" OID="@items.OID" value="@items.OIID"></td>
+                            <td><input class=" CkeckorNot" type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
                             <td>@FoodObj.Items</td>
                             <td>@items.Count</td>
                         </tr>
@@ -129,6 +130,7 @@
         var UpdatedBy = $("#UserCode").val();
         var CheckedID = ",";
         var OID = 0;
+        var TotalAmt = 0.00;
         //JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy, int OID)
         $("#Tickt"+TicketNo+" > tr").each(function (index, tr) {
             console.log(index);
@@ -137,17 +139,23 @@
             if (value) {
                 Checkdcount += 1;
                 CheckedID += OIID + ",";
+                TotalAmt += parseFloat($(tr).find('.CkeckorNot').attr("Amt"));
             }
             else {
                 canceledCount += 1;
             }
-            console.log(value);
+            
             OID = $(tr).find('.CkeckorNot').attr("OID");
         });
-
+        var  Msg = 'Mark order complete?';
+       
+        if (canceledCount > 0) {
+            Msg = canceledCount+" unticked items will be cancelled.Updated amount is Rs "+TotalAmt.toFixed(2)+" Proceed further?";
+        }
         $.confirm({
             title: 'Mark Complete',
-            content: ''+canceledCount +" Item Will Canceled Are You Sure",
+            content: Msg,
+            type: canceledCount > 0 ? 'red' : 'green',
             buttons: {
                 btnClass: 'btn-green',
                 confirm: function () {
@@ -196,7 +204,8 @@
             prop = true;
         }
         $("#Tickt" + TicketNo + " > tr").each(function (index, tr) {
-            $(tr).find('.CkeckorNot').attr('checked', prop);
+            //$(tr).find('.CkeckorNot').removeAttr('checked');
+            $(tr).find('.CkeckorNot').prop('checked', prop);
             
         });
     }

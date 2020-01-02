@@ -1560,7 +1560,7 @@ namespace HangOut.Controllers
                     Object.Add("OID", orders.OID);
                     Object.Add("Status", orders.Status);
                     Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
-                    if (orders.PaymentStatus == 0 && hG_OrganizationDetails.PaymentType==1)//prepaid
+                    if (orders.Status!="3"&& orders.PaymentStatus == 0 && hG_OrganizationDetails.PaymentType==1)//prepaid
                     {
                         Object.Add("LastOrdTime", (DateTime.Now-orders.Update_Date).TotalMinutes);
                     }
@@ -1610,6 +1610,11 @@ namespace HangOut.Controllers
                 {
                     Object.Add("ByOnline","YES");//mandatory for theater
                     Object.Add("ByCash", orgSetting.ByCash == 2 ? "YES" : "NO");
+                }
+                //cancel order condition
+                if (orders.Status!="3"&&orders.PaymentStatus == 0 && hG_OrganizationDetails.PaymentType == 1)//prepaid
+                {
+                    Object.Add("LastOrdTime", (DateTime.Now - orders.Update_Date).TotalMinutes);
                 }
                 foreach (var OrderItem in hG_OrderItems)
                 {
