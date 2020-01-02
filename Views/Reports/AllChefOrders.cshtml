@@ -63,7 +63,7 @@
                             Seating += " " + ObjTorS.Table_or_SheetName;
                         }
                         Seating += " Ticket No:" + TicketObj.Key;
-            <div class="col-md-12" id="@(TicketObj.Key)">
+            <div class="col-md-12" id="@(TicketObj.Key)" style="border:1px solid">
                 <h6>@Seating   Time:  @firstitm.OrderDate.ToString("dd-mm hh:mm tt")</h6>
 
                 @{
@@ -95,14 +95,14 @@
                     {
                         <p style="color:green">PAID BANK / WALLET</p>
                     }
-                    else if (objOrder.OrderApprovlSts == 1)
+                    else if (objOrder.PaymentStatus == 1)
                     {
                         <p style="color:green">PAID CASH</p>
                     }
 
 
                 }
-                <button onclick="MarkCompleteTicket(@TicketObj.Key)" style="border-radius:5px;padding:5px;" class="btn btn-lg btn-success">Complete</button>
+                <button onclick="MarkCompleteTicket(@TicketObj.Key)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
                 <table class="table table-bordered">
                     <thead>
                         <tr>

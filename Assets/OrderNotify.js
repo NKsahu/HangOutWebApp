@@ -114,7 +114,7 @@ function ChefNoticeAudio() {
     $("body").click()
     let audio = new Audio('/Image/sharp.ogg');
     audio.muted = false;
-    audio.play();
+   // audio.play();
     $.notify("Alert!");
 
 }
