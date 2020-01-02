@@ -2,19 +2,29 @@
 @using HangOut.Models;
 @using HangOut.Models.DynamicList;
 @{ 
+    string Seating = "";
     string OID = Request.QueryString["OID"];
     Int64 OrderId = Int64.Parse(OID);
     HG_Orders order = new HG_Orders().GetOne(OrderId);
     List<HG_Items> listItem = new HG_Items().GetAll();
-    //   List<vw_HG_UsersDetails> UserList = new vw_HG_UsersDetails().GetAll();
-    // UserList.AddRange(new vw_HG_UsersDetails().GetAll("CUST"));
+    HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
     List<HG_UserTypes> UsertypleList = new HG_UserTypes().GetAll();
     List<HG_OrderItem> listorder = new HG_OrderItem().GetAll(OrderId);
-   // listorder = listorder.FindAll(x => x.Status != 4);
     var tokens = listorder.Select(x => x.TickedNo);
     tokens = tokens.Distinct();
     var Ticketnos = string.Join(",", tokens);
-
+    HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
+    HG_Floor_or_ScreenMaster ObjScrFlr = new HG_Floor_or_ScreenMaster().GetOne(ObjTorS.Floor_or_ScreenId);
+    HG_FloorSide_or_RowName ObjFsideRowName = new HG_FloorSide_or_RowName().GetOne(ObjTorS.FloorSide_or_RowNoID);
+    if (ObjScrFlr != null)
+    {
+        Seating = ObjScrFlr.Name+" ";
+    }
+    if (ObjFsideRowName != null)
+    {
+        Seating += ObjFsideRowName.FloorSide_or_RowName + " ";
+    }
+    Seating += ObjTorS.Table_or_SheetName;
 }
 <style>
 .showDetails {
@@ -44,9 +54,10 @@
     }
 </style>
 <div class="card">
-    <div style="padding:5px;">
-        <h5>Order Date: @order.Create_Date.ToString("ddd-MMM-dd hh:mm")     Order No:  @order.OID</h5>
-        <h5> Ticket No: @Ticketnos   Payment Mode: @OrgType.PaymentMode(order.PaymentStatus)</h5>
+    <div style="padding:5px;border:1px solid;">
+        <h5 style="font-weight:bold">@ObjOrg.Name</h5>
+        <h5>Order Date: @order.Create_Date.ToString("ddd-MMM-dd hh:mm tt")     Order No:  @order.OID</h5>
+        <h5>Seating : @Seating Ticket No: @Ticketnos   Payment Mode: @OrgType.PaymentMode(order.PaymentStatus)</h5>
         @if (order.PaymentStatus == 3)
         {
             PaytmResn PatymRes = PaytmResn.Getone(order.OID);

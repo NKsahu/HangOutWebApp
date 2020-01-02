@@ -29,6 +29,12 @@
     var ItemsList = new HG_Items().GetAll(orgId);
 }
 @Html.Hidden("UserCode", Usercode)
+<style>
+    input[type="checkbox"] {
+        width: 25px; /*Desired width*/
+        height: 25px; /*Desired height*/
+    }
+</style>
 <div class="card">
     <div class="card-header">
         <h3 class="text-center">Chef Orders </h3>
@@ -58,12 +64,13 @@
                         }
                         Seating += " Ticket No:" + TicketObj.Key;
             <div class="col-md-12" id="@(TicketObj.Key)">
-                <h6>@Seating</h6>
+                <h6>@Seating   Time:  @firstitm.OrderDate.ToString("dd-mm hh:mm tt")</h6>
 
                 @{
                     var OrderObj = TodayOrdrlist.Find(x => x.OID == firstitm.OID);
                     OrdNotice ObjNotice = OrdNotice.GetOne(OrderObj.OID);
-                    if (OrderObj.PaymentStatus == 1 &&ObjNotice!=null&&ObjNotice.OID>0)
+
+                    if (OrderObj.PaymentStatus == 1 && ObjNotice != null && ObjNotice.OID > 0)
                     {
                         double Amt = 0.00;
                         for (int i = 0; i < orderItems.Count; i++)
@@ -73,34 +80,39 @@
                         vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(OrderObj.PayReceivedBy);
                         if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain
                         {
-                            <p style="color:red">@Amt.ToString("0.00") Rs/</p>
+                            <p style="color:red">CASH: @Amt.ToString("0.00") Rs/</p>
                         }
                         else if (ObjUser == null || ObjUser.UserCode <= 0)
                         {
-                            <p style="color:red">@Amt.ToString("0.00") Rs/</p>
+                            <p style="color:red">CASH: @Amt.ToString("0.00") Rs/</p>
                         }
+                    }
+                    if (OrderObj.PaymentStatus == 3)
+                    {
+                        <p style="color:red">ONLINE PAID</p>
                     }
 
 
                 }
-                <button onclick="MarkCompleteTicket(@TicketObj.Key)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
+                <button onclick="MarkCompleteTicket(@TicketObj.Key)" style="border-radius:5px;padding:5px;" class="btn btn-lg btn-success">Complete</button>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <td ><input  style="margin:2px"  type="checkbox" onclick="TickAll(this,@TicketObj.Key)">Tick</td>
                             <td>Item Name</td>
                             <td>Qty</td>
-                            <td>Status</td>
+
                         </tr>
                     </thead>
                     <tbody id="Tickt@(TicketObj.Key)">
                         @foreach (var items in orderItems)
                         {
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
-                            <tr>
-                                <td>@FoodObj.Items</td>
-                                <td>@items.Count</td>
-                                <td><input class="CkeckorNot" type="checkbox" id="@items.OIID" OID="@items.OID" value="@items.OIID"></td>
-                            </tr>
+                        <tr>
+                            <td><input class=" CkeckorNot" type="checkbox" id="@items.OIID" OID="@items.OID" value="@items.OIID"></td>
+                            <td>@FoodObj.Items</td>
+                            <td>@items.Count</td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -177,5 +189,15 @@
             }
         });
 
+    }
+    function TickAll(event,TicketNo) {
+        var prop = false;
+        if (event.checked) {
+            prop = true;
+        }
+        $("#Tickt" + TicketNo + " > tr").each(function (index, tr) {
+            $(tr).find('.CkeckorNot').attr('checked', prop);
+            
+        });
     }
 </script>

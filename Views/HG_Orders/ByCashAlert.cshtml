@@ -50,7 +50,7 @@
                 {
                     CashBy = UserTypeList.Find(x => x.UserType == ObjUser.UserType).UserTypeName;
                 }
-                if (OrderByObj != null)
+                if (OrderByObj != null && OrderByObj.UserCode>0)
                 {
                     OrderBy= UserTypeList.Find(x => x.UserType == OrderByObj.UserType).UserTypeName +" "+ OrderByObj.UserName+"( " + OrderByObj.UserId + " )";
                 }

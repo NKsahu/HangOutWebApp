@@ -1048,11 +1048,11 @@ namespace HangOut.Controllers
                     if (order.OID > 0&& OrderNotice!=null&& OrderNotice.OID>0)
                     {
                         vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(order.PayReceivedBy);
-                        if (ObjUser != null && ObjUser.UserType != "CA"&&ObjUser.UserType!="ONR")// not captain
+                        if (ObjUser != null && ObjUser.UserType != "CA"&&ObjUser.UserType!="ONR")// not captain not OWN
                         {
                             TableScreen.Add("Amt", Amount);
                         }
-                        else if (ObjUser == null||ObjUser.UserCode<=0)
+                        else if (ObjUser == null||ObjUser.UserCode<=0)// if CASH PAY BY CUSTOMER
                         {
                             TableScreen.Add("Amt", Amount);
                         }
@@ -1560,7 +1560,7 @@ namespace HangOut.Controllers
                     Object.Add("OID", orders.OID);
                     Object.Add("Status", orders.Status);
                     Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
-                    if (orders.PaymentStatus == 0)
+                    if (orders.PaymentStatus == 0 && hG_OrganizationDetails.PaymentType==1)//prepaid
                     {
                         Object.Add("LastOrdTime", (DateTime.Now-orders.Update_Date).TotalMinutes);
                     }
