@@ -96,7 +96,7 @@ function UnseenChefOrdCnt() {
     });
 }
 setTimeout(function () { UnseenChefOrdCnt();}, 1000);
-ChefCntInterval=setInterval(function () { UnseenChefOrdCnt(); }, 10000);//60000
+ChefCntInterval=setInterval(function () { UnseenChefOrdCnt(); }, 50000);//60000
 
 //===========order auto cancel=========
 function OrderAutoCancel() {
@@ -120,7 +120,7 @@ setInterval(function () { OrderAutoCancel(); }, 600000);//
 
 function ChefNoticeAudio() {
     $("body").click()
-    let audio = new Audio('/Image/sharp.ogg');
+    let audio = new Audio('/Image/noticefict.mpeg');
     audio.muted = false;
     audio.play();
         if ($('.message').length <= 0) {

@@ -1,7 +1,7 @@
 ﻿@using HangOut.Models.Common;
 @using HangOut.Models;
 @{ 
-    string OrgName = "ADMIN";
+    string OrgName = "SUPER-ADMIN";
     int Orgid =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
     string OrgType = "0";
     HG_OrganizationDetails ObgOrg = new HG_OrganizationDetails().GetOne(Orgid);
@@ -117,28 +117,31 @@
     <div id="admin-side-menu" class="col-md-2 col-12  ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
         <ul id="myaccordion" class="list-unstyled mb-0 ">
             @{
-                            var UserType = Request.Cookies["UserInfo"]["UserType"];
-                            List<UsersMenu> List = new UsersMenu().GetAll();
-                            List<UsersMenu> ADMINMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId == 0);
-                            if (UserType != "SA" && UserType != "A")
-                            {
-                                ADMINMenuList = ADMINMenuList.FindAll(x => x.User_Types.Contains(UserType));
-                                if (OrgType == "2")
-                                {
-                                    ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Restuarant"));
-                                }
-                                else
-                                {
-                                    ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Theater"));
-                                }
-                            }
-                            ADMINMenuList = ADMINMenuList.OrderBy(x => x.MenuOrderNo).ToList();
-                            List<UsersMenu> AdminSubMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId != 0);
-                            AdminSubMenuList = AdminSubMenuList.FindAll(x => x.User_Types.Contains(UserType));
-                            foreach (var ObjMenuLi in ADMINMenuList)
-                            {
-                                if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink != "")
-                                {
+                var UserType = Request.Cookies["UserInfo"]["UserType"];
+                List<UsersMenu> List = new UsersMenu().GetAll();
+                List<UsersMenu> ADMINMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId == 0);
+                if (UserType != "SA" && UserType != "A")
+                {
+                    ADMINMenuList = ADMINMenuList.FindAll(x => x.User_Types.Contains(UserType));
+                    if (OrgType == "2")
+                    {
+                        ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Restuarant"));
+                    }
+                    else
+                    {
+                        ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Theater"));
+                    }
+                }
+                ADMINMenuList = ADMINMenuList.OrderBy(x => x.MenuOrderNo).ToList();
+                List<UsersMenu> AdminSubMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId != 0);
+                if (UserType != "SA" && UserType != "A")
+                {
+                    AdminSubMenuList = AdminSubMenuList.FindAll(x => x.User_Types.Contains(UserType));
+                }
+                foreach (var ObjMenuLi in ADMINMenuList)
+                {
+                    if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink != "")
+                    {
                         <li class="nav-item" data-parent="#myaccordion">
                             <a class="nav-link" href="@ObjMenuLi.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@ObjMenuLi.Menu_Icon"></i>@ObjMenuLi.MenuDisplayName</a>
                         </li>
