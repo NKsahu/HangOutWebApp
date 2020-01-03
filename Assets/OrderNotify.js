@@ -81,9 +81,13 @@ function UnseenChefOrdCnt() {
             var Count = Jobj.Cnt;
             //CheUnsenCnt = Count;
             $("#ChefUnpaid").text(Count);
-            if (CheUnsenCnt > 0 && Count > parseInt(CheUnsenCnt)) {
-
+            console.log("Cnt=" + Count + " CheUnsenCnt=" + CheUnsenCnt);
+            if (Count > 0 && Count > CheUnsenCnt) {
+                CheUnsenCnt = parseInt(Count);
                 ChefNoticeAudio();
+            }
+            else {
+                CheUnsenCnt = parseInt(Count);
             }
         },
         error: function (Xr, Status, ErrorMsg) {
@@ -92,7 +96,7 @@ function UnseenChefOrdCnt() {
     });
 }
 setTimeout(function () { UnseenChefOrdCnt();}, 1000);
-setInterval(function () { UnseenChefOrdCnt(); },60000);//60000
+ChefCntInterval=setInterval(function () { UnseenChefOrdCnt(); }, 10000);//60000
 
 //===========order auto cancel=========
 function OrderAutoCancel() {
