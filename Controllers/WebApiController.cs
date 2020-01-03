@@ -1187,6 +1187,7 @@ namespace HangOut.Controllers
             HG_Orders order = new HG_Orders().GetOne(OID);
             List<HG_OrderItem> OrderItemListAll  = new HG_OrderItem().GetAll(OID);
            var OrderItemList = OrderItemListAll.FindAll(x => x.TickedNo == TickedNo);
+            OrderItemList = OrderItemList.FindAll(X => X.Status != 3 && X.Status != 4); //NOT ALREADY CANCEL NOT COMPLETED
             HashSet<Int64> OIIDHash = new HashSet<Int64>();
             OIIDHash.Add(0);
             if (CheckedID.Contains(","))

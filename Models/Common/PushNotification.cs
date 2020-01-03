@@ -33,7 +33,8 @@ namespace HangOut.Models.Common
                 {
                     body = message,
                     title = title,
-                    icon = "myicon"
+                    icon = "myicon",
+                    sound= "default"
                 }
             };
 
