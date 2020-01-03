@@ -1,4 +1,5 @@
 ﻿var CheUnsenCnt = 0;
+var ChefCntInterval = null;
 function BycashStatusVerifiedCount() {
     $.ajax({
         url: "/WebApi/CountByCashUnverify",
@@ -6,7 +7,6 @@ function BycashStatusVerifiedCount() {
         success: function (data) {
             var Jobj = JSON.parse(data);
             var Count = Jobj.Cnt;
-            
             $("#CountPymAlt").text(Count);
         },
         error: function (Xr, Status, ErrorMsg) {
@@ -32,7 +32,7 @@ function ShowPaymtAltdetails() {
     });
 }
 
-setTimeout(function () { BycashStatusVerifiedCount() }, 1000);
+setTimeout(function () { BycashStatusVerifiedCount(); }, 1000);
 setInterval(function () { BycashStatusVerifiedCount(); }, 40000);
 function ShowDetails(OID) {
     //HG_OrderItem
@@ -81,14 +81,18 @@ function UnseenChefOrdCnt() {
             var Count = Jobj.Cnt;
             //CheUnsenCnt = Count;
             $("#ChefUnpaid").text(Count);
+            if (CheUnsenCnt > 0 && Count > parseInt(CheUnsenCnt)) {
+
+                ChefNoticeAudio();
+            }
         },
         error: function (Xr, Status, ErrorMsg) {
 
         }
     });
 }
-setTimeout(function () { UnseenChefOrdCnt(), ChefNoticeAudio(); }, 1000);
-setInterval(function () { UnseenChefOrdCnt(), ChefNoticeAudio(); },10000);//60000
+setTimeout(function () { UnseenChefOrdCnt();}, 1000);
+setInterval(function () { UnseenChefOrdCnt(); },60000);//60000
 
 //===========order auto cancel=========
 function OrderAutoCancel() {
@@ -106,7 +110,7 @@ function OrderAutoCancel() {
     });
 
 }
-setInterval(function () { OrderAutoCancel(); }, 600000);
+setInterval(function () { OrderAutoCancel(); }, 600000);//
 //OrderAutoCancel();
 
 
@@ -114,7 +118,8 @@ function ChefNoticeAudio() {
     $("body").click()
     let audio = new Audio('/Image/sharp.ogg');
     audio.muted = false;
-   // audio.play();
-    $.notify("Alert!");
-
+    audio.play();
+        if ($('.message').length <= 0) {
+            $.notify("New Chef Order !", { type: "toast", close: true, delay: 5000000, align: "left", verticalAlign: "bottom" });
+        }
 }

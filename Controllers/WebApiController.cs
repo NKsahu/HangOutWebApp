@@ -1951,7 +1951,7 @@ namespace HangOut.Controllers
             
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(Orgid);
            
-            if (ObjOrg != null && ObjOrg.PaymentType == 1)
+            if (ObjOrg != null && ObjOrg.OrgID>0&& ObjOrg.PaymentType == 1)
             {
                 List<HG_Orders> ListOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
                 ListOrder = ListOrder.FindAll(x => x.Status != "3" && x.Status != "4");
@@ -1966,6 +1966,28 @@ namespace HangOut.Controllers
                         CancelOrder(order.OID, -1);// order auto cancel
                     }
                     
+                }
+            }
+            else if (Orgid == 0)
+            {
+                List<HG_Orders> ListOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                ListOrder = ListOrder.FindAll(x => x.Status != "3" && x.Status != "4");
+                ListOrder = ListOrder.FindAll(x => x.PaymentStatus == 0);
+                //ListOrder = ListOrder.FindAll(x => x.Update_Date > DateTime.Now.AddMinutes(-15));
+                List<HG_OrganizationDetails> ListOrgs = new HG_OrganizationDetails().GetAll();
+                foreach (var order in ListOrder)
+                {
+                    HG_OrganizationDetails ObjOrnaziztn = ListOrgs.Find(x => x.OrgID == order.OrgId);
+                    if(ObjOrnaziztn!=null&&ObjOrnaziztn.PaymentType==1)//prepaid
+                    {
+                        double TimeDiffInMinutes = (DateTime.Now - order.Update_Date).TotalMinutes;
+                        if (TimeDiffInMinutes > 10)
+                        {
+                            CancelOrder(order.OID, -1);// order auto cancel
+                        }
+                    }
+                   
+
                 }
             }
             return new JObject();
