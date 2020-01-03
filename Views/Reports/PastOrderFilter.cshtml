@@ -139,7 +139,27 @@
                     }
                 });
 
+    }
+            function PrintInvoice(OID) {
+
+          $("#waiting").show();
+          $.ajax({
+            type: 'POST',
+            url: "/HG_Orders/PrintInvoice?&OID=" + OID,
+            success: function (data) {
+                makedpt("invoice");
+                $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("invoice");
+                $("#waiting").hide();
+                //var Jobje = JSON.parse(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
             }
+        });
+
+    }
+
 </script>
 
 

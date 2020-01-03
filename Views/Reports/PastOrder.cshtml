@@ -52,6 +52,7 @@
             <td>Status</td>
             <td>Payment Mode</td>
             <td>Details</td>
+            <td>Print</td>
         </tr>
     </thead>
     <tbody>
@@ -76,6 +77,9 @@
             <td>@OrgType.PaymentMode(Ord.PaymentStatus)</td>
             <td>
                 <button class="btn btn-sm btn-warning" onclick="Details('@Ord.OID');"><i class="fas fa-eye"></i></button>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-outline-info" onclick="PrintInvoice('@Ord.OID');">Invoice</button>
             </td>
         </tr>
         }

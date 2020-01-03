@@ -116,11 +116,11 @@
                     var PrepareByObj=new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
                     if (PlacedByObj.UserCode > 0)
                     {
-                        OrderPlacedBy = UsertypleList.Find(x => x.UserType == PlacedByObj.UserType).UserTypeName + " (" + PlacedByObj.UserName + " )";
+                        OrderPlacedBy = UsertypleList.Find(x => x.UserType == PlacedByObj.UserType).UserTypeName + " (" + PlacedByObj.UserId + " )";
                     }
                     if (PrepareByObj.UserCode > 0)
                     {
-                        PrePareBy= UsertypleList.Find(x => x.UserType == PrepareByObj.UserType).UserTypeName + " (" + PrepareByObj.UserId + " )";
+                        PrePareBy= UsertypleList.Find(x => x.UserType == PrepareByObj.UserType).UserTypeName + " (" + PrepareByObj.UserName + " )";
                     }
                     string status = "";
                     string backTrColr = "";
