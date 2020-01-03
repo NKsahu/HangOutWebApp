@@ -1028,9 +1028,13 @@ namespace HangOut.Controllers
                     JArray ItemsArray = new JArray();
                     int ticketno = 0;
                     int ItemIndex = 0;
-                    double Amount = 0.00;
+                    double TotalAmount = 0.00;
                     foreach (var OrderItem in hG_OrderItems)
                     {
+                       
+                        double Amount = OrderItem.Price * OrderItem.Count;
+                        TotalAmount += Amount;
+                        ticketno = OrderItem.TickedNo;
                         HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
                         JObject itemobj = new JObject();
                         itemobj.Add("OIID", OrderItem.OIID);
@@ -1039,25 +1043,25 @@ namespace HangOut.Controllers
                         itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
+                        itemobj.Add("ItmAmt", Amount);
                         ItemsArray.Add(itemobj);
-                        Amount += OrderItem.Price * OrderItem.Count;
-                        ticketno = OrderItem.TickedNo;
                     }
                     OrdNotice OrderNotice = OrdNotice.GetOne(order.OID);
                     string name = Seating + " Ticket no. :" + ticketno;
-                    if (order.OID > 0&& OrderNotice!=null&& OrderNotice.OID>0)
+                    if (OrderNotice!=null&& OrderNotice.OID>0)
                     {
                         vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(order.PayReceivedBy);
                         if (ObjUser != null && ObjUser.UserType != "CA"&&ObjUser.UserType!="ONR")// not captain not OWN
                         {
-                            TableScreen.Add("Amt", Amount);
+                            TableScreen.Add("Amt", TotalAmount);
                         }
                         else if (ObjUser == null||ObjUser.UserCode<=0)// if CASH PAY BY CUSTOMER
                         {
-                            TableScreen.Add("Amt", Amount);
+                            TableScreen.Add("Amt", TotalAmount);
                         }
                         else
                         {
+                           
                             TableScreen.Add("Amt", 0);
                         }
                         
@@ -1065,6 +1069,7 @@ namespace HangOut.Controllers
                     else
                     {
                         TableScreen.Add("Amt", 0);
+                        TableScreen.Add("PymtMode", order.PaymentStatus);
                     }
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
