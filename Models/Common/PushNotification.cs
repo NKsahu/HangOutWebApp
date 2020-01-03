@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Text;
-
+using System.Web;
 
 namespace HangOut.Models.Common
 {
@@ -34,7 +34,7 @@ namespace HangOut.Models.Common
                     body = message,
                     title = title,
                     icon = "myicon",
-                    sound= "default"
+                    sound= "http://fooddo.club/Image/sharp.ogg"//"default"
                 }
             };
 
