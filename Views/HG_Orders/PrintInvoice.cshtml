@@ -85,9 +85,11 @@
     tr, td, th {
         text-align: center;
     }
+    .print:last-child {
+        page-break-after: auto;
+    }
 </style>
-<style>
-</style>
+
 
 
 <div class="row">
@@ -159,9 +161,10 @@
                 .........................................................................<br />
                 .........................................................................
             </div>
-            <h6>@PoweredBy</h6>
+            <h6 style="page-break-after:auto">@PoweredBy</h6>
         </div>
     </div>
+    <div class="print"></div>
 </div>
 
 <script>
