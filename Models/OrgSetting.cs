@@ -15,7 +15,7 @@ namespace HangOut.Models
         public int OrdCanlMinTime { get; set; }
         public int ByCash { get; set; }//{1:'NO',2:'YES'}
         public int ByOnline { get; set; }//{1:'NO',2:'YES'}
-        public int AcptMinOrd { get; set; }//{0  YES,1 NO}
+        public int AcptMinOrd { get; set; }//{0  NO,1 YES}
         public int save()
         {
             DBCon con = new DBCon();

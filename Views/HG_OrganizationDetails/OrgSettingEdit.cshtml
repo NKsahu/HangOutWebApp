@@ -13,26 +13,38 @@
         {
             @Html.HiddenFor(model => model.id)
             @Html.HiddenFor(model => model.OrgId)
-            <div class="row">
-                <div class="col-md-3">
-                    @Html.Label("Min Order Amount", htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.MinOrderAmt, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.MinOrderAmt, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-md-3">
-                    @Html.Label("Delivery Charge", htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.DeliveryCharge, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    @Html.Label("Order auto Cancel Time", htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.OrdCanlMinTime, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.OrdCanlMinTime, "", new { @class = "text-danger" })
-                </div>
+        <div class="row">
+            <div class="col-md-3">
+                @Html.Label("Min Order Amount", htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.MinOrderAmt, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.MinOrderAmt, "", new { @class = "text-danger" })
 
             </div>
-            <div class="row card">
+            <div class="col-md-3">
+                @{ 
+                    List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
+                    {
+  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                    };
+                }
+                @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
+                @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd,new { @class = "form-control ", required = "required"  })
+                @Html.ValidationMessageFor(model => model.AcptMinOrd, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Delivery Charge", htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.DeliveryCharge, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-3" style="visibility:hidden">
+                @Html.Label("Order auto Cancel Time", htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.OrdCanlMinTime, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
+                @Html.ValidationMessageFor(model => model.OrdCanlMinTime, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+            <div class="row card" style="margin-top:8px;">
                 <div class="card-header">
                     <h3 style="text-align:center;color:black"><b>Payment Modes</b></h3>
                 </div>
@@ -65,5 +77,18 @@ new SelectListItem{Text="NO",Value="1"},new SelectListItem{Text="YES",Value="2"}
     </div>
         </div>
 <script>
-    setTimeout(function () { $("#DynamicData").trigger('change'), 500 });
+    setTimeout(function () {$(window).trigger('resize'); },500);
+    AlowMinOrdAcpt();
+    function AlowMinOrdAcpt() {
+        var Sts = $("#AcptMinOrd").val();
+        if (Sts == "0") {
+            $("#DeliveryCharge").parent('div').hide();
+        }
+        else {
+            $("#DeliveryCharge").parent('div').show();
+        }
+    }
+    $("#AcptMinOrd").change(function () {
+        AlowMinOrdAcpt();
+    });
 </script>

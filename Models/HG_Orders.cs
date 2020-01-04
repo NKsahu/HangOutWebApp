@@ -26,8 +26,8 @@ namespace HangOut.Models
         public int PayReceivedBy { get; set; }
         public int TableOtp { get; set; }
         public string OrderByIds { get; set; }//  Order by IDS comma seprated
-        public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken OrderItems  or Not
-          
+        public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken Orde  or Not
+        public double ExtraAmt { get; set; }// delivery charge amount
         public HG_Orders()
         {
             this.OID = 0;
@@ -37,7 +37,7 @@ namespace HangOut.Models
             this.Update_By = 0;
             this.Table_or_SheatId = 0;
             this.PayReceivedBy = 0;
-            
+           
         }
 
         public System.Int64 Save()

@@ -1,6 +1,6 @@
 ﻿@using HangOut.Models;
 @using HangOut.Models.DynamicList;
-@{    Layout = null;}
+@{ Layout = null;}
 @{
 
     int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
@@ -14,7 +14,7 @@
         Int64 TorSid = Int64.Parse(Request.QueryString["TorSid"]);
         // int OldOtp = int.Parse(Request.QueryString["OldOtp"]);
         orderlist = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-        orderlist = orderlist.FindAll(x => x.Table_or_SheatId == TorSid && x.PaymentStatus!=0);
+        orderlist = orderlist.FindAll(x => x.Table_or_SheatId == TorSid && x.PaymentStatus != 0);
         var orderObj = orderlist.First();
         orderlist = orderlist.FindAll(X => X.OID == orderObj.OID);
         OrderItems.AddRange(new HG_OrderItem().GetAll(orderObj.OID));
@@ -30,7 +30,7 @@
         OrderItems.AddRange(new HG_OrderItem().GetAll(order.OID));
         OrderDate = order.Create_Date;
     }
-   // OrderItems = OrderItems.FindAll(x => x.Status != 4); //not cancedled items
+    // OrderItems = OrderItems.FindAll(x => x.Status != 4); //not cancedled items
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
@@ -50,7 +50,7 @@
     List<HG_Items> ItemList = new HG_Items().GetAll();
     HashSet<string> hashTicket = new HashSet<string>(OrderItems.Select(x => x.TickedNo.ToString()).ToArray());
     TicketNos = string.Join(",", hashTicket);
-    if (OrgObj.OrgID>0)
+    if (OrgObj.OrgID > 0)
     {
         InvoiceHeading = OrgObj.IvoiceHeading;
         OrgName = OrgObj.Name;
@@ -68,27 +68,25 @@
     @@media print {
         body * {
             visibility: hidden;
-            
         }
+
         #section-to-print {
             width: 21cm;
             height: 29.7cm;
             margin: 0mm 0mm 0mm 0mm;
         }
+
             #section-to-print * {
                 visibility: visible;
             }
     }
 
 
-   tr,td,th{
-       text-align:center;
-   }
-
+    tr, td, th {
+        text-align: center;
+    }
 </style>
 <style>
-
-
 </style>
 
 
@@ -97,7 +95,7 @@
     <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
 </div>
 <div style="border:2px solid black " id="section-to-print">
-    <div id="PrintHeight" style="border:0.5px dotted black;" >
+    <div id="PrintHeight" style="border:0.5px dotted black;">
         <div>
             <h3 style="text-align:center">@InvoiceHeading</h3>
             <h4 style="text-align:center">@OrgName</h4>
@@ -118,9 +116,9 @@
         </div>
         <div style="text-align:center">
             <p>Order No: @OrderNo Ticket No:@TicketNos</p>
-            <p>Date:@OrderDate.ToString("dd/MM/yy HH:mm") Mode :@PaymentMode</p>
+            <p>Date:@OrderDate.ToString("dd/MM hh:mm tt") Mode :@PaymentMode</p>
         </div>
-        <table id="InvoiceItems" style="width:100%"  class="table col-sm-12">
+        <table id="InvoiceItems" style="width:100%" class="table col-sm-12">
             <thead>
                 <tr>
                     <th style="text-align:center">Item </th>
@@ -245,14 +243,14 @@
     }
     function PrintToken() {
         zpl = "";
-        zpl += printstr("<h1 style='padding:0px 0px 0px 0px !important;margin:0px;'>TOKEN -123456</h1>", "34","center");
+        zpl += printstr("<h1 style='padding:0px 0px 0px 0px !important;margin:0px;'>TOKEN -123456</h1>", "34", "center");
         zpl += printstr("----------------------------------", "34");
         zpl += printstr("DATE: " + ConvertDateJA(new Date()), "34");
         zpl += printstr("TIME: " + new Date().toLocaleTimeString(), "34");
         zpl += printstr("----------------------------------", "34");
         zpl += printstr("BUILTY NO 1254864578354845785687697879807895675FGHFGHFGHFG", "34");
         zpl += printstr("----------------------------------", "34");
-        zpl += printstr("TRUCK NO : 148815448668" ,"34");
+        zpl += printstr("TRUCK NO : 148815448668", "34");
         zpl += printstr("----------------------------------", "34");
         console.log("zpl==" + zpl);
         var printWindow = window.open();
@@ -265,22 +263,25 @@
         printWindow.close();
     }
     function PrintElem() {
-       var Section=  $('#section-to-print').html();
+        var Section = $('#section-to-print').html();
         console.log("Section  " + Section);
 
-       // PrintToken();
+        // PrintToken();
         Popup(Section);
     }
 
     function Popup(data) {
-       // var myWindow = window.open('', 'Receipt', 'height=400,width=600');
+
+
+
+        // var myWindow = window.open('', 'Receipt', 'height=400,width=600');
         var myWindow = window.open('text/plain');
-      //  myWindow.document.write('<html>');
+        //  myWindow.document.write('<html>');
         /*optional stylesheet*/ //myWindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
         myWindow.document.write('<style type="text/css"> *, html,body {margin:0;padding:0;}</style>');
-     //   myWindow.document.write('<body>');
+        //   myWindow.document.write('<body>');
         myWindow.document.write(data);
-       // myWindow.document.write('</body></html>');
+        // myWindow.document.write('</body></html>');
         myWindow.document.close(); // necessary for IE >= 10
         myWindow.onload = function () { // necessary if the div contain images
             myWindow.focus(); // necessary for IE >= 10
