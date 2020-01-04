@@ -34,7 +34,7 @@ namespace HangOut.Models.Common
                     body = message,
                     title = title,
                     icon = "myicon",
-                    sound= "http://fooddo.club/Image/sharp.ogg"//"default"
+                    sound= "default"//"default"
                 }
             };
 

@@ -15,7 +15,7 @@ namespace HangOut.Models
         public int OrdCanlMinTime { get; set; }
         public int ByCash { get; set; }//{1:'NO',2:'YES'}
         public int ByOnline { get; set; }//{1:'NO',2:'YES'}
-        
+        public int AcptMinOrd { get; set; }//{0  YES,1 NO}
         public int save()
         {
             DBCon con = new DBCon();
@@ -24,12 +24,12 @@ namespace HangOut.Models
             {
                 if (this.id == 0)
                 {
-                    cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime,@ByCash,@ByOnline); SELECT SCOPE_IDENTITY();", con.Con);
+                    cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime,@ByCash,@ByOnline,@AcptMinOrd); SELECT SCOPE_IDENTITY();", con.Con);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 }
                 else
                 {
-                    cmd = new SqlCommand("update OrgSettings set MinOrdAmt=@MinOrdAmt,DeleveryCharge=@DeleveryCharge,OrdCanMinTime=@OrdCanMinTime,ByCash=@ByCash,ByOnline=@ByOnline where ID=@ID ", con.Con);
+                    cmd = new SqlCommand("update OrgSettings set MinOrdAmt=@MinOrdAmt,DeleveryCharge=@DeleveryCharge,OrdCanMinTime=@OrdCanMinTime,ByCash=@ByCash,ByOnline=@ByOnline,AcptMinOrd=@AcptMinOrd where ID=@ID ", con.Con);
                     cmd.Parameters.AddWithValue("@ID", this.id);
                 }
                 cmd.Parameters.AddWithValue("@MinOrdAmt", this.MinOrderAmt);
@@ -37,6 +37,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@OrdCanMinTime", this.OrdCanlMinTime);
                 cmd.Parameters.AddWithValue("@ByCash", this.ByCash);
                 cmd.Parameters.AddWithValue("@ByOnline", this.ByOnline);
+                cmd.Parameters.AddWithValue("@AcptMinOrd", this.AcptMinOrd);
                 if (this.id == 0)
                 {
                     this.id = Convert.ToInt32(cmd.ExecuteScalar());
@@ -82,6 +83,7 @@ namespace HangOut.Models
                     hG_Ticket.OrdCanlMinTime = sqlDataReader.GetInt32(++index);
                     hG_Ticket.ByCash = sqlDataReader.GetInt32(++index);
                     hG_Ticket.ByOnline = sqlDataReader.GetInt32(++index);
+                    hG_Ticket.AcptMinOrd = sqlDataReader.GetInt32(++index);
                     Temp = hG_Ticket;
                 }
 
