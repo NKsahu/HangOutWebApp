@@ -51,7 +51,7 @@
                 @foreach (var ObjOrder in ListOfTodayOrder)
                 {
                     string PaymentStatus = "";
-                    double TotalAmt = 0.00;
+                    double TotalAmt = ObjOrder.DeliveryCharge;
                     string Seating = "";
                     HG_Tables_or_Sheat ObjTableSheat = SeatingList.Find(x => x.Table_or_RowID == ObjOrder.Table_or_SheatId);
                     if (ObjTableSheat != null)

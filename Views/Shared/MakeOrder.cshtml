@@ -940,6 +940,7 @@
                         Obj.TORSID = CurrentOrder;
                         Obj.OID = CurrOID;
                         Obj.OrdingSts = 1;
+                        Obj.AppType = 3;
                         PostOrder(Obj);
                     },
                     cancel: function () {
@@ -963,6 +964,7 @@
                         Obj.OID = CurrOID;
                         Obj.Status = 3;
                         Obj.OrdingSts = 1;
+                        Obj.AppType = 3;
                         PostOrder(Obj);
                     },
                     cancel: function () {

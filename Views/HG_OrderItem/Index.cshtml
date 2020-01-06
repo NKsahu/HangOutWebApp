@@ -25,6 +25,7 @@
         Seating += ObjFsideRowName.FloorSide_or_RowName + " ";
     }
     Seating += ObjTorS.Table_or_SheetName;
+    double GrandTotal = order.DeliveryCharge;
 }
 <style>
 .showDetails {
@@ -42,9 +43,7 @@
         background-color: #f2f2f2;
     }
 
-    .showDetails tr:hover {
-        background-color: #ddd;
-    }
+    
 
     .showDetails th {
         padding-top: 8px;
@@ -109,7 +108,9 @@
                     {
                         QtyTotal += item.Count;
                         AmtTotal += ItemPrice;
+                        GrandTotal += ItemPrice;
                     }
+
                     string PrePareBy = "";
                     string OrderPlacedBy = "";
                     var PlacedByObj = new vw_HG_UsersDetails().GetSingleByUserId((int)item.OrdById);
@@ -169,15 +170,49 @@
                 }
             </tbody>
             <tfoot>
-                <tr>
-                    <td>Total</td>
-                    <td></td>
-                    <td>@QtyTotal</td>
-                    <td>@AmtTotal.ToString("0.00")</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                @if (order.DeliveryCharge > 0)
+                {
+                    <tr>
+                        <td>ItemTotal</td>
+                        <td></td>
+                        <td>@QtyTotal</td>
+                        <td>@AmtTotal.ToString("0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Delivery Charge</td>
+                        <td></td>
+                        <td></td>
+                        <td>@order.DeliveryCharge.ToString("0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td></td>
+                        <td>@GrandTotal.ToString("0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td>@QtyTotal</td>
+                        <td>@AmtTotal.ToString("0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+
 
             </tfoot>
         </table>

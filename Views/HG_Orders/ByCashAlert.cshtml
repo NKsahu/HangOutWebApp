@@ -34,7 +34,7 @@
                 seating += " " + ObjTorS.Table_or_SheetName;
                 var OrderItms = new HG_OrderItem().GetAll(Objorder.OID);
                 OrderItms = OrderItms.FindAll(x => x.Status != 4);
-                double Price = 0.00;
+                double Price = Objorder.DeliveryCharge;
                 HashSet<int> Tockens = new HashSet<int>();
                 for (int i = 0; i < OrderItms.Count; i++)
                 {

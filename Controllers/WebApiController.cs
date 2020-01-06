@@ -264,10 +264,10 @@ namespace HangOut.Controllers
         public JObject GetCart(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);
-            System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
-            System.Int32 OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
-           // Int64 OID= System.Int64.Parse(ParaMeters["OID"].ToString());
-            System.Int64 TableSheatTakeWayId = System.Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
+            Int64 CustID =Int64.Parse(ParaMeters["CID"].ToString());
+            Int32 OrgId = Convert.ToInt32(ParaMeters["OrgId"].ToString());
+            Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
+            int AppType= ParaMeters["AppType"] != null ? int.Parse(ParaMeters["AppType"].ToString()) : 1;//1 customer ,2 captain , 3 admin panel
             HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(OrgId);
             double TotalPrice = 0.00;
             List<Cart> CartItems = Cart.List.FindAll(x => x.CID == CustID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
@@ -300,6 +300,22 @@ namespace HangOut.Controllers
             ViewCartItem.Add("TotalPrice", TotalPrice.ToString("0.00"));
             ViewCartItem.Add("ListGetCart", jArray);
             ViewCartItem.Add("OrderingStatus", objOrg.CustomerOrdering);
+            OrgSetting orgSetting = OrgSetting.Getone(objOrg.OrgID);
+            if (orgSetting.EnblDeleryChrg == 1&& orgSetting.AcptMinOrd==1 &&OrgType.DeliveryChargeAply(AppType, orgSetting))
+            {
+                if(orgSetting.DeleryChrgType==0&&orgSetting.MinOrderAmt> TotalPrice)
+                {
+                    ViewCartItem.Add("MinOrdAmt", orgSetting.MinOrderAmt);
+                    ViewCartItem.Add("DeliveryChrge", orgSetting.DeliveryCharge);
+                }
+                else if(orgSetting.DeleryChrgType==1)//fixed charge{
+                {
+                    ViewCartItem.Add("MinOrdAmt", orgSetting.MinOrderAmt);
+                    ViewCartItem.Add("DeliveryChrge", orgSetting.DeliveryCharge);
+                }
+               
+                
+            }
             return ViewCartItem;
         }
 
@@ -515,14 +531,17 @@ namespace HangOut.Controllers
             Int64 TableorSheatId=Int64.Parse(Params["TORSID"].ToString());
             int Status =Params["Status"]!=null?int.Parse(Params["Status"].ToString()):1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
             int CustomerOrdering= Params["OrdingSts"] != null ? int.Parse(Params["OrdingSts"].ToString()) : 0;
+            int AppType = Params["AppType"] != null ? int.Parse(Params["AppType"].ToString()) : 1;//1 customer ,2 captain , 3 admin panel
+            double DeliveryChargeAmt = 0.00;
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+            List<HG_Items> ItemList = new HG_Items().GetAll(OrgId);
             List<HG_Orders> ListOfOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             ListOfOrder = ListOfOrder.FindAll(x => x.OrgId == OrgId);
             HG_Orders ObjOrders = ListOfOrder.Find(x => x.Table_or_SheatId == TableorSheatId && x.TableOtp == ObjTorS.Otp);
             JObject PostResult = new JObject();
             List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId);
-            // HG_Orders ObjOrders = new HG_Orders().GetOne(OID);
+            OrgSetting orgSetting = OrgSetting.Getone(ObjOrg.OrgID);
             Int64 OID = 0;
             if (ObjOrders==null||ObjOrders.Status=="3"|| ObjOrders.Status == "4"){// if order is completed or Canceled then Take New order
 
@@ -552,6 +571,30 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG","Add Atleast one Item");
                 return PostResult;
             }
+            if (orgSetting.EnblDeleryChrg == 1 &&OrgType.DeliveryChargeAply(AppType,orgSetting))
+            {
+                double TotalCostPrice = 0.00;
+                for(int i=0;i< ListCart.Count; i++)
+                {
+                    HG_Items ObjItem = ItemList.Find(x => x.ItemID == ListCart[i].ItemId);
+                    TotalCostPrice += ObjItem.CostPrice * ListCart[i].Count;
+                }
+                if (orgSetting.AcptMinOrd==0&&orgSetting.MinOrderAmt > TotalCostPrice)
+                {
+                    PostResult.Add("Status", 400);
+                    PostResult.Add("MSG", "Cannot Accept Order less than "+ orgSetting.MinOrderAmt.ToString("0.00") +" Rs/");
+                    return PostResult;
+                }
+                else if(orgSetting.AcptMinOrd==1 && orgSetting.DeleryChrgType==0&& orgSetting.MinOrderAmt > TotalCostPrice)
+                {
+                    DeliveryChargeAmt = orgSetting.DeliveryCharge;
+                }
+                else if(orgSetting.AcptMinOrd == 1 && orgSetting.DeleryChrgType ==1)// delivery charge fixed type
+                {
+                    DeliveryChargeAmt= orgSetting.DeliveryCharge;
+                }
+            }
+            
             if (PymentPageOpen.ListPytmPgOpen.Find(x => x.OID==OID) != null)
             {
                 PostResult.Add("Status", 400);
@@ -566,6 +609,7 @@ namespace HangOut.Controllers
                 ObjOrders.Update_By = CID;
                 ObjOrders.OrderByIds = ObjOrders.OrderByIds + CID.ToString() + ",";
                 ObjOrders.Update_Date = DateTime.Now;
+                ObjOrders.DeliveryCharge = ObjOrders.DeliveryCharge + DeliveryChargeAmt;
                 ObjOrders.Save();
             }
             else
@@ -583,7 +627,8 @@ namespace HangOut.Controllers
                     PaymentStatus = 0,// unpaid
                     TableOtp = ObjTorS.Otp,
                     OrderByIds=CID.ToString()+",",
-                    OrderApprovlSts=0
+                    OrderApprovlSts=0,
+                    DeliveryCharge=DeliveryChargeAmt
 
                 };
                 NewOID= ObjOrder.Save();
@@ -591,11 +636,11 @@ namespace HangOut.Controllers
                 if (NewOID > 0)
                 {
                 List<HG_Ticket> list = new HG_Ticket().GetAll(OrgId);
-                HG_Ticket objticket = new HG_Ticket() {OrgId=OrgId,OID=NewOID,TicketNo=list.Count+1 };
+                HG_Ticket objticket = new HG_Ticket() {OrgId=OrgId,OID=NewOID,TicketNo=list.Count+1,DeliveryCharge=DeliveryChargeAmt };
                 int Ticketno = objticket.save();
                     foreach (Cart Item in ListCart)
                     {
-                    HG_Items ObjItem = new HG_Items().GetOne(ItemID: Item.ItemId);
+                    HG_Items ObjItem = ItemList.Find(x => x.ItemID == Item.ItemId);
                     HG_OrderItem OrderItem = new HG_OrderItem()
                     {
                         FID = ObjItem.ItemID,
@@ -1000,24 +1045,22 @@ namespace HangOut.Controllers
                     }
 
                 }
-                List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAllWithTakeAwya(OrgType, OrgId);//GetAll(OrgType, OrgId);
-            List<HG_FloorSide_or_RowName> ListFloorSideorRow = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgId);
-            List<HG_Floor_or_ScreenMaster> ListFloorScreen = new HG_Floor_or_ScreenMaster().GetAll(OrgType, OrgId);
+               
             List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
                 int TorSIndex = 0;
                 foreach (var order in Orderlist)
                 {
                     string Seating = "";
-                    HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
-                    if (hG_Tables_Or_Sheat != null)
+                    HG_Tables_or_Sheat hG_Tables_Or_Sheat =new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
+                    if (hG_Tables_Or_Sheat != null&& hG_Tables_Or_Sheat.Table_or_RowID>0)
                     {
-                        HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = ListFloorScreen.Find(x => x.Floor_or_ScreenID == hG_Tables_Or_Sheat.Floor_or_ScreenId);
-                        if (hG_Floor_Or_ScreenMaster != null)
+                        HG_Floor_or_ScreenMaster hG_Floor_Or_ScreenMaster = new HG_Floor_or_ScreenMaster().GetOne(hG_Tables_Or_Sheat.Floor_or_ScreenId);
+                        if (hG_Floor_Or_ScreenMaster != null&& hG_Floor_Or_ScreenMaster.Floor_or_ScreenID>0)
                         {
                             Seating = hG_Floor_Or_ScreenMaster.Name;
                         }
-                        HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = ListFloorSideorRow.Find(x => x.ID == hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
-                        if (hG_FloorSide_Or_RowName != null)
+                        HG_FloorSide_or_RowName hG_FloorSide_Or_RowName = new HG_FloorSide_or_RowName().GetOne(hG_Tables_Or_Sheat.FloorSide_or_RowNoID);
+                        if (hG_FloorSide_Or_RowName != null && hG_FloorSide_Or_RowName.ID>0)
                         {
                             Seating += " " + hG_FloorSide_Or_RowName.FloorSide_or_RowName;
                         }

@@ -170,6 +170,10 @@ namespace HangOut.Controllers
         }
         public JsonResult SaveSetting(OrgSetting ObjSetting)
         {
+            if (ObjSetting.AcptMinOrd == 0||ObjSetting.EnblDeleryChrg==0)
+            {
+                ObjSetting.DeliveryCharge = 0.00;
+            }
             ObjSetting.save();
             return  Json(new { data="1" }, JsonRequestBehavior.AllowGet);
         }

@@ -69,13 +69,34 @@ namespace HangOut.Models.DynamicList
             }
             return PayMode;
         }
-
         public static double TotalTax(double Amt, double Tax, int Cnt)
         {
             double total = 0.00;
 
             total = ((Amt * Tax) / 100) * Cnt;
             return total;
+        }
+        public static bool  DeliveryChargeAply(int AppType,OrgSetting setting)
+        {
+            bool Sts = false;
+            //1 customer ,2 captain , 3 admin panel
+            if(AppType==1&& setting.ApplyInCustomerApp)
+            {
+                Sts = true;
+            }
+            else if (AppType == 2 && setting.ApplyInCaptainApp)
+            {
+                Sts = true;
+            }
+            else if (AppType == 3 && setting.ApplyInAdminPanel)
+            {
+                Sts = true;
+            }
+            else
+            {
+                Sts = false;
+            }
+            return Sts;
         }
     }
 }

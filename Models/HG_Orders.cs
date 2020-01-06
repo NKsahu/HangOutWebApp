@@ -27,7 +27,7 @@ namespace HangOut.Models
         public int TableOtp { get; set; }
         public string OrderByIds { get; set; }//  Order by IDS comma seprated
         public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken Orde  or Not
-        public double ExtraAmt { get; set; }// delivery charge amount
+        public double DeliveryCharge { get; set; }// delivery charge amount
         public HG_Orders()
         {
             this.OID = 0;
@@ -48,10 +48,10 @@ namespace HangOut.Models
             try
             {
                 if (this.OID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS (CID,Status,Create_By,Create_Date,Update_By,Update_Date,Deleted,OrgId,Table_or_SheatId,PaymentStatus,PayReceivedBy,TableOtp,OrderByIds,OrdAprovalSts) VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp,@OrderByIds,@OrdAprovalSts);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS  VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp,@OrderByIds,@OrdAprovalSts,@DeliveryCharge);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp,OrderByIds=@OrderByIds,OrdAprovalSts=@OrdAprovalSts where OID=@OID", Obj.Con);
+                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp,OrderByIds=@OrderByIds,OrdAprovalSts=@OrdAprovalSts,DeliveryCharge=@DeliveryCharge where OID=@OID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
                 }
                 cmd.Parameters.AddWithValue("@CID", this.CID);
@@ -68,6 +68,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@TableOtp", this.TableOtp);
                 cmd.Parameters.AddWithValue("@OrderByIds", this.OrderByIds);
                 cmd.Parameters.AddWithValue("@OrdAprovalSts", this.OrderApprovlSts);
+                cmd.Parameters.AddWithValue("@DeliveryCharge", this.DeliveryCharge);
                 if (this.OID == 0)
                 {
                     R = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -121,7 +122,8 @@ namespace HangOut.Models
                         PayReceivedBy=SDR.GetInt32(11),
                         TableOtp=SDR.GetInt32(12),
                         OrderByIds=SDR.GetString(13),
-                        OrderApprovlSts=SDR.GetInt32(14)
+                        OrderApprovlSts=SDR.GetInt32(14),
+                        DeliveryCharge=SDR.GetDouble(15)
                     };
                     ListTmp.Add(ObjTmp);
                 }
@@ -160,6 +162,7 @@ namespace HangOut.Models
                 ObjTemp.TableOtp =SDR.GetInt32(12);
                 ObjTemp.OrderByIds = SDR.GetString(13);
                 ObjTemp.OrderApprovlSts = SDR.GetInt32(14);
+                ObjTemp.DeliveryCharge= SDR.GetDouble(15);
                 }
             }
             catch (System.Exception e){ e.ToString(); }
@@ -223,8 +226,9 @@ namespace HangOut.Models
                        PayReceivedBy = SDR.GetInt32(11),
                         TableOtp =SDR.GetInt32(12),
                         OrderByIds = SDR.GetString(13),
-                        OrderApprovlSts=SDR.GetInt32(14)
-                    };
+                        OrderApprovlSts=SDR.GetInt32(14),
+                        DeliveryCharge = SDR.GetDouble(15)
+                };
                     ListTmp.Add(ObjTmp);
                 }
             }

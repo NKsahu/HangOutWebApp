@@ -61,7 +61,7 @@
             SN += 1;
             List<HG_OrderItem> ListIt = new HG_OrderItem().GetAll(Ord.OID);
             ListIt = ListIt.FindAll(x => x.Status != 4);
-            double Amt = 0.00;
+            double Amt = Ord.DeliveryCharge;
             for(int i=0;i< ListIt.Count; i++)
             {
                 Amt += ListIt[i].Price * ListIt[i].Count;
