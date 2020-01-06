@@ -5,7 +5,6 @@
 <div class="card">
     <div class="card-header">
         <h3 style="text-align:center;color:black"><b>Order Settings</b></h3>
-        <hr />
     </div>
     <div class="card-body">
 
@@ -13,57 +12,91 @@
         {
             @Html.HiddenFor(model => model.id)
             @Html.HiddenFor(model => model.OrgId)
-        <div class="row">
-            <div class="col-md-3">
-                @Html.Label("Min Order Amount", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.MinOrderAmt, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                @Html.ValidationMessageFor(model => model.MinOrderAmt, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.OrdCanlMinTime)
+            <div class="row">
+                <div class="col-md-2">
+                    @{
+                        List<SelectListItem> EnableOrdering = new List<SelectListItem>()
+                                        {
+                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                        };
+                    }
+                    @Html.Label("Enable Delivery Charge", htmlAttributes: new { @class = "control-label  " })
+                    @Html.DropDownListFor(model => model.EnblDeleryChrg, EnableOrdering, new { @class = "form-control ", required = "required" })
+                    @Html.ValidationMessageFor(model => model.EnblDeleryChrg, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2 enableCrg">
+                    @Html.Label("Min Order Amt", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.MinOrderAmt, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.MinOrderAmt, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2 enableCrg">
+                    @{
+                        List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
+                                        {
+                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                        };
+                    }
+                    @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
+                    @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd, new { @class = "form-control ", required = "required" })
+                    @Html.ValidationMessageFor(model => model.AcptMinOrd, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2 enableCrg">
+                    @{
+                        List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
+                                        {
+                      new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
+                                        };
+                    }
+                    @Html.Label("Charge Type", htmlAttributes: new { @class = "control-label  " })
+                    @Html.DropDownListFor(model => model.DeleryChrgType, DeliveryChrType, new { @class = "form-control ", required = "required" })
+                    @Html.ValidationMessageFor(model => model.DeleryChrgType, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2 enableCrg">
+                    @Html.Label("Charge Amt", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.DeliveryCharge, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <h5 class="enableCrg"  style="text-align:center;color:black;padding-top:8px;">APPLY CHARGES ON</h5>
+            <div class="row enableCrg">
+                <div class="col-md-2">
+                    @Html.Label("Customer App", htmlAttributes: new { @class = "control-label  " })
+                    @Html.CheckBoxFor(model => model.ApplyInCustomerApp, new { @class = "form-control " })
+                    @Html.ValidationMessageFor(model => model.ApplyInCustomerApp, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Captain App", htmlAttributes: new { @class = "control-label  " })
+                    @Html.CheckBoxFor(model => model.ApplyInCaptainApp, new { @class = "form-control " })
+                    @Html.ValidationMessageFor(model => model.ApplyInCaptainApp, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Admin Panel", htmlAttributes: new { @class = "control-label  " })
+                    @Html.CheckBoxFor(model => model.ApplyInAdminPanel, new { @class = "form-control " })
+                    @Html.ValidationMessageFor(model => model.ApplyInAdminPanel, "", new { @class = "text-danger" })
+                </div>
 
             </div>
-            <div class="col-md-3">
-                @{ 
-                    List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
-                    {
-  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                    };
-                }
-                @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
-                @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd,new { @class = "form-control ", required = "required"  })
-                @Html.ValidationMessageFor(model => model.AcptMinOrd, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-3">
-                @Html.Label("Delivery Charge", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.DeliveryCharge, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-3" style="visibility:hidden">
-                @Html.Label("Order auto Cancel Time", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.OrdCanlMinTime, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
-                @Html.ValidationMessageFor(model => model.OrdCanlMinTime, "", new { @class = "text-danger" })
-            </div>
-
-        </div>
             <div class="row card" style="margin-top:8px;">
                 <div class="card-header">
-                    <h3 style="text-align:center;color:black"><b>Payment Modes</b></h3>
+                    <h5 style="text-align:center;color:black">Payment Modes</h5>
                 </div>
-                @{ 
+                @{
                     List<SelectListItem> PaytModes = new List<SelectListItem>()
-                    {
+                        {
 new SelectListItem{Text="NO",Value="1"},new SelectListItem{Text="YES",Value="2"}
-                    };
+                        };
                 }
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
                             @Html.Label("By Online", htmlAttributes: new { @class = "control-label  " })
-                            @Html.DropDownListFor(model => model.ByOnline, PaytModes,  new { @class = "form-control ", required = "required" })
+                            @Html.DropDownListFor(model => model.ByOnline, PaytModes, new { @class = "form-control ", required = "required" })
                             @Html.ValidationMessageFor(model => model.ByOnline, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-md-3">
                             @Html.Label("By Cash", htmlAttributes: new { @class = "control-label  " })
-                            @Html.DropDownListFor(model => model.ByCash, PaytModes,new { @class = "form-control ", required = "required"  })
+                            @Html.DropDownListFor(model => model.ByCash, PaytModes, new { @class = "form-control ", required = "required" })
                             @Html.ValidationMessageFor(model => model.ByCash, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -79,16 +112,34 @@ new SelectListItem{Text="NO",Value="1"},new SelectListItem{Text="YES",Value="2"}
 <script>
     setTimeout(function () {$(window).trigger('resize'); },500);
     AlowMinOrdAcpt();
+    EnableDeliveryChrg();
     function AlowMinOrdAcpt() {
         var Sts = $("#AcptMinOrd").val();
         if (Sts == "0") {
             $("#DeliveryCharge").parent('div').hide();
+            $("#DeleryChrgType").parent('div').hide();
         }
         else {
             $("#DeliveryCharge").parent('div').show();
+            $("#DeleryChrgType").parent('div').show();
         }
     }
     $("#AcptMinOrd").change(function () {
         AlowMinOrdAcpt();
+    });
+    
+    function EnableDeliveryChrg() {
+        var DeliveryCrgYesNo = $("#EnblDeleryChrg").val();
+        if (DeliveryCrgYesNo == "0") {
+            $(".enableCrg").hide();
+            $("#AcptMinOrd").val('0');
+        }
+        else {
+            $(".enableCrg").show();
+        }
+        AlowMinOrdAcpt();
+    }
+    $("#EnblDeleryChrg").change(function () {
+        EnableDeliveryChrg();
     });
 </script>
