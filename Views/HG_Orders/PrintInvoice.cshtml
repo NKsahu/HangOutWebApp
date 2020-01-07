@@ -47,20 +47,22 @@
     int Qty = 0;
     string PoweredBy = "Powered By FoodDo";
     string TicketNos = "";
-    List<HG_Items> ItemList = new HG_Items().GetAll();
+    string Printremark =" ...........................................................";
+    List <HG_Items> ItemList = new HG_Items().GetAll();
     HashSet<string> hashTicket = new HashSet<string>(OrderItems.Select(x => x.TickedNo.ToString()).ToArray());
     TicketNos = string.Join(",", hashTicket);
     if (OrgObj.OrgID > 0)
     {
         InvoiceHeading = OrgObj.IvoiceHeading;
-        OrgName = OrgObj.Name;
+        OrgName = OrgObj.InvoiceTitle;
         AddressLine1 = OrgObj.Address;
         AddressLine2 = OrgObj.AddressLin2;
         AddressLine3 = OrgObj.AddressLine3;
-        Phoneno = OrgObj.Phone;
+        Phoneno = OrgObj.invoicePhone;
         GstNo = OrgObj.GSTNO;
         Licence2 = OrgObj.Licence2;
         Licence3 = OrgObj.License3;
+        Printremark = (OrgObj.PrintRemark != null && OrgObj.PrintRemark != "") ? OrgObj.PrintRemark : Printremark;
 
     }
 }
@@ -97,11 +99,11 @@
     <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
 </div>
 <div style="border:2px solid black " id="section-to-print">
-    <div id="PrintHeight" style="border:0.5px dotted black;">
+    <div id="PrintHeight" >
         <div>
-            <h3 style="text-align:center">@InvoiceHeading</h3>
-            <h4 style="text-align:center">@OrgName</h4>
-            <h4 style="text-align:center">@AddressLine1</h4>
+            <h4 style="text-align:center">@InvoiceHeading</h4>
+            <h3 style="text-align:center">@OrgName</h3>
+            <p style="text-align:center">@AddressLine1</p>
             @if (AddressLine2 != null && AddressLine2.Replace(" ", "") != "")
             {
                 <p style="text-align:center">@AddressLine2</p>
@@ -110,7 +112,7 @@
             {
                 <p style="text-align:center">@AddressLine3</p>
             }
-            <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
+            <p style="text-align:center">Phone  @Phoneno         @GstNo</p>
             @if (Licence2 != null && Licence2.Replace(" ", "") != "")
             {
                 <p style="text-align:center">@Licence2  @Licence3</p>
@@ -125,43 +127,47 @@
                 <tr>
                     <th style="text-align:center">Item </th>
                     <th style="text-align:center">Qty</th>
+                    <th style="text-align:center">Rate</th>
                     <th style="text-align:center">Amt</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var items in OrderItems)
                 {
+                    double Amt = 0.00;
                     string Style = "background-color:#e05c5c";
                     if (items.Status != 4)
                     {
-                        AmountTotal += items.Price * items.Count;
-                        Qty += items.Count;
+                        Amt = items.Price * items.Count;
+                        AmountTotal += Amt;
+                            Qty += items.Count;
                         Style = "background-color:white";
                     }
                     // Qty += items.Qty;
                     HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
-                    <tr style="@(Style)">
-                        <td style="text-align:center">@hG_Items.Items</td>
-                        <td style="text-align:center">@items.Count</td>
-                        <td style="text-align:center">@items.Price</td>
-                    </tr>
+                <tr style="@(Style)">
+                    <td style="text-align:center">@hG_Items.Items</td>
+                    <td style="text-align:center">@items.Count</td>
+                    <td style="text-align:center">@items.Price.ToString("0.00")</td>
+                    <td style="text-align:center">@Amt.ToString("0.00")</td>
+                </tr>
                 }
             </tbody>
             <tfoot>
                 <tr>
-                    <td style="text-align:center">Total</td>
+                    <td style="text-align:center">Item Total</td>
                     <td style="text-align:center">@Qty.ToString() </td>
+                    <td style="text-align:center"></td>
                     <td style="text-align:center">@AmountTotal.ToString()</td>
                 </tr>
             </tfoot>
         </table>
         <div>
-            <h6>Note:</h6>
+            <p>Note:</p>
             <div>
-                .........................................................................<br />
-                .........................................................................
+              @Printremark
             </div>
-            <h6 style="page-break-after:auto">@PoweredBy</h6>
+            <p style="page-break-after:auto">@PoweredBy</p>
         </div>
     </div>
     <div class="print"></div>

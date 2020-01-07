@@ -98,7 +98,15 @@ namespace HangOut.Controllers
             {
                 Objitem.PrintRemark = "";
             }
-            
+            if (Objitem.InvoiceTitle == null)
+            {
+                Objitem.InvoiceTitle = "";
+
+            }
+            if (Objitem.invoicePhone == null)
+            {
+                Objitem.invoicePhone = "";
+            }
             int i = Objitem.Save();
 
             if (i > 0)

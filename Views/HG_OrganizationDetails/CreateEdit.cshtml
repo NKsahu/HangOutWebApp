@@ -28,6 +28,8 @@
             @Html.HiddenFor(model => model.AcType)
             @Html.HiddenFor(model => model.PrintRemark)
             @Html.HiddenFor(model => model.CustomerOrdering)
+            @Html.HiddenFor(model => model.InvoiceTitle)
+            @Html.HiddenFor(model => model.invoicePhone)
             <div class="row">
 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
