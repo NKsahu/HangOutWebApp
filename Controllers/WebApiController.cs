@@ -1606,7 +1606,7 @@ namespace HangOut.Controllers
         public JArray PastOrderMainList(int CID,int status=0)
         {
             JArray Info = new JArray();
-            List<HG_Orders> OrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            List<HG_Orders> OrderList = new HG_Orders().GetAll(CID: CID);
             OrderList = OrderList.FindAll(x => x.OrderByIds.Contains(CID.ToString()));
             OrderList = OrderList.FindAll(x => x.Status != "4");
             if (status > 0 && status == 1)//ongoing orders

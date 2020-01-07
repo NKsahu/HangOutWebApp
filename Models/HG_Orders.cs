@@ -96,12 +96,10 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-
-                string Query = "SELECT * FROM HG_ORDERS WHERE OrgId="+OrgId+" and Deleted=0 ORDER BY OID DESC";
+                string Query = "SELECT * FROM HG_ORDERS WHERE OrgId="+OrgId+"  ORDER BY OID DESC";
                 if(CID>0)
                 {
-                     Query = "SELECT * FROM HG_ORDERS WHERE CID=" + CID + " and Deleted=0 ORDER BY OID DESC";
-
+                     Query = "SELECT * FROM HG_ORDERS WHERE OrderByIds like '%"+CID.ToString()+"%' ORDER BY OID DESC";
                 }
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
@@ -232,7 +230,7 @@ namespace HangOut.Models
                     ListTmp.Add(ObjTmp);
                 }
             }
-            catch (System.Exception e) { e.ToString(); }
+            catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ListTmp);
         }
