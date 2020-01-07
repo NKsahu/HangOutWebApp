@@ -614,7 +614,7 @@ namespace HangOut.Controllers
                 if (orgSetting.AcptMinOrd==0&&orgSetting.MinOrderAmt > TotalCostPrice)
                 {
                     PostResult.Add("Status", 400);
-                    PostResult.Add("MSG", "Cannot Accept Order less than "+ orgSetting.MinOrderAmt.ToString("0.00") +" Rs/");
+                    PostResult.Add("MSG", "Minimum ticket value for this outlet is Rs "+ orgSetting.MinOrderAmt.ToString("0.00"));
                     return PostResult;
                 }
                 else if(orgSetting.AcptMinOrd==1 && orgSetting.DeleryChrgType==0&& orgSetting.MinOrderAmt > TotalCostPrice)
