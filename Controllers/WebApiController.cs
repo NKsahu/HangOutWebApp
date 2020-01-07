@@ -110,7 +110,8 @@ namespace HangOut.Controllers
             if (ObjOrder != null)
             {
                 var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
-                for(var i=0;i< OrderItems.Count; i++)
+                CurrentTableAmt = ObjOrder.DeliveryCharge;
+                for (var i=0;i< OrderItems.Count; i++)
                 {
                     CurrentTableAmt += OrderItems[i].Count * OrderItems[i].Price;
                 }
@@ -520,7 +521,38 @@ namespace HangOut.Controllers
             }
             return status;
         }
-        
+        public JObject DeliveryCharge(string Obj)
+        {
+            JObject ParaMeters = JObject.Parse(Obj);
+            Int64 CustID = Int64.Parse(ParaMeters["CID"].ToString());
+            Int32 OrgId = Convert.ToInt32(ParaMeters["OrgId"].ToString());
+            Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
+            int AppType =3;//1 customer ,2 captain , 3 admin panel
+            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CustID && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
+            List<HG_Items> ItemList = new HG_Items().GetAll(OrgId);
+            OrgSetting orgSetting = OrgSetting.Getone(OrgId);
+            JObject result = new JObject();
+            double DeliveryChargeAmt = 0.00;
+            if (orgSetting.EnblDeleryChrg == 1 && OrgType.DeliveryChargeAply(AppType, orgSetting))
+            {
+                double TotalCostPrice = 0.00;
+                for (int i = 0; i <ListCart.Count; i++)
+                {
+                    HG_Items ObjItem = ItemList.Find(x => x.ItemID == ListCart[i].ItemId);
+                    TotalCostPrice += ObjItem.CostPrice * ListCart[i].Count;
+                }
+                 if (orgSetting.AcptMinOrd == 1 && orgSetting.DeleryChrgType == 0 && orgSetting.MinOrderAmt > TotalCostPrice)
+                {
+                    DeliveryChargeAmt = orgSetting.DeliveryCharge;
+                }
+                else if (orgSetting.AcptMinOrd == 1 && orgSetting.DeleryChrgType == 1)// delivery charge fixed type
+                {
+                    DeliveryChargeAmt = orgSetting.DeliveryCharge;
+                }
+            }
+            result.Add("ChargeAmt", DeliveryChargeAmt);
+            return result;
+        }
         
         // make order
         public JObject PostOrder(string Obj)
@@ -755,15 +787,17 @@ namespace HangOut.Controllers
             ListOrders= ListOrders.FindAll(x => x.PaymentStatus == 0);
             HG_Orders order  = ListOrders.FirstOrDefault();
             List<HG_OrderItem> listitems = new List<HG_OrderItem>();
+            double TotalPrice = 0.00;
+            double CostPrice = 0.00;
+            double Totaltax = 0.00;
             List<HG_Items> items = new HG_Items().GetAll(OrgId);
             if (order != null)
             {
                 listitems.AddRange(new HG_OrderItem().GetAll(order.OID));
+                TotalPrice = order.DeliveryCharge;
             }
            
-            double TotalPrice = 0.00;
-            double CostPrice = 0.00;
-            double Totaltax = 0.00;
+            
             JArray jArray = new JArray();
             foreach (var OrderItm in listitems)
             {
@@ -789,6 +823,7 @@ namespace HangOut.Controllers
                 jObject.Add("CostPrice", CostPrice.ToString("0.00"));
                 jObject.Add("Tax", Totaltax.ToString("0.00"));
                 jObject.Add("Total",TotalPrice.ToString("0.00"));
+                jObject.Add("DeliveryChage", order.DeliveryCharge);
                 jObject.Add("OID", order.OID);
             }
             
@@ -891,7 +926,6 @@ namespace HangOut.Controllers
             
             return jObject;
         }
-
         public JArray ShowOrderByStatus(string Obj)
         {
             JObject Params = JObject.Parse(Obj);
@@ -917,9 +951,7 @@ namespace HangOut.Controllers
                 }
                 else
                 {
-                    //auto cancel logic goes here=====
-
-                    //=========auto cancel order======
+                  
                     CurrentOrder = CurrentOrder.FindAll(x => x.PaymentStatus ==0);// only seen unpaid orders
                     OrderToShow = CurrentOrder;
 
@@ -974,7 +1006,7 @@ namespace HangOut.Controllers
                 jObject = JObject.FromObject(order);
               var  ShowOrderItems = hG_OrderItems.FindAll(x => x.OID == order.OID);
                 ShowOrderItems = ShowOrderItems.FindAll(x => x.Status != 4);//not canceled
-                double ToTalAmt = 0.00;
+                double ToTalAmt = order.DeliveryCharge;
                 foreach(var item in ShowOrderItems)
                 {
                     ToTalAmt += item.Count * item.Price;
@@ -1002,8 +1034,6 @@ namespace HangOut.Controllers
             }
             return jArray;
         }
-
-
         //Start Chef End Work
         public JArray ChefOrders(int OrgId,int ChefId,int Status)
         {
@@ -1307,7 +1337,6 @@ namespace HangOut.Controllers
             return PostResult;
 
         }
-
         public void SendMsgChef(int OrgId,Int64 OrdNo)
         {
             string[] topics = { OrgId.ToString() };
@@ -1325,7 +1354,6 @@ namespace HangOut.Controllers
              
         }
         //End Chef End Work
-
         public JObject ChangePassWord(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);
@@ -1447,10 +1475,22 @@ namespace HangOut.Controllers
         {
             JArray jArray = new JArray();
             DateTime fromdate = DateTime.Now;
-            List<HG_Tables_or_Sheat> list = new HG_Tables_or_Sheat().GetAllWithTakeAwya(Type);
-            List<HG_FloorSide_or_RowName> FloorSideRowList = new HG_FloorSide_or_RowName().GetAll(Type, OrgId);
-            List<HG_Floor_or_ScreenMaster> FloorScrenList = new HG_Floor_or_ScreenMaster().GetAll(Type, OrgId);
-            List<HG_Orders> Orderlist = new HG_Orders().GetListByGetDate(fromdate, DateTime.Now);
+            if (OrgId == 0)
+            {
+                var UserInfo = Request.Cookies["UserInfo"];
+                OrgId = int.Parse(UserInfo["OrgId"]);
+            }
+            List<HG_Tables_or_Sheat> list = new List<HG_Tables_or_Sheat>();
+            List<HG_FloorSide_or_RowName> FloorSideRowList = new List<HG_FloorSide_or_RowName>();
+            List<HG_Floor_or_ScreenMaster> FloorScrenList = new List<HG_Floor_or_ScreenMaster>();
+            List<HG_Orders> Orderlist = new List<HG_Orders>();
+            if (OrgId > 0)
+            {
+                 list = new HG_Tables_or_Sheat().GetAllWithTakeAwya(Type);
+                FloorSideRowList = new HG_FloorSide_or_RowName().GetAll(Type, OrgId);
+                 FloorScrenList = new HG_Floor_or_ScreenMaster().GetAll(Type, OrgId);
+                Orderlist = new HG_Orders().GetListByGetDate(fromdate, DateTime.Now);
+            }
             if (OrgId > 0)
             {
                 Orderlist = Orderlist.FindAll(x => x.OrgId == OrgId);
@@ -1586,7 +1626,7 @@ namespace HangOut.Controllers
                     HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
                     List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAll(orders.OID);
                     OrderItemList = OrderItemList.FindAll(x => x.Status != 4);// not canceled items
-                    double price = 0.00;
+                    double price = orders.DeliveryCharge;
                     double CostPrice = 0.00;
                     double tax = 0.00;
                     HashSet<int> Token = new HashSet<int>();
@@ -1608,6 +1648,7 @@ namespace HangOut.Controllers
                     Object.Add("TicketNo", string.Join(",", Token));
                     Object.Add("OID", orders.OID);
                     Object.Add("Status", orders.Status);
+                    Object.Add("DeliveryChrge", orders.DeliveryCharge);
                     Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
                     if (orders.Status!="3"&& orders.PaymentStatus == 0 && hG_OrganizationDetails.PaymentType==1)//prepaid
                     {
@@ -1634,7 +1675,7 @@ namespace HangOut.Controllers
                 HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(orders.Table_or_SheatId);
                 List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(orders.OID);
                 List<HG_Items> ListfoodItems = new HG_Items().GetAll(orders.OrgId);
-                double price = 0.00;
+                double price = orders.DeliveryCharge;
                 double tax = 0.00;
                 double CostPrice = 0.00;
                 HashSet<int> Token = new HashSet<int>();
@@ -1645,7 +1686,6 @@ namespace HangOut.Controllers
                 Object.Add("SeatOrTblid", orders.Table_or_SheatId);
                 Object.Add("TableSeatname", ObjTorS.Table_or_SheetName);
                 Object.Add("OutLetType", hG_OrganizationDetails.PaymentType);
-               
                 Object.Add("OID", orders.OID);
                 Object.Add("Status", orders.Status);
                 Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
@@ -1693,6 +1733,7 @@ namespace HangOut.Controllers
                 Object.Add("CostPrice", CostPrice.ToString("0.00"));
                 Object.Add("Tax", tax.ToString("0.00"));
                 Object.Add("TotalAmount", price.ToString("0.00"));
+                Object.Add("DeliveryChrge", orders.DeliveryCharge);
             }
             Object.Add("OrderDetails", Info);
             return Object;

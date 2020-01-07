@@ -471,6 +471,12 @@
                     </thead>
                     <tbody id="ItemsList"></tbody>
                     <tfoot>
+                        <tr id="DeliveryChr" style="display:none">
+                            <td>Delivery Charge</td>
+                            <td></td>
+                            <td id="DeliveryCharge"></td>
+                            <td></td>
+                        </tr>
                         <tr>
                             <td>TOTAL</td>
                             <td id="SumOfQty"></td>
@@ -934,14 +940,7 @@
                 buttons: {
                     btnClass: 'btn-primary',
                     confirm: function () {
-                        var Obj = {};
-                        Obj.CID = LoginId;
-                        Obj.OrgID = OrgId;
-                        Obj.TORSID = CurrentOrder;
-                        Obj.OID = CurrOID;
-                        Obj.OrdingSts = 1;
-                        Obj.AppType = 3;
-                        PostOrder(Obj);
+                        DeliveryCharge(1);
                     },
                     cancel: function () {
 
@@ -957,22 +956,56 @@
                     btnClass: 'btn-green',
                     confirm: function () {
                         // $.alert('Confirmed!');
-                        var Obj = {};
-                        Obj.CID = LoginId;
-                        Obj.OrgID = OrgId;
-                        Obj.TORSID = CurrentOrder;
-                        Obj.OID = CurrOID;
-                        Obj.Status = 3;
-                        Obj.OrdingSts = 1;
-                        Obj.AppType = 3;
-                        PostOrder(Obj);
+                        DeliveryCharge(3);
                     },
                     cancel: function () {
                         // $.alert('Canceled!');
                     }
                 }
             });
-        }
+     }
+     function DeliveryCharge(Status) {
+         var Parmas = {};
+         Parmas.CID = LoginId;
+         Parmas.OrgId = OrgId;
+         Parmas.TSTWID = CurrentOrder
+         $.ajax({
+             type: 'POST',
+             url: "/WebApi/DeliveryCharge?Obj=" + JSON.stringify(Parmas),
+             success: function (data) {
+                 var Obj = {};
+                 Obj.CID = LoginId;
+                 Obj.OrgID = OrgId;
+                 Obj.TORSID = CurrentOrder;
+                 Obj.OID = CurrOID;
+                 Obj.Status = Status;
+                 Obj.OrdingSts = 1;
+                 Obj.AppType = 3;
+                 var JsonObj = JSON.parse(data);
+                 if (parseFloat(JsonObj.ChargeAmt)>0) {
+                     $.confirm({
+                         title: 'Delivery Charge ?',
+                         content: 'Delivery Charge ' + JsonObj.ChargeAmt+" RS/",
+                         buttons: {
+                             btnClass: 'btn-green',
+                             confirm: function () {
+                                 PostOrder(Obj)
+                             },
+                             cancel: function () {
+                                 // $.alert('Canceled!');
+                             }
+                         }
+                     });
+                 }
+                 else {
+                     PostOrder(Obj);
+                 }
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
+             }
+         });
+     }
         function Charge() {
             console.log("Curr TorSid +" + CurrentOrder);
             $.ajax({
@@ -1034,6 +1067,14 @@
 
                                     }
                                     SumItems = parseFloat(Jobje.Total);
+                                    var DeliveryChrage = parseFloat(Jobje.DeliveryChage);
+                                    if (DeliveryChrage > 0) {
+                                        $("#DeliveryChr").show();
+                                        $("#DeliveryCharge").text(DeliveryChrage);
+                                    }
+                                    else {
+                                        $("#DeliveryChr").hide();
+                                    }
                                     $("#SumOfQty").text(Qty);
                                     $("#SumOfItem").text(SumItems.toFixed(2) + " Rs/-");
                                     $("#News").hide();
