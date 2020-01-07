@@ -69,10 +69,20 @@
                 @{
                     var OrderObj = TodayOrdrlist.Find(x => x.OID == firstitm.OID);
                     OrdNotice ObjNotice = OrdNotice.GetOne(OrderObj.OID);
+                    double DeliveryCharge = 0.00;
+                    if (OrderObj.DeliveryCharge > 0)
+                    {
+                        List<HG_Ticket> ListTickets = HG_Ticket.GetByOID(OrderObj.OID);
+                        HG_Ticket ObjTicket = ListTickets.Find(x => x.TicketNo == TicketObj.Key);
+                        if (ObjTicket != null && ObjTicket.TicketNo > 0)
+                        {
+                            DeliveryCharge = ObjTicket.DeliveryCharge;
+                        }
+                    }
 
                     if (OrderObj.PaymentStatus == 1 && ObjNotice != null && ObjNotice.OID > 0)
                     {
-                        double Amt = 0.00;
+                        double Amt = DeliveryCharge;
                         for (int i = 0; i < orderItems.Count; i++)
                         {
                             Amt += orderItems[i].Price * orderItems[i].Count;
@@ -112,12 +122,12 @@
 
                         </tr>
                     </thead>
-                    <tbody id="Tickt@(TicketObj.Key)">
+                    <tbody id="Tickt@(TicketObj.Key)" DeliveryAmt="@DeliveryCharge">
                         @foreach (var items in orderItems)
                         {
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
                             double Amt = items.Price * items.Count;
-                            <tr>
+                            <tr >
                                 <td><input class=" CkeckorNot" type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
                                 <td>@FoodObj.Items</td>
                                 <td>@items.Count</td>
@@ -139,6 +149,9 @@
         var CheckedID = ",";
         var OID = 0;
         var TotalAmt = 0.00;
+        var CancelAmt = 0.00;
+        var TotalCnt = 0;
+        TotalAmt= parseFloat($("#Tickt" + TicketNo).attr('DeliveryAmt'));
         //JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy, int OID)
         $("#Tickt"+TicketNo+" > tr").each(function (index, tr) {
             console.log(index);
@@ -147,16 +160,22 @@
             if (value) {
                 Checkdcount += 1;
                 CheckedID += OIID + ",";
-                TotalAmt += parseFloat($(tr).find('.CkeckorNot').attr("Amt"));
             }
             else {
                 canceledCount += 1;
+                CancelAmt += parseFloat($(tr).find('.CkeckorNot').attr("Amt"));
             }
-            
+            TotalAmt += parseFloat($(tr).find('.CkeckorNot').attr("Amt"));
             OID = $(tr).find('.CkeckorNot').attr("OID");
+            TotalCnt = TotalCnt + 1;
         });
         var  Msg = 'Mark order complete?';
-       
+        if (TotalCnt == canceledCount) {
+            TotalAmt = 0.00;
+        }
+        else {
+            TotalAmt = TotalAmt - CancelAmt;
+        }
         if (canceledCount > 0) {
             Msg = canceledCount+" unticked items will be cancelled.Updated amount is Rs "+TotalAmt.toFixed(2)+" Proceed further?";
         }
@@ -175,10 +194,10 @@
                             var Json = JSON.parse(data);
                             if (Json.Status == 200) {
                                 $("#" + TicketNo).remove();
-                                $.alert({
-                                    title: 'Alert',
-                                    content: 'Completed Succesfully',
-                                });
+                                //$.alert({
+                                //    title: 'Alert',
+                                //    content: 'Completed Succesfully',
+                                //});
                                 var Cnt = parseInt($("#ChefUnpaid").text());
                                 if (Cnt > 0) {
                                     Cnt = Cnt - 1;
