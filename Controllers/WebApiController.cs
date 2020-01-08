@@ -551,6 +551,8 @@ namespace HangOut.Controllers
                 }
             }
             result.Add("ChargeAmt", DeliveryChargeAmt);
+            result.Add("DeliveryType", orgSetting.DeleryChrgType);
+            result.Add("MinAmt", orgSetting.MinOrderAmt);
             return result;
         }
         

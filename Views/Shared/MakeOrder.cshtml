@@ -934,36 +934,11 @@
 
         }
         function SUBMIT() {
-            $.confirm({
-                title: 'SEND TO CHEF ?',
-                content: 'Are You Sure',
-                buttons: {
-                    btnClass: 'btn-primary',
-                    confirm: function () {
-                        DeliveryCharge(1);
-                    },
-                    cancel: function () {
-
-                    }
-                }
-            });
+         DeliveryCharge(1);
         }
         function INSTANTCLR() {
-            $.confirm({
-                title: 'ELEMINATE CHEF ?',
-                content: 'Are You Sure',
-                buttons: {
-                    btnClass: 'btn-green',
-                    confirm: function () {
-                        // $.alert('Confirmed!');
-                        DeliveryCharge(3);
-                    },
-                    cancel: function () {
-                        // $.alert('Canceled!');
-                    }
-                }
-            });
-     }
+         DeliveryCharge(3);
+         }
      function DeliveryCharge(Status) {
          var Parmas = {};
          Parmas.CID = LoginId;
@@ -981,11 +956,25 @@
                  Obj.Status = Status;
                  Obj.OrdingSts = 1;
                  Obj.AppType = 3;
+                 var Msg = "SEND TO CHEF ?";
+                 if (Status == '3') {
+                     Msg = "ELEMINATE CHEF ?";
+                 }
                  var JsonObj = JSON.parse(data);
-                 if (parseFloat(JsonObj.ChargeAmt)>0) {
+                 if (parseFloat(JsonObj.ChargeAmt) > 0) {
+                     var DeliveryType = JsonObj.DeliveryType;
+                     var incldmsg = '';
+                     var Postfix = '';
+                     if (DeliveryType == '1') {
+                         incldmsg = 'fixed';
+                     }
+                     else {
+                         Postfix = 'below Rs ' + JsonObj.MinAmt;
+                     }
+                     var DelivryMsg = 'A ' + incldmsg + ' delivery charge of Rs ' + JsonObj.ChargeAmt + ' applicable ' + Postfix;
                      $.confirm({
-                         title: 'Delivery Charge ?',
-                         content: 'Delivery Charge ' + JsonObj.ChargeAmt+" RS/",
+                         title: Msg,
+                         content: DelivryMsg,
                          buttons: {
                              btnClass: 'btn-green',
                              confirm: function () {
@@ -998,7 +987,19 @@
                      });
                  }
                  else {
-                     PostOrder(Obj);
+                     $.confirm({
+                         title: Msg,
+                         content: 'Are You Sure',
+                         buttons: {
+                             btnClass: 'btn-green',
+                             confirm: function () {
+                                 PostOrder(Obj)
+                             },
+                             cancel: function () {
+                                 // $.alert('Canceled!');
+                             }
+                         }
+                     });
                  }
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback

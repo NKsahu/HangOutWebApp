@@ -182,6 +182,24 @@ namespace HangOut.Controllers
             {
                 ObjSetting.DeliveryCharge = 0.00;
             }
+            if (ObjSetting.ContactHead1 == null)
+            {
+                ObjSetting.ContactHead1 = "";
+
+            }
+            if (ObjSetting.Contact1 == null)
+            {
+                ObjSetting.Contact1 = "";
+
+            }
+            if (ObjSetting.ContacHead2 == null)
+            {
+                ObjSetting.ContacHead2 = "";
+            }
+            if (ObjSetting.Contact2 == null)
+            {
+                ObjSetting.Contact2 = "";
+            }
             ObjSetting.save();
             return  Json(new { data="1" }, JsonRequestBehavior.AllowGet);
         }

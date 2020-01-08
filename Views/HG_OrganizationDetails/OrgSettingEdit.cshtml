@@ -13,118 +13,124 @@
             @Html.HiddenFor(model => model.id)
             @Html.HiddenFor(model => model.OrgId)
             @Html.HiddenFor(model => model.OrdCanlMinTime)
-            <div class="row">
-                <div class="col-md-2">
-                    @{
-                        List<SelectListItem> EnableOrdering = new List<SelectListItem>()
-                                                {
-                              new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                                };
-                    }
-                    @Html.Label("Enable Delivery Charge", htmlAttributes: new { @class = "control-label  " })
-                    @Html.DropDownListFor(model => model.EnblDeleryChrg, EnableOrdering, new { @class = "form-control ", required = "required" })
-                    @Html.ValidationMessageFor(model => model.EnblDeleryChrg, "", new { @class = "text-danger" })
+
+            <div style="padding:5px;border:2px solid black; border-radius:5px;">
+
+                <div class="row">
+                    <div class="col-md-2">
+                        @{
+                            List<SelectListItem> EnableOrdering = new List<SelectListItem>()
+                                                                    {
+                                                  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                    };
+                        }
+                        @Html.Label("Enable Delivery Charge", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.EnblDeleryChrg, EnableOrdering, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.EnblDeleryChrg, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 enableCrg">
+                        @Html.Label("Min Order Amt", htmlAttributes: new { @class = "control-label  " })
+                        @Html.EditorFor(model => model.MinOrderAmt, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.MinOrderAmt, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 enableCrg">
+                        @{
+                            List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
+                                                                    {
+                                                  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                    };
+                        }
+                        @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.AcptMinOrd, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 enableCrg">
+                        @{
+                            List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
+                                                                    {
+                                                  new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
+                                                                    };
+                        }
+                        @Html.Label("Charge Type", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.DeleryChrgType, DeliveryChrType, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.DeleryChrgType, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 enableCrg">
+                        @Html.Label("Charge Amt", htmlAttributes: new { @class = "control-label  " })
+                        @Html.EditorFor(model => model.DeliveryCharge, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-                <div class="col-md-2 enableCrg">
-                    @Html.Label("Min Order Amt", htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.MinOrderAmt, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.MinOrderAmt, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2 enableCrg">
-                    @{
-                        List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
-                                                {
-                              new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                                };
-                    }
-                    @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
-                    @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd, new { @class = "form-control ", required = "required" })
-                    @Html.ValidationMessageFor(model => model.AcptMinOrd, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2 enableCrg">
-                    @{
-                        List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
-                                                {
-                              new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
-                                                };
-                    }
-                    @Html.Label("Charge Type", htmlAttributes: new { @class = "control-label  " })
-                    @Html.DropDownListFor(model => model.DeleryChrgType, DeliveryChrType, new { @class = "form-control ", required = "required" })
-                    @Html.ValidationMessageFor(model => model.DeleryChrgType, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2 enableCrg">
-                    @Html.Label("Charge Amt", htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.DeliveryCharge, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
+
+
+                <h5 class="enableCrg" style="text-align:center"> Apply Charges On</h5>
+                <div class="row enableCrg " style="padding:10px;">
+                    <div class="col-md-2">
+                        @Html.Label("Customer App", htmlAttributes: new { @class = "control-label  " })
+                        @Html.CheckBoxFor(model => model.ApplyInCustomerApp, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ApplyInCustomerApp, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.Label("Captain App", htmlAttributes: new { @class = "control-label  " })
+                        @Html.CheckBoxFor(model => model.ApplyInCaptainApp, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ApplyInCaptainApp, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.Label("Admin Panel", htmlAttributes: new { @class = "control-label  " })
+                        @Html.CheckBoxFor(model => model.ApplyInAdminPanel, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ApplyInAdminPanel, "", new { @class = "text-danger" })
+                    </div>
+
                 </div>
             </div>
-            <h5 class="enableCrg" style="text-align:center;color:black;padding-top:8px;">APPLY CHARGES ON</h5>
-            <div class="row enableCrg">
-                <div class="col-md-2">
-                    @Html.Label("Customer App", htmlAttributes: new { @class = "control-label  " })
-                    @Html.CheckBoxFor(model => model.ApplyInCustomerApp, new { @class = "form-control " })
-                    @Html.ValidationMessageFor(model => model.ApplyInCustomerApp, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    @Html.Label("Captain App", htmlAttributes: new { @class = "control-label  " })
-                    @Html.CheckBoxFor(model => model.ApplyInCaptainApp, new { @class = "form-control " })
-                    @Html.ValidationMessageFor(model => model.ApplyInCaptainApp, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    @Html.Label("Admin Panel", htmlAttributes: new { @class = "control-label  " })
-                    @Html.CheckBoxFor(model => model.ApplyInAdminPanel, new { @class = "form-control " })
-                    @Html.ValidationMessageFor(model => model.ApplyInAdminPanel, "", new { @class = "text-danger" })
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+                <h5 style="padding-top:8px; text-align:center">Canteen Contact</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.Label("Heading 1", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.ContactHead1, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ContactHead1, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Label("Contact", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.Contact1, new { @class = "form-control OnlyNum" })
+                        @Html.ValidationMessageFor(model => model.Contact1, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Label("Heading 2", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.ContacHead2, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ContacHead2, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Label("Contact", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.Contact2, new { @class = "form-control OnlyNum" })
+                        @Html.ValidationMessageFor(model => model.Contact2, "", new { @class = "text-danger" })
+                    </div>
                 </div>
 
             </div>
-            <h5  style="text-align:center;color:black;padding-top:8px;">Canteen Contact</h5>
-            <div class="row">
-                <div class="col-md-6">
-                    @Html.Label("Heading 1", htmlAttributes: new { @class = "control-label  " })
-                    @Html.TextBoxFor(model => model.ContactHead1, new { @class = "form-control " })
-                    @Html.ValidationMessageFor(model => model.ContactHead1, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-6">
-                    @Html.Label("Contact", htmlAttributes: new { @class = "control-label  " })
-                    @Html.TextBoxFor(model => model.Contact1, new { @class = "form-control OnlyNum" })
-                    @Html.ValidationMessageFor(model => model.Contact1, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-6">
-                    @Html.Label("Heading 2", htmlAttributes: new { @class = "control-label  " })
-                    @Html.TextBoxFor(model => model.ContacHead2, new { @class = "form-control " })
-                    @Html.ValidationMessageFor(model => model.ContacHead2, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-6">
-                    @Html.Label("Contact", htmlAttributes: new { @class = "control-label  " })
-                    @Html.TextBoxFor(model => model.Contact2, new { @class = "form-control OnlyNum" })
-                    @Html.ValidationMessageFor(model => model.Contact2, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="row card" style="margin-top:8px;">
-                <div class="card-header">
-                    <h5 style="text-align:center;color:black">Payment Modes</h5>
-                </div>
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+                <h5 style="text-align:center;color:black">Payment Modes</h5>
                 @{
                     List<SelectListItem> PaytModes = new List<SelectListItem>()
-                            {
-new SelectListItem{Text="NO",Value="1"},new SelectListItem{Text="YES",Value="2"}
-                            };
+                                                                        {
+                                                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                        };
                 }
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            @Html.Label("By Online", htmlAttributes: new { @class = "control-label  " })
-                            @Html.DropDownListFor(model => model.ByOnline, PaytModes, new { @class = "form-control ", required = "required" })
-                            @Html.ValidationMessageFor(model => model.ByOnline, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="col-md-3">
-                            @Html.Label("By Cash", htmlAttributes: new { @class = "control-label  " })
-                            @Html.DropDownListFor(model => model.ByCash, PaytModes, new { @class = "form-control ", required = "required" })
-                            @Html.ValidationMessageFor(model => model.ByCash, "", new { @class = "text-danger" })
-                        </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Label("By Online", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.ByOnline, PaytModes, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.ByOnline, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.Label("By Cash", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.ByCash, PaytModes, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.ByCash, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
+
             <div class="col-sm-1">
                 @Html.Label("Save", new { @class = "text-white " })
                 <input type="submit" value="Save" class="btn btn-success form-control" />

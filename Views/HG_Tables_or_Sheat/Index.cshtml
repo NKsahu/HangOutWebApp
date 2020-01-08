@@ -16,24 +16,24 @@
         <table class=" table table-bordered table-hover w-100" id="TBLID">
             <thead>
                 <tr>
-                   
+
+
+
+                    <th>
+                        @Html.DisplayName("Table")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Floor")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Floor Side")
+                    </th>
                     <th>
                         @Html.DisplayName("Qr Number")
                     </th>
                     <th>
                         @Html.DisplayName("Otp")
                     </th>
-                    <th>
-                        @Html.DisplayName("Table Name")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Floor Number")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Floor Side")
-                    </th>
-
-
                     <th></th>
                 </tr>
             </thead>
@@ -42,13 +42,8 @@
                 {
                     
                 <tr id="@item.Table_or_RowID">
-                    
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QrCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Otp)
-                    </td>
+
+
                     <td>
                         @Html.DisplayFor(modelItem => item.Table_or_SheetName)
                     </td>
@@ -63,6 +58,12 @@
                     <td>
                         @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x.ID == item.FloorSide_or_RowNoID);}
                         @Objfloor.FloorSide_or_RowName
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QrCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Otp)
                     </td>
                     <td>
                         <a href=" /HG_Tables_or_Sheat/CreateEdit?ID=@item.Table_or_RowID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
