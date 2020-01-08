@@ -308,11 +308,13 @@ namespace HangOut.Controllers
                 {
                     ViewCartItem.Add("MinOrdAmt", orgSetting.MinOrderAmt);
                     ViewCartItem.Add("DeliveryChrge", orgSetting.DeliveryCharge);
+                    ViewCartItem.Add("DeliveryType", orgSetting.DeleryChrgType);
                 }
                 else if(orgSetting.DeleryChrgType==1)//fixed charge{
                 {
                     ViewCartItem.Add("MinOrdAmt", orgSetting.MinOrderAmt);
                     ViewCartItem.Add("DeliveryChrge", orgSetting.DeliveryCharge);
+                    ViewCartItem.Add("DeliveryType", orgSetting.DeleryChrgType);
                 }
                
                 
@@ -803,7 +805,7 @@ namespace HangOut.Controllers
             {
                 TotalPrice += (OrderItm.Count * OrderItm.Price);
                 CostPrice += (OrderItm.Count * OrderItm.CostPrice);
-                Totaltax += (OrderItm.Count * OrderItm.TaxInItm);
+                Totaltax += OrgType.TotalTax(OrderItm.CostPrice, OrderItm.TaxInItm, OrderItm.Count);
                 JObject jobj = JObject.FromObject(OrderItm);
                 HG_Items hG_Items = items.Find(x => x.ItemID == OrderItm.FID);
                 jobj.Add("ItemName", hG_Items.Items);
