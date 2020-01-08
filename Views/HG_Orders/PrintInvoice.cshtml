@@ -89,12 +89,11 @@
             }
     }
 
-
-    tr, td, th {
-        text-align: center;
-    }
     .print:last-child {
         page-break-after: auto;
+    }
+    .TblBorder {
+        border: 1px dotted black !important;
     }
 </style>
 
@@ -128,9 +127,9 @@
             <h5>Order No: @OrderNo Ticket No:@TicketNos</h5>
             <h5>Date:@OrderDate.ToString("dd/MM hh:mm tt") Mode :@PaymentMode</h5>
         </div>
-        <table id="InvoiceItems" style="width:100%" class="table col-sm-12">
-            <thead>
-                <tr>
+        <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
+            <thead >
+                <tr class="TblBorder" >
                     <th style="text-align:center">Item </th>
                     <th style="text-align:center">Qty</th>
                     <th style="text-align:center">Rate</th>
@@ -155,52 +154,52 @@
                     // Qty += items.Qty;
                     HG_Items hG_Items = ItemList.Find(x => x.ItemID == items.FID);
                 <tr style="@(Style)">
-                    <td style="text-align:center;font-size:small;">@hG_Items.Items</td>
-                    <td style="text-align:center ;font-size:small;">@items.Count</td>
-                    <td style="text-align:center; font-size:small;">@items.CostPrice.ToString("0.00")</td>
-                    <td style="text-align:center;font-size:small;">@Amt.ToString("0.00")</td>
+                    <td style="text-align:left;font-size:small;">@hG_Items.Items</td>
+                    <td style="text-align:right ;font-size:small;">@items.Count</td>
+                    <td style="text-align:right; font-size:small;">@items.CostPrice.ToString("0.00")</td>
+                    <td style="text-align:right;font-size:small;">@Amt.ToString("0.00")</td>
                 </tr>
                 }
             </tbody>
             <tfoot>
-                <tr>
-                    <td style="text-align:center">Total</td>
-                    <td style="text-align:center">@Qty.ToString() </td>
-                    <td style="text-align:center">@RateTotal.ToString("0.00")</td>
-                    <td style="text-align:center">@AmountTotal.ToString("0.00")</td>
+                <tr class="TblBorder">
+                    <td style="text-align:left">Total</td>
+                    <td style="text-align:right">@Qty.ToString() </td>
+                    <td style="text-align:right"></td>
+                    <td style="text-align:right">@AmountTotal.ToString("0.00")</td>
                 </tr>
                 @if (TotalTax > 0)
                 {
-                    <tr>
-                        <td style="text-align:center">Total Tax</td>
-                        <td style="text-align:center"> </td>
-                        <td style="text-align:center"></td>
-                        <td style="text-align:center">@TotalTax.ToString("0.00")</td>
+                    <tr class="TblBorder">
+                        <td style="text-align:left">Total Tax</td>
+                        <td style="text-align:right"> </td>
+                        <td style="text-align:right"></td>
+                        <td style="text-align:right">@TotalTax.ToString("0.00")</td>
                     </tr>
                 }
                 @if (delivercharges > 0)
                 {
-                    <tr>
-                        <td style="text-align:center">Delivery Charge</td>
-                        <td style="text-align:center"> </td>
-                        <td style="text-align:center"></td>
-                        <td style="text-align:center">@delivercharges.ToString("0.00")</td>
+                    <tr class="TblBorder">
+                        <td style="text-align:left">Delivery Charge</td>
+                        <td style="text-align:right"> </td>
+                        <td style="text-align:right"></td>
+                        <td style="text-align:right">@delivercharges.ToString("0.00")</td>
                     </tr>
                 }
                 @if (TotalTax > 0 || delivercharges > 0)
                 {
-                    <tr>
-                        <td style="text-align:center">Grand Total</td>
-                        <td style="text-align:center"> </td>
-                        <td style="text-align:center"></td>
-                        <td style="text-align:center">@GrandTotal.ToString("0.00")</td>
+                    <tr class="TblBorder">
+                        <td style="text-align:left">Grand Total</td>
+                        <td style="text-align:right"> </td>
+                        <td style="text-align:right"></td>
+                        <td style="text-align:right">@GrandTotal.ToString("0.00")</td>
                     </tr>
                 }
             </tfoot>
         </table>
         <div>
             <p>Note:</p>
-            <div>
+            <div style="margin-top:0px;">
               @Printremark
             </div>
             <p style="page-break-after:auto">@PoweredBy</p>
@@ -313,17 +312,12 @@
 
         // PrintToken();
         Popup(Section);
+       // Popup2(Section);
     }
 
     function Popup(data) {
-
-
-
-        // var myWindow = window.open('', 'Receipt', 'height=400,width=600');
         var myWindow = window.open('text/plain');
-        //  myWindow.document.write('<html>');
-        /*optional stylesheet*/ //myWindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-        myWindow.document.write('<style type="text/css"> *, html,body {margin:0;padding:0;}</style>');
+        myWindow.document.write('<style type="text/css">*, html,body {margin:0;padding:0;} .TblBorder{border:1px dotted black} media=\"print\"</style>');//*, before html
         //   myWindow.document.write('<body>');
         myWindow.document.write(data);
         // myWindow.document.write('</body></html>');
@@ -333,6 +327,18 @@
             myWindow.print();
             myWindow.close();
         };
+     //  return true;
+    }
+    function Popup2(data) {
+        var mywindow = window.open('', 'new div');
+        mywindow.document.write('<html>');
+        mywindow.document.write('<link rel="stylesheet" href = "/Assets/printreceipt.css" type="text/css"/>');
+        mywindow.document.write('<body >');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+        mywindow.print();
+        mywindow.close();
+        true;
     }
 
 </script>

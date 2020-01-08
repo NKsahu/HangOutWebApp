@@ -17,9 +17,9 @@
                 <div class="col-md-2">
                     @{
                         List<SelectListItem> EnableOrdering = new List<SelectListItem>()
-                                        {
-                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                        };
+                                                {
+                              new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                };
                     }
                     @Html.Label("Enable Delivery Charge", htmlAttributes: new { @class = "control-label  " })
                     @Html.DropDownListFor(model => model.EnblDeleryChrg, EnableOrdering, new { @class = "form-control ", required = "required" })
@@ -33,9 +33,9 @@
                 <div class="col-md-2 enableCrg">
                     @{
                         List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
-                                        {
-                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                        };
+                                                {
+                              new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                };
                     }
                     @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
                     @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd, new { @class = "form-control ", required = "required" })
@@ -44,9 +44,9 @@
                 <div class="col-md-2 enableCrg">
                     @{
                         List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
-                                        {
-                      new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
-                                        };
+                                                {
+                              new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
+                                                };
                     }
                     @Html.Label("Charge Type", htmlAttributes: new { @class = "control-label  " })
                     @Html.DropDownListFor(model => model.DeleryChrgType, DeliveryChrType, new { @class = "form-control ", required = "required" })
@@ -58,7 +58,7 @@
                     @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <h5 class="enableCrg"  style="text-align:center;color:black;padding-top:8px;">APPLY CHARGES ON</h5>
+            <h5 class="enableCrg" style="text-align:center;color:black;padding-top:8px;">APPLY CHARGES ON</h5>
             <div class="row enableCrg">
                 <div class="col-md-2">
                     @Html.Label("Customer App", htmlAttributes: new { @class = "control-label  " })
@@ -77,15 +77,38 @@
                 </div>
 
             </div>
+            <h5  style="text-align:center;color:black;padding-top:8px;">Canteen Contact</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.Label("Heading 1", htmlAttributes: new { @class = "control-label  " })
+                    @Html.TextBoxFor(model => model.ContactHead1, new { @class = "form-control " })
+                    @Html.ValidationMessageFor(model => model.ContactHead1, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    @Html.Label("Contact", htmlAttributes: new { @class = "control-label  " })
+                    @Html.TextBoxFor(model => model.Contact1, new { @class = "form-control OnlyNum" })
+                    @Html.ValidationMessageFor(model => model.Contact1, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    @Html.Label("Heading 2", htmlAttributes: new { @class = "control-label  " })
+                    @Html.TextBoxFor(model => model.ContacHead2, new { @class = "form-control " })
+                    @Html.ValidationMessageFor(model => model.ContacHead2, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    @Html.Label("Contact", htmlAttributes: new { @class = "control-label  " })
+                    @Html.TextBoxFor(model => model.Contact2, new { @class = "form-control OnlyNum" })
+                    @Html.ValidationMessageFor(model => model.Contact2, "", new { @class = "text-danger" })
+                </div>
+            </div>
             <div class="row card" style="margin-top:8px;">
                 <div class="card-header">
                     <h5 style="text-align:center;color:black">Payment Modes</h5>
                 </div>
                 @{
                     List<SelectListItem> PaytModes = new List<SelectListItem>()
-                        {
+                            {
 new SelectListItem{Text="NO",Value="1"},new SelectListItem{Text="YES",Value="2"}
-                        };
+                            };
                 }
                 <div class="card-body">
                     <div class="row">

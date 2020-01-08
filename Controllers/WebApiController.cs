@@ -304,20 +304,18 @@ namespace HangOut.Controllers
             OrgSetting orgSetting = OrgSetting.Getone(objOrg.OrgID);
             if (orgSetting.EnblDeleryChrg == 1&& orgSetting.AcptMinOrd==1 &&OrgType.DeliveryChargeAply(AppType, orgSetting))
             {
-                if(orgSetting.DeleryChrgType==0&&orgSetting.MinOrderAmt> TotalPrice)
+                 if (orgSetting.DeleryChrgType == 1)//fixed charge{
                 {
                     ViewCartItem.Add("MinOrdAmt", orgSetting.MinOrderAmt);
                     ViewCartItem.Add("DeliveryChrge", orgSetting.DeliveryCharge);
                     ViewCartItem.Add("DeliveryType", orgSetting.DeleryChrgType);
                 }
-                else if(orgSetting.DeleryChrgType==1)//fixed charge{
+               else if (orgSetting.DeleryChrgType==0)
                 {
                     ViewCartItem.Add("MinOrdAmt", orgSetting.MinOrderAmt);
                     ViewCartItem.Add("DeliveryChrge", orgSetting.DeliveryCharge);
                     ViewCartItem.Add("DeliveryType", orgSetting.DeleryChrgType);
                 }
-               
-                
             }
             return ViewCartItem;
         }

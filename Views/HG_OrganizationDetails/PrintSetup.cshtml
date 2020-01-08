@@ -38,13 +38,13 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    @Html.Label("Invoice Heading", htmlAttributes: new { @class = "control-label  " })
+                    @Html.Label("Invoice Heading *", htmlAttributes: new { @class = "control-label  " })
                     @Html.EditorFor(model => model.IvoiceHeading, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                     @Html.ValidationMessageFor(model => model.IvoiceHeading, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-3">
-                    @Html.Label("Invoice Title" ,htmlAttributes: new { @class = "control-label  " })
+                    @Html.Label("Invoice Title *" ,htmlAttributes: new { @class = "control-label  " })
                     @Html.EditorFor(model => model.InvoiceTitle, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                     @Html.ValidationMessageFor(model => model.InvoiceTitle, "", new { @class = "text-danger" })
                 </div>
@@ -77,32 +77,32 @@
 
                 </div>
                 <div class="col-md-2">
-                    @Html.Label("  ",  new { @class = "control-label  " })
+                    @Html.Label("Phone",  new { @class = "control-label  " })
                     @Html.EditorFor(model => model.invoicePhone, new { htmlAttributes = new { @class = "form-control", @placeholder = "Contact No" } })
                     @Html.ValidationMessageFor(model => model.invoicePhone, "", new { @class = "text-danger" })
 
                 </div>
 
                 <div class="col-md-3">
-                    @Html.Label("   ", new { @class = "control-label" })
+                    @Html.Label("Field 1", new { @class = "control-label" })
                     @Html.EditorFor(model => model.GSTNO, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.GSTNO, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-3">
-                    @Html.Label("   ",  new { @class = "control-label ",@style="margin-top:10px;"})
+                    @Html.Label("Field 2",  new { @class = "control-label "})
                     @Html.EditorFor(model => model.Licence2, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Licence2, "", new { @class = "text-danger" })
 
                 </div>
 
                 <div class="col-md-3">
-                    @Html.Label("  ",  new { @class = "control-label ", @style = "margin-top:10px;" })
+                    @Html.Label("Field 3",  new { @class = "control-label " })
                     @Html.EditorFor(model => model.License3, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-10">
-                    @Html.Label("Remark", htmlAttributes: new { @class = "control-label " })
+                    @Html.Label("Remark/ Note", htmlAttributes: new { @class = "control-label " })
                     @Html.EditorFor(model => model.PrintRemark, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
 
