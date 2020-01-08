@@ -77,9 +77,9 @@
 
                 </div>
                 <div class="col-md-2">
-                    @Html.Label("Contact no", htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.invoicePhone, new { htmlAttributes = new { @class = "form-control"} })
-                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    @Html.Label("  ",  new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.invoicePhone, new { htmlAttributes = new { @class = "form-control", @placeholder = "Contact No" } })
+                    @Html.ValidationMessageFor(model => model.invoicePhone, "", new { @class = "text-danger" })
 
                 </div>
 
@@ -102,7 +102,7 @@
                     @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-10">
-                    @Html.Label("Remark", htmlAttributes: new { @class = "control-label ", @style = "margin-top:10px;" })
+                    @Html.Label("Remark", htmlAttributes: new { @class = "control-label " })
                     @Html.EditorFor(model => model.PrintRemark, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
 
