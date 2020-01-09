@@ -15,7 +15,7 @@
             <button onclick="CreateEdit('0')" class="btn btn-success form-control">ADD ITEM</button>
         </div>
         <div class="col-md-2">
-            <button onclick="AddCategory('0')" class="btn btn-success form-control">ADD CATEGORY</button>
+            <button onclick="AddCategory()" class="btn btn-success form-control">ADD CATEGORY</button>
         </div>
         <div class="col-md-2">
             <button onclick="BULKEXCELUPL()" class="btn btn-success form-control">BULK UPLOAD</button>
@@ -159,8 +159,20 @@
         //});
     }
     function AddCategory() {
-
-
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Category/CreateEdit?ID=0",
+            success: function (data) {
+                makedpt("CreateItem");
+                $("#CreateItem > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateItem");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
     }
     function DownloadExl() {
         if (confirm('Are You Sure')) {

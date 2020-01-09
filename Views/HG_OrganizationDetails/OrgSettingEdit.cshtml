@@ -1,4 +1,5 @@
 ﻿@model HangOut.Models.OrgSetting
+@using HangOut.Models;
 @{
     Layout = null;
 }
@@ -7,24 +8,44 @@
         <h3 style="text-align:center;color:black"><b>Order Settings</b></h3>
     </div>
     <div class="card-body">
-
         @using (Ajax.BeginForm("SaveSetting", "HG_OrganizationDetails", new { OrgID = Model.OrgId }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", }))
         {
             @Html.HiddenFor(model => model.id)
             @Html.HiddenFor(model => model.OrgId)
             @Html.HiddenFor(model => model.OrdCanlMinTime)
-
-            <div style="padding:5px;border:2px solid black; border-radius:5px;">
-
-                <div class="row">
+            var OrgObj = new HG_OrganizationDetails().GetOne(Model.OrgId);
+            List<SelectListItem> Bycash = new List<SelectListItem>();
+            List<SelectListItem> ByOnline = new List<SelectListItem>();
+            if (OrgObj.OrgTypes == "1")// restuarant
+            {
+                Bycash = new List<SelectListItem>()
+                                                                        {
+                                                      new SelectListItem{Text="YES",Value="1"}
+                                                                        };
+                ByOnline= new List<SelectListItem>() {
+                    new SelectListItem{Text="NO",Value="2"},new SelectListItem{Text="YES",Value="1"}
+                    };
+            }
+            else if(OrgObj.OrgTypes=="2")//theater
+            {
+                Bycash = new List<SelectListItem>() {
+                    new SelectListItem{Text="NO",Value="2"},new SelectListItem{Text="YES",Value="1"}
+                    };
+                ByOnline = new List<SelectListItem>() {
+                    new SelectListItem{Text="YES",Value="1"}
+                    };
+            }
+            
+                        <div style="padding:5px;border:2px solid black; border-radius:5px;">
+                            <div class="row">
                     <div class="col-md-2">
                         @{
                             List<SelectListItem> EnableOrdering = new List<SelectListItem>()
-                                                                    {
-                                                  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                                                    };
-                        }
-                        @Html.Label("Enable Delivery Charge", htmlAttributes: new { @class = "control-label  " })
+                                                                                {
+                                                              new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                                };
+            }
+            @Html.Label("Enable Delivery Charge", htmlAttributes: new { @class = "control-label  " })
                         @Html.DropDownListFor(model => model.EnblDeleryChrg, EnableOrdering, new { @class = "form-control ", required = "required" })
                         @Html.ValidationMessageFor(model => model.EnblDeleryChrg, "", new { @class = "text-danger" })
                     </div>
@@ -36,9 +57,9 @@
                     <div class="col-md-2 enableCrg">
                         @{
                             List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
-                                                                    {
-                                                  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                                                    };
+                                                                                {
+                                                              new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                                };
                         }
                         @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
                         @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd, new { @class = "form-control ", required = "required" })
@@ -47,9 +68,9 @@
                     <div class="col-md-2 enableCrg">
                         @{
                             List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
-                                                                    {
-                                                  new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
-                                                                    };
+                                                                                {
+                                                              new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
+                                                                                };
                         }
                         @Html.Label("Charge Type", htmlAttributes: new { @class = "control-label  " })
                         @Html.DropDownListFor(model => model.DeleryChrgType, DeliveryChrType, new { @class = "form-control ", required = "required" })
@@ -111,21 +132,16 @@
             </div>
             <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
                 <h5 style="text-align:center;color:black">Payment Modes</h5>
-                @{
-                    List<SelectListItem> PaytModes = new List<SelectListItem>()
-                                                                        {
-                                                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                                                        };
-                }
+
                 <div class="row">
                     <div class="col-md-3">
                         @Html.Label("By Online", htmlAttributes: new { @class = "control-label  " })
-                        @Html.DropDownListFor(model => model.ByOnline, PaytModes, new { @class = "form-control ", required = "required" })
+                        @Html.DropDownListFor(model => model.ByOnline, ByOnline, new { @class = "form-control ", required = "required" })
                         @Html.ValidationMessageFor(model => model.ByOnline, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
                         @Html.Label("By Cash", htmlAttributes: new { @class = "control-label  " })
-                        @Html.DropDownListFor(model => model.ByCash, PaytModes, new { @class = "form-control ", required = "required" })
+                        @Html.DropDownListFor(model => model.ByCash, Bycash, new { @class = "form-control ", required = "required" })
                         @Html.ValidationMessageFor(model => model.ByCash, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -141,34 +157,34 @@
 <script>
     setTimeout(function () {$(window).trigger('resize'); },500);
     AlowMinOrdAcpt();
-    EnableDeliveryChrg();
-    function AlowMinOrdAcpt() {
-        var Sts = $("#AcptMinOrd").val();
-        if (Sts == "0") {
+        EnableDeliveryChrg();
+        function AlowMinOrdAcpt() {
+            var Sts = $("#AcptMinOrd").val();
+            if (Sts == "0") {
             $("#DeliveryCharge").parent('div').hide();
             $("#DeleryChrgType").parent('div').hide();
-        }
-        else {
+            }
+            else {
             $("#DeliveryCharge").parent('div').show();
             $("#DeleryChrgType").parent('div').show();
+            }
         }
-    }
     $("#AcptMinOrd").change(function () {
-        AlowMinOrdAcpt();
-    });
+            AlowMinOrdAcpt();
+        });
     
     function EnableDeliveryChrg() {
-        var DeliveryCrgYesNo = $("#EnblDeleryChrg").val();
-        if (DeliveryCrgYesNo == "0") {
+            var DeliveryCrgYesNo = $("#EnblDeleryChrg").val();
+            if (DeliveryCrgYesNo == "0") {
             $(".enableCrg").hide();
             $("#AcptMinOrd").val('0');
-        }
-        else {
+            }
+            else {
             $(".enableCrg").show();
+            }
+            AlowMinOrdAcpt();
         }
-        AlowMinOrdAcpt();
-    }
     $("#EnblDeleryChrg").change(function () {
-        EnableDeliveryChrg();
-    });
+            EnableDeliveryChrg();
+        });
 </script>
