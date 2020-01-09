@@ -119,6 +119,7 @@
             @{
                 var UserType = Request.Cookies["UserInfo"]["UserType"];
                 List<UsersMenu> List = new UsersMenu().GetAll();
+                List = List.FindAll(x => x.MenuOrderNo != 400);
                 List<UsersMenu> ADMINMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId == 0);
                 if (UserType != "SA" && UserType != "A")
                 {

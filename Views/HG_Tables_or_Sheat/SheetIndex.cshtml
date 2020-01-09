@@ -103,28 +103,32 @@
 <script>
     var AddTr = false;
     function JsonSuccess(Jobj) {
-        hidedpt("CreateSheat");
-        $('#waiting').hide();
-        var Jitmobj = JSON.parse(Jobj.data);
-        if (Jitmobj.Table_or_RowID != 'undefined' && Jitmobj.Table_or_RowID !=null) {
-            var HtmlStr = "<tr id='" + Jitmobj.Table_or_RowID + "'>";
-            HtmlStr += '<td>' + Jitmobj.Table_or_SheetName + '</td>';
-            HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
-            HtmlStr += '<td>' + Jitmobj.ScreenName + '</td>';
-            HtmlStr += '<td>' + Jitmobj.QrCode + '</td>';
-            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button>';
-            HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID + ')"> Delete</button></td ></tr > ';
-            if (AddTr) {
-                $("#Tbody").append(HtmlStr);
-            }
-            else {
-                $('#' + Jitmobj.Table_or_RowID).remove();
-                $("#Tbody").append(HtmlStr);
+        if (Jobj.data != undefined && Jobj.data == '1') {
+            $('#waiting').hide();
+            alert('Uploaded');
+        }
+        else {
+            hidedpt("CreateSheat");
+            $('#waiting').hide();
+            var Jitmobj = JSON.parse(Jobj.data);
+            if (Jitmobj.Table_or_RowID != 'undefined' && Jitmobj.Table_or_RowID != null) {
+                var HtmlStr = "<tr id='" + Jitmobj.Table_or_RowID + "'>";
+                HtmlStr += '<td>' + Jitmobj.Table_or_SheetName + '</td>';
+                HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
+                HtmlStr += '<td>' + Jitmobj.ScreenName + '</td>';
+                HtmlStr += '<td>' + Jitmobj.QrCode + '</td>';
+                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button>';
+                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID + ')"> Delete</button></td ></tr > ';
+                if (AddTr) {
+                    $("#Tbody").append(HtmlStr);
+                }
+                else {
+                    $('#' + Jitmobj.Table_or_RowID).remove();
+                    $("#Tbody").append(HtmlStr);
+                }
             }
         }
-        //$('#waiting').hide();
     }
-
     function CreateEdit(ID) {
         if (ID != "0") {
             AddTr = false;
