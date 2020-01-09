@@ -10,7 +10,7 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("CreateEdit", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEdit", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST",  LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.ItemID)
             @Html.HiddenFor(model => model.Qty)

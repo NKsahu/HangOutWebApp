@@ -54,7 +54,7 @@ namespace HangOut.Controllers
             }
             int i = Objitem.Save();
             if (i > 0)
-                return RedirectToAction("Index");
+                return Json(new { data = Objitem }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
 

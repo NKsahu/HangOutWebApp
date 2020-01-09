@@ -70,7 +70,10 @@ namespace HangOut.Controllers
                 if (Objitem.Save() < 1)
                     return Json(new { msg = "Error in Update Items" });
             }
-            return RedirectToAction("Index");
+            HG_Category hG_Category = new HG_Category().GetOne(Objitem.CategoryID);
+            Objitem.Categoryname = hG_Category.Category;
+            return Json(new { data =Objitem}, JsonRequestBehavior.AllowGet);
+           
         }
 
         public ActionResult Delete(System.Int64 ID)

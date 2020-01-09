@@ -10,12 +10,24 @@
         <h3 style="text-align:center"><b>ITEM</b> </h3>
         <hr />
     </div>
-    <a href="/HG_Items/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+    <div class="row">
+        <div class="col-md-2">
+            <button onclick="CreateEdit('0')" class="btn btn-success form-control">ADD ITEM</button>
+        </div>
+        <div class="col-md-2">
+            <button onclick="AddCategory('0')" class="btn btn-success form-control">ADD CATEGORY</button>
+        </div>
+        <div class="col-md-2">
+            <button onclick="BULKEXCELUPL()" class="btn btn-success form-control">BULK UPLOAD</button>
+        </div>
+        <div class="col-md-2">
+            <button onclick="DownloadExl()" class="btn btn-success form-control">DOWNLOAD EXCEL</button>
+        </div>
+    </div>
     <div class="card-body">
         <table class="table table-hover w-100" id="TBLID">
             <thead>
                 <tr>
-                   
                     <th>
                         @Html.DisplayName("Category Name")
                     </th>
@@ -25,36 +37,28 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Price)
                     </th>
-
-                    <th>
-                        @Html.DisplayNameFor(model => model.Status)
-                    </th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="Tbody">
                 @foreach (var item in Model)
                 {
-                <tr id="@item.ItemID">
-                    <td>
-                        @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
-                        @objcategory.Category
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Items)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                        <button class="btn btn-danger btn-sm " onclick="Delete(@item.ItemID)"> Delete</button>
-                    </td>
-                </tr>
+                    <tr id="@item.ItemID">
+                        <td>
+                            @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
+                            @objcategory.Category
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Items)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.ItemID)"> Edit</button>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.ItemID)"> Delete</button>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -89,5 +93,79 @@
         }
 
     }
+    var AddTr = false;
+    function JsonSuccess(Jobj) {
+        if (Jobj.data != undefined && Jobj.data == '1') {
+            $('#waiting').hide();
+            alert('Uploaded');
+        }
+        else {
+            hidedpt("CreateItem");
+            $('#waiting').hide();
+            var Jitmobj = Jobj.data;
+            if (Jitmobj.ItemID != 'undefined' && Jitmobj.ItemID != null) {
+                var HtmlStr = "<tr id='" + Jitmobj.ItemID + "'>";
+                HtmlStr += '<td>' + Jitmobj.Categoryname + '</td>';
+                HtmlStr += '<td>' + Jitmobj.Items + '</td>';
+                HtmlStr += '<td>' + Jitmobj.Price + '</td>';
+                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ItemID + ')"> Edit</button>';
+                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ItemID + ')"> Delete</button></td ></tr > ';
+                if (AddTr) {
+                    $("#Tbody").append(HtmlStr);
+                }
+                else {
+                    $('#' + Jitmobj.ItemID).remove();
+                    $("#Tbody").append(HtmlStr);
+                }
+            }
+        }
+    }
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/CreateEdit?ID=" + ID,
+            success: function (data) {
+                makedpt("CreateItem");
+                $("#CreateItem > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateItem");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
 
+    }
+    function BULKEXCELUPL() {
+        //$('#waiting').show();
+        //$.ajax({
+        //    type: 'GET',
+        //    url: "/HG_OrganizationDetails/Upload",
+        //    success: function (data) {
+        //        makedpt("CreateSheat");
+        //        $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+        //        showdpt("CreateSheat");
+        //        $('#waiting').hide();
+        //    },
+        //    error: function (jqXhr, textStatus, errorMessage) { // error callback
+        //        $('#waiting').hide();
+        //    }
+        //});
+    }
+    function AddCategory() {
+
+
+    }
+    function DownloadExl() {
+        if (confirm('Are You Sure')) {
+            $('.buttons-excel').click();
+        }
+
+    }
 </script>
