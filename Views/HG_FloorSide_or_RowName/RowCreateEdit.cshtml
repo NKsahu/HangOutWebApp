@@ -10,7 +10,7 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("RowCreateEdit", "HG_FloorSide_or_RowName", new { ID = Model.ID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("RowCreateEdit", "HG_FloorSide_or_RowName", new { ID = Model.ID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
 
 

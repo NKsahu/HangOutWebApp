@@ -14,8 +14,8 @@ namespace HangOut.Models
         public double MinOrderAmt {get;set;}
         public double DeliveryCharge { get; set; }
         public int OrdCanlMinTime { get; set; }
-        public int ByCash { get; set; }//{1:'NO',2:'YES'}
-        public int ByOnline { get; set; }//{1:'NO',2:'YES'}
+        public int ByCash { get; set; }//{0:'NO',1:'YES'}
+        public int ByOnline { get; set; }//{0:'NO',1:'YES'}
         public int AcptMinOrd { get; set; }//{0  NO,1 YES}
         public int DeleryChrgType { get; set; }//{0 : 'minimum thresold',1 :'Fixed '}
         public bool ApplyInCustomerApp { get; set; }// {"false": no == true  yes}

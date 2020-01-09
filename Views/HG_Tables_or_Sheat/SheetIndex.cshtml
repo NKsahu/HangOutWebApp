@@ -19,16 +19,16 @@
             <button onclick="CreateEdit('0')" class="btn btn-success form-control">ADD SEAT</button>
         </div>
         <div class="col-md-2">
-            <button onclick="CreateEditSCR('0')" class="btn btn-success form-control">ADD SCREEN</button>
+            <button onclick="SCRCreateEdit('0')" class="btn btn-success form-control">ADD SCREEN</button>
         </div>
         <div class="col-md-2">
-            <button onclick="CreateEditRow('0')" class="btn btn-success form-control">ADD ROW</button>
+            <button onclick="RowCreateEdit('0')" class="btn btn-success form-control">ADD ROW</button>
         </div>
         <div class="col-md-2">
-            <button onclick="CreateEditRow('0')" class="btn btn-success form-control">BULK UPLOAD</button>
+            <button onclick="BULKEXCELUPL()" class="btn btn-success form-control">BULK UPLOAD</button>
         </div>
         <div class="col-md-2">
-            <button onclick="$('.buttons-excel').click();" class="btn btn-success form-control">DOWNLOAD EXCEL</button>
+            <button onclick="DownloadExl()" class="btn btn-success form-control">DOWNLOAD EXCEL</button>
         </div>
     </div>
     
@@ -104,23 +104,25 @@
     var AddTr = false;
     function JsonSuccess(Jobj) {
         hidedpt("CreateSheat");
-        var Jitmobj =JSON.parse(Jobj.data);
-        var HtmlStr = "<tr id='" + Jitmobj.Table_or_RowID + "'>";
-        HtmlStr += '<td>' + Jitmobj.Table_or_SheetName + '</td>';
-        HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
-        HtmlStr += '<td>' + Jitmobj.ScreenName + '</td>';
-        HtmlStr += '<td>' + Jitmobj.QrCode + '</td>';
-        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button>';
-        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID+')"> Delete</button></td ></tr > ';
-        if (AddTr) {
-            $("#Tbody").append(HtmlStr);
-        }
-        else {
-            $('#' + Jitmobj.Table_or_RowID).remove();
-            $("#Tbody").append(HtmlStr);
-        }
-
         $('#waiting').hide();
+        var Jitmobj = JSON.parse(Jobj.data);
+        if (Jitmobj.Table_or_RowID != 'undefined' && Jitmobj.Table_or_RowID !=null) {
+            var HtmlStr = "<tr id='" + Jitmobj.Table_or_RowID + "'>";
+            HtmlStr += '<td>' + Jitmobj.Table_or_SheetName + '</td>';
+            HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
+            HtmlStr += '<td>' + Jitmobj.ScreenName + '</td>';
+            HtmlStr += '<td>' + Jitmobj.QrCode + '</td>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button>';
+            HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID + ')"> Delete</button></td ></tr > ';
+            if (AddTr) {
+                $("#Tbody").append(HtmlStr);
+            }
+            else {
+                $('#' + Jitmobj.Table_or_RowID).remove();
+                $("#Tbody").append(HtmlStr);
+            }
+        }
+        //$('#waiting').hide();
     }
 
     function CreateEdit(ID) {
@@ -145,7 +147,6 @@
         });
 
     }
-
     function Delete(ID) {
         if (confirm('Are You Sure')) {
             $('#waiting').show();
@@ -172,5 +173,71 @@
             });
         }
 
+    }
+    function SCRCreateEdit(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Floor_or_ScreenMaster/ScreenCreateEdit?ID=" + ID + "",
+            success: function (data) {
+                makedpt("CreateSheat");
+                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSheat");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function RowCreateEdit(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_FloorSide_or_RowName/RowCreateEdit?ID=" + ID + "",
+            success: function (data) {
+                makedpt("CreateSheat");
+                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSheat");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function BULKEXCELUPL() {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_OrganizationDetails/Upload",
+            success: function (data) {
+                makedpt("CreateSheat");
+                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSheat");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function DownloadExl() {
+        if (confirm('Are You Sure')) {
+            $('.buttons-excel').click();
+        }
+        
     }
 </script>

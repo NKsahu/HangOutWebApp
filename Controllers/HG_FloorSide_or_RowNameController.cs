@@ -38,7 +38,7 @@ namespace HangOut.Controllers
         {
             int i = ObjRowName.save();
             if (i > 0)
-                return RedirectToAction("RowIndex",new { Type=2});
+            return Json(new {data= ObjRowName }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
         public ActionResult CreateEdit(int ID)
@@ -55,9 +55,9 @@ namespace HangOut.Controllers
         {
             int i = ObjRowName.save();
             if (i > 0)
-                return RedirectToAction("Index",new {Type=1 });
+                return Json(new { data = ObjRowName }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
-             
+
         }
         public ActionResult Error()
         {

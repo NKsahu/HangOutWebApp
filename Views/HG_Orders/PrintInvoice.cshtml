@@ -32,6 +32,7 @@
         OrderDate = order.Create_Date;
         delivercharges = order.DeliveryCharge;
     }
+    OrderItems = OrderItems.FindAll(x => x.Status != 4);
     // OrderItems = OrderItems.FindAll(x => x.Status != 4); //not cancedled items
     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
     string InvoiceHeading = "Test-1";
@@ -51,7 +52,7 @@
     double GrandTotal = delivercharges;
     double RateTotal = 0.00;
 
-    string PoweredBy = "Powered By FoodDo";
+    string PoweredBy = "powered by foodDo";
     string TicketNos = "";
     string Printremark ="   ";
     List <HG_Items> ItemList = new HG_Items().GetAll();
@@ -129,7 +130,7 @@
         </div>
         <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
             <thead >
-                <tr class="TblBorder" >
+                <tr  >
                     <th style="text-align:center">Item </th>
                     <th style="text-align:center">Qty</th>
                     <th style="text-align:center">Rate</th>
@@ -162,15 +163,18 @@
                 }
             </tbody>
             <tfoot>
-                <tr class="TblBorder">
-                    <td style="text-align:left">Total</td>
+                <tr>
+                    <td colspan="4" style="text-align:left;border-top: 1px dotted black;"></td>
+                </tr>
+                <tr >
+                    <td style="text-align:left;">Total</td>
                     <td style="text-align:right">@Qty.ToString() </td>
                     <td style="text-align:right"></td>
                     <td style="text-align:right">@AmountTotal.ToString("0.00")</td>
                 </tr>
                 @if (TotalTax > 0)
                 {
-                    <tr class="TblBorder">
+                    <tr >
                         <td style="text-align:left">Total Tax</td>
                         <td style="text-align:right"> </td>
                         <td style="text-align:right"></td>
@@ -179,8 +183,8 @@
                 }
                 @if (delivercharges > 0)
                 {
-                    <tr class="TblBorder">
-                        <td style="text-align:left">Delivery Charge</td>
+                    <tr >
+                        <td style="text-align:left">Del Chrg</td>
                         <td style="text-align:right"> </td>
                         <td style="text-align:right"></td>
                         <td style="text-align:right">@delivercharges.ToString("0.00")</td>
@@ -188,8 +192,8 @@
                 }
                 @if (TotalTax > 0 || delivercharges > 0)
                 {
-                    <tr class="TblBorder">
-                        <td style="text-align:left">Grand Total</td>
+                    <tr >
+                        <td style="text-align:left">GTotal</td>
                         <td style="text-align:right"> </td>
                         <td style="text-align:right"></td>
                         <td style="text-align:right">@GrandTotal.ToString("0.00")</td>
@@ -197,12 +201,12 @@
                 }
             </tfoot>
         </table>
-        <div>
-            <p>Note:</p>
-            <div style="margin-top:0px;">
+        <div style="border-top:1px dotted black;margin:5px 0px 5px 0px;">
+            <p >Note:</p>
+            <div>
               @Printremark
             </div>
-            <p style="page-break-after:auto">@PoweredBy</p>
+            <p style="page-break-after:auto;text-align:center;margin:10px 0px 10px 0px;">@PoweredBy</p>
         </div>
     </div>
     <div class="print"></div>

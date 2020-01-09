@@ -104,7 +104,14 @@ namespace HangOut.Controllers
             }
             Int64 i = ObjTable.save();
             if (i > 0)
-                return RedirectToAction("Index", new { Type = 1 });
+            {
+                HG_Floor_or_ScreenMaster ObjScr = new HG_Floor_or_ScreenMaster().GetOne(ObjTable.Floor_or_ScreenId);
+                HG_FloorSide_or_RowName ObjRowName = new HG_FloorSide_or_RowName().GetOne(ObjTable.FloorSide_or_RowNoID);
+                JObject jObject = JObject.FromObject(ObjTable);
+                jObject.Add("ScreenName", ObjScr.Name);
+                jObject.Add("RowName", ObjRowName.FloorSide_or_RowName);
+                return Json(new { data = jObject.ToString() }, JsonRequestBehavior.AllowGet);
+            }
             return RedirectToAction("Error");
         }
         public ActionResult Delete(int ID)

@@ -760,6 +760,7 @@ namespace HangOut.Controllers
                 hG_Orders.Status = "4";//CANCEL ORDER
                 hG_Orders.Update_By = UpdatedBy;
                 hG_Orders.PaymentStatus = 0;
+                hG_Orders.DeliveryCharge = 0;
                 HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(hG_Orders.Table_or_SheatId);
                 if (ObjTorS != null &&hG_Orders.Create_Date.Date==DateTime.Now.Date&&hG_Orders.Status!="3")
                 {
@@ -1123,9 +1124,21 @@ namespace HangOut.Controllers
                     }
                     OrdNotice OrderNotice = OrdNotice.GetOne(order.OID);
                     string name = Seating + " Ticket no. :" + ticketno;
+                    double deliveryCharge = 0.00;
                     if (OrderNotice!=null&& OrderNotice.OID>0)
                     {
+                        
+                        if (order.DeliveryCharge > 0)
+                        {
+                            List<HG_Ticket> Tickets = HG_Ticket.GetByOID(order.OID);
+                            var ObjTicket = Tickets.Find(x => x.TicketNo == ticketno);
+                            if (ObjTicket != null && ObjTicket.TicketNo > 0)
+                            {
+                                deliveryCharge = ObjTicket.DeliveryCharge;
+                            }
+                        }
                         vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(order.PayReceivedBy);
+
                         if (ObjUser != null && ObjUser.UserType != "CA"&&ObjUser.UserType!="ONR")// not captain not OWN
                         {
                             TableScreen.Add("Amt", TotalAmount);
@@ -1136,7 +1149,6 @@ namespace HangOut.Controllers
                         }
                         else
                         {
-                           
                             TableScreen.Add("Amt", 0);
                         }
                         
@@ -1144,8 +1156,10 @@ namespace HangOut.Controllers
                     else
                     {
                         TableScreen.Add("Amt", 0);
-                        TableScreen.Add("PymtMode", order.PaymentStatus);
+                        
                     }
+                    TableScreen.Add("PymtMode", order.PaymentStatus);
+                    TableScreen.Add("deliveryCharge", deliveryCharge);
                     TableScreen.Add("TableScreenInfo", name);
                     TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
                     TableScreen.Add("TicketNo", ticketno);
@@ -1246,8 +1260,6 @@ namespace HangOut.Controllers
                     tableorSheatList.Add(TableScreen);
                     
                 }
-
-
             }
             catch (System.Exception e)
             {
@@ -1299,6 +1311,18 @@ namespace HangOut.Controllers
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
                 HG_Tables_or_Sheat TorSObj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
                  OrderItemListAll = new HG_OrderItem().GetAll(OID);
+                if (order.DeliveryCharge > 0)
+                {
+                    var TockenItems = OrderItemListAll.FindAll(x => x.TickedNo == TickedNo);
+                    var CancelItems = TockenItems.FindAll(x => x.Status == 4);//all canceled list
+                    if (TockenItems.Count == CancelItems.Count)
+                    {
+                        List<HG_Ticket> Tickets = HG_Ticket.GetByOID(order.OID);
+                        Tickets = Tickets.FindAll(x => x.TicketNo != TickedNo);
+                        order.DeliveryCharge = Tickets.Sum(x => x.DeliveryCharge);
+                    }
+
+                }
                 if (ObjOrg.PaymentType==1)// prepaid
                 {
                     var completedOrCancelorderItems = OrderItemListAll.FindAll(x => x.Status == 3 || x.Status == 4);//cancel and Completed
@@ -1695,12 +1719,12 @@ namespace HangOut.Controllers
                 if (hG_OrganizationDetails.OrgTypes == "1")//restuarnt
                 {
                     Object.Add("ByCash","YES");//mandatory for restuarnt
-                    Object.Add("ByOnline", orgSetting.ByOnline == 2? "YES" : "NO");
+                    Object.Add("ByOnline", orgSetting.ByOnline == 1? "YES" : "NO");
                 }
                 else if (hG_OrganizationDetails.OrgTypes == "2")// theater
                 {
                     Object.Add("ByOnline","YES");//mandatory for theater
-                    Object.Add("ByCash", orgSetting.ByCash == 2 ? "YES" : "NO");
+                    Object.Add("ByCash", orgSetting.ByCash == 1 ? "YES" : "NO");
                 }
                 //cancel order condition
                 if (orders.Status!="3"&&orders.PaymentStatus == 0 && hG_OrganizationDetails.PaymentType == 1)//prepaid
@@ -2049,7 +2073,7 @@ namespace HangOut.Controllers
            
             if (ObjOrg != null && ObjOrg.OrgID>0&& ObjOrg.PaymentType == 1)
             {
-                List<HG_Orders> ListOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                List<HG_Orders> ListOrder = new HG_Orders().GetListByGetDate(DateTime.Now.AddDays(-1), DateTime.Now);
                 ListOrder = ListOrder.FindAll(x => x.Status != "3" && x.Status != "4");
                 ListOrder = ListOrder.FindAll(X => X.OrgId == Orgid);
                 ListOrder = ListOrder.FindAll(x => x.PaymentStatus == 0);

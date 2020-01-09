@@ -39,7 +39,7 @@ namespace HangOut.Controllers
         {
             int i = Objfloor.save();
             if (i > 0)
-                return Json(new { Objfloor }, JsonRequestBehavior.AllowGet);
+                return Json(new {data= Objfloor }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
         public ActionResult CreateEdit(int ID)
@@ -56,7 +56,7 @@ namespace HangOut.Controllers
         {
             int i = Objfloor.save();
             if (i > 0)
-                return Json(new { Objfloor }, JsonRequestBehavior.AllowGet);
+                return Json(new {data= Objfloor }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
 
         }

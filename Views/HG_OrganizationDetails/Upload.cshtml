@@ -31,7 +31,11 @@
     </div>
 <script>
     function JsonSuccess(Jobj) {
-        $('#waiting').hide();
-        alert('Uploaded');
+        if (Jobj.data != undefined && Jobj.data == '1') {
+            $('#waiting').hide();
+            alert('Uploaded');
+        }
+       
+       
     }
 </script>

@@ -248,12 +248,12 @@ namespace HangOut.Models
         }
         public static int UnseenOrd(int OrgId)
         {
-            string Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE Status=1 and OID In(select OID from HG_Orders where   Convert(Date, Create_Date)= Convert(Date, GetDate()) and Status='1' and OrgId=" + OrgId.ToString()+" )";
+            string Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE ChefSeenBy=0 and Status=1 and OID In(select OID from HG_Orders where  Status='1' and OrgId=" + OrgId.ToString()+" )";
             int Count = 0;
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             if (ObjOrg!=null&&ObjOrg.PaymentType == 1)
             {
-              Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE Status=1 and OID In(select OID from HG_Orders where  Convert(Date, Create_Date)= Convert(Date, GetDate()) and Status='1' and PaymentStatus!= 0 and OrgId=" + OrgId.ToString() + " )";
+              Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE ChefSeenBy=0 and Status=1 and OID In(select OID from HG_Orders where  Status='1' and PaymentStatus!= 0 and OrgId=" + OrgId.ToString() + " )";
             }
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
