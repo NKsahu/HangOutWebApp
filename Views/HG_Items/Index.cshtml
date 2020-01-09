@@ -143,20 +143,20 @@
 
     }
     function BULKEXCELUPL() {
-        //$('#waiting').show();
-        //$.ajax({
-        //    type: 'GET',
-        //    url: "/HG_OrganizationDetails/Upload",
-        //    success: function (data) {
-        //        makedpt("CreateSheat");
-        //        $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
-        //        showdpt("CreateSheat");
-        //        $('#waiting').hide();
-        //    },
-        //    error: function (jqXhr, textStatus, errorMessage) { // error callback
-        //        $('#waiting').hide();
-        //    }
-        //});
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/UplExl",
+            success: function (data) {
+                makedpt("CreateSheat");
+                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSheat");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
     }
     function AddCategory() {
         $('#waiting').show();

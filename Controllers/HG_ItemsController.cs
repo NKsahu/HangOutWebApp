@@ -181,10 +181,12 @@ namespace HangOut.Controllers
                     HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgID);
                     for (int i = 1; i < DT.Rows.Count; i++)
                     {
-                        string FlrOrScrName = (DT.Rows[i][0] == null ? "" : DT.Rows[i][0].ToString());
-                        string FlrSideOrRowName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString());
-                        string TableorSheatName = (DT.Rows[i][2] == null ? "" : DT.Rows[i][2].ToString());
-                        string QrCode = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
+                        string CategoryName = (DT.Rows[i][0] == null ? "" : DT.Rows[i][0].ToString());
+                        string ItmName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString());
+                        string ItmMode = (DT.Rows[i][2] == null ? "" : DT.Rows[i][2].ToString());
+                        string Discriptn = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
+                        string CostPrice = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
+
                     }
                 }
 
