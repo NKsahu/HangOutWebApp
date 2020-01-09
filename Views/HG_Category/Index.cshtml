@@ -3,48 +3,41 @@
         Layout = null;
     }
 @using HangOut.Models
-    <div class="card">
-        <div class="card-header">
-            <h3 style="text-align:center"><b> Item Category </b> </h3>
-            <hr />
-        </div>
-        <div class="card-body">
-            <table class="table" id="TBLID">
-                <thead>
-                    <tr>
-                       
-                        <th>
-                            @Html.DisplayNameFor(model => model.Category)
-                        </th>
-                       
-                        <th>
-                            @Html.DisplayNameFor(model => model.Status)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center"><b> Item Category </b> </h3>
+        <hr />
+    </div>
+    <button style="text-align:center" onclick="CreateEdit('0')" class="btn btn-success form-control">ADD CATEGORY</button>
+    <div class="card-body">
+        <table class="table" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="">
+                @foreach (var item in Model)
+                {
                     <tr id="@item.CategoryID">
-                        
                         <td>
                             @Html.DisplayFor(modelItem => item.Category)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td>
-                            <a href=" /HG_Category/CreateEdit?ID=@item.CategoryID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.CategoryID)"> Edit</button>
                             <button class="btn btn-danger btn-sm " onclick="Delete(@item.CategoryID)"> Delete</button>
                         </td>
                     </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
+</div>
 <script>
+    var AddTr = false;
     function Delete(ID) {
         if (confirm('Are You Sure')) {
             $('#waiting').show();
@@ -69,6 +62,44 @@
                     $('#waiting').hide();
                 }
             });
+        }
+    }
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Category/CreateEdit?ID=" + ID,
+            success: function (data) {
+                makedpt("HG_Category");
+                $("#HG_Category > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("HG_Category");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function JsonSuccess(Jobj) {
+        var Jitmobj = Jobj;
+        hidedpt("HG_Category");
+        $('#waiting').hide();
+        var HtmlStr = "<tr id='"+Jitmobj.CategoryID+"'>";
+        HtmlStr += '<td>' + Jitmobj.Category + '</td>';
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CategoryID + ')"> Edit</button>';
+        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.CategoryID + ')"> Delete</button></td ></tr > ';
+        if (AddTr) {
+            $("#Tbody").append(HtmlStr);
+        }
+        else {
+            $('#'+ Jitmobj.CategoryID).remove();
+            $("#Tbody").append(HtmlStr);
         }
     }
 </script>

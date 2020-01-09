@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using HangOut.Models.Common;
+using System;
+
 namespace HangOut.Controllers
 {
     [LoginFilter]
@@ -154,6 +156,49 @@ namespace HangOut.Controllers
             Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             int i = Objitem.Save();
             return Json(new {Objitem},JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UplExl()
+        {
+            return View();
+        }
+        [HttpPost]
+        public JsonResult Upload(int OrgID, System.Web.HttpPostedFileBase UplXl)
+        {
+            if (OrgID <= 0)
+            {
+                return Json(new { msg = "Select Organization First" });
+            }
+            if (UplXl == null)
+            {
+                return Json(new { msg = "Upload Excel File First" });
+            }
+            try
+            {
+                UplXl.SaveAs(System.IO.Path.Combine(Server.MapPath("~/Image/"), UplXl.FileName));
+                var DT = ReadExl.ReadExcelFileDT("~/Image/" + UplXl.FileName);
+                if (DT.Rows.Count > 0)
+                {
+                    HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgID);
+                    for (int i = 1; i < DT.Rows.Count; i++)
+                    {
+                        string FlrOrScrName = (DT.Rows[i][0] == null ? "" : DT.Rows[i][0].ToString());
+                        string FlrSideOrRowName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString());
+                        string TableorSheatName = (DT.Rows[i][2] == null ? "" : DT.Rows[i][2].ToString());
+                        string QrCode = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
+                    }
+                }
+
+                else
+                {
+                    return Json(new { msg = "No Any Row Founds" });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { msg = "Error " + e.Message });
+            }
+
+            return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

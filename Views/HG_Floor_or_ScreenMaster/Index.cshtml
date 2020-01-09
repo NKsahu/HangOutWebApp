@@ -48,7 +48,7 @@
     var AddTr = false;
     function JsonSuccess(Jobj) {
         hidedpt("CreateFS");
-        var Jitmobj = Jobj.Objfloor;
+        var Jitmobj = Jobj.data;
         var HtmlStr = "<tr id='" + Jitmobj.Floor_or_ScreenID+"'>";
         HtmlStr += '<td>' + Jitmobj.Floor_or_ScreenID+'</td>';
         HtmlStr += '<td>' + Jitmobj.Name+'</td>';
