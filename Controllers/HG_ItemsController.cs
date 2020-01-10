@@ -184,9 +184,12 @@ namespace HangOut.Controllers
                         string CategoryName = (DT.Rows[i][0] == null ? "" : DT.Rows[i][0].ToString());
                         string ItmName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString());
                         string ItmMode = (DT.Rows[i][2] == null ? "" : DT.Rows[i][2].ToString());
-                        string Discriptn = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
+                        string Discriptn = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString());
                         string CostPrice = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
-
+            //            var CostPrice = parseFloat($("#CostPrice").val());
+            //            var TaxPercentage = parseFloat($("#Tax").val());
+            //            var taxAmt = (CostPrice * TaxPercentage) / 100;
+            //$("#Price").val(CostPrice + taxAmt).change();
                     }
                 }
 

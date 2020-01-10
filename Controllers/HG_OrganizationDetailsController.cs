@@ -210,6 +210,7 @@ namespace HangOut.Controllers
         [HttpPost]
         public JsonResult Upload(int OrgID, System.Web.HttpPostedFileBase UplXl)
         {
+            string msg = "Uploaded Succesfully";
             if (OrgID <= 0)
             {
                 return Json(new { msg = "Select Organization First" });
@@ -243,7 +244,7 @@ namespace HangOut.Controllers
                         }
                         var ObjFlrScr = ListFlrScr.Find(x => x.Name.ToUpper().Contains(FlrOrScrName.ToUpper()));
                         var ObjFsideOrRoName = ListFsideorRowName.Find(x => x.FloorSide_or_RowName.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
-                        if (ObjFlrScr == null)
+                        if (ObjFlrScr == null && FlrOrScrName.Replace(" ","")!="")
                         {
                             ObjFlrScr = new HG_Floor_or_ScreenMaster();
                             ObjFlrScr.Name = FlrOrScrName;
@@ -252,7 +253,7 @@ namespace HangOut.Controllers
                             ObjFlrScr.save();
                             ListFlrScr.Add(ObjFlrScr);
                         }
-                        if (ObjFsideOrRoName == null)
+                        if (ObjFsideOrRoName == null && FlrSideOrRowName.Replace(" ","")!="")
                         {
                             ObjFsideOrRoName = new HG_FloorSide_or_RowName();
                             ObjFsideOrRoName.FloorSide_or_RowName = FlrSideOrRowName;
@@ -261,8 +262,10 @@ namespace HangOut.Controllers
                             ObjFsideOrRoName.save();
                             ListFsideorRowName.Add(ObjFsideOrRoName);
                         }
+                        if(ObjFsideOrRoName!=null&& ObjFlrScr != null)
+                        {
                         var ObjTblOrShtExit = ListTorS.Find(x => x.Table_or_SheetName.ToUpper() == TableorSheatName.ToUpper() &&(x.Floor_or_ScreenId== ObjFlrScr.Floor_or_ScreenID) &&(x.FloorSide_or_RowNoID== ObjFsideOrRoName.ID));
-                        if (ObjTblOrShtExit == null)
+                        if (ObjTblOrShtExit == null && TableorSheatName.Replace(" ","")!="")
                         {
                             HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat();
                             hG_Tables_Or_Sheat.OrgId = OrgID;
@@ -278,11 +281,13 @@ namespace HangOut.Controllers
                             ObjTblOrShtExit.QrCode = QrCode;
                             ObjTblOrShtExit.save();
                         }
-                        
-
+                        }
+                        else
+                        {
+                            msg = "Uploaded Succesfully. With Some Data Missing";
+                        }
                     }
                 }
-
                 else
                 {
                     return Json(new { msg = "No Any Row Founds"});
@@ -292,8 +297,7 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "Error " + e.Message });
             }
-
-            return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
+            return Json(new { msg = msg }, JsonRequestBehavior.AllowGet);
         }
     }
 }
