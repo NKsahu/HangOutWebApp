@@ -130,8 +130,8 @@
                 HtmlStr += '<td>' + Jitmobj.ItemDiscription + '</td>';
                 HtmlStr += '<td>' + Jitmobj.CostPrice + '</td>';
                 HtmlStr += '<td>' + Jitmobj.Tax + '</td>';
-                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ItemID + ')"> Edit</button>';
-                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ItemID + ')"> Delete</button></td ></tr > ';
+                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit('+Jitmobj.ItemID+')"> Edit</button>';
+                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete('+Jitmobj.ItemID+')"> Delete</button></td></tr>';
                 if (AddTr) {
                     $("#Tbody").append(HtmlStr);
                 }

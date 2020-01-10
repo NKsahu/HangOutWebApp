@@ -275,6 +275,7 @@ namespace HangOut.Controllers
                             hG_Tables_Or_Sheat.Floor_or_ScreenId = ObjFlrScr.Floor_or_ScreenID;
                             hG_Tables_Or_Sheat.FloorSide_or_RowNoID = ObjFsideOrRoName.ID;
                             hG_Tables_Or_Sheat.save();
+                            ListTorS.Add(hG_Tables_Or_Sheat);
                         }
                         else if(ObjTblOrShtExit!=null&& (ObjTblOrShtExit.QrCode != QrCodeOld) && (QrCode != ""))
                         {
