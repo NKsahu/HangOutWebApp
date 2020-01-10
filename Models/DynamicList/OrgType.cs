@@ -98,5 +98,16 @@ namespace HangOut.Models.DynamicList
             }
             return Sts;
         }
+        public static string ItemMode(string mode)
+        {
+            if (mode == "1")
+            {
+                return "VEG";
+            }
+            else
+            {
+                return "NON-VEG";
+            }
+        }
     }
 }

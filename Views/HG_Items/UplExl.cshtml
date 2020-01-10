@@ -5,11 +5,11 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>Upload Excel</b></h3>
+        <h3 style="text-align:center;color:#000000"><b>Upload Item Excel</b></h3>
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("Upload", "HG_OrganizationDetails", null, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("Upload", "HG_Items", null, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             <div class="row">
                 <div class="col-md-3">

@@ -40,7 +40,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.CategoryID == 0)
                 {
-                    Query = "Insert into  HG_Category  values( @OrgID ,@Category ,@EntryBy,@EntryDate,@UpdateDate,@Status,@CategoryType);";
+                    Query = "Insert into  HG_Category  values( @OrgID ,@Category ,@EntryBy,@EntryDate,@UpdateDate,@Status,@CategoryType); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
@@ -57,7 +57,17 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Category", this.Category);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@CategoryType", this.CategoryType);
-                Row = cmd.ExecuteNonQuery();
+                if (this.CategoryID == 0)
+                {
+                    Row =Convert.ToInt32(cmd.ExecuteScalar());
+                    this.CategoryID = Row;
+                }
+                else
+                {
+                    Row = cmd.ExecuteNonQuery();
+                    //this.CategoryID = Row;
+                }
+                
             }
             catch (Exception e) { e.ToString(); }
             finally { Con.Close(); }

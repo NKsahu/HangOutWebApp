@@ -1601,6 +1601,7 @@ namespace HangOut.Controllers
             string QrCode = ParaMeters.GetValue("TID").ToString();
             int CID = int.Parse(ParaMeters.GetValue("CID").ToString());
             string Type = ParaMeters.GetValue("Type").ToString();
+            int AppType= ParaMeters["AppType"] != null ? int.Parse(ParaMeters["AppType"].ToString()) : 1;//1 customer ,2 captain , 3 admin panel
             HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
             if (TableRowObj.Type != Type)
             {
@@ -1618,9 +1619,26 @@ namespace HangOut.Controllers
                 jObject.Add("OID", orders.OID);
             }
             HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
+            
             jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
             jObject.Add("OrderingStatus", objOrg.CustomerOrdering);
             jObject.Add("PaymentType", objOrg.PaymentType);
+            OrgSetting orgSetting = OrgSetting.Getone(objOrg.OrgID);
+            if (orgSetting.EnblDeleryChrg == 1 && orgSetting.AcptMinOrd == 1 && OrgType.DeliveryChargeAply(AppType, orgSetting))
+            {
+                if (orgSetting.DeleryChrgType == 1)//fixed charge{
+                {
+                    jObject.Add("MinOrdAmt", orgSetting.MinOrderAmt);
+                    jObject.Add("DeliveryChrge", orgSetting.DeliveryCharge);
+                    jObject.Add("DeliveryType", orgSetting.DeleryChrgType);
+                }
+                else if (orgSetting.DeleryChrgType == 0)
+                {
+                    jObject.Add("MinOrdAmt", orgSetting.MinOrderAmt);
+                    jObject.Add("DeliveryChrge", orgSetting.DeliveryCharge);
+                    jObject.Add("DeliveryType", orgSetting.DeleryChrgType);
+                }
+            }
             return jObject;
         }
         [HttpPost]

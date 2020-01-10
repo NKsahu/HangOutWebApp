@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<HangOut.Models.HG_Items>
-   @using HangOut.Models
+@using HangOut.Models
+@using HangOut.Models.DynamicList
 @{
     Layout = null;
 }
@@ -35,7 +36,16 @@
                         @Html.DisplayNameFor(model => model.Items)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Price)
+                        @Html.DisplayNameFor(model => model.ItemMode)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Discription")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Cost Price")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Tax %")
                     </th>
                     <th></th>
                 </tr>
@@ -43,22 +53,31 @@
             <tbody id="Tbody">
                 @foreach (var item in Model)
                 {
-                    <tr id="@item.ItemID">
-                        <td>
-                            @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
-                            @objcategory.Category
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Items)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.ItemID)"> Edit</button>
-                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.ItemID)"> Delete</button>
-                        </td>
-                    </tr>
+                <tr id="@item.ItemID">
+                    <td>
+                        @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
+                        @objcategory.Category
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Items)
+                    </td>
+                    <td>
+                        @OrgType.ItemMode(item.ItemMode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ItemDiscription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CostPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tax)
+                    </td>
+                    <td>
+                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.ItemID)"> Edit</button>
+                        <button class="btn btn-danger btn-sm " onclick="Delete(@item.ItemID)"> Delete</button>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -107,7 +126,10 @@
                 var HtmlStr = "<tr id='" + Jitmobj.ItemID + "'>";
                 HtmlStr += '<td>' + Jitmobj.Categoryname + '</td>';
                 HtmlStr += '<td>' + Jitmobj.Items + '</td>';
-                HtmlStr += '<td>' + Jitmobj.Price + '</td>';
+                HtmlStr += '<td>' + ItemMode(Jitmobj.ItemMode) + '</td>';
+                HtmlStr += '<td>' + Jitmobj.ItemDiscription + '</td>';
+                HtmlStr += '<td>' + Jitmobj.CostPrice + '</td>';
+                HtmlStr += '<td>' + Jitmobj.Tax + '</td>';
                 HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ItemID + ')"> Edit</button>';
                 HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ItemID + ')"> Delete</button></td ></tr > ';
                 if (AddTr) {
@@ -179,5 +201,13 @@
             $('.buttons-excel').click();
         }
 
+    }
+    function ItemMode(mode) {
+        if (mode == "1") {
+            return "VEG";
+        }
+        else {
+            return "NON-VEG";
+        }
     }
 </script>
