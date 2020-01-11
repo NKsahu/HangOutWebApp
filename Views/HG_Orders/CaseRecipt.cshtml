@@ -109,6 +109,22 @@
                                     if(Request.QueryString["PMode"]!=null&& Request.QueryString["PMode"]!="-1"){
                                         ListOrder = ListOrder.FindAll(X => X.PaymentStatus == int.Parse(Request.QueryString["PMode"]));
                                     }
+                                    if(Request.QueryString["PlacedBy"]!=null&& Request.QueryString["PlacedBy"] != "0")
+                                    {
+                                        HashSet<int> hashUser = new HashSet<int>();
+                                        List<vw_HG_UsersDetails> userlist = new vw_HG_UsersDetails().GetAll();
+                                        if (Request.QueryString["PlacedBy"] == "ONR" || Request.QueryString["PlacedBy"] == "CA")
+                                        {
+                                            userlist = userlist.FindAll(x => x.UserType == Request.QueryString["PlacedBy"]);
+                                            hashUser = new HashSet<int>(userlist.Select(x => x.UserCode).ToArray());
+                                            ListOrder = ListOrder.FindAll(x => hashUser.Contains((int)x.CID));
+                                        }
+                                        if (Request.QueryString["PlacedBy"] == "CUST")
+                                        {
+                                            hashUser = new HashSet<int>(userlist.Select(x => x.UserCode).ToArray());
+                                            ListOrder = ListOrder.FindAll(x => !hashUser.Contains((int)x.CID));
+                                        }
+                                    }
                                     ItemList = new HG_Items().GetAll();
                                 }
     <div class="col" id="List2">
