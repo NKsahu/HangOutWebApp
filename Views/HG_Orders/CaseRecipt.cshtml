@@ -3,19 +3,47 @@
 @{
     Layout = null;
     int Sn = 1;
-    List<HG_OrderItem> OrderItmlist = new List<HG_OrderItem>();
-    var GroupByItems = OrderItmlist.GroupBy(x => x.FID);
+    List<HG_Orders> ListOrder = new List<HG_Orders>();
     int CountTotal = 0;
     double AmtTotal = 0.00;
     List<HG_Items> ItemList = new List<HG_Items>();
     if (Request.QueryString["Type"] == "1")
     {
-
         <div class="card">
-            <div class="card-header text-center"><b>Filter</b></div>
+            <div class="card-header text-center"><b>Item Sale Filter</b></div>
             <div class="card-body">
                 <div class="container">
                     <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("Payment Mode")
+                            @{
+                                List<SelectListItem> li = new List<SelectListItem>();
+                                SelectListItem obj = new SelectListItem() { Text = "All", Value = "-1" };
+                                SelectListItem obj1 = new SelectListItem() { Text = "Cash", Value = "1" };
+                                SelectListItem obj2 = new SelectListItem() { Text = "Bank/Wallet", Value = "2" };
+                                SelectListItem obj3 = new SelectListItem() { Text = "FoodDo", Value = "3" };
+                                li.Add(obj);
+                                li.Add(obj1);
+                                li.Add(obj2);
+                                li.Add(obj3);
+                            }
+                            @Html.DropDownList("PMode", li, new { @class = "form-control " })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.Label("Placed By")
+                            @{
+                                List<SelectListItem> PlacedByLit = new List<SelectListItem>();
+                                SelectListItem objp = new SelectListItem() { Text = "All", Value = "0" };
+                                SelectListItem objp1 = new SelectListItem() { Text = "OWNER", Value = "ONR" };
+                                SelectListItem objp2 = new SelectListItem() { Text = "CAPTAIN", Value = "CA" };
+                                SelectListItem objp3 = new SelectListItem() { Text = "CUSTOMER", Value = "CUST" };
+                                PlacedByLit.Add(objp);
+                                PlacedByLit.Add(objp1);
+                                PlacedByLit.Add(objp2);
+                                PlacedByLit.Add(objp3);
+                            }
+                            @Html.DropDownList("PlacedBy", PlacedByLit, new { @class = "form-control" })
+                        </div>
                         <div class="col-md-3">
                             @Html.Label("From Date")
                             @Html.TextBox("Fdate", DateTime.Now.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
@@ -24,14 +52,13 @@
                             @Html.Label("To Date")
                             @Html.TextBox("Tdate", DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
                         </div>
-                       
                         <div class="col-sm-2">
                             <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
                         </div>
 
                     </div>
 
-                </div>
+                    </div>
             </div>
         </div>
 
@@ -45,9 +72,11 @@
                     $("#waiting").show();
             var Fdate = $("#Fdate").val();
             var Tdate = $("#Tdate").val();
+            var PMode = $("#PMode").val();
+            var PlacedBy = $("#PlacedBy").val();
            
                     $.ajax({
-                        url: "/HG_Orders/CaseRecipt?Type=2&Fdate=" + Fdate + "&Tdate=" + Tdate,
+                        url: "/HG_Orders/CaseRecipt?Type=2&Fdate=" + Fdate + "&Tdate=" + Tdate + "&PMode=" + PMode +"&PlacedBy="+PlacedBy,
                         type: "GET",
                         success: function (data) {
                             $("#waiting").hide();
@@ -69,20 +98,19 @@
             });
             
         </script>
-    }
-
-
-    else
-    {
-        // int PaymentMode = int.Parse(Request.QueryString["PMode"]);
-        DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
-        DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
-        OrderItmlist = new HG_OrderItem().GetAll(0);
-        OrderItmlist = OrderItmlist.FindAll(x => x.OrderDate.Date >= FromDate.Date && x.OrderDate.Date <= Todate.Date).ToList();
-        OrderItmlist = OrderItmlist.FindAll(x => x.Status == 3);
-        GroupByItems = OrderItmlist.GroupBy(x => x.FID);
-        ItemList = new HG_Items().GetAll();
-    }
+                                }
+                                else
+                                {
+                                    // int PaymentMode = int.Parse(Request.QueryString["PMode"]);
+                                    DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                    DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                                    ListOrder = new HG_Orders().GetListByGetDate(FromDate, Todate);
+                                    ListOrder = ListOrder.FindAll(x => x.Status == "3");
+                                    if(Request.QueryString["PMode"]!=null&& Request.QueryString["PMode"]!="-1"){
+                                        ListOrder = ListOrder.FindAll(X => X.PaymentStatus == int.Parse(Request.QueryString["PMode"]));
+                                    }
+                                    ItemList = new HG_Items().GetAll();
+                                }
     <div class="col" id="List2">
         <div class="card">
             <div class="card-header">Item Sale Details </div>
@@ -97,16 +125,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var ObjOrder in GroupByItems)
+                        @foreach (var Order in ListOrder)
                         {
-
-                            var FirstObj = ObjOrder.First();
-                            var Rs = FirstObj.Price;
-                            var Counts = ObjOrder.ToList().Sum(x => x.Count);
-                            var Total = Rs * Counts;
-                            HG_Items item = ItemList.Find(x => x.ItemID == ObjOrder.Key);
-                            CountTotal += Counts;
-                            AmtTotal += Total;
+                            List<HG_OrderItem> ListItem = new HG_OrderItem().GetAll(Order.OID);
+                            ListItem = ListItem.FindAll(x => x.Status == 3);//only completed items
+                            var GroupByItm = ListItem.GroupBy(x => x.FID);
+                            foreach (var ObjOrder in GroupByItm)
+                            {
+                                var FirstObj = ObjOrder.First();
+                                var Rs = FirstObj.Price;
+                                var Counts = ObjOrder.ToList().Sum(x => x.Count);
+                                var Total = Rs * Counts;
+                                HG_Items item = ItemList.Find(x => x.ItemID == ObjOrder.Key);
+                                CountTotal += Counts;
+                                AmtTotal += Total;
                         <tr>
                             <td>@(Sn++)</td>
                             <td>@item.Items</td>
@@ -114,10 +146,9 @@
                             <td>@Total.ToString("0.00")</td>
                         </tr>
 
+                            }
                         }
-
                     </tbody>
-
                     <tfoot>
                         <tr>
                             <td>Total</td>
