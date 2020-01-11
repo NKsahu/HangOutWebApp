@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>foodDo| N-Work Technology</title>
+    <title>foodDo| N-Works Technology</title>
     <link rel="shortcut icon" href="~/Image/app_icon.png" />
     <!-- CSS -->
 
@@ -13,7 +13,6 @@
     <!-- JS -->
     <script src="~/Assets/jQuery/jquery-3.4.1.min.js"></script>
     <script src="~/Assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
-    @*<script src="~/Assets/AjaxForm/jquery.unobtrusive-ajax.min.js"></script>*@
     <script src="~/Assets/shortcut.js"></script>
     <script src="~/Assets/Website.js"></script>
     <script src="~/Assets/autonumeric.js"></script>
@@ -45,7 +44,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
+    @*<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>*@
     <!--responsive voice js-->
 </head>
 <body>
@@ -161,7 +160,7 @@
             "sScrollX": "100%",
             "bScrollCollapse": true,
             "dom": 'Bfrtip',
-            "buttons": ['excel', 'pdf', { extend: 'print', title: 'Impression', exportOptions: { columns: ':visible' } },]
+            "buttons": [{ extend: 'excel', exportOptions: {title:null, columns: "thead th:not(.noExport)" } }, 'pdf', { extend: 'print', exportOptions: { columns: ':visible' } },]
         });
         table.buttons.exportData({
             stripHtml: true
@@ -169,7 +168,6 @@
 
     }
 </script>
-
 <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 <script src="~/Assets/notify.js"></script>
 <script src="~/Assets/prettify.js"></script>

@@ -38,6 +38,8 @@ namespace HangOut.Controllers
         public ActionResult ScreenCreateEdit(HG_Floor_or_ScreenMaster Objfloor)
         {
             int i = Objfloor.save();
+           List<HG_Floor_or_ScreenMaster> Listscr = new HG_Floor_or_ScreenMaster().GetAll(2);
+
             if (i > 0)
                 return Json(new {data= Objfloor }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");

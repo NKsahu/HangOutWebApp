@@ -41,37 +41,23 @@
                         @Html.DisplayName("Seat")
                     </th>
                     <th>
-                        @Html.DisplayName("Row")
+                        @Html.DisplayName("Screen")
                     </th>
                     <th>
-                        @Html.DisplayName("Screen")
+                        @Html.DisplayName("Row")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.QrCode)
                     </th>
-                    <th></th>
+                    <th class="noExport"></th>
                 </tr>
             </thead>
             <tbody id="Tbody">
                 @foreach (var item in Model)
                 {
                 <tr id="@item.Table_or_RowID">
-
                     <td>
                         @Html.DisplayFor(modelItem => item.Table_or_SheetName)
-                    </td>
-                    <td>
-                        @{
-
-                            var ObjRow = ListRows.Find(x => x.ID == item.FloorSide_or_RowNoID);
-                            if (ObjRow == null)
-                            {
-                            }
-                            else
-                            {
-                                @ObjRow.FloorSide_or_RowName
-                            }
-                        }
                     </td>
                     <td>
                         @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);
@@ -82,10 +68,19 @@
                             {
                                 @ObjScreen.Name
                             }
-
-
                         }
-
+                    </td>
+                    <td>
+                        @{
+                            var ObjRow = ListRows.Find(x => x.ID == item.FloorSide_or_RowNoID);
+                            if (ObjRow == null)
+                            {
+                            }
+                            else
+                            {
+                                @ObjRow.FloorSide_or_RowName
+                            }
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.QrCode)
@@ -114,8 +109,8 @@
             if (Jitmobj.Table_or_RowID != 'undefined' && Jitmobj.Table_or_RowID != null) {
                 var HtmlStr = "<tr id='" + Jitmobj.Table_or_RowID + "'>";
                 HtmlStr += '<td>' + Jitmobj.Table_or_SheetName + '</td>';
-                HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
                 HtmlStr += '<td>' + Jitmobj.ScreenName + '</td>';
+                HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
                 HtmlStr += '<td>' + Jitmobj.QrCode + '</td>';
                 HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button>';
                 HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID + ')"> Delete</button></td ></tr > ';

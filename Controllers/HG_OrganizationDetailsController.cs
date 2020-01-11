@@ -234,16 +234,24 @@ namespace HangOut.Controllers
                     List<HG_FloorSide_or_RowName> ListFsideorRowName = new HG_FloorSide_or_RowName().GetAll(OrgType, OrgID);
                     for(int i=1;i<DT.Rows.Count;i++)
                     {
-                        string FlrOrScrName =(DT.Rows[i][0]==null?"": DT.Rows[i][0].ToString());
-                        string FlrSideOrRowName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString());
-                        string TableorSheatName = (DT.Rows[i][2] == null ? "" : DT.Rows[i][2].ToString());
+                        string TableorSheatName = (DT.Rows[i][0] == null ? "" : DT.Rows[i][0].ToString());
+                        string FlrOrScrName =(DT.Rows[i][1]==null?"": DT.Rows[i][1].ToString());
+                        string FlrSideOrRowName = (DT.Rows[i][2] == null ? "" : DT.Rows[i][2].ToString());
                         string QrCode = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString().Replace(" ", ""));
                         string QrCodeOld = QrCode;
-                        HG_Tables_or_Sheat TorSAlreadyObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
-                        if (TorSAlreadyObj != null && TorSAlreadyObj.QrCode != "0" && TorSAlreadyObj.QrCode !=""&& TorSAlreadyObj.Table_or_RowID > 0)
+                        if (QrCode == "" || QrCode.Trim() == "" ||QrCode=="0")
                         {
                             QrCode = "0";
                         }
+                        else
+                        {
+                            HG_Tables_or_Sheat TorSAlreadyObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
+                            if (TorSAlreadyObj != null && TorSAlreadyObj.QrCode != "0" && TorSAlreadyObj.QrCode != "" && TorSAlreadyObj.Table_or_RowID > 0)
+                            {
+                                QrCode = "0";
+                            }
+                        }
+                        
                         var ObjFlrScr = ListFlrScr.Find(x => x.Name.ToUpper().Contains(FlrOrScrName.ToUpper()));
                         var ObjFsideOrRoName = ListFsideorRowName.Find(x => x.FloorSide_or_RowName.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
                         if (ObjFlrScr == null && FlrOrScrName.Replace(" ","")!="")
@@ -264,7 +272,7 @@ namespace HangOut.Controllers
                             ObjFsideOrRoName.save();
                             ListFsideorRowName.Add(ObjFsideOrRoName);
                         }
-                        if(ObjFsideOrRoName!=null&& ObjFlrScr != null)
+                        if(ObjFsideOrRoName!=null&& ObjFlrScr != null )
                         {
                         var ObjTblOrShtExit = ListTorS.Find(x => x.Table_or_SheetName.ToUpper() == TableorSheatName.ToUpper() &&(x.Floor_or_ScreenId== ObjFlrScr.Floor_or_ScreenID) &&(x.FloorSide_or_RowNoID== ObjFsideOrRoName.ID));
                         if (ObjTblOrShtExit == null && TableorSheatName.Replace(" ","")!="")
