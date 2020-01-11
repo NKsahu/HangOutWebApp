@@ -116,7 +116,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <td><input style="margin:2px" type="checkbox" onclick="TickAll(this,@TicketObj.Key)">Tick</td>
+                            <td><input style="margin:2px" checked type="checkbox" onclick="TickAll(this,@TicketObj.Key)">Tick</td>
                             <td>Item Name</td>
                             <td>Qty</td>
 
@@ -128,7 +128,7 @@
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
                             double Amt = items.Price * items.Count;
                             <tr >
-                                <td><input class=" CkeckorNot" type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
+                                <td><input class=" CkeckorNot" checked type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
                                 <td>@FoodObj.Items</td>
                                 <td>@items.Count</td>
                             </tr>

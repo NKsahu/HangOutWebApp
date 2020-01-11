@@ -1738,13 +1738,13 @@ namespace HangOut.Controllers
                 Object.Add("OrdAprvalSts", orders.OrderApprovlSts);
                 if (hG_OrganizationDetails.OrgTypes == "1")//restuarnt
                 {
-                    Object.Add("ByCash","YES");//mandatory for restuarnt
-                    Object.Add("ByOnline", (orgSetting.ByOnline == 1|| orgSetting.ByOnline == 0) ? "YES" : "NO");
+                    Object.Add("ByCash", (orgSetting.ByCash ==1 ||orgSetting.ByOnline==0)? "YES" : "NO");//
+                    Object.Add("ByOnline", (orgSetting.ByOnline == 1) ? "YES" : "NO");
                 }
                 else if (hG_OrganizationDetails.OrgTypes == "2")// theater
                 {
-                    Object.Add("ByOnline","YES");//mandatory for theater
-                    Object.Add("ByCash", (orgSetting.ByCash == 1|| orgSetting.ByCash == 0) ? "YES" : "NO");
+                    Object.Add("ByOnline", (orgSetting.ByOnline ==1||orgSetting.ByCash==0) ? "YES" : "NO");
+                    Object.Add("ByCash", (orgSetting.ByCash ==1) ? "YES" : "NO");
                 }
                 //cancel order condition
                 if (orders.Status!="3"&&orders.PaymentStatus == 0 && hG_OrganizationDetails.PaymentType == 1)//prepaid

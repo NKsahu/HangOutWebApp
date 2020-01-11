@@ -167,11 +167,13 @@ namespace HangOut.Controllers
                 OrgSeting.OrgId = OrgId;
                 if (ObjOrg.OrgTypes =="1"&& OrgSeting.ByCash==0)//restruant
                 {
-                    OrgSeting.ByCash = 2;//yes
+                    OrgSeting.ByCash = 1;//yes
+                    OrgSeting.ByOnline = 2;//NO
                 }
                 else if(ObjOrg.OrgTypes=="2" && OrgSeting.ByOnline == 0)
                 {
-                    OrgSeting.ByOnline = 2;//yes
+                    OrgSeting.ByOnline = 1;//yes
+                    OrgSeting.ByCash = 2;//NO
                 }
             }
             return View(OrgSeting);
