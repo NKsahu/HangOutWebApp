@@ -1201,8 +1201,8 @@ namespace HangOut.Controllers
                
                 List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAllByOrg(OrgId, ChefId);
                
-                    OrderItemList = OrderItemList.FindAll(x => x.Status == Status && x.ChefSeenBy == ChefId);
-                    OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
+                OrderItemList = OrderItemList.FindAll(x => x.Status == Status && x.ChefSeenBy == ChefId);
+                OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
                     // HashSet<int> HashOID = new HashSet<int>(OrderItemList.Select(x => x.TickedNo).ToArray());
                     var GroupByTicketNo = OrderItemList.GroupBy(x => x.TickedNo);
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
@@ -1320,8 +1320,14 @@ namespace HangOut.Controllers
                     if (TockenItems.Count == CancelItems.Count)
                     {
                         List<HG_Ticket> Tickets = HG_Ticket.GetByOID(order.OID);
-                        Tickets = Tickets.FindAll(x => x.TicketNo != TickedNo);
-                        order.DeliveryCharge = Tickets.Sum(x => x.DeliveryCharge);
+                       var NotCanceled = Tickets.FindAll(x => x.TicketNo != TickedNo);
+                        order.DeliveryCharge = NotCanceled.Sum(x => x.DeliveryCharge);
+                        var CancelTicket = Tickets.Find(x => x.TicketNo == TickedNo);
+                        if (CancelTicket != null && CancelTicket.TicketNo > 0)
+                        {
+                            CancelTicket.DeliveryCharge = 0;
+                            CancelTicket.save();
+                        }
                     }
 
                 }

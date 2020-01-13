@@ -28,13 +28,21 @@ namespace HangOut.Models
             SqlCommand cmd = new SqlCommand();
             try
             {
-                cmd = new SqlCommand("insert into HG_Ticket values(@TicketNo,@OrgId,@OrderId,@CreateDate,@DeliveryCharge)", con.Con);
-                cmd.Parameters.AddWithValue("@TicketNo", this.TicketNo);
-                cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
-                cmd.Parameters.AddWithValue("@OrderId", this.OID);
-                cmd.Parameters.AddWithValue("@CreateDate", this.CreationDate.Date);
+                if (this.TicketId == 0)
+                {
+                    cmd = new SqlCommand("insert into HG_Ticket values(@TicketNo,@OrgId,@OrderId,@CreateDate,@DeliveryCharge)", con.Con);
+                    cmd.Parameters.AddWithValue("@TicketNo", this.TicketNo);
+                    cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
+                    cmd.Parameters.AddWithValue("@OrderId", this.OID);
+                    cmd.Parameters.AddWithValue("@CreateDate", this.CreationDate.Date);
+                }
+                else
+                {
+                    cmd = new SqlCommand("UPDATE  HG_Ticket set DeliveryCharge=@DeliveryCharge where TID=@TID", con.Con);
+                    cmd.Parameters.AddWithValue("@TID", this.TicketId);
+                }
                 cmd.Parameters.AddWithValue("@DeliveryCharge", this.DeliveryCharge);
-                this.TicketId = System.Convert.ToInt32(cmd.ExecuteScalar());
+                this.TicketId = System.Convert.ToInt64(cmd.ExecuteNonQuery());
             }
             catch(Exception e)
             {
@@ -65,6 +73,7 @@ namespace HangOut.Models
                 while (sqlDataReader.Read())
                 {
                     HG_Ticket hG_Ticket = new HG_Ticket();
+                    hG_Ticket.TicketId = sqlDataReader.GetInt64(0);
                     hG_Ticket.TicketNo = sqlDataReader.GetInt32(1);
                     hG_Ticket.OrgId = sqlDataReader.GetInt32(2);
                     hG_Ticket.OID = sqlDataReader.GetInt64(3);
@@ -98,6 +107,7 @@ namespace HangOut.Models
                 while (sqlDataReader.Read())
                 {
                     HG_Ticket hG_Ticket = new HG_Ticket();
+                    hG_Ticket.TicketId = sqlDataReader.GetInt64(0);
                     hG_Ticket.TicketNo = sqlDataReader.GetInt32(1);
                     hG_Ticket.OrgId = sqlDataReader.GetInt32(2);
                     hG_Ticket.OID = sqlDataReader.GetInt64(3);
