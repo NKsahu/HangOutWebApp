@@ -185,38 +185,45 @@ namespace HangOut.Controllers
                     for (int i = 1; i < DT.Rows.Count; i++)
                     {
                         string CategoryName = (DT.Rows[i][0] == null ? "" : DT.Rows[i][0].ToString());
-                        string ItmName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString());
-                        string ItmMode = (DT.Rows[i][2] == null ? "1" : DT.Rows[i][2].ToString().Replace(" ",""));
+                        string ItmName = (DT.Rows[i][1] == null ? "" : DT.Rows[i][1].ToString().Trim());
+                        string ItmMode = (DT.Rows[i][2] == null ? "1" : DT.Rows[i][2].ToString().Replace(" ", ""));
                         string Discriptn = (DT.Rows[i][3] == null ? "" : DT.Rows[i][3].ToString());
                         string CostPriceStr = (DT.Rows[i][4] == null ? "0.0" : DT.Rows[i][4].ToString().Replace(" ", ""));
-                        string Taxstr= (DT.Rows[i][5] == null ? "0.0" : DT.Rows[i][5].ToString().Replace(" ", ""));
+                        string Taxstr = (DT.Rows[i][5] == null ? "0.0" : DT.Rows[i][5].ToString().Replace(" ", ""));
                         double CostPrice = double.Parse(CostPriceStr);
                         double Tax = double.Parse(Taxstr);
                         double TaxAmt = (CostPrice * Tax) / 100;
                         double price = CostPrice + TaxAmt;
-
-                        HG_Category ObjCategory = ListCategory.Find(x => x.Category.ToUpper() == CategoryName.ToUpper());
-                        if(ObjCategory==null&& CategoryName.Replace(" ", "") != "")
+                        if(ItmMode.ToUpper()== "VEG")
                         {
-                            ObjCategory = new HG_Category() { Category = CategoryName, OrgID = ObjOrg.OrgID, CategoryID = 0,CategoryType=1 ,EntryBy= EntryBy };
+                            ItmMode = "1";
+                        }
+                        else if(ItmMode.ToUpper()== "NON-VEG")
+                        {
+                            ItmMode = "2";
+                        }
+                        HG_Category ObjCategory = ListCategory.Find(x => x.Category.ToUpper() == CategoryName.ToUpper());
+                        if (ObjCategory == null && CategoryName.Replace(" ", "") != "")
+                        {
+                            ObjCategory = new HG_Category() { Category = CategoryName, OrgID = ObjOrg.OrgID, CategoryID = 0, CategoryType = 1, EntryBy = EntryBy };
                             ObjCategory.Save();
                             ListCategory.Add(ObjCategory);
                         }
                         HG_Items ObjItem = ListItem.Find(x => x.Items.ToUpper() == ItmName.ToUpper());
-                        if(ObjItem==null&&ItmName.Replace(" ", "") != "" &&ObjCategory!=null)
+                        if (ObjItem == null && ItmName.Replace(" ", "") != "" && ObjCategory != null)
                         {
-                            ObjItem = new HG_Items() { ItemID = 0,CategoryID= ObjCategory.CategoryID,Items=ItmName,ItemMode=ItmMode,ItemDiscription=Discriptn,CostPrice=CostPrice,Tax=Tax,Price=price,ApplyAddOn=1,Image=""
-                            ,EntryBy=EntryBy,OrgID=OrgID,Qty="",Type=1,Status=true
+                            ObjItem = new HG_Items() { ItemID = 0, CategoryID = ObjCategory.CategoryID, Items = ItmName, ItemMode = ItmMode, ItemDiscription = Discriptn, CostPrice = CostPrice, Tax = Tax, Price = price, ApplyAddOn = 1, Image = ""
+                            , EntryBy = EntryBy, OrgID = OrgID, Qty = "", Type = 1, Status = true
 
                             };
                             ObjItem.Save();
                             ListItem.Add(ObjItem);
                         }
-                        else if(ObjItem!=null&& ItmName.Replace(" ", "") != "" && ObjCategory != null)
+                        else if (ObjItem != null && ItmName.Replace(" ", "") != "" && ObjCategory != null)
                         {
                             ObjItem.Items = ItmName;
                             ObjItem.ItemMode = ItmMode;
-                            if((ObjItem.CostPrice!=CostPrice) || (ObjItem.Tax != Tax))
+                            if ((ObjItem.CostPrice != CostPrice) || (ObjItem.Tax != Tax))
                             {
                                 ObjItem.CostPrice = CostPrice;
                                 ObjItem.Tax = Tax;
@@ -226,7 +233,7 @@ namespace HangOut.Controllers
                             ObjItem.Save();
                             ListItem.Add(ObjItem);
                         }
-                        else if(ItmName.Replace(" ", "") == "")
+                        else if (ItmName.Replace(" ", "") == ""|| ObjCategory==null)
                         {
                             Msg = "Uploaded Successfully With Some Data Missing";
                         }
