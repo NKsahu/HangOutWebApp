@@ -18,7 +18,7 @@
     OrderItems = OrderItems.FindAll(x => x.Status != 3 && x.Status != 4);
     OrderItems = OrderItems.FindAll(x => x.ChefSeenBy == 0);
     List<HG_Orders> TodayOrdrlist = new HG_Orders().GetAll(orgId);
-    TodayOrdrlist = TodayOrdrlist.FindAll(x => x.Status == "1" || x.Status == "2");
+    TodayOrdrlist = TodayOrdrlist.FindAll(x => x.Status == "1");
     if (ObjOrg != null && ObjOrg.PaymentType == 1)
     {
         TodayOrdrlist = TodayOrdrlist.FindAll(x => x.PaymentStatus != 0);
