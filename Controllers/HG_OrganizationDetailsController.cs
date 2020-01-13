@@ -252,8 +252,8 @@ namespace HangOut.Controllers
                             }
                         }
                         
-                        var ObjFlrScr = ListFlrScr.Find(x => x.Name.ToUpper().Contains(FlrOrScrName.ToUpper()));
-                        var ObjFsideOrRoName = ListFsideorRowName.Find(x => x.FloorSide_or_RowName.ToUpper().Contains(FlrSideOrRowName.ToUpper()));
+                        var ObjFlrScr = ListFlrScr.Find(x => x.Name.ToUpper()==FlrOrScrName.ToUpper());
+                        var ObjFsideOrRoName = ListFsideorRowName.Find(x => x.FloorSide_or_RowName.ToUpper()==FlrSideOrRowName.ToUpper());
                         if (ObjFlrScr == null && FlrOrScrName.Replace(" ","")!="")
                         {
                             ObjFlrScr = new HG_Floor_or_ScreenMaster();

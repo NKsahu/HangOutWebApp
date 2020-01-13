@@ -42,6 +42,12 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "Please Enter Qr Code" });
             }
+            List<HG_Tables_or_Sheat> ListOfSeat = new HG_Tables_or_Sheat().GetAll(2);//Sheat
+            var SeatExt = ListOfSeat.Find(x => x.Table_or_SheetName.ToUpper() == ObjTable.Table_or_SheetName.ToUpper() && (x.Floor_or_ScreenId == ObjTable.Floor_or_ScreenId) && (x.FloorSide_or_RowNoID == ObjTable.FloorSide_or_RowNoID) && x.Table_or_RowID != ObjTable.Table_or_RowID);
+            if (SeatExt != null)
+            {
+                return Json(new { msg = "Same Seating Already Exist" });
+            }
             HG_Tables_or_Sheat TorSAlreadyObj = new HG_Tables_or_Sheat().GetOne(QrOcde:ObjTable.QrCode);
             if (ObjTable.OrgId == 0)
             {
@@ -50,6 +56,7 @@ namespace HangOut.Controllers
             }
             if(TorSAlreadyObj != null && TorSAlreadyObj.QrCode!="0" && TorSAlreadyObj.Table_or_RowID>0 && TorSAlreadyObj.Table_or_RowID!= ObjTable.Table_or_RowID)
             {
+                
                 string QrMsg = "Qr Code Already used ";
                 if (TorSAlreadyObj.OrgId != ObjTable.OrgId)
                 {
@@ -85,6 +92,12 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_Tables_or_Sheat ObjTable)
         {
+            List<HG_Tables_or_Sheat> ListOfTable = new HG_Tables_or_Sheat().GetAll(1);//Tables
+            var TblExt = ListOfTable.Find(x => x.Table_or_SheetName.ToUpper() == ObjTable.Table_or_SheetName.ToUpper() && (x.Floor_or_ScreenId == ObjTable.Floor_or_ScreenId) && (x.FloorSide_or_RowNoID == ObjTable.FloorSide_or_RowNoID) && x.Table_or_RowID != ObjTable.Table_or_RowID);
+            if (TblExt != null)
+            {
+                return Json(new { msg = "Same Seating Already Exist" });
+            }
             if (ObjTable.QrCode == null || ObjTable.QrCode.Replace(" ","") == "")
             {
                 return Json(new { msg = "Please Enter Qr Code" });
