@@ -746,7 +746,13 @@ namespace HangOut.Controllers
                 result.Add("MSG", "Can't Cancel Order. Order Already Completed");
                 return result;
             }
-            if (hG_Orders.PaymentStatus > 0 &&(ordNotice == null || ordNotice.OID == 0))
+            if (hG_Orders.PaymentStatus ==1 &&(ordNotice == null || ordNotice.OID == 0))
+            {
+                result.Add("Status", 400);
+                result.Add("MSG", "Can't Cancel Order. Payment Has Been Done");
+                return result;
+            }
+            if (hG_Orders.PaymentStatus ==2 || hG_Orders.PaymentStatus==3)
             {
                 result.Add("Status", 400);
                 result.Add("MSG", "Can't Cancel Order. Payment Has Been Done");
