@@ -916,7 +916,6 @@ namespace HangOut.Controllers
                     else
                     {
                         Status = false;
-                        
                     }
                 }
 

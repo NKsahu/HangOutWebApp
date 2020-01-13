@@ -25,6 +25,7 @@
             @Html.HiddenFor(model => model.CreateDate)
             @Html.HiddenFor(model => model.Otp)
             @Html.HiddenFor(model => model.OMID)
+            @Html.HiddenFor(model=>model.Type)
         <div class="row">
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -70,14 +71,14 @@
 
             </div>
 
-            <div class="col-md-2">
+            @*<div class="col-md-2">
 
                 @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.DropDownListFor(model => model.Type, new SelectList(OrgType.List, "id", "Name", "2"), new { @class = "form-control", required = "required" })
                 @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 
-            </div>
+            </div>*@
             <div class=" col-md-1">
                 @Html.Label("Save", new { @class = "text-white" })
                 <input type="submit" value="Save" class="btn btn-success form-control" />
@@ -90,11 +91,7 @@
    </div>
     <script>
         $(document).ready(function () {
-            Cal();
-            //QrCodeMode();
-            function Cal() {
-                $("#Type").parent('div').hide();
-            }
+            
             function QrCodeMode() {
                 //Table_or_RowID
                 var TableCode = $("#Table_or_RowID").val();
@@ -106,4 +103,9 @@
             }
 
         });
+        Cal();
+        //QrCodeMode();
+        function Cal() {
+            $("#Type").parent('div').hide();
+        }
         </script>

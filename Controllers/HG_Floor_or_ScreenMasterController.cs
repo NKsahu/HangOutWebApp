@@ -38,8 +38,12 @@ namespace HangOut.Controllers
         public ActionResult ScreenCreateEdit(HG_Floor_or_ScreenMaster Objfloor)
         {
             int i = Objfloor.save();
-           List<HG_Floor_or_ScreenMaster> Listscr = new HG_Floor_or_ScreenMaster().GetAll(2);
-
+           List<HG_Floor_or_ScreenMaster> Listscr = new HG_Floor_or_ScreenMaster().GetAll(2);//scrn Type=2
+            var ObjFlrExist = Listscr.Find(x => x.Name.ToUpper() == Objfloor.Name.ToUpper() && x.Floor_or_ScreenID != Objfloor.Floor_or_ScreenID);
+            if (ObjFlrExist != null)
+            {
+                return Json(new { msg = "Screen Name Already Exist" }, JsonRequestBehavior.AllowGet);
+            }
             if (i > 0)
                 return Json(new {data= Objfloor }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
@@ -47,6 +51,7 @@ namespace HangOut.Controllers
         public ActionResult CreateEdit(int ID)
         {
             HG_Floor_or_ScreenMaster Objfloor = new HG_Floor_or_ScreenMaster();
+           
             if (ID > 0)
             {
                 Objfloor = Objfloor.GetOne(ID);
@@ -56,6 +61,12 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_Floor_or_ScreenMaster Objfloor)
         {
+            List<HG_Floor_or_ScreenMaster> Listscr = new HG_Floor_or_ScreenMaster().GetAll(1);//floor Type=1
+            var ObjFlrExist = Listscr.Find(x => x.Name.ToUpper() == Objfloor.Name.ToUpper() && x.Floor_or_ScreenID != Objfloor.Floor_or_ScreenID);
+            if (ObjFlrExist != null)
+            {
+                return Json(new { msg = "Floor Name Already Exist" }, JsonRequestBehavior.AllowGet);
+            }
             int i = Objfloor.save();
             if (i > 0)
                 return Json(new {data= Objfloor }, JsonRequestBehavior.AllowGet);

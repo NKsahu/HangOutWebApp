@@ -54,6 +54,12 @@ namespace HangOut.Controllers
         public ActionResult CreateEdit(HG_FloorSide_or_RowName ObjRowName)
         {
             int i = ObjRowName.save();
+            List<HG_FloorSide_or_RowName> Listscr = new HG_FloorSide_or_RowName().GetAll(1);//floor side Type=2
+            var ObjFlrExist = Listscr.Find(x => x.FloorSide_or_RowName.ToUpper() == ObjRowName.FloorSide_or_RowName.ToUpper() && x.ID != ObjRowName.ID);
+            if (ObjFlrExist != null)
+            {
+                return Json(new { msg = "Floor Side Name Already Exist" }, JsonRequestBehavior.AllowGet);
+            }
             if (i > 0)
                 return Json(new { data = ObjRowName }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");

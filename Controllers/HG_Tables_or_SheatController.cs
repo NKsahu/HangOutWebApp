@@ -27,6 +27,7 @@ namespace HangOut.Controllers
         public ActionResult SheetCreateEdit(int ID)
         {
             HG_Tables_or_Sheat ObjTable = new HG_Tables_or_Sheat();
+            ObjTable.Type = "2";// create shaet
             if (ID > 0)
             {
                 ObjTable = ObjTable.GetOne(ID);
@@ -73,6 +74,7 @@ namespace HangOut.Controllers
         {
 
             HG_Tables_or_Sheat ObjTable = new HG_Tables_or_Sheat();
+            ObjTable.Type = "1";
             if (ID > 0)
             {
                 ObjTable = ObjTable.GetOne(ID);
