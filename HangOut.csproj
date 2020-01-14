@@ -428,6 +428,7 @@
     <Content Include="Views\Reports\PastOrder.cshtml" />
     <Content Include="Views\HG_OrganizationDetails\Upload.cshtml" />
     <Content Include="Views\HG_Items\UplExl.cshtml" />
+    <Content Include="Views\City\CreateTeshsile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

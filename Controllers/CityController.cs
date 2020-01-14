@@ -18,11 +18,13 @@ namespace HangOut.Controllers
         public ActionResult CreateEdit(int CityId)
         {
 
-            City city = new City().GetOne(CityId);
-            if(CityId>0)
+            City city = new City();
+           
+            if (CityId>0)
             {
                 city = city.GetOne(CityId);
             }
+            city.Type = 0;
             return View(city);
         }
         [HttpPost]
@@ -30,13 +32,26 @@ namespace HangOut.Controllers
         {
             int i = city.save();
             if (i > 0)
-                return Json(new { CityId = city.CityId, Name = city.Name }, JsonRequestBehavior.AllowGet);
+                return Json(new { data=city }, JsonRequestBehavior.AllowGet);
             //    return RedirectToAction("Index", "City", new { Type = 1 });
            return RedirectToAction("Error");
         }
         public ActionResult Error()
         {
             return View();
+        }
+
+        public ActionResult CreateTeshsile(int CityId)
+        {
+            City city = new City();
+           
+            if (CityId > 0)
+            {
+                city = city.GetOne(CityId);
+            }
+            city.Type = 1;
+            city.StateId = 0;
+            return View(city);
         }
     }
 }

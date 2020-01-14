@@ -9,6 +9,8 @@ namespace HangOut.Models.Common
       public  int CityId { get; set; }
       public  string Name { get; set; }
      public   int StateId { get; set; }
+        public int Type { get; set; }//{0 city/district  1 means tehsil/TALUKA 
+        
         public List<City> GetAllByState(int StateId)
         {
             System.Data.SqlClient.SqlCommand cmd = null;
@@ -27,8 +29,9 @@ namespace HangOut.Models.Common
                     {
                         CityId = int.Parse(SDR["CityId"].ToString()),
                         Name = SDR["Name"].ToString(),
-                        StateId =int.Parse(SDR["StateId"].ToString())
-                    };
+                        StateId =int.Parse(SDR["StateId"].ToString()),
+                        Type = int.Parse(SDR["Type"].ToString())
+                };
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -55,7 +58,7 @@ namespace HangOut.Models.Common
                  ObjTmp.CityId = int.Parse(SDR["CityId"].ToString());
                  ObjTmp.Name = SDR["Name"].ToString();
                  ObjTmp.StateId = int.Parse(SDR["StateId"].ToString());
-                    
+                    ObjTmp.Type = int.Parse(SDR["Type"].ToString());
                 }
             }
             catch (Exception e) { e.ToString(); }
@@ -72,15 +75,18 @@ namespace HangOut.Models.Common
                 SqlCommand cmd = null;
                 string Query = "";
                 if (this.CityId == 0)
-                    Query = "insert into City values (@Name,@StateId); SELECT SCOPE_IDENTITY(); ";
+                    Query = "insert into City values (@Name,@StateId,@Type); SELECT SCOPE_IDENTITY(); ";
                 else
-                    Query = "Update   City set Name=@Name,StateId=@StateId where CityId=@CityId";
-                cmd = new SqlCommand(Query,Con);
+                    Query = "Update   City set Name=@Name,StateId=@StateId,Type=@Type where CityId=@CityId";
+                cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("CityId", CityId);
                 cmd.Parameters.AddWithValue("Name", Name);
                 cmd.Parameters.AddWithValue("StateId", StateId);
-                if (this.CityId == 0)
+                cmd.Parameters.AddWithValue("@Type", Type);
+                if (this.CityId == 0) { 
                     Row = System.Convert.ToInt32(cmd.ExecuteScalar());
+                this.CityId = Row;
+                }
                 else if (cmd.ExecuteNonQuery() > 0)
                 {
                     Row = this.CityId;
