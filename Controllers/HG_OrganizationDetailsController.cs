@@ -32,7 +32,7 @@ namespace HangOut.Controllers
         {
             if (Objitem.Email == null)
             {
-                Objitem.Email="";
+                Objitem.Email = "";
             }
             if (Objitem.PANNO == null)
             {
@@ -90,10 +90,7 @@ namespace HangOut.Controllers
             {
                 Objitem.ACNO = "";
             }
-            if (Objitem.City == null)
-            {
-                Objitem.City = "0";
-            }
+
             if (Objitem.PrintRemark == null)
             {
                 Objitem.PrintRemark = "";
@@ -106,6 +103,10 @@ namespace HangOut.Controllers
             if (Objitem.invoicePhone == null)
             {
                 Objitem.invoicePhone = "";
+            }
+            if (Objitem.City == null || Objitem.City == "0" || Objitem.City=="")
+            {
+                return Json(new { msg = "Please Select City" });
             }
             int i = Objitem.Save();
 
@@ -202,6 +203,7 @@ namespace HangOut.Controllers
             {
                 ObjSetting.Contact2 = "";
             }
+            
             ObjSetting.save();
             return  Json(new { data="1" }, JsonRequestBehavior.AllowGet);
         }

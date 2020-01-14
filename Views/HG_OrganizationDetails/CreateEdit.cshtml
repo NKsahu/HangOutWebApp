@@ -77,7 +77,7 @@
             </div>
             <div class="col-md-3">
                 @Html.Label("District/City")
-                @Html.DropDownListFor(model => model.City, new SelectList(listcity, "CityId", "Name", Model.City), new { @class = "form-control", val = Model.City })
+                @Html.DropDownListFor(model => model.City, new SelectList(listcity, "CityId", "Name", Model.City), new { @class = "form-control", val = Model.City, required = "required" })
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-1">
@@ -85,7 +85,7 @@
             </div>
             <div class="col-md-3">
                 @Html.Label("TALUKA/TEHSIL")
-                @Html.DropDownListFor(model => model.DistrictId, new SelectList(ListTehsil, "CityId", "Name", Model.DistrictId),"Select District", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.DistrictId, new SelectList(ListTehsil, "CityId", "Name", Model.DistrictId),"Select District", new { @class = "form-control",required = "required" })
                 @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-1">
