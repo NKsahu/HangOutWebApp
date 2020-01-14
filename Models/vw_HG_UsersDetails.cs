@@ -25,6 +25,7 @@ namespace HangOut.Models
         public bool Status { get; set; }
         public bool CurrentStatus { get; set; }
         public string orgType { get; set; }// only for check OrgType not included in table column
+        public int JoinByOrg { get; set; }// join from which org
        public vw_HG_UsersDetails()
         {
             Status = true;
@@ -72,6 +73,7 @@ namespace HangOut.Models
                     ObjTmp.UpdateDate = SDR.GetDateTime(10);
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
+                    ObjTmp.JoinByOrg = SDR.GetInt32(13);
                     listOfuser.Add(ObjTmp);
                 }
             }
@@ -110,6 +112,7 @@ namespace HangOut.Models
                     ObjTmp.UpdateDate = SDR.GetDateTime(10);
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
+                    ObjTmp.JoinByOrg = SDR.GetInt32(13);
 
                 }
             }
@@ -147,7 +150,7 @@ namespace HangOut.Models
                     ObjTmp.UpdateDate = SDR.GetDateTime(10);
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
-
+                    ObjTmp.JoinByOrg = SDR.GetInt32(13);
                 }
             }
             catch (System.Exception e) { e.ToString(); }
@@ -157,21 +160,25 @@ namespace HangOut.Models
         public int save()
         {
             int R = 0;
-            SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             try
             {
                 Con.Open();
                 SqlCommand cmd = null;
                 string Quary = "";
-                if (this.UserCode == 0)
-                
-                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus);SELECT SCOPE_IDENTITY(); ";
-                     else
-                 
-                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,EntryBy=@EntryBy,EntryDate=@EntryDate,UpdateDate=@UpdateDate,status=@status,CurrentStatus=@CurrentStatus where UserCode=@UserCode;";
-
-                cmd = new SqlCommand(Quary, Con);
-                cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
+                if (this.UserCode == 0) { 
+                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus,@JoinByOrg);SELECT SCOPE_IDENTITY(); ";
+                    cmd = new SqlCommand(Quary, Con);
+                    cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
+                    
+                }
+                else
+                {
+                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,UpdateDate=@UpdateDate,status=@status,CurrentStatus=@CurrentStatus,JoinByOrg=@JoinByOrg where UserCode=@UserCode;";
+                    cmd = new SqlCommand(Quary, Con);
+                    cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
+                }
                 cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                 cmd.Parameters.AddWithValue("@UserType", this.UserType);
                 cmd.Parameters.AddWithValue("@UserName", this.UserName);
@@ -179,16 +186,14 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Password", this.Password);
                 cmd.Parameters.AddWithValue("@EMail", this.EMail);
                 cmd.Parameters.AddWithValue("@UPhoto", this.UPhoto);
-                cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
-                cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@CurrentStatus", this.CurrentStatus);
-               
+                cmd.Parameters.AddWithValue("@JoinByOrg", this.JoinByOrg);
                 if (this.UserCode == 0)
                 {
                     R = System.Convert.ToInt32(cmd.ExecuteScalar());
-                   
+                    this.UserCode = R;
                 }
                 else
                 {
@@ -197,7 +202,6 @@ namespace HangOut.Models
                         R = this.UserCode;
                     }
                 }
-               
             }
             catch (System.Exception e){ e.ToString(); }
 
@@ -236,7 +240,7 @@ namespace HangOut.Models
                     ObjTmp.UpdateDate = SDR.GetDateTime(10);
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
-
+                    ObjTmp.JoinByOrg = SDR.GetInt32(13);
                 }
             }
             catch (System.Exception e) { e.ToString(); }

@@ -1614,6 +1614,7 @@ namespace HangOut.Controllers
             JObject ParaMeters = JObject.Parse(Obj);
             string QrCode = ParaMeters.GetValue("TID").ToString();
             int CID = int.Parse(ParaMeters.GetValue("CID").ToString());
+            
             string Type = ParaMeters.GetValue("Type").ToString();
             int AppType= ParaMeters["AppType"] != null ? int.Parse(ParaMeters["AppType"].ToString()) : 1;//1 customer ,2 captain , 3 admin panel
             HG_Tables_or_Sheat TableRowObj = new HG_Tables_or_Sheat().GetOne(QrOcde: QrCode);
@@ -1637,6 +1638,15 @@ namespace HangOut.Controllers
             jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
             jObject.Add("OrderingStatus", objOrg.CustomerOrdering);
             jObject.Add("PaymentType", objOrg.PaymentType);
+            vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(CID);
+            if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.JoinByOrg == 0)
+            {
+                if (objOrg.OrgID > 0)
+                {
+                    ObjUser.JoinByOrg = objOrg.OrgID;
+                    ObjUser.save();
+                }
+            }
             OrgSetting orgSetting = OrgSetting.Getone(objOrg.OrgID);
             if (orgSetting.EnblDeleryChrg == 1 && orgSetting.AcptMinOrd == 1 && OrgType.DeliveryChargeAply(AppType, orgSetting))
             {
