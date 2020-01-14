@@ -108,6 +108,10 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "Please Select City" });
             }
+            if (Objitem.DistrictId ==0)
+            {
+                return Json(new { msg = "Please Select Tehsil" });
+            }
             int i = Objitem.Save();
 
             if (i > 0)

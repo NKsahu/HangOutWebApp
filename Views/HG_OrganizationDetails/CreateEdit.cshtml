@@ -7,6 +7,8 @@
 @{List<City> listcity = new List<City>();
     List<State> liststate = new List<State>();
     List<District> ListTehsil = new District().GetAllByStsCity(0,0);
+    var UserInfo = Request.Cookies["UserInfo"];
+    var UserType = UserInfo["UserType"];
     }
 <div class="card">
     <div class="card-header">
@@ -79,17 +81,25 @@
                 @Html.DropDownListFor(model => model.City, new SelectList(listcity, "CityId", "Name", Model.City), new { @class = "form-control", val = Model.City, required = "required" })
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-1">
-                <button type="button" class="btn  btn-success btn-md" onclick="CreateCity('0')">Add </button>
-            </div>
+            @if (UserType != null && UserType == "SA")
+            {
+                <div class="col-md-1">
+                    <button type="button" class="btn  btn-success btn-md" onclick="CreateCity('0')">Add </button>
+                </div>
+            }
+
             <div class="col-md-3">
                 @Html.Label("TALUKA/TEHSIL")
-                @Html.DropDownListFor(model => model.DistrictId, new SelectList(ListTehsil, "Id", "Name", Model.DistrictId),"Select District", new { @class = "form-control",required = "required" })
+                @Html.DropDownListFor(model => model.DistrictId, new SelectList(ListTehsil, "Id", "Name", Model.DistrictId), "Select District", new { @class = "form-control", val = Model.DistrictId, required = "required" })
                 @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-1">
-                <button type="button" class="btn  btn-success btn-md" onclick="CreateTehsil('0')">Add </button>
-            </div>
+            @if (UserType != null && UserType == "SA")
+            {
+                <div class="col-md-1">
+                    <button type="button" class="btn  btn-success btn-md" onclick="CreateTehsil('0')">Add </button>
+                </div>
+            }
+
             <div class="col-md-3">
                 @Html.LabelFor(model => model.PinCode, htmlAttributes: new { @class = "control-label  " })
                 @Html.EditorFor(model => model.PinCode, new { htmlAttributes = new { @class = "form-control", required = "required" } })
@@ -130,7 +140,8 @@
 </div>
 
 <script>
-        GetDrowpDownCity();
+    
+    GetDrowpDownCity();
         $("#State").change(function () {
             GetDrowpDownCity();
         });
@@ -156,7 +167,7 @@
                                     
                                 }).html(Obj.Name).appendTo("#City");
                         });
-                        $("#City").val(CityValue);
+                        $("#City").val(CityValue).change();
                     }
                     $("#waiting").hide();
                     //$("#City").val('1');
@@ -200,6 +211,13 @@
         LoadTehSil();
 
     }
+    $("#City").change(function () {
+        if ($("#City").val() != "" && $("#City").val() != "0") {
+            if ($("#State").val() != "" && $("#City").val() != "0") {
+                LoadTehSil();
+            }
+        }
+    });
     function CreateTehsil(ID) {
         if (ID != "0") {
             AddTr = false;
@@ -223,12 +241,13 @@
     }
     function LoadTehSil() {
         $("#waiting").show();
-        var TehsilId = $("#DistrictId").val();
+        var TehsilId = $("#DistrictId").attr("val");
+        var City = $("#City").val();
+        var State = $("#State").val();
         $.ajax({
-            url: "/WebApi/CityListByStateId?StateId=0",
+            url: "/WebApi/TehsilList?StateId="+State+"&CityId="+City,
             type: "POST",
             success: function (data) {
-                
                 var JsonArray = JSON.parse(data);
                 $("#DistrictId").html('');
                 $("#DistrictId").val('0');
@@ -237,7 +256,7 @@
                     $.each(JsonArray, function (i, Obj) {      // bind the dropdown list using json result              
                         $('<option>',
                             {
-                                value: Obj.CityId,
+                                value: Obj.Id,
                                 text: Obj.Name
 
                             }).html(Obj.Name).appendTo("#DistrictId");
@@ -258,7 +277,5 @@
             }
         });
     }
-    //$("#DistrictId").ch(function () {
-    //    LoadTehSil();
-    //});
+    setTimeout(function () { LoadTehSil(); }, 100); 
 </script>

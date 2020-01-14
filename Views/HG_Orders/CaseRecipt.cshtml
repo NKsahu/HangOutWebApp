@@ -1,5 +1,4 @@
 ﻿@using HangOut.Models
-
 @{
     Layout = null;
     int Sn = 1;
@@ -7,6 +6,7 @@
     int CountTotal = 0;
     double AmtTotal = 0.00;
     List<HG_Items> ItemList = new List<HG_Items>();
+    List<HG_OrderItem> ListOfOrdItems = new List<HG_OrderItem>();
     if (Request.QueryString["Type"] == "1")
     {
         <div class="card">
@@ -58,7 +58,7 @@
 
                     </div>
 
-                    </div>
+                </div>
             </div>
         </div>
 
@@ -68,15 +68,15 @@
         </div>
         <script>
             $(document).ready(function () {
-        function Search() {
+                function Search() {
                     $("#waiting").show();
-            var Fdate = $("#Fdate").val();
-            var Tdate = $("#Tdate").val();
-            var PMode = $("#PMode").val();
-            var PlacedBy = $("#PlacedBy").val();
-           
+                    var Fdate = $("#Fdate").val();
+                    var Tdate = $("#Tdate").val();
+                    var PMode = $("#PMode").val();
+                    var PlacedBy = $("#PlacedBy").val();
+
                     $.ajax({
-                        url: "/HG_Orders/CaseRecipt?Type=2&Fdate=" + Fdate + "&Tdate=" + Tdate + "&PMode=" + PMode +"&PlacedBy="+PlacedBy,
+                        url: "/HG_Orders/CaseRecipt?Type=2&Fdate=" + Fdate + "&Tdate=" + Tdate + "&PMode=" + PMode + "&PlacedBy=" + PlacedBy,
                         type: "GET",
                         success: function (data) {
                             $("#waiting").hide();
@@ -84,19 +84,19 @@
                             $("#List").html("");
                             $("#List").html(data);
 
-                },
+                        },
                         error: function (jqXhr, textStatus, errorMessage) { // error callback
                             $("#waiting").hide();
+                        }
+
+                    });
                 }
-
-            });
-    }
                 $("#Search").click(function () {
-        Search();
-    });
+                    Search();
+                });
 
             });
-            
+
         </script>
                                 }
                                 else
@@ -106,10 +106,11 @@
                                     DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     ListOrder = new HG_Orders().GetListByGetDate(FromDate, Todate);
                                     ListOrder = ListOrder.FindAll(x => x.Status == "3");
-                                    if(Request.QueryString["PMode"]!=null&& Request.QueryString["PMode"]!="-1"){
+                                    if (Request.QueryString["PMode"] != null && Request.QueryString["PMode"] != "-1")
+                                    {
                                         ListOrder = ListOrder.FindAll(X => X.PaymentStatus == int.Parse(Request.QueryString["PMode"]));
                                     }
-                                    if(Request.QueryString["PlacedBy"]!=null&& Request.QueryString["PlacedBy"] != "0")
+                                    if (Request.QueryString["PlacedBy"] != null && Request.QueryString["PlacedBy"] != "0")
                                     {
                                         HashSet<int> hashUser = new HashSet<int>();
                                         List<vw_HG_UsersDetails> userlist = new vw_HG_UsersDetails().GetAll();
@@ -126,27 +127,29 @@
                                         }
                                     }
                                     ItemList = new HG_Items().GetAll();
-                                }
-    <div class="col" id="List2">
-        <div class="card">
-            <div class="card-header">Item Sale Details </div>
-            <div class="card-body">
-                <table class="table table-hover table-bordered text-center" id="TBLID">
-                    <thead>
-                        <tr>
-                            <th> S.N </th>
-                            <th> Item Name</th>
-                            <th> Unit</th>
-                            <th> Total Amt</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var Order in ListOrder)
-                        {
-                            List<HG_OrderItem> ListItem = new HG_OrderItem().GetAll(Order.OID);
-                            ListItem = ListItem.FindAll(x => x.Status == 3);//only completed items
-                            var GroupByItm = ListItem.GroupBy(x => x.FID);
-                            foreach (var ObjOrder in GroupByItm)
+                                    foreach (var Order in ListOrder)
+                                    {
+                                        List<HG_OrderItem> ListItem = new HG_OrderItem().GetAll(Order.OID);
+                                        ListItem = ListItem.FindAll(x => x.Status == 3);//only completed items
+                                        ListOfOrdItems.AddRange(ListItem);
+                                    }
+                                    var GroupByItm = ListOfOrdItems.GroupBy(x => x.FID);
+
+        <div class="col" id="List2">
+            <div class="card">
+                <div class="card-header">Item Sale Details </div>
+                <div class="card-body">
+                    <table class="table table-hover table-bordered text-center" id="TBLID">
+                        <thead>
+                            <tr>
+                                <th> S.N </th>
+                                <th> Item Name</th>
+                                <th> Unit</th>
+                                <th> Total Amt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var ObjOrder in GroupByItm)
                             {
                                 var FirstObj = ObjOrder.First();
                                 var Rs = FirstObj.Price;
@@ -155,28 +158,26 @@
                                 HG_Items item = ItemList.Find(x => x.ItemID == ObjOrder.Key);
                                 CountTotal += Counts;
                                 AmtTotal += Total;
-                        <tr>
-                            <td>@(Sn++)</td>
-                            <td>@item.Items</td>
-                            <td>@Counts</td>
-                            <td>@Total.ToString("0.00")</td>
-                        </tr>
+                            <tr>
+                                <td>@(Sn++)</td>
+                                <td>@item.Items</td>
+                                <td>@Counts</td>
+                                <td>@Total.ToString("0.00")</td>
+                            </tr>
 
                             }
-                        }
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>Total</td>
-                            <td></td>
-                            <td>@CountTotal</td>
-                            <td>@AmtTotal.ToString("0.00")</td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Total</td>
+                                <td></td>
+                                <td>@CountTotal</td>
+                                <td>@AmtTotal.ToString("0.00")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
-
-    </div>
-}
-
+                                    }
+                                }

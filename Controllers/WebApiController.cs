@@ -1677,7 +1677,7 @@ namespace HangOut.Controllers
         {
             JArray Info = new JArray();
             List<HG_Orders> OrderList = new HG_Orders().GetAll(CID: CID);
-            OrderList = OrderList.FindAll(x => x.OrderByIds.Contains(CID.ToString()));
+          //  OrderList = OrderList.FindAll(x => x.OrderByIds.Contains(CID.ToString()));
             OrderList = OrderList.FindAll(x => x.Status != "4");
             if (status > 0 && status == 1)//ongoing orders
             {
@@ -2020,6 +2020,11 @@ namespace HangOut.Controllers
         public JArray CityListByStateId(int StateId)
         {
             List<City> citylist = new City().GetAllByState(StateId);
+            return JArray.FromObject(citylist);
+        }
+        public JArray TehsilList(int StateId,int CityId)
+        {
+            List<District> citylist = new District().GetAllByStsCity(StateId,CityId);
             return JArray.FromObject(citylist);
         }
         [HttpPost]

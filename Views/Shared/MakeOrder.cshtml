@@ -325,10 +325,7 @@
             </div>
 
         </div>
-
         <!---->
-
-
     </div>
     <div class="row tabcontent2" id="News">
         <div class="col-sm-12 col-md-7">
@@ -975,28 +972,65 @@
                      $.confirm({
                          title: Msg,
                          content: DelivryMsg,
+                         closeIcon: true,
+                         boxWidth: '50%',
+                         useBootstrap: false,
                          buttons: {
-                             btnClass: 'btn-green',
-                             confirm: function () {
-                                 PostOrder(Obj)
+                             confirm: {
+                                 text: 'Confirm',
+                                 btnClass: 'btn-info',
+                                 columnClass:'col-md-3',
+                                 action: function () {
+                                     PostOrder(Obj)
+                                 }
                              },
-                             cancel: function () {
-                                 // $.alert('Canceled!');
+                             cancel: {
+                                 text:'Cancel',
+                                 btnClass: 'btn-red',
+                                 keys: ['Esc', 'esc'],
+                                 columnClass: 'col-md-3'
+                             },
+                             Bycash: {
+                                 text: 'ByCash',
+                                 btnClass: 'btn-success',
+                                 keys: ['enter', 'shift'],
+                                 columnClass: 'col-md-3',
+                                 action: function () {
+                                     $.alert('Something else?');
+                                 }
+                             },
+                             ByWallet: {
+                                 text: 'Bank/Wallet',
+                                 btnClass: 'btn-info',
+                                 columnClass: 'col-md-3',
+                                 action: function () {
+                                     $.alert('Something else?');
+                                 }
                              }
                          }
+                         
                      });
                  }
                  else {
                      $.confirm({
                          title: Msg,
                          content: 'Are You Sure',
+                         closeIcon:true,
                          buttons: {
-                             btnClass: 'btn-green',
                              confirm: function () {
                                  PostOrder(Obj)
                              },
-                             cancel: function () {
-                                 // $.alert('Canceled!');
+                             cancel: {
+                                 text: 'Cancel',
+                                 keys: ['Esc', 'esc'],
+                             },
+                             Bycash: {
+                                 text: 'Something else',
+                                 btnClass: 'btn-blue',
+                                 keys: ['enter', 'shift'],
+                                 action: function () {
+                                     $.alert('Something else?');
+                                 }
                              }
                          }
                      });

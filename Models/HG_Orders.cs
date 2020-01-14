@@ -99,7 +99,7 @@ namespace HangOut.Models
                 string Query = "SELECT * FROM HG_ORDERS WHERE OrgId="+OrgId+"  ORDER BY OID DESC";
                 if(CID>0)
                 {
-                     Query = "SELECT * FROM HG_ORDERS WHERE OrderByIds like '%"+CID.ToString()+"%' ORDER BY OID DESC";
+                     Query = "  select * from HG_Orders where OID in (select Distinct(OID) from HG_OrderItem where OrdById="+CID+") ORDER BY OID DESC";
                 }
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
