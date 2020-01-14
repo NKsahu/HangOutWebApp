@@ -41,17 +41,34 @@ namespace HangOut.Controllers
             return View();
         }
 
-        public ActionResult CreateTeshsile(int CityId)
+        public ActionResult CreateTeshsile( int ID)
         {
-            City city = new City();
-           
-            if (CityId > 0)
+            District district = new District();
+            if (ID > 0)
             {
-                city = city.GetOne(CityId);
+                district = new District().GetOne(ID);
             }
-            city.Type = 1;
-            city.StateId = 0;
-            return View(city);
+            return View(district);
         }
+        [HttpPost]
+        public ActionResult CreateTehsil(District district)
+        {
+            if (district.StateId == 0)
+            {
+                return Json(new { msg = "Please Select State" });
+            }
+            if (district.CityId == 0)
+            {
+                return Json(new { msg = "Please Select City" });
+            }
+            int i = district.save();
+            if (i > 0)
+                return Json(new { data = district }, JsonRequestBehavior.AllowGet);
+            //    return RedirectToAction("Index", "City", new { Type = 1 });
+            return RedirectToAction("Error");
+
+        }
+
+
     }
 }

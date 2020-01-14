@@ -6,8 +6,7 @@
 @using HangOut.Models.Common
 @{List<City> listcity = new List<City>();
     List<State> liststate = new List<State>();
-    List<City> ListTehsil = new City().GetAllByState(0);
-
+    List<District> ListTehsil = new District().GetAllByStsCity(0,0);
     }
 <div class="card">
     <div class="card-header">
@@ -85,7 +84,7 @@
             </div>
             <div class="col-md-3">
                 @Html.Label("TALUKA/TEHSIL")
-                @Html.DropDownListFor(model => model.DistrictId, new SelectList(ListTehsil, "CityId", "Name", Model.DistrictId),"Select District", new { @class = "form-control",required = "required" })
+                @Html.DropDownListFor(model => model.DistrictId, new SelectList(ListTehsil, "Id", "Name", Model.DistrictId),"Select District", new { @class = "form-control",required = "required" })
                 @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-1">
@@ -210,7 +209,7 @@
         $('#waiting').show();
         $.ajax({
             type: 'GET',
-            url: "/City/CreateTeshsile?CityId=" + ID + "",
+            url: "/City/CreateTeshsile?ID=" + ID + "",
             success: function (data) {
                 makedpt("CreateCity");
                 $("#CreateCity > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -229,7 +228,7 @@
             url: "/WebApi/CityListByStateId?StateId=0",
             type: "POST",
             success: function (data) {
-                var dis
+                
                 var JsonArray = JSON.parse(data);
                 $("#DistrictId").html('');
                 $("#DistrictId").val('0');

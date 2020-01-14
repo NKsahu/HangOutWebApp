@@ -321,6 +321,7 @@
     <Compile Include="Models\Common\ActiveMenu.cs" />
     <Compile Include="Models\Common\Cart.cs" />
     <Compile Include="Models\Common\City.cs" />
+    <Compile Include="Models\Common\District.cs" />
     <Compile Include="Models\Common\LoginFilter.cs" />
     <Compile Include="Models\Common\OrdNotice.cs" />
     <Compile Include="Models\Common\OTPGeneretion.cs" />
