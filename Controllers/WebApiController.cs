@@ -1461,7 +1461,7 @@ namespace HangOut.Controllers
                     TableScreen.Add("OID", order.OID);
                     TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
-                    TableScreen.Add("ChefName", (ChefObj != null?ChefObj.UserName:ChefSeenId.ToString()));
+                    TableScreen.Add("ChefName", (ChefObj != null?ChefObj.UserName:""));
                     tableorSheatList.Add(TableScreen);
                 }
             }
