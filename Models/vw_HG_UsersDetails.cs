@@ -26,6 +26,7 @@ namespace HangOut.Models
         public bool CurrentStatus { get; set; }
         public string orgType { get; set; }// only for check OrgType not included in table column
         public int JoinByOrg { get; set; }// join from which org
+        public bool IsHeadChef { get; set; }
        public vw_HG_UsersDetails()
         {
             Status = true;
@@ -74,6 +75,7 @@ namespace HangOut.Models
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     ObjTmp.JoinByOrg = SDR.GetInt32(13);
+                    ObjTmp.IsHeadChef = SDR.GetBoolean(14);
                     listOfuser.Add(ObjTmp);
                 }
             }
@@ -113,7 +115,7 @@ namespace HangOut.Models
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     ObjTmp.JoinByOrg = SDR.GetInt32(13);
-
+                    ObjTmp.IsHeadChef = SDR.GetBoolean(14);
                 }
             }
             catch (System.Exception e) { e.ToString(); }
@@ -124,7 +126,7 @@ namespace HangOut.Models
 
         public vw_HG_UsersDetails GetSingleByUserId(int UserCode)
         {
-            SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
@@ -151,9 +153,10 @@ namespace HangOut.Models
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     ObjTmp.JoinByOrg = SDR.GetInt32(13);
+                    ObjTmp.IsHeadChef = SDR.GetBoolean(14);
                 }
             }
-            catch (System.Exception e) { e.ToString(); }
+            catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); SDR.Close(); Con.Close(); Con.Dispose(); Con = null; }
             return (ObjTmp);
         }
@@ -167,15 +170,14 @@ namespace HangOut.Models
                 SqlCommand cmd = null;
                 string Quary = "";
                 if (this.UserCode == 0) { 
-                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus,@JoinByOrg);SELECT SCOPE_IDENTITY(); ";
+                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus,@JoinByOrg,@IsHeadChef);SELECT SCOPE_IDENTITY(); ";
                     cmd = new SqlCommand(Quary, Con);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
-                    
                 }
                 else
                 {
-                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,UpdateDate=@UpdateDate,status=@status,CurrentStatus=@CurrentStatus,JoinByOrg=@JoinByOrg where UserCode=@UserCode;";
+                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,UpdateDate=@UpdateDate,status=@status,CurrentStatus=@CurrentStatus,JoinByOrg=@JoinByOrg,IsHeadChef=@IsHeadChef where UserCode=@UserCode;";
                     cmd = new SqlCommand(Quary, Con);
                     cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
                 }
@@ -190,6 +192,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Status", this.Status);
                 cmd.Parameters.AddWithValue("@CurrentStatus", this.CurrentStatus);
                 cmd.Parameters.AddWithValue("@JoinByOrg", this.JoinByOrg);
+                cmd.Parameters.AddWithValue("@IsHeadChef", this.IsHeadChef);
                 if (this.UserCode == 0)
                 {
                     R = System.Convert.ToInt32(cmd.ExecuteScalar());
@@ -241,6 +244,7 @@ namespace HangOut.Models
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     ObjTmp.JoinByOrg = SDR.GetInt32(13);
+                    ObjTmp.IsHeadChef = SDR.GetBoolean(14);
                 }
             }
             catch (System.Exception e) { e.ToString(); }

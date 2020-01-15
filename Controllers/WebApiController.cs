@@ -36,6 +36,8 @@ namespace HangOut.Controllers
                 {
                     HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(Objuser.OrgID);
                     Objuser.orgType = OrgObj.OrgTypes;
+                    if (Objuser.IsHeadChef)
+                        Objuser.UserType = "HCH";// head chef
                 }
             }
            
