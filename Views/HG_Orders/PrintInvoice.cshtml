@@ -9,7 +9,7 @@
     List<HG_Orders> orderlist = new List<HG_Orders>();
     List<HG_OrderItem> OrderItems = new List<HG_OrderItem>();
     DateTime OrderDate = DateTime.Now;
-    if (Request.QueryString["TorSid"] != null)
+    if (Request.QueryString["TorSid"] != null && Request.QueryString["TorSid"] !="0")
     {
         Int64 TorSid = Int64.Parse(Request.QueryString["TorSid"]);
         // int OldOtp = int.Parse(Request.QueryString["OldOtp"]);

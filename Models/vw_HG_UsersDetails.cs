@@ -37,7 +37,7 @@ namespace HangOut.Models
             CurrentStatus = true;
         }
         
-        public List<vw_HG_UsersDetails> GetAll(string Type="")
+        public List<vw_HG_UsersDetails> GetAll(string Type="",int OrgId=0)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -48,6 +48,10 @@ namespace HangOut.Models
             if (Type != "")
             {
                 Query = "SELECT * FROM HG_UsersDetails WHERE UserType='"+Type+"' ;";
+            }
+            else if (OrgId > 0)
+            {
+                Query = "SELECT * FROM HG_UsersDetails WHERE OrgID=" + OrgId.ToString()+ ";";
             }
             else if (CurrOrgID != null && int.Parse(CurrOrgID["OrgId"]) > 0)
             {

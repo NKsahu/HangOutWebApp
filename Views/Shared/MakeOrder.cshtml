@@ -925,6 +925,7 @@
                             $("#FinalAmt").html('0.00');
                             $("#FinalAmtCharge").text('CHARGE 0.00');
                             ChargeAmt = 0.00;
+                            GenInvoice(0, JsonMsg[0]);
                         }
                         else {
                             var finalAmt = parseFloat($("#FinalAmt").text());
@@ -1195,11 +1196,14 @@
                 }
             });
         }
-        function GenInvoice(oldOtp) {
+     function GenInvoice(oldOtp, OID) {
+         if (OID == undefined || OID == null) {
+             OID = 0;
+         }
             $("#waiting").show();
             $.ajax({
                 type: 'POST',
-                url: "/HG_Orders/PrintInvoice?TorSid="+CurrentOrder+"&OldOtp="+oldOtp+"&OID=0",
+                url: "/HG_Orders/PrintInvoice?TorSid="+CurrentOrder+"&OldOtp="+oldOtp+"&OID="+OID,
                 success: function (data) {
                     makedpt("invoice");
                     $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -1271,7 +1275,7 @@
                             ResetOrder(CurrentOrder, 1);
                         }
                         
-                        GenInvoice(OldOtp);
+                        GenInvoice(OldOtp,0);
                         $("#defaultOpen").click();
                     }
 

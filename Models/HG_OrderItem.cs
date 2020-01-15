@@ -129,11 +129,11 @@ namespace HangOut.Models
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ListTmp);
         }
-        public List<HG_OrderItem> GetAllByOrg(int OrgId,int ChefId=0,int ItemStatus=0,bool TodayOnly=false)
+        public List<HG_OrderItem> GetAllByOrg(int OrgId,int ChefId=0,int ItemStatus=0,bool TodayOnly=false,string Status=null)
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
-            System.Collections.Generic.List<HG_OrderItem> ListTmp = new System.Collections.Generic.List<HG_OrderItem>();
+            List<HG_OrderItem> ListTmp = new List<HG_OrderItem>();
             DBCon Obj = new DBCon();
             try
             {
@@ -151,6 +151,10 @@ namespace HangOut.Models
                     var Formdate = DateTime.Now;
                     var theDate = new DateTime(Formdate.Year, Formdate.Month, Formdate.Day, 23, 59, 00);
                     Query = "SELECT * FROM HG_ORDERITEM WHERE OrderDate between '" + Formdate.ToString("MM/dd/yyyy") + "' and '" + theDate.ToString("MM/dd/yyyy HH:mm:ss") + "' and OrgId="+OrgId.ToString()+"";
+                }
+                if (Status != null &&ItemStatus==0)
+                {
+                    Query += " and "+Status;
                 }
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
@@ -248,12 +252,12 @@ namespace HangOut.Models
         }
         public static int UnseenOrd(int OrgId)
         {
-            string Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE ChefSeenBy=0 and Status=1 and OID In(select OID from HG_Orders where  Status='1' and OrgId=" + OrgId.ToString()+" )";
+            string Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE  (Status=1 or Status=2) and OID In(select OID from HG_Orders where  Status='1' and OrgId=" + OrgId.ToString()+" )";
             int Count = 0;
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             if (ObjOrg!=null&&ObjOrg.PaymentType == 1)
             {
-              Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE ChefSeenBy=0 and Status=1 and OID In(select OID from HG_Orders where  Status='1' and PaymentStatus!= 0 and OrgId=" + OrgId.ToString() + " )";
+              Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE  (Status=1 or Status=2) and OID In(select OID from HG_Orders where  Status='1' and PaymentStatus!= 0 and OrgId=" + OrgId.ToString() + " )";
             }
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;

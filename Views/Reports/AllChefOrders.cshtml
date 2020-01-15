@@ -14,19 +14,19 @@
     List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(OrgType);
     List<HG_FloorSide_or_RowName> ListFsorRowNa = new HG_FloorSide_or_RowName().GetAll(OrgType);
     List<HG_Floor_or_ScreenMaster> ListFrorScr = new HG_Floor_or_ScreenMaster().GetAll(OrgType);
-    List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAllByOrg(orgId,ChefId:1,ItemStatus:1);
-    OrderItems = OrderItems.FindAll(x => x.Status != 3 && x.Status != 4);
-    OrderItems = OrderItems.FindAll(x => x.ChefSeenBy == 0);
-    List<HG_Orders> TodayOrdrlist = new HG_Orders().GetAll(orgId);
-    TodayOrdrlist = TodayOrdrlist.FindAll(x => x.Status == "1");
+    List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAllByOrg(orgId, ChefId: 0, Status: "(Status=1 or Status=2)");
+    List<HG_Orders> PendingOrders = new HG_Orders().GetAll(OrgId: orgId, Status: 1);
     if (ObjOrg != null && ObjOrg.PaymentType == 1)
     {
-        TodayOrdrlist = TodayOrdrlist.FindAll(x => x.PaymentStatus != 0);
+        PendingOrders = PendingOrders.FindAll(x => x.PaymentStatus != 0);
     }
-    HashSet<Int64> OIdsHash = new HashSet<Int64>(TodayOrdrlist.Select(x => x.OID).ToArray());
+    int Count = 0;
+    HashSet<Int64> OIdsHash = new HashSet<Int64>(PendingOrders.Select(x => x.OID).ToArray());
     OrderItems = OrderItems.FindAll(x => OIdsHash.Contains(x.OID));
+    OrderItems = OrderItems.OrderByDescending(x => x.Status).ToList();
     var GroupByTickets = OrderItems.GroupBy(x => x.TickedNo);
     var ItemsList = new HG_Items().GetAll(orgId);
+    List<vw_HG_UsersDetails> ListUsers = new vw_HG_UsersDetails().GetAll(OrgId: orgId);
 }
 @Html.Hidden("UserCode", Usercode)
 <style>
@@ -37,37 +37,51 @@
 </style>
 <div class="card">
     <div class="card-header">
-        <h3 class="text-center">Chef Orders </h3>
+        <h3 class="text-center" style="color:blue">Head Chef Panel</h3>
     </div>
     <div class="card-body">
         <div class="row">
             @foreach(var TicketObj in GroupByTickets)
+            {
+                Count++;
+                string Seating = Count.ToString()+". ";
+                var orderItems = TicketObj.ToList();
+                var firstitm = orderItems.First();
+                var ChefId = firstitm.ChefSeenBy;
+                HG_Orders objOrder = new HG_Orders().GetOne(firstitm.OID);
+                var ObjTorS = ListTorS.Find(x => x.Table_or_RowID == objOrder.Table_or_SheatId);
+                string ChefName = "";
+                if (ChefId > 0)
+                {
+                    var Objchef = ListUsers.Find(x => x.UserCode == ChefId);
+                    if (Objchef != null)
                     {
-                        string Seating = "";
-                        var orderItems = TicketObj.ToList();
-                        var firstitm = orderItems.First();
-                        HG_Orders objOrder = new HG_Orders().GetOne(firstitm.OID);
-                        var ObjTorS = ListTorS.Find(x => x.Table_or_RowID == objOrder.Table_or_SheatId);
-                        if (ObjTorS != null)
-                        {
-                            var ObjFlrOrScr = ListFrorScr.Find(x => x.Floor_or_ScreenID == ObjTorS.Floor_or_ScreenId);
-                            if (ObjFlrOrScr != null)
-                            {
-                                Seating = ObjFlrOrScr.Name;
-                            }
-                            var ObjFsideOrRowName = ListFsorRowNa.Find(x => x.ID == ObjTorS.FloorSide_or_RowNoID);
-                            if (ObjFsideOrRowName != null)
-                            {
-                                Seating += " " + ObjFsideOrRowName.FloorSide_or_RowName;
-                            }
-                            Seating += " " + ObjTorS.Table_or_SheetName;
-                        }
-                        Seating += " Ticket No:" + TicketObj.Key;
+                        ChefName ="Chef :  " +Objchef.UserName;
+                    }
+                }
+                if (ObjTorS != null)
+                {
+                    var ObjFlrOrScr = ListFrorScr.Find(x => x.Floor_or_ScreenID == ObjTorS.Floor_or_ScreenId);
+                    if (ObjFlrOrScr != null)
+                    {
+                        Seating += ObjFlrOrScr.Name;
+                    }
+                    var ObjFsideOrRowName = ListFsorRowNa.Find(x => x.ID == ObjTorS.FloorSide_or_RowNoID);
+                    if (ObjFsideOrRowName != null)
+                    {
+                        Seating += " " + ObjFsideOrRowName.FloorSide_or_RowName;
+                    }
+                    Seating += "  " + ObjTorS.Table_or_SheetName;
+                }
+                Seating += "  Order No:" + firstitm.OID+ "   Ticket No: " + TicketObj.Key;
             <div class="col-md-12" id="@(TicketObj.Key)" style="border:1px solid">
                 <h6>@Seating   Time:  @firstitm.OrderDate.ToString("dd-MM hh:mm tt")</h6>
-
+                @if (ChefName != "")
+                {
+                    <h6 style="color:blue"> @ChefName</h6>
+                }
                 @{
-                    var OrderObj = TodayOrdrlist.Find(x => x.OID == firstitm.OID);
+                    var OrderObj = PendingOrders.Find(x => x.OID == firstitm.OID);
                     OrdNotice ObjNotice = OrdNotice.GetOne(OrderObj.OID);
                     double DeliveryCharge = 0.00;
                     if (OrderObj.DeliveryCharge > 0)
@@ -110,7 +124,6 @@
                         <p style="color:green">PAID CASH</p>
                     }
 
-
                 }
                 <button onclick="MarkCompleteTicket(@TicketObj.Key)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
                 <table class="table table-bordered">
@@ -127,7 +140,7 @@
                         {
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
                             double Amt = items.Price * items.Count;
-                            <tr >
+                            <tr>
                                 <td><input class=" CkeckorNot" checked type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
                                 <td>@FoodObj.Items</td>
                                 <td>@items.Count</td>

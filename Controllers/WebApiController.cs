@@ -1089,7 +1089,7 @@ namespace HangOut.Controllers
             }
             return jArray;
         }
-        //Start Chef End Work
+        //Start Chef End Work=== single chef
         public JArray ChefOrders(int OrgId,int ChefId,int Status)
         {
             JArray tableorSheatList = new JArray();
@@ -1157,6 +1157,8 @@ namespace HangOut.Controllers
                     int ticketno = 0;
                     int ItemIndex = 0;
                     double TotalAmount = 0.00;
+                    Int64 OrderById = 0;
+                    List<vw_HG_UsersDetails> ListUsers = new vw_HG_UsersDetails().GetAll(OrgId: OrgId);
                     foreach (var OrderItem in hG_OrderItems)
                     {
                        
@@ -1168,18 +1170,19 @@ namespace HangOut.Controllers
                         itemobj.Add("OIID", OrderItem.OIID);
                         itemobj.Add("ItemID", OrderItem.FID);
                         itemobj.Add("ItemName", hG_Items.Items);
-                        itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
+                        itemobj.Add("Quantity",OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
                         itemobj.Add("ItmAmt", Amount);
                         ItemsArray.Add(itemobj);
+                        OrderById = OrderItem.OrdById;
                     }
                     OrdNotice OrderNotice = OrdNotice.GetOne(order.OID);
                     string name = Seating + " Ticket no. :" + ticketno;
                     double deliveryCharge = 0.00;
+                    vw_HG_UsersDetails objOrderBy = new vw_HG_UsersDetails().GetSingleByUserId((int)OrderById);
                     if (OrderNotice!=null&& OrderNotice.OID>0)
                     {
-                        
                         if (order.DeliveryCharge > 0)
                         {
                             List<HG_Ticket> Tickets = HG_Ticket.GetByOID(order.OID);
@@ -1218,6 +1221,10 @@ namespace HangOut.Controllers
                     TableScreen.Add("OID", order.OID);
                     TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
+                    TableScreen.Add("CustomerMobile", objOrderBy.UserId);
+                    TableScreen.Add("CustomerName", objOrderBy.UserName);
+                    TableScreen.Add("ChefName", "");
+                    TableScreen.Add("OrdTime", order.Create_Date.ToString("dd-MM hh:mm tt"));
                     tableorSheatList.Add(TableScreen);
                     if (tableorSheatList.Count == 1&& Status==0)
                     {
@@ -1242,19 +1249,162 @@ namespace HangOut.Controllers
             return tableorSheatList;
 
         }
+        public JArray HedChefOrders(int OrgId)
+        {
+            JArray tableorSheatList = new JArray();
+            try
+            {
+                List<HG_Orders> Orderlist = new List<HG_Orders>();
+                HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+                int OrgType = 1;
+                if (ObjOrg != null && ObjOrg.OrgTypes == "2")
+                {
+                    OrgType = 2;
+                }
+                List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(OrgType,OrgId);
+                List<HG_FloorSide_or_RowName> ListFsorRowNa = new HG_FloorSide_or_RowName().GetAll(OrgType,OrgId);
+                List<HG_Floor_or_ScreenMaster> ListFrorScr = new HG_Floor_or_ScreenMaster().GetAll(OrgType,OrgId);
+                List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAllByOrg(OrgId, ChefId: 0, Status: "(Status=1 or Status=2)");
+                List<HG_Orders> PendingOrders = new HG_Orders().GetAll(OrgId:OrgId,Status:1);
+                if (ObjOrg.PaymentType == 1)
+                {
+                    PendingOrders = PendingOrders.FindAll(x => x.PaymentStatus > 0);
+                }
+                List<vw_HG_UsersDetails> ListUsers = new vw_HG_UsersDetails().GetAll(OrgId: OrgId);
+                HashSet<Int64> OIDHash = new HashSet<Int64>(PendingOrders.Select(x => x.OID).ToArray());
+                OrderItems = OrderItems.FindAll(x => OIDHash.Contains(x.OID));
+                List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
+                var GroupByTicketNo = OrderItems.GroupBy(x => x.TickedNo);
+                int TorSIndex = 0;
+                foreach (var TicktObj in GroupByTicketNo)
+                {
+                    JObject TableScreen = new JObject();
+                    JArray ItemsArray = new JArray();
+                    var hG_OrderItems = TicktObj.ToList();
+                    int ticketno = 0;
+                    int ItemIndex = 0;
+                    int ChefSeenId = 0;
+                    double TotalAmount = 0.00;
+                    Int64 OID = 0;
+                    Int64 OrderById = 0;
+                    foreach (var OrderItem in hG_OrderItems)
+                    {
+                        double Amount = OrderItem.Price * OrderItem.Count;
+                        TotalAmount += Amount;
+                        ticketno = OrderItem.TickedNo;
+                        HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);
+                        JObject itemobj = new JObject();
+                        itemobj.Add("OIID", OrderItem.OIID);
+                        itemobj.Add("ItemID", OrderItem.FID);
+                        itemobj.Add("ItemName", hG_Items.Items);
+                        itemobj.Add("Quantity",OrderItem.Count);
+                        itemobj.Add("Status", OrderItem.Status);
+                        itemobj.Add("IIndex", ItemIndex++);
+                        itemobj.Add("ItmAmt", Amount);
+                        ItemsArray.Add(itemobj);
+                        OID = OrderItem.OID;
+                        ChefSeenId = OrderItem.ChefSeenBy;
+                        OrderById = OrderItem.OrdById;
+                    }
+                    var Chefname = "";
+                    if (ChefSeenId > 0)
+                    {
+                        var ObjChef = ListUsers.Find(x => x.UserCode == ChefSeenId);
+                        if (ObjChef != null)
+                            Chefname = ObjChef.UserName;
+                    }
+                    var objOrder = PendingOrders.Find(x => x.OID == OID);
+                    string Seating = "";
+                    var ObjTorS = ListTorS.Find(x => x.Table_or_RowID == objOrder.Table_or_SheatId);
+                    if (ObjTorS != null)
+                    {
+                        var ObjFlrOrScr = ListFrorScr.Find(x => x.Floor_or_ScreenID == ObjTorS.Floor_or_ScreenId);
+                        if (ObjFlrOrScr != null)
+                        {
+                            Seating = ObjFlrOrScr.Name;
+                        }
+                        var ObjFsideOrRowName = ListFsorRowNa.Find(x => x.ID == ObjTorS.FloorSide_or_RowNoID);
+                        if (ObjFsideOrRowName != null)
+                        {
+                            Seating += " " + ObjFsideOrRowName.FloorSide_or_RowName;
+                        }
+                        Seating += " " + ObjTorS.Table_or_SheetName;
+                    }
+                    //Seating += " Ticket No:" + TicktObj.Key;
+                    OrdNotice OrderNotice = OrdNotice.GetOne(objOrder.OID);
+                    vw_HG_UsersDetails objOrderBy = new vw_HG_UsersDetails().GetSingleByUserId((int)OrderById);
+                    string name = Seating + " Ticket No. :" + ticketno ;
+                    //if (Chefname != "")
+                    //{
+                    //    name += " Chef " + Chefname;
+                    //}
+                    double deliveryCharge = 0.00;
+                    if (OrderNotice != null && OrderNotice.OID > 0)
+                    {
+                        if (objOrder.DeliveryCharge > 0)
+                        {
+                            List<HG_Ticket> Tickets = HG_Ticket.GetByOID(objOrder.OID);
+                            var ObjTicket = Tickets.Find(x => x.TicketNo == ticketno);
+                            if (ObjTicket != null && ObjTicket.TicketNo > 0)
+                            {
+                                deliveryCharge = ObjTicket.DeliveryCharge;
+                            }
+                        }
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(objOrder.PayReceivedBy);
+
+                        if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain not OWN
+                        {
+                            TableScreen.Add("Amt", TotalAmount);
+                        }
+                        else if (ObjUser == null || ObjUser.UserCode <= 0)// if CASH PAY BY CUSTOMER
+                        {
+                            TableScreen.Add("Amt", TotalAmount);
+                        }
+                        else
+                        {
+                            TableScreen.Add("Amt", 0);
+                        }
+                    }
+                    else
+                    {
+                        TableScreen.Add("Amt", 0);
+                    }
+                    TableScreen.Add("PymtMode", objOrder.PaymentStatus);
+                    TableScreen.Add("deliveryCharge", deliveryCharge);
+                    TableScreen.Add("TableScreenInfo", name);
+                    TableScreen.Add("TableSeatID", objOrder.Table_or_SheatId);
+                    TableScreen.Add("TicketNo", ticketno);
+                    TableScreen.Add("OID", objOrder.OID);
+                    TableScreen.Add("OrderItems", ItemsArray);
+                    TableScreen.Add("TorSIndex", TorSIndex++);
+                    TableScreen.Add("CustomerMobile", objOrderBy.UserId);
+                    TableScreen.Add("CustomerName", objOrderBy.UserName);
+                    TableScreen.Add("ChefName", Chefname);
+                    TableScreen.Add("OrdTime", objOrder.Create_Date.ToString("dd-MM hh:mm tt"));
+                    tableorSheatList.Add(TableScreen);
+                }
+            }
+            catch (System.Exception e)
+            {
+
+            }
+            return tableorSheatList;
+
+        }
         // chef past completed and cancel orders
         public JArray ChefComCaclOrd(int OrgId, int ChefId, int Status)
         {
             JArray tableorSheatList = new JArray();
             try
             {
-               
-                List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAllByOrg(OrgId, ChefId);
-               
-                OrderItemList = OrderItemList.FindAll(x => x.Status == Status && x.ChefSeenBy == ChefId);
-                OrderItemList = OrderItemList.FindAll(x => x.OrderDate.Date == DateTime.Now.Date).ToList();
-                    // HashSet<int> HashOID = new HashSet<int>(OrderItemList.Select(x => x.TickedNo).ToArray());
-                    var GroupByTicketNo = OrderItemList.GroupBy(x => x.TickedNo);
+                List<vw_HG_UsersDetails> ListUsers = new vw_HG_UsersDetails().GetAll(OrgId:OrgId);
+                List<HG_OrderItem> OrderItemList = new HG_OrderItem().GetAllByOrg(OrgId, ChefId:0,TodayOnly:true);
+                OrderItemList = OrderItemList.FindAll(x => x.Status == Status);
+                if (ChefId > 0)
+                {
+                    OrderItemList = OrderItemList.FindAll(x => x.ChefSeenBy == ChefId);
+                }
+                var GroupByTicketNo = OrderItemList.GroupBy(x => x.TickedNo);
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
                 int OrgType = int.Parse(ObjOrg.OrgTypes);
                 List<HG_Tables_or_Sheat> ListTableOrSheat = new HG_Tables_or_Sheat().GetAll(OrgType, OrgId);
@@ -1268,6 +1418,7 @@ namespace HangOut.Controllers
                     int ItemIndex = 0;
                     int ticketno = 0;
                     Int64 OrdId = 0;
+                    int ChefSeenId = 0;
                     var OrderItmListTicketWise = TicketitmList.ToList();
                     foreach (var OrderItem in OrderItmListTicketWise)
                     {
@@ -1276,16 +1427,17 @@ namespace HangOut.Controllers
                         itemobj.Add("OIID", OrderItem.OIID);
                         itemobj.Add("ItemID", OrderItem.FID);
                         itemobj.Add("ItemName", hG_Items.Items);
-                        itemobj.Add("Quantity", OrderItem.Qty + "*" + OrderItem.Count);
+                        itemobj.Add("Quantity",OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
-                       
                         ItemsArray.Add(itemobj);
                         ticketno = OrderItem.TickedNo;
                         OrdId = OrderItem.OID;
+                        ChefSeenId = OrderItem.ChefSeenBy;
                     }
+                    var ChefObj = ListUsers.Find(x => x.UserCode == ChefSeenId);
                     HG_Orders order = new HG_Orders().GetOne(OrdId);
-                    string Seating = "";
+                    string Seating = " ";
                     HG_Tables_or_Sheat hG_Tables_Or_Sheat = ListTableOrSheat.Find(x => x.Table_or_RowID == order.Table_or_SheatId);
                     if (hG_Tables_Or_Sheat != null)
                     {
@@ -1304,13 +1456,13 @@ namespace HangOut.Controllers
                     JObject TableScreen = new JObject();
                     string name =Seating+ "Ticket no. : " + ticketno;
                     TableScreen.Add("TableScreenInfo", name);
-                    TableScreen.Add("TableSeatID", hG_Tables_Or_Sheat.Table_or_RowID);
+                    TableScreen.Add("TableSeatID", "0");// UNUSED
                     TableScreen.Add("TicketNo", ticketno);
                     TableScreen.Add("OID", order.OID);
                     TableScreen.Add("OrderItems", ItemsArray);
                     TableScreen.Add("TorSIndex", TorSIndex++);
+                    TableScreen.Add("ChefName", (ChefObj != null?ChefObj.UserName:ChefSeenId.ToString()));
                     tableorSheatList.Add(TableScreen);
-                    
                 }
             }
             catch (System.Exception e)

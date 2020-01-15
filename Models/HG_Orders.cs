@@ -87,7 +87,7 @@ namespace HangOut.Models
             return R;
         }
 
-        public List<HG_Orders> GetAll(int OrgId=0,int CID=0)
+        public List<HG_Orders> GetAll(int OrgId=0,int CID=0,int Status=0)
         {
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
@@ -96,12 +96,17 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM HG_ORDERS WHERE OrgId="+OrgId+"  ORDER BY OID DESC";
+                string Query = "SELECT * FROM HG_ORDERS WHERE OrgId="+OrgId+"";
                 if(CID>0)
                 {
-                     Query = "  select * from HG_Orders where OID in (select Distinct(OID) from HG_OrderItem where OrdById="+CID+") ORDER BY OID DESC";
+                     Query = "select * from HG_Orders where OID in (select Distinct(OID) from HG_OrderItem where OrdById="+CID+") ";
                 }
-                cmd = new System.Data.SqlClient.SqlCommand(Query, Obj.Con);
+                if (Status > 0)
+                {
+                    Query += "and Status=" + Status.ToString();
+                }
+                Query += " ORDER BY OID DESC";
+                cmd = new SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
