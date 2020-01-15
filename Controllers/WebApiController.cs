@@ -568,6 +568,7 @@ namespace HangOut.Controllers
             int Status =Params["Status"]!=null?int.Parse(Params["Status"].ToString()):1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
             int CustomerOrdering= Params["OrdingSts"] != null ? int.Parse(Params["OrdingSts"].ToString()) : 0;
             int AppType = Params["AppType"] != null ? int.Parse(Params["AppType"].ToString()) : 1;//1 customer ,2 captain , 3 admin panel
+            int PaymtSts=Params["PaymtType"]!=null? int.Parse(Params["PaymtType"].ToString()) :0;//payment mode type
             double DeliveryChargeAmt = 0.00;
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
@@ -637,15 +638,39 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG", "Can't Change Order After Redirect To Payment Page");
                 return PostResult;
             }
+            //=========Order Logic Here===================
+            string OrderSts = "1"; //placed by defualt
+            if (Status == 3 && PaymtSts > 0)
+            {
+                if (OID > 0)
+                {
+                    List<HG_OrderItem> ListOrderItems = new HG_OrderItem().GetAll(OID);
+                    if (ListOrderItems.Count > 0)
+                    {
+                        var CanclAndComleted = ListOrderItems.FindAll(x => x.Status == 3 || x.Status == 4);
+                        if (CanclAndComleted.Count == ListOrderItems.Count)
+                        {
+                            OrderSts = "3";//completed
+                        }
+                    }
+                }
+                else
+                {
+                    OrderSts = "3";//completed
+                }
+                
+            }
             Int64 NewOID = 0;
             if (OID > 0)
             {
                 NewOID = OID;
-                ObjOrders.Status ="1";// Placed
+                ObjOrders.Status = OrderSts;
                 ObjOrders.Update_By = CID;
                 ObjOrders.OrderByIds = ObjOrders.OrderByIds + CID.ToString() + ",";
                 ObjOrders.Update_Date = DateTime.Now;
                 ObjOrders.DeliveryCharge = ObjOrders.DeliveryCharge + DeliveryChargeAmt;
+                ObjOrders.PaymentStatus = PaymtSts;
+                ObjOrders.PayReceivedBy = (int)CID;
                 ObjOrders.Save();
             }
             else
@@ -657,11 +682,12 @@ namespace HangOut.Controllers
                     Update_Date=DateTime.Now,
                     CID = CID,
                     Update_By = CID,
-                    Status = "1",//Placed
+                    Status = OrderSts,
                     OrgId = OrgId,
                     Table_or_SheatId = TableorSheatId,
-                    PaymentStatus = 0,// unpaid
+                    PaymentStatus = PaymtSts,
                     TableOtp = ObjTorS.Otp,
+                    PayReceivedBy=(int)CID,
                     OrderByIds=CID.ToString()+",",
                     OrderApprovlSts=0,
                     DeliveryCharge=DeliveryChargeAmt
@@ -674,7 +700,7 @@ namespace HangOut.Controllers
                 List<HG_Ticket> list = new HG_Ticket().GetAll(OrgId);
                 HG_Ticket objticket = new HG_Ticket() {OrgId=OrgId,OID=NewOID,TicketNo=list.Count+1,DeliveryCharge=DeliveryChargeAmt };
                 int Ticketno = objticket.save();
-                    foreach (Cart Item in ListCart)
+                foreach (Cart Item in ListCart)
                     {
                     HG_Items ObjItem = ItemList.Find(x => x.ItemID == Item.ItemId);
                     HG_OrderItem OrderItem = new HG_OrderItem()
@@ -704,10 +730,16 @@ namespace HangOut.Controllers
                         return PostResult;
                         }
                     }
+                if (OrderSts == "3")
+                {
+                    ObjTorS.Status = 1;// free table
+                    ObjTorS.Otp = OTPGeneretion.Generate();
+                    ObjTorS.save();
+                }
                 PostResult.Add("Status", 200);
-                PostResult.Add("MSG",NewOID.ToString()+","+Ticketno.ToString());
+                PostResult.Add("MSG",NewOID.ToString()+","+Ticketno.ToString()+","+PaymtSts.ToString());
                 //send firebase massage new ticket assign
-                if (ObjOrg.PaymentType == 2)// postpaid
+                if (ObjOrg.PaymentType == 2 &&ObjTorS.Type!="3")// postpaid
                 {
                     SendMsgChef(OrgId, NewOID);
                 }
@@ -884,9 +916,17 @@ namespace HangOut.Controllers
                         order.Status = "3";//completed
                         order.Save();
                         ChangeOtpTbl = 1;
-                        SendMsgCustomer(order.CID,order.OID);
+                        if (obj.Type != "3")
+                        {
+                            SendMsgCustomer(order.CID, order.OID);
+                        }
+                        
                     }
-                    SendMsgChef(ObjOrg.OrgID, order.OID);
+                    else if(obj.Type != "3")
+                    {
+                        SendMsgChef(ObjOrg.OrgID, order.OID);
+                    }
+                    
                 }
                 else
                 {
@@ -908,7 +948,10 @@ namespace HangOut.Controllers
                             ChangeOtpTbl = 1;
                             order.Status = "3";//3 order completed
                             order.Save();
-                            SendMsgCustomer(order.CID, order.OID);
+                            if (obj.Type != "3")
+                            {
+                                SendMsgCustomer(order.CID, order.OID);
+                            }
 
                         }
                         Status = true;
@@ -1346,7 +1389,11 @@ namespace HangOut.Controllers
                         TorSObj.Otp = OTPGeneretion.Generate();
                         TorSObj.save();// free table 
                         order.Update_By = UpdateBy;
-                        SendMsgCustomer(order.CID,order.OID);
+                        if (TorSObj.Type != "3")
+                        {
+                            SendMsgCustomer(order.CID, order.OID);
+                        }
+                        
                         OrdNotice.ChangeAlertSts(OID, 0, 1);
                     }
                   
@@ -1361,7 +1408,10 @@ namespace HangOut.Controllers
                         TorSObj.Status = 1;
                         TorSObj.Otp = OTPGeneretion.Generate();
                         TorSObj.save();
-                        SendMsgCustomer((int)order.CID, order.OID);
+                        if (TorSObj.Type != "3")
+                        {
+                            SendMsgCustomer(order.CID, order.OID);
+                        }
                         OrdNotice.ChangeAlertSts(OID, 0, 1);
                     }
                     order.Update_By = UpdateBy;

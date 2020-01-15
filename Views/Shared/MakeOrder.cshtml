@@ -248,6 +248,12 @@
     .search-box:not(:valid) ~ .close-icon {
         display: none;
     }
+    .LeftBtn{
+        float:left;
+    }
+    .RightBtn{
+        float:right;
+    }
 </style>
 <div class="row">
     <div class="col-md-12 col-sm-12">
@@ -909,10 +915,22 @@
                     }
                     else {
                         var JsonMsg = JsonObj.MSG.split(",");
+                        var PaymentSts = JsonMsg[2];
                         $.alert({
                             title: 'Alert!',
                             content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
                         });
+                        console.log("Msh pay" + PaymentSts);
+                        if (PaymentSts != "0") {
+                            $("#FinalAmt").html('0.00');
+                            $("#FinalAmtCharge").text('CHARGE 0.00');
+                            ChargeAmt = 0.00;
+                        }
+                        else {
+                            var finalAmt = parseFloat($("#FinalAmt").text());
+                            ChargeAmt = ChargeAmt + finalAmt;
+                            $("#FinalAmtCharge").text('CHARGE ' + ChargeAmt.toFixed(2) +' /Rs.');
+                        }
                         $("tr.ItemsTr").remove();
                         CurrOID = JsonMsg[0];
                         for (var i = 0; i < TablesList.length; i++) {
@@ -940,7 +958,8 @@
          var Parmas = {};
          Parmas.CID = LoginId;
          Parmas.OrgId = OrgId;
-         Parmas.TSTWID = CurrentOrder
+         Parmas.TSTWID = CurrentOrder;
+         
          $.ajax({
              type: 'POST',
              url: "/WebApi/DeliveryCharge?Obj=" + JSON.stringify(Parmas),
@@ -953,10 +972,17 @@
                  Obj.Status = Status;
                  Obj.OrdingSts = 1;
                  Obj.AppType = 3;
-                 var Msg = "SEND TO CHEF ?";
+                 Obj.PaymtType = 0;
+                 var Msg = "Send To Chef ?";
+                 var ChrMsg = "Send To Chef & Charge?";
                  if (Status == '3') {
-                     Msg = "ELEMINATE CHEF ?";
+                     Msg = "Eleminate Chef ?";
+                     ChrMsg = "Eleminate Chef & Charge?";
                  }
+                 var titlemsg = '<div class="row">';
+                 titlemsg += '<div class="col-md-6"><h4 style="text-align:left;">'+Msg+'</h4></div>';
+                 titlemsg += '<div class="col-md-6"><h4 style="text-align:right;">' + ChrMsg+'</h4></div>';
+                 titlemsg += '</div>';
                  var JsonObj = JSON.parse(data);
                  if (parseFloat(JsonObj.ChargeAmt) > 0) {
                      var DeliveryType = JsonObj.DeliveryType;
@@ -969,69 +995,110 @@
                          Postfix = 'below Rs ' + JsonObj.MinAmt;
                      }
                      var DelivryMsg = 'A ' + incldmsg + ' delivery charge of Rs ' + JsonObj.ChargeAmt + ' applicable ' + Postfix;
+                    
                      $.confirm({
-                         title: Msg,
-                         content: DelivryMsg,
+                         title:'<p>'+ DelivryMsg+'</p>',
+                         content: titlemsg,
                          closeIcon: true,
-                         boxWidth: '50%',
+                         boxWidth: '40%',
                          useBootstrap: false,
                          buttons: {
                              confirm: {
                                  text: 'Confirm',
-                                 btnClass: 'btn-info',
+                                 btnClass: 'btn-info LeftBtn',
                                  columnClass:'col-md-3',
+                                 action: function () {
+                                     PostOrder(Obj);
+                                 }
+                             },
+                             cancel: {
+                                 text:'Cancel',
+                                 btnClass: 'btn-red LeftBtn',
+                                 keys: ['Esc', 'esc'],
+                                 columnClass: 'col-md-3'
+                             },
+                             ByWallet: {
+                                 text: 'Bank/Wallet',
+                                 btnClass: 'btn-success RightBtn',
+                                 columnClass: 'col-md-3',
+                                 action: function () {
+                                     Obj.PaymtType = 2;
+                                     PostOrder(Obj);
+                                 }
+                             },
+                             Bycash: {
+                                 text: 'Cash',
+                                 btnClass: 'btn-info RightBtn',
+                                 keys: ['enter', 'shift'],
+                                 columnClass: 'col-md-3',
+                                 action: function () {
+                                     Obj.PaymtType = 1;
+                                     PostOrder(Obj);
+                                 }
+                             }
+                         }
+                         ,
+                         onContentReady: function () {
+                            
+                         },
+                         onOpenBefore: function () {
+                             $(".jconfirm-buttons").css('width', '100%');
+                         },
+                         onDestroy: function () {
+                             $(".jconfirm-buttons").removeAttr('width');
+                         }
+                     });
+                 }
+                 else {
+                     $.confirm({
+                         title: '<p>Are You Sure</p>',
+                         content: titlemsg,
+                         closeIcon: true,
+                         boxWidth: '40%',
+                         useBootstrap: false,
+                         buttons: {
+                             confirm: {
+                                 text: 'Confirm',
+                                 btnClass: 'btn-info LeftBtn',
+                                 columnClass: 'col-md-3',
                                  action: function () {
                                      PostOrder(Obj)
                                  }
                              },
                              cancel: {
-                                 text:'Cancel',
-                                 btnClass: 'btn-red',
-                                 keys: ['Esc', 'esc'],
+                                 text: 'Cancel',
+                                 btnClass: 'btn-red LeftBtn',
                                  columnClass: 'col-md-3'
-                             },
-                             Bycash: {
-                                 text: 'ByCash',
-                                 btnClass: 'btn-success',
-                                 keys: ['enter', 'shift'],
-                                 columnClass: 'col-md-3',
-                                 action: function () {
-                                     $.alert('Something else?');
-                                 }
                              },
                              ByWallet: {
                                  text: 'Bank/Wallet',
-                                 btnClass: 'btn-info',
+                                 btnClass: 'btn-success RightBtn',
                                  columnClass: 'col-md-3',
                                  action: function () {
-                                     $.alert('Something else?');
+                                     Obj.PaymtType = 2;
+                                     PostOrder(Obj);
+                                 }
+                             },
+                             ByCash: {
+                                 text: 'Cash',
+                                 btnClass: 'btn-info RightBtn',
+                                 keys: ['enter', 'shift'],
+                                 columnClass: 'col-md-3',
+                                 action: function () {
+                                     Obj.PaymtType = 1;
+                                     PostOrder(Obj);
                                  }
                              }
                          }
-                         
-                     });
-                 }
-                 else {
-                     $.confirm({
-                         title: Msg,
-                         content: 'Are You Sure',
-                         closeIcon:true,
-                         buttons: {
-                             confirm: function () {
-                                 PostOrder(Obj)
-                             },
-                             cancel: {
-                                 text: 'Cancel',
-                                 keys: ['Esc', 'esc'],
-                             },
-                             Bycash: {
-                                 text: 'Something else',
-                                 btnClass: 'btn-blue',
-                                 keys: ['enter', 'shift'],
-                                 action: function () {
-                                     $.alert('Something else?');
-                                 }
-                             }
+                         ,
+                         onContentReady: function () {
+
+                         },
+                         onOpenBefore: function () {
+                             $(".jconfirm-buttons").css('width', '100%');
+                         },
+                         onDestroy: function () {
+                             $(".jconfirm-buttons").removeAttr('width');
                          }
                      });
                  }
