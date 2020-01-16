@@ -1300,6 +1300,7 @@ namespace HangOut.Controllers
                         itemobj.Add("Quantity",OrderItem.Count);
                         itemobj.Add("Status", OrderItem.Status);
                         itemobj.Add("IIndex", ItemIndex++);
+                        itemobj.Add("OID", OrderItem.OID);
                         itemobj.Add("ItmAmt", Amount);
                         ItemsArray.Add(itemobj);
                         OID = OrderItem.OID;
