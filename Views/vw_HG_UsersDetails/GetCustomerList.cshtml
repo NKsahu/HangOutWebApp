@@ -1,7 +1,6 @@
 ﻿@model IEnumerable<HangOut.Models.vw_HG_UsersDetails>
 @{ Layout = null;}
 @using HangOut.Models
-@{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll();}
 @{ List<HG_OrganizationDetails> listorgo = new HG_OrganizationDetails().GetAll();}
 <div class="card">
     <div class="card-header">
@@ -28,10 +27,8 @@
                     <th>
                         @Html.DisplayNameFor(model => model.EMail)
                     </th>
-
-
                     <th>
-                        @Html.DisplayNameFor(model => model.Status)
+                        Join By Outlet
                     </th>
                     <th></th>
                 </tr>
@@ -56,13 +53,17 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.EMail)
                         </td>
-
                         <td>
-                            @Html.DisplayFor(modelItem => item.Status)
+                            @{ 
+                                if (item.JoinByOrg > 0)
+                                {
+                                    var OrgObj = listorgo.Find(x => x.OrgID == item.JoinByOrg);
+                                    @OrgObj.Name
+                                }
+                            }
                         </td>
                         <td>
                             <a href="/vw_HG_UsersDetails/CreateEdit?ID=@item.UserCode" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-
                         </td>
                     </tr>
                 }
