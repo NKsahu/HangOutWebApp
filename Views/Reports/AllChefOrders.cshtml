@@ -27,6 +27,7 @@
     var GroupByTickets = OrderItems.GroupBy(x => x.TickedNo);
     var ItemsList = new HG_Items().GetAll(orgId);
     List<vw_HG_UsersDetails> ListUsers = new vw_HG_UsersDetails().GetAll(OrgId: orgId);
+    List<HG_UserTypes> ListUserType = new HG_UserTypes().GetAll();
 }
 @Html.Hidden("UserCode", Usercode)
 <style>
@@ -48,8 +49,21 @@
                 var orderItems = TicketObj.ToList();
                 var firstitm = orderItems.First();
                 var ChefId = firstitm.ChefSeenBy;
+                Int64 PlacedBy = firstitm.OrdById;
                 HG_Orders objOrder = new HG_Orders().GetOne(firstitm.OID);
                 var ObjTorS = ListTorS.Find(x => x.Table_or_RowID == objOrder.Table_or_SheatId);
+                string UserPlcedBy = "";
+                if (PlacedBy > 0)
+                {
+                    var ObjPlacedBy = new vw_HG_UsersDetails().GetSingleByUserId((int)PlacedBy);
+                    var UserType = ListUserType.Find(x => x.UserType == ObjPlacedBy.UserType);
+                    if (UserType != null)
+                    {
+                        UserPlcedBy = UserType.UserTypeName + "( " + ObjPlacedBy.UserName + "-" + ObjPlacedBy.UserId + " )";
+                    }
+
+                }
+
                 string ChefName = "";
                 if (ChefId > 0)
                 {
@@ -69,13 +83,13 @@
                     var ObjFsideOrRowName = ListFsorRowNa.Find(x => x.ID == ObjTorS.FloorSide_or_RowNoID);
                     if (ObjFsideOrRowName != null)
                     {
-                        Seating += " " + ObjFsideOrRowName.FloorSide_or_RowName;
+                        Seating +=" " + ObjFsideOrRowName.FloorSide_or_RowName;
                     }
-                    Seating += "  " + ObjTorS.Table_or_SheetName;
+                    Seating +=" " + ObjTorS.Table_or_SheetName;
                 }
-                Seating += "  Order No:" + firstitm.OID+ "   Ticket No: " + TicketObj.Key;
+                // Seating += "  Order No:" + firstitm.OID+ "   Ticket No: " + TicketObj.Key;
             <div class="col-md-12" id="@(TicketObj.Key)" style="border:1px solid">
-                <h6>@Seating   Time:  @firstitm.OrderDate.ToString("dd-MM hh:mm tt")</h6>
+                <pre style="margin:0px !important;"><h6>@Seating &nbsp;&nbsp; Order No:@firstitm.OID &nbsp;&nbsp;Ticket No:@TicketObj.Key &nbsp;&nbsp; Time:@firstitm.OrderDate.ToString("dd-MM hh:mm tt") &nbsp;&nbsp;By:@UserPlcedBy</h6></pre>
                 @if (ChefName != "")
                 {
                     <h6 style="color:blue"> @ChefName</h6>
