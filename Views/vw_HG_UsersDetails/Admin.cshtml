@@ -15,6 +15,14 @@
     {
         CustomerOrdrn = "checked";
     }
+    if (Orgid == 0)
+    {
+        OrgName = "PREPAID-SUPER-ADMIN";
+    }
+    if (Orgid < 0)
+    {
+        OrgName = "POSTPAID-SUPER-ADMIN";
+    }
 }
 <style>
     .switch {

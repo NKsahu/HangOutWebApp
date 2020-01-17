@@ -1274,7 +1274,7 @@ namespace HangOut.Controllers
                 HashSet<Int64> OIDHash = new HashSet<Int64>(PendingOrders.Select(x => x.OID).ToArray());
                 OrderItems = OrderItems.FindAll(x => OIDHash.Contains(x.OID));
                 List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
-                var GroupByTicketNo = OrderItems.GroupBy(x => x.TickedNo);
+                var GroupByTicketNo = OrderItems.GroupBy(x =>new { x.TickedNo,x.OID});
                 int TorSIndex = 0;
                 foreach (var TicktObj in GroupByTicketNo)
                 {
