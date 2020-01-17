@@ -745,6 +745,10 @@ namespace HangOut.Controllers
                 {
                     SendMsgChef(OrgId, NewOID);
                 }
+                else if (PaymtSts > 0 && ObjTorS.Type != "3")
+                {
+                    SendMsgChef(OrgId, NewOID);
+                }
             }
             else
             {
@@ -1405,6 +1409,7 @@ namespace HangOut.Controllers
                 {
                     OrderItemList = OrderItemList.FindAll(x => x.ChefSeenBy == ChefId);
                 }
+                OrderItemList = OrderItemList.OrderByDescending(x => x.UpdationDate).ToList();
                 var GroupByTicketNo = OrderItemList.GroupBy(x => x.TickedNo);
                 HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
                 int OrgType = int.Parse(ObjOrg.OrgTypes);

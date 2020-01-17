@@ -22,6 +22,7 @@ namespace HangOut
             OrderType.List = new OrderType().OrgTypeList();
             OrgType.List = new OrgType().ListOrgTypeList();
             PymentPageOpen.ListPytmPgOpen = new System.Collections.Generic.List<PymentPageOpen>();
+            JoinCls.List = new JoinCls().ListProductType();
         }
     }
 }

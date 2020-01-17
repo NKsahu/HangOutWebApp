@@ -1,14 +1,22 @@
-﻿
+﻿@using HangOut.Models
+@using HangOut.Models.DynamicList
 @{ Layout = null;
 
-
+    List<JoinFoodDo> joinList = JoinFoodDo.GetAll();
+    int sn = 1;
+    if (Request.QueryString["Fdate"] != null && Request.QueryString["Tdate"] != null)
+    {
+        DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        joinList = joinList.FindAll(x => x.JoinDate.Date.Date>= FromDate.Date && x.JoinDate.Date <= Todate.Date);
+    }
 
 
 }
 <table class="table table-hover" id="TBLID">
     <thead>
         <tr>
-            <td>S.N</td>
+            <td>JoiningId</td>
             <td>Join Date</td>
             <td>Customer Name</td>
             <td>Mobile No</td>
@@ -16,6 +24,35 @@
             <td>Product</td>
         </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+        @foreach(var obj in joinList)
+        {
+            var ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(obj.JoinedUserd);
+            var ProductType = JoinCls.List.FindAll(x=>obj.ProductType.Contains(x.Id));
+            string Type = "";
+            string PrdTypeName = "";
+            if (ProductType.Count>0)
+            {
+                PrdTypeName = string.Join(",", ProductType.Select(x => x.ProductName).ToArray());
+            }
+            if (obj.JoinType == 1)
+            {
+                Type = "Business";
+            }
+            else if (obj.JoinType==2)
+            {
+                Type = "Team";
+            }
+        <tr>
+            <td>@obj.JoinId</td>
+            <td>@obj.JoinDate.ToString("dd-MM-yyyy")</td>
+            <td>@ObjUser.UserName</td>
+            <td>@ObjUser.UserId</td>
+            <td>@Type</td>
+            <td>@PrdTypeName</td>
+        </tr>
+        }
+
+    </tbody>
 
 </table>
