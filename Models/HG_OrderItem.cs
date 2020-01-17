@@ -137,7 +137,15 @@ namespace HangOut.Models
             DBCon Obj = new DBCon();
             try
             {
-                string Query = "SELECT * FROM HG_ORDERITEM WHERE OrgId=" + OrgId.ToString()+"";
+                string Query = "";
+                if (OrgId > 0)
+                {
+                    Query=  "SELECT * FROM HG_ORDERITEM WHERE OrgId=" + OrgId.ToString() + "";
+                }
+                else if (OrgId <=0)//super admin && postpaid-admin
+                {
+                    Query = "SELECT * FROM HG_ORDERITEM WHERE OrgId>0";
+                }
                 if (ChefId > 0)
                 {
                      Query+= " and (ChefSeenBy="+ChefId.ToString()+ " or ChefSeenBy=0)";
@@ -252,13 +260,22 @@ namespace HangOut.Models
         }
         public static int UnseenOrd(int OrgId)
         {
-            string Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE  (Status=1 or Status=2) and OID In(select OID from HG_Orders where  Status='1' and OrgId=" + OrgId.ToString()+" )";
+            string Query = "SELECT distinct TickedNo,OID FROM HG_OrderItem WHERE  (Status=1 or Status=2) and OID In(select OID from HG_Orders where  Status='1' ";
             int Count = 0;
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
-            if (ObjOrg!=null&&ObjOrg.PaymentType == 1)
+            if (OrgId==0|| (ObjOrg.OrgID>0&& ObjOrg.PaymentType == 1))
             {
-              Query = "SELECT count(distinct(TickedNo)) FROM HG_OrderItem WHERE  (Status=1 or Status=2) and OID In(select OID from HG_Orders where  Status='1' and PaymentStatus!= 0 and OrgId=" + OrgId.ToString() + " )";
+              Query = "SELECT distinct TickedNo,OID FROM HG_OrderItem WHERE  (Status=1 or Status=2) and OID In(select OID from HG_Orders where  Status='1' and PaymentStatus!= 0 ";
             }
+            if (OrgId > 0)
+            {
+                Query += "and OrgId=" + OrgId.ToString() + " )";
+            }
+            else
+            {
+                Query += ")";
+            }
+           
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
             HG_OrderItem ObjTmp = new HG_OrderItem();
@@ -269,7 +286,7 @@ namespace HangOut.Models
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    Count = SDR.GetInt32(0);
+                    Count = Count + 1;
 
                 }
             }

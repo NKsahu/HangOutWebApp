@@ -97,6 +97,14 @@ namespace HangOut.Models
             try
             {
                 string Query = "SELECT * FROM HG_ORDERS WHERE OrgId="+OrgId+"";
+                if (OrgId > 0)
+                {
+                    Query = "SELECT * FROM HG_ORDERS WHERE OrgId=" + OrgId + "";
+                }
+                else if (CID == 0 && OrgId <= 0)
+                {
+                    Query = "SELECT * FROM HG_ORDERS WHERE OrgId>0";
+                }
                 if(CID>0)
                 {
                      Query = "select * from HG_Orders where OID in (select Distinct(OID) from HG_OrderItem where OrdById="+CID+") ";

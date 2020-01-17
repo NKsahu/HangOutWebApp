@@ -16,7 +16,7 @@
     List<HG_Floor_or_ScreenMaster> ListFrorScr = new HG_Floor_or_ScreenMaster().GetAll(OrgType);
     List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAllByOrg(orgId, ChefId: 0, Status: "(Status=1 or Status=2)");
     List<HG_Orders> PendingOrders = new HG_Orders().GetAll(OrgId: orgId, Status: 1);
-    if (ObjOrg != null && ObjOrg.PaymentType == 1)
+    if (orgId==0||( ObjOrg.OrgID>0 && ObjOrg.PaymentType == 1))
     {
         PendingOrders = PendingOrders.FindAll(x => x.PaymentStatus != 0);
     }
@@ -24,7 +24,8 @@
     HashSet<Int64> OIdsHash = new HashSet<Int64>(PendingOrders.Select(x => x.OID).ToArray());
     OrderItems = OrderItems.FindAll(x => OIdsHash.Contains(x.OID));
     OrderItems = OrderItems.OrderByDescending(x => x.Status).ToList();
-    var GroupByTickets = OrderItems.GroupBy(x => x.TickedNo);
+    // var GroupByTickets = OrderItems.GroupBy(x => x.TickedNo);
+    var GroupByTickets = OrderItems.GroupBy(x => new { x.TickedNo, x.OID });//.Select(y=>y);
     var ItemsList = new HG_Items().GetAll(orgId);
     List<vw_HG_UsersDetails> ListUsers = new vw_HG_UsersDetails().GetAll(OrgId: orgId);
     List<HG_UserTypes> ListUserType = new HG_UserTypes().GetAll();
@@ -88,8 +89,8 @@
                     Seating +=" " + ObjTorS.Table_or_SheetName;
                 }
                 // Seating += "  Order No:" + firstitm.OID+ "   Ticket No: " + TicketObj.Key;
-            <div class="col-md-12" id="@(TicketObj.Key)" style="border:1px solid">
-                <pre style="margin:0px !important;"><h6>@Seating &nbsp;&nbsp; Order No:@firstitm.OID &nbsp;&nbsp;Ticket No:@TicketObj.Key &nbsp;&nbsp; Time:@firstitm.OrderDate.ToString("dd-MM hh:mm tt") &nbsp;&nbsp;By:@UserPlcedBy</h6></pre>
+            <div class="col-md-12" id="@(firstitm.TickedNo)" style="border:1px solid">
+                <pre style="margin:0px !important;"><h6>@Seating &nbsp;&nbsp; Order No:@firstitm.OID &nbsp;&nbsp;Ticket No:@firstitm.TickedNo &nbsp;&nbsp; Time:@firstitm.OrderDate.ToString("dd-MM hh:mm tt") &nbsp;&nbsp;By:@UserPlcedBy</h6></pre>
                 @if (ChefName != "")
                 {
                     <h6 style="color:blue"> @ChefName</h6>
@@ -101,7 +102,7 @@
                     if (OrderObj.DeliveryCharge > 0)
                     {
                         List<HG_Ticket> ListTickets = HG_Ticket.GetByOID(OrderObj.OID);
-                        HG_Ticket ObjTicket = ListTickets.Find(x => x.TicketNo == TicketObj.Key);
+                        HG_Ticket ObjTicket = ListTickets.Find(x => x.TicketNo == firstitm.TickedNo);
                         if (ObjTicket != null && ObjTicket.TicketNo > 0)
                         {
                             DeliveryCharge = ObjTicket.DeliveryCharge;
@@ -139,23 +140,23 @@
                     }
 
                 }
-                <button onclick="MarkCompleteTicket(@TicketObj.Key)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
+                <button onclick="MarkCompleteTicket(@firstitm.OIID)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <td><input style="margin:2px" checked type="checkbox" onclick="TickAll(this,@TicketObj.Key)">Tick</td>
+                            <td><input style="margin:2px" checked type="checkbox" onclick="TickAll(this,@firstitm.OIID)">Tick</td>
                             <td>Item Name</td>
                             <td>Qty</td>
 
                         </tr>
                     </thead>
-                    <tbody id="Tickt@(TicketObj.Key)" DeliveryAmt="@DeliveryCharge">
+                    <tbody id="Tickt@(firstitm.OIID)" TicketNo="@firstitm.TickedNo" DeliveryAmt="@DeliveryCharge">
                         @foreach (var items in orderItems)
                         {
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
                             double Amt = items.Price * items.Count;
                             <tr>
-                                <td><input class=" CkeckorNot" checked type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
+                                <td><input class=" CkeckorNot" checked type="checkbox"  id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
                                 <td>@FoodObj.Items</td>
                                 <td>@items.Count</td>
                             </tr>
@@ -169,7 +170,7 @@
 </div>
 
 <script>
-    function MarkCompleteTicket(TicketNo) {
+    function MarkCompleteTicket(OIID) {
         var canceledCount = 0;
         var Checkdcount = 0;
         var UpdatedBy = $("#UserCode").val();
@@ -178,9 +179,11 @@
         var TotalAmt = 0.00;
         var CancelAmt = 0.00;
         var TotalCnt = 0;
-        TotalAmt= parseFloat($("#Tickt" + TicketNo).attr('DeliveryAmt'));
+        var TicketNo = 0;
+        TotalAmt = parseFloat($("#Tickt" + OIID).attr('DeliveryAmt'));
+        TicketNo = $("#Tickt" + OIID).attr('TicketNo');
         //JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy, int OID)
-        $("#Tickt"+TicketNo+" > tr").each(function (index, tr) {
+        $("#Tickt" + OIID+" > tr").each(function (index, tr) {
             console.log(index);
             var value = $(tr).find('.CkeckorNot').is(":checked");
             var OIID = $(tr).find('.CkeckorNot').val();
@@ -252,12 +255,12 @@
         });
 
     }
-    function TickAll(event,TicketNo) {
+    function TickAll(event,OIID) {
         var prop = false;
         if (event.checked) {
             prop = true;
         }
-        $("#Tickt" + TicketNo + " > tr").each(function (index, tr) {
+        $("#Tickt"+ OIID+ " > tr").each(function (index, tr) {
             //$(tr).find('.CkeckorNot').removeAttr('checked');
             $(tr).find('.CkeckorNot').prop('checked', prop);
             

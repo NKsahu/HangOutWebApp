@@ -280,16 +280,12 @@
             List<SelectListItem> list = new List<SelectListItem>();
             SelectListItem sl1 = new SelectListItem { Text = "SEAT VIEW", Value = "1" };
             SelectListItem sl2 = new SelectListItem { Text = "ORDER VIEW", Value = "2" };
-            if (OrgType == 1)
-            {
-                list.Add(sl1);
-                list.Add(sl2);
-            }
-            else
-            {
-                list.Add(sl2);
-                list.Add(sl1);
-            }
+            list.Add(sl1);
+            list.Add(sl2);
+
+            //list.Add(sl2);
+            //list.Add(sl1);
+
 
         }
         @Html.DropDownList("DashBoard", list, new { @class = "form-control", })
@@ -323,7 +319,6 @@
             <p class="card" onclick="FreeOrOccupied('1');SelectedColor('card',this)"><span class="Pspan" id="Free">UnOccupied </span></p>
             <p class="card" onclick="FreeOrOccupied('3');SelectedColor('card',this)"><span class="Pspan" id="Occupied">Occupied</span></p>
             <p class="card" onclick="FreeOrOccupied('2');SelectedColor('card',this)"><span class="Pspan" id="Unpaid">Call For Bill</span></p>
-
         </div>
         <div class="col-sm-12 col-md-9 sp-grid-items-scroll-with-noticebar">
             <div class="row" id="OrderStatus" style="width:100%">
@@ -506,6 +501,9 @@
 
 <div class="row" id="OrderView" >
 
+
+</div>
+<div id="PrintInvoice" style="display:none">
 
 </div>
 
@@ -1200,14 +1198,17 @@
          if (OID == undefined || OID == null) {
              OID = 0;
          }
+         $("#PrintInvoice").html('');
             $("#waiting").show();
             $.ajax({
                 type: 'POST',
                 url: "/HG_Orders/PrintInvoice?TorSid="+CurrentOrder+"&OldOtp="+oldOtp+"&OID="+OID,
                 success: function (data) {
-                    makedpt("invoice");
-                    $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
-                    showdpt("invoice");
+                   // makedpt("invoice");
+                   // $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
+                   // showdpt("invoice");
+                    $("#PrintInvoice").html(data);
+                    PrintElem();
                     $("#waiting").hide();
                     //var Jobje = JSON.parse(data);
                 },
