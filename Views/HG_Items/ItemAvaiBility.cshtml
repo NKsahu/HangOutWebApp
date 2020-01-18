@@ -1,0 +1,46 @@
+﻿@model IEnumerable<HangOut.Models.HG_Items>
+@using HangOut.Models
+@using HangOut.Models.DynamicList
+@{
+    Layout = null;
+}
+
+<div class="card-body">
+    <table class="table table-hover w-100" id="TBLID">
+        <thead>
+            <tr>
+               
+                <th>
+                    @Html.DisplayNameFor(model => model.Items)
+                </th>
+                <th>
+                    @Html.DisplayName("Item Avaibility")
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody id="Tbody">
+            @foreach (var item in Model)
+            {
+                <tr id="@item.ItemID">
+                  
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Items)
+                    </td>
+                    @{ string title = "Click To Item Unavailable";
+                        if (item.ItemAvaibility == 1)
+                        {
+                            title = "Click To Item available";
+                        }
+                    }
+                    <td>
+                        <label class="switch" data-toggle="tooltip" title="@title">
+                            <input type="checkbox" checked="" onchange="SetCustmrOrd(this)">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -436,6 +436,7 @@
     <Content Include="Views\Reports\JoinFoodDoFilter.cshtml" />
     <Content Include="Views\Reports\JoinFoodDo.cshtml" />
     <Content Include="Views\City\IndexTehsil.cshtml" />
+    <Content Include="Views\HG_Items\ItemAvaiBility.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

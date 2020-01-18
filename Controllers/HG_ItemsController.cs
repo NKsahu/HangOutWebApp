@@ -251,5 +251,10 @@ namespace HangOut.Controllers
 
             return Json(new { msg = Msg }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult ItemAvaiBility()
+        {
+            return View();
+        }
     }
 }

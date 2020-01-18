@@ -36,7 +36,7 @@ namespace HangOut.Models
         public int AddOnType { get; set; }// {0 None, 1 Base 2 Addons}
         [Display(Name = "Discription")]
         public string ItemDiscription { get; set; }
-
+        public int ItemAvaibility { get; set; }
 
         //========
         public string Categoryname { get; set; }
