@@ -331,9 +331,12 @@ namespace HangOut.Controllers
             List<HG_Category> listcategory = new HG_Category().GetAll(OrgId:OrgId);
             return  JArray.FromObject(listcategory);
         }
-        public JObject ChangeItemAvability(Int64 ItemId, int ByUser, bool Status) {
+        public JObject ChangeItemAvability(Int64 ItemId, bool Status) {
 
-
+            HG_Items ObjItem = new HG_Items().GetOne(ItemId);
+            int Avaiblity = Status ? 0 : 1;
+            ObjItem.ItemAvaibility = Avaiblity;
+            ObjItem.Save();
             JObject jObject = new JObject();
             return jObject;
         }
@@ -565,16 +568,28 @@ namespace HangOut.Controllers
             result.Add("MinAmt", orgSetting.MinOrderAmt);
             return result;
         }
-        public JObject MakeOfflineOrd([System.Web.Http.FromBody] List<Cart> cartlist)
+        public JObject MakeOfflineOrd(string Obj)
         {
-            Cart.List.AddRange(cartlist);
-            Cart cart = cartlist.First();
-            JObject jObject = new JObject();
-            jObject.Add("CID", cart.CID);
-            jObject.Add("OrgID", cart.OrgId);
-            jObject.Add("TORSID", cart.TableorSheatOrTaleAwayId);
-
-            return null;
+            try
+            {
+                LocalCart localCarts = Newtonsoft.Json.JsonConvert.DeserializeObject<LocalCart>(Obj);
+                int AppType = localCarts.AppType;
+                Cart cart = localCarts.OrderList.First();
+                Cart.List.AddRange(localCarts.OrderList);
+                JObject jObject = new JObject();
+                jObject.Add("CID", cart.CID);
+                jObject.Add("OrgID", cart.OrgId);
+                jObject.Add("TORSID", cart.TableorSheatOrTaleAwayId);
+                jObject.Add("AppType", AppType);
+                JObject result = PostOrder(jObject.ToString());
+                return result;
+            }
+            catch(Exception e)
+            {
+                e.Message.ToString();
+                return null;
+            }
+            
         }
         // make order
         public JObject PostOrder(string Obj)
