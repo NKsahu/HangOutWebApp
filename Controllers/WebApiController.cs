@@ -572,10 +572,12 @@ namespace HangOut.Controllers
         {
             try
             {
-                LocalCart localCarts = Newtonsoft.Json.JsonConvert.DeserializeObject<LocalCart>(Obj);
-                int AppType = localCarts.AppType;
-                Cart cart = localCarts.OrderList.First();
-                Cart.List.AddRange(localCarts.OrderList);
+                JObject jObjectlist = JObject.Parse(Obj);
+                string AppType = jObjectlist.GetValue("AppType").ToString();
+                List<Cart> cartlist= Newtonsoft.Json.JsonConvert.DeserializeObject<List<Cart>>(jObjectlist["OrderList"].ToString());
+                //   AddRange(localCarts.OrderList);
+                Cart.List.AddRange(cartlist);
+                Cart cart = cartlist.First();
                 JObject jObject = new JObject();
                 jObject.Add("CID", cart.CID);
                 jObject.Add("OrgID", cart.OrgId);
