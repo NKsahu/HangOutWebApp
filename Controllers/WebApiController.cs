@@ -331,6 +331,12 @@ namespace HangOut.Controllers
             List<HG_Category> listcategory = new HG_Category().GetAll(OrgId:OrgId);
             return  JArray.FromObject(listcategory);
         }
+        public JObject ChangeItemAvability(Int64 ItemId, int ByUser, bool Status) {
+
+
+            JObject jObject = new JObject();
+            return jObject;
+        }
         public JObject OrderMenuList(int Orgid)
         {
             HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(Orgid);
@@ -559,7 +565,17 @@ namespace HangOut.Controllers
             result.Add("MinAmt", orgSetting.MinOrderAmt);
             return result;
         }
-        
+        public JObject MakeOfflineOrd([System.Web.Http.FromBody] List<Cart> cartlist)
+        {
+            Cart.List.AddRange(cartlist);
+            Cart cart = cartlist.First();
+            JObject jObject = new JObject();
+            jObject.Add("CID", cart.CID);
+            jObject.Add("OrgID", cart.OrgId);
+            jObject.Add("TORSID", cart.TableorSheatOrTaleAwayId);
+
+            return null;
+        }
         // make order
         public JObject PostOrder(string Obj)
         {

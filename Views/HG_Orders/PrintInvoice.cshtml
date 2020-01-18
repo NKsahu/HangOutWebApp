@@ -213,119 +213,24 @@
 </div>
 
 <script>
-    function printstr(text1, col1, align) {
-
-        if (align === null) {
-            align = "center";
-        }
-
-        var text = text1.split(",");
-        var col = col1.split(",");
-
-        var arr = new Array();
-        var i = 0;
-        var rtrstr = "";
-        for (i = 0; i < text.length; i++) {
-
-            var t = text[i]; //item name
-            var c = parseInt(col[i]); //length of column
-            var textlenght = t.length;
-            var totalspace = c - textlenght;
-            var prefixspace = 0;
-            var suffixspace = 0;
-            switch (align) {
-                case "center":
-                    prefixspace = parseInt(totalspace / 2);
-                    suffixspace = parseInt(totalspace / 2);
-                    var remainingspace = totalspace - (prefixspace + suffixspace);
-                    prefixspace = prefixspace + remainingspace;
-                    break;
-                case "left":
-                    prefixspace = 0;
-                    suffixspace = parseInt(totalspace);
-                    break;
-                case "right":
-                    prefixspace = parseInt(totalspace);
-                    suffixspace = 0;
-                    break;
-                default:
-                    prefixspace = parseInt(totalspace / 2);
-                    suffixspace = parseInt(totalspace / 2);
-                    var remainingspace = totalspace - (prefixspace + suffixspace);
-                    prefixspace = prefixspace + remainingspace;
-                    break;
-            }
-
-
-
-            for (j = 0; j < prefixspace; j++) {
-
-                rtrstr += " ";
-
-            }
-
-            rtrstr += t;
-            for (j = 0; j < suffixspace; j++) {
-
-                rtrstr += " ";
-
-
-            }
-
-
-        }
-
-        return rtrstr + "\n";
-
-    }
-    function ConvertDateJA(d) {
-        var date = d;
-        var dd = date.getDate();
-        var m = date.getMonth() + 1;
-        var y = date.getFullYear();
-        var h = date.getHours();
-        var mm = date.getMinutes();
-        var s = date.getSeconds();
-        return (dd <= 9 ? '0' + dd : dd) + '/' + (m <= 9 ? '0' + m : m) + '/' + y;
-        //return curr_year + "-"  + curr_month + "-" + curr_date;
-    }
-    function PrintToken() {
-        zpl = "";
-        zpl += printstr("<h1 style='padding:0px 0px 0px 0px !important;margin:0px;'>TOKEN -123456</h1>", "34", "center");
-        zpl += printstr("----------------------------------", "34");
-        zpl += printstr("DATE: " + ConvertDateJA(new Date()), "34");
-        zpl += printstr("TIME: " + new Date().toLocaleTimeString(), "34");
-        zpl += printstr("----------------------------------", "34");
-        zpl += printstr("BUILTY NO 1254864578354845785687697879807895675FGHFGHFGHFG", "34");
-        zpl += printstr("----------------------------------", "34");
-        zpl += printstr("TRUCK NO : 148815448668", "34");
-        zpl += printstr("----------------------------------", "34");
-        console.log("zpl==" + zpl);
-        var printWindow = window.open();
-        printWindow.document.open('text/plain');
-
-        printWindow.document.write("<pre>" + zpl + "</pre>");
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
-    }
     function PrintElem() {
         var Section = $('#section-to-print').html();
        // console.log("Section  " + Section);
-
+        
         // PrintToken();
         Popup(Section);
+       // printNew(Section);
        // Popup2(Section);
     }
 
     function Popup(data) {
         var myWindow = window.open('text/plain'); //best in thermal printer remove new popup
-        myWindow.document.write('<style type="text/css">*, html,body {margin:0;padding:0;} .TblBorder{border:1px dotted black} media=\"print\"</style>');//*, before html
+        myWindow.document.write('<style type="text/css">*, html,body {margin:0;padding:0;}</style>');//*, before html
         //   myWindow.document.write('<body>');
         myWindow.document.write(data);
         // myWindow.document.write('</body></html>');
-        myWindow.document.close(); // necessary for IE >= 10
+       //  // necessary for IE >= 10
+        myWindow.document.close();
         myWindow.onload = function () { // necessary if the div contain images
            // myWindow.focus(); // necessary for IE >= 10
             myWindow.print();
@@ -333,6 +238,13 @@
         };
         myWindow.onfocus = function () { myWindow.close(); }
      //  return true;
+    }
+    function printNew(data) {
+        var printContents = data;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
     }
     function Popup2(data) {
         var mywindow = window.open('', 'new div');

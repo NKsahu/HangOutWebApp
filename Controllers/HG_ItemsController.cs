@@ -254,7 +254,9 @@ namespace HangOut.Controllers
 
         public ActionResult ItemAvaiBility()
         {
-            return View();
+            HG_Items Objitem = new HG_Items();
+            List<HG_Items> Listitem = Objitem.GetAll();
+            return View(Listitem);
         }
     }
 }

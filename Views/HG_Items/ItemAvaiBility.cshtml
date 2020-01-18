@@ -14,6 +14,9 @@
                     @Html.DisplayNameFor(model => model.Items)
                 </th>
                 <th>
+                    @Html.DisplayName("Last Modified")
+                </th>
+                <th>
                     @Html.DisplayName("Item Avaibility")
                 </th>
                 
@@ -27,6 +30,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Items)
                     </td>
+                    <td>
+                        @item.UpdateDate.ToString("dd/MM/yyyy")
+                    </td>
                     @{ string title = "Click To Item Unavailable";
                         if (item.ItemAvaibility == 1)
                         {
@@ -35,7 +41,7 @@
                     }
                     <td>
                         <label class="switch" data-toggle="tooltip" title="@title">
-                            <input type="checkbox" checked="" onchange="SetCustmrOrd(this)">
+                            <input type="checkbox" checked="" onchange="ChangeItmAvble(@item.ItemID)">
                             <span class="slider round"></span>
                         </label>
                     </td>
@@ -44,3 +50,10 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    function ChangeItmAvble() {
+
+
+    }
+</script>
