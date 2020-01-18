@@ -1,0 +1,58 @@
+﻿@model IEnumerable<HangOut.Models.Common.District>
+@{
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-header text-center"><b>Tehsil / Taluka</b></div>
+    <div class="card-body">
+        <table class="table table-hover table-bordered text-center" id="TBLID">
+            <thead>
+                <tr>
+                    <th> Code </th>
+                    <th> Name </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr id="@item.Id">
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm " onclick="Delete(@item.Id)"> Delete</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/City/DeleteTehsil?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
+    }
+</script>

@@ -12,7 +12,7 @@ namespace HangOut.Models.Common
         public string Name { get; set; }
         public int StateId { get; set; }
         public int CityId { get; set; }
-        public List<District> GetAllByStsCity(int StateId,int CityId)
+        public List<District> GetAllByStsCity(int StateId,int CityId,bool All=false)
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
@@ -22,6 +22,10 @@ namespace HangOut.Models.Common
             try
             {
                 string Query = "SELECT * FROM District where StateId=" + StateId.ToString() + " and CityId="+CityId.ToString();
+                if (All)
+                {
+               Query = "SELECT * FROM District";
+                }
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -55,7 +59,6 @@ namespace HangOut.Models.Common
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-
                     ObjTmp.Id = int.Parse(SDR["Id"].ToString());
                     ObjTmp.Name = SDR["Name"].ToString();
                     ObjTmp.StateId = int.Parse(SDR["StateId"].ToString());
@@ -97,6 +100,27 @@ namespace HangOut.Models.Common
             catch (Exception e) { e.ToString(); }
             finally { Con.Close(); }
             return Row;
+        }
+        public static int Dell(int ID)
+        {
+            int R = 0;
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  District where Id=" + ID;
+                cmd = new SqlCommand(Query, Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally
+            {
+                Con.Close();
+            }
+            return R;
         }
     }
 }

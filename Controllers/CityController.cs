@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using HangOut.Models.Common;
+using HangOut.Models;
 namespace HangOut.Controllers
 {
     public class CityController : Controller
@@ -40,7 +41,12 @@ namespace HangOut.Controllers
         {
             return View();
         }
-
+        //==================Tehsil/taluka===================
+        public ActionResult IndexTehsil()
+        {
+            List<District> listTehsil = new District().GetAllByStsCity(0, 0, true);
+            return View(listTehsil);
+        }
         public ActionResult CreateTeshsile( int ID)
         {
             District district = new District();
@@ -69,6 +75,44 @@ namespace HangOut.Controllers
 
         }
 
+        public ActionResult DeleteCity(int ID)
+        {
+            List<HG_OrganizationDetails> ListOrg = new HG_OrganizationDetails().GetAll();
+            City ObjCity = new City().GetOne(ID);
+            if (ObjCity.CityId > 0)
+            {
+                List<District> districtList = new District().GetAllByStsCity(ObjCity.StateId, ObjCity.CityId);
+                if (districtList.Count > 0)
+                {
+                    return Json(new { msg = "Data already used" }, JsonRequestBehavior.AllowGet);
 
+                }
+            }
+            var CityContains = ListOrg.FindAll(x => x.City == ObjCity.CityId.ToString());
+            if (CityContains.Count > 0)
+            {
+                return Json(new { msg = "Data already used" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                int i = City.Dell(ID);
+            }
+            return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
+        }
+    
+    public ActionResult DeleteTehsil(int ID)
+    {
+        List<HG_OrganizationDetails> ListOrg = new HG_OrganizationDetails().GetAll();
+        var CityContains = ListOrg.FindAll(x => x.DistrictId == ID);
+        if (CityContains.Count > 0)
+        {
+            return Json(new { msg = "Data already used" }, JsonRequestBehavior.AllowGet);
+        }
+        else
+        {
+                int i = District.Dell(ID);
+        }
+        return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
     }
+  }
 }

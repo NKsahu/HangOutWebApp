@@ -46,6 +46,32 @@
             </div>
 
             <script>
+                function Delete(ID) {
+                    if (confirm('Are You Sure')) {
+                        $('#waiting').show();
+                        $.ajax({
+                            type: 'GET',
+                            url: "/City/DeleteCity?ID=" + ID,
+                            success: function (data) {
+                                //  var da = JSON.parse(data);
+                                if (data.msg != null && data.msg != "") {
+                                    alert(data.msg);
+
+                                }
+                                else {
+                                    $("#" + ID).hide();
+                                }
+                                console.log(data);
+                                $('#waiting').hide();
+                            },
+                            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                                console.log(errorMessage);
+                                Onfail(errorMessage.MSG);
+                                $('#waiting').hide();
+                            }
+                        });
+                    }
+                }
                 function Search() {
                     $("#waiting").show();
                     var StateCode = $("#SID").val();
@@ -103,34 +129,9 @@
 
 </div>
  
- <script>
-     function Delete(ID) {
-         if (confirm('Are You Sure')) {
-             $('#waiting').show();
-             $.ajax({
-                 type: 'GET',
-                 url: "/City/Delete?ID=" + ID,
-                 success: function (data) {
-                     //  var da = JSON.parse(data);
-                     if (data.msg != null && data.msg != "") {
-                         alert(data.msg);
 
-                     }
-                     else {
-                         $("#" + ID).hide();
-                     }
-                     console.log(data);
-                     $('#waiting').hide();
-                 },
-                 error: function (jqXhr, textStatus, errorMessage) { // error callback
-                     console.log(errorMessage);
-                     Onfail(errorMessage.MSG);
-                     $('#waiting').hide();
-                 }
-             });
-         }
-     }
- </script>
+     
+ 
 
 
 
