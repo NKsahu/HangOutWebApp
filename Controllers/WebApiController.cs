@@ -930,10 +930,10 @@ namespace HangOut.Controllers
             }
             else if (TorSid > 0)
             {
-                OrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-                OrderList = OrderList.FindAll(x => x.Table_or_SheatId == TorSid && (x.Status == "1" || x.Status == "2"));
                 obj = new HG_Tables_or_Sheat().GetOne(TorSid);
-
+                OrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                OrderList = OrderList.FindAll(x => x.Table_or_SheatId == TorSid && x.TableOtp==obj.Otp);
+                OrderList = OrderList.FindAll(x => x.Status =="1");// order placed
             }
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(obj.OrgId);
             bool Status = false;
@@ -1006,7 +1006,6 @@ namespace HangOut.Controllers
                 }
 
             }
-
             if (Status)
             {
               

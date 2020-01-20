@@ -1145,50 +1145,7 @@
                         return;
                     }
                     else {
-                        $.confirm({
-                            title: 'Alert !',
-                            content: 'FINALIZE ORDER ?',
-                            buttons: {
-                                btnClass: 'btn-green',
-                                confirm: function () {
-                                    var SumItems = 0.00;
-                                    var Qty = 0;
-                                    $("#ItemsList").html('');
-                                    var List = Jobje.ListItems;
-                                    for (var i = 0; i < List.length; i++) {
-
-                                       // var ObjItem = ItemList.find(x => {
-                                      //      return x.IID == List[i].FID;
-                                      //  });
-                                        var Price = parseFloat(List[i].Price) * parseInt(List[i].Count);
-                                        var td1 = "<tr><td>" + List[i].ItemName + "</td>";
-                                        td1 += "<td>" + List[i].Count + "</td>";
-                                        td1 += "<td>" + Price + "</td>";
-                                        td1 += "<td>" + List[i].TickedNo + "</td></tr>";
-                                       // Qty += parseInt(List[i].Count);
-                                      //  var total = (List[i].Count * parseFloat(List[i].Price));
-                                        $("#ItemsList").append(td1);
-
-                                    }
-                                    SumItems = parseFloat(Jobje.Total);
-                                    var DeliveryChrage = parseFloat(Jobje.DeliveryChage);
-                                    if (DeliveryChrage > 0) {
-                                        $("#DeliveryChr").show();
-                                        $("#DeliveryCharge").text(DeliveryChrage);
-                                    }
-                                    else {
-                                        $("#DeliveryChr").hide();
-                                    }
-                                    $("#SumOfQty").text(Qty);
-                                    $("#SumOfItem").text(SumItems.toFixed(2) + " Rs/-");
-                                    $("#News").hide();
-                                    $("#PaymnetAndReceipt").show(); 
-                                },
-                                cancel: function () {
-                                    // $.alert('Canceled!');
-                                }
-                            }
-                        });
+                        FinaliZeOrd();
                     }
 
                 },
@@ -1221,36 +1178,10 @@
             });
         }
         function ByCash() {
-            $.confirm({
-                title: 'BY CASH',
-                content: 'Mark Order Completed',
-                buttons: {
-                    btnClass: 'btn-green',
-                    confirm: function () {
-                        CompleteOrder(1)// bycash
-                    },
-                    cancel: function () {
-                        // $.alert('Canceled!');
-                    }
-                }
-            });
-
+          CompleteOrder(1)// bycash
         }
         function ByOnline() {
-            $.confirm({
-                title: 'BY ONLINE',
-                content: 'Mark Order Completed',
-                buttons: {
-                    btnClass: 'btn-green',
-                    confirm: function () {
-                        CompleteOrder(2)// by online
-                    },
-                    cancel: function () {
-                        // $.alert('Canceled!');
-                    }
-                }
-            });
-
+         CompleteOrder(2)// by online
         }
         function CompleteOrder(PaymentType) {
             $.ajax({
@@ -1302,6 +1233,31 @@
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback
                  $("#waiting").hide();
+             }
+         });
+     }
+     function FinaliZeOrd() {
+         $.confirm({
+             title: 'Alert !',
+             content: 'FINALIZE ORDER ?',
+             buttons: {
+                 Bycash:{
+                     text: 'ByCash',
+                     btnClass : 'btn-info',
+                     action: function() {
+                         ByCash();
+                     }
+                 },
+                 ByOnline: {
+                     text: 'Bank/Wallet',
+                         btnClass : 'btn-success',
+                         action: function() {
+                             ByOnline();
+                         }
+                 },
+                 cancel: function () {
+                     // $.alert('Canceled!');
+                 }
              }
          });
      }

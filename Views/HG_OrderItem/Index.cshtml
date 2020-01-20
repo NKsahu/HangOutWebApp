@@ -92,11 +92,15 @@
                         @Html.DisplayName("Status")
                     </th>
                     <th>
+                        Ticket No
+                    </th>
+                    <th>
                         @Html.DisplayName("Placed By")
                     </th>
                     <th>
                         @Html.DisplayName("Prepare By")
                     </th>
+
                 </tr>
             </thead>
             <tbody>
@@ -168,6 +172,9 @@
                     </td>
                     <td>
                         @status
+                    </td>
+                    <td>
+                        @item.TickedNo
                     </td>
                     <td>@OrderPlacedBy</td>
                     <td>@PrePareBy</td>
