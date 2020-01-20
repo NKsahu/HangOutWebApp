@@ -961,7 +961,6 @@
          Parmas.CID = LoginId;
          Parmas.OrgId = OrgId;
          Parmas.TSTWID = CurrentOrder;
-         
          $.ajax({
              type: 'POST',
              url: "/WebApi/DeliveryCharge?Obj=" + JSON.stringify(Parmas),
@@ -997,7 +996,6 @@
                          Postfix = 'below Rs ' + JsonObj.MinAmt;
                      }
                      var DelivryMsg = 'A ' + incldmsg + ' delivery charge of Rs ' + JsonObj.ChargeAmt + ' applicable ' + Postfix;
-                    
                      $.confirm({
                          title:'<p>'+ DelivryMsg+'</p>',
                          content: titlemsg,
@@ -1094,7 +1092,6 @@
                          }
                          ,
                          onContentReady: function () {
-
                          },
                          onOpenBefore: function () {
                              $(".jconfirm-buttons").css('width', '100%');
@@ -1117,11 +1114,14 @@
                 url: "/WebApi/ShowOrderItems?TOrSId=" + CurrentOrder,
                 success: function (data) {
                     var Jobje = JSON.parse(data);
-                    var TableShaetStatus = TablesList.find(x => {
-                        return x.Table_or_RowID == CurrentOrder;
-                    });
-
-                    if (Jobje.Status == 400 && Jobje.TorSsts!=1) {
+                     if($("tr.ItemsTr").length > 0) {
+                        $.alert({
+                            title: 'Alert !',
+                            content: 'please take action on selected item first',
+                              });
+                            return;
+                      }
+                    else if (Jobje.Status == 400 && Jobje.TorSsts!=1) {
                         $.alert({
                             title: 'Alert !',
                             content: 'Already Charged ',
@@ -1129,19 +1129,12 @@
                         //Jobje.MSG
                         return;
                     }
-                    if (Jobje.Status == 400) {
+                     else if (Jobje.Status == 400 && Jobje.TorSsts == 1) {
                         $.alert({
                             title: 'Alert !',
                             content: 'NO TICKETS YET',
                         });
                         //Jobje.MSG
-                        return;
-                    }
-                    else if ($("tr.ItemsTr").length > 0) {
-                        $.alert({
-                            title: 'Alert !',
-                            content: 'please take action on selected item first',
-                        });
                         return;
                     }
                     else {

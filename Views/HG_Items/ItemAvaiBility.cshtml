@@ -34,14 +34,16 @@
                         @item.UpdateDate.ToString("dd/MM/yyyy")
                     </td>
                     @{ string title = "Click To Item Unavailable";
-                        if (item.ItemAvaibility == 1)
+                        string ChekSts = "checked";
+                        if (item.ItemAvaibility ==1)
                         {
                             title = "Click To Item available";
+                            ChekSts = "";
                         }
                     }
                     <td>
                         <label class="switch" data-toggle="tooltip" title="@title">
-                            <input type="checkbox" checked="" onchange="ChangeItmAvble(@item.ItemID)">
+                            <input type="checkbox" @ChekSts itemid="@item.ItemID" onchange="ChangeItmAvble(this)">
                             <span class="slider round"></span>
                         </label>
                     </td>
@@ -52,8 +54,27 @@
 </div>
 
 <script>
-    function ChangeItmAvble() {
+    function ChangeItmAvble(event) {
+            //  var Status = $(event).val();
+        var ItemId = $(event).attr('itemid');
+            var checkStst = false;
+            if (event.checked) {
+                checkStst = true;
+                $(event).attr('checked', true);
+            }
+            else {
+                $(event).prop('checked', false);
+            }
+            $.ajax({
+                url: "/WebApi/ChangeItemAvability?ItemId="ItemId+"&Status=" + checkStst,
+                type: "GET",
+                success: function (data) {
+                    // alert("AAYA");
+                    // window.location = "/vw_HG_UsersDetails/vw_HG_UsersDetails";
+                },
+                error: function (Xr, Status, ErrorMsg) {
 
-
+                }
+            });
     }
 </script>

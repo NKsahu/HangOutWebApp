@@ -270,5 +270,26 @@ namespace HangOut.Models
 
             return (listTemp);
         }
+
+        public static string Seating(Int64 SeatId)
+        {
+            HG_Tables_or_Sheat Objseating = new HG_Tables_or_Sheat().GetOne(SeatId);
+            string Seating = "";
+            if (Objseating.Table_or_RowID > 0)
+            {
+                HG_Floor_or_ScreenMaster floor_Or_ScreenMaster = new HG_Floor_or_ScreenMaster().GetOne(Objseating.Floor_or_ScreenId);
+                if (floor_Or_ScreenMaster.Floor_or_ScreenID > 0)
+                {
+                    Seating = floor_Or_ScreenMaster.Name + " ";
+                }
+                HG_FloorSide_or_RowName side_Or_RowName = new HG_FloorSide_or_RowName().GetOne(Objseating.FloorSide_or_RowNoID);
+                if (side_Or_RowName.ID > 0)
+                {
+                    Seating += side_Or_RowName.FloorSide_or_RowName +" ";
+                }
+                Seating += Objseating.Table_or_SheetName;
+            }
+            return Seating;
+        }
     }
 }
