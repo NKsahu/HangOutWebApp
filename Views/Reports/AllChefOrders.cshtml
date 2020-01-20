@@ -90,7 +90,7 @@
                 }
                 // Seating += "  Order No:" + firstitm.OID+ "   Ticket No: " + TicketObj.Key;
             <div class="col-md-12" id="@(firstitm.TickedNo)" style="border:1px solid">
-                <pre style="margin:0px !important;"><h6>@Seating &nbsp;&nbsp; Order No:@firstitm.OID &nbsp;&nbsp;Ticket No:@firstitm.TickedNo &nbsp;&nbsp; Time:@firstitm.OrderDate.ToString("dd-MM hh:mm tt") &nbsp;&nbsp;By:@UserPlcedBy</h6></pre>
+                <pre style="margin:0px !important;"><h6>@Seating &nbsp;&nbsp; Order No:@firstitm.OID &nbsp;&nbsp;Ticket No:@firstitm.TickedNo &nbsp;&nbsp; Time:@firstitm.OrderDate.ToString("dd-MM hh:mm tt") &nbsp;&nbsp;By:@UserPlcedBy <div style="float:right"><i class="fas fa-info-circle" onclick="Details(@objOrder.OID);"></i></div></h6></pre>
                 @if (ChefName != "")
                 {
                     <h6 style="color:blue"> @ChefName</h6>
@@ -264,6 +264,22 @@
             //$(tr).find('.CkeckorNot').removeAttr('checked');
             $(tr).find('.CkeckorNot').prop('checked', prop);
             
+        });
+    }
+    function Details(OID) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/HG_OrderItem/index?OID=" + OID,
+            success: function (data) {
+                makedpt("CurrOrder");
+                $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CurrOrder");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
         });
     }
 </script>
