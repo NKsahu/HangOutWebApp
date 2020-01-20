@@ -5,6 +5,11 @@
     string Seating = "";
     string OID = Request.QueryString["OID"];
     Int64 OrderId = Int64.Parse(OID);
+    if (OrderId <= 0)
+    {
+        <h1 style="color:red;text-align:center">No order Yet</h1>
+        return;
+    }
     HG_Orders order = new HG_Orders().GetOne(OrderId);
     List<HG_Items> listItem = new HG_Items().GetAll();
     HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);

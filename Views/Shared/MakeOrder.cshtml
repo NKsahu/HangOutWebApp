@@ -361,11 +361,14 @@
                     <span class="sp-hide-if-sm-screen" id="TorTWID">
                         <!--Table name or take-away name-->
                     </span>
-
+                    <span>
+                       &nbsp; :&nbsp;
+                    </span>
                     <span class="badge badge-pill badge-secondary" style="padding:7px" id="FinalAmt">
                         0.00
                     </span>
-                    <small class="pull-right sp-bill-actions">
+                    <small style="float:right; font-size:large">
+                        <i class="fas fa-info-circle" onclick="OrdDetail();" ></i>
                     </small>
                 </p>
                 <!---->
@@ -1285,6 +1288,22 @@
                     $("#waiting").hide();
                 }
             });
+     }
+     function OrdDetail() {
+         $("#waiting").show();
+         $.ajax({
+             type: 'POST',
+             url: "/HG_OrderItem/index?OID=" + CurrOID,
+             success: function (data) {
+                 makedpt("CurrOrder");
+                 $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                 showdpt("CurrOrder");
+                 $("#waiting").hide();
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
+             }
+         });
      }
      DashBoard();
      function DashBoard() {

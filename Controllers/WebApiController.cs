@@ -584,6 +584,10 @@ namespace HangOut.Controllers
                 jObject.Add("TORSID", cart.TableorSheatOrTaleAwayId);
                 jObject.Add("AppType", AppType);
                 JObject result = PostOrder(jObject.ToString());
+                if (result.GetValue("Status").ToString() == "400")
+                {
+                    Cart.List.RemoveAll(x => x.CID == cart.CID && x.OrgId == cart.OrgId && x.TableorSheatOrTaleAwayId == cart.TableorSheatOrTaleAwayId);
+                }
                 return result;
             }
             catch(Exception e)
