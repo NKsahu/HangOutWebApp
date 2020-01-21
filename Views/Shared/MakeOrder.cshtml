@@ -368,7 +368,7 @@
                         0.00
                     </span>
                     <small style="float:right; font-size:large">
-                        <i class="fas fa-info-circle" onclick="OrdDetail();" ></i>
+                        <i class="fas fa-eye" style="color:green" onclick="OrdDetail();" ></i>
                     </small>
                 </p>
                 <!---->
@@ -511,6 +511,7 @@
 </div>
 
  <script>
+     var ReloadSeatingSts = false;
      var OrgId = 0;
      var LoginId = 0;
      var OrgType = 0;
@@ -675,7 +676,16 @@
                 url: "/WebApi/TableAndTakeAway?Type="+OrgType+"&OrderById="+LoginId,
                 success: function (data) {
                     TablesList = JSON.parse(data);
-                    ShowOrders(TablesList);
+                    if (ReloadSeatingSts == false) {
+                        ShowOrders(TablesList);
+                        ReloadSeatingSts = true;
+                        setInterval(function () { GeTablesTakeAwya(); }, 22000);//60000
+                    }
+                    else {
+                        ReloadSeatingSts = true;
+                        ReloadSeating();
+                    }
+                    
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                     $("#waiting").hide();
@@ -784,12 +794,37 @@
                 ShowOrders(OccupiedList);
                 console.log("Call For Bill" + OccupiedList.length);
             }
-        }
+     }
+     function ReloadSeating() {
+         console.log("Reloading.....");
+         for (i = 0; i < TablesList.length; i++) {
+             var TableID = TablesList[i].Table_or_RowID.toString();
+             var Status = TablesList[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
+             var Otp = TablesList[i].Otp;
+             var clasName = "";
+             var ShowStatus = "";
+             if (Status == 1) {
+                 clasName = "tableFree";
+                 ShowStatus = "Unoccupied";
+             } else if (Status == 2) {
+                 clasName = "tableBooked";
+                 ShowStatus = "Bill demanded";
+             }
+             else {
+                 clasName = "tableProgress";
+                 ShowStatus = "Occupied";
+             }
+             $("#TC" + TableID).removeClass();
+             $("#TC" + TableID).addClass("sp-grid-cell-contents " + clasName);
+             $("#TS" + TableID).text(ShowStatus);
+             $("#Otp" + TableID).text(Otp);
+         }
+     }
         function GetItemList(TableOrMWid) {
             CurrentOrder = TableOrMWid;
             GetItemListByCategory(CurrentOrder)
         }
-     function GetItemListByCategory(TableOrMWid) {
+        function GetItemListByCategory(TableOrMWid) {
          $("#waiting").show();
             $("#Current").click();
             var ObjOrderName = TablesList.find(x => {
@@ -858,7 +893,7 @@
                 ShowItems(list[j]);
             }
         }
-     function ShowItems(objitem) {
+        function ShowItems(objitem) {
          console.log("AAYA");
          var PrefixItemHtmlSecond = "";
          if (objitem.ItemMode === "1") {
@@ -956,7 +991,7 @@
         function INSTANTCLR() {
          DeliveryCharge(3);
          }
-     function DeliveryCharge(Status) {
+        function DeliveryCharge(Status) {
          var Parmas = {};
          Parmas.CID = LoginId;
          Parmas.OrgId = OrgId;
@@ -1147,7 +1182,7 @@
                 }
             });
         }
-     function GenInvoice(oldOtp, OID) {
+        function GenInvoice(oldOtp, OID) {
          if (OID == undefined || OID == null) {
              OID = 0;
          }

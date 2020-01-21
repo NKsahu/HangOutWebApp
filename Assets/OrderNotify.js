@@ -96,7 +96,7 @@ function UnseenChefOrdCnt() {
     });
 }
 setTimeout(function () { UnseenChefOrdCnt();}, 1000);
-ChefCntInterval=setInterval(function () { UnseenChefOrdCnt(); }, 50000);//60000
+ChefCntInterval = setInterval(function () { UnseenChefOrdCnt(); }, 15000);//60000
 
 //===========order auto cancel=========
 function OrderAutoCancel() {
