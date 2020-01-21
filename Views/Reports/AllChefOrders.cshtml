@@ -5,11 +5,17 @@
     var Userinfo = Request.Cookies["UserInfo"];
     int orgId = int.Parse(Userinfo["OrgId"]);
     int Usercode = int.Parse(Userinfo["UserCode"]);
+    string TickSts = "Checked";
     HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(orgId);
     int OrgType = 1;
     if (ObjOrg != null && ObjOrg.OrgTypes == "2")
     {
         OrgType = 2;
+    }
+    OrgSetting orgSetting = OrgSetting.Getone(orgId);
+    if (orgSetting.id > 0 && orgSetting.CheckBoxStatus == false)
+    {
+        TickSts = "";
     }
     List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(OrgType);
     List<HG_FloorSide_or_RowName> ListFsorRowNa = new HG_FloorSide_or_RowName().GetAll(OrgType);
@@ -40,7 +46,7 @@
     <div class="card-header">
         <h3 class="text-center" style="color:blue">Head Chef Panel</h3>
         <label  class="switch" data-toggle="tooltip" title="Change Default Tick Untick Status">
-            <input type="checkbox"  onchange="SetCustmrOrd(this)">
+            <input type="checkbox" @TickSts OrgId="@orgId" onchange="DefaultTickSts(this)">
             <span class="slider round"></span>
         </label>
     </div>
@@ -147,7 +153,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <td><input style="margin:2px" checked type="checkbox" onclick="TickAll(this,@firstitm.OIID)">Tick</td>
+                            <td><input style="margin:2px" @TickSts type="checkbox" onclick="TickAll(this,@firstitm.OIID)">Tick</td>
                             <td>Item Name</td>
                             <td>Qty</td>
 
@@ -159,7 +165,7 @@
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
                             double Amt = items.Price * items.Count;
                             <tr>
-                                <td><input class=" CkeckorNot" checked type="checkbox"  id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
+                                <td><input class=" CkeckorNot" @TickSts type="checkbox"  id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
                                 <td>@FoodObj.Items</td>
                                 <td>@items.Count</td>
                             </tr>
@@ -282,6 +288,27 @@
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
+            }
+        });
+    }
+    function DefaultTickSts(event) {
+        var OrgId = $(event).attr('OrgId');
+        var checkStst = false;
+        if (event.checked) {
+            checkStst = true;
+            $(event).attr('checked', true);
+        }
+        else {
+            $(event).prop('checked', false);
+        }
+        $.ajax({
+            url: "/CommonApi/OrgTickUntick?OrgId=" + OrgId + "&Status=" + checkStst,
+            type: "GET",
+            success: function (data) {
+              
+            },
+            error: function (Xr, Status, ErrorMsg) {
+
             }
         });
     }

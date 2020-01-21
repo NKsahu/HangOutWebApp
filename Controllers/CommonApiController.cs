@@ -34,6 +34,7 @@ namespace HangOut.Controllers
             else
             {
                 orgSetting.CheckBoxStatus = Status;
+                orgSetting.save();
             }
             JObject jObject = new JObject();
             jObject.Add("Status", 200);
