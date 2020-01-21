@@ -25,6 +25,12 @@ namespace HangOut.Models
         public string Contact1 { get; set; }
         public string ContacHead2 { get; set; }
         public string Contact2 { get; set; }
+        public int CrxVerification { get; set; }//customer cross verification { 0:"NO",1:"By-Otp",2: "By-Camera"
+        public bool CheckBoxStatus { get; set; }
+        public OrgSetting()
+        {
+            CheckBoxStatus = true;
+        }
         public int save()
         {
             DBCon con = new DBCon();
@@ -33,12 +39,12 @@ namespace HangOut.Models
             {
                 if (this.id == 0)
                 {
-                    cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime,@ByCash,@ByOnline,@AcptMinOrd,@EnbDeliChrg,@DeliChrgType,@CustomerApp,@CaptainApp,@AdminPanel,@ContactH1,@Contact1,@ContactH2,@Contact2); SELECT SCOPE_IDENTITY();", con.Con);
+                    cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime,@ByCash,@ByOnline,@AcptMinOrd,@EnbDeliChrg,@DeliChrgType,@CustomerApp,@CaptainApp,@AdminPanel,@ContactH1,@Contact1,@ContactH2,@Contact2,@CrxVerification,@CheckBoxStatus); SELECT SCOPE_IDENTITY();", con.Con);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 }
                 else
                 {
-                    cmd = new SqlCommand("update OrgSettings set MinOrdAmt=@MinOrdAmt,DeleveryCharge=@DeleveryCharge,OrdCanMinTime=@OrdCanMinTime,ByCash=@ByCash,ByOnline=@ByOnline,AcptMinOrd=@AcptMinOrd,EnbDeliChrg=@EnbDeliChrg,DeliChrgType=@DeliChrgType,CustomerApp=@CustomerApp,CaptainApp=@CaptainApp,AdminPanel=@AdminPanel,ContactH1=@ContactH1,Contact1=@Contact1,ContactH2=@ContactH2,Contact2=@Contact2 where ID=@ID ", con.Con);
+                    cmd = new SqlCommand("update OrgSettings set MinOrdAmt=@MinOrdAmt,DeleveryCharge=@DeleveryCharge,OrdCanMinTime=@OrdCanMinTime,ByCash=@ByCash,ByOnline=@ByOnline,AcptMinOrd=@AcptMinOrd,EnbDeliChrg=@EnbDeliChrg,DeliChrgType=@DeliChrgType,CustomerApp=@CustomerApp,CaptainApp=@CaptainApp,AdminPanel=@AdminPanel,ContactH1=@ContactH1,Contact1=@Contact1,ContactH2=@ContactH2,Contact2=@Contact2,CrxVerification=@CrxVerification,CheckBoxStatus=@CheckBoxStatus where ID=@ID ", con.Con);
                     cmd.Parameters.AddWithValue("@ID", this.id);
                 }
                 cmd.Parameters.AddWithValue("@MinOrdAmt", this.MinOrderAmt);
@@ -56,6 +62,8 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Contact1", this.Contact1);
                 cmd.Parameters.AddWithValue("@ContactH2", this.ContacHead2);
                 cmd.Parameters.AddWithValue("@Contact2", this.Contact2);
+                cmd.Parameters.AddWithValue("@CrxVerification", this.CrxVerification);
+                cmd.Parameters.AddWithValue("@CheckBoxStatus", this.CheckBoxStatus);
                 if (this.id == 0)
                 {
                     this.id = Convert.ToInt32(cmd.ExecuteScalar());
@@ -111,6 +119,8 @@ namespace HangOut.Models
                     hG_Ticket.Contact1 = sqlDataReader.GetString(++index);
                     hG_Ticket.ContacHead2 = sqlDataReader.GetString(++index);
                     hG_Ticket.Contact2 = sqlDataReader.GetString(++index);
+                    hG_Ticket.CrxVerification = sqlDataReader.GetInt32(++index);
+                    hG_Ticket.CheckBoxStatus = sqlDataReader.GetBoolean(++index);
                     Temp = hG_Ticket;
                 }
 

@@ -24,7 +24,6 @@
     HashSet<Int64> OIdsHash = new HashSet<Int64>(PendingOrders.Select(x => x.OID).ToArray());
     OrderItems = OrderItems.FindAll(x => OIdsHash.Contains(x.OID));
     OrderItems = OrderItems.OrderByDescending(x => x.Status).ToList();
-    // var GroupByTickets = OrderItems.GroupBy(x => x.TickedNo);
     var GroupByTickets = OrderItems.GroupBy(x => new { x.TickedNo, x.OID });//.Select(y=>y);
     var ItemsList = new HG_Items().GetAll(orgId);
     List<vw_HG_UsersDetails> ListUsers = new vw_HG_UsersDetails().GetAll(OrgId: orgId);
@@ -40,6 +39,10 @@
 <div class="card">
     <div class="card-header">
         <h3 class="text-center" style="color:blue">Head Chef Panel</h3>
+        <label  class="switch" data-toggle="tooltip" title="Change Default Tick Untick Status">
+            <input type="checkbox"  onchange="SetCustmrOrd(this)">
+            <span class="slider round"></span>
+        </label>
     </div>
     <div class="card-body">
         <div class="row">

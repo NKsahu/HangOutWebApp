@@ -10,141 +10,142 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("CreateEdit", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST",  LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEdit", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.ItemID)
             @Html.HiddenFor(model => model.Qty)
             @Html.HiddenFor(model => model.Type)
             @Html.HiddenFor(model => model.AddOnType)
-//public int ApplyAddOn { get; set; } //{1 NO ,2 YES}
-  //  public int AddOnCatId { get; set; }// addon category id
-   
-    <div class="row">
-        <div class="col text-center">
-            @if (Model.ItemID > 0)
-                                {
+            @Html.HiddenFor(Model => Model.ItemAvaibility)
+            //public int ApplyAddOn { get; set; } //{1 NO ,2 YES}
+            //  public int AddOnCatId { get; set; }// addon category id
 
-            <img id="DemoUser" src="@Model.Image" width="110" height="110" class="mb-4" /><br />
-            <input type="file" id="FoodImg" name="FoodImg" value="@Model.Image" accept="image/jpeg" onChange="document.getElementById('DemoUser').src = window.URL.createObjectURL(this.files[0])" />
-                                }
-                                else
-                                {
-            <img id="DemoUser" src="~/Assets/fork.png" width="110" height="110" class="mb-4" /><br />
-            <input type="file" id="FoodImg" name="FoodImg" value="0" accept="image/jpeg" onChange="document.getElementById('DemoUser').src = window.URL.createObjectURL(this.files[0])" />
-                                }
+            <div class="row">
+                <div class="col text-center">
+                    @if (Model.ItemID > 0)
+                    {
 
-        </div>
-    </div>
-    <div class="row">
+                        <img id="DemoUser" src="@Model.Image" width="110" height="110" class="mb-4" /><br />
+                        <input type="file" id="FoodImg" name="FoodImg" value="@Model.Image" accept="image/jpeg" onChange="document.getElementById('DemoUser').src = window.URL.createObjectURL(this.files[0])" />
+                    }
+                    else
+                    {
+                        <img id="DemoUser" src="~/Assets/fork.png" width="110" height="110" class="mb-4" /><br />
+                        <input type="file" id="FoodImg" name="FoodImg" value="0" accept="image/jpeg" onChange="document.getElementById('DemoUser').src = window.URL.createObjectURL(this.files[0])" />
+                    }
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
 
-        @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        @{
-            if (CurrentOrg != null && CurrentOrg["OrgId"] == "0")
-            {
+                @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
+
+                @{
+                    if (CurrentOrg != null && CurrentOrg["OrgId"] == "0")
+                    {
+                        <div class="col-md-3">
+                            @Html.Label("Organization  ")
+                            @Html.DropDownListFor(model => model.OrgID, new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID", "Name", Model.OrgID), "Select Organization Name", new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
+
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.HiddenFor(model => model.OrgID);
+                    }
+                }
+
                 <div class="col-md-3">
-                    @Html.Label("Organization  ")
-                    @Html.DropDownListFor(model => model.OrgID, new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID", "Name", Model.OrgID), "Select Organization Name", new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
+                    @Html.Label("Category Name")
+                    @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required", val = Model.CategoryID })
+                    @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
 
                 </div>
-            }
-            else
-            {
-                @Html.HiddenFor(model => model.OrgID);
-            }
-        }
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "control-label  " })
 
-        <div class="col-md-3">
-            @Html.Label("Category Name")
-            @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required", val = Model.CategoryID })
-            @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Items, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
 
-        </div>
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "control-label  " })
+                </div>
+                @{
+                    List<SelectListItem> FoodType = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem{Text="VEG",Value="1"},
+                                                                    new SelectListItem{Text="NON-VEG",Value="2"},
 
-            @Html.EditorFor(model => model.Items, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-            @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
+                                                                };
+                }
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ItemMode, htmlAttributes: new { @class = "control-label  " })
+                    <div class="checkbox">
+                        @Html.DropDownListFor(model => model.ItemMode, FoodType, new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.ItemMode, "", new { @class = "text-danger", required = "required" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.ItemDiscription)
+                    @Html.EditorFor(model => model.ItemDiscription, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ItemDiscription, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.CostPrice, htmlAttributes: new { @class = "control-label  " })
 
-        </div>
-        @{
-            List<SelectListItem> FoodType = new List<SelectListItem>()
-                                                            {
-                                                                new SelectListItem{Text="VEG",Value="1"},
-                                                                new SelectListItem{Text="NON-VEG",Value="2"},
+                    @Html.EditorFor(model => model.CostPrice, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
 
-                                                            };
-        }
-        <div class="col-md-2">
-            @Html.LabelFor(model => model.ItemMode, htmlAttributes: new { @class = "control-label  " })
-            <div class="checkbox">
-                @Html.DropDownListFor(model => model.ItemMode, FoodType, new { @class = "form-control", required = "required" })
-                @Html.ValidationMessageFor(model => model.ItemMode, "", new { @class = "text-danger", required = "required" })
-            </div>
-        </div>
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.ItemDiscription)
-            @Html.EditorFor(model => model.ItemDiscription, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.ItemDiscription, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
-            @Html.LabelFor(model => model.CostPrice, htmlAttributes: new { @class = "control-label  " })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
 
-            @Html.EditorFor(model => model.CostPrice, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-            @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label  " })
 
-        </div>
-        <div class="col-md-2">
-            @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control autodouble", required = "required", @readonly = "readonly", } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
+                @{
+                    List<SelectListItem> AddOnOption = new List<SelectListItem>()
+                                                                {
+                                                                    new SelectListItem{Text="NO",Value="1"},
+                                                                    new SelectListItem{Text="YES",Value="2"},
 
-            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-            @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
-            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label  " })
+                                                                };
+                }
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ApplyAddOn, htmlAttributes: new { @class = "control-label  " })
+                    <div class="checkbox">
+                        @Html.DropDownListFor(model => model.ApplyAddOn, AddOnOption, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ApplyAddOn, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.AddOnCatId)
+                    @Html.DropDownListFor(model => model.AddOnCatId, new SelectList(new HG_Category().GetAll(CategoryType: 2), "CategoryID", "Category", Model.CategoryID), "Select Addon ", new { @class = "form-control", val = Model.CategoryID })
+                    @Html.ValidationMessageFor(model => model.AddOnCatId, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-1">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.Status)
+                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", required = "required" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input type="submit" value="Save" class="btn btn-success" />
 
-            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control autodouble", required = "required", @readonly = "readonly", } })
-            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-        </div>
-        @{
-            List<SelectListItem> AddOnOption = new List<SelectListItem>()
-                                                            {
-                                                                new SelectListItem{Text="NO",Value="1"},
-                                                                new SelectListItem{Text="YES",Value="2"},
-
-                                                            };
-        }
-        <div class="col-md-2">
-            @Html.LabelFor(model => model.ApplyAddOn, htmlAttributes: new { @class = "control-label  " })
-            <div class="checkbox">
-                @Html.DropDownListFor(model => model.ApplyAddOn, AddOnOption, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ApplyAddOn, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="col-md-2">
-            @Html.LabelFor(model => model.AddOnCatId)
-            @Html.DropDownListFor(model => model.AddOnCatId, new SelectList(new HG_Category().GetAll(CategoryType: 2), "CategoryID", "Category", Model.CategoryID), "Select Addon ", new { @class = "form-control", val = Model.CategoryID })
-            @Html.ValidationMessageFor(model => model.AddOnCatId, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-1">
-            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Status)
-                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", required = "required" })
                 </div>
             </div>
-        </div>
-        <div class="col-sm-1">
-            @Html.Label("Save", new { @class = "text-white" })
-            <input type="submit" value="Save" class="btn btn-success" />
-
-        </div>
-    </div>
-            }
+        }
     </div>
 </div>
 <script>

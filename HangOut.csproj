@@ -302,6 +302,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\CommonApiController.cs" />
     <Compile Include="Controllers\HG_CategoryController.cs" />
     <Compile Include="Controllers\HG_FloorSide_or_RowNameController.cs" />
     <Compile Include="Controllers\HG_Floor_or_ScreenMasterController.cs" />
@@ -449,6 +450,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
+    <Folder Include="Views\CommonApi\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
