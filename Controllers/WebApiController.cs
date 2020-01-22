@@ -887,8 +887,6 @@ namespace HangOut.Controllers
                 listitems.AddRange(new HG_OrderItem().GetAll(order.OID));
                 TotalPrice = order.DeliveryCharge;
             }
-           
-            
             JArray jArray = new JArray();
             foreach (var OrderItm in listitems)
             {
