@@ -38,17 +38,14 @@
 @Html.Hidden("UserCode", Usercode)
 <style>
     input[type="checkbox"] {
-        width: 20px; /*Desired width*/
-        height: 20px; /*Desired height*/
+        width: 25px; /*Desired width*/
+        height: 25px; /*Desired height*/
     }
 </style>
 <div class="card">
     <div class="card-header">
         <h3 class="text-center" style="color:blue">Head Chef Panel</h3>
-        <label  class="switch" data-toggle="tooltip" title="Change Default Tick Untick Status">
-            <input type="checkbox" @TickSts OrgId="@orgId" onchange="DefaultTickSts(this)">
-            <span class="slider round"></span>
-        </label>
+        <input type="checkbox" @TickSts OrgId="@orgId" onchange="DefaultTickSts(this)"> Default Action
     </div>
     <div class="card-body">
         <div class="row">

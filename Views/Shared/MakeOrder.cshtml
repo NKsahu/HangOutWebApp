@@ -393,16 +393,19 @@
                         
                         <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn">
                             <!---->
-                            <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
-                                <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
-                                    send to CHEF
-                                </button>
+                            <div class="row" style="width:100%">
+                                <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
+                                    <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
+                                        send to CHEF
+                                    </button>
+                                </div>
+                                <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
+                                    <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                                        bypass CHEF
+                                    </button>
+                                </div>
                             </div>
-                            <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
-                                <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                                    bypass CHEF
-                                </button>
-                            </div>
+                            
                             <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px" onclick="Charge()">
                                 <button type="button" class="form-control btn btn-success sp-f2-hotkey" id="FinalAmtCharge">
                                     CHARGE
@@ -672,32 +675,37 @@
     // setTimeout(function () { GeTablesTakeAwya() }, 1000);
      function GeTablesTakeAwya() {
          console.log("table list");
-            $.ajax({
-                type: 'POST',
-                url: "/WebApi/TableAndTakeAway?Type="+OrgType+"&OrderById="+LoginId,
-                success: function (data) {
-                    TablesList = JSON.parse(data);
-                    if (ReloadSeatingSts == false) {
-                        ShowOrders(TablesList);
-                        ReloadSeatingSts = true;
-                        if (timer !== 'undefined' || timer != null) {
-                            clearTimeout(timer);
-                        }
-                        timer =setTimeout(function () { GeTablesTakeAwya(); }, 22000);//60000
-                    }
-                    else {
-                        ReloadSeatingSts = true;
-                        ReloadSeating();
-                        clearTimeout(timer);
-                       timer=setTimeout(function () { GeTablesTakeAwya(); }, 22000);//60000
-                    }
-                    
-                },
-                error: function (jqXhr, textStatus, errorMessage) { // error callback
-                    $("#waiting").hide();
-                }
-            });
+         $.ajax({
+             type: 'POST',
+             url: "/WebApi/TableAndTakeAway?Type=" + OrgType + "&OrderById=" + LoginId,
+             success: function (data) {
+                 TablesList = JSON.parse(data);
+                 if (ReloadSeatingSts == false) {
+                     ShowOrders(TablesList);
+                     ReloadSeatingSts = true;
+                     if (timer !== 'undefined' || timer != null) {
+                         clearTimeout(timer);
+                     }
+                     setTimeout(FunctionExist, 22000);//60000
+                 }
+                 else {
+                     ReloadSeatingSts = true;
+                     ReloadSeating();
+                     //clearTimeout(timer);
+                     setTimeout( FunctionExist, 22000);//60000
+                 }
 
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
+             }
+         });
+
+     }
+     function FunctionExist() {
+         if ($("#Home").length>0 && typeof GeTablesTakeAwya === 'function') {
+             GeTablesTakeAwya();
+         }
      }
      function FilterTables(event) {
          var ForSid = $(event).val();
