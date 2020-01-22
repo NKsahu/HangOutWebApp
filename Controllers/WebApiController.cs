@@ -103,6 +103,7 @@ namespace HangOut.Controllers
             Int64 CID = Int64.Parse(objParams.GetValue("CID").ToString());
             Int32 OrgId = Int32.Parse(objParams.GetValue("OrgId").ToString());
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
+            ListItems = ListItems.FindAll(x => x.ItemAvaibility == 0);// only available items
             Int64 TableSheatTakeWayId =Int64.Parse(objParams.GetValue("TSTWID").ToString());
             List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
@@ -112,6 +113,7 @@ namespace HangOut.Controllers
             if (ObjOrder != null)
             {
                 var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
+                OrderItems = OrderItems.FindAll(x => x.Status != 4);// not ccanceled items
                 CurrentTableAmt = ObjOrder.DeliveryCharge;
                 for (var i=0;i< OrderItems.Count; i++)
                 {
@@ -127,6 +129,8 @@ namespace HangOut.Controllers
                 ListCategry = ListCategry.FindAll(x => x.Status == true);
                 ListCategry = ListCategry.OrderBy(x => x.OrderNo).ToList();
                 ListMenuItems = ListMenuItems.FindAll(x => x.Status == true);
+                HashSet<int> ItemIdHash = new HashSet<int>(ListItems.Select(x => x.ItemID).ToArray());
+                ListMenuItems = ListMenuItems.FindAll(x => ItemIdHash.Contains((int)x.ItemId));
                 int count = 0;
                 foreach (var OrderMenuObj in ListCategry)
                 {
@@ -223,12 +227,12 @@ namespace HangOut.Controllers
         public string AddCart(string Obj)
         {
             JObject ParaMeters = JObject.Parse(Obj);
-            System.Int64 CustID = System.Int64.Parse(ParaMeters["CID"].ToString());
-            System.Int64 ItemId = System.Convert.ToInt64(ParaMeters["ItemId"].ToString());
-            int Cnt = System.Convert.ToInt32(ParaMeters["Cnt"].ToString());
-            int OrgId = System.Convert.ToInt32(ParaMeters["OrgId"].ToString());
-            Int64 OID = System.Convert.ToInt64(ParaMeters["OID"]);
-            System.Int64 TableSheatTakeWayId = System.Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
+            Int64 CustID = Int64.Parse(ParaMeters["CID"].ToString());
+            Int64 ItemId = Convert.ToInt64(ParaMeters["ItemId"].ToString());
+            int Cnt = Convert.ToInt32(ParaMeters["Cnt"].ToString());
+            int OrgId = Convert.ToInt32(ParaMeters["OrgId"].ToString());
+            Int64 OID = Convert.ToInt64(ParaMeters["OID"]);
+            Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
             Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.OrgId == OrgId && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
             if (ObjCart != null)
             {
@@ -324,7 +328,7 @@ namespace HangOut.Controllers
             if (orgSetting.OrgId > 0 && orgSetting.CrxVerification > 0)
             {
                 List<HG_Orders> ListCurrOrder = new HG_Orders().GetAll(CID:(int)CustID, Status: 1);
-                var CurrSeatingOrder = ListCurrOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId);
+                var CurrSeatingOrder = ListCurrOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId &&x.Create_Date.Date==DateTime.Now.Date);
                 if (CurrSeatingOrder == null || CurrSeatingOrder.OID == 0)
                 {
                     ViewCartItem.Add("VerifyBy", orgSetting.CrxVerification);
@@ -340,15 +344,7 @@ namespace HangOut.Controllers
             List<HG_Category> listcategory = new HG_Category().GetAll(OrgId:OrgId);
             return  JArray.FromObject(listcategory);
         }
-        public JObject ChangeItemAvability(Int64 ItemId, bool Status) {
-
-            HG_Items ObjItem = new HG_Items().GetOne(ItemId);
-            int Avaiblity = Status ? 0 : 1;
-            ObjItem.ItemAvaibility = Avaiblity;
-            ObjItem.Save();
-            JObject jObject = new JObject();
-            return jObject;
-        }
+        
         public JObject OrderMenuList(int Orgid)
         {
             HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(Orgid);

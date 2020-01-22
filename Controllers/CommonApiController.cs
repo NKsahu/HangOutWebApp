@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System.Linq;
 using HangOut.Models.DynamicList;
 using System.Web.Mvc;
+using System;
 
 namespace HangOut.Controllers
 {
@@ -35,9 +36,28 @@ namespace HangOut.Controllers
             {
                 orgSetting.CheckBoxStatus = Status;
                 orgSetting.save();
-            }
+            
+}
             JObject jObject = new JObject();
             jObject.Add("Status", 200);
+            return jObject;
+        }
+        public JObject ChangeItemAvability(Int64 ItemId, bool Status)
+        {
+
+            HG_Items ObjItem = new HG_Items().GetOne(ItemId);
+            int Avaiblity = Status ? 0 : 1;
+            JObject jObject = new JObject();
+            if (ObjItem.ItemID > 0)
+            {
+                ObjItem.ItemAvaibility = Avaiblity;
+                ObjItem.Save();
+                jObject.Add("Status", 200);
+            }
+            else
+            {
+                jObject.Add("Status", 400);
+            }
             return jObject;
         }
     }
