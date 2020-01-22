@@ -321,6 +321,15 @@ namespace HangOut.Controllers
                     ViewCartItem.Add("DeliveryType", orgSetting.DeleryChrgType);
                 }
             }
+            if (orgSetting.OrgId > 0 && orgSetting.CrxVerification > 0)
+            {
+                List<HG_Orders> ListCurrOrder = new HG_Orders().GetAll(CID:(int)CustID, Status: 1);
+                var CurrSeatingOrder = ListCurrOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId);
+                if (CurrSeatingOrder == null || CurrSeatingOrder.OID == 0)
+                {
+                    ViewCartItem.Add("VerifyBy", orgSetting.CrxVerification);
+                }
+            }
             return ViewCartItem;
         }
 

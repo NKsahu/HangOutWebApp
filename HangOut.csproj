@@ -440,6 +440,7 @@
     <Content Include="Views\Reports\JoinFoodDo.cshtml" />
     <Content Include="Views\City\IndexTehsil.cshtml" />
     <Content Include="Views\HG_Items\ItemAvaiBility.cshtml" />
+    <Content Include="Views\Account\AcntHeading.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -451,7 +452,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
-    <Folder Include="Views\Account\" />
     <Folder Include="Views\CommonApi\" />
   </ItemGroup>
   <ItemGroup>
