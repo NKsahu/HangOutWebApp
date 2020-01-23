@@ -182,7 +182,7 @@
                 }
 
             }
-            @if (UserType!=null&&UserType != "A")
+            @if (UserType!=null&&UserType != "SA")
                     {
                         List<HG_Items> listItem = new HG_Items().GetAll();
                         var offitem = listItem.FindAll(x => x.ItemAvaibility == 1).Count;
