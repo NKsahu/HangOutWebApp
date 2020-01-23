@@ -2024,10 +2024,10 @@ namespace HangOut.Controllers
                 {
                     Object.Add("LastOrdTime", (DateTime.Now - orders.Update_Date).TotalMinutes);
                 }
-                Object.Add("ContactH1", orgSetting.ContactHead1);
-                Object.Add("Contact1", orgSetting.Contact1);
-                Object.Add("ContactH2", orgSetting.ContacHead2);
-                Object.Add("Contact2", orgSetting.Contact2);
+                Object.Add("ContactH1", orgSetting.ContactHead1==null?"": orgSetting.ContactHead1);
+                Object.Add("Contact1", orgSetting.Contact1==null?"": orgSetting.Contact1);
+                Object.Add("ContactH2", orgSetting.ContacHead2==null?"" : orgSetting.ContacHead2);
+                Object.Add("Contact2", orgSetting.Contact2==null?"" : orgSetting.Contact2);
                 foreach (var OrderItem in hG_OrderItems)
                 {
                     HG_Items hG_Items = ListfoodItems.Find(x => x.ItemID == OrderItem.FID);

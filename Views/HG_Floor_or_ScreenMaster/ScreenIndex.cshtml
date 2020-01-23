@@ -5,13 +5,38 @@
 }
 @using HangOut.Models
 
+<style>
+    .btn:hover {
+        background-color: #666;
+        color: white;
+    }
+</style>
 <div class="card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>SCREEN </b> </h1>
-        <hr />
+        <h1 style="text-align:center"><b>SEATING</b> </h1>
+        <button style="float:left;" onclick="BULKEXCELUPL()" class="btn btn-lg btn-info ">BULK UPLOAD</button>
+        <button style="float:right !important;" onclick="DownloadExl()" class="btn btn-lg btn-info ">DOWNLOAD EXCEL</button>
+
     </div>
-    <button onclick="CreateEdit('0')" class="btn btn-success"><i class="fa fa-plus">ADD</i></button>
+    <div class="row">
+        <div class="col-md-4">
+            <a a href="/HG_Tables_or_Sheat/SheetIndex?Type=2" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"  class="btn btn-success  form-control">SEAT</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/HG_Floor_or_ScreenMaster/ScreenIndex?Type=2" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" style="background-color: #666;" class="btn btn-success form-control">SCREEN</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/HG_FloorSide_or_RowName/RowIndex?Type=2" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success form-control">ROW</a>
+        </div>
+    </div>
     <div class="card-body">
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
         <table class="table table-bordered table-hover w-100" id="TBLID">
             <thead>
                 <tr>
@@ -34,7 +59,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
-                        
+
                         <td>
                             <button onclick="CreateEdit(@item.Floor_or_ScreenID)" class="btn btn-warning btn-sm "> Edit</button>
                             <button class="btn btn-danger btn-sm " onclick="Delete(@item.Floor_or_ScreenID)"> Delete</button>
@@ -48,23 +73,30 @@
 <script>
     var AddTr = false;
     function JsonSuccess(Jobj) {
-        hidedpt("CreateScrn");
-        var Jitmobj = Jobj.data;
-        var HtmlStr = "<tr id='" + Jitmobj.Floor_or_ScreenID+"'>";
-        HtmlStr += '<td>' + Jitmobj.Floor_or_ScreenID+'</td>';
-        HtmlStr += '<td>' + Jitmobj.Name+'</td>';
-        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID + ')"> Edit</button>';
-        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Floor_or_ScreenID + ')"> Delete</button>';
-        HtmlStr += '</td ></tr >';
-        if (AddTr) {
-            $("#Tbody").append(HtmlStr);
+        if (Jobj.data != undefined && Jobj.data == '1') {
+            $('#waiting').hide();
+            alert('Uploaded');
         }
         else {
-            $('#' + Jitmobj.Floor_or_ScreenID).remove();
-            $("#Tbody").append(HtmlStr);
-        }
 
-        $('#waiting').hide();
+            hidedpt("CreateScrn");
+            var Jitmobj = Jobj.data;
+            var HtmlStr = "<tr id='" + Jitmobj.Floor_or_ScreenID + "'>";
+            HtmlStr += '<td>' + Jitmobj.Floor_or_ScreenID + '</td>';
+            HtmlStr += '<td>' + Jitmobj.Name + '</td>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID + ')"> Edit</button>';
+            HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Floor_or_ScreenID + ')"> Delete</button>';
+            HtmlStr += '</td ></tr >';
+            if (AddTr) {
+                $("#Tbody").append(HtmlStr);
+            }
+            else {
+                $('#' + Jitmobj.Floor_or_ScreenID).remove();
+                $("#Tbody").append(HtmlStr);
+            }
+
+            $('#waiting').hide();
+        }
     }
 
     function CreateEdit(ID) {
@@ -76,7 +108,7 @@
         $('#waiting').show();
         $.ajax({
             type: 'GET',
-            url: "/HG_Floor_or_ScreenMaster/ScreenCreateEdit?ID="+ID+"",
+            url: "/HG_Floor_or_ScreenMaster/ScreenCreateEdit?ID=" + ID + "",
             success: function (data) {
                 makedpt("CreateScrn");
                 $("#CreateScrn > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -117,6 +149,27 @@
         }
 
     }
+    function BULKEXCELUPL() {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_OrganizationDetails/Upload",
+            success: function (data) {
+                makedpt("CreateSheat");
+                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSheat");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function DownloadExl() {
+        if (confirm('Are You Sure')) {
+            $('.buttons-excel').click();
+        }
 
+    }
 </script>
 
