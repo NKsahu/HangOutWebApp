@@ -2,13 +2,39 @@
 @{
     Layout = null;
 }
+<style>
+    .btn:hover {
+        background-color: #666;
+        color: white;
+    }
+</style>
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center"><b>AddOn Category </b> </h3>
+        <h3 style="text-align:center"><b>ITEM</b> </h3>
         <hr />
+        <button style="float:left;" onclick="BULKEXCELUPL()" class="btn btn-lg btn-info ">BULK UPLOAD</button>
+        <button style="float:right !important;" onclick="DownloadExl()" class="btn btn-lg btn-info ">DOWNLOAD EXCEL</button>
     </div>
-    <a href="/HG_Category/CreateEditAddon?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success"><i class="fa fa-plus">ADD</i></a>
+    <div class="row">
+        <div class="col-md-4">
+            <a href="/HG_Items/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-success form-control">ITEM</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/HG_Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"  class="btn btn-success form-control">CATEGORY</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/HG_Category/AddonsIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" style="background-color: #666;" class="btn btn-success form-control">ADD ON</a>
+        </div>
+
+    </div>
     <div class="card-body">
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <a href="/HG_Category/CreateEditAddon?ID=0" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-info form-control">Add One</a>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
         <table class="table table-hover w-100 " id="TBLID">
             <thead>
                 <tr>
@@ -48,7 +74,7 @@
     </div>
 </div>
 <script>
-    
+
     function AddOnIndex(CatId) {
         $('#waiting').show();
         $.ajax({
@@ -67,5 +93,20 @@
 
 
     }
-    
+    function BULKEXCELUPL() {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/UplExl",
+            success: function (data) {
+                makedpt("CreateSheat");
+                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSheat");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
 </script>

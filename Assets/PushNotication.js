@@ -33,8 +33,4 @@ messaging.onMessage(function (payload) {
    // NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload)
 });
 
-messaging.setBackgroundMessageHandler(function (payload) {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
-    // ...
-});
 

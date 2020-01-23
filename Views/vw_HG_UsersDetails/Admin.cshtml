@@ -134,11 +134,11 @@
                     ADMINMenuList = ADMINMenuList.FindAll(x => x.User_Types.Contains(UserType));
                     if (OrgType == "2")
                     {
-                        ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Restuarant"));
+                        List = List.FindAll(x => !x.MenuLink.Equals("/HG_Tables_or_Sheat/Index?Type=1"));
                     }
                     else
                     {
-                        ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Theater"));
+                        List = List.FindAll(x => !x.MenuLink.Equals("/HG_Tables_or_Sheat/SheetIndex?Type=2"));
                     }
                 }
                 ADMINMenuList = ADMINMenuList.OrderBy(x => x.MenuOrderNo).ToList();
@@ -167,8 +167,6 @@
                                     ChileMenus = ChileMenus.OrderBy(x => x.MenuOrderNo).ToList();
                                     foreach (var SubMenu in ChileMenus)
                                     {
-
-
                                         <li class="nav-item" data-parent="#myaccordion">
                                             <a class="nav-link" href="@SubMenu.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@SubMenu.Menu_Icon"></i>@SubMenu.MenuDisplayName</a>
                                         </li>
