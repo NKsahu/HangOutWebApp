@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using HangOut.Models.Common;
 using System;
+using System.Linq;
 
 namespace HangOut.Controllers
 {
@@ -256,6 +257,7 @@ namespace HangOut.Controllers
         {
             HG_Items Objitem = new HG_Items();
             List<HG_Items> Listitem = Objitem.GetAll();
+            Listitem = Listitem.OrderByDescending(x => x.ItemAvaibility).ToList();
             return View(Listitem);
         }
     }

@@ -131,3 +131,15 @@ header .btn-group a i:hover {
     top: 0;
     right: 0;
 }
+.w3-badge {
+    border-radius: 50%;
+}
+
+.w3-badge, .w3-tag {
+    background-color: #000;
+    color: #3bff03;
+    display: inline-block;
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: center;
+}
