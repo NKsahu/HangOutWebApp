@@ -185,7 +185,7 @@
             {
                 List<HG_Items> listItem = new HG_Items().GetAll();
                 var offitem = listItem.FindAll(x => x.ItemAvaibility == 1).Count;
-                var CustomerCount = HG_OrganizationDetails.MyCustomerCnt(Orgid);
+
                 <li class="nav-item">
                     <a class="nav-link have-sub-menu collapsed" href="#" data-target="#qkaccess" data-toggle="collapse">
                         <i class="fa fa-desktop-alt"></i>Quick Access <b id="TotalCntHome" class="w3-badge">@offitem</b><span class="fa fa-plus"></span>
@@ -196,9 +196,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item" data-parent="#myaccordion">
-                    <a class="nav-link" href="#"onclick="return false;" style="color:orangered" ><i class="fas fa-users"></i>My Customer :&nbsp;@CustomerCount</a>
-                </li>
+
             }
             <li class="nav-item" data-parent="#myaccordion">
                 <a class="nav-link" href="/HG_OrganizationDetails/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-school"></i>Setup</a>
@@ -207,11 +205,17 @@
                 <a style="display:none" class="nav-link" href="/UsersMenu/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-file-code-o" aria-hidden="true"></i>UserMenus</a>
             </li>
         </ul>
-    </div>
+        @if (UserType != null && UserType != "SA")
+        {
+            var CustomerCount = HG_OrganizationDetails.MyCustomerCnt(Orgid);
+            
+            <div style="border-top:1px solid white;width:100%;padding:2px; position:fixed;left:0px;bottom:0px;color:black;font-weight:bold;margin-left:5px;"><i class="fas fa-users"></i>&nbsp;&nbsp;My Customers :&nbsp;<b style="color:black;background-color:white" class="w3-badge">@CustomerCount</b></div>
+        }
+       </div>
     <!-- End admin side menus -->
     @*mt-0 p-0*@
     <div class="col-md-10 col-12 " id="DynamicData">
-            
+
     </div>
 </div>
 <script>

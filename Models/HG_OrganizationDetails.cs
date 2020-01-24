@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
+using System.Web.Mvc;
 using System.Web;
 
 namespace HangOut.Models
@@ -35,10 +35,15 @@ namespace HangOut.Models
         public bool Status { get; set; } 
         public int PaymentType { get; set; }// {'1':'prepaid','2':'postpaid'}
         public string IvoiceHeading { get; set; }
+        [AllowHtml]
         public string AddressLin2 { get; set; }
+        [AllowHtml]
         public string AddressLine3 { get; set; }
+        [AllowHtml]
         public string Licence2 { get; set; }
+        [AllowHtml]
         public string License3 { get; set; }
+        [AllowHtml]
         public string PrintRemark { get; set; }
         public bool CustomerOrdering { get; set; }// true means enable ordering else  Ordering not Allowed
         public string InvoiceTitle { get; set; }
