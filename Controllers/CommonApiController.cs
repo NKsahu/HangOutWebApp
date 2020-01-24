@@ -60,9 +60,10 @@ namespace HangOut.Controllers
             }
             return jObject;
         }
-        public JObject CustomerCnt()
+        public JObject CustomerCnt(int OrgId)
         {
             JObject result = new JObject();
+
             return result;
         }
     }
