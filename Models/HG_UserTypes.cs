@@ -63,7 +63,7 @@ namespace HangOut.Models
             return Row;
         }
 
-        public List<HG_UserTypes> GetAll()
+        public List<HG_UserTypes> GetAll(bool all=false)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -72,7 +72,7 @@ namespace HangOut.Models
             SqlDataReader SDR = null;
             List<HG_UserTypes> ListTmp = new List<HG_UserTypes>();
             string Query = "SELECT * FROM  HG_UserTypes   ORDER BY UTID DESC";
-            if (CurrOrgID!=null && int.Parse(CurrOrgID["OrgId"]) >0)
+            if (CurrOrgID!=null && int.Parse(CurrOrgID["OrgId"]) >0 &&all==false)
             {
                   Query = "SELECT * FROM  HG_UserTypes where UserType!='SA' And UserType!='A' ORDER BY UTID DESC";
             }

@@ -180,6 +180,7 @@
                 }
 
             }
+            <!--customize menu here-->
             @if (UserType!=null&&UserType != "SA")
                     {
                         List<HG_Items> listItem = new HG_Items().GetAll();
@@ -195,7 +196,9 @@
                             </ul>
                         </li>
             }
-                        
+            <li class="nav-item" data-parent="#myaccordion">
+                 <a class="nav-link" href="/HG_OrganizationDetails/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-school"></i>Setup</a>
+             </li>         
             <li class="nav-item" data-parent="#myaccordion">
                 <a style="display:none" class="nav-link" href="/UsersMenu/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-file-code-o" aria-hidden="true"></i>UserMenus</a>
             </li>

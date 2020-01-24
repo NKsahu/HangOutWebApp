@@ -13,7 +13,7 @@
     HG_Orders order = new HG_Orders().GetOne(OrderId);
     List<HG_Items> listItem = new HG_Items().GetAll();
     HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
-    List<HG_UserTypes> UsertypleList = new HG_UserTypes().GetAll();
+    List<HG_UserTypes> UsertypleList = new HG_UserTypes().GetAll(all:true);
     List<HG_OrderItem> listorder = new HG_OrderItem().GetAll(OrderId);
     var tokens = listorder.Select(x => x.TickedNo);
     tokens = tokens.Distinct();

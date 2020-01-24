@@ -112,7 +112,7 @@ header .btn-group a i:hover {
         background-color: #121111;
     }
 #admin-side-menu {
-    height: 91vh;
+    height: 100vh;
     overflow-y:auto;
 }
 @media only screen and (max-width: 540px) {

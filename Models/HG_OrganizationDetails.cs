@@ -118,7 +118,6 @@ namespace HangOut.Models
             finally { Con.Close(); }
             return Row;
         }
-
         public List<HG_OrganizationDetails> GetAll(int Orgid=0)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
@@ -235,7 +234,6 @@ namespace HangOut.Models
 
             return (ObjTmp);
         }
-
         public int Dell(int ID)
         {
             int R = 0;
@@ -257,65 +255,26 @@ namespace HangOut.Models
             }
             return R;
         }
-        public List<HG_OrganizationDetails> GetAllByType(string Type)
+        public static int MyCustomerCnt(int OrgId)
         {
-            var CurrOrgID = HttpContext.Current.Request.Cookies[""];
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
-            Con.Open();
+            string Query = "SELECT COUNT(Distinct(CID)) FROM HG_Orders where orgid ="+OrgId+" and CID in(select UserCode from HG_UsersDetails where UserType = 'CUST') ";
+            int Count = 0;
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            List<HG_OrganizationDetails> ListTmp = new List<HG_OrganizationDetails>();
-            
-               string Query = "SELECT * FROM  HG_OrganizationDetails where Type=" + Type + "  ORDER BY OrgID  DESC";
-           
-            if (CurrOrgID != null)
-            {
-
-            }
+            DBCon Obj = new DBCon();
             try
             {
-                cmd = new SqlCommand(Query, Con);
+                cmd = new SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    HG_OrganizationDetails ObjTmp = new HG_OrganizationDetails();
-                    ObjTmp.OrgID = SDR.GetInt32(0);
-                    ObjTmp.OrgTypes = SDR.GetString(1);
-                    ObjTmp.HeadName = SDR.GetString(2);
-                    ObjTmp.Name = SDR.GetString(3);
-                    ObjTmp.Address = SDR.GetString(4);
-                    ObjTmp.City = SDR.GetString(5);
-                    ObjTmp.State = SDR.GetString(6);
-                    ObjTmp.PinCode = SDR.GetString(7);
-                    ObjTmp.Phone = SDR.GetString(8);
-                    ObjTmp.Cell = SDR.GetString(9);
-                    ObjTmp.Email = SDR.GetString(10);
-                    ObjTmp.WebSite = SDR.GetString(11);
-                    ObjTmp.Logo = SDR.GetString(12);
-                    ObjTmp.GSTNO = SDR.GetString(15);
-                    ObjTmp.PANNO = SDR.GetString(16);
-                    ObjTmp.BankName = SDR.GetString(17);
-                    ObjTmp.ACNO = SDR.GetString(18);
-                    ObjTmp.AcType = SDR.GetString(19);
-                    ObjTmp.Status = SDR.GetBoolean(23);
-                    ObjTmp.PaymentType = SDR.IsDBNull(24) ? 1 : SDR.GetInt32(24);
-                    ObjTmp.IvoiceHeading = SDR.IsDBNull(25) ? " " : SDR.GetString(25);
-                    ObjTmp.AddressLin2 = SDR.IsDBNull(26) ? " " : SDR.GetString(26);
-                    ObjTmp.AddressLine3 = SDR.IsDBNull(27) ? " " : SDR.GetString(27);
-                    ObjTmp.Licence2 = SDR.IsDBNull(28) ? " " : SDR.GetString(28);
-                    ObjTmp.License3 = SDR.IsDBNull(29) ? " " : SDR.GetString(29);
-                    ObjTmp.PrintRemark = SDR.GetString(30);
-                    ObjTmp.CustomerOrdering = SDR.GetBoolean(31);
-                    ObjTmp.InvoiceTitle = SDR.GetString(32);
-                    ObjTmp.invoicePhone = SDR.GetString(33);
-                    ObjTmp.DistrictId = SDR.GetInt32(34);
-                    ListTmp.Add(ObjTmp);
+                    Count = SDR.GetInt32(0);
+
                 }
             }
-            catch (System.Exception e) { e.ToString(); }
-            finally { Con.Close(); }
-
-            return (ListTmp);
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
+            return Count;
         }
     }
 }
