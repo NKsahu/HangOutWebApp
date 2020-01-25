@@ -338,6 +338,7 @@
     <Compile Include="Models\Common\Settings.cs" />
     <Compile Include="Models\Common\State.cs" />
     <Compile Include="Models\Common\UsersMenu.cs" />
+    <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DBCon.cs" />
     <Compile Include="Models\DynamicList\JoinCls.cs" />
     <Compile Include="Models\DynamicList\OrgType.cs" />
