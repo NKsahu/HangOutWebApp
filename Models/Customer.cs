@@ -18,8 +18,8 @@ namespace HangOut.Models
                     cmd = new SqlCommand("insert into MyCustomer values(@CID,@OrgId,@JoinDate)", con.Con);
                     cmd.Parameters.AddWithValue("@CID", this.CID);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
-                    cmd.Parameters.AddWithValue("@JoinDate", this.JoinDate);
-                   cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue("@JoinDate", DateTime.Now);
+                    cmd.ExecuteNonQuery();
             }
             catch (Exception e)
             {
@@ -36,6 +36,7 @@ namespace HangOut.Models
         {
             string Query = "SELECT CID,OrgId from MyCustomer where CID=" +CID.ToString() + " and OrgId="+OrgId.ToString();
             bool joindSts = false;
+            int Cnt = 0;
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             DBCon Obj = new DBCon();
@@ -46,7 +47,7 @@ namespace HangOut.Models
                 while (SDR.Read())
                 {
                     joindSts = true;
-
+                    //Cnt++;
                 }
             }
             catch (Exception e) { e.ToString(); }

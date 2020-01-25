@@ -206,9 +206,8 @@
             </li>
         </ul>
         @if (UserType != null && UserType != "SA")
-        {
-            var CustomerCount = HG_OrganizationDetails.MyCustomerCnt(Orgid);
-            
+            {
+                var CustomerCount = Customer.MyCustomerCnt(Orgid);
             <div style="border-top:1px solid white;width:100%;padding:2px; position:fixed;left:0px;bottom:0px;color:black;font-weight:bold;margin-left:5px;"><i class="fas fa-users"></i>&nbsp;&nbsp;My Customers :&nbsp;<b style="color:black;background-color:white" class="w3-badge">@CustomerCount</b></div>
         }
        </div>

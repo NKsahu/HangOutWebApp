@@ -1896,6 +1896,10 @@ namespace HangOut.Controllers
                     ObjUser.save();
                 }
             }
+            if (Customer.IsJoined(CID, objOrg.OrgID) == false && TableRowObj.Table_or_RowID>0)
+            {
+                new Customer { CID = CID, OrgId = objOrg.OrgID }.save();
+            }
             OrgSetting orgSetting = OrgSetting.Getone(objOrg.OrgID);
             if (orgSetting.EnblDeleryChrg == 1 && orgSetting.AcptMinOrd == 1 && OrgType.DeliveryChargeAply(AppType, orgSetting))
             {
