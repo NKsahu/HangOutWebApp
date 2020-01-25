@@ -1152,16 +1152,13 @@ namespace HangOut.Controllers
                         var OrderItems = OrderItemList;
                         foreach (var Orderitm in OrderItems)
                         {
-
                             HG_Orders order = new HG_Orders().GetOne(Orderitm.OID);
                             if (order != null && order.PaymentStatus != 0)
                             {
                                 Orderlist.Add(order);
                                 OrderItemList = OrderItemList.FindAll(x=>x.TickedNo==Orderitm.TickedNo);
                                 break;
-
                             }
-
                         }
                     }
                     else
@@ -1171,9 +1168,7 @@ namespace HangOut.Controllers
                         HG_Orders order = new HG_Orders().GetOne(ObjItem.OID);
                         Orderlist.Add(order);
                     }
-
                 }
-               
             List<HG_Items> ListfoodItems = new HG_Items().GetAll(OrgId);
                 int TorSIndex = 0;
                 foreach (var order in Orderlist)
@@ -1285,7 +1280,7 @@ namespace HangOut.Controllers
                 }
            
             }
-            catch(System.Exception e)
+            catch(Exception e)
             {
 
             }
@@ -1383,17 +1378,18 @@ namespace HangOut.Controllers
                     //    name += " Chef " + Chefname;
                     //}
                     double deliveryCharge = 0.00;
+                    if (objOrder.DeliveryCharge > 0)
+                    {
+                        List<HG_Ticket> Tickets = HG_Ticket.GetByOID(objOrder.OID);
+                        var ObjTicket = Tickets.Find(x => x.TicketNo == ticketno);
+                        if (ObjTicket != null && ObjTicket.TicketNo > 0)
+                        {
+                            deliveryCharge = ObjTicket.DeliveryCharge;
+                        }
+                    }
                     if (OrderNotice != null && OrderNotice.OID > 0)
                     {
-                        if (objOrder.DeliveryCharge > 0)
-                        {
-                            List<HG_Ticket> Tickets = HG_Ticket.GetByOID(objOrder.OID);
-                            var ObjTicket = Tickets.Find(x => x.TicketNo == ticketno);
-                            if (ObjTicket != null && ObjTicket.TicketNo > 0)
-                            {
-                                deliveryCharge = ObjTicket.DeliveryCharge;
-                            }
-                        }
+                       
                         vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(objOrder.PayReceivedBy);
 
                         if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain not OWN
@@ -1428,7 +1424,7 @@ namespace HangOut.Controllers
                     tableorSheatList.Add(TableScreen);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
 
             }
