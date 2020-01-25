@@ -4,10 +4,13 @@
 @{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll();
     var UserTypeList = new HG_UserTypes().GetAll();
     List<HG_OrganizationDetails> ListOrg=new HG_OrganizationDetails().GetAll();
-    ListOrg.Add(new HG_OrganizationDetails { OrgID = -1, Name = "POSTPAID-ADMIN" });
     UserTypeList = UserTypeList.FindAll(x => x.UserType != "CUST");
     var UserInfo = Request.Cookies["UserInfo"];
     var UserType = UserInfo["UserType"];
+    if (UserType == "SA")
+    {
+        ListOrg.Add(new HG_OrganizationDetails { OrgID = -1, Name = "POSTPAID-ADMIN" });
+    }
     }
 <div class="card">
     <div class="card-header">
@@ -22,6 +25,7 @@
             @Html.HiddenFor(model => model.JoinByOrg)
             @Html.HiddenFor(model => model.EntryDate)
             @Html.HiddenFor(model => model.EntryBy)
+            @Html.HiddenFor(model=>model.TickUntick)
         <div class="row">
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.UserType, htmlAttributes: new { @class = "control-label  " })

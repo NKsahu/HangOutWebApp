@@ -27,6 +27,7 @@ namespace HangOut.Models
         public string orgType { get; set; }// only for check OrgType not included in table column
         public int JoinByOrg { get; set; }// join from which org
         public bool IsHeadChef { get; set; }
+        public bool TickUntick { get; set; }//{0 unticked, 1 Ticked}
        public vw_HG_UsersDetails()
         {
             Status = true;
@@ -35,8 +36,64 @@ namespace HangOut.Models
             EMail = "";
             UserName = "";
             CurrentStatus = true;
+            TickUntick = true;
         }
-        
+        public int save()
+        {
+            int R = 0;
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            try
+            {
+                Con.Open();
+                SqlCommand cmd = null;
+                string Quary = "";
+                if (this.UserCode == 0)
+                {
+                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus,@JoinByOrg,@IsHeadChef,@TickUntick);SELECT SCOPE_IDENTITY(); ";
+                    cmd = new SqlCommand(Quary, Con);
+                    cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
+                }
+                else
+                {
+                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,UpdateDate=@UpdateDate,status=@status,CurrentStatus=@CurrentStatus,JoinByOrg=@JoinByOrg,IsHeadChef=@IsHeadChef,TickUntick=@TickUntick where UserCode=@UserCode;";
+                    cmd = new SqlCommand(Quary, Con);
+                    cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
+                }
+                cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
+                cmd.Parameters.AddWithValue("@UserType", this.UserType);
+                cmd.Parameters.AddWithValue("@UserName", this.UserName);
+                cmd.Parameters.AddWithValue("@UserId", this.UserId);
+                cmd.Parameters.AddWithValue("@Password", this.Password);
+                cmd.Parameters.AddWithValue("@EMail", this.EMail);
+                cmd.Parameters.AddWithValue("@UPhoto", this.UPhoto);
+                cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
+                cmd.Parameters.AddWithValue("@Status", this.Status);
+                cmd.Parameters.AddWithValue("@CurrentStatus", this.CurrentStatus);
+                cmd.Parameters.AddWithValue("@JoinByOrg", this.JoinByOrg);
+                cmd.Parameters.AddWithValue("@IsHeadChef", this.IsHeadChef);
+                cmd.Parameters.AddWithValue("@TickUntick", this.TickUntick);
+                if (this.UserCode == 0)
+                {
+                    R = System.Convert.ToInt32(cmd.ExecuteScalar());
+                    this.UserCode = R;
+                }
+                else
+                {
+                    if (cmd.ExecuteNonQuery() > 0)
+                    {
+                        R = this.UserCode;
+                    }
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+
+            finally
+            {
+                Con.Close(); Con.Dispose(); Con = null;
+            }
+            return R;
+        }
         public List<vw_HG_UsersDetails> GetAll(string Type="",int OrgId=0)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
@@ -80,6 +137,7 @@ namespace HangOut.Models
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     ObjTmp.JoinByOrg = SDR.GetInt32(13);
                     ObjTmp.IsHeadChef = SDR.GetBoolean(14);
+                    ObjTmp.TickUntick = SDR.GetBoolean(15);
                     listOfuser.Add(ObjTmp);
                 }
             }
@@ -120,6 +178,7 @@ namespace HangOut.Models
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     ObjTmp.JoinByOrg = SDR.GetInt32(13);
                     ObjTmp.IsHeadChef = SDR.GetBoolean(14);
+                    ObjTmp.TickUntick = SDR.GetBoolean(15);
                 }
             }
             catch (System.Exception e) { e.ToString(); }
@@ -158,70 +217,18 @@ namespace HangOut.Models
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     ObjTmp.JoinByOrg = SDR.GetInt32(13);
                     ObjTmp.IsHeadChef = SDR.GetBoolean(14);
+                    ObjTmp.TickUntick = SDR.GetBoolean(15);
                 }
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); SDR.Close(); Con.Close(); Con.Dispose(); Con = null; }
             return (ObjTmp);
         }
-        public int save()
-        {
-            int R = 0;
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
-            try
-            {
-                Con.Open();
-                SqlCommand cmd = null;
-                string Quary = "";
-                if (this.UserCode == 0) { 
-                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus,@JoinByOrg,@IsHeadChef);SELECT SCOPE_IDENTITY(); ";
-                    cmd = new SqlCommand(Quary, Con);
-                    cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
-                }
-                else
-                {
-                    Quary = "Update HG_UsersDetails set OrgID=@OrgID,UserType=@UserType,UserName=@UserName,UserId=@UserId,Password=@Password,EMail=@EMail,UPhoto=@Uphoto,UpdateDate=@UpdateDate,status=@status,CurrentStatus=@CurrentStatus,JoinByOrg=@JoinByOrg,IsHeadChef=@IsHeadChef where UserCode=@UserCode;";
-                    cmd = new SqlCommand(Quary, Con);
-                    cmd.Parameters.AddWithValue("@UserCode", this.UserCode);
-                }
-                cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
-                cmd.Parameters.AddWithValue("@UserType", this.UserType);
-                cmd.Parameters.AddWithValue("@UserName", this.UserName);
-                cmd.Parameters.AddWithValue("@UserId", this.UserId);
-                cmd.Parameters.AddWithValue("@Password", this.Password);
-                cmd.Parameters.AddWithValue("@EMail", this.EMail);
-                cmd.Parameters.AddWithValue("@UPhoto", this.UPhoto);
-                cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
-                cmd.Parameters.AddWithValue("@Status", this.Status);
-                cmd.Parameters.AddWithValue("@CurrentStatus", this.CurrentStatus);
-                cmd.Parameters.AddWithValue("@JoinByOrg", this.JoinByOrg);
-                cmd.Parameters.AddWithValue("@IsHeadChef", this.IsHeadChef);
-                if (this.UserCode == 0)
-                {
-                    R = System.Convert.ToInt32(cmd.ExecuteScalar());
-                    this.UserCode = R;
-                }
-                else
-                {
-                   if(cmd.ExecuteNonQuery() > 0)
-                    {
-                        R = this.UserCode;
-                    }
-                }
-            }
-            catch (System.Exception e){ e.ToString(); }
-
-            finally
-            {
-                Con.Close(); Con.Dispose(); Con = null;
-            }
-            return R;
-        }
+        
        
        public vw_HG_UsersDetails MobileAlreadyExist(string UserLogin)
         {
-            SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
@@ -249,6 +256,7 @@ namespace HangOut.Models
                     ObjTmp.CurrentStatus = SDR.IsDBNull(12) ? false : SDR.GetBoolean(12);
                     ObjTmp.JoinByOrg = SDR.GetInt32(13);
                     ObjTmp.IsHeadChef = SDR.GetBoolean(14);
+                    ObjTmp.TickUntick = SDR.GetBoolean(15);
                 }
             }
             catch (System.Exception e) { e.ToString(); }
