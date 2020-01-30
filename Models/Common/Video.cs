@@ -16,6 +16,10 @@ namespace HangOut.Models.Common
         public int Languange { get; set; }
         public int SerialNumber { get; set; }
         public bool IsImp { get; set; }
+        public bool Restaurant { get; set; }
+        public bool Theater { get; set; }
+        public bool Prepaid { get; set; }
+        public bool Postpaid { get; set; }
 
         public int Save()
         {
@@ -27,13 +31,13 @@ namespace HangOut.Models.Common
                 string Query = "";
                 if (this.ID == 0)
                 {
-                    Query = "Insert into  Video  values( @CategoryId  ,@Title ,@Discription,@Link,@Languange,@SerialNumber,@IsImp); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  Video  values( @CategoryId  ,@Title ,@Discription,@Link,@Languange,@SerialNumber,@IsImp,@Restaurant,@Theater,@Prepaid,@Postpaid); SELECT SCOPE_IDENTITY();";
 
 
                 }
                 else
                 {
-                    Query = "update  Video set   CategoryId =@CategoryId ,Title=@Title,Discription=@Discription,Link=@Link,Languange=@Languange,SerialNumber=@SerialNumber,IsImp=@IsImp where ID=@ID";
+                    Query = "update  Video set   CategoryId =@CategoryId ,Title=@Title,Discription=@Discription,Link=@Link,Languange=@Languange,SerialNumber=@SerialNumber,IsImp=@IsImp,Restaurant=@Restaurant,Theater=@Theater,Prepaid=@Prepaid,Postpaid=@Postpaid where ID=@ID";
 
                 }
                 cmd = new SqlCommand(Query, OBJCon.Con);
@@ -45,6 +49,10 @@ namespace HangOut.Models.Common
                 cmd.Parameters.AddWithValue("@Languange", this.Languange);
                 cmd.Parameters.AddWithValue("@SerialNumber", this.SerialNumber);
                 cmd.Parameters.AddWithValue("@IsImp", this.IsImp);
+                cmd.Parameters.AddWithValue("@Restaurant", this.Restaurant);
+                cmd.Parameters.AddWithValue("@Theater", this.Theater);
+                cmd.Parameters.AddWithValue("@Prepaid", this.Prepaid);
+                cmd.Parameters.AddWithValue("@Postpaid", this.Postpaid);
                 if (this.ID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -84,6 +92,10 @@ namespace HangOut.Models.Common
                     ObjTmp.Languange = SDR.GetInt32(5);
                     ObjTmp.SerialNumber = SDR.GetInt32(6);
                     ObjTmp.IsImp = SDR.GetBoolean(7);
+                    ObjTmp.Restaurant = SDR.GetBoolean(8);
+                    ObjTmp.Theater = SDR.GetBoolean(9);
+                    ObjTmp.Prepaid = SDR.GetBoolean(10);
+                    ObjTmp.Postpaid = SDR.GetBoolean(11);
 
                     ListTmp.Add(ObjTmp);
                 }
@@ -116,6 +128,11 @@ namespace HangOut.Models.Common
                     ObjTmp.Languange = SDR.GetInt32(5);
                     ObjTmp.SerialNumber = SDR.GetInt32(6);
                     ObjTmp.IsImp = SDR.GetBoolean(7);
+                    ObjTmp.IsImp = SDR.GetBoolean(7);
+                    ObjTmp.Restaurant = SDR.GetBoolean(8);
+                    ObjTmp.Theater = SDR.GetBoolean(9);
+                    ObjTmp.Prepaid = SDR.GetBoolean(10);
+                    ObjTmp.Postpaid = SDR.GetBoolean(11);
                 }
             }
             catch (System.Exception e)

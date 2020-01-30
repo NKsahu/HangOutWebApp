@@ -1,12 +1,15 @@
-﻿@model HangOut.Models.Common.Video
+﻿@{ 
+    Layout = null;
+}
+
 <div class="row text-center">
         <button class="btn btn-success w-100"><h1 class="text-center"><i class="fa fa-video-camera"></i>Video Category</h1></button>
 </div>
 <br />
  <div class=" row">
-     <ul class="nav p-1" style="font-size:40px" id="MyCategory">
+     <ul class="nav p-1" style="font-size:40px" id="MyCategory" onclick="LoadCategoryPopup()">
          <li>
-             <button class="btn btn-warning" style="font-size:25px">
+             <button class="btn btn-warning" style="font-size:25px" >
                  <i class="fa fa-plus "></i>
                  <span>Category1</span>
              </button>
@@ -37,9 +40,9 @@
     var listvideocategory = [];
     var strhtml = '<li><button class="btn btn-warning" style="font-size:25px">';
     strhtml += '<i class="fa fa-plus "></i>';
-    
+    LoadCategory();
     function LoadCategory() {
-        $("#MyCategory").html();
+        $("#MyCategory").html('');
         $.ajax({
             type: 'GET',
             url: "/Video/Categorylist",
@@ -60,7 +63,24 @@
             var Secondhtml = '<span>' + ObjcatVideo.Name+'</span>';
             Secondhtml += '</button>';
             Secondhtml += '</li>&nbsp';
-            $("#MyCategory").append(strhtml);
+            $("#MyCategory").append(strhtml + Secondhtml);
         }
+    }
+    function LoadCategoryPopup() {
+       
+        $.ajax({
+            type: 'GET',
+            url: "/Video/Popupwindow",
+            success: function (data) {
+                makedpt("HG_Category");
+                $("#HG_Category > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("HG_Category");
+                $('#waiting').hide();
+                // }
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
     }
 </script>
