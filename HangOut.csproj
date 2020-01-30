@@ -318,6 +318,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
+    <Compile Include="Controllers\VideoController.cs" />
     <Compile Include="Controllers\vw_HG_UsersDetailsController.cs" />
     <Compile Include="Controllers\WebApiController.cs" />
     <Compile Include="Global.asax.cs">
@@ -339,6 +340,8 @@
     <Compile Include="Models\Common\Settings.cs" />
     <Compile Include="Models\Common\State.cs" />
     <Compile Include="Models\Common\UsersMenu.cs" />
+    <Compile Include="Models\Common\Video.cs" />
+    <Compile Include="Models\Common\VideoCategory.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DBCon.cs" />
     <Compile Include="Models\DynamicList\JoinCls.cs" />
@@ -446,6 +449,7 @@
     <Content Include="Views\City\IndexTehsil.cshtml" />
     <Content Include="Views\HG_Items\ItemAvaiBility.cshtml" />
     <Content Include="Views\Account\AcntHeading.cshtml" />
+    <Content Include="Views\Video\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
