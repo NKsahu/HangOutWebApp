@@ -59,11 +59,12 @@ namespace HangOut.Controllers
             else
             {
                 Objuser.UserCode = Objuser.save();
+                
             }
             return JObject.FromObject(Objuser);
 
         }
-        public void SendMsgCustomer(Int64 UserId,Int64 OrderNo)
+        public void SendMsgCustomer(Int64 UserId,Int64 OrderNo=0)
         {
                 string[] topics = { UserId.ToString() };
                 // topics.Add(OrgId.ToString());

@@ -29,7 +29,7 @@ namespace HangOut.Models.Common
             var data = new
             {
                 to = "/topics/"+regIds,//"/topics/AgroIndia",//deviceId,
-                notification = new
+                data = new
                 {
                     body = message,
                     title = title,
@@ -69,6 +69,6 @@ namespace HangOut.Models.Common
                 
             }
         }
-
+        
         }
 }

@@ -277,6 +277,7 @@
     <Content Include="Assets\Login Assets\vendor\bootstrap\css\bootstrap.css.map" />
     <Content Include="Assets\Login Assets\vendor\bootstrap\css\bootstrap.min.css.map" />
     <Content Include="Image\sharp.ogg" />
+    <Content Include="PosHandler.ashx" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -361,6 +362,9 @@
     <Compile Include="Models\OrgSetting.cs" />
     <Compile Include="Models\PaytmResn.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
+    <Compile Include="PosHandler.ashx.cs">
+      <DependentUpon>PosHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
