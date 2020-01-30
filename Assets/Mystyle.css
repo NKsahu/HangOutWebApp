@@ -143,4 +143,11 @@ header .btn-group a i:hover {
     padding-right: 6px;
     text-align: center;
 }
+.blackTest{
+    color:black;
+    border:1px solid green;
+}
+.blackBackground{
+    background-color:#666;
+}
 
