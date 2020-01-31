@@ -2,16 +2,60 @@
 @{
     Layout = null;
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>AddFeedBack</title>
-</head>
-<body>
-    <div> 
+<div class="card row">
+<div class="card-header">
+<h3 class="text-center">FeedBack Form</h3>
+</div>
+<div class="card">
+    <div class="row" style="display:none" id="question0">
+        <div class="col-md-5">
+            <input type="text" class="form-control" placeholder="Enter Question Title" />
+        </div>
+        <div class="col-md-1">
+            <input type="checkbox" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label> Question Type</label>
+            <select class="form-control" name="QuestionType">
+                <option value="0">Star</option>
+                <option value="1">Objective</option>
+                <option value="3">Subjective</option>
+                <option value="4">Like Dislike Ok</option>
+            </select>
+        </div>
     </div>
-</body>
-</html>
+    <div class="row" id="question">
+        <div class="col-md-5">
+            <input type="text" class="form-control" placeholder="Enter Question Title" />
+        </div>
+        <div class="col-md-1">
+            <input type="checkbox" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label> Question Type</label>
+            <select class="form-control" name="QuestionType">
+                <option value="0">Star</option>
+                <option value="1">Objective</option>
+                <option value="3">Subjective</option>
+                <option value="4">Like Dislike Ok</option>
+            </select>
+        </div>
+    </div>
+    <div id="CopyDiv" style="display:none"></div>
+    <button onclick="ShalloCopy()" class="btn btn-danger">
+        <i class="fas fa-plus-circle"></i>
+    </button>
+    <button style="margin-top:10px;" class="btn btn-success form-control">
+        Submit
+    </button>
+</div>
+</div>
+
+<script>
+    function ShalloCopy() {
+        console.log("AAYA");
+        var ColyDiv = $("#question0").clone();
+        ColyDiv.show();
+        ColyDiv.insertBefore("#CopyDiv"); 
+    }
+</script>
