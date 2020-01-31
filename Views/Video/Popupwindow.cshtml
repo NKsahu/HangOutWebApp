@@ -1,7 +1,7 @@
 ﻿@{ Layout = null;}
 <div class=" card p-1 m-5" style="border:groove;box-shadow:2px 4px 4px black;z-index:10000">
     <div class="card-header" style="border:groove;box-shadow:2px 4px 4px black;z-index:10000">
-        <h4 class="text-center">Video Category</h4>
+        <h4 class="text-center"><b>Video Category</b></h4>
         <hr />
     </div>
     <div class="row">
@@ -13,8 +13,8 @@
         </div>
         <div class="col-md-3"></div>
     </div>
-    <div class="card-body" style="border:groove;box-shadow:2px 4px 4px black;z-index:10000">
-        <div class="row">
+    <div class="card-body bb" style="border:groove;box-shadow:2px 4px 4px black;z-index:10000">
+        <div class="row aa">
             <div class="col-md-4">
                 <label for="Title">Title</label>
                 <input class="form-control" type="text" placeholder="Title" />
@@ -33,7 +33,7 @@
             </div>
             <div class="col-md-12">
                 <select class="form-control" name="StudentGender">
-                    <option value="0">Select Gender</option>
+                    <option value="0">Select Language</option>
                     <option value="1">Hindi</option>
                     <option value="2">English</option>
                     <option value="3">Urdu</option>
@@ -64,34 +64,23 @@
                 <label for="Prepaid">Prepaid </label>
                 <input type="checkbox" />
             </div>
-            <div class="col-md-1">
-                <button class="btn   btn-danger button" style="color:black;font-size:15px"><i class="fa fa-plus"></i>Add</button>
-            </div>
+
         </div>
+
+    </div>
+    <div class="col-md-12">
+        <button class="btn btn-danger form-control"><i class="fa fa-plus"></i></button>
+    </div>
+    <div class="col-md-12">
+        <button class="btn   btn-success form-control" type="submit">Submit</button>
     </div>
 </div>
-<style>
-    .button {
-        padding: 15px 25px;
-        font-size: 10px;
-        text-align: center;
-        cursor: pointer;
-        outline: none;
-        color: #fff;
-        background-color: #4CAF50;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 9px #999;
-    }
-
-        .button:hover {
-            background-color: #1eebe5
-        }
-
-        .button:active {
-            background-color: #3e8e41;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
-
-</style>
+<script>
+    $(document).ready(function () {
+        $("button").click(function () {
+            $(".bb").append($(".aa").clone(true));
+        });
+        
+    });
+</script>
+ 

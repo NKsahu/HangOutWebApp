@@ -2,47 +2,31 @@
     Layout = null;
 }
 
-<div class="row text-center">
-        <button class="btn btn-success w-100"><h1 class="text-center"><i class="fa fa-video-camera"></i>Video Category</h1></button>
+<div class="card">
+    <div class="card-header">
+        <h5 class="text-center"><b>Video Category</b></h5> 
+    </div>
 </div>
 <br />
  <div class=" row">
-     <ul class="nav p-1" style="font-size:40px" id="MyCategory" onclick="LoadCategoryPopup()">
+     <ul class="nav p-1" style="font-size:40px" id="MyCategory" >
          <li>
-             <button class="btn btn-warning" style="font-size:25px" >
+             <button class="btn btn-warning" style="font-size:25px" onclick="LoadCategoryPopup()">
                  <i class="fa fa-plus "></i>
-                 <span>Category1</span>
+                 <span>ADD</span>
              </button>
          </li>&nbsp;
-         <li>
-             <button class="btn btn-primary" style="font-size:25px">
-                 <i class="fa fa-plus "></i>
-                 <span>Category2</span>
-             </button>
-         </li>&nbsp;
-         <li>
-             <button class="btn btn-dark" style="font-size:25px">
-                 <i class="fa fa-plus "></i>
-                 <span>Category3</span>
-             </button>
-         </li>
-         &nbsp;
-         <li>
-             <button class="btn btn-danger" style="font-size:25px">
-                 <i class="fa fa-plus "></i>
-                 <span>Category4</span>
-             </button>
-         </li>
+         
      </ul>
      
  </div>
 <script>
     var listvideocategory = [];
     var strhtml = '<li><button class="btn btn-warning" style="font-size:25px">';
-    strhtml += '<i class="fa fa-plus "></i>';
+   
     LoadCategory();
     function LoadCategory() {
-        $("#MyCategory").html('');
+      //  $("#MyCategory").html('');
         $.ajax({
             type: 'GET',
             url: "/Video/Categorylist",
