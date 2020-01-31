@@ -455,6 +455,7 @@
     <Content Include="Views\Account\AcntHeading.cshtml" />
     <Content Include="Views\Video\Index.cshtml" />
     <Content Include="Views\Video\Popupwindow.cshtml" />
+    <Content Include="Views\FeedBack\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -467,7 +468,6 @@
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
     <Folder Include="Views\CommonApi\" />
-    <Folder Include="Views\FeedBack\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
