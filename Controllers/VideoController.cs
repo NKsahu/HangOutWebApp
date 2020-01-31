@@ -21,5 +21,9 @@ namespace HangOut.Controllers
             List<VideoCategory> listvideocategory = VideoCategory.GetAll();
             return JArray.FromObject(listvideocategory);
         }
+        public ActionResult Popupwindow()
+        {
+            return View();
+        }
     }
 }
