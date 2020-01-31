@@ -8,7 +8,10 @@
     border:1px solid black;
     height:100px;
 }
-
+    .CustomUl {
+       text-align:center;
+       list-style-type:none;
+    }
 </style>
 <div class="card row">
     <div class="card-header">
@@ -17,50 +20,59 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-4 formdiv">
-                <ul class="nav-link" style="text-align:center;list-style-type:none">
+                <ul class="CustomUl" >
                     <li>Feedback form4</li>
                     <li>Created : 30/01/20   08:46</li>
                     <li>Filled 73 times</li>
                     <li>Placed 107 times</li>
                 </ul>
-               
             </div>
             <div class="col-md-4 formdiv">
-                <div>
-                    <p> Feedback form4</p>
-                    <p>
-                        Created : 30/01/20   08:46
-                    </p>
-                    <p>Filled 73 times</p>
-                    <p>Placed 107 times</p>
-                </div>
+                <ul class="CustomUl">
+                    <li>Feedback form4</li>
+                    <li>Created : 30/01/20   08:46</li>
+                    <li>Filled 73 times</li>
+                    <li>Placed 107 times</li>
+                </ul>
             </div>
             <div class="col-md-4 formdiv">
-                <div>
-                    <p> Feedback form4</p>
-                    <p>
-                        Created : 30/01/20   08:46
-                    </p>
-                    <p>Filled 73 times</p>
-                    <p>Placed 107 times</p>
-                </div>
+                <ul class="CustomUl">
+                    <li>Feedback form4</li>
+                    <li>Created : 30/01/20   08:46</li>
+                    <li>Filled 73 times</li>
+                    <li>Placed 107 times</li>
+                </ul>
             </div>
             <div class="col-md-4 formdiv">
-                <div>
-                    <p> Feedback form4</p>
-                    <p>
-                        Created : 30/01/20   08:46
-                    </p>
-                    <p>Filled 73 times</p>
-                    <p>Placed 107 times</p>
-                </div>
+                <ul class="CustomUl">
+                    <li>Feedback form4</li>
+                    <li>Created : 30/01/20   08:46</li>
+                    <li>Filled 73 times</li>
+                    <li>Placed 107 times</li>
+                </ul>
             </div>
         </div>
 
     </div>
 </div>
 
+<script>
+    function AddNewForm() {
+        $.ajax({
+            type: 'GET',
+            url: "/Video/Categorylist",
+            success: function (data) {
+                listvideocategory = JSON.parse(data);
+                DispalyCategory(listvideocategory);
+                // }
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
 
+</script>
 
 
 
