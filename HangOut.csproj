@@ -305,6 +305,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CommonApiController.cs" />
+    <Compile Include="Controllers\FeedBackController.cs" />
     <Compile Include="Controllers\HG_CategoryController.cs" />
     <Compile Include="Controllers\HG_FloorSide_or_RowNameController.cs" />
     <Compile Include="Controllers\HG_Floor_or_ScreenMasterController.cs" />
@@ -328,6 +329,9 @@
     <Compile Include="Models\Common\Cart.cs" />
     <Compile Include="Models\Common\City.cs" />
     <Compile Include="Models\Common\District.cs" />
+    <Compile Include="Models\Common\FeedBackQue.cs" />
+    <Compile Include="Models\Common\FeedbkForm.cs" />
+    <Compile Include="Models\Common\FeedbkObj.cs" />
     <Compile Include="Models\Common\LocalCart.cs" />
     <Compile Include="Models\Common\LoginFilter.cs" />
     <Compile Include="Models\Common\OrdNotice.cs" />
@@ -451,6 +455,7 @@
     <Content Include="Views\Account\AcntHeading.cshtml" />
     <Content Include="Views\Video\Index.cshtml" />
     <Content Include="Views\Video\Popupwindow.cshtml" />
+    <Content Include="Views\FeedBack\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
