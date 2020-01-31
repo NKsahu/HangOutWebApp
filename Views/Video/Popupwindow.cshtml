@@ -1,37 +1,47 @@
 ﻿ @{ Layout = null;}
-<div class="row">
-    <div class=" col-sm-12 text-center">
-        <h4>Video Category</h4>
+<div class=" card p-1 m-5" style="border:groove;box-shadow:2px 4px 4px black;z-index:10000">
+    <div class="card-header" style="border:groove;box-shadow:2px 4px 4px black;z-index:10000">
+        <h4 class="text-center">Video Category</h4>
+        <hr />
     </div>
-</div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <label for="Category"><b>Category</b></label>
+            <input class=" form-control" type="text" placeholder="Category" />
+            <hr />
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="card-body" style="border:groove;box-shadow:2px 4px 4px black;z-index:10000">
+        <div class="row">
 
-<div class=" card p-1 m-5">
-    
-        @Html.Label("Category")<br />
-        <input type="text" placeholder="Category" />
-    
-    <div class="col-sm-6 text-center">
-        @Html.Label("Title")<br />
-        <input type="text" placeholder="Title" />
-    </div>
-    <div class="col-sm-6 text-center">
-        @Html.Label("Discription")<br />
-        <input type="text" placeholder="Discription" />
-    </div>
-    <div class="col-sm-6 text-center">
-        @Html.Label("Link")<br />
-        <input type="text" placeholder="Link" />
-    </div>
-    <div class="col-sm-6 text-center">
-        @Html.Label("Piority")<br />
-        <input type="checkbox"   />
-    </div>
-    <div class="col-sm-6 text-center">
-        <select class="form-control" name="StudentGender">
-            <option>Select Gender</option>
-            <option>Hindi</option>
-            <option>English</option>
-            <option>Urdu</option>
-        </select>
+
+
+            <div class="col-md-4">
+                <label for="Title">Title</label>
+                <input class="form-control" type="text" placeholder="Title" />
+            </div>
+            <div class="col-md-4">
+                <label for="Discription">Discription</label>
+                <input class="form-control" type="text" placeholder="Discription" />
+            </div>
+            <div class="col-md-4">
+                <label for="Link">Link</label>
+                <input class="form-control" type="text" placeholder="Link" />
+            </div>
+            <div class="col-md-4">
+                <label for="Piority">Piority</label>
+                <input type="checkbox" />
+            </div>
+            <div class="col-md-12">
+                <select class="form-control" name="StudentGender">
+                    <option value="0">Select Gender</option>
+                    <option value="1">Hindi</option>
+                    <option value="2">English</option>
+                    <option value="3">Urdu</option>
+                </select>
+            </div>
+        </div>
     </div>
 </div>
