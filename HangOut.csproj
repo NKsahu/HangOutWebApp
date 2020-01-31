@@ -305,6 +305,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CommonApiController.cs" />
+    <Compile Include="Controllers\FeedBackController.cs" />
     <Compile Include="Controllers\HG_CategoryController.cs" />
     <Compile Include="Controllers\HG_FloorSide_or_RowNameController.cs" />
     <Compile Include="Controllers\HG_Floor_or_ScreenMasterController.cs" />
@@ -466,6 +467,7 @@
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
     <Folder Include="Views\CommonApi\" />
+    <Folder Include="Views\FeedBack\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
