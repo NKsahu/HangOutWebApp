@@ -13,5 +13,9 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult AddFeedBack(int Id)
+        {
+            return View();
+        }
     }
 }

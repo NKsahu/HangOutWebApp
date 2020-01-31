@@ -2,16 +2,79 @@
 @{
     Layout = null;
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <div> 
+<style>
+.formdiv{
+    background-color:aqua;
+    border:1px solid black;
+    height:100px;
+}
+    .CustomUl {
+       text-align:center;
+       list-style-type:none;
+    }
+</style>
+<div class="card row">
+    <div class="card-header">
+        <h3 class="text-center">Feedback Form</h3>
     </div>
-</body>
-</html>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 formdiv">
+                <ul class="CustomUl" >
+                    <li>Feedback form4</li>
+                    <li>Created : 30/01/20   08:46</li>
+                    <li>Filled 73 times</li>
+                    <li>Placed 107 times</li>
+                </ul>
+            </div>
+            <div class="col-md-4 formdiv">
+                <ul class="CustomUl">
+                    <li>Feedback form4</li>
+                    <li>Created : 30/01/20   08:46</li>
+                    <li>Filled 73 times</li>
+                    <li>Placed 107 times</li>
+                </ul>
+            </div>
+            <div class="col-md-4 formdiv">
+                <ul class="CustomUl">
+                    <li>Feedback form4</li>
+                    <li>Created : 30/01/20   08:46</li>
+                    <li>Filled 73 times</li>
+                    <li>Placed 107 times</li>
+                </ul>
+            </div>
+            <div class="col-md-4 formdiv">
+                <ul class="CustomUl">
+                    <li>Feedback form4</li>
+                    <li>Created : 30/01/20   08:46</li>
+                    <li>Filled 73 times</li>
+                    <li>Placed 107 times</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function AddNewForm() {
+        $.ajax({
+            type: 'GET',
+            url: "/Video/Categorylist",
+            success: function (data) {
+                listvideocategory = JSON.parse(data);
+                DispalyCategory(listvideocategory);
+                // }
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+
+</script>
+
+
+
+
+
