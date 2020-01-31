@@ -2,12 +2,20 @@
 @{
     Layout = null;
 }
+<style>
+    .SubItem {
+        max-height: 250px;
+        width: 100%;
+        overflow-y: scroll;
+        border:1px solid green;
+    }
+</style>
 <div class="card row">
 <div class="card-header">
 <h3 class="text-center">FeedBack Form</h3>
 </div>
 <div class="card">
-    <div class="row" style="display:none" id="question0">
+    <div class="row" style="display:none;border:1px solid black;" id="question0">
         <div class="col-md-5">
             <input type="text" class="form-control" placeholder="Enter Question Title" />
         </div>
@@ -16,7 +24,7 @@
         </div>
         <div class="col-md-6">
             <label> Question Type</label>
-            <select class="form-control" name="QuestionType">
+            <select class="form-control" name="QuestionType" id="QuestionType">
                 <option value="0">Star</option>
                 <option value="1">Objective</option>
                 <option value="3">Subjective</option>
@@ -24,7 +32,10 @@
             </select>
         </div>
     </div>
-    <div class="row" id="question">
+    <div class="col-md-12" id="ObjectiveID" style="display:none">
+        <input type="text" placeholder="Title" class="form-control" />
+    </div>
+    <div class="row" id="question" style="border:1px solid black;">
         <div class="col-md-5">
             <input type="text" class="form-control" placeholder="Enter Question Title" />
         </div>
@@ -33,15 +44,32 @@
         </div>
         <div class="col-md-6">
             <label> Question Type</label>
-            <select class="form-control" name="QuestionType">
+            <select class="form-control" name="QuestionType" id="QuestionType">
                 <option value="0">Star</option>
                 <option value="1">Objective</option>
                 <option value="3">Subjective</option>
                 <option value="4">Like Dislike Ok</option>
             </select>
         </div>
+        <div id="Objective" class="row SubItem"  >
+            <div class="col-md-12">
+                <select class="form-control" name="QuestionType">
+                    <option value="0">Single Mode</option>
+                    <option value="1">Multiple</option>
+                </select>
+            </div>
+             <div class="col-md-12">
+                    <input type="text" placeholder="Title" class="form-control" />
+             </div>
+             <div id="SubDiv" style="display:none"></div>
+             
+                 <button onclick="AddTitle()" style="width:40%;margin-left:30%;margin-right:30%;margin-top:5px;" class="btn btn-danger ">
+                     <i class="fas fa-plus-circle"></i>
+                 </button>
+            
+        </div>
     </div>
-    <div id="CopyDiv" style="display:none"></div>
+    <div id="HeadDiv" style="display:none"></div>
     <button onclick="ShalloCopy()" class="btn btn-danger">
         <i class="fas fa-plus-circle"></i>
     </button>
@@ -53,9 +81,23 @@
 
 <script>
     function ShalloCopy() {
-        console.log("AAYA");
         var ColyDiv = $("#question0").clone();
         ColyDiv.show();
-        ColyDiv.insertBefore("#CopyDiv"); 
+        ColyDiv.insertBefore("#HeadDiv"); 
     }
+    function AddTitle() {
+        var SubItem = $("#ObjectiveID").clone();
+        SubItem.show();
+        SubItem.insertBefore("#SubDiv"); 
+    }
+    $("#QuestionType").change(function () {
+        console.log("AAYA");
+        if ($(this).val() == "1") {
+            $(this).parent('div').parent('div').find('.SubItem').show();
+        }
+        else {
+            $(this).parent('div').parent('div').find('.SubItem').hide();
+        }
+       
+    });
 </script>
