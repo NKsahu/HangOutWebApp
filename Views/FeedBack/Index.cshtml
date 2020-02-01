@@ -3,6 +3,52 @@
     Layout = null;
 }
 <style>
+    .SelectedMenu {
+        background-color: #a9bf1a;
+    }
+
+    .SelectedTable {
+        background-color: #a9bf1a;
+    }
+
+    div.scrollmenu {
+        background-color: #333;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+        div.scrollmenu block {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-left: solid 1px #5de79a;
+            text-decoration: none;
+        }
+
+    div.scrollTables {
+        background-color: white;
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+        div.scrollTables blockTable {
+            display: inline-block;
+            text-align: center;
+            width: 35%;
+            height: 250px;
+            overflow-y: auto;
+            border-right: solid 2px #f00;
+            text-decoration: none;
+        }
+
+    div.scrollmenu a:hover {
+        background-color: #777;
+    }
+
+    block.selected {
+        color: green;
+    }
 .formdiv{
     background-color:aqua;
     border:1px solid black;
@@ -18,13 +64,45 @@
         <h3 class="text-center">Feedback Form</h3>
     </div>
     <div class="card-body">
-        <div class="row" id="AddForm">
-            <div class="col-md-4 formdiv text-center">
-             <i style="margin-top:40px;font-size:x-large" onclick="AddNewForm(0)" class="fas fa-plus-circle"></i>
-            </div>
-            
-        </div>
+        @*<div class="row" id="AddForm">
+                <div class="col-md-4 formdiv text-center">
+                 <i style="margin-top:40px;font-size:x-large" onclick="AddNewForm(0)" class="fas fa-plus-circle"></i>
+                </div>
 
+            </div>*@
+        <div class="scrollmenu" id="Menus">
+            <block id="AddNew" class="ShowMenu" ondblclick="AddOrderMenu(0)">Add New</block>
+        </div>
+    </div>
+    <div class=" scrollTables" id="Floor">
+
+        <blockTable>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 style="text-align:right">Floor1</h4>
+                </div>
+                <div class="col-md-2">
+                    <input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+                </div>
+            </div>
+            <div class="row" id="AddSeat">
+
+            </div>
+        </blockTable>
+
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-danger form-control " onclick="Apply()">Apply</button>
+        </div>
+        <div class="col-md-5">
+
+        </div>
     </div>
 </div>
 
