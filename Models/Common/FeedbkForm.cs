@@ -14,7 +14,11 @@ namespace HangOut.Models.Common
        public bool Status { get; set; }
        public DateTime CreateDate { get; set; }
         public List<FeedBackQue> Questions { get; set; }
-        
+        public FeedbkForm()
+        {
+            CreateDate = DateTime.Now;
+            Status = true;
+        }
         public int Save()
         {
             int Row = 0;

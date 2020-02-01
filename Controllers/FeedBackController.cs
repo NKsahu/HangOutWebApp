@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using HangOut.Models.Common;
 using System.Web.Mvc;
 
 namespace HangOut.Controllers
@@ -16,6 +16,12 @@ namespace HangOut.Controllers
         public ActionResult AddFeedBack(int Id)
         {
             return View();
+        }
+        [HttpPost]
+        public string SaveFeedBack([System.Web.Http.FromBody] FeedbkForm feedbackForm )
+        {
+            var result = feedbackForm;
+            return "";
         }
     }
 }
