@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HangOut.Models.Common;
 using System.Web.Mvc;
+using HangOut.Models;
 using Newtonsoft.Json.Linq;
 
 namespace HangOut.Controllers
@@ -50,13 +51,26 @@ namespace HangOut.Controllers
             response.Add("Create", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
             return response;
         }
-        public JArray ListFeedBack()
+        public JObject ListFeedBack()
         {
             var ObjInfo = Request.Cookies["UserInfo"];
             int OrgId = int.Parse(ObjInfo["OrgId"]);
             List<FeedbkForm> formList = FeedbkForm.GetAll(OrgId);
-           
-            return JArray.FromObject(formList);
+            HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
+            int OrgType = orgobj.OrgTypes != null ? int.Parse(orgobj.OrgTypes) : 1;
+            List<HG_Floor_or_ScreenMaster> floorOrScreens = new HG_Floor_or_ScreenMaster().GetAll(OrgType);
+            List<HG_Tables_or_Sheat> tableOrSheatlist = new HG_Tables_or_Sheat().GetAll(OrgType);
+            JObject FeedBackObj = new JObject();
+            FeedBackObj.Add("FormList", JArray.FromObject(FeedbkForm.GetAll(OrgId)));
+            JArray jArray = new JArray();
+            foreach (HG_Floor_or_ScreenMaster Floors in floorOrScreens)
+            {
+                JObject jObject = JObject.FromObject(Floors);
+                jObject.Add("TableSheatList", JArray.FromObject(tableOrSheatlist.FindAll(x => x.Floor_or_ScreenId == Floors.Floor_or_ScreenID)));
+                jArray.Add(jObject);
+            }
+            FeedBackObj.Add("FloorList", jArray);
+            return FeedBackObj;
         }
     }
 }
