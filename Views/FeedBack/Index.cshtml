@@ -22,36 +22,14 @@
             <div class="col-md-4 formdiv text-center">
              <i style="margin-top:40px;font-size:x-large" onclick="AddNewForm(0)" class="fas fa-plus-circle"></i>
             </div>
-            <div class="col-md-4 formdiv">
-                <ul class="CustomUl">
-                    <li>Feedback form4</li>
-                    <li>Created : 30/01/20   08:46</li>
-                    <li>Filled 73 times</li>
-                    <li>Placed 107 times</li>
-                </ul>
-            </div>
-            <div class="col-md-4 formdiv">
-                <ul class="CustomUl">
-                    <li>Feedback form4</li>
-                    <li>Created : 30/01/20   08:46</li>
-                    <li>Filled 73 times</li>
-                    <li>Placed 107 times</li>
-                </ul>
-            </div>
-            <div class="col-md-4 formdiv">
-                <ul class="CustomUl">
-                    <li>Feedback form4</li>
-                    <li>Created : 30/01/20   08:46</li>
-                    <li>Filled 73 times</li>
-                    <li>Placed 107 times</li>
-                </ul>
-            </div>
+            
         </div>
 
     </div>
 </div>
 
 <script>
+    LoadFeedback();
     function AddNewForm(id) {
         $('#waiting').show();
         $.ajax({
@@ -69,7 +47,39 @@
             }
         });
     }
-   
+    function LoadFeedback() {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/FeedBack/ListFeedBack",
+                success: function (data) {
+                    var ListFeedBack = JSON.parse(data);
+                    for (var i = 0; i < ListFeedBack.length; i++) {
+                        var Obj = ListFeedBack[i];
+                        var fullDate = new Date(Obj.CreateDate);
+                        var twoDigitMonth = fullDate.getMonth() +1+ "";
+                        if (twoDigitMonth.length == 1)
+                            twoDigitMonth = "0" + twoDigitMonth;
+                        var twoDigitDate = fullDate.getDate() + "";
+                        if (twoDigitDate.length == 1)
+                            twoDigitDate = "0" + twoDigitDate;
+                        var currentDate = twoDigitDate + "/" + twoDigitMonth + "/" + fullDate.getFullYear();
+                        var str = ' <div class="col-md-4 formdiv">';
+                        str += '<ul class="CustomUl">';
+                        str += '<li>' + Obj.Name + '</li>';
+                        str += '<li>Created : ' + currentDate  + '</li>'
+                        str += '<li>Filled 0 times</li>';
+                        str += '<li>Placed 0 times</li> </ul></div>';
+                        $("#AddForm").append(str);
+                    }
+                    $('#waiting').hide();
+                    // }
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+    }
 </script>
 
 

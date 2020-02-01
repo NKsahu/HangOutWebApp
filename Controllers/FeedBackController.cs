@@ -54,8 +54,9 @@ namespace HangOut.Controllers
         {
             var ObjInfo = Request.Cookies["UserInfo"];
             int OrgId = int.Parse(ObjInfo["OrgId"]);
-
-            List<FeedbkForm> formList=FeedbkForm.
+            List<FeedbkForm> formList = FeedbkForm.GetAll(OrgId);
+           
+            return JArray.FromObject(formList);
         }
     }
 }
