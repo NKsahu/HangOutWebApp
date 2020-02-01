@@ -10,6 +10,7 @@ namespace HangOut.Models.Common
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public List<Video> Videos { get; set; }
         public int Save()
         {
             int Row = 0;

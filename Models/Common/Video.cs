@@ -13,7 +13,7 @@ namespace HangOut.Models.Common
         public string Title { get; set; }
         public string Discription { get; set; }
         public string Link { get; set; }
-        public int Languange { get; set; }
+        public int Languange { get; set; }// { 1: Hindi , 2: English ,3:Urdu
         public int SerialNumber { get; set; }
         public bool IsImp { get; set; }
         public bool Restaurant { get; set; }
