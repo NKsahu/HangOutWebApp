@@ -26,10 +26,10 @@ namespace HangOut.Models.Common
 
                 if(this.ID==0)
                 {
-                    Quary = "Insert into FeedBackQue values (@Title,@Status,@QuestionType,@FeedBKFormID); SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert into FeedBackQuestion values (@Title,@Status,@QuestionType,@FeedBKFormID); SELECT SCOPE_IDENTITY();";
                 }else
                 {
-                    Quary = "Update FeedBackQue Set Title=@Title,Status=@Status,QuestionType=@QuestionType,FeedBKFormID=@FeedBKFormID where ID=@ID";
+                    Quary = "Update FeedBackQuestion Set Title=@Title,Status=@Status,QuestionType=@QuestionType,FeedBKFormID=@FeedBKFormID where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID",this.ID);
@@ -62,7 +62,7 @@ namespace HangOut.Models.Common
 
             try
             {
-                string Query = "SELECT * FROM  FeedBackQue ORDER BY  ID DESC";
+                string Query = "SELECT * FROM  FeedBackQuestion ORDER BY  ID DESC";
                 cmd = new SqlCommand(Query, OBJCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

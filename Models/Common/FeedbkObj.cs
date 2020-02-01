@@ -24,17 +24,17 @@ namespace HangOut.Models.Common
 
                 if (this.id == 0)
                 {
-                    Quary = "Insert into FeedbkObj values (@Name,@ObjectiveType,@QuestionId); SELECT SCOPE_idENTITY();";
+                    Quary = "Insert into FeedbackObjective values (@Name,@ObjectiveType,@QuestionId); SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update FeedbkObj Set Name=@Name,ObjectiveType=@ObjectiveType,QuestionId=@QuestionId where id=@id";
+                    Quary = "Update FeedbackObjective Set Name=@Name,ObjectiveType=@ObjectiveType,QuestionId=@QuestionId where id=@id";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@id", this.id);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
-                cmd.Parameters.AddWithValue("@Orgid", this.ObjectiveType);
-                cmd.Parameters.AddWithValue("@Status", this.QuestionId);
+                cmd.Parameters.AddWithValue("@ObjectiveType", this.ObjectiveType);
+                cmd.Parameters.AddWithValue("@QuestionId", this.QuestionId);
                 cmd.Parameters.AddWithValue("@CreateDate", DateTime.Now);
                 if (this.id == 0)
                 {
@@ -61,7 +61,7 @@ namespace HangOut.Models.Common
 
             try
             {
-                string Query = "SELECT * FROM  FeedbkObj ORDER BY  id DESC";
+                string Query = "SELECT * FROM  FeedbackObjective ORDER BY  id DESC";
                 cmd = new SqlCommand(Query, OBJCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

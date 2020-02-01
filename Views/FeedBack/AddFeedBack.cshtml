@@ -168,12 +168,14 @@
             contentType: "application/json",
             success: function (data) {
                 //var OMId = parseInt(data);
+                var Obj = JSON.parse(data);
+                
                 var str = ' <div class="col-md-4 formdiv">';
                 str += '<ul class="CustomUl">';
-                str += '<li>'+2+'</li>';
-                str+='<li>Created : 30/01/20   08:46</li>'
-                str += '<li>Filled 73 times</li>';
-                str += '<li>Placed 107 times</li> </ul></div>';
+                str += '<li>'+Obj.Name+'</li>';
+                str += '<li>Created : ' + Obj.Create+'</li>'
+                str += '<li>Filled 0 times</li>';
+                str += '<li>Placed 0 times</li> </ul></div>';
                 $("#AddForm").append(str);
                 hidedpt("FeedBack");
                 $('#waiting').hide();
