@@ -1,5 +1,5 @@
 ﻿@{ Layout = null;}
-<div class=" card p-1 m-5" style="border:thick;box-shadow:2px 2px 4px black;z-index:1000">
+<div class=" card p-1 m-5" style="border:thick;box-shadow:2px 2px 4px black;z-index:1000" >
     <div class="card-header" style="border:thick;">
         <h4 class="text-center"><b>Video Category</b></h4>
         <hr />
@@ -13,8 +13,8 @@
         </div>
         <div class="col-md-3"></div>
     </div>
-    <div class="card-body bb" style="border:thick; ">
-        <div class="row aa" id="question0">
+    <div class="card-body bb" style="border:thick; " OrderNo="1">
+        <div class="row aa" id="question0" style="border:groove">
             <hr />
             <div class="col-md-4">
                 <label for="Title">Title</label>
@@ -24,9 +24,22 @@
                 <label for="Discription">Discription</label>
                 <input class="form-control" type="text" placeholder="Discription" />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <label for="Link">Link</label>
                 <input class="form-control" type="text" placeholder="Link" />
+            </div>
+            <div class="col-md-1">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-down mt-4"></i></a>
+
+                    </div>
+                    <div class="col-md-6">
+                        <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large ;color:#138692" class="fas fa-long-arrow-alt-up  mt-4"></i></a>
+
+                    </div>
+                </div>
+
             </div>
             <div class="col-md-4">
                 <label for="Piority">Piority</label>
@@ -41,7 +54,7 @@
                 </select>
             </div>
             <div class=" col-md-4 mt-3">
-                <h5 class="text-center">OutLate Type</h5>
+                <h5 class="text-center">OutLet Type</h5>
             </div>
 
             <div class="col-md-4  mt-3">
@@ -85,13 +98,33 @@
 </div>
  
 <script>
-    //$(document).ready(function () {
-    //    $("button").click(function () {
-    //        $(".bb").append($(".aa").clone(true));
+    function divup(event) {
+        // var li = $(this).closest('li');
+        var li = $(event).parent('div').parent('div').parent('div').parent("#question0");
+        var prev = li.prev();
+        if (prev.length) {
 
-    //    });
-
-    //});
+            var OrderNoCur = parseInt(li.attr('OrderNo'));
+            var OrderNoPre = parseInt(prev.attr('OrderNo'));
+            console.log(OrderNoCur);
+            li.attr('OrderNo', OrderNoCur - 1);
+            prev.attr('OrderNo', OrderNoPre + 1);
+            li.detach().insertBefore(prev);
+        }
+    }
+    function divdown(event) {
+        var li = $(event).parent('div').parent('div').parent('div').parent("#question0");
+        // var li = $(this).closest('li');
+        var next = li.next();
+        if (next.length) {
+            var OrderNoCurr = parseInt(li.attr('OrderNo'));
+            var OrderNoNxt = parseInt(next.attr('OrderNo'));
+            console.log(OrderNoCurr);
+            li.attr('OrderNo', OrderNoCurr + 1);
+            next.attr('OrderNo', OrderNoNxt - 1);
+            li.detach().insertAfter(next);
+        }
+    }
     function Copydiv() {
         var clonediv = $("#question0").clone();
         clonediv.show();
