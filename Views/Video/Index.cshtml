@@ -8,18 +8,20 @@
     </div>
 </div>
 <br />
- <div class=" row">
-     <ul class="nav p-1" style="font-size:60px" id="MyCategory" >
-         <li>
-             <button class="btn btn-danger button" style="font-size:25px" onclick="LoadCategoryPopup()">
-                 <i class="fa fa-plus "></i>
-                 <span>ADD</span>
-             </button>
-         </li>&nbsp;
-         
-     </ul>
-     
- </div>
+<div class=" row">
+    <ul class="nav p-1" style="font-size:60px" id="MyCategory" OrderNo="1">
+        <li>
+            <button class="btn btn-danger button" style="font-size:25px" onclick="LoadCategoryPopup()">
+                <i class="fa fa-plus "></i>
+                <span>ADD</span>
+            </button>
+            <a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-left "></i></a>
+            <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-right "></i></a>
+
+        </li>&nbsp;
+    </ul>
+   
+</div>
  <style>
      .button {
          padding: 15px 25px;
@@ -31,7 +33,7 @@
          background-color: #4CAF50;
          border: none;
          border-radius: 15px;
-         box-shadow: 0 9px #999;
+         box-shadow: 0 4px #999;
      }
 
          .button:hover {
@@ -45,8 +47,37 @@
          }
  </style>
 <script>
+    function divup(event) {
+        // var li = $(this).closest('li');
+        var li = $(event).parent('button').parent('li').parent('ul');
+      
+        var prev = li.prev();
+        if (prev.length) {
+
+            var OrderNoCur = parseInt(li.attr('OrderNo'));
+            var OrderNoPre = parseInt(prev.attr('OrderNo'));
+            console.log(OrderNoCur);
+            li.attr('OrderNo', OrderNoCur - 1);
+            prev.attr('OrderNo', OrderNoPre + 1);
+            li.detach().insertBefore(prev);
+        }
+    }
+    function divdown(event) {
+        var li = $(event).parent('button').parent('li').parent('ul');
+        // var li = $(this).closest('li');
+        var next = li.next();
+        if (next.length) {
+            var OrderNoCurr = parseInt(li.attr('OrderNo'));
+            var OrderNoNxt = parseInt(next.attr('OrderNo'));
+            console.log(OrderNoCurr);
+            li.attr('OrderNo', OrderNoCurr + 1);
+            next.attr('OrderNo', OrderNoNxt - 1);
+            li.detach().insertAfter(next);
+        }
+    }
     var listvideocategory = [];
-    var strhtml = '<li><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 9px #999">';
+    var strhtml = '<li><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999"> ';
+    var strhtml = '<a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-left "></i></a>';
    
     LoadCategory();
     function LoadCategory() {
@@ -71,11 +102,12 @@
             var Secondhtml = '<span>' + ObjcatVideo.Name+'</span>';
             Secondhtml += '</button>';
             Secondhtml += '</li>&nbsp';
+            Secondhtml += '</ul>';
             $("#MyCategory").append(strhtml + Secondhtml);
         }
     }
     function LoadCategoryPopup() {
-       
+        $('#waiting').show();
         $.ajax({
             type: 'GET',
             url: "/Video/Popupwindow",
