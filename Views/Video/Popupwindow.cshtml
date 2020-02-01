@@ -14,7 +14,8 @@
         <div class="col-md-3"></div>
     </div>
     <div class="card-body bb" style="border:thick; ">
-        <div class="row aa">
+        <div class="row aa" id="question0">
+
             <div class="col-md-4">
                 <label for="Title">Title</label>
                 <input class="form-control" type="text" placeholder="Title" />
@@ -66,21 +67,34 @@
             </div>
 
         </div>
-       <hr />
+        <hr />
     </div>
-    <div class="col-md-12">
-        <button class="btn btn-danger form-control"><i class="fa fa-plus"></i></button>
-    </div>
-    <div class="col-md-12">
-        <button class="btn   btn-success form-control" type="submit">Submit</button>
+    <hr />
+    <div id="HeadDiv" style="display:none"></div>
+    <div class="row">
+        <div class="col-md-8">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-danger form-control" onclick="Copydiv()"><i class="fa fa-plus"></i></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn   btn-success form-control" type="submit">Submit</button>
+
+        </div>
     </div>
 </div>
-<script>
-    $(document).ready(function () {
-        $("button").click(function () {
-            $(".bb").append($(".aa").clone(true));
-        });
-        
-    });
-</script>
  
+<script>
+    //$(document).ready(function () {
+    //    $("button").click(function () {
+    //        $(".bb").append($(".aa").clone(true));
+
+    //    });
+
+    //});
+    function Copydiv() {
+        var clonediv = $("#question0").clone();
+        clonediv.show();
+        clonediv.insertBefore("#HeadDiv");
+    }
+</script>
