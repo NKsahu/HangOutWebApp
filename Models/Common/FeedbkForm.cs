@@ -13,6 +13,8 @@ namespace HangOut.Models.Common
        public int  OrgId { get; set; }
        public bool Status { get; set; }
        public DateTime CreateDate { get; set; }
+        public List<FeedBackQue> Questions { get; set; }
+        
         public int Save()
         {
             int Row = 0;

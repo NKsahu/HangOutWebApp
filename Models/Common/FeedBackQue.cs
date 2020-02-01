@@ -11,8 +11,9 @@ namespace HangOut.Models.Common
        public int ID { get; set; }
       public string Title { get; set; }
       public bool Status { get; set; }
-      public int QuestionType { get; set; }
+      public int QuestionType { get; set; }// 0:Star,1: Objective,2:Subjective,3:Like Dislike Ok
         public int FeedBkFormID { get; set; }
+        public List<FeedbkObj> Objectives { get; set; }
         public int Save()
         {
             int Row = 0;

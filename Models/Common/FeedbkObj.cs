@@ -10,7 +10,7 @@ namespace HangOut.Models.Common
     {
         public int id { get; set; }
         public string  Name { get; set; }
-        public int ObjectiveType { get; set; }
+        public int ObjectiveType { get; set; }// {0 single choice, 1 multiple choice}
         public int QuestionId{ get; set; }
         public int Save()
         {
