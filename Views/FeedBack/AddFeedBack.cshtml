@@ -168,10 +168,14 @@
             contentType: "application/json",
             success: function (data) {
                 //var OMId = parseInt(data);
-                //if (parseInt(OrderMenuObj.id) == 0) {
-                //    $("#Menus").append('<block ondblclick="AddOrderMenu(' + OMId + ')" id=' + OMId + '>' + OMName + '</block>');
-                //}
-                hidedpt("AddOrderMenu");
+                var str = ' <div class="col-md-4 formdiv">';
+                str += '<ul class="CustomUl">';
+                str += '<li>'+2+'</li>';
+                str+='<li>Created : 30/01/20   08:46</li>'
+                str += '<li>Filled 73 times</li>';
+                str += '<li>Placed 107 times</li> </ul></div>';
+                $("#AddForm").append(str);
+                hidedpt("FeedBack");
                 $('#waiting').hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback

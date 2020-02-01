@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HangOut.Models.Common;
 using System.Web.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace HangOut.Controllers
 {
@@ -18,10 +19,13 @@ namespace HangOut.Controllers
             return View();
         }
         [HttpPost]
-        public string SaveFeedBack([System.Web.Http.FromBody] FeedbkForm feedbackForm )
+        public JObject SaveFeedBack([System.Web.Http.FromBody] FeedbkForm feedbackForm )
         {
             var result = feedbackForm;
-            return "";
+
+            JObject response = new JObject();
+
+            return response;
         }
     }
 }
