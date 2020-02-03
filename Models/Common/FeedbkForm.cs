@@ -35,16 +35,16 @@ namespace HangOut.Models.Common
                 }
                 else
                 {
-                    Quary = "Update FeedbackForm Set Name=@Name,OrgId=@OrgId,Status=@Status,CreateDate=@CreateDate where Id=@Id";
+                    Quary = "Update FeedbackForm Set Name=@Name,OrgId=@OrgId,Status=@Status where Id=@Id";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@Id", this.Id);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
-                cmd.Parameters.AddWithValue("@CreateDate", DateTime.Now);
                 if (this.Id == 0)
                 {
+                    cmd.Parameters.AddWithValue("@CreateDate", DateTime.Now);
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
                     this.Id = Row;
                 }

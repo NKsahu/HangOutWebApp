@@ -72,5 +72,41 @@ namespace HangOut.Controllers
             FeedBackObj.Add("FloorList", jArray);
             return FeedBackObj;
         }
+
+        public int ActiveForm([System.Web.Http.FromBody] ActiveMenu activeMenu)
+        {
+            //var Jobj = { };
+            //Jobj.OMID = MenuId;
+            //Jobj.TorSIDs = TableList;
+            //Jobj.OrgId = OrgId;
+            int status = 0;
+            int FID = activeMenu.OMID;
+            int OrgId = activeMenu.OrgId;
+            HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(OrgId);
+            string OrgType = hG_OrganizationDetails.OrgTypes != null ? hG_OrganizationDetails.OrgTypes : "1";
+            List<FeedbkForm> FeedBackList = FeedbkForm.GetAll(OrgId);
+            FeedbkForm FeedBkObj = FeedBackList.Find(x => x.Id == FID);
+            FeedBkObj.Status = true;
+            FeedBkObj.Save();
+            List<HG_Tables_or_Sheat> TorSlist = new HG_Tables_or_Sheat().GetAll(int.Parse(OrgType));
+            var AlreadySelectedList = TorSlist.FindAll(x => x.FDBKId == FID);
+            Int64[] items = activeMenu.TorSIDs;
+            HashSet<Int64> hashKeys = new HashSet<Int64>(items);
+            var RemovedTorSList = AlreadySelectedList.FindAll(x => !hashKeys.Contains(x.Table_or_RowID));
+            List<HG_Tables_or_Sheat> OnlyApplytoTorS = TorSlist.FindAll(x => hashKeys.Contains(x.Table_or_RowID));
+            foreach (var TorSobj in OnlyApplytoTorS)
+            {
+                TorSobj.FDBKId = FID;
+                TorSobj.save();
+
+            }
+
+            foreach (var TorSobj in RemovedTorSList)
+            {
+                TorSobj.FDBKId = 0;
+                TorSobj.save();
+            }
+            return status;
+        }
     }
 }
