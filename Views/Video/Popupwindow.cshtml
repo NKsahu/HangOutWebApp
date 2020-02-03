@@ -1,4 +1,71 @@
 ﻿@{ Layout = null;}
+
+<!--HIDDEN ELEMENT FOR DUPLICATING -->
+    <div class="row aa MainDivs"  style="border:groove;display:none"  OrderNo="1" id="CreateCopy">
+        <hr />
+        <div class="col-md-4">
+            <label for="Title">Title</label>
+            <input class="form-control VidTitle" type="text" placeholder="Title" />
+        </div>
+        <div class="col-md-4">
+            <label for="Discription">Discription</label>
+            <input class="form-control discript" type="text" placeholder="Discription" />
+        </div>
+        <div class="col-md-3">
+            <label for="Link">Link</label>
+            <input class="form-control Source" type="text" placeholder="Link" />
+        </div>
+        <div class="col-md-1">
+            <div class="row">
+                <div class="col-md-6">
+                    <a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-down mt-4"></i></a>
+
+                </div>
+                <div class="col-md-6">
+                    <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large ;color:#138692" class="fas fa-long-arrow-alt-up  mt-4"></i></a>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <label for="Piority">Piority</label>
+            <input type="checkbox" class="checked" />
+        </div>
+        <div class="col-md-12">
+            <select class="form-control droupdown" name="StudentGender">
+                <option value="0">Select Language</option>
+                <option value="1">Hindi</option>
+                <option value="2">English</option>
+                <option value="3">Urdu</option>
+            </select>
+        </div>
+        <div class=" col-md-4 mt-3">
+            <h5 class="text-center">OutLet Type</h5>
+        </div>
+        <div class="col-md-4  mt-3">
+            <label for="Restaurant">Restaurant</label>
+            <input type="checkbox" />
+        </div>
+        <div class="col-md-4 mt-3">
+            <label for="Theater">Theater</label>
+            <input type="checkbox" />
+        </div>
+        <div class="col-md-4  mt-3">
+            <h5 class=" text-center">Peyment Type</h5>
+        </div>
+        <div class="col-md-4  mt-3">
+            <label for="Postpaid">Postpaid</label>
+            <input type="checkbox" />
+        </div>
+        <div class="col-md-4  mt-3">
+            <label for="Prepaid">Prepaid </label>
+            <input type="checkbox" />
+        </div>
+    </div>
+
+
+<!---->
 <div class=" card p-1 m-5" style="border:thick;box-shadow:2px 2px 4px black;z-index:1000" >
     <div class="card-header" style="border:thick;">
         <h4 class="text-center"><b>Video Category</b></h4>
@@ -8,25 +75,27 @@
         <div class="col-md-3"></div>
         <div class="col-md-6">
             <label for="Category"><b>Category</b></label>
-            <input class=" form-control" type="text" placeholder="Category" />
+            <input class=" form-control" id="CategoryName" type="text" placeholder="Category" />
             <hr />
         </div>
         <div class="col-md-3"></div>
     </div>
-    <div class="card-body bb" style="border:thick; " OrderNo="1">
-        <div class="row aa" id="question0" style="border:groove">
+    <div class="card-body bb" style="border:thick; " >
+        <!--First value-->
+
+        <div class="row aa  MainDivs" id="question0" style="border:groove" OrderNo="1">
             <hr />
             <div class="col-md-4">
                 <label for="Title">Title</label>
-                <input class="form-control" type="text" placeholder="Title" />
+                <input class="form-control VidTitle" type="text" placeholder="Title" />
             </div>
             <div class="col-md-4">
                 <label for="Discription">Discription</label>
-                <input class="form-control" type="text" placeholder="Discription" />
+                <input class="form-control discript" type="text" placeholder="Discription" />
             </div>
             <div class="col-md-3">
                 <label for="Link">Link</label>
-                <input class="form-control" type="text" placeholder="Link" />
+                <input class="form-control Source" type="text" placeholder="Link" />
             </div>
             <div class="col-md-1">
                 <div class="row">
@@ -43,11 +112,10 @@
             </div>
             <div class="col-md-4">
                 <label for="Piority">Piority</label>
-                <input type="checkbox" />
+                <input type="checkbox"  class="checked"/>
             </div>
             <div class="col-md-12">
-                <select class="form-control" name="StudentGender">
-                    <option value="0">Select Language</option>
+                <select class="form-control droupdown" name="StudentGender">
                     <option value="1">Hindi</option>
                     <option value="2">English</option>
                     <option value="3">Urdu</option>
@@ -56,53 +124,50 @@
             <div class=" col-md-4 mt-3">
                 <h5 class="text-center">OutLet Type</h5>
             </div>
-
             <div class="col-md-4  mt-3">
                 <label for="Restaurant">Restaurant</label>
-                <input type="checkbox" />
+                <input type="checkbox" class="restaurent" />
             </div>
-
             <div class="col-md-4 mt-3">
                 <label for="Theater">Theater</label>
-                <input type="checkbox" />
+                <input type="checkbox" class="theater"/>
             </div>
-
             <div class="col-md-4  mt-3">
                 <h5 class=" text-center">Peyment Type</h5>
             </div>
             <div class="col-md-4  mt-3">
                 <label for="Postpaid">Postpaid</label>
-                <input type="checkbox" />
+                <input type="checkbox"  class="postpaid"/>
             </div>
             <div class="col-md-4  mt-3">
                 <label for="Prepaid">Prepaid </label>
-                <input type="checkbox" />
+                <input type="checkbox"  class="prepaid"/>
             </div>
-
         </div>
-        
+
+        <!--end -->
+        <div id="HeadDiv" style="display:none"></div>
     </div>
-    
-      <div id="HeadDiv" style="display:none"></div>
     <div class="row">
         <div class="col-md-8">
         </div>
         <div class="col-md-2">
-            <button class="btn btn-danger form-control" onclick="Copydiv()"><i class="fa fa-plus"></i></button>
+            <button class="btn btn-danger form-control" onclick="Copydiv();"><i class="fa fa-plus"></i></button>
         </div>
         <div class="col-md-2">
-            <button class="btn   btn-success form-control" type="submit">Submit</button>
-
+            <button class="btn   btn-success form-control" type="submit" onclick="Submit();">Submit</button>
         </div>
     </div>
 </div>
  
 <script>
     function divup(event) {
+        console.log('li');
         // var li = $(this).closest('li');
-        var li = $(event).parent('div').parent('div').parent('div').parent("#question0");
+        var li = $(event).parent('div').parent('div').parent('div').parent('div');
         var prev = li.prev();
-        if (prev.length) {
+        console.log("Pre==" + prev.html());
+        if (prev.length && prev.hasClass("MainDivs")) {
 
             var OrderNoCur = parseInt(li.attr('OrderNo'));
             var OrderNoPre = parseInt(prev.attr('OrderNo'));
@@ -113,10 +178,10 @@
         }
     }
     function divdown(event) {
-        var li = $(event).parent('div').parent('div').parent('div').parent("#question0");
+        var li = $(event).parent('div').parent('div').parent('div').parent('div');
         // var li = $(this).closest('li');
         var next = li.next();
-        if (next.length) {
+        if (next.length && next.hasClass("MainDivs")) {
             var OrderNoCurr = parseInt(li.attr('OrderNo'));
             var OrderNoNxt = parseInt(next.attr('OrderNo'));
             console.log(OrderNoCurr);
@@ -126,8 +191,62 @@
         }
     }
     function Copydiv() {
-        var clonediv = $("#question0").clone();
+        console.log('hh');
+        var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
+        var clonediv = $('#CreateCopy').clone();
         clonediv.show();
+        clonediv.attr('OrderNo', MainDivsCnt);
         clonediv.insertBefore("#HeadDiv");
+    }
+
+    function Submit() {
+        var Categoryname = $("#CategoryName").val();
+        var VidCategory = {};
+        VidCategory.Name = Categoryname;
+        var VideosList = [];
+        var ObjVideo = {};
+       // public List < Video > Videos { get; set; }
+
+        var VideosDivList = document.getElementsByClassName("MainDivs");
+
+        for (var i = 1; i < VideosDivList.length; i++) {
+            var ObjDiv = $(VideosDivList[i]);
+            var title = ObjDiv.find('.VidTitle').val();
+            var Discription = ObjDiv.find('.discript').val();
+            var Link = ObjDiv.find('.Source').val();
+            var piority = ObjDiv.find('.checked').is(':checked');
+            var droupdown = ObjDiv.find('.droupdown').val();
+            var serialnumber = ObjDiv.find("#OrderNo").val();
+            var Restaurent = ObjDiv.find('.restaurent').is(':checked');
+            var theater = ObjDiv.find('.theater').is(':checked');
+            var postpaid = ObjDiv.find('.postpaid').is(':checked');
+            var prepaid = ObjDiv.find('.prepaid').is(':checked');
+            var 
+            console.log("title= " + title);
+            console.log("Discription= " + Discription);
+            console.log("Link= " + Link);
+            console.log("piority=" + piority);
+            console.log("droupdown=" + droupdown);
+            console.log("Restaurent=" + Restaurent);
+            console.log("serialnumber=" + serialnumber);
+            console.log("theater=" + theater);
+            console.log("postpaid=" + postpaid);
+            console.log("prepaid=" + prepaid);
+
+
+        }
+
+        //public int ID { get; set; }
+        //public int CategoryId { get; set; }
+        //public string Title { get; set; }
+        //public string Discription { get; set; }
+        //public string Link { get; set; }
+        //public int Languange { get; set; }// { 1: Hindi , 2: English ,3:Urdu
+        //public int SerialNumber { get; set; }
+        //public bool IsImp { get; set; }
+        //public bool Restaurant { get; set; }
+        //public bool Theater { get; set; }
+        //public bool Prepaid { get; set; }
+        //public bool Postpaid { get; set; }
     }
 </script>
