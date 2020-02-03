@@ -1,10 +1,10 @@
-﻿@{ 
+﻿@{
     Layout = null;
 }
 
 <div class="card">
     <div class="card-header">
-        <h5 class="text-center"><b>Video Category</b></h5> 
+        <h5 class="text-center"><b>Video Category</b></h5>
     </div>
 </div>
 <br />
@@ -16,109 +16,113 @@
                 <span>ADD</span>
             </button>
             @*<a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-left "></i></a>
-            <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-right "></i></a>*@
+                <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-right "></i></a>*@
 
         </li>&nbsp;
+
     </ul>
-   
+
 </div>
- <style>
-     .button {
-         padding: 15px 25px;
-         font-size: 24px;
-         text-align: center;
-         cursor: pointer;
-         outline: none;
-         color: #fff;
-         background-color: #4CAF50;
-         border: none;
-         border-radius: 15px;
-         box-shadow: 0 4px #999;
-     }
-
-         .button:hover {
-             background-color: #3e8e41
-         }
-
-         .button:active {
-             background-color: #3e8e41;
-             box-shadow: 0 5px #666;
-             transform: translateY(4px);
-         }
- </style>
-<script>
-    function divup(event) {
-        // var li = $(this).closest('li');
-        var li = $(event).parent('button').parent('li').parent('ul');
-      
-        var prev = li.prev();
-        if (prev.length) {
-
-            var OrderNoCur = parseInt(li.attr('OrderNo'));
-            var OrderNoPre = parseInt(prev.attr('OrderNo'));
-            console.log(OrderNoCur);
-            li.attr('OrderNo', OrderNoCur - 1);
-            prev.attr('OrderNo', OrderNoPre + 1);
-            li.detach().insertBefore(prev);
+<iframe width="560" height="315" src="https://www.youtube.com/embed/jOAqp6ItPXg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+ 
+          
+    <style>
+        .button {
+            padding: 15px 25px;
+            font-size: 24px;
+            text-align: center;
+            cursor: pointer;
+            outline: none;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px #999;
         }
-    }
-    function divdown(event) {
-        var li = $(event).parent('button').parent('li').parent('ul');
-        // var li = $(this).closest('li');
-        var next = li.next();
-        if (next.length) {
-            var OrderNoCurr = parseInt(li.attr('OrderNo'));
-            var OrderNoNxt = parseInt(next.attr('OrderNo'));
-            console.log(OrderNoCurr);
-            li.attr('OrderNo', OrderNoCurr + 1);
-            next.attr('OrderNo', OrderNoNxt - 1);
-            li.detach().insertAfter(next);
-        }
-    }
-    var listvideocategory = [];
-    var strhtml = '<li><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999"> ';
-    LoadCategory();
-    function LoadCategory() {
-      //  $("#MyCategory").html('');
-        $.ajax({
-            type: 'GET',
-            url: "/Video/Categorylist",
-            success: function (data) {
-                 listvideocategory = JSON.parse(data);
-                DispalyCategory(listvideocategory);
-                // }
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
+
+            .button:hover {
+                background-color: #3e8e41
             }
-        });
-    }
 
-    function DispalyCategory(List) {
-        for (var i = 0; i < List.length; i++) {
-            var ObjcatVideo = List[i];
-            var Secondhtml = '<span>' + ObjcatVideo.Name+'</span>';
-            Secondhtml += '</button>';
-            Secondhtml += '</li>&nbsp';
-            Secondhtml += '</ul>';
-            $("#MyCategory").append(strhtml + Secondhtml);
-        }
-    }
-    function LoadCategoryPopup() {
-        $('#waiting').show();
-        $.ajax({
-            type: 'GET',
-            url: "/Video/Popupwindow",
-            success: function (data) {
-                makedpt("HG_Category");
-                $("#HG_Category > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("HG_Category");
-                $('#waiting').hide();
-               
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
+            .button:active {
+                background-color: #3e8e41;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
             }
-        });
-    }
-</script>
+    </style>
+    <script>
+        function divup(event) {
+            // var li = $(this).closest('li');
+            var li = $(event).parent('button').parent('li').parent('ul');
+
+            var prev = li.prev();
+            if (prev.length) {
+
+                var OrderNoCur = parseInt(li.attr('OrderNo'));
+                var OrderNoPre = parseInt(prev.attr('OrderNo'));
+                console.log(OrderNoCur);
+                li.attr('OrderNo', OrderNoCur - 1);
+                prev.attr('OrderNo', OrderNoPre + 1);
+                li.detach().insertBefore(prev);
+            }
+        }
+        function divdown(event) {
+            var li = $(event).parent('button').parent('li').parent('ul');
+            // var li = $(this).closest('li');
+            var next = li.next();
+            if (next.length) {
+                var OrderNoCurr = parseInt(li.attr('OrderNo'));
+                var OrderNoNxt = parseInt(next.attr('OrderNo'));
+                console.log(OrderNoCurr);
+                li.attr('OrderNo', OrderNoCurr + 1);
+                next.attr('OrderNo', OrderNoNxt - 1);
+                li.detach().insertAfter(next);
+            }
+        }
+        var listvideocategory = [];
+        var strhtml = '<li><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999"> ';
+        LoadCategory();
+        function LoadCategory() {
+            //  $("#MyCategory").html('');
+            $.ajax({
+                type: 'GET',
+                url: "/Video/Categorylist",
+                success: function (data) {
+                    listvideocategory = JSON.parse(data);
+                    DispalyCategory(listvideocategory);
+                    // }
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+        }
+
+        function DispalyCategory(List) {
+            for (var i = 0; i < List.length; i++) {
+                var ObjcatVideo = List[i];
+                var Secondhtml = '<span>' + ObjcatVideo.Name + '</span>';
+                Secondhtml += '</button>';
+                Secondhtml += '</li>&nbsp';
+                Secondhtml += '</ul>';
+                $("#MyCategory").append(strhtml + Secondhtml);
+            }
+        }
+        function LoadCategoryPopup() {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/Video/Popupwindow",
+                success: function (data) {
+                    makedpt("HG_Category");
+                    $("#HG_Category > .modal-dialog > .modal-content > .modal-body").html(data);
+                    showdpt("HG_Category");
+                    $('#waiting').hide();
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+        }
+    </script>
