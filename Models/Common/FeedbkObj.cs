@@ -52,7 +52,7 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); con.Con.Close(); }
             return Row;
         }
-        public List<FeedbkObj> GetAll()
+        public static List<FeedbkObj> GetAll(int Qid)
         {
             DBCon OBJCon = new DBCon();
             SqlCommand cmd = null;
@@ -61,7 +61,7 @@ namespace HangOut.Models.Common
 
             try
             {
-                string Query = "SELECT * FROM  FeedbackObjective ORDER BY  id DESC";
+                string Query = "SELECT * FROM  FeedbackObjective where QuestionId="+ Qid;
                 cmd = new SqlCommand(Query, OBJCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -70,9 +70,7 @@ namespace HangOut.Models.Common
                     ObjTmp.id = SDR.GetInt32(0);
                     ObjTmp.Name = SDR.GetString(1);
                     ObjTmp.ObjectiveType = SDR.GetInt32(2);
-                    ObjTmp.QuestionId = SDR.GetInt32   (3);
-                    
-
+                    ObjTmp.QuestionId = SDR.GetInt32(3);
                     ListTmp.Add(ObjTmp);
                 }
             }

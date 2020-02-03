@@ -55,7 +55,7 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); con.Con.Close(); }
             return Row;
         }
-        public List<FeedBackQue> GetAll(int FeedBkId)
+        public static List<FeedBackQue> GetAll(int FeedBkId)
         {
             DBCon OBJCon = new DBCon();
             SqlCommand cmd = null;

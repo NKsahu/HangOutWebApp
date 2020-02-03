@@ -22,7 +22,7 @@
             color: white;
             text-align: center;
             padding: 20px;
-            border-left: solid 1px #5de79a;
+            border-left: solid 1px black;
             text-decoration: none;
         }
 
@@ -73,7 +73,7 @@
     
     <div class="scrollmenu" id="Menus">
         <block id="AddNew" class="ShowMenu" ondblclick="AddNewForm(0)">
-            <p>Add New Form</p>
+            <i class="fa fa-plus" style="font-size:x-large" aria-hidden="true"></i><ul class="CustmUl"><li class="CustmUl">&nbsp</li></ul>
         </block>
     </div>
 </div>
@@ -151,7 +151,7 @@
     function ShowOrderMenus(list) {
         $("#Menus").html('');
         $("#Floor").html('');
-        $("#Menus").append('<block id="AddNew" onclick="AddNewForm(0)"><ul class="CustmUl"><li>Add New Form</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li></ul></block>');
+        $("#Menus").append('<block id="AddNew" onclick="AddNewForm(0)"><i class="fa fa-plus" style="font-size:x-large" aria-hidden="true"></i><ul class="CustmUl"><li class="CustmUl">&nbsp</li></ul></block>');
         FormList = list.FormList;
         var SelectedMenu = -5;
         for (var i = 0; i < FormList.length; i++) {
@@ -165,8 +165,8 @@
             str += '<li>' + FormList[i].CreateDate + '</li>';
             str += '<li>Filled 0</li>';
             str += '<li>Placed 0</li></ul>';
-            //ondblclick="AddNewForm(' + FormList[i].Id + ')"
-            $("#Menus").append('<block class="ShowMenu ' + Addcls + '" onclick="ActiveMenu(this)"  OMID=' + FormList[i].Id + ' id="M' + FormList[i].Id + '">' + str + '</block>');
+            //
+            $("#Menus").append('<block class="ShowMenu ' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddNewForm(' + FormList[i].Id + ')"  OMID=' + FormList[i].Id + ' id="M' + FormList[i].Id + '">' + str + '</block>');
         }
         categorylist = list.FloorList;
 
