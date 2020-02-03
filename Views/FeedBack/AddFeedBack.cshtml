@@ -18,21 +18,35 @@
 <h3 class="text-center">FeedBack Form</h3>
 </div>
 <div class="card">
-    <div class="row questions" style="display:none;border:1px solid black; " id="question0">
+    <!--Hidden Elements-->
+    <div class="row questions" style="display:none;border:1px solid black; " id="question0" OrderNo="0">
         <div class="col-md-5">
             <input type="text" class="form-control QueTitle" placeholder="Enter Question Title" />
         </div>
         <div class="col-md-1">
             <input type="checkbox" class="form-control QueStatus" />
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label> Response Type</label>
             <select class="form-control QuestionType" id="QuestionType" onchange="ShowObjective(this)">
                 <option value="0">Star</option>
+                <option value="4">Star-Subjective</option>
                 <option value="1">Objective</option>
                 <option value="2">Subjective</option>
                 <option value="3">Like Dislike Ok</option>
             </select>
+        </div>
+        <div class="col-md-1">
+            <label></label>
+            <a onclick="RowDown(this)"  style="text-align:center;color:dodgerblue" class="nav-link">
+                <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+            </a>
+        </div>
+        <div class="col-md-1">
+            <label></label>
+            <a onclick="RowUp(this)"  style="text-align:center;color:dodgerblue" class="nav-link">
+                <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+            </a>
         </div>
         <div id="Objective" class="row SubItem" style="display:none">
             <div class="col-md-12">
@@ -53,31 +67,44 @@
     <div class="col-md-12 SubQuestions" id="ObjectiveID" style="display:none">
         <input type="text" placeholder="Option" class="form-control SubQuestion" />
     </div>
+    <!--End Elements-->
 
 
-                            <!--START DESIGN FROM HERE -->
+    <!--START DESIGN FROM HERE -->
     <div class="row" style="margin-bottom:10px;">
         <div class="col-md-8">
-            <input type="text" class="form-control" placeholder="Form Name" id="FeedbackForm"/>
+            <input type="text" class="form-control" placeholder="Form Name" id="FeedbackForm" />
             <input type="hidden" id="FeedBkFormID" value="0" />
         </div>
         <div class="col-md-4">
-            <input type="checkbox" class="form-control" id="FeedfackSts"/>
+            <input type="checkbox" class="form-control" id="FeedfackSts" />
         </div>
     </div>
-    <div class="row questions" id="question" style="border:1px solid black;">
+    <div class="row questions" id="question" style="border:1px solid black;" OrderNo="1">
         <div class="col-md-5">
             <input type="text" readonly value="ORDERED ITEM LIST" class="form-control QueTitle" placeholder="Enter Question Title" />
         </div>
         <div class="col-md-1">
             <input type="checkbox" class="form-control QueStatus" />
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label> Response Type</label>
-            <select class="form-control QuestionType"  id="QuestionType" onchange="ShowObjective(this)">
+            <select class="form-control QuestionType" id="QuestionType" onchange="ShowObjective(this)">
                 <option value="0">Star</option>
                 <option value="3">Like Dislike Ok</option>
             </select>
+        </div>
+        <div class="col-md-1">
+            <label></label>
+            <a  style="text-align:center;color:#a9adb1" class="nav-link">
+                <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+            </a>
+        </div>
+        <div class="col-md-1">
+            <label></label>
+            <a  style="text-align:center;color:#a9adb1" class="nav-link">
+                <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+            </a>
         </div>
     </div>
     <div id="HeadDiv" style="display:none"></div>
@@ -92,6 +119,8 @@
 <script>
     function ShalloCopy() {
         var ColyDiv = $("#question0").clone();
+        var QuestionCnt = document.getElementsByClassName("questions").length;
+        ColyDiv.attr("OrderNo", QuestionCnt);
         ColyDiv.show();
         ColyDiv.insertBefore("#HeadDiv"); 
     }
@@ -110,6 +139,32 @@
             $(event).parent('div').parent('div').find('.SubItem').hide();
         }
        
+    }
+    function RowDown(event) {
+        var li = $(event).parent('div').parent('div');
+        // var li = $(this).closest('li');
+        var next = li.next();
+        if (next.length && next.hasClass("questions")) {
+            var OrderNoCurr = parseInt(li.attr('OrderNo'));
+            var OrderNoNxt = parseInt(next.attr('OrderNo'));
+            console.log(OrderNoCurr);
+            li.attr('OrderNo', OrderNoCurr + 1);
+            next.attr('OrderNo', OrderNoNxt - 1);
+            li.detach().insertAfter(next);
+        }
+    }
+    function RowUp(event) {
+        var li = $(event).parent('div').parent('div');
+        var prev = li.prev();
+        if (prev.length && prev.hasClass("questions") && prev.attr("OrderNo")!="1") {
+
+            var OrderNoCur = parseInt(li.attr('OrderNo'));
+            var OrderNoPre = parseInt(prev.attr('OrderNo'));
+            console.log(OrderNoCur);
+            li.attr('OrderNo', OrderNoCur - 1);
+            prev.attr('OrderNo', OrderNoPre + 1);
+            li.detach().insertBefore(prev);
+        }
     }
     function Submit() {
         var listQue = document.getElementsByClassName("questions");
@@ -169,14 +224,14 @@
             success: function (data) {
                 //var OMId = parseInt(data);
                 var Obj = JSON.parse(data);
-                
-                var str = ' <div class="col-md-4 formdiv">';
-                str += '<ul class="CustomUl">';
+                //var Id = Obj.Id;
+                var str = '<ul class"CustmUl">';
                 str += '<li>'+Obj.Name+'</li>';
-                str += '<li>Created : ' + Obj.Create+'</li>'
-                str += '<li>Filled 0 times</li>';
-                str += '<li>Placed 0 times</li> </ul></div>';
-                $("#AddForm").append(str);
+                str += '<li>'+Obj.Create+'</li>';
+                str += '<li>Filled 0</li>';
+                str += '<li>Placed 0</li></ul>';
+               // $("#Menus").append('<block class="ShowMenu" ondblclick="AddNewForm(' + Id + ')" id=' + Id + '>' +str + '</block>');
+                $("#Menus").append('<block class="ShowMenu' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddNewForm(' + Obj.Id + ')" OMID=' + Obj.Id + ' id="M' + Obj.Id + '">' + str + '</block>');
                 hidedpt("FeedBack");
                 $('#waiting').hide();
             },

@@ -49,10 +49,8 @@
     block.selected {
         color: green;
     }
-    block{
-        height:75px;
-        width:150px;
-    }
+    
+    
 .formdiv{
     background-color:aqua;
     border:1px solid black;
@@ -62,22 +60,20 @@
        text-align:center;
        list-style-type:none;
     }
-   
+    .CustmUl {
+        list-style-type: none;
+        margin-top:10%;
+    }
 </style>
 <div class="row">
     <div class="col-md-12">
         <h3 class="text-center">Feedback Form</h3>
     </div>
     </hr>
-    @*<div class="row" id="AddForm">
-            <div class="col-md-4 formdiv text-center">
-             <i style="margin-top:40px;font-size:x-large" onclick="AddNewForm(0)" class="fas fa-plus-circle"></i>
-            </div>
-
-        </div>*@
+    
     <div class="scrollmenu" id="Menus">
         <block id="AddNew" class="ShowMenu" ondblclick="AddNewForm(0)">
-            <p class="PCenter">Add New Form</p>
+            <p>Add New Form</p>
         </block>
     </div>
 </div>
@@ -155,7 +151,7 @@
     function ShowOrderMenus(list) {
         $("#Menus").html('');
         $("#Floor").html('');
-        $("#Menus").append('<block id="AddNew" ondblclick="AddNewForm(0)">Add New Form</block>');
+        $("#Menus").append('<block id="AddNew" ondblclick="AddNewForm(0)"><ul class="CustmUl"><li>Add New Form</li><li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li></ul></block>');
         FormList = list.FormList;
         var SelectedMenu = -5;
         for (var i = 0; i < FormList.length; i++) {
@@ -164,7 +160,12 @@
                 // Addcls = "SelectedMenu";
                 SelectedMenu = FormList[i].Id;
             }
-            $("#Menus").append('<block class="ShowMenu ' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddOrderMenu(' + FormList[i].Id + ')" OMID=' + FormList[i].Id + ' id="M' + FormList[i].Id + '">' + FormList[i].Name + '</block>');
+            var str = '<ul class="CustmUl">';
+            str += '<li>' + FormList[i].Name + '</li>';
+            str += '<li>' + FormList[i].CreateDate + '</li>';
+            str += '<li>Filled 0</li>';
+            str += '<li>Placed 0</li></ul>';
+            $("#Menus").append('<block class="ShowMenu ' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddNewForm(' + FormList[i].Id + ')" OMID=' + FormList[i].Id + ' id="M' + FormList[i].Id + '">' + str + '</block>');
         }
         categorylist = list.FloorList;
 

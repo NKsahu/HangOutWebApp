@@ -30,7 +30,8 @@ namespace HangOut.Controllers
             feedbackForm.Save();
             int FeedbackId = feedbackForm.Id;
             var QuestionList = feedbackForm.Questions;
-            foreach(var question in QuestionList)
+            QuestionList = QuestionList.FindAll(x => x.Title != null && x.Title != "");
+            foreach (var question in QuestionList)
             {
                 question.FeedBkFormID = FeedbackId;
                 question.Save();
@@ -49,6 +50,7 @@ namespace HangOut.Controllers
             JObject response = new JObject();
             response.Add("Name", feedbackForm.Name);
             response.Add("Create", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            response.Add("Id", feedbackForm.Id);
             return response;
         }
         public JObject ListFeedBack()
@@ -108,5 +110,7 @@ namespace HangOut.Controllers
             }
             return status;
         }
+
+        
     }
 }
