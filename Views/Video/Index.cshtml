@@ -8,15 +8,15 @@
     </div>
 </div>
 <br />
-<div class=" row">
+<div class=" row aa">
     <ul class="nav p-1" style="font-size:60px" id="MyCategory" OrderNo="1">
         <li>
             <button class="btn btn-danger button" style="font-size:25px" onclick="LoadCategoryPopup()">
                 <i class="fa fa-plus "></i>
                 <span>ADD</span>
             </button>
-            <a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-left "></i></a>
-            <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-right "></i></a>
+            @*<a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-left "></i></a>
+            <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-right "></i></a>*@
 
         </li>&nbsp;
     </ul>
@@ -77,8 +77,6 @@
     }
     var listvideocategory = [];
     var strhtml = '<li><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999"> ';
-    var strhtml = '<a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-left "></i></a>';
-   
     LoadCategory();
     function LoadCategory() {
       //  $("#MyCategory").html('');
@@ -116,7 +114,7 @@
                 $("#HG_Category > .modal-dialog > .modal-content > .modal-body").html(data);
                 showdpt("HG_Category");
                 $('#waiting').hide();
-                // }
+               
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
