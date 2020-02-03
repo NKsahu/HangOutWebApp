@@ -126,22 +126,22 @@
             </div>
             <div class="col-md-4  mt-3">
                 <label for="Restaurant">Restaurant</label>
-                <input type="checkbox" />
+                <input type="checkbox" class="restaurent" />
             </div>
             <div class="col-md-4 mt-3">
                 <label for="Theater">Theater</label>
-                <input type="checkbox" />
+                <input type="checkbox" class="theater"/>
             </div>
             <div class="col-md-4  mt-3">
                 <h5 class=" text-center">Peyment Type</h5>
             </div>
             <div class="col-md-4  mt-3">
                 <label for="Postpaid">Postpaid</label>
-                <input type="checkbox" />
+                <input type="checkbox"  class="postpaid"/>
             </div>
             <div class="col-md-4  mt-3">
                 <label for="Prepaid">Prepaid </label>
-                <input type="checkbox" />
+                <input type="checkbox"  class="prepaid"/>
             </div>
         </div>
 
@@ -152,7 +152,7 @@
         <div class="col-md-8">
         </div>
         <div class="col-md-2">
-            <button class="btn btn-danger form-control" onclick="Copydiv()"><i class="fa fa-plus"></i></button>
+            <button class="btn btn-danger form-control" onclick="Copydiv();"><i class="fa fa-plus"></i></button>
         </div>
         <div class="col-md-2">
             <button class="btn   btn-success form-control" type="submit" onclick="Submit();">Submit</button>
@@ -221,6 +221,7 @@
             var theater = ObjDiv.find('.theater').is(':checked');
             var postpaid = ObjDiv.find('.postpaid').is(':checked');
             var prepaid = ObjDiv.find('.prepaid').is(':checked');
+            var 
             console.log("title= " + title);
             console.log("Discription= " + Discription);
             console.log("Link= " + Link);
