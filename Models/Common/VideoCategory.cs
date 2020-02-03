@@ -78,7 +78,7 @@ namespace HangOut.Models.Common
             VideoCategory listvideo = new VideoCategory();
             try
             {
-                string Query = "SELECT * FROM  Video where  ID=@ID";
+                string Query = "SELECT * FROM  VideoCategory where  ID=@ID";
                 cmd = new SqlCommand(Query, con.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
