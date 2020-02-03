@@ -84,6 +84,21 @@ namespace HangOut.Models.Common
 
             return (ListTmp);
         }
+        public static List<Questions>  QuestioType()
+        {
 
+            List<Questions> questions = new List<Questions>();
+            questions.Add(new Questions { Id = 0, Name = "Star" });
+            questions.Add(new Questions { Id = 1, Name = "Objective" });
+            questions.Add(new Questions { Id = 2, Name = "Subjective" });
+            questions.Add(new Questions { Id = 3, Name = "Like Dislike Ok" });
+            questions.Add(new Questions { Id = 4, Name = "Star-Subjective" });
+            return questions;
+        }
     }
+}
+public class Questions
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
 }
