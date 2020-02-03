@@ -182,10 +182,19 @@
         ObjFeedbkForm.OrgId = 0;
         ObjFeedbkForm.Status = FormStatus;
         var QuestionList = [];
+        var AllowQuesn = 3;
+        var CntAllwd = 0;
         for (var i = 1; i < listQue.length; i++) {
             var ObjQue = $(listQue[i]);
             var QuestionTitle = ObjQue.find('.QueTitle').val();
             var QueStatus = ObjQue.find('.QueStatus').is(':checked');
+            if (QueStatus==true||QueStatus) {
+                CntAllwd += 1;
+            }
+            if (CntAllwd > AllowQuesn) {
+                alert("Maximum 3 Question Allowed in Single Form");
+                return;
+            }
             var QuestionType = ObjQue.find('.QuestionType').val();
             var OrderNo = ObjQue.attr("OrderNo");
             console.log("questions=" + QuestionTitle + "  Status=" + QueStatus + "Qtype=" + QuestionType);
@@ -231,8 +240,8 @@
                 str += '<li>'+Obj.Create+'</li>';
                 str += '<li>Filled 0</li>';
                 str += '<li>Placed 0</li></ul>';
-               // $("#Menus").append('<block class="ShowMenu" ondblclick="AddNewForm(' + Id + ')" id=' + Id + '>' +str + '</block>');
-                $("#Menus").append('<block class="ShowMenu' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddNewForm(' + Obj.Id + ')" OMID=' + Obj.Id + ' id="M' + Obj.Id + '">' + str + '</block>');
+               // $("#Menus").append('<block class="ShowMenu" ondblclick="AddNewForm(' + Id + ')" id=' + Id + '>' +str + '</block>');//ondblclick="AddNewForm(' + Obj.Id + ')"
+                $("#Menus").append('<block class="ShowMenu " onclick="ActiveMenu(this)"  OMID=' + Obj.Id + ' id="M' + Obj.Id + '">' + str + '</block>');
                 hidedpt("FeedBack");
                 $('#waiting').hide();
             },
