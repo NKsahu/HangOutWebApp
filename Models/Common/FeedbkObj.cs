@@ -81,5 +81,18 @@ namespace HangOut.Models.Common
 
             return (ListTmp);
         }
+
+        public static List<Objectives> QusObjective()
+        {
+            List<Objectives> objectives = new List<Objectives>();
+            objectives.Add(new Objectives { id = 0, Name = "Single Mode" });
+            objectives.Add(new Objectives { id = 1, Name = "Multiple" });
+            return objectives;
+        }
     }
+}
+public class Objectives
+{
+    public int id { get; set; }
+    public string Name { get; set; }
 }

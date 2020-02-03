@@ -11,8 +11,9 @@ namespace HangOut.Models.Common
        public int ID { get; set; }
       public string Title { get; set; }
       public bool Status { get; set; }
-      public int QuestionType { get; set; }// 0:Star,1: Objective,2:Subjective,3:Like Dislike Ok
+      public int QuestionType { get; set; }// 0:Star,1: Objective,2:Subjective,3:Like Dislike Ok,4:star-subjective
         public int FeedBkFormID { get; set; }
+        public int OrderNo { get; set; }
         public List<FeedbkObj> Objectives { get; set; }
         public int Save()
         {
@@ -26,10 +27,10 @@ namespace HangOut.Models.Common
 
                 if(this.ID==0)
                 {
-                    Quary = "Insert into FeedBackQuestion values (@Title,@Status,@QuestionType,@FeedBKFormID); SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert into FeedBackQuestion values (@Title,@Status,@QuestionType,@FeedBKFormID,@OrderNo); SELECT SCOPE_IDENTITY();";
                 }else
                 {
-                    Quary = "Update FeedBackQuestion Set Title=@Title,Status=@Status,QuestionType=@QuestionType,FeedBKFormID=@FeedBKFormID where ID=@ID";
+                    Quary = "Update FeedBackQuestion Set Title=@Title,Status=@Status,QuestionType=@QuestionType,FeedBKFormID=@FeedBKFormID,OrderNo=@OrderNo where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID",this.ID);
@@ -37,6 +38,7 @@ namespace HangOut.Models.Common
                 cmd.Parameters.AddWithValue("@Status",this.Status);
                 cmd.Parameters.AddWithValue("@QuestionType", this.QuestionType);
                 cmd.Parameters.AddWithValue("@FeedBkFormID", this.FeedBkFormID);
+                cmd.Parameters.AddWithValue("@OrderNo", this.OrderNo);
                 if (this.ID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -53,7 +55,7 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); con.Con.Close(); }
             return Row;
         }
-        public List<FeedBackQue> GetAll()
+        public List<FeedBackQue> GetAll(int FeedBkId)
         {
             DBCon OBJCon = new DBCon();
             SqlCommand cmd = null;
@@ -62,7 +64,7 @@ namespace HangOut.Models.Common
 
             try
             {
-                string Query = "SELECT * FROM  FeedBackQuestion ORDER BY  ID DESC";
+                string Query = "SELECT * FROM  FeedBackQuestion where FeedBkFormID="+FeedBkId;
                 cmd = new SqlCommand(Query, OBJCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -73,7 +75,7 @@ namespace HangOut.Models.Common
                     ObjTmp.Status = SDR.GetBoolean(2);
                     ObjTmp.QuestionType = SDR.GetInt32(3);
                     ObjTmp.FeedBkFormID = SDR.GetInt32(4);
-
+                    ObjTmp.OrderNo = SDR.GetInt32(5);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -82,6 +84,21 @@ namespace HangOut.Models.Common
 
             return (ListTmp);
         }
+        public static List<Questions>  QuestioType()
+        {
 
+            List<Questions> questions = new List<Questions>();
+            questions.Add(new Questions { Id = 0, Name = "Star" });
+            questions.Add(new Questions { Id = 1, Name = "Objective" });
+            questions.Add(new Questions { Id = 2, Name = "Subjective" });
+            questions.Add(new Questions { Id = 3, Name = "Like Dislike Ok" });
+            questions.Add(new Questions { Id = 4, Name = "Star-Subjective" });
+            return questions;
+        }
     }
+}
+public class Questions
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
 }
