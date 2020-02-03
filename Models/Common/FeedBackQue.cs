@@ -55,7 +55,7 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); con.Con.Close(); }
             return Row;
         }
-        public List<FeedBackQue> GetAll()
+        public List<FeedBackQue> GetAll(int FeedBkId)
         {
             DBCon OBJCon = new DBCon();
             SqlCommand cmd = null;
@@ -64,7 +64,7 @@ namespace HangOut.Models.Common
 
             try
             {
-                string Query = "SELECT * FROM  FeedBackQuestion ORDER BY  ID DESC";
+                string Query = "SELECT * FROM  FeedBackQuestion where FeedBkFormID="+FeedBkId;
                 cmd = new SqlCommand(Query, OBJCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
