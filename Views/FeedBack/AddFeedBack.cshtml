@@ -187,13 +187,14 @@
             var QuestionTitle = ObjQue.find('.QueTitle').val();
             var QueStatus = ObjQue.find('.QueStatus').is(':checked');
             var QuestionType = ObjQue.find('.QuestionType').val();
+            var OrderNo = ObjQue.attr("OrderNo");
             console.log("questions=" + QuestionTitle + "  Status=" + QueStatus + "Qtype=" + QuestionType);
             var ObjQues = {};
             ObjQues.Title = QuestionTitle;
             ObjQues.Status = QueStatus;
             ObjQues.QuestionType = QuestionType;
             ObjQues.FeedBkFormID = FeedBkFormID;
-            
+            ObjQues.OrderNo = OrderNo;
            // public int ID { get; set; }
            //  Check Is Objective
             if (QuestionType == "1") {
