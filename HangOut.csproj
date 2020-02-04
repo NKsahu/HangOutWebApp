@@ -460,6 +460,7 @@
     <Content Include="Views\FeedBack\FeedbkShortReport.cshtml" />
     <Content Include="Views\Video\viewstatuspopupwindow.cshtml" />
     <Content Include="Views\FeedBack\FeedBkDetails.cshtml" />
+    <Content Include="Views\FeedBack\FeedBackReportFilter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
