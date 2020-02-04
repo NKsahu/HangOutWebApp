@@ -40,5 +40,9 @@ namespace HangOut.Controllers
             }
             return JObject.FromObject(ObjCategory);
         }
+        public ActionResult viewstatuspopupwindow()
+        {
+            return View();
+        }
     }
 }
