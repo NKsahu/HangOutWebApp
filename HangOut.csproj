@@ -352,6 +352,9 @@
     <Compile Include="Models\DynamicList\OrgType.cs" />
     <Compile Include="Models\DynamicList\PymentPageOpen.cs" />
     <Compile Include="Models\DynamicList\Type.cs" />
+    <Compile Include="Models\Feedbk\Feedbk.cs" />
+    <Compile Include="Models\Feedbk\FeedbkItem.cs" />
+    <Compile Include="Models\Feedbk\FeedbkResponse.cs" />
     <Compile Include="Models\HG_Category.cs" />
     <Compile Include="Models\HG_FloorSide_or_RowName.cs" />
     <Compile Include="Models\HG_Floor_or_ScreenMaster.cs" />
@@ -459,6 +462,8 @@
     <Content Include="Views\FeedBack\AddFeedBack.cshtml" />
     <Content Include="Views\FeedBack\FeedbkShortReport.cshtml" />
     <Content Include="Views\Video\viewstatuspopupwindow.cshtml" />
+    <Content Include="Views\FeedBack\FeedBkDetails.cshtml" />
+    <Content Include="Views\FeedBack\FeedBackReportFilter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

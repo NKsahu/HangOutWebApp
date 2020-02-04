@@ -121,6 +121,15 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult FeedBackReportFilter()
+        {
+            return View();
+        }
+        public ActionResult FeedBkDetails()
+        {
+
+          return  View();
+        }
         
     }
 }
