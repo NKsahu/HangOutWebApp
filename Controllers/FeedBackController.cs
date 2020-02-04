@@ -121,6 +121,11 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult FeedBkDetails()
+        {
+
+          return  View();
+        }
         
     }
 }
