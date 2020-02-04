@@ -22,7 +22,7 @@
     <div class="row questions" style="display:none;border:1px solid black; " id="question0" OrderNo="0">
         <div class="col-md-5">
             <input type="text" class="form-control QueTitle" placeholder="Enter Question Title" />
-            <input type="hidden" QID="0" />
+            <input type="hidden" class="QID" value="0" />
         </div>
         <div class="col-md-1">
             <input type="checkbox" class="form-control QueStatus" />
@@ -94,7 +94,7 @@
                 <div class="row questions" style="border:1px solid black; " id="question0" OrderNo="@ques.OrderNo">
                     <div class="col-md-5">
                         <input type="text" class="form-control QueTitle" readonly placeholder="Enter Question Title" value="@ques.Title" />
-                        <input type="hidden" QID="@ques.ID"/>
+                        <input type="hidden" class="QID" value="@ques.ID"/>
                     </div>
                     <div class="col-md-1">
                         @{ 
@@ -163,7 +163,7 @@
             <div class="row questions" id="question" style="border:1px solid black;" OrderNo="1">
                 <div class="col-md-5">
                     <input type="text" readonly value="ITEM FEEDBACK" class="form-control QueTitle" placeholder="Enter Question Title" />
-                    <input type="hidden" QID="0" />
+                    <input type="hidden" class="QID" value="0" />
                 </div>
                 <div class="col-md-1">
                     <input type="checkbox" class="form-control QueStatus" />
@@ -177,13 +177,13 @@
                 </div>
                 <div class="col-md-1">
                     <label></label>
-                    <a style="text-align:center;color:#a9adb1" class="nav-link">
+                    <a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link">
                         <i class="fas fa-arrow-down" style="font-size:x-large"></i>
                     </a>
                 </div>
                 <div class="col-md-1">
                     <label></label>
-                    <a style="text-align:center;color:#a9adb1" class="nav-link">
+                    <a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link">
                         <i class="fas fa-arrow-up" style="font-size:x-large"></i>
                     </a>
                 </div>
@@ -240,7 +240,7 @@
     function RowUp(event) {
         var li = $(event).parent('div').parent('div');
         var prev = li.prev();
-        if (prev.length && prev.hasClass("questions") && prev.attr("OrderNo")!="1") {
+        if (prev.length && prev.hasClass("questions")) {
 
             var OrderNoCur = parseInt(li.attr('OrderNo'));
             var OrderNoPre = parseInt(prev.attr('OrderNo'));
@@ -287,8 +287,8 @@
             ObjQues.QuestionType = QuestionType;
             ObjQues.FeedBkFormID = FeedBkFormID;
             ObjQues.OrderNo = OrderNo;
-            ObjQue.ID = ObjQue.find('QID');
-            console.log("QID"+ObjQue.ID);
+            ObjQues.ID = ObjQue.find('.QID').val();
+            console.log("QID" + ObjQues.ID);
           
            //  Check Is Objective
             if (QuestionType == "1") {
@@ -301,7 +301,7 @@
                     var FeedBkObjective = {};
                     FeedBkObjective.Name = option;
                     FeedBkObjective.ObjectiveType = OptionType;
-                    FeedBkObjective.QuestionId = ObjQue.ID;
+                    FeedBkObjective.QuestionId = ObjQues.ID;
                     FeedBkObjective.id = ListSubQuestions[j].getAttribute("SubQId");
                     ObjectiveList.push(FeedBkObjective);
                     console.log("ListSubQuestions[j].getAttribut==" + ListSubQuestions[j].getAttribute("SubQId"));
@@ -329,7 +329,9 @@
                 str += '<li>Filled 0</li>';
                 str += '<li>Placed 0</li></ul>';
                // $("#Menus").append('<block class="ShowMenu" ondblclick="AddNewForm(' + Id + ')" id=' + Id + '>' +str + '</block>');//ondblclick="AddNewForm(' + Obj.Id + ')"
-                $("#Menus").append('<block class="ShowMenu " onclick="ActiveMenu(this)"  OMID=' + Obj.Id + ' id="M' + Obj.Id + '">' + str + '</block>');
+                if (FeedBkFormID ==0) {
+                    $("#Menus").append('<block class="ShowMenu " onclick="ActiveMenu(this)"  OMID=' + Obj.Id + ' id="M' + Obj.Id + '">' + str + '</block>');
+                }
                 hidedpt("FeedBack");
                 $('#waiting').hide();
             },

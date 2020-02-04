@@ -57,13 +57,20 @@ namespace HangOut.Controllers
         {
             var ObjInfo = Request.Cookies["UserInfo"];
             int OrgId = int.Parse(ObjInfo["OrgId"]);
-            List<FeedbkForm> formList = FeedbkForm.GetAll(OrgId);
             HG_OrganizationDetails orgobj = new HG_OrganizationDetails().GetOne(OrgId);
             int OrgType = orgobj.OrgTypes != null ? int.Parse(orgobj.OrgTypes) : 1;
             List<HG_Floor_or_ScreenMaster> floorOrScreens = new HG_Floor_or_ScreenMaster().GetAll(OrgType);
             List<HG_Tables_or_Sheat> tableOrSheatlist = new HG_Tables_or_Sheat().GetAll(OrgType);
             JObject FeedBackObj = new JObject();
-            FeedBackObj.Add("FormList", JArray.FromObject(FeedbkForm.GetAll(OrgId)));
+            var feedbklist = FeedbkForm.GetAll(OrgId);
+            JArray jArrayfdbk = new JArray();
+            foreach (var feedback in feedbklist)
+            {
+                JObject jObject = JObject.FromObject(feedback);
+                jObject.Add("Create", feedback.CreateDate.ToString("dd/MM/yyyy HH:mm"));
+                jArrayfdbk.Add(jObject);
+            }
+            FeedBackObj.Add("FormList", jArrayfdbk);
             JArray jArray = new JArray();
             foreach (HG_Floor_or_ScreenMaster Floors in floorOrScreens)
             {
