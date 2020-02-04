@@ -1,4 +1,5 @@
-﻿@{ Layout = null;}
+﻿@using HangOut.Models.Common;
+@{ Layout = null;}
 <html>
 <body>
 
@@ -8,6 +9,7 @@
         <div class="col-md-4">
             <label for="Title">Title</label>
             <input class="form-control VidTitle" type="text" placeholder="Title" />
+            <input type="hidden" class="videoID" value="0" />
         </div>
         <div class="col-md-4">
             <label for="Discription">Discription</label>
@@ -72,93 +74,213 @@
             <h4 class="text-center"><b>Video Category</b></h4>
             <hr />
         </div>
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <label for="Category"><b>Category</b></label>
-                <input class=" form-control" id="CategoryName" type="text" placeholder="Category" required />
-                <hr />
-            </div>
-            <div class="col-md-3"></div>
-        </div>
-        <div class="card-body bb" style="border:thick; ">
-            <!--First value-->
+        @{
+               if (Request.QueryString["Id"] != "0")
+               {
+                            VideoCategory videoCategory = new VideoCategory().GetOne(int.Parse(Request.QueryString["Id"]));
+                            List<Video> listvideo = Video.GetAll(videoCategory.Id);
+                            listvideo = listvideo.OrderBy(x => x.SerialNumber).ToList();
+                            List<VideoLangu> videoLanguss = Video.Languages();
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <label for="Category"><b>Category</b></label>
+                        <input class=" form-control" id="CategoryName" value="@videoCategory.Name" type="text" placeholder="Category" required />
+                        <input type="hidden" class="categoryID" value="@videoCategory.Id"/>
+                        <hr />
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                foreach (var video in listvideo)
+                {
+                    <div class="card-body bb" style="border:thick; ">
+                        <!--First value-->
+                        <div class="row aa  MainDivs mt-2" id="question0" style="border: ridge" OrderNo="@video.SerialNumber">
+                            <hr />
+                            <div class="col-md-4">
+                                <label for="Title">Title</label>
+                                <input class="form-control VidTitle" type="text" placeholder="Title" value="@video.Title" required="required" />
+                                <input type="hidden" class="videoID" value="@video.ID" />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Discription">Discription</label>
+                                <input class="form-control discript" type="text" value="@video.Discription" placeholder="Discription" />
+                            </div>
+                            <div class="col-md-3">
+                                <label for="Link">Link</label>
+                                <input class="form-control Source" value="@video.Link" type="text" placeholder="Link" />
+                            </div>
+                            <div class="col-md-1">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-down mt-4"></i></a>
 
-            <div class="row aa  MainDivs mt-2" id="question0" style="border: ridge" OrderNo="1">
-                <hr />
-                <div class="col-md-4">
-                    <label for="Title">Title</label>
-                    <input class="form-control VidTitle" type="text" placeholder="Title" required="required" />
-                </div>
-                <div class="col-md-4">
-                    <label for="Discription">Discription</label>
-                    <input class="form-control discript" type="text" placeholder="Discription" />
-                </div>
-                <div class="col-md-3">
-                    <label for="Link">Link</label>
-                    <input class="form-control Source" type="text" placeholder="Link" />
-                </div>
-                <div class="col-md-1">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large ;color:#138692" class="fas fa-long-arrow-alt-up  mt-4"></i></a>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Piority">Piority</label>
+                                @{ 
+                                    var status = video.IsImp ? "checked" : "";
+                                }
+                                <input type="checkbox" @status class="checked" />
+                            </div>
+                            <div class="col-md-12">
+                                <select class="form-control droupdown" name="StudentGender">
+                                    @foreach (var languae in videoLanguss)
+                                    {
+                                        string isselected = (languae.id == video.Languange) ? "selected" : "";
+                                        <option @isselected value="@languae.id">@languae.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class=" col-md-4 mt-3">
+                                <h5 class="text-center">OutLet Type</h5>
+                            </div>
+                            <div class="col-md-4  mt-3">
+                                <label for="Restaurant">Restaurant</label>
+                                @{
+                                    var rescheck = video.Restaurant ? "checked" : "";
+                                }
+                                <input type="checkbox"  @rescheck  class="restaurent" />
+                            </div>
+                            <div class="col-md-4 mt-3">
+                                <label for="Theater">Theater</label>
+                                @{
+                                    var theatercheck = video.Theater ? "checked" : "";
+                                }
+                                <input type="checkbox"  @theatercheck class="theater" />
+                            </div>
+                            <div class="col-md-4  mt-3">
+                                <h5 class=" text-center">Peyment Type</h5>
+                            </div>
+                            <div class="col-md-4  mt-3">
+                                <label for="Postpaid">Postpaid</label>
+                                @{ var postpaidcheck = video.Postpaid ? "checked" : "";}
+                                <input type="checkbox" @postpaidcheck class="postpaid" />
+                            </div>
+                            <div class="col-md-4  mt-3">
+                                <label for="Prepaid">Prepaid </label>
+                                @{ var prepaidcheck = video.Prepaid ? "checked" : "";}
+                                <input type="checkbox"  @prepaidcheck class="prepaid" />
+                            </div>
+                        </div>
+
+                        <!--end -->
+                        <div id="HeadDiv" style="display:none"></div>
+                    </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-down mt-4"></i></a>
+                        <div class="col-md-8">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-danger form-control" onclick="DuplicateDiv();"><i class="fa fa-plus"></i></button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn   btn-success form-control" type="submit" onclick="Submit()">Submit</button>
+                        </div>
+                    </div>
+                }
+
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <label for="Category"><b>Category</b></label>
+                        <input class=" form-control" id="CategoryName" type="text" placeholder="Category" required />
+                        <input type="hidden" class="categoryID" value="0" />
+                        <hr />
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="card-body bb" style="border:thick; ">
+                    <!--First value-->
+
+                    <div class="row aa  MainDivs mt-2" id="question0" style="border: ridge" OrderNo="1">
+                        <hr />
+                        <div class="col-md-4">
+                            <label for="Title">Title</label>
+                            <input class="form-control VidTitle" type="text" placeholder="Title" required="required" />
+                            <input type="hidden" class="videoID" value="0" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Discription">Discription</label>
+                            <input class="form-control discript" type="text" placeholder="Discription" />
+                        </div>
+                        <div class="col-md-3">
+                            <label for="Link">Link</label>
+                            <input class="form-control Source" type="text" placeholder="Link" />
+                        </div>
+                        <div class="col-md-1">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-down mt-4"></i></a>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large ;color:#138692" class="fas fa-long-arrow-alt-up  mt-4"></i></a>
+
+                                </div>
+                            </div>
 
                         </div>
-                        <div class="col-md-6">
-                            <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large ;color:#138692" class="fas fa-long-arrow-alt-up  mt-4"></i></a>
-
+                        <div class="col-md-4">
+                            <label for="Piority">Piority</label>
+                            <input type="checkbox" class="checked" />
+                        </div>
+                        <div class="col-md-12">
+                            <select class="form-control droupdown" name="StudentGender">
+                                <option value="1">Hindi</option>
+                                <option value="2">English</option>
+                                <option value="3">Urdu</option>
+                            </select>
+                        </div>
+                        <div class=" col-md-4 mt-3">
+                            <h5 class="text-center">OutLet Type</h5>
+                        </div>
+                        <div class="col-md-4  mt-3">
+                            <label for="Restaurant">Restaurant</label>
+                            <input type="checkbox" class="restaurent" />
+                        </div>
+                        <div class="col-md-4 mt-3">
+                            <label for="Theater">Theater</label>
+                            <input type="checkbox" class="theater" />
+                        </div>
+                        <div class="col-md-4  mt-3">
+                            <h5 class=" text-center">Peyment Type</h5>
+                        </div>
+                        <div class="col-md-4  mt-3">
+                            <label for="Postpaid">Postpaid</label>
+                            <input type="checkbox" class="postpaid" />
+                        </div>
+                        <div class="col-md-4  mt-3">
+                            <label for="Prepaid">Prepaid </label>
+                            <input type="checkbox" class="prepaid" />
                         </div>
                     </div>
 
+                    <!--end -->
+                    <div id="HeadDiv" style="display:none"></div>
                 </div>
-                <div class="col-md-4">
-                    <label for="Piority">Piority</label>
-                    <input type="checkbox" class="checked" />
+                <div class="row">
+                    <div class="col-md-8">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-danger form-control" onclick="DuplicateDiv();"><i class="fa fa-plus"></i></button>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn   btn-success form-control" type="submit" onclick="Submit()">Submit</button>
+                    </div>
                 </div>
-                <div class="col-md-12">
-                    <select class="form-control droupdown" name="StudentGender">
-                        <option value="1">Hindi</option>
-                        <option value="2">English</option>
-                        <option value="3">Urdu</option>
-                    </select>
-                </div>
-                <div class=" col-md-4 mt-3">
-                    <h5 class="text-center">OutLet Type</h5>
-                </div>
-                <div class="col-md-4  mt-3">
-                    <label for="Restaurant">Restaurant</label>
-                    <input type="checkbox" class="restaurent" />
-                </div>
-                <div class="col-md-4 mt-3">
-                    <label for="Theater">Theater</label>
-                    <input type="checkbox" class="theater" />
-                </div>
-                <div class="col-md-4  mt-3">
-                    <h5 class=" text-center">Peyment Type</h5>
-                </div>
-                <div class="col-md-4  mt-3">
-                    <label for="Postpaid">Postpaid</label>
-                    <input type="checkbox" class="postpaid" />
-                </div>
-                <div class="col-md-4  mt-3">
-                    <label for="Prepaid">Prepaid </label>
-                    <input type="checkbox" class="prepaid" />
-                </div>
-            </div>
+            }
+        }
 
-            <!--end -->
-            <div id="HeadDiv" style="display:none"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-8">
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-danger form-control" onclick="DuplicateDiv();"><i class="fa fa-plus"></i></button>
-            </div>
-            <div class="col-md-2">
-                <button class="btn   btn-success form-control" type="submit" onclick="Submit()">Submit</button>
-            </div>
-        </div>
     </div>
     </body>
 </html>
@@ -209,6 +331,8 @@
             }
                 var VidCategory = {};
             VidCategory.Name = Categoryname;
+            VidCategory.Id = $(".categoryID").val();
+            console.log("hiii" + VidCategory.Id);
             var VideosList = [];
             // public List < Video > Videos { get; set; }
             var VideosDivList = document.getElementsByClassName("MainDivs");
@@ -224,6 +348,7 @@
                 var theater = ObjDiv.find('.theater').is(':checked');
                 var postpaid = ObjDiv.find('.postpaid').is(':checked');
                 var prepaid = ObjDiv.find('.prepaid').is(':checked');
+                var ID = ObjDiv.find('.videoID').val();
                 console.log("title= " + title);
                 console.log("Discription= " + Discription);
                 console.log("Link= " + Link);
@@ -234,7 +359,20 @@
                 console.log("theater=" + theater);
                 console.log("postpaid=" + postpaid);
                 console.log("prepaid=" + prepaid);
+                if (title == null || title == "") {
+                    alert("Title is required");
+                    return;
+                }
+                if (Discription == null || Discription == "") {
+                    alert("Discription is Required");
+                    return;
+                }
+                if (Link == null || Link == "") {
+                    alert("Link is Required");
+                    return;
+                }
                 var ObjVideo = {};
+                ObjVideo.ID = ID;
                 ObjVideo.Title = title;
                 ObjVideo.Discription = Discription;
                 ObjVideo.Link = Link;

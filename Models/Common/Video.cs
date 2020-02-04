@@ -69,7 +69,7 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); OBJCon.Con.Close(); }
             return Row;
         }
-        public List<Video>GetAll()
+        public static List<Video>GetAll(int CatId)
         {
             DBCon OBJCon = new DBCon();
             SqlCommand cmd = null;
@@ -78,7 +78,7 @@ namespace HangOut.Models.Common
 
             try
             {
-                string Query = "SELECT * FROM  Video ORDER BY  ID DESC";
+                string Query = "SELECT * FROM  Video where CategoryId="+ CatId;
                 cmd = new SqlCommand(Query, OBJCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -105,7 +105,7 @@ namespace HangOut.Models.Common
 
             return (ListTmp);
         }
-        public Video GetOne(int ID)
+        public static Video GetOne(int ID)
         {
             DBCon OBJCON = new DBCon();
             SqlCommand cmd = null;
@@ -142,5 +142,19 @@ namespace HangOut.Models.Common
 
             return (ObjTmp);
         }
+
+        public static List<VideoLangu> Languages()
+        {
+            List<VideoLangu> videoLangus = new List<VideoLangu>();
+            videoLangus.Add(new VideoLangu { id=1,Name="Hindi"});
+            videoLangus.Add(new VideoLangu { id = 2, Name = "English" });
+            videoLangus.Add(new VideoLangu { id = 3, Name = "Urdu" });
+            return videoLangus;
+        }
     }
+}
+public class VideoLangu
+{
+   public  int id { get; set; }
+    public string Name { get; set; }
 }
