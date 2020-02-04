@@ -192,7 +192,7 @@
                 <div class="row">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
-                        <label for="Category"><b>Category</b></label>
+                        <label for="Category"><b>Category*</b></label>
                         <input class=" form-control" id="CategoryName" type="text" placeholder="Category" required />
                         <input type="hidden" class="categoryID" value="0" />
                         <hr />
@@ -205,16 +205,16 @@
                     <div class="row aa  MainDivs mt-2" id="question0" style="border: ridge" OrderNo="1">
                         <hr />
                         <div class="col-md-4">
-                            <label for="Title">Title</label>
+                            <label for="Title">Title*</label>
                             <input class="form-control VidTitle" type="text" placeholder="Title" required="required" />
                             <input type="hidden" class="videoID" value="0" />
                         </div>
                         <div class="col-md-4">
-                            <label for="Discription">Discription</label>
+                            <label for="Discription">Discription*</label>
                             <input class="form-control discript" type="text" placeholder="Discription" />
                         </div>
                         <div class="col-md-3">
-                            <label for="Link">Link</label>
+                            <label for="Link">Link*</label>
                             <input class="form-control Source" type="text" placeholder="Link" />
                         </div>
                         <div class="col-md-1">
@@ -344,7 +344,7 @@
                 var piority = ObjDiv.find('.checked').is(':checked');
                 var droupdown = ObjDiv.find('.droupdown').val();
                 var serialnumber = ObjDiv.attr('OrderNo');
-                var Restaurent = ObjDiv.find('.restaurent').is(':checked');
+                var Restaurant = ObjDiv.find('.restaurent').is(':checked');
                 var theater = ObjDiv.find('.theater').is(':checked');
                 var postpaid = ObjDiv.find('.postpaid').is(':checked');
                 var prepaid = ObjDiv.find('.prepaid').is(':checked');
@@ -355,7 +355,7 @@
                 console.log("piority=" + piority);
                 console.log("droupdown=" + droupdown);
                 console.log("serialnumber=" + serialnumber);
-                console.log("Restaurent=" + Restaurent);
+                console.log("Restaurant=" + Restaurant);
                 console.log("theater=" + theater);
                 console.log("postpaid=" + postpaid);
                 console.log("prepaid=" + prepaid);
@@ -379,7 +379,7 @@
                 ObjVideo.IsImp = piority;
                 ObjVideo.Languange = droupdown;
                 ObjVideo.serialnumber = serialnumber;
-                ObjVideo.Restaurent = Restaurent;
+                ObjVideo.Restaurant = Restaurant;
                 ObjVideo.theater = theater;
                 ObjVideo.postpaid = postpaid;
                 ObjVideo.prepaid = prepaid;
@@ -401,7 +401,9 @@
                     Secondhtml += '</button>';
                     Secondhtml += '</li>&nbsp';
                     Secondhtml += '</ul>';
-                    $("#MyCategory").append(strhtml + Secondhtml);
+                    if (VidCategory.Id == 0) {
+                        $("#MyCategory").append(strhtml + Secondhtml);
+                    }
                   
                 },
 
