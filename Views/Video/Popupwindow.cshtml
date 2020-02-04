@@ -84,7 +84,7 @@
                 <div class="row">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
-                        <label for="Category"><b>Category</b></label>
+                        <label for="Category"><b>Category*</b></label>
                         <input class=" form-control" id="CategoryName" value="@videoCategory.Name" type="text" placeholder="Category" required />
                         <input type="hidden" class="categoryID" value="@videoCategory.Id"/>
                         <hr />
@@ -98,16 +98,16 @@
                         <div class="row aa  MainDivs mt-2" id="question0" style="border: ridge" OrderNo="@video.SerialNumber">
                             <hr />
                             <div class="col-md-4">
-                                <label for="Title">Title</label>
+                                <label for="Title">Title*</label>
                                 <input class="form-control VidTitle" type="text" placeholder="Title" value="@video.Title" required="required" />
                                 <input type="hidden" class="videoID" value="@video.ID" />
                             </div>
                             <div class="col-md-4">
-                                <label for="Discription">Discription</label>
+                                <label for="Discription">Discription*</label>
                                 <input class="form-control discript" type="text" value="@video.Discription" placeholder="Discription" />
                             </div>
                             <div class="col-md-3">
-                                <label for="Link">Link</label>
+                                <label for="Link">Link*</label>
                                 <input class="form-control Source" value="@video.Link" type="text" placeholder="Link" />
                             </div>
                             <div class="col-md-1">
