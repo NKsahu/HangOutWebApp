@@ -117,7 +117,11 @@ namespace HangOut.Controllers
             }
             return status;
         }
+        public ActionResult FeedbkShortReport()
+        {
 
+            return View();
+        }
         
     }
 }
