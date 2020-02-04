@@ -1,4 +1,5 @@
-﻿@{
+﻿ 
+@{
     Layout = null;
 }
 
@@ -11,7 +12,7 @@
 <div class=" row aa">
     <ul class="nav p-1" style="font-size:60px" id="MyCategory" OrderNo="1">
         <li>
-            <button class="btn btn-danger button" style="font-size:25px" onclick="LoadCategoryPopup()">
+            <button class="btn btn-danger button" style="font-size:25px" onclick="LoadCategoryPopup('0')">
                 <i class="fa fa-plus "></i>
                 <span>ADD</span>
             </button>
@@ -23,6 +24,7 @@
     </ul>
 
 </div>
+ 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/jOAqp6ItPXg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
  
           
@@ -80,7 +82,7 @@
             }
         }
         var listvideocategory = [];
-        var strhtml = '<li><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999"> ';
+        var strhtml = '<li><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999"';
         LoadCategory();
         function LoadCategory() {
             //  $("#MyCategory").html('');
@@ -101,18 +103,18 @@
         function DispalyCategory(List) {
             for (var i = 0; i < List.length; i++) {
                 var ObjcatVideo = List[i];
-                var Secondhtml = '<span>' + ObjcatVideo.Name + '</span>';
+                var Secondhtml = "onclick='LoadCategoryPopup(\""+ObjcatVideo.Id+"\")'><span>" + ObjcatVideo.Name + "</span>";
                 Secondhtml += '</button>';
                 Secondhtml += '</li>&nbsp';
                 Secondhtml += '</ul>';
                 $("#MyCategory").append(strhtml + Secondhtml);
             }
         }
-        function LoadCategoryPopup() {
+        function LoadCategoryPopup(id) {
             $('#waiting').show();
             $.ajax({
                 type: 'GET',
-                url: "/Video/Popupwindow",
+                url: "/Video/Popupwindow?Id="+id,
                 success: function (data) {
                     makedpt("HG_Category");
                     $("#HG_Category > .modal-dialog > .modal-content > .modal-body").html(data);

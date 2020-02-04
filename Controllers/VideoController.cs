@@ -32,7 +32,8 @@ namespace HangOut.Controllers
             ObjCategory.Save();
             List<Video> videolist = ObjCategory.Videos;
 
-            foreach(var video in videolist)
+            videolist = videolist.FindAll(x => x.Title != null && x.Link != null);
+            foreach (var video in videolist)
             {
                 video.CategoryId = ObjCategory.Id;
                 video.Save();

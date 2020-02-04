@@ -75,15 +75,16 @@ namespace HangOut.Models.Common
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            VideoCategory listvideo = new VideoCategory();
+            VideoCategory ObjTmp = new VideoCategory();
             try
             {
-                string Query = "SELECT * FROM  VideoCategory where  ID=@ID";
+                string Query = "SELECT * FROM  VideoCategory where  ID="+Id;
                 cmd = new SqlCommand(Query, con.Con);
+                cmd.Parameters.AddWithValue("@ID", Id);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    VideoCategory ObjTmp = new VideoCategory();
+                     
                     ObjTmp.Id = SDR.GetInt32(0);
                     ObjTmp.Name = SDR.GetString(1);
                 }
@@ -91,7 +92,7 @@ namespace HangOut.Models.Common
             catch (System.Exception e) { e.ToString(); }
             finally { cmd.Dispose(); ; con.Con.Close(); }
 
-            return (listvideo);
+            return (ObjTmp);
         }
     }
 }
