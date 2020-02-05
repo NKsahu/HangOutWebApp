@@ -44,5 +44,22 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public JArray VideoList()
+        {
+            
+            List<VideoCategory> videoCategories = VideoCategory.GetAll();
+            JArray jArray = new JArray();
+            foreach(var category in videoCategories)
+            {
+                JObject jObject = new JObject();
+                List<Video> videolist = Video.GetAll(category.Id);
+                videolist = videolist.OrderBy(x => x.SerialNumber).ToList();
+                jObject.Add("CatName", category.Name);
+                jObject.Add("CatId", category.Id);
+                jObject.Add("Videos", JArray.FromObject(videolist));
+                jArray.Add(jObject);
+            }
+            return jArray;
+        }
     }
 }
