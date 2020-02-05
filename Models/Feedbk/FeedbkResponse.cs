@@ -47,7 +47,7 @@ namespace HangOut.Models.Feedbk
                 cmd.Parameters.AddWithValue("@NormalOkCnt", this.NormalOkCnt);
                 cmd.Parameters.AddWithValue("@FeedbkId", this.FeedbkId);
                 cmd.Parameters.AddWithValue("@ObjectiveOptions", this.ObjectiveOptions);
-                cmd.Parameters.AddWithValue("@FeedbkId", this.FeedbkId);
+                cmd.Parameters.AddWithValue("@CreateDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@CID", this.CID);
                 R = cmd.ExecuteNonQuery();
             }
