@@ -80,7 +80,28 @@ namespace HangOut.Controllers
                 feedBackQues = feedBackQues.FindAll(x => x.Status);
                 feedBackQues = feedBackQues.OrderBy(x => x.OrderNo).ToList();
                 respose.Add("Status", 200);
-                respose.Add("Questions", JArray.FromObject(feedBackQues));
+                JArray jArray = new JArray();
+                foreach(var question in feedBackQues)
+                {
+                    JObject jObject = new JObject();
+                    jObject.Add("QID", question.ID);
+                    jObject.Add("Title", question.Title);
+                    jObject.Add("QuestionType", question.QuestionType);
+                    jObject.Add("FeedBkFormID", question.FeedBkFormID);
+                    if(question.Title.Contains("ITEM FEEDBACK"))
+                    {
+                        jObject["Title"] = "ITEM FEEDBACK";
+                    }
+                    if (question.QuestionType == 1)
+                    {
+                        List<FeedbkObj> objectivesList = FeedbkObj.GetAll(question.ID);
+                        FeedbkObj firstt = objectivesList.FirstOrDefault();
+                        jObject.Add("ObjectiveType", firstt.ObjectiveType);
+                        jObject.Add("Objectives", JObject.FromObject(objectivesList));
+                    }
+                    jArray.Add(jObject);
+                 }
+                respose.Add("Questions", jArray);
             }
             else
             {
