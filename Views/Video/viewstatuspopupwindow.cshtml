@@ -105,12 +105,8 @@
                                             <h5><u>sdfdsf</u></h5>
                                         </button>
                                     </div>
-
-
-
-
                                     <div class="col-md-4"></div>
-                                    <div class="col-md-4"><button class="btn btn-primary  ">Learn Now</button></div>
+                                    <div class="col-md-4"><button class="btn btn-primary  " onclick="onevideo();">Learn Now</button></div>
 
                                     <div class="col-md-4"> <button class="btn btn-primary  ">Mark Completed</button></div>
                                 </div>
@@ -201,6 +197,11 @@
 
     </div>
 </div>
+<script>
+    function onevideo() {
+        var html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/PQmrmVs10X8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    }
+</script>
 <style>
     .card{
         height:80px;
