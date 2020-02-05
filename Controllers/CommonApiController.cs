@@ -3,7 +3,7 @@ using HangOut.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Linq;
-using HangOut.Models.DynamicList;
+using HangOut.Models.Feedbk;
 using System.Web.Mvc;
 using System;
 
@@ -88,9 +88,9 @@ namespace HangOut.Controllers
             }
             return respose;
         }
-        public JObject SubmitFeedBk(Int64 OID,Int64 SeatingId)
+        public JObject SubmitFeedBk(Int64 OID)
         {
-
+            
             return new JObject();
 
         }
