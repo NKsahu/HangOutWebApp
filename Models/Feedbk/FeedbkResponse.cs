@@ -30,12 +30,12 @@ namespace HangOut.Models.Feedbk
                 string Quary = "";
                 if (QID == 0)
                 {
-                    Quary = "Insert into FeedbkResponse values(@ResponseType,@FeedbkFormId,@StarCnt ,@Subject,@LikeCnt,@DislikeCnt,@NormalOkCnt,@FeedbkId,@ObjectiveOptions,@CreateDate,@CID);select SCOPE_IDENTITY();";
+                    Quary = "Insert into FeedbkResponse values(@QID,@ResponseType,@FeedbkFormId,@StarCnt ,@Subject,@LikeCnt,@DislikeCnt,@NormalOkCnt,@FeedbkId,@ObjectiveOptions,@CreateDate,@CID);select SCOPE_IDENTITY();";
                 }
-                else
-                {
-                    Quary = "Update FeedbkResponse Set ResponseType=@ResponseType,FeedbkFormId=@FeedbkFormId,StarCnt =@StarCnt ,Subject=@Subject,LikeCnt=@LikeCnt,DislikeCnt=@DislikeCnt,NormalOkCnt=@NormalOkCnt,FeedbkId=@FeedbkId,ObjectiveOptions=@ObjectiveOptions,CreateDate=@CreateDate,CID=@CID where QID=@QID ";
-                }
+                //else
+                //{
+                //    Quary = "Update FeedbkResponse Set ResponseType=@ResponseType,FeedbkFormId=@FeedbkFormId,StarCnt =@StarCnt ,Subject=@Subject,LikeCnt=@LikeCnt,DislikeCnt=@DislikeCnt,NormalOkCnt=@NormalOkCnt,FeedbkId=@FeedbkId,ObjectiveOptions=@ObjectiveOptions,CreateDate=@CreateDate,CID=@CID where QID=@QID ";
+                //}
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@QID", this.QID);
                 cmd.Parameters.AddWithValue("@ResponseType", this.ResponseType);
@@ -49,17 +49,7 @@ namespace HangOut.Models.Feedbk
                 cmd.Parameters.AddWithValue("@ObjectiveOptions", this.ObjectiveOptions);
                 cmd.Parameters.AddWithValue("@FeedbkId", this.FeedbkId);
                 cmd.Parameters.AddWithValue("@CID", this.CID);
-                if (this.QID == 0)
-                {
-                    R = Convert.ToInt32(cmd.ExecuteScalar());
-                    this.QID = R;
-                }
-                else
-                {
-                    R = cmd.ExecuteNonQuery();
-                    //this.CategoryID = Row;
-                }
-
+                R = cmd.ExecuteNonQuery();
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
