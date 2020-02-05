@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace HangOut.Models.Feedbk
 {
@@ -21,18 +19,14 @@ namespace HangOut.Models.Feedbk
             int R = 0;
             DBCon con = new DBCon();
             SqlCommand cmd = null;
-
             try
             {
                 string Quary = "";
-                if (ItemID == 0)
-                {
-                    Quary = "Insert into FeedbkItem values(@Rating,@Comment,@FeedbkFormID ,@FeedBkID,@ResponseType,@CreateOn,@CID);select SCOPE_IDENTITY();";
-                }
-                else
-                {
-                    Quary = "Update FeedbkItem Set Rating=@Rating,Comment=@Comment,FeedbkFormID =@FeedbkFormID ,FeedBkID=@FeedBkID,ResponseType=@ResponseType,CreateOn=@CreateOn,CID=@CID where ItemID=@ItemID ";
-                }
+                Quary = "Insert into FeedBkItem values(@ItemID,@Rating,@Comment,@FeedbkFormID ,@FeedBkID,@ResponseType,@CreateOn,@CID);";
+                //else
+                //{
+                //    Quary = "Update FeedBkItem Set Rating=@Rating,Comment=@Comment,FeedbkFormID =@FeedbkFormID ,FeedBkID=@FeedBkID,ResponseType=@ResponseType,CreateOn=@CreateOn,CID=@CID where ItemID=@ItemID ";
+                //}
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
                 cmd.Parameters.AddWithValue("@Rating", this.Rating);
@@ -41,17 +35,7 @@ namespace HangOut.Models.Feedbk
                 cmd.Parameters.AddWithValue("@FeedBkID", this.FeedBkID);
                 cmd.Parameters.AddWithValue("@CreateOn", DateTime.Now);
                 cmd.Parameters.AddWithValue("@CID", this.CID);
-                if (this.ItemID == 0)
-                {
-                    R = Convert.ToInt32(cmd.ExecuteScalar());
-                    this.ItemID = R;
-                }
-                else
-                {
-                    R = cmd.ExecuteNonQuery();
-                    //this.CategoryID = Row;
-                }
-
+                R = cmd.ExecuteNonQuery();
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
@@ -65,7 +49,7 @@ namespace HangOut.Models.Feedbk
             List<FeedbkItem> listfeedbk = new List<FeedbkItem>();
             try
             {
-                string Quary = "Select * From FeedbkItem ORDER BY ItemID  DESC";
+                string Quary = "Select * From FeedBkItem ORDER BY ItemID  DESC";
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

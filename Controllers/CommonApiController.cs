@@ -3,7 +3,7 @@ using HangOut.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Linq;
-using HangOut.Models.DynamicList;
+using HangOut.Models.Feedbk;
 using System.Web.Mvc;
 using System;
 
@@ -66,5 +66,38 @@ namespace HangOut.Controllers
 
             return result;
         }
+        //=========FEEDBACK API===========
+        public JObject FeedBack(Int64 OID)
+        {
+
+            HG_Orders hG_Orders = new HG_Orders().GetOne(OID);
+            HG_Tables_or_Sheat Seating = new HG_Tables_or_Sheat().GetOne(hG_Orders.Table_or_SheatId);
+            JObject respose = new JObject();
+            if (Seating.FDBKId > 0)// feedback applied in seating
+            {
+                FeedbkForm feedbkForm = FeedbkForm.GetOne(Seating.FDBKId);
+                List<FeedBackQue> feedBackQues = FeedBackQue.GetAll(feedbkForm.Id);
+                feedBackQues = feedBackQues.FindAll(x => x.Status);
+                feedBackQues = feedBackQues.OrderBy(x => x.OrderNo).ToList();
+                respose.Add("Status", 200);
+                respose.Add("Questions", JArray.FromObject(feedBackQues));
+            }
+            else
+            {
+                respose.Add("Status", 400);
+            }
+            return respose;
+        }
+        public JObject SubmitFeedBk(Int64 OID)
+        {
+            
+            return new JObject();
+
+        }
+
+
+
+
+
     }
 }
