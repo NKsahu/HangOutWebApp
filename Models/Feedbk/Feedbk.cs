@@ -28,7 +28,7 @@ namespace HangOut.Models.Feedbk
                     Quary = "Insert into FeedBk values(@OrgId,@OrderId,@SeatingId,@FeedbkFormId,@CreateOn);select SCOPE_IDENTITY();";
                 }else
                 {
-                    Quary = "Update FeedBk Set OrgId=@OrgId,OrderId=@OrderId,SeatingId=@SeatingId,FeedbkFormId=@FeedbkFormId,CreateOn=@CreateOn where FeedBkId=@FeedBkId ";
+                    Quary = "Update FeedBk Set OrgId=@OrgId,OrderId=@OrderId,SeatingId=@SeatingId,FeedbkFormId=@FeedbkFormId where FeedBkId=@FeedBkId";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@FeedBkId", this.FeedBkId);
@@ -36,16 +36,16 @@ namespace HangOut.Models.Feedbk
                 cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
                 cmd.Parameters.AddWithValue("@SeatingId", this.SeatingId);
                 cmd.Parameters.AddWithValue("@FeedbkFormId", this.FeedbkFormId);
-                cmd.Parameters.AddWithValue("@CreateOn", DateTime.Now);
                 if (this.FeedBkId == 0)
                 {
+                    cmd.Parameters.AddWithValue("@CreateOn", DateTime.Now);
                     R = Convert.ToInt32(cmd.ExecuteScalar());
                     this.FeedBkId = R;
                 }
                 else
                 {
                     R = cmd.ExecuteNonQuery();
-                    //this.CategoryID = Row;
+                    
                 }
 
             }
