@@ -97,7 +97,7 @@ namespace HangOut.Controllers
                         List<FeedbkObj> objectivesList = FeedbkObj.GetAll(question.ID);
                         FeedbkObj firstt = objectivesList.FirstOrDefault();
                         jObject.Add("ObjectiveType", firstt.ObjectiveType);
-                        jObject.Add("Objectives", JObject.FromObject(objectivesList));
+                        jObject.Add("Objectives", JArray.FromObject(objectivesList));
                     }
                     jArray.Add(jObject);
                  }
