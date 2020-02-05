@@ -25,10 +25,10 @@ namespace HangOut.Models.Feedbk
                 string Quary = "";
                 if(FeedBkId ==0)
                 {
-                    Quary = "Insert into Feedbk values(@OrgId,@OrderId,@SeatingId,@FeedbkFormId,@CreateOn);select SCOPE_IDENTITY();";
+                    Quary = "Insert into FeedBk values(@OrgId,@OrderId,@SeatingId,@FeedbkFormId,@CreateOn);select SCOPE_IDENTITY();";
                 }else
                 {
-                    Quary = "Update Feedbk Set OrgId=@OrgId,OrderId=@OrderId,SeatingId=@SeatingId,FeedbkFormId=@FeedbkFormId,CreateOn=@CreateOn where FeedBkId=@FeedBkId ";
+                    Quary = "Update FeedBk Set OrgId=@OrgId,OrderId=@OrderId,SeatingId=@SeatingId,FeedbkFormId=@FeedbkFormId,CreateOn=@CreateOn where FeedBkId=@FeedBkId ";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@FeedBkId", this.FeedBkId);
@@ -61,7 +61,7 @@ namespace HangOut.Models.Feedbk
             List<Feedbk> listfeedbk = new List<Feedbk>();
             try
             {
-                string Quary = "Select * From Feedbk ORDER BY FeedBkId  DESC";
+                string Quary = "Select * From FeedBk ORDER BY FeedBkId  DESC";
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 SDR = cmd.ExecuteReader();
                 while(SDR.Read())
@@ -78,7 +78,7 @@ namespace HangOut.Models.Feedbk
                 listfeedbk.Add(OBJfeedbk);
                 }
             }
-            catch (System.Exception e) { e.ToString(); }
+            catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); ; dBCon.Con.Close(); }
 
             return (listfeedbk);
