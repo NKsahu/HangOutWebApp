@@ -2007,7 +2007,7 @@ namespace HangOut.Controllers
                 Object.Add("TableSeatname", ObjTorS.Table_or_SheetName);
                 Object.Add("OutLetType", hG_OrganizationDetails.PaymentType);
                 Object.Add("OID", orders.OID);
-                Object.Add("Status", orders.Status);
+                Object.Add("Status", orders.Status); 
                 Object.Add("PayStatus",OrgType.PaymentMode(orders.PaymentStatus));
                 Object.Add("OrdAprvalSts", orders.OrderApprovlSts);
                 if (hG_OrganizationDetails.OrgTypes == "1")//restuarnt
