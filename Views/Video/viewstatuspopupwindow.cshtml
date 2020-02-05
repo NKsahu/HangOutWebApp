@@ -76,20 +76,20 @@
                             <li class="mt-2">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <button class="btn btn-dark form-control">
+                                        <button class="btn btn-dark form-control text-left">
                                             <h5><u>Title:</u></h5>
                                         </button>
                                     </div>
                                     <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
+                                        <button class="btn btn-secondary form-control text-left">
                                             <h5><u>FFEEDAS</u></h5>
                                         </button>
                                     </div>
                                     <div class="col-md-2">
-                                        <button class="btn btn-dark form-control"><h5><u> Discription:</u></h5></button>
+                                        <button class="btn btn-dark form-control text-left"><h5><u>Discription:</u></h5></button>
                                     </div>
                                     <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
+                                        <button class="btn btn-secondary form-control text-left">
                                             <h5><u>fgsdsd</u></h5>
                                         </button>
                                     </div>
@@ -98,17 +98,23 @@
 
                                     </div>
                                     <div class="col-md-2">
-                                        <button class="btn btn-dark form-control"><h5><u>link:</u></h5></button>
+                                        <button class="btn btn-dark form-control text-left"><h5><u>link:</u></h5></button>
                                     </div>
                                     <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
+                                        <button class="btn btn-secondary form-control text-left">
                                             <h5><u>sdfdsf</u></h5>
                                         </button>
                                     </div>
                                     <div class="col-md-4"></div>
-                                    <div class="col-md-4"><button class="btn btn-primary  " onclick="onevideo();">Learn Now</button></div>
+                                    <div class="col-md-4"><button class="btn btn-primary  " onclick="onevideo();" >Learn Now</button>
+                                                          <button class="btn btn-primary" id="feku"   aria-label="Close" style="display:none" onclick="closevideo();">
+                                                              <span aria-hidden="true">&times;</span>
+                                                          </button>
+                                    </div> 
+                                    <div class="col-md-4"><button class="btn btn-primary  ">Mark Completed</button></div>
+                                    <div class="col-md-6 collapse" id="test"  >
 
-                                    <div class="col-md-4"> <button class="btn btn-primary  ">Mark Completed</button></div>
+                                    </div>
                                 </div>
                             </li>
                             <li class="mt-2">
@@ -199,8 +205,25 @@
 </div>
 <script>
     function onevideo() {
-        var html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/PQmrmVs10X8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+       
+       var obj = {"video": {
+           "value": "<iframe title='YouTube video player' type=\"text/html\" width='640' height='390' src='https://www.youtube.com/embed/PgReI84lcqE' frameborder='0' allowFullScreen></iframe>"
+       }
+       } 
+        $("#test").html(obj.video.value);
+        $("#feku").show(); $("#test").show();
     }
+    function closevideo() {
+        $("#feku").hide();
+        $("#test").hide();
+    }
+    //var obj = {
+    //    "video": {
+    //        "value": "<iframe title='YouTube video player' type=\"text/html\" width='640' height='390' src='http://www.youtube.com/embed/W-Q7RMpINVo' frameborder='0' allowFullScreen></iframe>"
+    //    }
+    //}
+
+    //$("#test").html(obj.video.value);
 </script>
 <style>
     .card{
