@@ -22,45 +22,11 @@
         
         <div class="row mt-2">
             <div class="col-md-3">
-                <ul class="nav-fill nav-justified" style="list-style-type:none;padding-left:0">
+                <ul class="nav-fill nav-justified" style="list-style-type:none;padding-left:0" id="CategoryList">
                     <li class="card">
                         <div class="row">
                             <div class="col-md-9 pt-3 ">
                                 <button class="btn btn-success form-control" style="font-size:25px"> Video MP4</button>
-                            </div>
-                            <div class="col-md-3 pt-4">
-                                <p><span>60%</span></p>
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="card">
-                        <div class="row">
-                            <div class="col-md-9 pt-3 ">
-                                <button class="btn btn-success form-control" style="font-size:25px"> Video MP3</button>
-                            </div>
-                            <div class="col-md-3 pt-4">
-                                <p><span>100%</span></p>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="card">
-                        <div class="row">
-                            <div class="col-md-9 pt-3">
-                                <button class="btn btn-success form-control" style="font-size:25px"> Video HD</button>
-                            </div>
-                            <div class="col-md-3 pt-4">
-                                <p><span>60%</span></p>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="card">
-                        <div class="row">
-                            <div class="col-md-9 pt-3">
-                                <button class="btn btn-success form-control" style="font-size:25px"> Video HQ</button>
                             </div>
                             <div class="col-md-3 pt-4">
                                 <p><span>60%</span></p>
@@ -72,7 +38,7 @@
             <div class="col-md-9">
                 <div class="scrollbar" id="style-1">
                     <div class="force-overflow">
-                        <ol class="nav-fill nav-justified">
+                        <ol class="nav-fill nav-justified" id="VideoList">
                             <li class="mt-2">
                                 <div class="row">
                                     <div class="col-md-2">
@@ -117,84 +83,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="mt-2">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <button class="btn btn-dark form-control">
-                                            <h5><u>Title:</u></h5>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
-                                            <h5><u>FFEEDAS</u></h5>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-dark form-control"><h5><u>Discription:</u></h5></button>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
-                                            <h5><u>fgsdsd</u></h5>
-                                        </button>
-                                    </div>
-                                    <div class=" col-md-1 text-center">
-                                        <i class=" fa fa-align-right"></i>
-
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-dark form-control"><h5><u>link:</u></h5></button>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
-                                            <h5><u>sdfdsf</u></h5>
-                                        </button>
-                                    </div>
-
-
-                                    <div class="col-md-4"></div>
-                                    <div class="col-md-4"><button class="btn btn-primary  ">Learn Now</button></div>
-                                    <div class="col-md-4"><button class="btn btn-primary  ">Mark Completed</button></div>
-                                </div>
-                            </li>
-                            <li class="mt-2">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <button class="btn btn-dark form-control">
-                                            <h5><u>Title:</u></h5>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
-                                            <h5><u>FFEEDAS</u></h5>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-dark form-control"><h5><u> Discription:</u></h5></button>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
-                                            <h5><u>fgsdsd</u></h5>
-                                        </button>
-                                    </div>
-                                    <div class=" col-md-1 text-center">
-                                        <i class=" fa fa-align-right"></i>
-
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-dark form-control"><h5><u>link</u></h5></button>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control">
-                                            <h5><u>sdfdsf</u></h5>
-                                        </button>
-                                    </div>
-
-
-                                    <div class="col-md-4"></div>
-                                    <div class="col-md-4"><button class="btn btn-primary ">Learn Now</button></div>
-                                    <div class="col-md-4"><button class="btn btn-primary ">Mark Completed</button></div>
-                                </div>
-                            </li>
+                            
                         </ol>
                     </div>
                 </div>
@@ -217,6 +106,95 @@
         $("#feku").hide();
         $("#test").hide();
     }
+    LoadVideos();
+    function LoadVideos() {
+        $.ajax({
+            type: 'POST',
+            url: "/Video/VideoList",
+            contentType: "application/json",
+            success: function (data) {
+                var CategoryList = JSON.parse(data);
+                $("#CategoryList").html('');
+                $("#VideoList").html('');
+                for (var i = 0; i < CategoryList.length; i++) {
+                    var ObjCategory = CategoryList[i];
+                    var CatName = ObjCategory.CatName;
+                    var VideoList = ObjCategory.Videos;
+                    var html = ' <li class="card">';
+                    html += ' < div class="row" >';
+                    html += '<div class="col-md-9 pt-3 ">';
+                    html += '<button class="btn btn-success form-control" style="font-size:25px">"' + ObjCategory.CatName + '"</button>   ';        
+                    html += '        </div>';
+                    html += ' < div class="col-md-3 pt-4" >';
+                    html += ' < p > <span>0</span></p >';
+                    html += '</div>';
+                    html += '</div >';
+                    html += ' </li >';
+                    for (var j = 0; j < VideoList.length; j++) {
+                        var VideoObj = VideoList[j];
+                        var Title = VideoObj.Title;
+                        var Discription = VideoObj.Discription;
+                        var Link = VideoObj.Link;
+                        var Languange = VideoObj.Languange;
+                        var SerialNumber = VideoObj.SerialNumber;
+                        var IsImp = VideoObj.IsImp;
+                        videohtml = '<li class="mt-2">';
+                        videohtml += '<div class="row">';
+                        videohtml += '<div class="col-md-2">';
+                        videohtml += '    <button class="btn btn-dark form-control text-left">';
+                        videohtml += '        <h5><u>"' + VideoObj.Title + '"</u></h5>';
+                        videohtml += '    </button>';
+                        videohtml += '</div>';
+                        videohtml += '<div class="col-md-9">';
+                        videohtml += '    <button class="btn btn-secondary form-control text-left">';
+                        videohtml += '        <h5><u>FFEEDAS</u></h5>';
+                        videohtml += '    </button>';
+                        videohtml += '</div>';
+                        videohtml += '<div class="col-md-2">';
+                        videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>Discription:</u></h5></button>';
+                        videohtml += '</div>';
+                        videohtml += '<div class="col-md-9">';
+                        videohtml += '    <button class="btn btn-secondary form-control text-left">';
+                        videohtml += '        <h5><u>fgsdsd</u></h5>';
+                        videohtml += '    </button>';
+                        videohtml += '</div>';
+                        videohtml += '<div class=" col-md-1 text-center">';
+                        videohtml += '    <i class=" fa fa-align-right"></i>';
+                        videohtml += '</div>';
+                        videohtml += '<div class="col-md-2">';
+                        videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>link:</u></h5></button>';
+                        videohtml += '</div>';
+                        videohtml += '<div class="col-md-9">';
+                        videohtml += '    <button class="btn btn-secondary form-control text-left">';
+                        videohtml += '        <h5><u>sdfdsf</u></h5>';
+                        videohtml += '    </button>';
+                        videohtml += '</div>';
+                        videohtml += '<div class="col-md-4"></div>';
+                        videohtml += '<div class="col-md-4"><button class="btn btn-primary  " onclick="onevideo();" >Learn Now</button>';
+                        videohtml += '<button class="btn btn-primary" id="feku" aria-label="Close" style="display:none" onclick="closevideo();">';
+                        videohtml += '<span aria-hidden="true">&times;</span>';
+                        videohtml += '</button>';
+                        videohtml += '</div>';
+                        videohtml += '<div class="col-md-4"><button class="btn btn-primary  ">Mark Completed</button></div>';
+                        videohtml += '<div class="col-md-6 collapse" id="test">';
+                        videohtml += '</div>';
+                        videohtml += '</div>';
+                        videohtml += '</li>';
+                        
+                        $("#VideoList").append(videohtml);
+                    }
+                    $("#CategoryList").append(html);
+                }
+                
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+
 </script>
 <style>
     .card{
