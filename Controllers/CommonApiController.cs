@@ -88,9 +88,10 @@ namespace HangOut.Controllers
                     jObject.Add("Title", question.Title);
                     jObject.Add("QuestionType", question.QuestionType);
                     jObject.Add("FeedBkFormID", question.FeedBkFormID);
-                    if(question.Title.Contains("ITEM FEEDBACK"))
+                    if(question.Title.Contains("ITEM FEEDBACK") && (question.QuestionType==0|| question.QuestionType==3))
                     {
                         jObject["Title"] = "ITEM FEEDBACK";
+
                     }
                     if (question.QuestionType == 1)
                     {
