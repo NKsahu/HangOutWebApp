@@ -41,7 +41,7 @@ namespace HangOut.Models.Feedbk
             finally { cmd.Dispose(); con.Con.Close(); }
             return R;
         }
-        public List<FeedbkItem> GetAll()
+        public static List<FeedbkItem> GetAll()
         {
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;

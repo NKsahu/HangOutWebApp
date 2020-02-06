@@ -1,11 +1,153 @@
-﻿
+﻿@using HangOut.Models.Feedbk;
+@using HangOut.Models.Common;
 @{
     Layout = null;
+    if (Request.QueryString["Fdate"]!=null&& Request.QueryString["Tdate"] != null)
+    {
+        var UserInfo = Request.Cookies["UserInfo"];
+        int OrgId = int.Parse(UserInfo["OrgId"]);
+        DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        List<Feedbk> feedbks = Feedbk.GetAll(OrgId, FromDate, Todate);
+        List<FeedbkItem> feedbkItems=FeedbkItem.
+
+    }
+
+
 }
+<style>
+    th{
+        background-color:deepskyblue;
+    }
+</style>
+    <div class="card-header">
+        <h3>User FeedBack</h3>
+    </div>
+    <div class="card">
+        <!--item feedback-->
+        <table class="table table-hover"  style="width:100%">
+            <thead>
+                <tr>
+                    <th>Item FeedBack</th>
+                    <th>4.1 / 5 </th>
+                    <th>Ratings</th>
+                    <th>Served </th>
+                    <th>Qty</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Item FeedBack</td>
+                    <td>4.1 / 5 </td>
+                    <td>Ratings</td>
+                    <td>Served </td>
+                    <td>Qty</td>
+                    <td></td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <!--STAR TYPE-->
+        <table class="table table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Rate our Staff Behaviour</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>Details</td>
+                </tr>
+            </tbody>
+
+        </table>
 
 
-<div class="col" id="List">
+        <!--START & SUBJECTIVE-->
+        <table class="table table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>About Staff Behaviour</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td>Details</td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <!--SUBJECTIVE-->
+        <table class="table table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Rate our Staff Behaviour</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+        </table>
+
+        <!--LIKE DISLIKE OK-->
+        <table class="table table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Rate our Staff Behaviour</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>LIKED 0   DISLIKE 0  NORMAL 0</td>
+                    <td>Details</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!--MCQ-->
+        <table class="table table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Rate our Staff Behaviour</th>
+                    <th>Details </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>LIKED 0   DISLIKE 0  NORMAL 0</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+        <!--SUGGESTION FEEDBACK-->
+        <table class="table table-hover" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Rate our Staff Behaviour</th>
+                    <th>Details </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>LIKED 0   DISLIKE 0  NORMAL 0</td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
 
 
+<script>
+    function ShowDetails() {
 
-</div>
+    }
+
+</script>
