@@ -67,7 +67,7 @@ namespace HangOut.Controllers
             return result;
         }
         //=========FEEDBACK API===========
-        public JObject FeedBack(Int64 OID)
+        public JObject FeedBack(Int64 OID,int CID)
         {
 
             HG_Orders hG_Orders = new HG_Orders().GetOne(OID);
@@ -91,7 +91,19 @@ namespace HangOut.Controllers
                     if(question.Title.Contains("ITEM FEEDBACK") && (question.QuestionType==0|| question.QuestionType==3))
                     {
                         jObject["Title"] = "ITEM FEEDBACK";
-
+                        List<HG_OrderItem> hG_OrderItems = new HG_OrderItem().GetAll(OID);
+                        hG_OrderItems = hG_OrderItems.FindAll(x => x.Status == 3);
+                        hG_OrderItems = hG_OrderItems.FindAll(x => x.OrdById == CID);
+                        JArray itemfeedbks = new JArray();
+                        for(int i=0; i<hG_OrderItems.Count; i++)
+                        {
+                            HG_Items Objfood = new HG_Items().GetOne(hG_OrderItems[i].FID);
+                            JObject ItemJobj = new JObject();
+                            ItemJobj.Add("ItmId", hG_OrderItems[i].FID);//FID is ItemId
+                            ItemJobj.Add("ItmName", Objfood.Items);
+                            itemfeedbks.Add(ItemJobj);
+                        }
+                        jObject.Add("Items", itemfeedbks);
                     }
                     if (question.QuestionType == 1)
                     {
