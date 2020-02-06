@@ -153,7 +153,7 @@
                         var ObjmarkVideo = VideoMark.find(x => {
                             return x.VideoID == VideoId;
                         });
-                        var markCmplthtml = "<div class='col-md-4'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
+                        var markCmplthtml = "<div class='col-md-4' id='Mark'"+VideoId+"'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
                         if (ObjmarkVideo != null && ObjmarkVideo != undefined) {
                             markCmplthtml ="<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
 
@@ -221,6 +221,11 @@
             contentType: "application/json",
             success: function (data) {
                 $('#waiting').hide();
+                var mark = {};
+                mark.VideoID = videoId;
+                VideoMark.push(mark);
+                var markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
+                $("#Mark" + videoId).html(markCmplthtml);
             },
 
             error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -256,7 +261,7 @@
             var ObjmarkVideo = VideoMark.find(x => {
                 return x.VideoID == VideoId;
             });
-            var markCmplthtml = "<div class='col-md-4'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
+            var markCmplthtml = "<div class='col-md-4 ' id='Mark"+VideoId+"'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
             if (ObjmarkVideo != null && ObjmarkVideo != undefined) {
                 markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
             }
