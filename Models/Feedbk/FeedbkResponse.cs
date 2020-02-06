@@ -57,7 +57,7 @@ namespace HangOut.Models.Feedbk
             finally { cmd.Dispose(); con.Con.Close(); }
             return R;
         }
-        public static List<FeedbkResponse> GetAll()
+        public static List<FeedbkResponse> GetAll(int Orgid,DateTime Fdate,DateTime Tdate)
         {
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
@@ -65,7 +65,11 @@ namespace HangOut.Models.Feedbk
             List<FeedbkResponse> listfeedbk = new List<FeedbkResponse>();
             try
             {
-                string Quary = "Select * From FeedbkResponse ORDER BY QID  DESC";
+                string Quary = "Select * From FeedbkResponse where OrgId="+Orgid;
+                if (Fdate != null && Tdate != null)
+                {
+                    Quary += "and CreateDate between '" + Fdate.ToString("MM/dd/yyyy") + "' and '" + Tdate.ToString("MM/dd/yyyy HH:mm:ss") + "";
+                }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
