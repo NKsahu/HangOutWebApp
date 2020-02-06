@@ -14,6 +14,7 @@ namespace HangOut.Models.Feedbk
        public int  ResponseType { get; set; }
        public DateTime CreateOn { get; set; }
        public int CID { get; set; }
+        public int OrgId { get; set; }
         public int save()
         {
             int R = 0;
@@ -22,7 +23,7 @@ namespace HangOut.Models.Feedbk
             try
             {
                 string Quary = "";
-                Quary = "Insert into FeedBkItem values(@ItemID,@Rating,@Comment,@FeedbkFormID ,@FeedBkID,@ResponseType,@CreateOn,@CID);";
+                Quary = "Insert into FeedBkItem values(@ItemID,@Rating,@Comment,@FeedbkFormID ,@FeedBkID,@ResponseType,@CreateOn,@CID,@OrgId);";
                 //else
                 //{
                 //    Quary = "Update FeedBkItem Set Rating=@Rating,Comment=@Comment,FeedbkFormID =@FeedbkFormID ,FeedBkID=@FeedBkID,ResponseType=@ResponseType,CreateOn=@CreateOn,CID=@CID where ItemID=@ItemID ";
@@ -35,6 +36,7 @@ namespace HangOut.Models.Feedbk
                 cmd.Parameters.AddWithValue("@FeedBkID", this.FeedBkID);
                 cmd.Parameters.AddWithValue("@CreateOn", DateTime.Now);
                 cmd.Parameters.AddWithValue("@CID", this.CID);
+                cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 R = cmd.ExecuteNonQuery();
             }
             catch (Exception e) { e.ToString(); }
@@ -64,6 +66,7 @@ namespace HangOut.Models.Feedbk
                     OBJfeedbk.FeedBkID= SDR.GetInt32(4);
                     OBJfeedbk.CreateOn= SDR.GetDateTime(5);
                     OBJfeedbk.CID= SDR.GetInt32(6);
+                    OBJfeedbk.OrgId = SDR.GetInt32(7);
                     listfeedbk.Add(OBJfeedbk);
                 }
             }
