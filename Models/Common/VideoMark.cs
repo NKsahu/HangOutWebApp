@@ -49,7 +49,7 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); Con.Con.Close(); }
             return Row;
         }
-        public static List<VideoMark> GetAll()
+        public static List<VideoMark> GetAll(int CID)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -57,13 +57,12 @@ namespace HangOut.Models.Common
             List<VideoMark> listvideo = new List<VideoMark>();
             try 
             {
-                string Query = "Select *From VideoMark ORDER BY  ID DESC";
+                string Query = "Select * From VideoMark where CID="+CID;
                 cmd = new SqlCommand(Query, con.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
                     VideoMark ObjTmp = new VideoMark();
-                    ObjTmp.ID = SDR.GetInt32(0);
                     ObjTmp.VideoID = SDR.GetInt32(1);
                     ObjTmp.CID = SDR.GetInt32(2);
                     listvideo.Add(ObjTmp);
