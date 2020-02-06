@@ -1,7 +1,7 @@
 ﻿@{ Layout = null;}
 <div class="card">
     <div class="card-header">
-        <div class="row">
+        @*<div class="row">
             <div class="col-md-6">
 
             </div>
@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
     <div class="card-body">
         
@@ -91,6 +91,7 @@
 </div>
 <script>
     var VideosList = [];
+    var VideoMark = [];
     function PlayVideo(id) {
         var ObjVideo = VideosList.find(x => {
             return x.ID == id;
@@ -119,7 +120,9 @@
             url: "/Video/VideoList",
             contentType: "application/json",
             success: function (data) {
-                var CategoryList = JSON.parse(data);
+                var objects = JSON.parse(data);
+                var CategoryList = objects.CategoryList;
+                VideoMark = objects.videomarks;
                // $("#CategoryList").html('');
                 $("#VideoList").html('');
                 for (var i = 0; i < CategoryList.length; i++) {
@@ -143,6 +146,19 @@
                         var SerialNumber = VideoObj.SerialNumber;
                         var IsImp = VideoObj.IsImp;
                         var VideoId = VideoObj.ID;
+                        var icons = '<i class=" fa fa-align-right"></i>';
+                        if (IsImp == true) {
+                            icons = '<i class="fas fa-star" style="color:green;font-size:40px"></i>';
+                        }
+                        var ObjmarkVideo = VideoMark.find(x => {
+                            return x.VideoID == VideoId;
+                        });
+                        var markCmplthtml = "<div class='col-md-4'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
+                        if (ObjmarkVideo != null && ObjmarkVideo != undefined) {
+                            markCmplthtml ="<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
+
+                        }
+                        
                         var  videohtml = '<li class="mt-2">';
                         videohtml += '<div class="row">';
                         videohtml += '<div class="col-md-2">';
@@ -164,7 +180,7 @@
                         videohtml += '    </button>';
                         videohtml += '</div>';
                         videohtml += '<div class=" col-md-1 text-center">';
-                        videohtml += '    <i class=" fa fa-align-right"></i>';
+                        videohtml += icons;
                         videohtml += '</div>';
                         videohtml += '<div class="col-md-2">';
                         videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>link:</u></h5></button>';
@@ -176,10 +192,9 @@
                         videohtml += '</div>';
                         videohtml += '<div class="col-md-4"></div>';
                         videohtml += "<div class='col-md-4'><button class='btn btn-primary' onclick='PlayVideo(\"" + VideoId + "\");'>Learn Now</button>&nbsp;&nbsp;";
-                         
                         videohtml += "<button class='btn btn-primary ' id='Btn"+VideoId+"' aria-label='Close' style='display:none' onclick='StopVideo(\"" + VideoId +"\");'>";
                         videohtml += '<span aria-hidden="true">&times;</span></button></div>';
-                        videohtml += '  <div class="col-md-4"><button class="btn btn-primary  ">Mark Completed</button></div>';
+                        videohtml += markCmplthtml;
                         videohtml += '  <div class="col-md-6 collapse '+VideoId+'">';
                         videohtml += '  </div>';
                         videohtml += '</div>';
@@ -196,6 +211,22 @@
             }
         });
 
+    }
+    function markComplete(videoId)
+    {
+        $('#waiting').show();
+        $.ajax({
+            type: 'POST',
+            url: "/Video/MarkComplete?videoId=" + videoId,
+            contentType: "application/json",
+            success: function (data) {
+                $('#waiting').hide();
+            },
+
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
     }
     function ShowVideso(CatId) {
         var CurrentVideos = [];
@@ -216,8 +247,19 @@
             var Link = VideoObj.Link;
             var Languange = VideoObj.Languange;
             var SerialNumber = VideoObj.SerialNumber;
-            var IsImp = VideoObj.IsImp;
             var VideoId = VideoObj.ID;
+            var IsImp = VideoObj.IsImp;
+            var icons = '<i class=" fa fa-align-right"></i>';
+            if (IsImp == true) {
+                icons = '<i class="fas fa-star" style="color:green;font-size:40px"></i>';
+            }
+            var ObjmarkVideo = VideoMark.find(x => {
+                return x.VideoID == VideoId;
+            });
+            var markCmplthtml = "<div class='col-md-4'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
+            if (ObjmarkVideo != null && ObjmarkVideo != undefined) {
+                markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
+            }
             var videohtml = '<li class="mt-2">';
             videohtml += '<div class="row">';
             videohtml += '<div class="col-md-2">';
@@ -239,7 +281,7 @@
             videohtml += '    </button>';
             videohtml += '</div>';
             videohtml += '<div class=" col-md-1 text-center">';
-            videohtml += '    <i class=" fa fa-align-right"></i>';
+            videohtml += icons;
             videohtml += '</div>';
             videohtml += '<div class="col-md-2">';
             videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>Language:</u></h5></button>';
@@ -253,7 +295,7 @@
             videohtml += "<div class='col-md-4'><button class='btn btn-primary' onclick='PlayVideo(\"" + VideoId + "\");'>Learn Now</button>&nbsp;&nbsp;";
             videohtml += "<button class='btn btn-primary ' id='Btn" + VideoId + "' aria-label='Close' style='display:none' onclick='StopVideo(\"" + VideoId + "\");'>";
             videohtml += '<span aria-hidden="true">&times;</span></button></div>';
-            videohtml += '  <div class="col-md-4"><button class="btn btn-primary  ">Mark Completed</button></div>';
+            videohtml += markCmplthtml;
             videohtml += '  <div class="col-md-6 collapse ' + VideoId + '">';
             videohtml += '  </div>';
             videohtml += '</div>';

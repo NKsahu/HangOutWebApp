@@ -44,12 +44,15 @@ namespace HangOut.Controllers
         {
             return View();
         }
-        public JArray VideoList()
+        public JObject VideoList()
         {
-            
             List<VideoCategory> videoCategories = VideoCategory.GetAll();
+            JObject response = new JObject();
+            var UserInfo = Request.Cookies["UserInfo"];
+            int CID = int.Parse(UserInfo["UserCode"]);
+            List<VideoMark> videomarks = VideoMark.GetAll(CID);
             JArray jArray = new JArray();
-            foreach(var category in videoCategories)
+            foreach (var category in videoCategories)
             {
                 JObject jObject = new JObject();
                 List<Video> videolist = Video.GetAll(category.Id);
@@ -59,7 +62,21 @@ namespace HangOut.Controllers
                 jObject.Add("Videos", JArray.FromObject(videolist));
                 jArray.Add(jObject);
             }
-            return jArray;
+            response.Add("CategoryList", jArray);
+            response.Add("videomarks", JArray.FromObject(videomarks));
+            return response;
+        }
+        public JObject MarkComplete(int videoId)
+        {
+            var UserInfo = Request.Cookies["UserInfo"];
+            int CID = int.Parse(UserInfo["UserCode"]);
+            VideoMark videoMark = new VideoMark();
+            videoMark.CID = CID;
+            videoMark.VideoID = videoId;
+             videoMark.Save();
+            JObject responce = new JObject();
+            responce.Add("Status", 200);
+            return responce;
         }
     }
 }
