@@ -19,6 +19,7 @@ namespace HangOut.Models.Feedbk
         public string ObjectiveOptions {get;set;}
         public DateTime  CreateDate { get; set; }
         public int CID { get; set; }
+        public int OrgId { get; set; }
         public int save()
         {
             int R = 0;
@@ -30,7 +31,7 @@ namespace HangOut.Models.Feedbk
                 string Quary = "";
                 if (QID == 0)
                 {
-                    Quary = "Insert into FeedbkResponse values(@QID,@ResponseType,@FeedbkFormId,@StarCnt ,@Subject,@LikeCnt,@DislikeCnt,@NormalOkCnt,@FeedbkId,@ObjectiveOptions,@CreateDate,@CID);select SCOPE_IDENTITY();";
+                    Quary = "Insert into FeedbkResponse values(@QID,@ResponseType,@FeedbkFormId,@StarCnt ,@Subject,@LikeCnt,@DislikeCnt,@NormalOkCnt,@FeedbkId,@ObjectiveOptions,@CreateDate,@CID,@OrgId);";
                 }
                 //else
                 //{
@@ -49,13 +50,14 @@ namespace HangOut.Models.Feedbk
                 cmd.Parameters.AddWithValue("@ObjectiveOptions", this.ObjectiveOptions);
                 cmd.Parameters.AddWithValue("@CreateDate", DateTime.Now);
                 cmd.Parameters.AddWithValue("@CID", this.CID);
+                cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 R = cmd.ExecuteNonQuery();
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
             return R;
         }
-        public List<FeedbkResponse> GetAll()
+        public static List<FeedbkResponse> GetAll(int Orgid,DateTime Fdate,DateTime Tdate)
         {
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
@@ -63,13 +65,15 @@ namespace HangOut.Models.Feedbk
             List<FeedbkResponse> listfeedbk = new List<FeedbkResponse>();
             try
             {
-                string Quary = "Select * From FeedbkResponse ORDER BY QID  DESC";
+                string Quary = "Select * From FeedbkResponse where OrgId="+Orgid;
+                if (Fdate != null && Tdate != null)
+                {
+                    Quary += "and CreateDate between '" + Fdate.ToString("MM/dd/yyyy") + "' and '" + Tdate.ToString("MM/dd/yyyy HH:mm:ss") + "";
+                }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-
-
                     FeedbkResponse OBJfeedbk = new FeedbkResponse();
                     OBJfeedbk.QID = SDR.GetInt32(0);
                     OBJfeedbk.ResponseType = SDR.GetInt32(1);
@@ -83,6 +87,7 @@ namespace HangOut.Models.Feedbk
                     OBJfeedbk.ObjectiveOptions = SDR.GetString(9);
                     OBJfeedbk.CreateDate = SDR.GetDateTime(10);
                     OBJfeedbk.CID = SDR.GetInt32(11);
+                    OBJfeedbk.OrgId= SDR.GetInt32(12);
                     listfeedbk.Add(OBJfeedbk);
                 }
             }

@@ -24,13 +24,21 @@
         </div>
     </div>
 </div>
+<div class="col" id="List">
+    <div class="card-header">
+        <h3>User FeedBack</h3>
+    </div>
+<div class="card">
+
+</div>
+</div>
 <script>
     function Search() {
         $("#waiting").show();
         var Fdate = $("#Fdate").val();
         var Tdate = $("#Tdate").val();
         $.ajax({
-            url: "/Reports/JoinFoodDo?Fdate=" + Fdate + "&Tdate=" + Tdate,
+            url: "/FeedBack/FeedbkShortReport?Fdate=" + Fdate + "&Tdate=" + Tdate,
             type: "GET",
             success: function (data) {
                 $("#waiting").hide();
