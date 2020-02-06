@@ -1,5 +1,6 @@
 ﻿@using HangOut.Models.Feedbk;
 @using HangOut.Models.Common;
+@using HangOut.Models;
 @{
     List<FeedbkItem> feedbkItems = new List<FeedbkItem>();
     List<FeedbkResponse> feedbkResponses = new List<FeedbkResponse>();
@@ -23,7 +24,7 @@
             SumOfRatingByCID += ratings.Key * ratings.ToList().Count;
         }
         double TotalItemRating = SumOfRatingByCID / TotalPerson;
-        var ResponseByQID = feedbkResponses.GroupBy(x => x.QID);
+        var ResponseByType = feedbkResponses.GroupBy(x => x.ResponseType);
 
 <style>
  th {
@@ -37,114 +38,153 @@
             <!--item feedback-->
             @if (TotalPerson > 0)
             {
-            <table class="table table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Item FeedBack</th>
-                        <th>@TotalItemRating.ToString("0.00") / 5 </th>
-                        <th>Ratings</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{ 
-                        var GroupByItems = OnlyRatingItems.GroupBy(x => x.ItemID);
-                        foreach(var items in GroupByItems)
-                        {
-
-
+                <table class="table table-hover" style="width:100%">
+                    <thead>
                         <tr>
-                        <td>Item FeedBack</td>
-                        <td>4.1 / 5 </td>
-                        <td>Ratings</td>
-                        <td></td>
-                       </tr>
+                            <th>Item FeedBack</th>
+                            <th>@TotalItemRating.ToString("0.00") / 5 </th>
+                            <th>Ratings</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var GroupByItems = OnlyRatingItems.GroupBy(x => x.ItemID);
+                            foreach (var items in GroupByItems)
+                            {
+                                var itemlist = items.ToList();
+                                var ObjItm = itemlist.FirstOrDefault();
+                                var ItemGrpByRatng = itemlist.GroupBy(x => x.Rating);
+                                var SumOfRating = 0.00;
+                                HG_Items hG_Items = new HG_Items().GetOne(ObjItm.ItemID);
+                                foreach (var ratings in ItemGrpByRatng)
+                                {
+                                    SumOfRating += ratings.Key * ratings.ToList().Count;
+                                }
+                                double ItemRating = SumOfRating / itemlist.Count;
+                                <tr>
+                                    <td>@hG_Items.Items</td>
+                                    <td>@ItemRating.ToString("0.00") / 5 </td>
+                                    <td>@itemlist.Count</td>
+                                    <td></td>
+                                </tr>
+                            }
+
                         }
 
+                    </tbody>
+
+                </table>
+            }
+
+            @foreach (var reponses in ResponseByType)
+            {
+                if (reponses.Key == 0)
+                {
+                    var Questions = reponses.ToList();
+                    var GroupByQuestions = Questions.GroupBy(x => x.QID);
+
+                    foreach (var question in GroupByQuestions)
+                    {
+                        var questionlist = question.ToList();
+                        var questionrating = questionlist.GroupBy(x => x.StarCnt);
+                        var sumOfRating = 0.00;
+                        foreach (var ratings in questionrating)
+                        {
+                            sumOfRating += ratings.Key * ratings.ToList().Count;
+                        }
+                        var ObjQuestion = FeedBackQue.Getone(question.Key);
+                        var avgRating = sumOfRating / questionlist.Count;
+
+                            <!--STAR TYPE  0-->
+                            <table class="table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>@ObjQuestion.Title</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@avgRating.ToString("0.00")/ 5 (@questionlist.Count Rating)</td>
+                            <td>Details</td>
+                        </tr>
+                    </tbody>
+
+                </table>
                     }
-                    
-                </tbody>
-
-            </table>
-                        }
-            
-
-            <!--STAR TYPE-->
-            <table class="table table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Rate our Staff Behaviour</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>Details</td>
-                    </tr>
-                </tbody>
-
-            </table>
+                }
+                if (reponses.Key == 2)
+                {
+                    var Questions = reponses.ToList();
+                    var GroupByQuestions = Questions.GroupBy(x => x.QID);
+                    foreach (var question in GroupByQuestions)
+                    {
+                        var ObjQuestion = FeedBackQue.Getone(question.Key);
 
 
-            <!--START & SUBJECTIVE-->
-            <table class="table table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>About Staff Behaviour</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td>Details</td>
-                    </tr>
-                </tbody>
 
-            </table>
+                <!--SUBJECTIVE  2-->
+                <table class="table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>@ObjQuestion.Title</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                </table>
+                    }
+                }
+                @if (reponses.Key == 3)
+                {
+                    var Questions = reponses.ToList();
+                    var GroupByQuestions = Questions.GroupBy(x => x.QID);
+                    foreach (var question in GroupByQuestions)
+                    {
+                        var ObjQuestion = FeedBackQue.Getone(question.Key);
+                        var LikeCnt = Questions.Sum(x => x.LikeCnt);
+                        var DisLikeCnt = Questions.Sum(x => x.DislikeCnt);
+                        var OkCnt = Questions.Sum(x => x.NormalOkCnt);
 
-            <!--SUBJECTIVE-->
-            <table class="table table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Rate our Staff Behaviour</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-            </table>
+                            <!--LIKE DISLIKE OK  3-->
+                            <table class="table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Rate our Staff Behaviour</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>LIKED :@LikeCnt   DISLIKE @DisLikeCnt  NORMAL @OkCnt</td>
+                            <td>Details</td>
+                        </tr>
+                    </tbody>
+                </table>
+                    }
+                }
+                <!--MCQ-->
+                <table class="table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Rate our Staff Behaviour</th>
+                            <th>Details </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>LIKED 0   DISLIKE 0  NORMAL 0</td>
 
-            <!--LIKE DISLIKE OK-->
-            <table class="table table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Rate our Staff Behaviour</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>LIKED 0   DISLIKE 0  NORMAL 0</td>
-                        <td>Details</td>
-                    </tr>
-                </tbody>
-            </table>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <!--MCQ-->
-            <table class="table table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Rate our Staff Behaviour</th>
-                        <th>Details </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>LIKED 0   DISLIKE 0  NORMAL 0</td>
+                }
 
-                    </tr>
-                </tbody>
-            </table>
+
+
+
+
 
             <!--SUGGESTION FEEDBACK-->
             <table class="table table-hover" style="width:100%">

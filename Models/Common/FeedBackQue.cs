@@ -84,6 +84,32 @@ namespace HangOut.Models.Common
 
             return (ListTmp);
         }
+        public static FeedBackQue Getone(int QID)
+        {
+            DBCon OBJCon = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            FeedBackQue ObjTmp = new FeedBackQue();
+
+            try
+            {
+                string Query = "SELECT TOP 1 * FROM  FeedBackQuestion where ID=" + QID;
+                cmd = new SqlCommand(Query, OBJCon.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTmp.ID = SDR.GetInt32(0);
+                    ObjTmp.Title = SDR.GetString(1);
+                    ObjTmp.Status = SDR.GetBoolean(2);
+                    ObjTmp.QuestionType = SDR.GetInt32(3);
+                    ObjTmp.FeedBkFormID = SDR.GetInt32(4);
+                    ObjTmp.OrderNo = SDR.GetInt32(5);
+                }
+            }
+            catch (System.Exception e) { e.ToString(); }
+            finally { cmd.Dispose();  OBJCon.Con.Close(); }
+            return (ObjTmp);
+        }
         public static List<Questions>  QuestioType()
         {
 
