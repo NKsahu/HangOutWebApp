@@ -25,11 +25,13 @@
         }
         double TotalItemRating = SumOfRatingByCID / TotalPerson;
         var ResponseByType = feedbkResponses.GroupBy(x => x.ResponseType);
+        var OnlyLikeDisCntItems = feedbkItems.FindAll(x => x.ResponseType == 3);
+
 
 <style>
  th {
-     background-color: deepskyblue;
- }
+            background-color: deepskyblue;
+        }
 </style>
         <div class="card-header">
             <h3>User FeedBack</h3>
@@ -76,7 +78,40 @@
 
                 </table>
             }
+            @if (OnlyLikeDisCntItems.Count > 0)
+            {
+                <table class="table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Item FeedBack</th>
+                            <th> </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var GroupByItems = OnlyLikeDisCntItems.GroupBy(x => x.ItemID);
+                            foreach (var items in GroupByItems)
+                            {
+                                var itemlist = items.ToList();
+                                var LikeCnt = itemlist.Sum(x => x.LikeCnt);
+                                var DisLikeCnt = itemlist.Sum(x => x.DislikeCnt);
+                                var OkCnt = itemlist.Sum(x => x.OkCnt);
+                                var ObjItm = itemlist.FirstOrDefault();
+                                HG_Items hG_Items = new HG_Items().GetOne(ObjItm.ItemID);
+                        <tr>
+                            <td>@hG_Items.Items</td>
+                            <td>LIKED :@LikeCnt   DISLIKE @DisLikeCnt  NORMAL @OkCnt</td>
+                            <td></td>
+                        </tr>
+                            }
 
+                        }
+
+                    </tbody>
+
+                </table>
+            }
             @foreach (var reponses in ResponseByType)
             {
                 if (reponses.Key == 0)
@@ -96,22 +131,22 @@
                         var ObjQuestion = FeedBackQue.Getone(question.Key);
                         var avgRating = sumOfRating / questionlist.Count;
 
-                            <!--STAR TYPE  0-->
-                            <table class="table table-hover" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>@ObjQuestion.Title</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>@avgRating.ToString("0.00")/ 5 (@questionlist.Count Rating)</td>
-                            <td>Details</td>
-                        </tr>
-                    </tbody>
+                        <!--STAR TYPE  0-->
+                        <table class="table table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>@ObjQuestion.Title</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>@avgRating.ToString("0.00")/ 5 (@questionlist.Count Rating)</td>
+                                    <td>Details</td>
+                                </tr>
+                            </tbody>
 
-                </table>
+                        </table>
                     }
                 }
                 if (reponses.Key == 2)
@@ -124,18 +159,18 @@
 
 
 
-                <!--SUBJECTIVE  2-->
-                <table class="table table-hover" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>@ObjQuestion.Title</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                </table>
+                        <!--SUBJECTIVE  2-->
+                        <table class="table table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>@ObjQuestion.Title</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                        </table>
                     }
                 }
-                @if (reponses.Key == 3)
+                if (reponses.Key == 3)
                 {
                     var Questions = reponses.ToList();
                     var GroupByQuestions = Questions.GroupBy(x => x.QID);
@@ -146,46 +181,65 @@
                         var DisLikeCnt = Questions.Sum(x => x.DislikeCnt);
                         var OkCnt = Questions.Sum(x => x.NormalOkCnt);
 
-                            <!--LIKE DISLIKE OK  3-->
-                            <table class="table table-hover" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Rate our Staff Behaviour</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>LIKED :@LikeCnt   DISLIKE @DisLikeCnt  NORMAL @OkCnt</td>
-                            <td>Details</td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <!--LIKE DISLIKE OK  3-->
+                        <table class="table table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Rate our Staff Behaviour</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>LIKED :@LikeCnt   DISLIKE @DisLikeCnt  NORMAL @OkCnt</td>
+                                    <td>Details</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     }
                 }
-                <!--MCQ-->
-                <table class="table table-hover" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Rate our Staff Behaviour</th>
-                            <th>Details </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>LIKED 0   DISLIKE 0  NORMAL 0</td>
 
-                        </tr>
-                    </tbody>
-                </table>
+                if (reponses.Key == 1)
+                {
+                    var Questions = reponses.ToList();
+                    var GroupByQuestions = Questions.GroupBy(x => x.QID);
+                    foreach (var question in GroupByQuestions)
+                    {
+                        var ObjQuestion = FeedBackQue.Getone(question.Key);
+                        var Objectives = FeedbkObj.GetAll(ObjQuestion.ID);
+                        var questionlist = question.ToList();
 
+
+                        <!--MCQ 1-->
+                        <table class="table table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>@ObjQuestion.Title</th>
+                                    <th>Details </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var Objective in Objectives)
+                                {
+                                    int Cnt = 0;
+                                    for (int i = 0; i < questionlist.Count; i++)
+                                    {
+                                        if (questionlist[i].ObjectiveOptions.Contains(Objective.id.ToString()))
+                                        {
+                                            Cnt++;
+                                        }
+                                    }
+                                    <tr>
+                                        <td>@Objective.Name ( @Cnt Hits)</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+
+                    }
                 }
-
-
-
-
-
-
+            }
             <!--SUGGESTION FEEDBACK-->
             <table class="table table-hover" style="width:100%">
                 <thead>
@@ -203,7 +257,6 @@
             </table>
 
         </div>
-
     }
 }
 <script>
