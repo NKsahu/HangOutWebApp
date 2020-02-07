@@ -77,7 +77,7 @@ namespace HangOut.Controllers
             {
                 FeedbkForm feedbkForm = FeedbkForm.GetOne(Seating.FDBKId);
                 List<FeedBackQue> feedBackQues = FeedBackQue.GetAll(feedbkForm.Id);
-                feedBackQues = feedBackQues.FindAll(x => x.Status);
+               // feedBackQues = feedBackQues.FindAll(x => x.Status);
                 feedBackQues = feedBackQues.OrderBy(x => x.OrderNo).ToList();
                 respose.Add("Status", 200);
                 JArray jArray = new JArray();
@@ -124,10 +124,14 @@ namespace HangOut.Controllers
         }
         public JObject SubmitFeedBk(Int64 OID)
         {
-            
+            Feedbk feedBack = Feedbk.GetOne(OID);
+            if (feedBack.FeedBkId == 0)
+            {
+                feedBack.o
+            }
             return new JObject();
-
         }
+        
 
 
 
