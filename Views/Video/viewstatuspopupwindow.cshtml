@@ -2,24 +2,24 @@
 <div class="card">
     <div class="card-header">
         @*<div class="row">
-            <div class="col-md-6">
+                <div class="col-md-6">
 
-            </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5><u><b>LEARNER:BABA</b></u></h5>
-                    </div>
-                    <div class="col-md-6">
-                        <button class="btn btn-primary">Switch Learner</button>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><u><b>LEARNER:BABA</b></u></h5>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-primary">Switch Learner</button>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
     </div>
     <div class="card-body">
-        
+
         <div class="row mt-2">
             <div class="col-md-3">
                 <ul class="nav-fill nav-justified" style="list-style-type:none;padding-left:0" id="CategoryList">
@@ -28,7 +28,7 @@
                             <div class="col-md-12 pt-3 ">
                                 <button class="btn btn-success form-control" style="font-size:25px" onclick="ShowVideso('0')">ALL</button>
                             </div>
-                             
+
                         </div>
                     </li>
                 </ul>
@@ -36,6 +36,18 @@
             <div class="col-md-9">
                 <div class="scrollbar" id="style-1">
                     <div class="force-overflow">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-control droupdown" name="StudentGender" id="droupdown">
+                                    <option value="1">Hindi</option>
+                                    <option value="2">English</option>
+                                    <option value="3">Urdu</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <input id="example" type="text" class="form-control text-center" placeholder="Search by Video Name">
+                            </div>
+                        </div>
                         <ol class="nav-fill nav-justified" id="VideoList">
                             <li class="mt-2">
                                 <div class="row">
@@ -65,22 +77,23 @@
                                         <button class="btn btn-dark form-control text-left"><h5><u>link:</u></h5></button>
                                     </div>
                                     <div class="col-md-9">
-                                        <button class="btn btn-secondary form-control text-left "id="link" >
+                                        <button class="btn btn-secondary form-control text-left " id="link">
                                             <h5><u>sdfdsf</u></h5>
                                         </button>
                                     </div>
                                     <div class="col-md-4"></div>
-                                    <div class="col-md-4"><button class="btn btn-primary " onclick="PlayVideo();" >Learn Now</button>&nbsp;
-                                                          <button class="btn btn-primary "    aria-label="Close" style="display:none" onclick="StopVideo();">
-                                                              <span aria-hidden="true">&times;</span>
-                                                          </button>
-                                    </div> 
+                                    <div class="col-md-4">
+                                        <button class="btn btn-primary " onclick="PlayVideo();">Learn Now</button>&nbsp;
+                                        <button class="btn btn-primary " aria-label="Close" style="display:none" onclick="StopVideo();">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
                                     <div class="col-md-4"><button class="btn btn-primary  ">Mark Completed</button></div>
                                     <div class="col-md-6 collapse">
                                     </div>
                                 </div>
                             </li>
-                            
+
                         </ol>
                     </div>
                 </div>
@@ -92,6 +105,14 @@
 <script>
     var VideosList = [];
     var VideoMark = [];
+    $("#droupdown").change(function () {
+        console.log("asdsad");
+        var language = $("#droupdown").val();
+     var   CurrentVideos = VideosList.filter(function (x) {
+         return x.Languange == language;
+        });
+        ShowVidelos(CurrentVideos);
+    });
     function PlayVideo(id) {
         var ObjVideo = VideosList.find(x => {
             return x.ID == id;
@@ -101,17 +122,17 @@
                 "value": "<iframe title='YouTube video player' type=\"text/html\" width='640' height='390' src=" + ObjVideo.Link + " frameborder='0' allowFullScreen></iframe>"
             }
         };
-        $("."+id).html(obj.video.value);
-        $("#Btn"+id).show();
-        $("."+id).show();
+        $("." + id).html(obj.video.value);
+        $("#Btn" + id).show();
+        $("." + id).show();
     }
     function StopVideo(id) {
         var ObjVideo = VideosList.find(x => {
             return x.ID == id;
         });
         $("." + id).html(ObjVideo).StopVideo;
-        $("#Btn"+id).hide();
-        $("."+id).hide();
+        $("#Btn" + id).hide();
+        $("." + id).hide();
     }
     LoadVideos();
     function LoadVideos() {
@@ -123,102 +144,28 @@
                 var objects = JSON.parse(data);
                 var CategoryList = objects.CategoryList;
                 VideoMark = objects.videomarks;
-               // $("#CategoryList").html('');
+                // $("#CategoryList").html('');
                 $("#VideoList").html('');
                 for (var i = 0; i < CategoryList.length; i++) {
                     var ObjCategory = CategoryList[i];
                     var CatName = ObjCategory.CatName;
                     var CatId = ObjCategory.CatId;
                     var VideoList = ObjCategory.Videos;
+                   
                     var html = '<li class="card">';
-                    html+='<div class="row">'
-                    html+='<div class="col-md-12 pt-3 ">'
-                    html += "<button class='btn btn-success form-control' onclick='ShowVideso(\"" + CatId+"\")' style='font-size:25px'>" + CatName+"</button>";
+                    html += '<div class="row">'
+                    html += '<div class="col-md-12 pt-3 ">'
+                    html += "<button class='btn btn-success form-control' onclick='ShowVideso(\"" + CatId + "\")' style='font-size:25px'>" + CatName + "</button>";
                     html += '</div>';
                     html += '</div></li>';
+                    //ShowVidelos()
+                      //  $("#VideoList").append(videohtml);
                     for (var j = 0; j < VideoList.length; j++) {
-                        var VideoObj = VideoList[j];
-                        VideosList.push(VideoObj);
-                        var Title = VideoObj.Title;
-                        var Discription = VideoObj.Discription;
-                        //var maxLength = Discription.length;
-                        //console.log("das");
-                        //$(".show-read-more").each(function () {
-                        //    var myStr = $(this).text();
-                        //    if ($.trim(myStr).length > maxLength) {
-                        //        var newStr = myStr.substring(0, maxLength);
-                        //        var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
-                        //        $(this).empty().html(newStr);
-                        //        $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
-                        //        $(this).append('<span class="more-text">' + removedStr + '</span>');
-                        //    }
-                        //});
-                        //$(".read-more").click(function () {
-                        //    $(this).siblings(".more-text").contents().unwrap();
-                        //    $(this).remove();
-                        //});
-                        var Link = VideoObj.Link;
-                        var Languange = VideoObj.Languange;
-                        var SerialNumber = VideoObj.SerialNumber;
-                        var IsImp = VideoObj.IsImp;
-                        var VideoId = VideoObj.ID;
-                        var icons = '<i class=" fa fa-align-right"></i>';
-                        if (IsImp == true) {
-                            icons = '<i class="fas fa-star" style="color:green;font-size:40px"></i>';
-                        }
-                        var ObjmarkVideo = VideoMark.find(x => {
-                            return x.VideoID == VideoId;
-                        });
-                        var markCmplthtml = "<div class='col-md-4' id='Mark'"+VideoId+"'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
-                        if (ObjmarkVideo != null && ObjmarkVideo != undefined) {
-                            markCmplthtml ="<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
-
-                        }
-                        var  videohtml = '<li class="mt-2">';
-                        videohtml += '<div class="row">';
-                        videohtml += '<div class="col-md-2">';
-                        videohtml += '    <button class="btn btn-dark form-control text-left">';
-                        videohtml += '        <h5>Title:</h5>';
-                        videohtml += '    </button>';
-                        videohtml += '</div>';
-                        videohtml += '<div class="col-md-9">';
-                        videohtml += '    <button class="btn btn-secondary form-control text-left">';
-                        videohtml += '        <h5>'+VideoObj.Title +'</h5>';
-                        videohtml += '    </button>';
-                        videohtml += '</div>';
-                        videohtml += '<div class="col-md-2">';
-                        videohtml += '    <button class="btn btn-dark form-control text-left w-100 "style="padding-bottom: 000px;padding-right: 00px;padding-top: 0.00px;padding-left: 00px;"><h5>Description:</h5></button>';
-                        videohtml += '</div>';
-                        videohtml += '<div class="col-md-9">';
-                        videohtml += '  <div id="style-1" style="height:80px;" class="btn-secondary scrollb"> ';
-                        videohtml += VideoObj.Discription;
-                        videohtml += '</div>';
-                        videohtml += '</div>';
-                        videohtml += '<div class=" col-md-1 text-center">';
-                        videohtml += icons;
-                        videohtml += '</div>';
-                        videohtml += '<div class="col-md-2">';
-                        videohtml += '    <button class="btn btn-dark form-control text-left"><h5>Language:</h5></button>';
-                        videohtml += '</div>';
-                        videohtml += '<div class="col-md-9">';
-                        videohtml += '    <button class="btn btn-secondary form-control text-left link">';
-                        videohtml += '        <h5 >' + Language(Languange)  +'</h5>';
-                        videohtml += '    </button>';
-                        videohtml += '</div>';
-                        videohtml += '<div class="col-md-4"></div>';
-                        videohtml += "<div class='col-md-4'><button class='btn btn-primary' onclick='PlayVideo(\"" + VideoId + "\");'>Learn Now</button>&nbsp;&nbsp;";
-                        videohtml += "<button class='btn btn-primary ' id='Btn"+VideoId+"' aria-label='Close' style='display:none' onclick='StopVideo(\"" + VideoId +"\");'>";
-                        videohtml += '<span aria-hidden="true">&times;</span></button></div>';
-                        videohtml += markCmplthtml;
-                        videohtml += '  <div class="col-md-6 collapse '+VideoId+'">';
-                        videohtml += '  </div>';
-                        videohtml += '</div>';
-                        videohtml += '</li>';
-                        $("#VideoList").append(videohtml);
+                        VideosList.push(VideoList[j]);
                     }
                     $("#CategoryList").append(html);
                 }
-                
+                ShowVidelos(VideosList);
 
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -227,8 +174,7 @@
         });
 
     }
-    function markComplete(videoId)
-    {
+    function markComplete(videoId) {
         $('#waiting').show();
         $.ajax({
             type: 'POST',
@@ -258,28 +204,16 @@
                 return x.CategoryId == CatId;
             });
         }
+        ShowVidelos(CurrentVideos);
+    }
+    function ShowVidelos(CurrentVideos) {
         $("#VideoList").html('');
         for (var j = 0; j < CurrentVideos.length; j++) {
             var VideoObj = CurrentVideos[j];
-           // VideosList.push(VideoObj);
+            // VideosList.push(VideoObj);
             var Title = VideoObj.Title;
             var Discription = VideoObj.Discription;
-            //var maxLength = Discription.length;
-            //console.log("das");
-            //$(".show-read-more").each(function () {
-            //    var myStr = $(this).text();
-            //    if ($.trim(myStr).length > maxLength) {
-            //        var newStr = myStr.substring(0, maxLength);
-            //        var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
-            //        $(this).empty().html(newStr);
-            //        $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
-            //        $(this).append('<span class="more-text">' + removedStr + '</span>');
-            //    }
-            //});
-            //$(".read-more").click(function () {
-            //    $(this).siblings(".more-text").contents().unwrap();
-            //    $(this).remove();
-            //});
+
             var Link = VideoObj.Link;
             var Languange = VideoObj.Languange;
             var SerialNumber = VideoObj.SerialNumber;
@@ -292,12 +226,12 @@
             var ObjmarkVideo = VideoMark.find(x => {
                 return x.VideoID == VideoId;
             });
-            var markCmplthtml = "<div class='col-md-4 ' id='Mark"+VideoId+"'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
+            var markCmplthtml = "<div class='col-md-4 ' id='Mark" + VideoId + "'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
             if (ObjmarkVideo != null && ObjmarkVideo != undefined) {
                 markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
             }
-            
-            var videohtml = '<li class="mt-2">';
+
+            var videohtml = '<li class="mt-2" id="myInput">';
             videohtml += '<div class="row">';
             videohtml += '<div class="col-md-2">';
             videohtml += '    <button class="btn btn-dark form-control text-left">';
@@ -314,7 +248,7 @@
             videohtml += '</div>';
             videohtml += '<div class="col-md-9">';
             videohtml += '  <div id="style-1" style="height:80px;" class="btn-secondary scrollb"> ';
-            videohtml += VideoObj.Discription ;
+            videohtml += VideoObj.Discription;
             videohtml += '</div>';
             videohtml += '</div>';
             videohtml += '<div class=" col-md-1 text-center">';
@@ -353,21 +287,24 @@
             return "Urdu";
         }
     }
+
     
 </script>
- 
 <style>
     .show-read-more .more-text {
         display: none;
     }
-    .card{
-        height:80px;
+
+    .card {
+        height: 80px;
     }
+
     #wrapper {
         text-align: center;
         width: 500px;
         margin: auto;
     }
+
     #style-1::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
         border-radius: 10px;
@@ -384,9 +321,8 @@
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
         background-color: #b6ff00;
     }
-   
+
     .scrollbar {
-        
         float: left;
         height: 80%;
         width: 99%;
@@ -401,7 +337,5 @@
         height: 100%;
         width: 100%;
         overflow-y: scroll;
-        
     }
-   
 </style>
