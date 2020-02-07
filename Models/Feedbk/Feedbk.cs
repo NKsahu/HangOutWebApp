@@ -11,7 +11,6 @@ namespace HangOut.Models.Feedbk
        public int  FeedBkId { get; set; }
        public int OrgId { get; set; }
        public Int64 OrderId { get; set; }
-       public Int64 SeatingId { get; set; }
        public  int FeedbkFormId { get; set; }
        public DateTime CreateOn { get; set; }
         public int save()
@@ -25,16 +24,15 @@ namespace HangOut.Models.Feedbk
                 string Quary = "";
                 if(FeedBkId ==0)
                 {
-                    Quary = "Insert into FeedBk values(@OrgId,@OrderId,@SeatingId,@FeedbkFormId,@CreateOn);select SCOPE_IDENTITY();";
+                    Quary = "Insert into FeedBk values(@OrgId,@OrderId,@FeedbkFormId,@CreateOn);select SCOPE_IDENTITY();";
                 }else
                 {
-                    Quary = "Update FeedBk Set OrgId=@OrgId,OrderId=@OrderId,SeatingId=@SeatingId,FeedbkFormId=@FeedbkFormId where FeedBkId=@FeedBkId";
+                    Quary = "Update FeedBk Set OrgId=@OrgId,OrderId=@OrderId,FeedbkFormId=@FeedbkFormId where FeedBkId=@FeedBkId";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@FeedBkId", this.FeedBkId);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
-                cmd.Parameters.AddWithValue("@SeatingId", this.SeatingId);
                 cmd.Parameters.AddWithValue("@FeedbkFormId", this.FeedbkFormId);
                 if (this.FeedBkId == 0)
                 {
@@ -74,9 +72,8 @@ namespace HangOut.Models.Feedbk
                 OBJfeedbk.FeedBkId = SDR.GetInt32(0);
                 OBJfeedbk.OrgId = SDR.GetInt32(1);
                 OBJfeedbk.OrderId = SDR.GetInt64(2);
-                OBJfeedbk.SeatingId = SDR.GetInt64(3);
-                OBJfeedbk.FeedbkFormId = SDR.GetInt32(4);
-                OBJfeedbk.CreateOn = SDR.GetDateTime(5);
+                OBJfeedbk.FeedbkFormId = SDR.GetInt32(3);
+                OBJfeedbk.CreateOn = SDR.GetDateTime(4);
                 listfeedbk.Add(OBJfeedbk);
                 }
             }
@@ -100,9 +97,8 @@ namespace HangOut.Models.Feedbk
                     feedbk.FeedBkId = SDR.GetInt32(0);
                     feedbk.OrgId = SDR.GetInt32(1);
                     feedbk.OrderId = SDR.GetInt64(2);
-                    feedbk.SeatingId = SDR.GetInt64(3);
-                    feedbk.FeedbkFormId = SDR.GetInt32(4);
-                    feedbk.CreateOn = SDR.GetDateTime(5);
+                    feedbk.FeedbkFormId = SDR.GetInt32(3);
+                    feedbk.CreateOn = SDR.GetDateTime(4);
                 }
             }
             catch (Exception e) { e.ToString(); }
