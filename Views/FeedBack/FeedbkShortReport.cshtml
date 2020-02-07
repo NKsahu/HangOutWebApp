@@ -14,7 +14,7 @@
         List<Feedbk> feedbks = Feedbk.GetAll(OrgId, FromDate, Todate);
         feedbkItems = FeedbkItem.GetAll(OrgId, FromDate, Todate);
         feedbkResponses = FeedbkResponse.GetAll(OrgId, FromDate, Todate);
-        // 0:Star,1: Objective,2:Subjective,3:Like Dislike Ok,4:star-subjective
+        // 0:Star,1: Objective,2:Subjective,3:Like Dislike Ok,4:star-subjective ,5:FEEDBACK
         var OnlyRatingItems = feedbkItems.FindAll(x => x.ResponseType == 0);
         var GroupItemByRating = OnlyRatingItems.GroupBy(x => x.Rating);
         var SumOfRatingByCID = 0.00;
@@ -99,11 +99,11 @@
                                 var OkCnt = itemlist.Sum(x => x.OkCnt);
                                 var ObjItm = itemlist.FirstOrDefault();
                                 HG_Items hG_Items = new HG_Items().GetOne(ObjItm.ItemID);
-                        <tr>
-                            <td>@hG_Items.Items</td>
-                            <td>LIKED :@LikeCnt   DISLIKE @DisLikeCnt  NORMAL @OkCnt</td>
-                            <td></td>
-                        </tr>
+                                <tr>
+                                    <td>@hG_Items.Items</td>
+                                    <td>LIKED :@LikeCnt   DISLIKE @DisLikeCnt  NORMAL @OkCnt</td>
+                                    <td></td>
+                                </tr>
                             }
 
                         }
@@ -167,6 +167,12 @@
                                     <th>Details</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Comments : @question.ToList().Count</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
                         </table>
                     }
                 }
@@ -239,22 +245,28 @@
 
                     }
                 }
-            }
-            <!--SUGGESTION FEEDBACK-->
-            <table class="table table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Rate our Staff Behaviour</th>
-                        <th>Details </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>LIKED 0   DISLIKE 0  NORMAL 0</td>
 
-                    </tr>
-                </tbody>
-            </table>
+                if (reponses.Key == 5)
+                {
+                    <!--SUGGESTION FEEDBACK-->
+                    <table class="table table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>SUGGESTION / FEEDBACK</th>
+                                <th>Details </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Comments : @reponses.ToList().Count</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+            }
+
+
 
         </div>
     }
