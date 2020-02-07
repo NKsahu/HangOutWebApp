@@ -141,6 +141,22 @@
                         VideosList.push(VideoObj);
                         var Title = VideoObj.Title;
                         var Discription = VideoObj.Discription;
+                        var maxLength = Discription.length;
+                        console.log("das");
+                        $(".show-read-more").each(function () {
+                            var myStr = $(this).text();
+                            if ($.trim(myStr).length > maxLength) {
+                                var newStr = myStr.substring(0, maxLength);
+                                var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                                $(this).empty().html(newStr);
+                                $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
+                                $(this).append('<span class="more-text">' + removedStr + '</span>');
+                            }
+                        });
+                        $(".read-more").click(function () {
+                            $(this).siblings(".more-text").contents().unwrap();
+                            $(this).remove();
+                        });
                         var Link = VideoObj.Link;
                         var Languange = VideoObj.Languange;
                         var SerialNumber = VideoObj.SerialNumber;
@@ -168,26 +184,26 @@
                         videohtml += '</div>';
                         videohtml += '<div class="col-md-9">';
                         videohtml += '    <button class="btn btn-secondary form-control text-left">';
-                        videohtml += '        <h5><u>'+VideoObj.Title +'</u></h5>';
+                        videohtml += '        <h5>'+VideoObj.Title +'</h5>';
                         videohtml += '    </button>';
                         videohtml += '</div>';
                         videohtml += '<div class="col-md-2">';
-                        videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>Discription:</u></h5></button>';
+                        videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>Description:</u></h5></button>';
                         videohtml += '</div>';
                         videohtml += '<div class="col-md-9">';
-                        videohtml += '    <button class="btn btn-secondary form-control text-left">';
-                        videohtml += '        <h5><u>'+ VideoObj.Discription +'</u></h5>';
+                        videohtml += '    <button class="btn btn-secondary form-control text-left"style="font-size:50px">';
+                        videohtml += '        <h5><p class="show-read-more">'+ VideoObj.Discription +'</p></h5>';
                         videohtml += '    </button>';
                         videohtml += '</div>';
                         videohtml += '<div class=" col-md-1 text-center">';
                         videohtml += icons;
                         videohtml += '</div>';
                         videohtml += '<div class="col-md-2">';
-                        videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>link:</u></h5></button>';
+                        videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>Language:</u></h5></button>';
                         videohtml += '</div>';
                         videohtml += '<div class="col-md-9">';
                         videohtml += '    <button class="btn btn-secondary form-control text-left link">';
-                        videohtml += '        <h5 ><u>' + Language(Languange)  +'</u></h5>';
+                        videohtml += '        <h5 >' + Language(Languange)  +'</h5>';
                         videohtml += '    </button>';
                         videohtml += '</div>';
                         videohtml += '<div class="col-md-4"></div>';
@@ -249,6 +265,22 @@
            // VideosList.push(VideoObj);
             var Title = VideoObj.Title;
             var Discription = VideoObj.Discription;
+            var maxLength = Discription.length;
+            console.log("das");
+            $(".show-read-more").each(function () {
+                var myStr = $(this).text();
+                if ($.trim(myStr).length > maxLength) {
+                    var newStr = myStr.substring(0, maxLength);
+                    var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                    $(this).empty().html(newStr);
+                    $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
+                    $(this).append('<span class="more-text">' + removedStr + '</span>');
+                }
+            });
+            $(".read-more").click(function () {
+                $(this).siblings(".more-text").contents().unwrap();
+                $(this).remove();
+            });
             var Link = VideoObj.Link;
             var Languange = VideoObj.Languange;
             var SerialNumber = VideoObj.SerialNumber;
@@ -274,15 +306,15 @@
             videohtml += '</div>';
             videohtml += '<div class="col-md-9">';
             videohtml += '    <button class="btn btn-secondary form-control text-left">';
-            videohtml += '        <h5><u>' + Title + '</u></h5>';
+            videohtml += '        <h5>' + Title + '</h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
             videohtml += '<div class="col-md-2">';
-            videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>Discription:</u></h5></button>';
+            videohtml += '    <button class="btn btn-dark form-control text-left"><h5><u>Description:</u></h5></button>';
             videohtml += '</div>';
             videohtml += '<div class="col-md-9">';
-            videohtml += '    <button class="btn btn-secondary form-control text-left">';
-            videohtml += '        <h5><u>' + Discription + '</u></h5>';
+            videohtml += '    <button class="btn btn-secondary form-control text-left" style="font-size:50px">';
+            videohtml += '        <h5><p class="show-read-more">' + Discription + '</p></h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
             videohtml += '<div class=" col-md-1 text-center">';
@@ -293,7 +325,7 @@
             videohtml += '</div>';
             videohtml += '<div class="col-md-9">';
             videohtml += '    <button class="btn btn-secondary form-control text-left link">';
-            videohtml += '        <h5 ><u>' + Language(Languange) + '</u></h5>';
+            videohtml += '        <h5 >' + Language(Languange) + '</h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
             videohtml += '<div class="col-md-4"></div>';
@@ -308,21 +340,12 @@
             $("#VideoList").append(videohtml);
         }
     }
-    function Language(id) {
-        //{
-        //    1: Hindi, 2: English, 3: Urdu
-        if (id == "1") {
-            return "Hindi";
-        }
-        else if (id == "2") {
-            return "English";
-        }
-        else if (id == "3") {
-            return "Urdu";
-        }
-    }
 </script>
+ 
 <style>
+    .show-read-more .more-text {
+        display: none;
+    }
     .card{
         height:80px;
     }
