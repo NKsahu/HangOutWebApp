@@ -248,7 +248,7 @@
             videohtml += '    </button>';
             videohtml += '</div>';
             videohtml += '<div class="col-md-9 firstdiv"  >';
-            videohtml += '    <button class="btn btn-secondary form-control text-left seconddiv"  >';
+            videohtml += '    <button class="btn btn-secondary form-control text-left seconddiv" data-name="deepak" >';
             videohtml += '        <h5>' + Title + '</h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
@@ -306,14 +306,14 @@
     function search_func() {
         console.log("asdsa");
         var filter = $(this).val();
-        $(".element-holder .seconddiv").each(function () {
+        $(".firstdiv .seconddiv").each(function () {
 
             var current = $('.seconddiv').attr('data-name');
-            if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+            if ($(this).text().search(new RegExp(filter))) {
                 $(this).fadeOut();
             } else {
                 $(this).show();
-                count++;
+               
             }
         });
     }
