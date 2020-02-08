@@ -1,4 +1,5 @@
 ﻿@{ Layout = null;}
+@using HangOut.Models.Common
 <div class="card">
     <div class="card-header">
         @*<div class="row">
@@ -31,6 +32,14 @@
 
                         </div>
                     </li>
+                    <li class="card">
+                        <div class="row">
+                            <div class="col-md-12 pt-3 ">
+                                <button class="btn btn-success form-control"   style="font-size:25px" onclick="WatchVideo()">Must Watch Video</button>
+                            </div>
+
+                        </div>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-9">
@@ -45,7 +54,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6 text-center">
-                                <input id="example" type="text" class="form-control text-center" placeholder="Search by Video Name">
+                                <input id="search" type="text" class="form-control text-center" onkeyup="search_func(this.value);" placeholder="search in TITLE & DESCRIPTION">
                             </div>
                         </div>
                         <ol class="nav-fill nav-justified" id="VideoList">
@@ -108,8 +117,8 @@
     $("#droupdown").change(function () {
         console.log("asdsad");
         var language = $("#droupdown").val();
-     var   CurrentVideos = VideosList.filter(function (x) {
-         return x.Languange == language;
+        var CurrentVideos = VideosList.filter(function (x) {
+            return x.Languange == language;
         });
         ShowVidelos(CurrentVideos);
     });
@@ -151,7 +160,7 @@
                     var CatName = ObjCategory.CatName;
                     var CatId = ObjCategory.CatId;
                     var VideoList = ObjCategory.Videos;
-                   
+
                     var html = '<li class="card">';
                     html += '<div class="row">'
                     html += '<div class="col-md-12 pt-3 ">'
@@ -159,7 +168,7 @@
                     html += '</div>';
                     html += '</div></li>';
                     //ShowVidelos()
-                      //  $("#VideoList").append(videohtml);
+                    //  $("#VideoList").append(videohtml);
                     for (var j = 0; j < VideoList.length; j++) {
                         VideosList.push(VideoList[j]);
                     }
@@ -238,8 +247,8 @@
             videohtml += '        <h5>Title:</h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
-            videohtml += '<div class="col-md-9">';
-            videohtml += '    <button class="btn btn-secondary form-control text-left">';
+            videohtml += '<div class="col-md-9 firstdiv"  >';
+            videohtml += '    <button class="btn btn-secondary form-control text-left seconddiv" data-name="deepak" >';
             videohtml += '        <h5>' + Title + '</h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
@@ -287,7 +296,27 @@
             return "Urdu";
         }
     }
-     
+    function WatchVideo() {
+        
+    var  VideosListImp = VideosList.filter(function (x) {
+                return x.IsImp == true;
+        });
+        ShowVidelos(VideosListImp); 
+    }
+    function search_func() {
+        console.log("asdsa");
+        var filter = $(this).val();
+        $(".firstdiv .seconddiv").each(function () {
+
+            var current = $('.seconddiv').attr('data-name');
+            if ($(this).text().search(new RegExp(filter))) {
+                $(this).fadeOut();
+            } else {
+                $(this).show();
+               
+            }
+        });
+    }
     
 </script>
 <style>
