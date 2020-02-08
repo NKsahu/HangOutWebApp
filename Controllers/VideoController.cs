@@ -61,7 +61,9 @@ namespace HangOut.Controllers
                 jObject.Add("CatId", category.Id);
                 jObject.Add("Videos", JArray.FromObject(videolist));
                 jArray.Add(jObject);
+               
             }
+             
             response.Add("CategoryList", jArray);
             response.Add("videomarks", JArray.FromObject(videomarks));
             return response;
