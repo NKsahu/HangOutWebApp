@@ -296,27 +296,7 @@
             return "Urdu";
         }
     }
-    function WatchVideo() {
-        
-    var  VideosListImp = VideosList.filter(function (x) {
-                return x.IsImp == true;
-        });
-        ShowVidelos(VideosListImp); 
-    }
-    function search_func() {
-        console.log("asdsa");
-        var filter = $(this).val();
-        $(".firstdiv .seconddiv").each(function () {
 
-            var current = $('.seconddiv').attr('data-name');
-            if ($(this).text().search(new RegExp(filter))) {
-                $(this).fadeOut();
-            } else {
-                $(this).show();
-               
-            }
-        });
-    }
     
 </script>
 <style>
