@@ -240,7 +240,7 @@
                 markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
             }
 
-            var videohtml = '<li class="mt-2 firstdiv" id="VidLi'+VideoId+'">';
+            var videohtml = '<li class="mt-2 firstdiv filter" id="VidLi'+VideoId+'">';
             videohtml += '<div class="row">';
             videohtml += '<div class="col-md-2">';
             videohtml += '    <button class="btn btn-dark form-control text-left">';
@@ -248,7 +248,7 @@
             videohtml += '    </button>';
             videohtml += '</div>';
             videohtml += '<div class="col-md-9 "  >';
-            videohtml += '    <button class="btn btn-secondary form-control text-left seconddiv filter " VideoID="'+VideoId+'" data-name="deepak" >';
+            videohtml += '    <button class="btn btn-secondary form-control text-left seconddiv filter2 " VideoID="'+VideoId+'" data-name="deepak" >';
             videohtml += '        <h5>' + Title + '</h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
@@ -311,18 +311,18 @@
         for (i = 0; i < nodes.length; i++) {
             if (nodes[i].innerText.toLowerCase().includes(filter)) {
                 console.log(nodes[i]);
-                var node = $(nodes[i]);
-               var videois= $(node).attr('VideoID');
+               // var node = $(nodes[i]);
+               //var videois= $(node).attr('VideoID');
                // console.log("ssss" + videois);
-                $("#VidLi" + videois).show();
+               // $("#VidLi" + videois).show();
                // $(node).parent('div').parent('div').parent('li').show();
-               // nodes[i].style.display = "block";
+               nodes[i].style.display = "block";
             } else {
-                var node = $(nodes[i]);
-                var videois = $(node).attr('VideoID');
+               // var node = $(nodes[i]);
+                //var videois = $(node).attr('VideoID');
                // console.log("ssss" + videois);
-                $("#VidLi" + videois).hide();
-               // nodes[i].style.display = "none";
+                //$("#VidLi" + videois).hide();
+                nodes[i].style.display = "none";
                // $(node).parent('div').parent('div').parent('li').hide();
             }
         }
