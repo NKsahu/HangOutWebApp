@@ -127,7 +127,7 @@ namespace HangOut.Controllers
             Feedbk feedBack = Feedbk.GetOne(OID);
             if (feedBack.FeedBkId == 0)
             {
-                feedBack.o
+               // feedBack.o
             }
             return new JObject();
         }
