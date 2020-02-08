@@ -31,6 +31,14 @@
 
                         </div>
                     </li>
+                    <li class="card">
+                        <div class="row">
+                            <div class="col-md-12 pt-3 ">
+                                <button class="btn btn-success form-control" style="font-size:25px" onclick="WatchVideo('0')">Must Watch Video</button>
+                            </div>
+
+                        </div>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-9">
@@ -287,7 +295,73 @@
             return "Urdu";
         }
     }
+    function WatchVideo() {
+        $("#VideoList").html('');
+        for (var j = 0; j < CurrentVideos.length; j++) {
+            var VideoObj = CurrentVideos[j];
+            // VideosList.push(VideoObj);
+            var IsImp = VideoObj.IsImp;
+            if (IsImp == true) {
+            var Title = VideoObj.Title;
+            var Discription = VideoObj.Discription;
+            var Link = VideoObj.Link;
+            var Languange = VideoObj.Languange;
+            var SerialNumber = VideoObj.SerialNumber;
+            var VideoId = VideoObj.ID;
+            var icons = '<i class=" fa fa-align-right"></i>';
+           
+            var ObjmarkVideo = VideoMark.find(x => {
+                return x.VideoID == VideoId;
+            });
+            var markCmplthtml = "<div class='col-md-4 ' id='Mark" + VideoId + "'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
+            if (ObjmarkVideo != null && ObjmarkVideo != undefined) {
+                markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
+            }
 
+            var videohtml = '<li class="mt-2" id="myInput">';
+            videohtml += '<div class="row">';
+            videohtml += '<div class="col-md-2">';
+            videohtml += '    <button class="btn btn-dark form-control text-left">';
+            videohtml += '        <h5>Title:</h5>';
+            videohtml += '    </button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-9">';
+            videohtml += '    <button class="btn btn-secondary form-control text-left">';
+            videohtml += '        <h5>' + Title + '</h5>';
+            videohtml += '    </button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-2">';
+            videohtml += '    <button class="btn btn-dark form-control text-left w-100"style="padding-bottom: 000px;padding-right: 00px;padding-top: 0.00px;padding-left: 00px;"><h5>Description:</h5></button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-9">';
+            videohtml += '  <div id="style-1" style="height:80px;" class="btn-secondary scrollb"> ';
+            videohtml += VideoObj.Discription;
+            videohtml += '</div>';
+            videohtml += '</div>';
+            videohtml += '<div class=" col-md-1 text-center">';
+            videohtml += icons;
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-2">';
+            videohtml += '    <button class="btn btn-dark form-control text-left"><h5>Language:</h5></button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-9">';
+            videohtml += '    <button class="btn btn-secondary form-control text-left link">';
+            videohtml += '        <h5 class="text-left" >' + Language(Languange) + '</h5>';
+            videohtml += '    </button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-4"></div>';
+            videohtml += "<div class='col-md-4'><button class='btn btn-primary' onclick='PlayVideo(\"" + VideoId + "\");'>Learn Now</button>&nbsp;&nbsp;";
+            videohtml += "<button class='btn btn-primary ' id='Btn" + VideoId + "' aria-label='Close' style='display:none' onclick='StopVideo(\"" + VideoId + "\");'>";
+            videohtml += '<span aria-hidden="true">&times;</span></button></div>';
+            videohtml += markCmplthtml;
+            videohtml += '  <div class="col-md-6 collapse ' + VideoId + '">';
+            videohtml += '  </div>';
+            videohtml += '</div>';
+            videohtml += '</li>';
+                $("#VideoList").append(videohtml);
+            }
+        }
+    }
     
 </script>
 <style>
