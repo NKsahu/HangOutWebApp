@@ -1,4 +1,4 @@
-﻿
+﻿console.log("aaya push notcie me");
 var firebaseConfig = {
     apiKey: "AIzaSyAOXRvYFi2TFHzoYzWJEJ2d4KwgJj2W_bo",
     authDomain: "tracking-1557219983795.firebaseapp.com",
@@ -6,31 +6,67 @@ var firebaseConfig = {
     projectId: "tracking-1557219983795",
     storageBucket: "tracking-1557219983795.appspot.com",
     messagingSenderId: "996349517183",
-    appId: "1:996349517183:web:0c5a7fa0aefc49ff1d4e4a"
+    appId: "1:996349517183:web:0c5a7fa0aefc49ff1d4e4a",
+    measurementId: "G-XLXDMQMKG5"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
 const messaging = firebase.messaging();
-messaging.requestPermission()
+messaging
+    .requestPermission()
     .then(function () {
         //MsgElem.innerHTML = "Notification permission granted."
-        console.log("Notification permission granted.");
+      //  console.log("Notification permission granted.+=" + messaging.getToken());
+       // var tocken = messaging.getToken();
 
         // get the token in the form of promise
-        return messaging.getToken();
+        return messaging.getToken()
     })
     .then(function (token) {
-        console.log("Tockeen Is=  " + token);
-       // TokenElem.innerHTML = "token is : " + token
+        // print the token on the HTML page
+        console.log("Notification permission granted.+=" + token);
+        // Subscribe(token);
+        subscribeTokenToTopic(token, 100);
+        // TokenElem.innerHTML = "token is : " + token
     })
     .catch(function (err) {
-        //ErrElem.innerHTML = ErrElem.innerHTML + "; " + err
+        // ErrElem.innerHTML = ErrElem.innerHTML + "; " + err
         console.log("Unable to get permission to notify.", err);
     });
-
-messaging.onMessage(function (payload) {
-    console.log("Message received. ", payload);
-   // NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload)
+//messaging.onMessage(function (payload) {
+//    console.log("Message received. ", payload);
+//    // ...
+//});
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js').then(function (registration) {
+            messaging.useServiceWorker(registration);
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    });
+}
+navigator.serviceWorker.addEventListener('message', function (event) {
+    console.log("service worker " + event.data.msg);
+    //you can do whatever you want now that you have this data in script.
 });
 
-
+function subscribeTokenToTopic(token, topic) {
+    topic=""
+    fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + topic, {
+        method: 'POST',
+        headers: new Headers({
+            'Authorization': 'key=AIzaSyBIOFFFdYuoOE-7NtiwkO0hEwVsc1T6M2Q'
+        })
+    }).then(response => {
+        if (response.status < 200 || response.status >= 400) {
+            throw 'Error subscribing to topic: ' + response.status + ' - ' + response.text();
+        }
+        console.log('Subscribed to "' + topic + '"');
+    }).catch(error => {
+        console.error(error);
+    })
+}
