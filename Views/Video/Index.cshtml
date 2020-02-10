@@ -9,16 +9,13 @@
 </div>
 <br />
 <div class=" row aa">
-    <ul class="nav p-1" style="font-size:60px" id="MyCategory" OrderNo="1">
-        <li>
-            <button class="btn btn-danger button" style="font-size:25px" onclick="LoadCategoryPopup('0')">
-                <i class="fa fa-plus "></i>
+    <ul class="nav p-1"  id="MyCategory" OrderNo="1">
+        <li class="NotOrd">
+            <button class="btn btn-danger button form-control" style="font-size:35px;padding-top: 6px;" onclick="LoadCategoryPopup('0')">
+                <i class="fa fa-plus"></i>
                 <span>ADD</span>
             </button>
-            @*<a onclick="divdown(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-left "></i></a>
-                <a onclick="divup(this)" class="nav-link"><i style="font-size:x-large;color:#138692" class="fas fa-long-arrow-alt-right "></i></a>*@
-
-        </li>&nbsp;
+        </li> 
 
     </ul>
 
@@ -54,34 +51,53 @@
     <script>
         function divup(event) {
             // var li = $(this).closest('li');
-            var li = $(event).parent('button').parent('li').parent('ul');
-
+            console.log("sad");
+            var li = $(event).parent('div').parent('div').parent('li');
             var prev = li.prev();
-            if (prev.length) {
+            if (prev.length && prev.hasClass('NotOrd')==false) {
 
-                var OrderNoCur = parseInt(li.attr('OrderNo'));
-                var OrderNoPre = parseInt(prev.attr('OrderNo'));
+                var OrderNoCur = parseInt(li.attr('OrderNo','MyCategory'));
+                var OrderNoPre = parseInt(prev.attr('OrderNo','MyCategory'));
                 console.log(OrderNoCur);
                 li.attr('OrderNo', OrderNoCur - 1);
-                prev.attr('OrderNo', OrderNoPre + 1);
+                prev.attr('OrderNo',OrderNoPre + 1);
                 li.detach().insertBefore(prev);
+                updateorderno(li.attr('CatId'), OrderNoCur - 1);
+                updateorderno(prev.attr('CatId'), OrderNoPre + 1);
+             
             }
         }
+        function updateorderno(Id,OrderNo) {
+            $.ajax({
+                type: 'POST',
+                url: "/Video/SaveOrderNo?Id=" + Id + "&OrderNo=" + OrderNo,
+                contentType: "application/json",
+                success: function (data) {
+
+
+                },
+
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $('#waiting').hide();
+                }
+            });
+        }
         function divdown(event) {
-            var li = $(event).parent('button').parent('li').parent('ul');
+            var li = $(event).parent('div').parent('div').parent('li');
             // var li = $(this).closest('li');
             var next = li.next();
-            if (next.length) {
+            if (next.length && next.hasClass('NotOrd') == false) {
                 var OrderNoCurr = parseInt(li.attr('OrderNo'));
                 var OrderNoNxt = parseInt(next.attr('OrderNo'));
                 console.log(OrderNoCurr);
                 li.attr('OrderNo', OrderNoCurr + 1);
                 next.attr('OrderNo', OrderNoNxt - 1);
                 li.detach().insertAfter(next);
+                updateorderno(li.attr('CatId'), OrderNoCurr+ 1);
+                updateorderno(next.attr('CatId'), OrderNoNxt - 1);
             }
         }
         var listvideocategory = [];
-        var strhtml = '<li><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999"';
         LoadCategory();
         function LoadCategory() {
             //  $("#MyCategory").html('');
@@ -102,9 +118,18 @@
         function DispalyCategory(List) {
             for (var i = 0; i < List.length; i++) {
                 var ObjcatVideo = List[i];
-                var Secondhtml = "onclick='LoadCategoryPopup(\""+ObjcatVideo.Id+"\")'><span>" + ObjcatVideo.Name + "</span>";
+                var strhtml = '<li OrderNo="' + ObjcatVideo.OrderNo + '" CatId="' + ObjcatVideo.Id+'"><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999; margin-left: 5px;"';
+                var Secondhtml = "onclick='LoadCategoryPopup(\"" + ObjcatVideo.Id + "\")'><span>" + ObjcatVideo.Name + "</span>";
                 Secondhtml += '</button>';
-                Secondhtml += '</li>&nbsp';
+                Secondhtml += '<div class="row">';
+                Secondhtml += '<div class="col-md-6 text-center">';
+                Secondhtml += "<a onclick='divup(this)'><i style=' font-size:30px;color:#138692' class='fas fa-long-arrow-alt-left'></i></a>";
+                Secondhtml += '</div>';
+                Secondhtml += '<div class="col-md-6 text-center">';
+                Secondhtml += "<a onclick ='divdown(this)' ><i style=' font-size:30px;color:#138692' class='fas fa-long-arrow-alt-right'></i></a>";
+                Secondhtml += '</div>';
+                Secondhtml += '</div>';
+                Secondhtml += '</li>';
                 Secondhtml += '</ul>';
                 $("#MyCategory").append(strhtml + Secondhtml);
             }
