@@ -623,6 +623,7 @@ namespace HangOut.Controllers
             HG_Orders ObjOrders = ListOfOrder.Find(x => x.Table_or_SheatId == TableorSheatId && x.TableOtp == ObjTorS.Otp);
             JObject PostResult = new JObject();
             List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId);
+            ListCart = ListCart.FindAll(x => x.Count > 0);
             OrgSetting orgSetting = OrgSetting.Getone(ObjOrg.OrgID);
             Int64 OID = 0;
             if (ObjOrders==null||ObjOrders.Status=="3"|| ObjOrders.Status == "4"){// if order is completed or Canceled then Take New order
