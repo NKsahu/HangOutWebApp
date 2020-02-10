@@ -28,7 +28,7 @@ messaging
         // print the token on the HTML page
         console.log("Notification permission granted.+=" + token);
         // Subscribe(token);
-        subscribeTokenToTopic(token, 100);
+        subscribeTokenToTopic(token, '100');
         // TokenElem.innerHTML = "token is : " + token
     })
     .catch(function (err) {
@@ -55,11 +55,12 @@ navigator.serviceWorker.addEventListener('message', function (event) {
 });
 
 function subscribeTokenToTopic(token, topic) {
-    topic=""
+    topic = $("#OrgIdHead").val();
+    console.log("topic==" + topic);
     fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + topic, {
         method: 'POST',
         headers: new Headers({
-            'Authorization': 'key=AIzaSyBIOFFFdYuoOE-7NtiwkO0hEwVsc1T6M2Q'
+            'Authorization':'key=AIzaSyAjv_Y-sB7wW1f_Q0CZ5C_KIjknVZy92JU'
         })
     }).then(response => {
         if (response.status < 200 || response.status >= 400) {

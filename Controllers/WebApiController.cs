@@ -787,11 +787,13 @@ namespace HangOut.Controllers
                 //send firebase massage new ticket assign
                 if (ObjOrg.PaymentType == 2 &&ObjTorS.Type!="3")// postpaid
                 {
-                    SendMsgChef(OrgId, NewOID);
+                    SendMsgChef(OrgId, NewOID,Ticketno);
+                    SendMsgChef(0, NewOID,Ticketno);
                 }
                 else if (PaymtSts > 0 && ObjTorS.Type != "3")
                 {
-                    SendMsgChef(OrgId, NewOID);
+                    SendMsgChef(OrgId, NewOID,Ticketno);
+                    SendMsgChef(0, NewOID, Ticketno);
                 }
             }
             else
@@ -1623,11 +1625,15 @@ namespace HangOut.Controllers
             return PostResult;
 
         }
-        public void SendMsgChef(int OrgId,Int64 OrdNo)
+        public void SendMsgChef(int OrgId,Int64 OrdNo,int Ticket=0)
         {
             string[] topics = { OrgId.ToString() };
            // topics.Add(OrgId.ToString());
             string Msg = "Order Place  Order No " + OrdNo.ToString();
+            if (Ticket > 0)
+            {
+                Msg += "and Ticket No: " + Ticket;
+            }
             string Title = "New Order Placed";
             try
             {
