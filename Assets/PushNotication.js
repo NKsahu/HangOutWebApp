@@ -57,7 +57,7 @@ navigator.serviceWorker.addEventListener('message', function (event) {
 function subscribeTokenToTopic(token, topic) {
     topic = $("#OrgIdHead").val();
     console.log("topic==" + topic);
-    fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + 50000, {
+    fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + topic, {
         method: 'POST',
         headers: new Headers({
             'Authorization': 'key=AAAA5_sPHX8:APA91bHDAXzfpWGrIXMebCCIySxJo7WY-t8ID4mylmgd-ZHRp65Ybbuk_HW0YZ_nOQkPYjUN83Y9OYv1Gh7WY6Kd8GEJ-xK3xaLz8Zt9BHwz59Ba4P6cwHX4XFd1f2krQYOEuV9hSy94'
