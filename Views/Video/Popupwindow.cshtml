@@ -77,7 +77,7 @@
         @{
                if (Request.QueryString["Id"] != "0")
                {
-                            VideoCategory videoCategory = new VideoCategory().GetOne(int.Parse(Request.QueryString["Id"]));
+                            VideoCategory videoCategory =  VideoCategory.GetOne(int.Parse(Request.QueryString["Id"]));
                             List<Video> listvideo = Video.GetAll(videoCategory.Id);
                             listvideo = listvideo.OrderBy(x => x.SerialNumber).ToList();
                             List<VideoLangu> videoLanguss = Video.Languages();
@@ -397,10 +397,20 @@
                     $('#waiting').hide();
                     console.log("ss");
                     var ObjcatVideo = JSON.parse(data);
-                    var Secondhtml = '<span>' + ObjcatVideo.Name + '</span>';
+                    var strhtml = '<li OrderNo="' + ObjcatVideo.OrderNo + '" CatId="' + ObjcatVideo.Id + '"><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999; margin-left: 5px;"';
+                    var Secondhtml = "onclick='LoadCategoryPopup(\"" + ObjcatVideo.Id + "\")'><span>" + ObjcatVideo.Name + "</span>";
                     Secondhtml += '</button>';
-                    Secondhtml += '</li>&nbsp';
+                    Secondhtml += '<div class="row">';
+                    Secondhtml += '<div class="col-md-6 text-center">';
+                    Secondhtml += "<a onclick='divup(this)'><i style=' font-size:30px;color:#138692' class='fas fa-long-arrow-alt-left'></i></a>";
+                    Secondhtml += '</div>';
+                    Secondhtml += '<div class="col-md-6 text-center">';
+                    Secondhtml += "<a onclick ='divdown(this)' ><i style=' font-size:30px;color:#138692' class='fas fa-long-arrow-alt-right'></i></a>";
+                    Secondhtml += '</div>';
+                    Secondhtml += '</div>';
+                    Secondhtml += '</li>';
                     Secondhtml += '</ul>';
+                   
                     if (VidCategory.Id == 0) {
                         $("#MyCategory").append(strhtml + Secondhtml);
                     }

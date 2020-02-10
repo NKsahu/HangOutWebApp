@@ -30,6 +30,10 @@ namespace HangOut.Controllers
         public JObject SaveCategory([System.Web.Http.FromBody] VideoCategory Category)
         {
             VideoCategory ObjCategory = Category;
+            if (ObjCategory.Id == 0)
+            {
+                ObjCategory.OrderNo = VideoCategory.GetAll().Count+1;
+            }
             ObjCategory.Save();
             List<Video> videolist = ObjCategory.Videos;
 
@@ -57,6 +61,7 @@ namespace HangOut.Controllers
         public JObject VideoList()
         {
             List<VideoCategory> videoCategories = VideoCategory.GetAll();
+            videoCategories = videoCategories.OrderBy(x => x.OrderNo).ToList();
             JObject response = new JObject();
             var UserInfo = Request.Cookies["UserInfo"];
             int CID = int.Parse(UserInfo["UserCode"]);
