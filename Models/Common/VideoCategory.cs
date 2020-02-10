@@ -10,6 +10,7 @@ namespace HangOut.Models.Common
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int OrderNo { get; set; }
         public List<Video> Videos { get; set; }
         public int Save()
         {
@@ -22,16 +23,17 @@ namespace HangOut.Models.Common
                 string Quary = "";
                 if(this.Id==0)
                 {
-                    Quary = "Insert Into VideoCategory values(@Name); SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into VideoCategory values(@Name,@OrderNo); SELECT SCOPE_IDENTITY();";
                 }else
                 {
-                    Quary = "Update VideoCategory Set Name=@Name Where Id=@Id";
+                        Quary = "Update VideoCategory Set Name=@Name Where Id=@Id";
                 }
                 cmd = new SqlCommand(Quary,Con.Con);
                 cmd.Parameters.AddWithValue("@Id", this.Id);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
                 if (this.Id == 0)
                 {
+                    cmd.Parameters.AddWithValue("@OrderNo", this.OrderNo);
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
                     this.Id = Row;
                 }
@@ -45,6 +47,25 @@ namespace HangOut.Models.Common
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); Con.Con.Close(); }
             return Row;
+        }
+        public int UpdateOrderNo()
+        {
+            int Row = 0;
+            DBCon Con = new DBCon();
+            SqlCommand cmd = null;
+            try
+            {
+                    string Quary = "Update VideoCategory Set OrderNo=@OrderNo Where Id="+this.Id;
+                cmd = new SqlCommand(Quary, Con.Con);
+                cmd.Parameters.AddWithValue("@OrderNo", this.OrderNo);
+                    Row = cmd.ExecuteNonQuery();
+                    //this.CategoryID = Row;
+                         
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); Con.Con.Close(); }
+            return Row;
+
         }
         public static List<VideoCategory>GetAll()
         {
@@ -62,6 +83,7 @@ namespace HangOut.Models.Common
                     VideoCategory ObjTmp = new VideoCategory();
                     ObjTmp.Id = SDR.GetInt32(0);
                     ObjTmp.Name = SDR.GetString(1);
+                    ObjTmp.OrderNo = SDR.GetInt32(2);
                     listvideo.Add(ObjTmp);
                 }
             }
@@ -70,7 +92,7 @@ namespace HangOut.Models.Common
 
             return (listvideo);
         }
-        public  VideoCategory  GetOne(int Id)
+        public static VideoCategory  GetOne(int Id)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -87,6 +109,7 @@ namespace HangOut.Models.Common
                      
                     ObjTmp.Id = SDR.GetInt32(0);
                     ObjTmp.Name = SDR.GetString(1);
+                    ObjTmp.OrderNo = SDR.GetInt32(2);
                 }
             }
             catch (System.Exception e) { e.ToString(); }
