@@ -35,10 +35,10 @@ messaging
         // ErrElem.innerHTML = ErrElem.innerHTML + "; " + err
         console.log("Unable to get permission to notify.", err);
     });
-//messaging.onMessage(function (payload) {
-//    console.log("Message received. ", payload);
-//    // ...
-//});
+messaging.onMessage(function (payload) {
+    console.log("Message received. ", payload);
+    // ...
+});
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
         navigator.serviceWorker.register('/firebase-messaging-sw.js').then(function (registration) {
@@ -57,10 +57,10 @@ navigator.serviceWorker.addEventListener('message', function (event) {
 function subscribeTokenToTopic(token, topic) {
     topic = $("#OrgIdHead").val();
     console.log("topic==" + topic);
-    fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + topic, {
+    fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + 50000, {
         method: 'POST',
         headers: new Headers({
-            'Authorization':'key=AIzaSyAjv_Y-sB7wW1f_Q0CZ5C_KIjknVZy92JU'
+            'Authorization': 'key=AAAA5_sPHX8:APA91bHDAXzfpWGrIXMebCCIySxJo7WY-t8ID4mylmgd-ZHRp65Ybbuk_HW0YZ_nOQkPYjUN83Y9OYv1Gh7WY6Kd8GEJ-xK3xaLz8Zt9BHwz59Ba4P6cwHX4XFd1f2krQYOEuV9hSy94'
         })
     }).then(response => {
         if (response.status < 200 || response.status >= 400) {

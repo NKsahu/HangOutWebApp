@@ -24,21 +24,21 @@ console.log("aaya");
 //    });
 //});
 
-//self.addEventListener('push', (event) => {
-//    //console.log('Received a push message', event);
+self.addEventListener('push', (event) => {
+    //console.log('Received a push message', event);
 
-//    //var title = 'Yay a message.';
-//    //var body = 'We have received a push message.';
-//    //var icon = '~/Image/app_icon.png';
-//    //var tag = 'simple-push-demo-notification-tag';
-//    //event.waitUntil(
-//    //    self.registration.showNotification(title, {
-//    //        body: body,
-//    //        icon: icon,
-//    //        tag: tag
-//    //    })
-//    //);
-//});
+    //var title = 'Yay a message.';
+    //var body = 'We have received a push message.';
+    //var icon = '~/Image/app_icon.png';
+    //var tag = 'simple-push-demo-notification-tag';
+    //event.waitUntil(
+    //    self.registration.showNotification(title, {
+    //        body: body,
+    //        icon: icon,
+    //        tag: tag
+    //    })
+    //);
+});
 
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
