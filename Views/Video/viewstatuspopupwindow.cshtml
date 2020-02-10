@@ -35,7 +35,7 @@
                     <li class="card">
                         <div class="row">
                             <div class="col-md-12 pt-3 ">
-                                <button class="btn btn-success form-control"   style="font-size:25px" onclick="WatchVideo()">Must Watch Video</button>
+                                <button class="btn btn-success form-control" style="font-size:25px" onclick="WatchVideo()">Must Watch Video</button>
                             </div>
 
                         </div>
@@ -54,7 +54,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6 text-center">
-                                <input id="search" type="text" class="form-control text-center" onkeyup="search_func(this.value);" placeholder="search in TITLE & DESCRIPTION">
+                                <input id="search" type="text" class="form-control text-center" onkeyup="SearchItem('search','filter')" placeholder="search in TITLE & DESCRIPTION">
                             </div>
                         </div>
                         <ol class="nav-fill nav-justified" id="VideoList">
@@ -240,15 +240,15 @@
                 markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
             }
 
-            var videohtml = '<li class="mt-2" id="myInput">';
+            var videohtml = '<li class="mt-2 firstdiv filter" id="VidLi'+VideoId+'">';
             videohtml += '<div class="row">';
             videohtml += '<div class="col-md-2">';
             videohtml += '    <button class="btn btn-dark form-control text-left">';
             videohtml += '        <h5>Title:</h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
-            videohtml += '<div class="col-md-9 firstdiv"  >';
-            videohtml += '    <button class="btn btn-secondary form-control text-left seconddiv" data-name="deepak" >';
+            videohtml += '<div class="col-md-9 "  >';
+            videohtml += '    <button class="btn btn-secondary form-control text-left seconddiv filter2 " VideoID="'+VideoId+'" data-name="deepak" >';
             videohtml += '        <h5>' + Title + '</h5>';
             videohtml += '    </button>';
             videohtml += '</div>';
@@ -256,7 +256,7 @@
             videohtml += '    <button class="btn btn-dark form-control text-left w-100"style="padding-bottom: 000px;padding-right: 00px;padding-top: 0.00px;padding-left: 00px;"><h5>Description:</h5></button>';
             videohtml += '</div>';
             videohtml += '<div class="col-md-9">';
-            videohtml += '  <div id="style-1" style="height:80px;" class="btn-secondary scrollb"> ';
+            videohtml += '  <div id="style-1" style="height:80px;" class="btn-secondary scrollb filter2" VideoID="' + VideoId +'"> ';
             videohtml += VideoObj.Discription;
             videohtml += '</div>';
             videohtml += '</div>';
@@ -296,8 +296,37 @@
             return "Urdu";
         }
     }
+    function WatchVideo() {
 
-    
+        var VideosListImp = VideosList.filter(function (x) {
+            return x.IsImp == true;
+        });
+        ShowVidelos(VideosListImp);
+    }
+     
+    function SearchItem(SearchItem, hideClsName) {
+        var input = document.getElementById(SearchItem);
+        var filter = input.value.toLowerCase();
+        var nodes = document.getElementsByClassName(hideClsName);
+        for (i = 0; i < nodes.length; i++) {
+            if (nodes[i].innerText.toLowerCase().includes(filter)) {
+                console.log(nodes[i]);
+               // var node = $(nodes[i]);
+               //var videois= $(node).attr('VideoID');
+               // console.log("ssss" + videois);
+               // $("#VidLi" + videois).show();
+               // $(node).parent('div').parent('div').parent('li').show();
+               nodes[i].style.display = "block";
+            } else {
+               // var node = $(nodes[i]);
+                //var videois = $(node).attr('VideoID');
+               // console.log("ssss" + videois);
+                //$("#VidLi" + videois).hide();
+                nodes[i].style.display = "none";
+               // $(node).parent('div').parent('div').parent('li').hide();
+            }
+        }
+    }
 </script>
 <style>
     .show-read-more .more-text {
