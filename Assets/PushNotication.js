@@ -39,6 +39,14 @@ messaging.onMessage(function (payload) {
     console.log("Message received. ", payload);
     // ...
 });
+//navigator.serviceWorker.register('/firebase-messaging-sw.js');
+//Notification.requestPermission(function (result) {
+//    if (result === 'granted') {
+//        navigator.serviceWorker.ready.then(function (registration) {
+//            //registration.showNotification('Notification with ServiceWorker');
+//        });
+//    }
+//});
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
         navigator.serviceWorker.register('/firebase-messaging-sw.js').then(function (registration) {

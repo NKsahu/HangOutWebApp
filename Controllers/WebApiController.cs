@@ -785,15 +785,18 @@ namespace HangOut.Controllers
                 PostResult.Add("Status", 200);
                 PostResult.Add("MSG",NewOID.ToString()+","+Ticketno.ToString()+","+PaymtSts.ToString());
                 //send firebase massage new ticket assign
+                string[] topics = { OrgId.ToString(), "0" };
                 if (ObjOrg.PaymentType == 2 &&ObjTorS.Type!="3")// postpaid
                 {
                     SendMsgChef(OrgId, NewOID,Ticketno);
-                    SendMsgChef(0, NewOID,Ticketno);
+
+                    PushNotification.NewOrderMsg(topics, NewOID, Ticketno);
+                    
                 }
                 else if (PaymtSts > 0 && ObjTorS.Type != "3")
                 {
                     SendMsgChef(OrgId, NewOID,Ticketno);
-                    SendMsgChef(0, NewOID, Ticketno);
+                    PushNotification.NewOrderMsg(topics, NewOID, Ticketno);
                 }
             }
             else
@@ -975,6 +978,8 @@ namespace HangOut.Controllers
                     else if(obj.Type != "3")
                     {
                         SendMsgChef(ObjOrg.OrgID, order.OID);
+                        string[] topics = { "0", ObjOrg.OrgID.ToString() };
+                        PushNotification.NewOrderMsg(topics, order.OID, 0);
                     }
                     
                 }
