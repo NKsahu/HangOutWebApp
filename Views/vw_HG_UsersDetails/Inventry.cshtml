@@ -6,7 +6,7 @@
 }
 <header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #33bb6f, #30bb66, #30bb5b, #31bb50, #33bb44);z-index:1;">
     <div class="col-md-8 col-12 text-md-left text-center mt-0">
-        <a class="text-white navbar-brand pl-3" style="font-size:15px;"> Account </a>
+        <a class="text-white navbar-brand pl-3" style="font-size:15px;"> Inventry </a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
     </div>
 
@@ -39,12 +39,12 @@
 
                 var UserType = Request.Cookies["UserInfo"]["UserType"];
                 List<UsersMenu> List = new UsersMenu().GetAll();
-                List<UsersMenu> AccountMenuList = List.FindAll(x => x.Section == "ACCOUNT" && x.ParentMenuId == 0);
+                List<UsersMenu> AccountMenuList = List.FindAll(x => x.Section == "INVENTORY" && x.ParentMenuId == 0);
                 AccountMenuList = AccountMenuList.OrderBy(x => x.MenuOrderNo).ToList();
-                List<UsersMenu> AccountSubMenuList =List.FindAll(x => x.Section == "ACCOUNT" && x.ParentMenuId != 0);
+                List<UsersMenu> AccountSubMenuList = List.FindAll(x => x.Section == "INVENTORY" && x.ParentMenuId != 0);
                 foreach (var ObjMenuLi in AccountMenuList)
                 {
-                    if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink!="")
+                    if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink != "")
                     {
                         <li class="nav-item" data-parent="#myaccordion">
                             <a class="nav-link" href="@ObjMenuLi.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@ObjMenuLi.Menu_Icon"></i>@ObjMenuLi.MenuDisplayName</a>
@@ -150,4 +150,5 @@
 
     });
 </script>
+
 

@@ -8,7 +8,7 @@ namespace HangOut.Controllers
 {
     public class AccountController : Controller
     {
-        // GET: Account
+        // GET: inventrry
         public ActionResult AcntHeading()
         {
             return View();

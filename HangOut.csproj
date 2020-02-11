@@ -366,6 +366,8 @@
     <Compile Include="Models\HG_Ticket.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\HG_OrderItem.cs" />
+    <Compile Include="Models\Inventory\INTCategory.cs" />
+    <Compile Include="Models\Inventory\INTGSTBL.cs" />
     <Compile Include="Models\JoinFoodDo.cs" />
     <Compile Include="Models\OrderMenu.cs" />
     <Compile Include="Models\OrderMenuCategory.cs" />
@@ -465,6 +467,7 @@
     <Content Include="Views\Video\viewstatuspopupwindow.cshtml" />
     <Content Include="Views\FeedBack\FeedBkDetails.cshtml" />
     <Content Include="Views\FeedBack\FeedBackReportFilter.cshtml" />
+    <Content Include="Views\vw_HG_UsersDetails\Inventry.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
