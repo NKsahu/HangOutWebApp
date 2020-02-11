@@ -90,7 +90,7 @@ namespace HangOut.Models.Common
                         body = message,
                         title = title,
                         icon = "https://fooddo.club/Image/app_icon.png",
-                        sound = "~/Image/noticefict.mpeg",//"default",
+                        sound = "default",//"default",
                         OrderID = OID
                     }
                 };
