@@ -23,7 +23,7 @@ namespace HangOut.Models.Inventory
             try
             {
                 string Quary = "";
-                if (this.CatID == 0)
+                if (this.GSID == 0)
                 {
                     Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Type,@Unit,@Qty);SELECT SCOPE_IDENTITY();";
                 }
@@ -35,13 +35,13 @@ namespace HangOut.Models.Inventory
                 cmd.Parameters.AddWithValue("@GSID", this.GSID);
                 cmd.Parameters.AddWithValue("@CatID", this.CatID);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
-                cmd.Parameters.AddWithValue("@Type", this.Type);
+                cmd.Parameters.AddWithValue("@Type", 1);
                 cmd.Parameters.AddWithValue("@Unit", this.Unit);
                 cmd.Parameters.AddWithValue("@Qty", this.Qty);
-                if (this.CatID == 0)
+                if (this.GSID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
-                    this.CatID = Row;
+                    this.GSID = Row;
                 }
                 else
                 {
@@ -63,7 +63,7 @@ namespace HangOut.Models.Inventory
             List<INTGSTBL> listintcat = new List<INTGSTBL>();
             try
             {
-                string Quary = "Select * from INTGSTBL where ORDER BY GSID DESC";
+                string Quary = "Select * from INTGSTBL ORDER BY GSID DESC";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
@@ -76,6 +76,7 @@ namespace HangOut.Models.Inventory
                     OBJINT.Type = SDR.GetInt32(3);
                     OBJINT.Unit = SDR.GetInt32(4);
                     OBJINT.Qty = SDR.GetDouble(5);
+                    listintcat.Add(OBJINT);
                 }
             }
             catch (Exception e) { e.ToString(); }
@@ -99,8 +100,11 @@ namespace HangOut.Models.Inventory
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    ObjTmp.CatID = SDR.GetInt32(0);
-                    ObjTmp.Name = SDR.GetString(1);
+                    ObjTmp.GSID = SDR.GetInt32(0);
+                    ObjTmp.CatID = SDR.GetInt32(1);
+                    ObjTmp.Name = SDR.GetString(2);
+                    ObjTmp.Unit = SDR.GetInt32(3);
+                    ObjTmp.Qty = SDR.GetInt32(4);
 
 
                 }
@@ -133,5 +137,22 @@ namespace HangOut.Models.Inventory
             }
             return R;
         }
+        public static List<Unit> Types()
+        {
+
+            List<Unit> unit = new List<Unit>();
+            unit.Add(new Unit { Id = 0, Name = "Star" });
+            unit.Add(new Unit { Id = 1, Name = "Objective" });
+            unit.Add(new Unit { Id = 2, Name = "Subjective" });
+            unit.Add(new Unit { Id = 3, Name = "Like Dislike Ok" });
+            unit.Add(new Unit { Id = 4, Name = "Star-Subjective" });
+            return unit;
+        }
     }
+   
+}
+public class Unit
+{
+   public int Id { get; set; }
+   public string Name { get; set; }
 }

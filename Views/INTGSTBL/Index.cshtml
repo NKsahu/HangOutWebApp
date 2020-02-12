@@ -12,24 +12,20 @@
         <h3 class="text-center">Goods</h3>
     </div>
     <div class="col-md-2">
-        <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
+        <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Goods</button>
     </div>
     <div class="card-body">
-        <table class="table" id="TBLID">
+        <table class="table" id="TBLID" style="width:100%;">
             <thead>
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.GSID)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CatID)
-                    </th>
+              
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Type)
-                    </th>
+                
                     <th>
                         @Html.DisplayNameFor(model => model.Unit)
                     </th>
@@ -43,9 +39,8 @@
                 @foreach (INTGSTBL Obj in Model)
                 {
                 <tr id="@Obj.GSID">
-                    <td>@Obj.CatID</td>
+                    <td>@Obj.GSID</td>
                     <td>@Obj.Name</td>
-                    <td>@Obj.Type</td>
                     <td>@Obj.Unit</td>
                     <td>@Obj.Qty</td>
                     <td>
@@ -90,17 +85,17 @@
     }
     function CreateEdit(ID) {
         if (ID != "0") {
-            AddCategory = false;
+            AddGoods = false;
         } else {
-            AddCategory = true;
+            AddGoods = true;
         }
         $.ajax({
             type: 'GET',
-            url: "/Category/CreateEdit?ID=" + ID,
+            url: "/INTGSTBL/CreateEdit?ID=" + ID,
             success: function (data) {
-                makedpt("INTCategory");
-                $("#INTCategory > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("INTCategory");
+                makedpt("INTGSTBL");
+                $("#INTGSTBL > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("INTGSTBL");
                 $('#waiting').hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -113,19 +108,23 @@
 
         var Jitmobj = Jobj.data;
         console.log(Jitmobj);
-        hidedpt("INTCategory");
+        hidedpt("INTGSTBL");
         $('#waiting').hide();
-        var HtmlStr = "<tr id='" + Jitmobj.CatID + "'>";
+        var HtmlStr = "<tr id='" + Jitmobj.GSID + "'>";
+        HtmlStr += '<td>' + Jitmobj.GSID + '</td>';
         HtmlStr += '<td>' + Jitmobj.CatID + '</td>';
         HtmlStr += '<td>' + Jitmobj.Name + '</td>';
-        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CatID + ')"> Edit</button>';
-        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Name
+        HtmlStr += '<td>' + Jitmobj.type + '</td>';
+        HtmlStr += '<td>' + Jitmobj.Unit + '</td>';
+        HtmlStr += '<td>' + Jitmobj.Qty + '</td>';
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.GSID + ')"> Edit</button>';
+        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.GSID
         HtmlStr += ')"> Delete</button></td ></tr > ';
-        if (AddCategory) {
+        if (AddGoods) {
             $("#Tbody").append(HtmlStr);
         }
         else {
-            $('#' + Jitmobj.CatID).remove();
+            $('#' + Jitmobj.GSID).remove();
             $("#Tbody").append(HtmlStr);
         }
     }

@@ -41,7 +41,7 @@ namespace HangOut.Controllers.Inventory
 
             if (listGoodService != null)
             {
-                int i = INTCategory.Dell(ID);
+                int i = INTGSTBL.Dell(ID);
             }
             return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
         }

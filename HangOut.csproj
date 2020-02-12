@@ -474,6 +474,7 @@
     <Content Include="Views\Category\CreateEdit.cshtml" />
     <Content Include="Views\INTGSTBL\Index.cshtml" />
     <Content Include="Views\HG_Orders\PrintKot.cshtml" />
+    <Content Include="Views\INTGSTBL\CreateEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
