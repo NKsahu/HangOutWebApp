@@ -14,6 +14,7 @@ namespace HangOut.Models.Inventory
         public int Type { get; set; }
         public int Unit { get; set; }
         public double Qty { get; set; }
+
         public int Save()
         {
             int Row = 0;
@@ -80,6 +81,57 @@ namespace HangOut.Models.Inventory
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
             return (listintcat);
+        }
+
+        public INTGSTBL GetOne(int ID)
+        {
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            INTGSTBL ObjTmp = new INTGSTBL();
+
+            try
+            {
+                string Query = "SELECT * FROM  INTGSTBL where GSID=@GSID";
+                cmd = new SqlCommand(Query, Con);
+                cmd.Parameters.AddWithValue("@GSID", ID);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTmp.CatID = SDR.GetInt32(0);
+                    ObjTmp.Name = SDR.GetString(1);
+
+
+                }
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally { Con.Close(); }
+
+            return (ObjTmp);
+        }
+        public static int Dell(int ID)
+        {
+            int R = 0;
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  INTGSTBL where GSID=" + ID;
+                cmd = new SqlCommand(Query, Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally
+            {
+                Con.Close();
+            }
+            return R;
         }
     }
 }
