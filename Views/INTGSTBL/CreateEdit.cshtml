@@ -1,0 +1,64 @@
+﻿@model HangOut.Models.Inventory.INTGSTBL
+@using HangOut.Models.Inventory;
+
+@{
+    Layout = null;
+    var ObjOrg = Request.Cookies["UserInfo"];
+}
+@using HangOut.Models
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:#000000"><b>Add Goods</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+
+        @using (Ajax.BeginForm("CreateEdit", "INTGSTBL", new { ID = Model.GSID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.GSID)
+
+
+        <div class="row">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.GSID, "", new { @class = "text-danger" })
+
+            @{
+                <div class="col-md-3">
+                    @Html.Label("Category")
+                    @Html.DropDownListFor(model => model.CatID, new SelectList(INTCategory.GetAll(), "CatID", "Name", Model.CatID), "Select Category Name", new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(model => model.CatID, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+            </div>
+            @{
+                <div class="col-md-3">
+                    @Html.Label("Unit")
+                    @Html.DropDownListFor(model => model.Unit, new SelectList(INTGSTBL.Types(), "Id", "Name", Model.Unit), "Select Unit", new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Qty, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-1">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input style="margin-top:25px"  type="submit" value="Save" class="btn btn-success" />
+
+            </div>
+        </div>
+        }
+    </div>
+</div>
