@@ -315,6 +315,7 @@
     <Compile Include="Controllers\HG_OrganizationDetailsController.cs" />
     <Compile Include="Controllers\HG_Tables_or_SheatController.cs" />
     <Compile Include="Controllers\HG_UserTypesController.cs" />
+    <Compile Include="Controllers\Inventory\CategoryController.cs" />
     <Compile Include="Controllers\OrderMenuController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -468,6 +469,8 @@
     <Content Include="Views\FeedBack\FeedBkDetails.cshtml" />
     <Content Include="Views\FeedBack\FeedBackReportFilter.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\Inventry.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Category\CreateEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

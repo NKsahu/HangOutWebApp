@@ -55,7 +55,7 @@ namespace HangOut.Models.Inventory
             List<INTCategory> listintcat = new List<INTCategory>();
             try
             {
-                string Quary = "Select * from INTCategory where ORDER BY CatID DESC";
+                string Quary = "Select * from INTCategory ORDER BY CatID DESC";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
@@ -70,6 +70,56 @@ namespace HangOut.Models.Inventory
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
             return (listintcat);
+        }
+        public INTCategory GetOne(int ID)
+        {
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            INTCategory ObjTmp = new INTCategory();
+
+            try
+            {
+                string Query = "SELECT * FROM  INTCategory where CatID=@CatID";
+                cmd = new SqlCommand(Query, Con);
+                cmd.Parameters.AddWithValue("@CatID", ID);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTmp.CatID = SDR.GetInt32(0);
+                    ObjTmp.Name = SDR.GetString(1);
+                   
+
+                }
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally { Con.Close(); }
+
+            return (ObjTmp);
+        }
+        public static int Dell(int ID)
+        {
+            int R = 0;
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  INTCategory where CatID=" + ID;
+                cmd = new SqlCommand(Query, Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally
+            {
+                Con.Close();
+            }
+            return R;
         }
     }
 }

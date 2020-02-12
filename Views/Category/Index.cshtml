@@ -1,0 +1,118 @@
+﻿@model IEnumerable<HangOut.Models.Inventory.INTCategory>
+@using HangOut.Models.Inventory;
+@{
+   
+    Layout = null;
+}
+
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="text-center">Category</h3>
+    </div>
+    <div class="col-md-2">
+        <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
+    </div>
+    <div class="card-body">
+        <table class="table" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CatID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="Tbody">
+                @foreach (INTCategory Obj in Model)
+                {
+                    <tr id="@Obj.CatID">
+                        <td>@Obj.CatID</td>
+                        <td>@Obj.Name</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.CatID)"> Edit</button>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.CatID)"> Delete</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+    var AddCategory = false;
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/Category/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
+    }
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddCategory = false;
+        } else {
+            AddCategory = true;
+        }
+        $.ajax({
+            type: 'GET',
+            url: "/Category/CreateEdit?ID=" + ID,
+            success: function (data) {
+                makedpt("INTCategory");
+                $("#INTCategory > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("INTCategory");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function JsonSuccess(Jobj) {
+        
+            var Jitmobj = Jobj.data;
+            console.log(Jitmobj);
+          hidedpt("INTCategory");
+            $('#waiting').hide();
+        var HtmlStr = "<tr id='" + Jitmobj.CatID + "'>";
+        HtmlStr += '<td>' + Jitmobj.CatID + '</td>';
+        HtmlStr += '<td>' + Jitmobj.Name + '</td>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CatID + ')"> Edit</button>';
+        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Name
+        HtmlStr += ')"> Delete</button></td ></tr > ';
+        if (AddCategory) {
+                $("#Tbody").append(HtmlStr);
+            }
+            else {
+                $('#' + Jitmobj.CatID).remove();
+                $("#Tbody").append(HtmlStr);
+            }
+       }
+    
+</script>
+
