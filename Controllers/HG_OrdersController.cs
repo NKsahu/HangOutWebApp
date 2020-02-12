@@ -31,8 +31,10 @@ namespace HangOut.Controllers
         }
         public ActionResult PrintInvoice(int OID)
         {
-
-
+            return View();
+        }
+        public ActionResult PrintKot(Int64 OID)
+        {
             return View();
         }
         public ActionResult DashBoardOrders()

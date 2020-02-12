@@ -36,5 +36,6 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        
     }
 }
