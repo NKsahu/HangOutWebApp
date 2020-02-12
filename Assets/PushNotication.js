@@ -64,7 +64,7 @@ navigator.serviceWorker.addEventListener('message', function (event) {
 
 function subscribeTokenToTopic(token, topic) {
     topic = $("#OrgIdHead").val();
-    console.log("topic==" + topic);
+    //console.log("topic==" + topic);
     fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + topic, {
         method: 'POST',
         headers: new Headers({
@@ -74,7 +74,7 @@ function subscribeTokenToTopic(token, topic) {
         if (response.status < 200 || response.status >= 400) {
             throw 'Error subscribing to topic: ' + response.status + ' - ' + response.text();
         }
-        console.log('Subscribed to "' + topic + '"');
+       // console.log('Subscribed to "' + topic + '"');
     }).catch(error => {
         console.error(error);
     })

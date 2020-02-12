@@ -1,17 +1,14 @@
 ﻿
 @{
     Layout = null;
+
+    Int64 OID = Int64.Parse(Request.QueryString["OID"]);
+    // int TicketNo=int.Parse(Request.QueryString)
+    int TicketNo = 0;
+    if (Request.QueryString["TicketNo"] != null)
+    {
+        TicketNo = int.Parse(Request.QueryString["TicketNo"]);
+    }
+
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>PrintKot</title>
-</head>
-<body>
-    <div> 
-    </div>
-</body>
-</html>
