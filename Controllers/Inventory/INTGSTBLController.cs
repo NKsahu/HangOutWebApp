@@ -2,46 +2,44 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using HangOut.Models.Inventory;
 using System.Web.Mvc;
+using HangOut.Models.Inventory;
 
 namespace HangOut.Controllers.Inventory
 {
-    public class CategoryController : Controller
+    public class INTGSTBLController : Controller
     {
-        // GET: Category
+        // GET: INTGSTBL
         public ActionResult Index()
         {
-            List<INTCategory> listcategory = INTCategory.GetAll();
-            return View(listcategory);
+            List<INTGSTBL> listINTGSTBL = INTGSTBL.GetAll();
+            return View(listINTGSTBL);
         }
         public ActionResult CreateEdit(int ID)
         {
-            INTCategory Objitem = new INTCategory();
+            INTGSTBL Obj = new INTGSTBL();
             if (ID > 0)
             {
-                Objitem = Objitem.GetOne(ID);
+                Obj = Obj.GetOne(ID);
             }
 
-            return View(Objitem);
+            return View(Obj);
         }
-        // category create edit
+        // inventory goods and service create edit
         [HttpPost]
-        public ActionResult CreateEdit(INTCategory Objitem)
+        public ActionResult CreateEdit(INTGSTBL Obj)
         {
-            int i = Objitem.Save();
+            int i = Obj.Save();
             if (i > 0)
-                return Json(new { data = Objitem }, JsonRequestBehavior.AllowGet);
+                return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
-
-
         public ActionResult Delete(int ID)
         {
-            List<INTCategory> listcategory = INTCategory.GetAll();
-            listcategory = listcategory.FindAll(x => x.CatID == ID);
-          
-            if(listcategory!=null)
+            List<INTGSTBL> listGoodService = INTGSTBL.GetAll();
+            listGoodService = listGoodService.FindAll(x => x.GSID == ID);
+
+            if (listGoodService != null)
             {
                 int i = INTCategory.Dell(ID);
             }
