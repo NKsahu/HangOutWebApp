@@ -473,6 +473,7 @@
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Category\CreateEdit.cshtml" />
     <Content Include="Views\INTGSTBL\Index.cshtml" />
+    <Content Include="Views\HG_Orders\PrintKot.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
