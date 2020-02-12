@@ -64,6 +64,7 @@ namespace HangOut.Models.Inventory
                     INTCategory OBJINT = new INTCategory();
                     OBJINT.CatID = SDR.GetInt32(0);
                     OBJINT.Name = SDR.GetString(1);
+                    listintcat.Add(OBJINT);
                 }
             }
             catch (Exception e) { e.ToString(); }
