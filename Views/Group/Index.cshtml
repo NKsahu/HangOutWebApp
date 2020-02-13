@@ -6,12 +6,28 @@
 }
 
 <div class="card">
-
     <div class="card-header">
         <h3 class="text-center">Group</h3>
     </div>
-    <div class="col-md-2">
-        <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Group</button>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="/Group/Index" data-ajax="true" style="background-color:white" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control"> Group</a>
+        </div>
+        <div class="col-md-6">
+            <a href="/Ledger/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">Ledger</a>
+        </div>
+
+    </div>
+    <div class="row pt-5">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Group</button>
+        </div>
+        <div class="col-md-4">
+
+        </div>
     </div>
     <div class="card-body">
         <table class="table" id="TBLID" style="width:100%">
@@ -24,27 +40,27 @@
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
                     @*<th>
-                        @Html.DisplayNameFor(model => model.PGID)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Type)
-                    </th>*@
+                            @Html.DisplayNameFor(model => model.PGID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Type)
+                        </th>*@
                     <th></th>
                 </tr>
             </thead>
             <tbody id="Tbody">
                 @foreach (Group Obj in Model)
                 {
-                <tr id="@Obj.ID">
-                    <td>@Obj.ID</td>
-                    <td>@Obj.Name</td>
-                    @*<td>@Obj.PGID</td>
-                    <td>@Obj.Type</td>*@
-                    <td>
-                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
-                        <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.ID)"> Delete</button>
-                    </td>
-                </tr>
+                    <tr id="@Obj.ID">
+                        <td>@Obj.ID</td>
+                        <td>@Obj.Name</td>
+                        @*<td>@Obj.PGID</td>
+                            <td>@Obj.Type</td>*@
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.ID)"> Delete</button>
+                        </td>
+                    </tr>
                 }
 
             </tbody>

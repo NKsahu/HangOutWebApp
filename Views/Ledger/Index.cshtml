@@ -10,8 +10,25 @@
     <div class="card-header">
         <h3 class="text-center">Ledger</h3>
     </div>
-    <div class="col-md-2">
-        <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Ledger</button>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="/Group/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control"> Group</a>
+        </div>
+        <div class="col-md-6">
+            <a href="/Ledger/Index" style="background-color:white" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">Ledger</a>
+        </div>
+
+    </div>
+    <div class="row pt-5">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Ledger</button>
+        </div>
+        <div class="col-md-4">
+
+        </div>
     </div>
     <div class="card-body">
         <table class="table" id="TBLID" style="width:100%">

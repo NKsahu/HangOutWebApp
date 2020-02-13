@@ -155,7 +155,7 @@
 
 
             }
-            <div class="col-md-4">
+            <div class="col-md-4" id="myModal">
                 @Html.Label("CalculationStartFrom")
                 @Html.TextBoxFor(model => model.CalculationStartFrom, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
             </div>
@@ -221,6 +221,17 @@
         if (values === "1") {
             $("#cwid").show();
         }
+    });
+    $('#myModal').on('shown.bs.modal', function () {
+        $('.input-group.date').datepicker({
+            format: "dd/mm/yyyy",
+            startDate: "01-01-2015",
+            endDate: "01-01-2020",
+            todayBtn: "linked",
+            autoclose: true,
+            todayHighlight: true,
+            container: '#myModal modal-body'
+        });
     });
 </script>
 
