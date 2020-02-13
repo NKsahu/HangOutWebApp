@@ -106,24 +106,27 @@
             <input type="checkbox" @CustomerOrdrn onchange="SetCustmrOrd(this)">
             <span class="slider round"></span>
         </label>
-        <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Inventry"><i class="fas fa-truck-moving"></i></a>
-        <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Account" ><i class="fas fa-rupee-sign" ></i></a>
-        <div class="btn-group mt-0">
-            <button class="btn btn-lg text-white " onclick="MakeOrder()"><i class="fas fa-laptop"></i></button>
-            <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
-            <div class="dropdown-menu dropdown-menu-right text-center pb-0">
-                <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
-                <button id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
-                <style>
-                    #logoutbtn > i:hover {
-                        border: none !important;
-                        background: none !important;
-                    }
-                </style>
+        @if (UserType == "SA")
+        {
+            <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Inventry"><i class="fas fa-truck-moving"></i></a>
+        }
+            @*  <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Account" ><i class="fas fa-rupee-sign" ></i></a>*@
+            <div class="btn-group mt-0">
+                <button class="btn btn-lg text-white " onclick="MakeOrder()"><i class="fas fa-laptop"></i></button>
+                <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
+                <div class="dropdown-menu dropdown-menu-right text-center pb-0">
+                    <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
+                    <button id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
+                    <style>
+                        #logoutbtn > i:hover {
+                            border: none !important;
+                            background: none !important;
+                        }
+                    </style>
+                </div>
             </div>
-        </div>
 
-    </div>
+        </div>
 </header>
 
 <div class="row">
