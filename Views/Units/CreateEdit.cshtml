@@ -1,22 +1,28 @@
 ﻿@model HangOut.Models.Inventory.INTUnits
+@using HangOut.Models.Inventory;
+@{
+    Layout = null;
+    var ObjOrg = Request.Cookies["UserInfo"];
+}
 
 <div class="card">
     <div class="card-header">
-        <h4 class="text-danger"><b>Units</b></h4>
+        <h4 class="text-danger text-center"><b>Units</b></h4>
         <hr />
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEdit", "Units", new { ID = Model.UnitID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             <div class="row">
-                @Html.HiddenFor(model => model.UnitID);
+                @Html.HiddenFor(model => model.UnitID)
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
                         @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                    </div>
                 </div>
                 <div class="col-md-1">
                     @Html.Label("Save", new { @class = "text-white" })

@@ -18,6 +18,7 @@ namespace HangOut.Controllers.Inventory
         public ActionResult CreateEdit(int ID)
         {
             INTGSTBL Obj = new INTGSTBL();
+            Obj.Type = 1;//1 = Goods
             if (ID > 0)
             {
                 Obj = Obj.GetOne(ID);
@@ -42,6 +43,7 @@ namespace HangOut.Controllers.Inventory
         public ActionResult ServiceCreateEdit(int ID)
         {
             INTGSTBL Obj = new INTGSTBL();
+            Obj.Type = 2;// 2 = service
             if (ID > 0)
             {
                 Obj = Obj.GetOne(ID);

@@ -2,15 +2,37 @@
 @using HangOut.Models.Inventory;
 @{
     Layout = null;
+    List<INTUnits> listUnits = INTUnits.GetAll();
 }
+
 <div class="card">
 
     <div class="card-header">
-        <h3 class="text-center">Goods</h3>
+        <h3 class="text-center"><b>Service</b></h3>
     </div>
-    <div class="col-md-2">
-        <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Goods</button>
+    <div class="row">
+        <div class="col-md-4">
+            <a href="/INTGSTBL/Index?Type=1" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"  class="btn btn-default blackBackground blackTest form-control"> Goods</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"  class="btn btn-default blackBackground blackTest form-control">Category</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/INTGSTBL/ServiceIndex?Type=2" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"  class="btn btn-default blackBackground blackTest form-control">Service</a>
+        </div>
     </div>
+    <div class="row pt-5">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Service</button>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+    
     <div class="card-body">
         <table class="table table-hover w-100" id="TBLID">
             <thead>
@@ -24,7 +46,7 @@
                     </th>
 
                     <th>
-                        @Html.DisplayNameFor(model => model.Unit)
+                  Unit
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Qty)
@@ -35,17 +57,21 @@
             <tbody id="Tbody">
                 @foreach (INTGSTBL Obj in Model)
                 {
+
                     <tr id="@Obj.GSID">
                         <td>@Obj.GSID</td>
                         <td>@Obj.Name</td>
-                        <td>@Obj.Unit</td>
-                        <td>@Obj.Qty</td>
                         <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.GSID)"> Edit</button>
-                            <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.GSID)"> Delete</button>
-                        </td>
-                    </tr>
-                }
+                            @{INTUnits OBJUnits = listUnits.Find(x => x.UnitID == Obj.UnitID); }
+                        @OBJUnits.Name
+                    </td>
+                    <td>@Obj.Qty</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.GSID)"> Edit</button>
+                        <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.GSID)"> Delete</button>
+                    </td>
+                </tr>
+            }
 
             </tbody>
         </table>
@@ -109,10 +135,8 @@
         $('#waiting').hide();
         var HtmlStr = "<tr id='" + Jitmobj.GSID + "'>";
         HtmlStr += '<td>' + Jitmobj.GSID + '</td>';
-        HtmlStr += '<td>' + Jitmobj.CatID + '</td>';
         HtmlStr += '<td>' + Jitmobj.Name + '</td>';
-        HtmlStr += '<td>' + Jitmobj.type + '</td>';
-        HtmlStr += '<td>' + Jitmobj.Unit + '</td>';
+        HtmlStr += '<td>' + Jitmobj.UnitID + '</td>';
         HtmlStr += '<td>' + Jitmobj.Qty + '</td>';
         HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.GSID + ')"> Edit</button>';
         HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.GSID
@@ -125,5 +149,5 @@
             $("#Tbody").append(HtmlStr);
         }
     }
-
+    
 </script>
