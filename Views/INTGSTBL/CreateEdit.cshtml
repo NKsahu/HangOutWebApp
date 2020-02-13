@@ -16,6 +16,7 @@
         @using (Ajax.BeginForm("CreateEdit", "INTGSTBL", new { ID = Model.GSID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.GSID)
+            @Html.HiddenFor(model => model.Type)
 
 
         <div class="row">
@@ -41,8 +42,8 @@
             @{
                 <div class="col-md-3">
                     @Html.Label("Unit")
-                    @Html.DropDownListFor(model => model.Unit, new SelectList(INTGSTBL.Types(), "Id", "Name", Model.Unit), "Select Unit", new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model => model.UnitID, new SelectList(INTUnits.GetAll() , "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
 
                 </div>
             }

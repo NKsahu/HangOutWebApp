@@ -28,7 +28,7 @@ namespace HangOut.Controllers.Inventory
         {
             int i = ObjUnits.Save();
             if (i > 0)
-                return RedirectToAction("Index");
+                return Json(new { data = ObjUnits }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
         public ActionResult Error()

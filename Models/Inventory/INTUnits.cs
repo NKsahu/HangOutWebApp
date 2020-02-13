@@ -70,7 +70,7 @@ namespace HangOut.Models.Inventory
             finally { cmd.Dispose(); con.Con.Close(); }
             return (listUnit);
         }
-        public INTUnits GetOne(int ID)
+        public   INTUnits GetOne(int ID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -80,9 +80,9 @@ namespace HangOut.Models.Inventory
 
             try
             {
-                string Query = "SELECT * FROM  INTUnits where UnitID=@UnitID";
+                string Query = "SELECT * FROM  INTUnits where UnitID="+ID;
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@UnitID", UnitID);
+                cmd.Parameters.AddWithValue("@UnitID", ID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
