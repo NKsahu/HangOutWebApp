@@ -17,9 +17,9 @@ namespace HangOut.Models.Account
         public int DebtorType { get; set; }
         public int OrgId { get; set; }
         public int State { get; set; }
-        public float MarginOnCash { get; set; }
+        public double MarginOnCash { get; set; }
         public int TaxOnAboveMargin { get; set; }
-        public float MarginOnline { get; set; }
+        public double MarginOnline { get; set; }
         public int TaxOnAboveMarginOnline { get; set; }
         public int PaymentFrequency { get; set; }
 
@@ -48,11 +48,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.ID == 0)
                 {
-                    Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks,);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACGroup Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks, where ID=@ID";
+                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID", this.ID);
@@ -91,6 +91,7 @@ namespace HangOut.Models.Account
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
+            GetAll();
             return Row;
 
         }
@@ -117,9 +118,9 @@ namespace HangOut.Models.Account
                     OBJLDR.DebtorType = SDR.GetInt32(5);
                     OBJLDR.OrgId = SDR.GetInt32(6);
                     OBJLDR.State = SDR.GetInt32(7);
-                    OBJLDR.MarginOnCash = SDR.GetFloat(8);
+                    OBJLDR.MarginOnCash = SDR.GetDouble(8);
                     OBJLDR.TaxOnAboveMargin = SDR.GetInt32(9);
-                    OBJLDR.MarginOnline = SDR.GetFloat(10);
+                    OBJLDR.MarginOnline = SDR.GetDouble(10);
                     OBJLDR.TaxOnAboveMarginOnline = SDR.GetInt32(11);
                     OBJLDR.PaymentFrequency = SDR.GetInt32(12);
                     OBJLDR.PaymentDay = SDR.GetInt32(13);
@@ -162,9 +163,9 @@ namespace HangOut.Models.Account
                     OBJLDR.DebtorType = SDR.GetInt32(5);
                     OBJLDR.OrgId = SDR.GetInt32(6);
                     OBJLDR.State = SDR.GetInt32(7);
-                    OBJLDR.MarginOnCash = SDR.GetFloat(8);
+                    OBJLDR.MarginOnCash = SDR.GetDouble(8);
                     OBJLDR.TaxOnAboveMargin = SDR.GetInt32(9);
-                    OBJLDR.MarginOnline = SDR.GetFloat(10);
+                    OBJLDR.MarginOnline = SDR.GetDouble(10);
                     OBJLDR.TaxOnAboveMarginOnline = SDR.GetInt32(11);
                     OBJLDR.PaymentFrequency = SDR.GetInt32(12);
                     OBJLDR.PaymentDay = SDR.GetInt32(13);
@@ -192,7 +193,7 @@ namespace HangOut.Models.Account
             SqlCommand cmd = null;
             try
             {
-                string Query = "Delete FROM  ACOBJLDR where ID=" + ID;
+                string Query = "Delete FROM  ACLedger where ID=" + ID;
                 cmd = new SqlCommand(Query, Con);
                 R = cmd.ExecuteNonQuery();
             }
@@ -238,6 +239,40 @@ namespace HangOut.Models.Account
 
             return wtype;
         }
+        public static List<CollectionFrequency> CFrequency()
+        {
+
+            List<CollectionFrequency> ptype = new List<CollectionFrequency>();
+            ptype.Add(new CollectionFrequency { Id = 0, Name = "Daily" });
+            ptype.Add(new CollectionFrequency { Id = 1, Name = "Weekly" });
+
+            return ptype;
+        }
+        public static List<CollectionWeekly> CWeekDays()
+        {
+
+            List<CollectionWeekly> wtype = new List<CollectionWeekly>();
+            wtype.Add(new CollectionWeekly { Id = 0, Name = "Sunday" });
+            wtype.Add(new CollectionWeekly { Id = 1, Name = "Monday" });
+            wtype.Add(new CollectionWeekly { Id = 2, Name = "TuesDay" });
+            wtype.Add(new CollectionWeekly { Id = 3, Name = "WednesDay" });
+            wtype.Add(new CollectionWeekly { Id = 4, Name = "ThusDay" });
+            wtype.Add(new CollectionWeekly { Id = 5, Name = "Friday" });
+            wtype.Add(new CollectionWeekly { Id = 6, Name = "SaturDay" });
+
+
+            return wtype;
+        }
+        public static List<TdsApplicable> TDS()
+        {
+
+            List<TdsApplicable> ptype = new List<TdsApplicable>();
+            ptype.Add(new TdsApplicable { Id = 1, Name = "Yes" });
+            ptype.Add(new TdsApplicable { Id = 0, Name = "No" });
+
+
+            return ptype;
+        }
     }
 }
 public class DebtorType
@@ -251,6 +286,21 @@ public class PaymentFrequency
     public string Name { get; set; }
 }
 public class PaymentWeekly
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+public class CollectionFrequency
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+public class CollectionWeekly
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+public class TdsApplicable
 {
     public int Id { get; set; }
     public string Name { get; set; }
