@@ -92,7 +92,7 @@
             success: function (data) {
                 makedpt("Leader");
                 $("#Leader > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("Group");
+                showdpt("Leader");
                 $('#waiting').hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -115,7 +115,7 @@
         HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ID + ')"> Edit</button>';
         HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ID
         HtmlStr += ')"> Delete</button></td ></tr > ';
-        if (AddGroup) {
+        if (AddLeader) {
             $("#Tbody").append(HtmlStr);
         }
         else {
