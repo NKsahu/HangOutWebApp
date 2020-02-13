@@ -56,8 +56,8 @@
             var prev = li.prev();
             if (prev.length && prev.hasClass('NotOrd')==false) {
 
-                var OrderNoCur = parseInt(li.attr('OrderNo','MyCategory'));
-                var OrderNoPre = parseInt(prev.attr('OrderNo','MyCategory'));
+                var OrderNoCur = parseInt(li.attr('OrderNo'));
+                var OrderNoPre = parseInt(prev.attr('OrderNo'));
                 console.log(OrderNoCur);
                 li.attr('OrderNo', OrderNoCur - 1);
                 prev.attr('OrderNo',OrderNoPre + 1);

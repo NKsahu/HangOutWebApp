@@ -37,13 +37,14 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult ScreenCreateEdit(HG_Floor_or_ScreenMaster Objfloor)
         {
-            int i = Objfloor.save();
+            
            List<HG_Floor_or_ScreenMaster> Listscr = new HG_Floor_or_ScreenMaster().GetAll(2);//scrn Type=2
             var ObjFlrExist = Listscr.Find(x => x.Name.ToUpper() == Objfloor.Name.ToUpper() && x.Floor_or_ScreenID != Objfloor.Floor_or_ScreenID);
             if (ObjFlrExist != null)
             {
                 return Json(new { msg = "Screen Name Already Exist" }, JsonRequestBehavior.AllowGet);
             }
+            int i = Objfloor.save();
             if (i > 0)
                 return Json(new {data= Objfloor }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");

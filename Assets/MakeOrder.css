@@ -2992,7 +2992,7 @@ input[type=search] {
     }
 }
 
-.form-group {
+.Col-md-4 {
     margin-bottom: 15px
 }
 
@@ -3069,7 +3069,7 @@ input[type=search] {
     height: auto
 }
 
-.form-group-sm .form-control {
+.Col-md-4-sm .form-control {
     height: 36px;
     padding: 8px 12px;
     font-size: 12px;
@@ -3077,16 +3077,16 @@ input[type=search] {
     border-radius: 0
 }
 
-.form-group-sm select.form-control {
+.Col-md-4-sm select.form-control {
     height: 36px;
     line-height: 36px
 }
 
-.form-group-sm select[multiple].form-control, .form-group-sm textarea.form-control {
+.Col-md-4-sm select[multiple].form-control, .Col-md-4-sm textarea.form-control {
     height: auto
 }
 
-.form-group-sm .form-control-static {
+.Col-md-4-sm .form-control-static {
     height: 36px;
     min-height: 33px;
     padding: 9px 12px;
@@ -3111,7 +3111,7 @@ input[type=search] {
     height: auto
 }
 
-.form-group-lg .form-control {
+.Col-md-4-lg .form-control {
     height: 60px;
     padding: 16px 20px;
     font-size: 19px;
@@ -3119,16 +3119,16 @@ input[type=search] {
     border-radius: 0
 }
 
-.form-group-lg select.form-control {
+.Col-md-4-lg select.form-control {
     height: 60px;
     line-height: 60px
 }
 
-.form-group-lg select[multiple].form-control, .form-group-lg textarea.form-control {
+.Col-md-4-lg select[multiple].form-control, .Col-md-4-lg textarea.form-control {
     height: auto
 }
 
-.form-group-lg .form-control-static {
+.Col-md-4-lg .form-control-static {
     height: 60px;
     min-height: 40px;
     padding: 17px 20px;
@@ -3157,13 +3157,13 @@ input[type=search] {
     pointer-events: none
 }
 
-.form-group-lg .form-control + .form-control-feedback, .input-group-lg + .form-control-feedback, .input-group-lg > .form-control + .form-control-feedback, .input-group-lg > .input-group-addon + .form-control-feedback, .input-group-lg > .input-group-btn > .btn + .form-control-feedback, .input-lg + .form-control-feedback {
+.Col-md-4-lg .form-control + .form-control-feedback, .input-group-lg + .form-control-feedback, .input-group-lg > .form-control + .form-control-feedback, .input-group-lg > .input-group-addon + .form-control-feedback, .input-group-lg > .input-group-btn > .btn + .form-control-feedback, .input-lg + .form-control-feedback {
     width: 60px;
     height: 60px;
     line-height: 60px
 }
 
-.form-group-sm .form-control + .form-control-feedback, .input-group-sm + .form-control-feedback, .input-group-sm > .form-control + .form-control-feedback, .input-group-sm > .input-group-addon + .form-control-feedback, .input-group-sm > .input-group-btn > .btn + .form-control-feedback, .input-sm + .form-control-feedback {
+.Col-md-4-sm .form-control + .form-control-feedback, .input-group-sm + .form-control-feedback, .input-group-sm > .form-control + .form-control-feedback, .input-group-sm > .input-group-addon + .form-control-feedback, .input-group-sm > .input-group-btn > .btn + .form-control-feedback, .input-sm + .form-control-feedback {
     width: 36px;
     height: 36px;
     line-height: 36px
@@ -3257,7 +3257,7 @@ input[type=search] {
 }
 
 @media (min-width:768px) {
-    .form-inline .form-group {
+    .form-inline .Col-md-4 {
         display: inline-block;
         margin-bottom: 0;
         vertical-align: middle
@@ -3322,17 +3322,17 @@ input[type=search] {
     min-height: 30px
 }
 
-.form-horizontal .form-group {
+.form-horizontal .Col-md-4 {
     margin-left: -15px;
     margin-right: -15px
 }
 
-    .form-horizontal .form-group:after, .form-horizontal .form-group:before {
+    .form-horizontal .Col-md-4:after, .form-horizontal .Col-md-4:before {
         content: " ";
         display: table
     }
 
-    .form-horizontal .form-group:after {
+    .form-horizontal .Col-md-4:after {
         clear: both
     }
 
@@ -3349,14 +3349,14 @@ input[type=search] {
 }
 
 @media (min-width:768px) {
-    .form-horizontal .form-group-lg .control-label {
+    .form-horizontal .Col-md-4-lg .control-label {
         padding-top: 17px;
         font-size: 19px
     }
 }
 
 @media (min-width:768px) {
-    .form-horizontal .form-group-sm .control-label {
+    .form-horizontal .Col-md-4-sm .control-label {
         padding-top: 9px;
         font-size: 12px
     }
@@ -4610,7 +4610,7 @@ tbody.collapse.in {
 }
 
 @media (min-width:768px) {
-    .navbar-form .form-group {
+    .navbar-form .Col-md-4 {
         display: inline-block;
         margin-bottom: 0;
         vertical-align: middle
@@ -4666,11 +4666,11 @@ tbody.collapse.in {
 }
 
 @media (max-width:767px) {
-    .navbar-form .form-group {
+    .navbar-form .Col-md-4 {
         margin-bottom: 5px
     }
 
-        .navbar-form .form-group:last-child {
+        .navbar-form .Col-md-4:last-child {
             margin-bottom: 0
         }
 }
@@ -9228,7 +9228,7 @@ popover-container.popover.in.popover-top.top {
     font-size: inherit
 }
 
-timepicker > table, timepicker > table > tbody > tr > td.form-group > input {
+timepicker > table, timepicker > table > tbody > tr > td.Col-md-4 > input {
     width: 100% !important
 }
 

@@ -10,9 +10,9 @@ namespace HangOut.Controllers.Inventory
     public class INTGSTBLController : Controller
     {
         // GET: INTGSTBL
-        public ActionResult Index()
+        public ActionResult Index(int Type)
         {
-            List<INTGSTBL> listINTGSTBL = INTGSTBL.GetAll();
+            List<INTGSTBL> listINTGSTBL = INTGSTBL.GetAll(Type);
             return View(listINTGSTBL);
         }
         public ActionResult CreateEdit(int ID)
@@ -34,16 +34,28 @@ namespace HangOut.Controllers.Inventory
                 return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
-        public ActionResult Delete(int ID)
+        public ActionResult ServiceIndex(int Type)
         {
-            List<INTGSTBL> listGoodService = INTGSTBL.GetAll();
-            listGoodService = listGoodService.FindAll(x => x.GSID == ID);
-
-            if (listGoodService != null)
+            List<INTGSTBL> listgstbl = INTGSTBL.GetAll(Type);
+            return View(listgstbl);
+        }
+        public ActionResult ServiceCreateEdit(int ID)
+        {
+            INTGSTBL Obj = new INTGSTBL();
+            if (ID > 0)
             {
-                int i = INTGSTBL.Dell(ID);
+                Obj = Obj.GetOne(ID);
             }
-            return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
+
+            return View(Obj);
+        }
+        [HttpPost]
+        public ActionResult ServiceCreateEdit(INTGSTBL Obj)
+        {
+            int i = Obj.Save();
+            if (i > 0)
+                return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Error");
         }
         public ActionResult Error()
         {

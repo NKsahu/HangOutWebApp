@@ -11,7 +11,7 @@ namespace HangOut.Models.Inventory
         public int GSID { get; set; }
         public int CatID { get; set; }
         public string Name { get; set; }
-        public int Type { get; set; }
+        public int Type { get; set; }//1=Goods and 2 = Service
         public int Unit { get; set; }
         public double Qty { get; set; }
 
@@ -55,7 +55,7 @@ namespace HangOut.Models.Inventory
             return Row;
 
         }
-        public static List<INTGSTBL> GetAll()
+        public static List<INTGSTBL> GetAll(int Type)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -63,7 +63,7 @@ namespace HangOut.Models.Inventory
             List<INTGSTBL> listintcat = new List<INTGSTBL>();
             try
             {
-                string Quary = "Select * from INTGSTBL ORDER BY GSID DESC";
+                string Quary = "Select * from INTGSTBL where Type="+Type;
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
@@ -141,13 +141,14 @@ namespace HangOut.Models.Inventory
         {
 
             List<Unit> unit = new List<Unit>();
-            unit.Add(new Unit { Id = 0, Name = "Star" });
-            unit.Add(new Unit { Id = 1, Name = "Objective" });
+            unit.Add(new Unit { Id = 0, Name = "Gram" });
+            unit.Add(new Unit { Id = 1, Name = "" });
             unit.Add(new Unit { Id = 2, Name = "Subjective" });
             unit.Add(new Unit { Id = 3, Name = "Like Dislike Ok" });
             unit.Add(new Unit { Id = 4, Name = "Star-Subjective" });
             return unit;
         }
+
     }
    
 }

@@ -12,17 +12,17 @@
         <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Goods</button>
     </div>
     <div class="card-body">
-        <table class="table table-hover w-100" id="TBLID" >
+        <table class="table table-hover w-100" id="TBLID">
             <thead>
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.GSID)
                     </th>
-              
+
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
-                
+
                     <th>
                         @Html.DisplayNameFor(model => model.Unit)
                     </th>
@@ -35,16 +35,16 @@
             <tbody id="Tbody">
                 @foreach (INTGSTBL Obj in Model)
                 {
-                <tr id="@Obj.GSID">
-                    <td>@Obj.GSID</td>
-                    <td>@Obj.Name</td>
-                    <td>@Obj.Unit</td>
-                    <td>@Obj.Qty</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.GSID)"> Edit</button>
-                        <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.GSID)"> Delete</button>
-                    </td>
-                </tr>
+                    <tr id="@Obj.GSID">
+                        <td>@Obj.GSID</td>
+                        <td>@Obj.Name</td>
+                        <td>@Obj.Unit</td>
+                        <td>@Obj.Qty</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.GSID)"> Edit</button>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.GSID)"> Delete</button>
+                        </td>
+                    </tr>
                 }
 
             </tbody>
@@ -88,7 +88,7 @@
         }
         $.ajax({
             type: 'GET',
-            url: "/INTGSTBL/CreateEdit?ID=" + ID,
+            url: "/INTGSTBL/ServiceCreateEdit?ID=" + ID,
             success: function (data) {
                 makedpt("INTGSTBL");
                 $("#INTGSTBL > .modal-dialog > .modal-content > .modal-body").html(data);
