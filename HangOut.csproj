@@ -303,6 +303,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Account\GroupController.cs" />
+    <Compile Include="Controllers\Account\LedgerController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CommonApiController.cs" />
     <Compile Include="Controllers\FeedBackController.cs" />
@@ -328,6 +330,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\Group.cs" />
+    <Compile Include="Models\Account\Ledger.cs" />
     <Compile Include="Models\Common\ActiveMenu.cs" />
     <Compile Include="Models\Common\Cart.cs" />
     <Compile Include="Models\Common\City.cs" />
@@ -481,6 +485,10 @@
     <Content Include="Views\INTGSTBL\ServiceCreateEdit.cshtml" />
     <Content Include="Views\Units\Index.cshtml" />
     <Content Include="Views\Units\CreateEdit.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
+    <Content Include="Views\Ledger\Index.cshtml" />
+    <Content Include="Views\Group\CreateEdit.cshtml" />
+    <Content Include="Views\Ledger\CreateEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
