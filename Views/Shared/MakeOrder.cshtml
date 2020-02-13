@@ -1277,6 +1277,7 @@
              }
          });
      }
+     
      function FinaliZeOrd() {
          $.confirm({
              title: 'Alert !',
@@ -1333,5 +1334,21 @@
      $("#DashBoard").change(function () {
          DashBoard();
      });
-     
+     function Testing() {
+         //PrintKot
+         $.ajax({
+             type: 'POST',
+             url: "/HG_Orders/PrintKot?OID=" + 5,
+             success: function (data) {
+                 makedpt("CurrOrder");
+                 $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                 showdpt("CurrOrder");
+                 $("#waiting").hide();
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
+             }
+         });
+     }
+     Testing();
     </script>
