@@ -1,0 +1,134 @@
+﻿@model HangOut.Models.Account.Ledger
+@using HangOut.Models.Common
+@using HangOut.Models.Account;
+@{ List<State> listcity = new State().GetAll();}
+@{
+    Layout = null;
+    var ObjOrg = Request.Cookies["UserInfo"];
+}
+
+@using HangOut.Models
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:#000000"><b>Account Group</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+
+        @using (Ajax.BeginForm("CreateEdit", "Group", new { ID = Model.ID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.ID)
+
+
+        <div class="row">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.ShortName, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ShortName, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.MobileNo1, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.MobileNo1, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.MobileNo1, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.MobileNo2, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.MobileNo2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MobileNo2, "", new { @class = "text-danger" })
+
+            </div>
+            @{
+                <div class="col-md-4">
+                    @Html.Label("DebtorType")
+                    @Html.DropDownListFor(model => model.DebtorType, new SelectList(Ledger.DTypes(), "ID", "Name", Model.ID), "Select Parent Group Name", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DebtorType, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            @if (ObjOrg["OrgId"] == "0" || ObjOrg["OrgId"] == null)
+            {
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.OrgId, htmlAttributes: new { @class = "control-label  " })
+                    @{
+
+                        SelectList sl = new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID ", "Name");
+                    }
+
+                    @Html.DropDownListFor(Model => Model.OrgId, sl, "Select Orgonization", new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.OrgId)
+            }
+            <div class=" col-md-4">
+                @Html.Label("State")
+                @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId", "Name"), "Select States", new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.MarginOnCash, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.MarginOnCash, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.MarginOnCash, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.TaxOnAboveMargin, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.TaxOnAboveMargin, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.TaxOnAboveMargin, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.MarginOnline, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.MarginOnline, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.MarginOnline, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.TaxOnAboveMarginOnline, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.TaxOnAboveMarginOnline, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.TaxOnAboveMarginOnline, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.PaymentFrequency, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.TaxOnAboveMarginOnline, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.TaxOnAboveMarginOnline, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="col-sm-1">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input style="margin-top:25px" type="submit" value="Save" class="btn btn-success" />
+
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+
