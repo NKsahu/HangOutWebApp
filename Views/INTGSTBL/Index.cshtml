@@ -3,21 +3,22 @@
 @{
     Layout = null;
     List<INTUnits> listUnits = INTUnits.GetAll();
+    List<InventoryType> inventoryTypes = InventoryType.ListOrgTypeidList();
 }
 <div class="card">
 
     <div class="card-header">
-        <h3 class="text-center">Goods</h3>
+        <h3 class="text-center">Items</h3>
     </div>
     <div class="row">
         <div class="col-md-4">
-            <a href="/INTGSTBL/Index?Type=1" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control"> Goods</a>
+            <a href="/INTGSTBL/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">Items</a>
+        </div>
+        <div class="col-md-4">
         </div>
         <div class="col-md-4">
             <a href="/Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">Category</a>
-        </div>
-        <div class="col-md-4">
-            <a href="/INTGSTBL/ServiceIndex?Type=2" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">Service</a>
+
         </div>
     </div>
     <div class="row pt-5">
@@ -25,7 +26,7 @@
 
         </div>
         <div class="col-md-4">
-            <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Goods</button>
+            <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Items</button>
         </div>
         <div class="col-md-4">
 
@@ -42,7 +43,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
-
+                    <th>
+                        Type
+                    </th>
                     <th>
                         Unit
                     </th>
@@ -58,6 +61,11 @@
                     <tr id="@Obj.GSID">
                         <td>@Obj.GSID</td>
                         <td>@Obj.Name</td>
+                        <td>
+                              
+                              @{ InventoryType OBjinventory = inventoryTypes.Find(x => x.Typeid==Obj.Typeid);} 
+                            @OBjinventory.Name
+                                            </td>
                         <td>
                             @{INTUnits OBJUnits = listUnits.Find(x => x.UnitID == Obj.UnitID); }
                             @OBJUnits.Name

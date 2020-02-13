@@ -11,7 +11,7 @@ namespace HangOut.Models.Inventory
         public int GSID { get; set; }
         public int CatID { get; set; }
         public string Name { get; set; }
-        public int Type { get; set; }//1=Goods and 2 = Service
+        public int Typeid { get; set; }//1=Goods and 2 = Service
         public int UnitID { get; set; }
         public double Qty { get; set; }
 
@@ -25,17 +25,17 @@ namespace HangOut.Models.Inventory
                 string Quary = "";
                 if (this.GSID == 0)
                 {
-                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Type,@UnitID,@Qty);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Type=@Type,UnitID=@UnitID,Qty=@Qty where GSID=@GSID";
+                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty where GSID=@GSID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@GSID", this.GSID);
                 cmd.Parameters.AddWithValue("@CatID", this.CatID);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
-                cmd.Parameters.AddWithValue("@Type", this.Type);
+                cmd.Parameters.AddWithValue("@Typeid", this.Typeid);
                 cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
                 cmd.Parameters.AddWithValue("@Qty", this.Qty);
                 if (this.GSID == 0)
@@ -55,7 +55,7 @@ namespace HangOut.Models.Inventory
             return Row;
 
         }
-        public static List<INTGSTBL> GetAll(int Type)
+        public static List<INTGSTBL> GetAll()
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -63,7 +63,7 @@ namespace HangOut.Models.Inventory
             List<INTGSTBL> listintcat = new List<INTGSTBL>();
             try
             {
-                string Quary = "Select * from INTGSTBL where Type="+Type;
+                string Quary = "Select * from INTGSTBL";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
@@ -73,7 +73,7 @@ namespace HangOut.Models.Inventory
                     OBJINT.GSID = SDR.GetInt32(0);
                     OBJINT.CatID = SDR.GetInt32(1);
                     OBJINT.Name = SDR.GetString(2);
-                    OBJINT.Type = SDR.GetInt32(3);
+                    OBJINT.Typeid = SDR.GetInt32(3);
                     OBJINT.UnitID = SDR.GetInt32(4);
                     OBJINT.Qty = SDR.GetDouble(5);
                     listintcat.Add(OBJINT);
@@ -103,7 +103,7 @@ namespace HangOut.Models.Inventory
                     ObjTmp.GSID = SDR.GetInt32(0);
                     ObjTmp.CatID = SDR.GetInt32(1);
                     ObjTmp.Name = SDR.GetString(2);
-                    ObjTmp.Type = SDR.GetInt32(3);
+                    ObjTmp.Typeid = SDR.GetInt32(3);
                     ObjTmp.UnitID = SDR.GetInt32(4);
                     ObjTmp.Qty = SDR.GetDouble(5);
 
@@ -138,5 +138,17 @@ namespace HangOut.Models.Inventory
             return R;
         }
     }
-   
+    public class InventoryType
+    {
+        public int Typeid { get; set; }
+        public string Name { get; set; }
+        public static List<InventoryType> List { get; set; }
+        public static List<InventoryType> ListOrgTypeidList()
+        {
+            List<InventoryType> list = new List<InventoryType>();
+            list.Add(new InventoryType { Typeid = 1 , Name = "Goods" });
+            list.Add(new InventoryType { Typeid = 2 , Name = "Service" });
+            return list;
+        }
+    }
 }
