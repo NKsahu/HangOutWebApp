@@ -58,7 +58,7 @@
                             <td>@Obj.Type</td>*@
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
-                            <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.ID)"> Delete</button>
+                            @*<button class="btn btn-danger btn-sm " onclick="Delete(@Obj.ID)"> Delete</button>*@
                         </td>
                     </tr>
                 }
@@ -126,12 +126,10 @@
         var HtmlStr = "<tr id='" + Jitmobj.ID + "'>";
         HtmlStr += '<td>' + Jitmobj.ID + '</td>';
         HtmlStr += '<td>' + Jitmobj.Name + '</td>';
-        //HtmlStr += '<td>' + Jitmobj.PGID + '</td>';
-        //HtmlStr += '<td>' + Jitmobj.type + '</td>';
-
-            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ID + ')"> Edit</button>';
-        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ID
-        HtmlStr += ')"> Delete</button></td ></tr > ';
+  
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ID + ')"> Edit</button>';
+        //HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ID
+        //HtmlStr += ')"> Delete</button></td ></tr > ';
         if (AddGroup) {
                 $("#Tbody").append(HtmlStr);
             }
