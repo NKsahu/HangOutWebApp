@@ -1,9 +1,6 @@
-﻿using System;
+﻿using HangOut.Models.Account;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using HangOut.Models.Account;
 
 namespace HangOut.Controllers.Account
 {
@@ -30,6 +27,22 @@ namespace HangOut.Controllers.Account
         [HttpPost]
         public ActionResult CreateEdit(Ledger Obj)
         {
+            if(Obj.ShortName==null)
+            {
+                Obj.ShortName = "";
+            }
+            if (Obj.Email == null)
+            {
+                Obj.Email = "";
+            }
+            if (Obj.Remarks == null)
+            {
+                Obj.Remarks = "";
+            }
+            if (Obj.DebtorType == 1)
+            {
+                Obj.OrgId = 0;
+            }
             int i = Obj.Save();
             if (i > 0)
                 return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
