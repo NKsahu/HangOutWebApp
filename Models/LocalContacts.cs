@@ -11,7 +11,6 @@ namespace HangOut.Models
         public int ContctID { get; set; }
         public string MobileNo { get; set; }
         public string Cust_Name { get; set; }
-        public Int64 OrderID { get; set; }
         public int Save()
         {
             int Row = 0;
@@ -22,17 +21,16 @@ namespace HangOut.Models
                 string Quary = "";
                 if (this.ContctID == 0)
                 {
-                    Quary = "Insert Into LocalContacts Values (@MobileNo,@Cust_Name,@OrderID);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into LocalContacts Values (@MobileNo,@Cust_Name);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update LocalContacts Set MobileNo=@MobileNo,Cust_Name=@Cust_Name,OrderID=@OrderID where ContctID=@ContctID";
+                    Quary = "Update LocalContacts Set MobileNo=@MobileNo,Cust_Name=@Cust_Name where ContctID=@ContctID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ContctID", this.ContctID);
                 cmd.Parameters.AddWithValue("@MobileNo", this.MobileNo);
                 cmd.Parameters.AddWithValue("@Cust_Name", this.Cust_Name);
-                cmd.Parameters.AddWithValue("@OrderID", this.OrderID);
                 if (this.ContctID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -68,7 +66,6 @@ namespace HangOut.Models
                     OBJINT.ContctID = SDR.GetInt32(0);
                     OBJINT.MobileNo = SDR.GetString(1);
                     OBJINT.Cust_Name = SDR.GetString(2);
-                    OBJINT.OrderID = SDR.GetInt64(3);
                     listUnit.Add(OBJINT);
                 }
             }
@@ -95,9 +92,6 @@ namespace HangOut.Models
                     ObjTmp.ContctID = SDR.GetInt32(0);
                     ObjTmp.MobileNo = SDR.GetString(1);
                     ObjTmp.Cust_Name = SDR.GetString(2);
-                    ObjTmp.OrderID = SDR.GetInt64(3);
-                     
-
                 }
             }
             catch (System.Exception e)

@@ -135,9 +135,15 @@ namespace HangOut.Controllers
         //========local contact list=======
         public JObject SaveLocalContact(string Mobile,string Cname,int ContctID)
         {
+            LocalContacts localContacts = new LocalContacts();
             if (ContctID > 0)
             {
-                LocalContacts localContacts=LocalContacts.ge
+                localContacts = LocalContacts.GetOne(ContctID);
+            }
+            else
+            {
+                localContacts.MobileNo = Mobile;
+                localContacts.Cust_Name = Cname;
             }
 
 
