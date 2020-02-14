@@ -355,67 +355,79 @@
 
         </div>
         <div class="col-sm-12 col-md-5 sp-billed-items">
-            <div class="sp-bill">
-                <p class="sp-panel-header">
-                    <span class="sp-hide-if-sm-screen" id="TorTWID">
-                        <!--Table name or take-away name-->
-                    </span>
-                    <span>
-                       &nbsp; :&nbsp;
-                    </span>
-                    <span class="badge badge-pill badge-secondary" style="padding:7px" id="FinalAmt">
-                        0.00
-                    </span>
-                    <small style="float:right; font-size:large">
-                        <i class="fas fa-eye" style="color:green" onclick="OrdDetail();" ></i>
-                    </small>
-                </p>
-                <!---->
-                <!----><div>
+            <div class="row">
+                <input type="hidden" id="ContactId" value="0"/>
+                <div class="col-md-5">
+                    <input id="C_mobile" type="text" onchange="ChangeContactList()" class="OnlyNum form-control" placeholder="Mobile No" />
+                </div>
+                <div class="col-md-5">
+                    <input id="C_name" onchange="ChangeContactList()" type="text" class=" form-control" placeholder="Customer Name" />
+                </div>
+                <div class="col-md-2">
+                    <button id="C_save" onclick="SaveLocalContact()" class="btn btn-success">save</button>
+                </div>
+            </div>
+                <div class="sp-bill">
+                    <p class="sp-panel-header">
+                        <span class="sp-hide-if-sm-screen" id="TorTWID">
+                            <!--Table name or take-away name-->
+                        </span>
+                        <span>
+                            &nbsp; :&nbsp;
+                        </span>
+                        <span class="badge badge-pill badge-secondary" style="padding:7px" id="FinalAmt">
+                            0.00
+                        </span>
+                        <small style="float:right; font-size:large">
+                            <i class="fas fa-eye" style="color:green" onclick="OrdDetail();"></i>
+                        </small>
+                    </p>
+                    <!---->
+                    <!----><div>
 
-                    <div>
-                        <div class="sp-sold-items-scroll-with-noticebar">
-                            <table class="table table-hover sp-product-list">
-                                <thead>
-                                    <tr>
-                                        <th>Item</th>
-                                        <th class="sp-quantity-th">Quantity</th>
-                                        <th><span class="sp-padright-10"></span>Price</th>
+                        <div>
+                            <div class="sp-sold-items-scroll-with-noticebar">
+                                <table class="table table-hover sp-product-list">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th class="sp-quantity-th">Quantity</th>
+                                            <th><span class="sp-padright-10"></span>Price</th>
 
-                                        <!---->
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="AddItem"></tbody>
-                            </table>
-                        </div>
-                        
-                        <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn">
-                            <!---->
-                            <div class="row" style="width:100%">
-                                <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
-                                    <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
-                                        send to CHEF
-                                    </button>
-                                </div>
-                                <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
-                                    <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                                        bypass CHEF
-                                    </button>
-                                </div>
+                                            <!---->
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="AddItem"></tbody>
+                                </table>
                             </div>
-                            
-                            <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px" onclick="Charge()">
-                                <button type="button" class="form-control btn btn-success sp-f2-hotkey" id="FinalAmtCharge">
-                                    CHARGE
-                                </button>
+
+                            <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn">
+                                <!---->
+                                <div class="row" style="width:100%">
+                                    <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
+                                        <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
+                                            send to CHEF
+                                        </button>
+                                    </div>
+                                    <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
+                                        <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                                            bypass CHEF
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px" onclick="Charge()">
+                                    <button type="button" class="form-control btn btn-success sp-f2-hotkey" id="FinalAmtCharge">
+                                        CHARGE
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
     </div>
     <div id="PaymnetAndReceipt" class="row" style="display:none">
         <div class="col-md-6">
@@ -685,13 +697,13 @@
                      if (timer !== 'undefined' || timer != null) {
                          clearTimeout(timer);
                      }
-                     setTimeout(FunctionExist, 22000);//60000
+                     setTimeout(FunctionExist, 50000);//60000
                  }
                  else {
                      ReloadSeatingSts = true;
                      ReloadSeating();
                      //clearTimeout(timer);
-                     setTimeout( FunctionExist, 22000);//60000
+                     setTimeout( FunctionExist, 50000);//60000
                  }
 
              },
@@ -890,9 +902,18 @@
                             title: 'Alert!',
                             content: "Menu Not Applied.",
                         });
+                        return;
                     }
                     $("#FinalAmt").text(TotalRs.toFixed(2));
-
+                    $("#ContactId").val(CategoryList[0].ContactId);
+                    var MobileNo = CategoryList[0].Mobile;
+                    var Cname = CategoryList[0].CName;
+                    $("#C_mobile").val(MobileNo);
+                    $("#C_name").val(Cname);
+                    if (CategoryList[0].ContactId == -1) {
+                        $('#C_mobile,#C_name').prop('readonly', true);
+                        $("#C_save").attr('disabled', 'disabled');
+                    }
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                     $("#waiting").hide();
@@ -1022,6 +1043,7 @@
                  Obj.OrdingSts = 1;
                  Obj.AppType = 3;
                  Obj.PaymtType = 0;
+                 Obj.ContactId = $("#ContactId").val();
                  var Msg = "Send To Chef ?";
                  var ChrMsg = "Send To Chef & Charge?";
                  if (Status == '3') {
@@ -1156,7 +1178,7 @@
          });
      }
         function Charge() {
-            console.log("Curr TorSid +" + CurrentOrder);
+           // console.log("Curr TorSid +" + CurrentOrder);
             $.ajax({
                 type: 'POST',
                 url: "/WebApi/ShowOrderItems?TOrSId=" + CurrentOrder,
@@ -1334,5 +1356,43 @@
      $("#DashBoard").change(function () {
          DashBoard();
      });
-     
+     function ChangeContactList() {
+         var ContctID = $("#ContactId").val();
+         console.log("value=" + ContctID);
+         if (ContctID>=0) {
+             $("#C_save").removeAttr('disabled');
+         }
+     }
+     function SaveLocalContact() {
+         var Mobile = $("#C_mobile").val();
+         var C_name = $("#C_name").val();
+         var ContctID = $("#ContactId").val();
+         if (Mobile == "" && C_name == "") {
+             alert("One Field required");
+             return;
+         }
+         if ( Mobile != "" && (Mobile.length < 10 || Mobile.length>10)) {
+             alert("Mobile Number Must Be 10 Digit");
+             return;
+         }
+         if (ContctID >= 0) {
+             $("#waiting").show();
+             $.ajax({
+                 type: 'POST',
+                 url: "/CommonApi/SaveLocalContact?Mobile=" + Mobile + "&Cname=" + C_name + "&ContctID=" + ContctID,
+                 success: function (data) {
+                     var Jobj = JSON.parse(data);
+                     if (Jobj.Status == 200) {
+                         $("#ContactId").val(Jobj.ContactId);
+                         $("#C_save").attr('disabled', 'disabled');
+                     }
+                     $("#waiting").hide();
+                 },
+                 error: function (jqXhr, textStatus, errorMessage) { // error callback
+                     $("#waiting").hide();
+                 }
+             });
+         }
+        
+     }
     </script>

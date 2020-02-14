@@ -7,25 +7,27 @@
  *
  * Date: 2019-02-19T12:18:01.828Z
  */
-
+.datepicker{
+    z-index:1000;
+}
 .datepicker-container {
-  background-color: #fff;
-  direction: ltr;
-  font-size: 12px;
-  left: 0;
-  line-height: 30px;
-  position: fixed;
-  -webkit-tap-highlight-color: transparent;
-  top: 0;
-  -ms-touch-action: none;
-  touch-action: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  width: 210px;
-  z-index: -1;
+    background-color: #fff;
+    direction: ltr;
+    font-size: 12px;
+    left: 0;
+    line-height: 30px;
+    position: fixed;
+    -webkit-tap-highlight-color: transparent;
+    top: 0;
+    -ms-touch-action: none;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: 210px;
+    z-index: -1;
 }
 
 .datepicker-container::before,
