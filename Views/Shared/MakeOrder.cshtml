@@ -356,6 +356,7 @@
         </div>
         <div class="col-sm-12 col-md-5 sp-billed-items">
             <div class="row">
+                <input type="hidden" id="ContactId" />
                 <div class="col-md-5">
                     <input id="C_mobile" type="text" class="OnlyNum form-control" placeholder="Mobile No" />
                 </div>
@@ -901,9 +902,14 @@
                             title: 'Alert!',
                             content: "Menu Not Applied.",
                         });
+                        return;
                     }
                     $("#FinalAmt").text(TotalRs.toFixed(2));
-
+                    $("#ContactId").val(CategoryList[0].ContactId);
+                    var MobileNo = CategoryList[0].Mobile;
+                    var Cname = CategoryList[0].Name;
+                    $("#C_mobile").val(MobileNo);
+                    $("#C_name").val(Cname);
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                     $("#waiting").hide();
@@ -1355,12 +1361,16 @@
              alert("Mobile Number Must Be 10 Digit");
              return;
          }
+         $("#waiting").show();
          $.ajax({
              type: 'POST',
              url: "/CommonApi/SaveLocalContact?Mobile=" + Mobile + "&Cname=" + C_name +"&ContctID=0",
              success: function (data) {
-                 
-
+                 var Jobj = JSON.parse(data);
+                 if (Jobj.Status == 200) {
+                     $("#ContactId").val(Jobj.ContactId);
+                     $("#waiting").hide();
+                 }
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback
                  $("#waiting").hide();

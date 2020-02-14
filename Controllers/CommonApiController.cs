@@ -139,14 +139,25 @@ namespace HangOut.Controllers
             if (ContctID > 0)
             {
                 localContacts = LocalContacts.GetOne(ContctID);
+                localContacts.MobileNo = Mobile;
+                localContacts.Cust_Name = Cname;
             }
             else
             {
                 localContacts.MobileNo = Mobile;
                 localContacts.Cust_Name = Cname;
             }
-
-
+            JObject result = new JObject();
+           if(localContacts.Save() > 0)
+            {
+                result.Add("Status", 200);
+                result.Add("ContactId", localContacts.ContctID);
+            }
+            else
+            {
+                result.Add("Status", 400);
+            }
+            return result;
         }
 
 
