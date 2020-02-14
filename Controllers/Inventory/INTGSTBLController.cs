@@ -10,15 +10,15 @@ namespace HangOut.Controllers.Inventory
     public class INTGSTBLController : Controller
     {
         // GET: INTGSTBL
-        public ActionResult Index(int Type)
+        public ActionResult Index()
         {
-            List<INTGSTBL> listINTGSTBL = INTGSTBL.GetAll(Type);
+            List<INTGSTBL> listINTGSTBL = INTGSTBL.GetAll();
             return View(listINTGSTBL);
         }
         public ActionResult CreateEdit(int ID)
         {
             INTGSTBL Obj = new INTGSTBL();
-            Obj.Type = 1;//1 = Goods
+            Obj.Typeid = 1;//1 = Goods
             if (ID > 0)
             {
                 Obj = Obj.GetOne(ID);
@@ -35,15 +35,15 @@ namespace HangOut.Controllers.Inventory
                 return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
-        public ActionResult ServiceIndex(int Type)
+        public ActionResult ServiceIndex()
         {
-            List<INTGSTBL> listgstbl = INTGSTBL.GetAll(Type);
+            List<INTGSTBL> listgstbl = INTGSTBL.GetAll();
             return View(listgstbl);
         }
         public ActionResult ServiceCreateEdit(int ID)
         {
             INTGSTBL Obj = new INTGSTBL();
-            Obj.Type = 2;// 2 = service
+            Obj.Typeid = 2;// 2 = service
             if (ID > 0)
             {
                 Obj = Obj.GetOne(ID);
