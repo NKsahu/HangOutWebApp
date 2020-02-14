@@ -109,7 +109,7 @@ namespace HangOut.Controllers
             List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
             List<HG_Orders> TodaysOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-            HG_Orders ObjOrder = TodaysOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId && x.TableOtp == ObjTorS.Otp &&x.PaymentStatus==0);
+            HG_Orders ObjOrder = TodaysOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId && x.TableOtp == ObjTorS.Otp);
             double CurrentTableAmt = 0.00;
             string Cmobile = "";
             string Cname = "";
@@ -123,20 +123,27 @@ namespace HangOut.Controllers
                     Cname = localContacts.Cust_Name;
                     ContactId = localContacts.ContctID;
                 }
-                vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)ObjOrder.CID);
-                if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
+                else
                 {
-                    Cmobile = ObjUser.UserId;
-                    Cname = ObjUser.UserName;
-                    ContactId = -1;// minus show dont edit this. Order Palced By Customer
+                    vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)ObjOrder.CID);
+                    if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
+                    {
+                        Cmobile = ObjUser.UserId;
+                        Cname = ObjUser.UserName;
+                        ContactId = -1;// minus show dont edit this. Order Palced By Customer
+                    }
                 }
-                var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
-                OrderItems = OrderItems.FindAll(x => x.Status != 4);// not ccanceled items
-                CurrentTableAmt = ObjOrder.DeliveryCharge;
-                for (var i=0;i< OrderItems.Count; i++)
+                if (ObjOrder.PaymentStatus == 0)
                 {
-                    CurrentTableAmt += OrderItems[i].Count * OrderItems[i].Price;
+                    var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
+                    OrderItems = OrderItems.FindAll(x => x.Status != 4);// not ccanceled items
+                    CurrentTableAmt = ObjOrder.DeliveryCharge;
+                    for (var i = 0; i < OrderItems.Count; i++)
+                    {
+                        CurrentTableAmt += OrderItems[i].Count * OrderItems[i].Price;
+                    }
                 }
+                
             }
             if (ObjTorS.Type !="3")// not takeaway
             {
