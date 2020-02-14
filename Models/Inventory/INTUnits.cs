@@ -10,6 +10,8 @@ namespace HangOut.Models.Inventory
     {
         public int UnitID { get; set; }
         public string Name { get; set; }
+        public string Unit { get; set; }
+        public int SubUnitID { get; set; }
         public int Save()
         {
             int Row = 0;
@@ -20,15 +22,17 @@ namespace HangOut.Models.Inventory
                 string Quary = "";
                 if (this.UnitID == 0)
                 {
-                    Quary = "Insert Into INTUnits Values (@Name);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into INTUnits Values (@Name,@Unit,@SubUnitID);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update INTUnits Set Name=@Name where UnitID=@UnitID";
+                    Quary = "Update INTUnits Set Name=@Name,Unit=@Unit,SubUnitID=@SubUnitID where UnitID=@UnitID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
                 cmd.Parameters.AddWithValue("@Name", this.Name);
+                cmd.Parameters.AddWithValue("@Unit", this.Unit);
+                cmd.Parameters.AddWithValue("@SubUnitID", this.SubUnitID);
                 if (this.UnitID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -63,6 +67,8 @@ namespace HangOut.Models.Inventory
                     INTUnits OBJINT = new INTUnits();
                     OBJINT.UnitID = SDR.GetInt32(0);
                     OBJINT.Name = SDR.GetString(1);
+                    OBJINT.Unit = SDR.GetString(2);
+                    OBJINT.SubUnitID = SDR.GetInt32(3);
                     listUnit.Add(OBJINT);
                 }
             }
@@ -88,6 +94,8 @@ namespace HangOut.Models.Inventory
                 {
                     ObjTmp.UnitID = SDR.GetInt32(0);
                     ObjTmp.Name = SDR.GetString(1);
+                    ObjTmp.Unit = SDR.GetString(2);
+                    ObjTmp.SubUnitID = SDR.GetInt32(3);
                 }
             }
             catch (System.Exception e)
