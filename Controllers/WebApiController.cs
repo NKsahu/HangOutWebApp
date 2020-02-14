@@ -1843,13 +1843,24 @@ namespace HangOut.Controllers
                     {
                         jObject["Status"] = 3;// processing
                     }
-                    
+                    if (order.ContactId > 0)
+                    {
+                        LocalContacts localContacts = LocalContacts.GetOne(order.ContactId);
+                        jObject.Add("SeatingUser", localContacts.Cust_Name + " (" + localContacts.MobileNo + ")");
+                    }
+                    else
+                    {
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)order.CID);
+                        if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
+                        {
+                            jObject.Add("SeatingUser", ObjUser.UserName + " (" + ObjUser.UserId + ")");
+                        }
+                    }
                 }
                 else
                 {
                     jObject.Add("CurrOID",0);
                     jObject["Status"]= 1;
-
                 }
                 string Seating = "";
                 HG_Floor_or_ScreenMaster floor_Or_ScreenMaster = FloorScrenList.Find(x => x.Floor_or_ScreenID == objtable.Floor_or_ScreenId);

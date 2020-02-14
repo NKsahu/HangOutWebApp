@@ -780,17 +780,17 @@
                 var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
                 var Otp = list[i].Otp;
                 var clasName = "";
-                var ShowStatus = "";
+                var ShowStatus = list[i].SeatingUser == null ? "" : list[i].SeatingUser;
                 if (Status == 1) {
                     clasName = "tableFree";
-                    ShowStatus = "Unoccupied";
+                    //ShowStatus = "Unoccupied";
                 } else if (Status == 2) {
                     clasName = "tableBooked";
-                    ShowStatus = "Bill demanded";
+                    //ShowStatus = "Bill demanded";
                 }
                 else {
                     clasName = "tableProgress";
-                    ShowStatus = "Occupied";
+                   // ShowStatus = "Occupied";
                 }
                 $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS" + TableID + "'>" + ShowStatus + Third + 'id=Otp' + TableID + ">" + Otp+"</p></div>");
             }
@@ -827,17 +827,17 @@
              var Status = TablesList[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
              var Otp = TablesList[i].Otp;
              var clasName = "";
-             var ShowStatus = "";
+             var ShowStatus = TablesList[i].SeatingUser == null ? "" : TablesList[i].SeatingUser;
              if (Status == 1) {
                  clasName = "tableFree";
-                 ShowStatus = "Unoccupied";
+                 //ShowStatus = "Unoccupied";
              } else if (Status == 2) {
                  clasName = "tableBooked";
-                 ShowStatus = "Bill demanded";
+                 //ShowStatus = "Bill demanded";
              }
              else {
                  clasName = "tableProgress";
-                 ShowStatus = "Occupied";
+                 //ShowStatus = "Occupied";
              }
              $("#TC" + TableID).removeClass();
              $("#TC" + TableID).addClass("sp-grid-cell-contents " + clasName);
