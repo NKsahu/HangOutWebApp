@@ -137,7 +137,7 @@ namespace HangOut.Controllers
         {
             if (ContctID > 0)
             {
-                
+                LocalContacts localContacts=LocalContacts.ge
             }
 
 

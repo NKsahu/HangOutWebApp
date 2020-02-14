@@ -76,7 +76,7 @@ namespace HangOut.Models
             finally { cmd.Dispose(); con.Con.Close(); }
             return (listUnit);
         }
-        public LocalContacts GetOne(int ID)
+        public static LocalContacts GetOne(int ID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
