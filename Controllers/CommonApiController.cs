@@ -132,8 +132,16 @@ namespace HangOut.Controllers
             return new JObject();
         }
         
+        //========local contact list=======
+        public JObject SaveLocalContact(string Mobile,string Cname,int ContctID)
+        {
+            if (ContctID > 0)
+            {
+                
+            }
 
 
+        }
 
 
 
