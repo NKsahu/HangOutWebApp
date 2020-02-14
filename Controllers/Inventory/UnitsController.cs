@@ -12,11 +12,16 @@ namespace HangOut.Controllers.Inventory
         public ActionResult Index()
         {
             List<INTUnits> listunit = INTUnits.GetAll();
+            listunit = listunit.FindAll(x => x.ParentId == 0);
             return View(listunit);
         }
         public ActionResult CreateEdit( int ID)
         {
             INTUnits ObjUnits = new INTUnits();
+            if (Request.QueryString["ParentId"] != "0")
+            {
+                ObjUnits.ParentId = int.Parse(Request.QueryString["ParentId"]);
+            }
             if(ID>0)
             {
                 ObjUnits = ObjUnits.GetOne(ID);
