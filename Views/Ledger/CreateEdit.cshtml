@@ -25,28 +25,28 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.ShortName, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ShortName, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.MobileNo1, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.MobileNo1, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
                 @Html.ValidationMessageFor(model => model.MobileNo1, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.MobileNo2, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.MobileNo2, new { htmlAttributes = new { @class = "form-control OnlyNum" } })
@@ -54,7 +54,7 @@
 
             </div>
             @{
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @Html.Label("DebtorType")
                     @Html.DropDownListFor(model => model.DebtorType, new SelectList(Ledger.DTypes(), "ID", "Name", Model.ID), "Select Debtor Type", new { @class = "form-control", required = "required", Id = "did" })
                     @Html.ValidationMessageFor(model => model.DebtorType, "", new { @class = "text-danger" })
@@ -63,7 +63,7 @@
             }
             @if (ObjOrg["OrgId"] == "0" || ObjOrg["OrgId"] == null)
             {
-                <div class="col-md-4" id="Oid">
+                <div class="col-md-3" id="Oid">
                     @Html.Label("Organization")
                     @{
 
@@ -79,34 +79,34 @@
             {
                 @Html.HiddenFor(model => model.OrgId)
             }
-            <div class=" col-md-4">
+            <div class=" col-md-3">
                 @Html.Label("State")
                 @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId", "Name"), "Select States", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.MarginOnCash, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.MarginOnCash, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.MarginOnCash, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.TaxOnAboveMargin, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.TaxOnAboveMargin, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.TaxOnAboveMargin, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.MarginOnline, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.MarginOnline, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.MarginOnline, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.TaxOnAboveMarginOnline, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.TaxOnAboveMarginOnline, new { htmlAttributes = new { @class = "form-control" } })
@@ -114,7 +114,7 @@
 
             </div>
             @{
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @Html.Label("PaymentFrequency")
                     @Html.DropDownListFor(model => model.PaymentFrequency, new SelectList(Ledger.PFrequency(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", id = "pid" })
                     @Html.ValidationMessageFor(model => model.PaymentFrequency, "", new { @class = "text-danger" })
@@ -125,7 +125,7 @@
 
 
 
-                <div class="col-md-4" id="wid">
+                <div class="col-md-3" id="wid">
                     @Html.Label("PaymentDay")
                     @Html.DropDownListFor(model => model.PaymentDay, new SelectList(Ledger.WeekDays(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.PaymentDay, "", new { @class = "text-danger" })
@@ -135,7 +135,7 @@
 
             }
             @{
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @Html.Label("CollectionFrequency")
                     @Html.DropDownListFor(model => model.CollectionFrequency, new SelectList(Ledger.CFrequency(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", id = "cid" })
                     @Html.ValidationMessageFor(model => model.CollectionFrequency, "", new { @class = "text-danger" })
@@ -146,7 +146,7 @@
 
 
 
-                <div class="col-md-4" id="cwid">
+                <div class="col-md-3" id="cwid">
                     @Html.Label("CollectionDay")
                     @Html.DropDownListFor(model => model.CollectionDay, new SelectList(Ledger.CWeekDays(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.CollectionDay, "", new { @class = "text-danger" })
@@ -155,7 +155,7 @@
 
 
             }
-            <div class="col-md-4">
+            <div class="col-md-3" id="myModal">
                 @Html.Label("CalculationStartFrom")
                 @Html.TextBoxFor(model => model.CalculationStartFrom, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
             </div>
@@ -163,7 +163,7 @@
 
 
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @Html.Label("TDS Applicable")
                     @Html.DropDownListFor(model => model.TDSApplicable, new SelectList(Ledger.TDS(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.TDSApplicable, "", new { @class = "text-danger" })
@@ -172,14 +172,14 @@
 
 
             }
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", } })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label  " })
 
                 @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
@@ -199,8 +199,8 @@
 <script>
     setTimeout(function () { $(window).trigger('resize'); }, 100);
     $(".DateField").datepicker();
-    $("#wid").hide();
-    $("#cwid").hide();
+    //$("#wid").hide();
+    //$("#cwid").hide();
     $(document).on('change', function () {
         $("#Oid").show();
         var values = $("#did").val();
@@ -208,20 +208,21 @@
             $("#Oid").hide();
         }
     });
-    $(document).on('change', function () {
-        $("#wid").hide();
-        var values = $("#pid").val();
-        if (values === "1") {
-            $("#wid").show();
-        }
-    });
-    $(document).on('change', function () {
-        $("#cwid").hide();
-        var values = $("#cid").val();
-        if (values === "1") {
-            $("#cwid").show();
-        }
-    });
+    //$(document).on('change', function () {
+    //    $("#wid").hide();
+    //    var values = $("#pid").val();
+    //    if (values === "1") {
+    //        $("#wid").show();
+    //    }
+    //});
+    //$(document).on('change', function () {
+    //    $("#cwid").hide();
+    //    var values = $("#cid").val();
+    //    if (values === "1") {
+    //        $("#cwid").show();
+    //    }
+    //});
+
 </script>
 
 
