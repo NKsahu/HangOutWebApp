@@ -4,12 +4,14 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace HangOut.Models.Inventory
+namespace HangOut.Models
 {
-    public class INTUnits
+    public class LocalContacts
     {
-        public int UnitID { get; set; }
-        public string Name { get; set; }
+        public int ContctID { get; set; }
+        public string MobileNo { get; set; }
+        public string Cust_Name { get; set; }
+        public Int64 OrderID { get; set; }
         public int Save()
         {
             int Row = 0;
@@ -18,21 +20,23 @@ namespace HangOut.Models.Inventory
             try
             {
                 string Quary = "";
-                if (this.UnitID == 0)
+                if (this.ContctID == 0)
                 {
-                    Quary = "Insert Into INTUnits Values (@Name);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into LocalContacts Values (@MobileNo,@Cust_Name,@OrderID);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update INTUnits Set Name=@Name where UnitID=@UnitID";
+                    Quary = "Update LocalContacts Set MobileNo=@MobileNo,Cust_Name=@Cust_Name,OrderID=@OrderID where ContctID=@ContctID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
-                cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
-                cmd.Parameters.AddWithValue("@Name", this.Name);
-                if (this.UnitID == 0)
+                cmd.Parameters.AddWithValue("@ContctID", this.ContctID);
+                cmd.Parameters.AddWithValue("@MobileNo", this.MobileNo);
+                cmd.Parameters.AddWithValue("@Cust_Name", this.Cust_Name);
+                cmd.Parameters.AddWithValue("@OrderID", this.OrderID);
+                if (this.ContctID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
-                    this.UnitID = Row;
+                    this.ContctID = Row;
                 }
                 else
                 {
@@ -46,23 +50,25 @@ namespace HangOut.Models.Inventory
             return Row;
 
         }
-        public static List<INTUnits> GetAll()
+        public static List<LocalContacts> GetAll()
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            List<INTUnits> listUnit= new List<INTUnits>();
+            List<LocalContacts> listUnit = new List<LocalContacts>();
             try
             {
-                string Quary = "Select * from INTUnits ORDER BY UnitID DESC";
+                string Quary = "Select * from LocalContacts ORDER BY ContctID DESC";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
                 while (SDR.Read())
                 {
-                    INTUnits OBJINT = new INTUnits();
-                    OBJINT.UnitID = SDR.GetInt32(0);
-                    OBJINT.Name = SDR.GetString(1);
+                    LocalContacts OBJINT = new LocalContacts();
+                    OBJINT.ContctID = SDR.GetInt32(0);
+                    OBJINT.MobileNo = SDR.GetString(1);
+                    OBJINT.Cust_Name = SDR.GetString(2);
+                    OBJINT.OrderID = SDR.GetInt64(3);
                     listUnit.Add(OBJINT);
                 }
             }
@@ -70,24 +76,28 @@ namespace HangOut.Models.Inventory
             finally { cmd.Dispose(); con.Con.Close(); }
             return (listUnit);
         }
-        public   INTUnits GetOne(int ID)
+        public LocalContacts GetOne(int ID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            INTUnits ObjTmp = new INTUnits();
+            LocalContacts ObjTmp = new LocalContacts();
 
             try
             {
-                string Query = "SELECT * FROM  INTUnits where UnitID="+ID;
+                string Query = "SELECT * FROM  LocalContacts where ContctID=" + ID;
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@UnitID", ID);
+                cmd.Parameters.AddWithValue("@ContctID", ID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    ObjTmp.UnitID = SDR.GetInt32(0);
-                    ObjTmp.Name = SDR.GetString(1);
+                    ObjTmp.ContctID = SDR.GetInt32(0);
+                    ObjTmp.MobileNo = SDR.GetString(1);
+                    ObjTmp.Cust_Name = SDR.GetString(2);
+                    ObjTmp.OrderID = SDR.GetInt64(3);
+                     
+
                 }
             }
             catch (System.Exception e)
