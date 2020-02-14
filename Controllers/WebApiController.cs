@@ -111,8 +111,25 @@ namespace HangOut.Controllers
             List<HG_Orders> TodaysOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             HG_Orders ObjOrder = TodaysOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId && x.TableOtp == ObjTorS.Otp &&x.PaymentStatus==0);
             double CurrentTableAmt = 0.00;
+            string Cmobile = "";
+            string Cname = "";
+            int ContactId = 0;
             if (ObjOrder != null)
             {
+                if (ObjOrder.ContactId > 0)
+                {
+                    LocalContacts localContacts = LocalContacts.GetOne(ObjOrder.ContactId);
+                    Cmobile = localContacts.MobileNo;
+                    Cname = localContacts.Cust_Name;
+                    ContactId = localContacts.ContctID;
+                }
+                vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)ObjOrder.CID);
+                if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
+                {
+                    Cmobile = ObjUser.UserId;
+                    Cname = ObjUser.UserName;
+                    ContactId = -1;// minus show dont edit this. Order Palced By Customer
+                }
                 var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
                 OrderItems = OrderItems.FindAll(x => x.Status != 4);// not ccanceled items
                 CurrentTableAmt = ObjOrder.DeliveryCharge;
@@ -171,6 +188,9 @@ namespace HangOut.Controllers
                         JobjMenu.Add("MenuItems", jarrayItem);
                         JobjMenu.Add("MenuItmPrice", MenuItemPrice);
                         JobjMenu.Add("TableAmt", CurrentTableAmt);
+                        JobjMenu.Add("ContactId", ContactId);
+                        JobjMenu.Add("Mobile", Cmobile);
+                        JobjMenu.Add("CName", Cname);
                         JMenuArray.Add(JobjMenu);
                     }
 
@@ -218,6 +238,9 @@ namespace HangOut.Controllers
                         JobjMenu.Add("MenuItems", jarrayItem);
                         JobjMenu.Add("MenuItmPrice", MenuItemPrice);
                         JobjMenu.Add("TableAmt", CurrentTableAmt);
+                        JobjMenu.Add("ContactId", ContactId);
+                        JobjMenu.Add("Mobile", Cmobile);
+                        JobjMenu.Add("CName", Cname);
                         JMenuArray.Add(JobjMenu);
                     }
                 }
@@ -614,6 +637,7 @@ namespace HangOut.Controllers
             int CustomerOrdering= Params["OrdingSts"] != null ? int.Parse(Params["OrdingSts"].ToString()) : 0;
             int AppType = Params["AppType"] != null ? int.Parse(Params["AppType"].ToString()) : 1;//1 customer ,2 captain , 3 admin panel
             int PaymtSts=Params["PaymtType"]!=null? int.Parse(Params["PaymtType"].ToString()) :0;//payment mode type
+            int ContactId=Params["ContactId"]!=null? int.Parse(Params["ContactId"].ToString()) : 0;// local contact id
             double DeliveryChargeAmt = 0.00;
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
@@ -717,6 +741,7 @@ namespace HangOut.Controllers
                 ObjOrders.DeliveryCharge = ObjOrders.DeliveryCharge + DeliveryChargeAmt;
                 ObjOrders.PaymentStatus = PaymtSts;
                 ObjOrders.PayReceivedBy = (int)CID;
+                ObjOrders.ContactId = ContactId<=0?0:ContactId;// -1 contact id for Customer Order foodo app
                 ObjOrders.Save();
             }
             else
@@ -724,8 +749,8 @@ namespace HangOut.Controllers
                 HG_Orders ObjOrder = new HG_Orders()
                 {
                     Create_By = CID,
-                    Create_Date =DateTime.Now,
-                    Update_Date=DateTime.Now,
+                    Create_Date = DateTime.Now,
+                    Update_Date = DateTime.Now,
                     CID = CID,
                     Update_By = CID,
                     Status = OrderSts,
@@ -733,12 +758,12 @@ namespace HangOut.Controllers
                     Table_or_SheatId = TableorSheatId,
                     PaymentStatus = PaymtSts,
                     TableOtp = ObjTorS.Otp,
-                    PayReceivedBy=(int)CID,
-                    OrderByIds=CID.ToString()+",",
-                    OrderApprovlSts=0,
-                    DeliveryCharge=DeliveryChargeAmt
-
-                };
+                    PayReceivedBy = (int)CID,
+                    OrderByIds = CID.ToString() + ",",
+                    OrderApprovlSts = 0,
+                    DeliveryCharge = DeliveryChargeAmt,
+                   ContactId = ContactId <= 0 ? 0 : ContactId// -1 contact id for Customer Order foodo app
+            };
                 NewOID= ObjOrder.Save();
             }
                 if (NewOID > 0)

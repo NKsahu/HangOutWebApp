@@ -356,15 +356,15 @@
         </div>
         <div class="col-sm-12 col-md-5 sp-billed-items">
             <div class="row">
-                <input type="hidden" id="ContactId" />
+                <input type="hidden" id="ContactId" value="0"/>
                 <div class="col-md-5">
-                    <input id="C_mobile" type="text" class="OnlyNum form-control" placeholder="Mobile No" />
+                    <input id="C_mobile" type="text" onchange="ChangeContactList()" class="OnlyNum form-control" placeholder="Mobile No" />
                 </div>
                 <div class="col-md-5">
-                    <input id="C_name" type="text" class=" form-control" placeholder="Customer Name" />
+                    <input id="C_name" onchange="ChangeContactList()" type="text" class=" form-control" placeholder="Customer Name" />
                 </div>
                 <div class="col-md-2">
-                    <button id="C_save" class="btn btn-success">save</button>
+                    <button id="C_save" onclick="SaveLocalContact()" class="btn btn-success">save</button>
                 </div>
             </div>
                 <div class="sp-bill">
@@ -697,13 +697,13 @@
                      if (timer !== 'undefined' || timer != null) {
                          clearTimeout(timer);
                      }
-                     setTimeout(FunctionExist, 22000);//60000
+                     setTimeout(FunctionExist, 50000);//60000
                  }
                  else {
                      ReloadSeatingSts = true;
                      ReloadSeating();
                      //clearTimeout(timer);
-                     setTimeout( FunctionExist, 22000);//60000
+                     setTimeout( FunctionExist, 50000);//60000
                  }
 
              },
@@ -907,9 +907,13 @@
                     $("#FinalAmt").text(TotalRs.toFixed(2));
                     $("#ContactId").val(CategoryList[0].ContactId);
                     var MobileNo = CategoryList[0].Mobile;
-                    var Cname = CategoryList[0].Name;
+                    var Cname = CategoryList[0].CName;
                     $("#C_mobile").val(MobileNo);
                     $("#C_name").val(Cname);
+                    if (CategoryList[0].ContactId == -1) {
+                        $('#C_mobile,#C_name').prop('readonly', true);
+                        $("#C_save").attr('disabled', 'disabled');
+                    }
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                     $("#waiting").hide();
@@ -1039,6 +1043,7 @@
                  Obj.OrdingSts = 1;
                  Obj.AppType = 3;
                  Obj.PaymtType = 0;
+                 Obj.ContactId = $("#ContactId").val();
                  var Msg = "Send To Chef ?";
                  var ChrMsg = "Send To Chef & Charge?";
                  if (Status == '3') {
@@ -1351,30 +1356,43 @@
      $("#DashBoard").change(function () {
          DashBoard();
      });
-     $("#C_mobile,#C_name").change(function () {
-
-     });
+     function ChangeContactList() {
+         var ContctID = $("#ContactId").val();
+         console.log("value=" + ContctID);
+         if (ContctID>=0) {
+             $("#C_save").removeAttr('disabled');
+         }
+     }
      function SaveLocalContact() {
          var Mobile = $("#C_mobile").val();
          var C_name = $("#C_name").val();
-         if (Mobile != null && Mobile != "" && (Mobile.length < 10 || Mobile.length.length>10)) {
+         var ContctID = $("#ContactId").val();
+         if (Mobile == "" && C_name == "") {
+             alert("One Field required");
+             return;
+         }
+         if ( Mobile != "" && (Mobile.length < 10 || Mobile.length>10)) {
              alert("Mobile Number Must Be 10 Digit");
              return;
          }
-         $("#waiting").show();
-         $.ajax({
-             type: 'POST',
-             url: "/CommonApi/SaveLocalContact?Mobile=" + Mobile + "&Cname=" + C_name +"&ContctID=0",
-             success: function (data) {
-                 var Jobj = JSON.parse(data);
-                 if (Jobj.Status == 200) {
-                     $("#ContactId").val(Jobj.ContactId);
+         if (ContctID >= 0) {
+             $("#waiting").show();
+             $.ajax({
+                 type: 'POST',
+                 url: "/CommonApi/SaveLocalContact?Mobile=" + Mobile + "&Cname=" + C_name + "&ContctID=" + ContctID,
+                 success: function (data) {
+                     var Jobj = JSON.parse(data);
+                     if (Jobj.Status == 200) {
+                         $("#ContactId").val(Jobj.ContactId);
+                         $("#C_save").attr('disabled', 'disabled');
+                     }
+                     $("#waiting").hide();
+                 },
+                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                      $("#waiting").hide();
                  }
-             },
-             error: function (jqXhr, textStatus, errorMessage) { // error callback
-                 $("#waiting").hide();
-             }
-         });
+             });
+         }
+        
      }
     </script>
