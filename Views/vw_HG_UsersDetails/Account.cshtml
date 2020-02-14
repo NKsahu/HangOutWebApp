@@ -40,6 +40,7 @@
                 var UserType = Request.Cookies["UserInfo"]["UserType"];
                 List<UsersMenu> List = new UsersMenu().GetAll();
                 List<UsersMenu> AccountMenuList = List.FindAll(x => x.Section == "ACCOUNT" && x.ParentMenuId == 0);
+                AccountMenuList = AccountMenuList.FindAll(x => x.MenuOrderNo != 400);
                 AccountMenuList = AccountMenuList.OrderBy(x => x.MenuOrderNo).ToList();
                 List<UsersMenu> AccountSubMenuList =List.FindAll(x => x.Section == "ACCOUNT" && x.ParentMenuId != 0);
                 foreach (var ObjMenuLi in AccountMenuList)
