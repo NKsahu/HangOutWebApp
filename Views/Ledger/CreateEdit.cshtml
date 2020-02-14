@@ -10,12 +10,12 @@
 @using HangOut.Models
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>Account Group</b></h3>
+        <h3 style="text-align:center;color:#000000"><b>Account Ledger</b></h3>
         <hr />
     </div>
     <div class="card-body">
 
-        @using (Ajax.BeginForm("CreateEdit", "Group", new { ID = Model.ID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEdit", "Ledger", new { ID = Model.ID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.ID)
 
@@ -113,15 +113,74 @@
                 @Html.ValidationMessageFor(model => model.TaxOnAboveMarginOnline, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.PaymentFrequency, htmlAttributes: new { @class = "control-label  " })
+            @{
+                <div class="col-md-4">
+                    @Html.Label("PaymentFrequency")
+                    @Html.DropDownListFor(model => model.PaymentFrequency, new SelectList(Ledger.PFrequency(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PaymentFrequency, "", new { @class = "text-danger" })
 
-                @Html.EditorFor(model => model.TaxOnAboveMarginOnline, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.TaxOnAboveMarginOnline, "", new { @class = "text-danger" })
+                </div>
+            }
+            @{
+
+
+
+                <div class="col-md-4">
+                    @Html.Label("PaymentDay")
+                    @Html.DropDownListFor(model => model.PaymentDay, new SelectList(Ledger.WeekDays(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PaymentDay, "", new { @class = "text-danger" })
+
+                </div>
+
+
+            }
+            @{
+                <div class="col-md-4">
+                    @Html.Label("CollectionFrequency")
+                    @Html.DropDownListFor(model => model.CollectionFrequency, new SelectList(Ledger.PFrequency(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CollectionFrequency, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            @{
+
+
+
+                <div class="col-md-4">
+                    @Html.Label("CollectionDay")
+                    @Html.DropDownListFor(model => model.CollectionDay, new SelectList(Ledger.WeekDays(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CollectionDay, "", new { @class = "text-danger" })
+
+                </div>
+
+
+            }
+            <div class="col-md-4">
+                @Html.Label("CalculationStartFrom")
+                @Html.TextBoxFor(model => model.CalculationStartFrom, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.TDSApplicable, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.TDSApplicable, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.TDSApplicable, "", new { @class = "text-danger" })
 
             </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label  " })
 
-            <div class="col-sm-1">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-1">
                 @Html.Label("Save", new { @class = "text-white" })
                 <input style="margin-top:25px" type="submit" value="Save" class="btn btn-success" />
 
