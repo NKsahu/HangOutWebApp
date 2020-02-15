@@ -99,52 +99,48 @@
         });
 
     }
+
+    function reload(url) {
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+
+
     function JsonSuccess(Jobj) {
+
         var Jitmobj = Jobj.data;
         console.log("ggg");
         hidedpt("INTUnits");
+        reload('/Units/Index');
         $('#waiting').hide();
-        var HtmlStr = "<tr id='" + Jitmobj.UnitID + "'>";
-        HtmlStr += '<td>' + Jitmobj.UnitID + '</td>';
-        HtmlStr += '<td><div class="row">';
-        HtmlStr += '<button id="Btn' + Jitmobj.UnitID + '" type="button"  class="btn btn-info text-center form-control header" data-toggle="collapse" data-target="#Clp' + Jitmobj.UnitID+'">'+Jitmobj.Name+'</button></div></td>';
-        HtmlStr += '<td><button id ="btnadd" onclick="CreateEdit(' + Jitmobj.UnitID + ')" class="btn btn-info form-control">Add Unit</button>';
-        htmlstr += '<div  class="row collapse"id="Clp' + jitmobj.UnitID + '">';
-        htmlstr += '<table style="width:100%" >';
-        htmlstr += '<thead>';
-        htmlstr += '<tr>';
-        htmlstr += '<th>Name</th>';
-        htmlstr += '<th>Unit</th>';
-        htmlstr += '</tr>';
-        htmlstr += '</thead>';
-        htmlstr += '<tbody>';
-        HtmlStr += '   <tr >';
-        HtmlStr += '  <td>';
-        HtmlStr += jitmobj.Name
-        HtmlStr += '  </td>';
-        HtmlStr += '  <td>';
-        HtmlStr += Jitmobj.Unit
-        HtmlStr += '  </td>';
-        HtmlStr += '</tr>';
-        HtmlStr += '</tbody>';
-        HtmlStr += '</table>';
-        HtmlStr += '</div>';
-        HtmlStr += '<td><button  onclick="CreateEdit(' + Jitmobj.UnitID + ')" class="btn btn-info form-control">Add Unit</button>';
-        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.UnitID + ')"> Edit</button>';
-        HtmlStr += ' </td ></tr> ';
-        if (AddCategory) {
-            $("#tbody").append(HtmlStr);
-            $("#btnadd" + Jitmobj.UnitID).text(Jitmobj.Name);
+        //var HtmlStr = "<tr id='" + Jitmobj.UnitID + "'>";
+        //HtmlStr += '<td>' + Jitmobj.UnitID + '</td>';
+        //HtmlStr += '<td><div class="row">';
+        //HtmlStr += '<button id="Btn' + Jitmobj.UnitID + '" type="button"  class="btn btn-info text-center form-control header" data-toggle="collapse" data-target="#Clp' + Jitmobj.UnitID+'">'+Jitmobj.Name+'</button></div></td>';
+        //HtmlStr += '<td><button  onclick="CreateEdit(' + Jitmobj.UnitID + ')" class="btn btn-info form-control">Add Unit</button>';
+        //HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.UnitID + ')"> Edit</button>';
+        //HtmlStr += ' </td ></tr> ';
+        //if (AddCategory) {
+        //    $("#tbody").append(HtmlStr);
+        //    $("#btnadd" + Jitmobj.UnitID).text(Jitmobj.Name);
 
-        }
-        else {
-            $("#Btn" + Jitmobj.UnitID).text(Jitmobj.Name);
-
-
-
-            //$('#' + Jitmobj.UnitID).remove();
-            //$("#tbody").append(HtmlStr);
-        }
+        //}
+        //else {
+        //    $("#Btn" + Jitmobj.UnitID).text(Jitmobj.Name);
+            
+        //    //$('#' + Jitmobj.UnitID).remove();
+        //    //$("#tbody").append(HtmlStr);
+        //}
     }
 
 </script>
