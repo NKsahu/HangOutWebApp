@@ -380,6 +380,7 @@
     <Compile Include="Models\Inventory\INTUnits.cs" />
     <Compile Include="Models\JoinFoodDo.cs" />
     <Compile Include="Models\LocalContacts.cs" />
+    <Compile Include="Models\OrdDiscntChrge.cs" />
     <Compile Include="Models\OrderMenu.cs" />
     <Compile Include="Models\OrderMenuCategory.cs" />
     <Compile Include="Models\OrdMenuCtgItems.cs" />

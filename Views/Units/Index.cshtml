@@ -2,6 +2,8 @@
 @using HangOut.Models.Inventory;
 @{
     Layout = null;
+    var Subunitlist = INTUnits.GetAll();
+    Subunitlist = Subunitlist.FindAll(x => x.ParentId > 0);
 }
 <div class="card">
     <div class="card-header">
@@ -18,37 +20,56 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
-
                     <th></th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 @foreach (INTUnits item in Model)
                 {
-                    <tr id="@item.UnitID">
-                        <td>
+                    //parent tr
+                    <tr id="@item.UnitID" class="click">
+                        <td >
                             @Html.DisplayFor(modelItem => item.UnitID)
                         </td>
                         <td>
-                            <a class="showhr" href="#">@item.Name</a>
-
-                            @*@Html.DisplayFor(modelItem => item.Name)*@
+                            <div class="row">
+                                <button id="Btn@(item.UnitID)" type="button"  class="btn btn-info text-center form-control header" data-toggle="collapse" data-target="#Clp@(item.UnitID)">@item.Name</button>
+                            </div>
+                            <div  class="row collapse"id="Clp@(item.UnitID)">
+                                <table style="width:100%" >
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Unit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var lisunits = Subunitlist.FindAll(x => x.ParentId == item.UnitID);
+                                         }
+                                        @foreach (var Obj in lisunits)
+                                        {
+                                                <tr >
+                                                    <td>
+                                                        @Obj.Name
+                                                    </td>
+                                                    <td>
+                                                       @Obj.Unit 
+                                                    </td>
+                                                </tr>
+                                             
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </td>
                         <td>
-                            <button onclick="CreateEdit('0',@item.UnitID)" class="btn btn-info form-control">Add Unit</button>
+                            <button onclick="CreateEdit('0',@item.UnitID)" id="btnadd" class="btn btn-info form-control">Add Unit</button>
                         </td>
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.UnitID,'0')"> Edit</button>
                         </td>
                     </tr>
-                    if (item.ParentId == 0)
-                    {
-                        <tr>
-                            @item.Name
-                            @item.Unit
-                        </tr>
-                    }
-
                 }
             </tbody>
         </table>
@@ -62,7 +83,7 @@
         } else {
             AddCategory = true;
         }
-        console.log("sdxsad");
+
         $.ajax({
             type: 'GET',
             url: "/Units/CreateEdit?ID=" + ID + "&ParentId=" + ParentId,
@@ -80,24 +101,50 @@
     }
     function JsonSuccess(Jobj) {
         var Jitmobj = Jobj.data;
-        console.log(Jitmobj);
+        console.log("ggg");
         hidedpt("INTUnits");
         $('#waiting').hide();
         var HtmlStr = "<tr id='" + Jitmobj.UnitID + "'>";
         HtmlStr += '<td>' + Jitmobj.UnitID + '</td>';
-        HtmlStr += '<td>' + Jitmobj.Name + '</td>';
-        HtmlStr += '<td><button onclick="CreateEdit(' + Jitmobj.UnitID + ')" class="btn btn-info form-control">Add Unit</button>';
+        HtmlStr += '<td><div class="row">';
+        HtmlStr += '<button id="Btn' + Jitmobj.UnitID + '" type="button"  class="btn btn-info text-center form-control header" data-toggle="collapse" data-target="#Clp' + Jitmobj.UnitID+'">'+Jitmobj.Name+'</button></div></td>';
+        HtmlStr += '<td><button id ="btnadd" onclick="CreateEdit(' + Jitmobj.UnitID + ')" class="btn btn-info form-control">Add Unit</button>';
+        htmlstr += '<div  class="row collapse"id="Clp' + jitmobj.UnitID + '">';
+        htmlstr += '<table style="width:100%" >';
+        htmlstr += '<thead>';
+        htmlstr += '<tr>';
+        htmlstr += '<th>Name</th>';
+        htmlstr += '<th>Unit</th>';
+        htmlstr += '</tr>';
+        htmlstr += '</thead>';
+        htmlstr += '<tbody>';
+        HtmlStr += '   <tr >';
+        HtmlStr += '  <td>';
+        HtmlStr += jitmobj.Name
+        HtmlStr += '  </td>';
+        HtmlStr += '  <td>';
+        HtmlStr += Jitmobj.Unit
+        HtmlStr += '  </td>';
+        HtmlStr += '</tr>';
+        HtmlStr += '</tbody>';
+        HtmlStr += '</table>';
+        HtmlStr += '</div>';
+        HtmlStr += '<td><button  onclick="CreateEdit(' + Jitmobj.UnitID + ')" class="btn btn-info form-control">Add Unit</button>';
         HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.UnitID + ')"> Edit</button>';
-        HtmlStr += ' </td ></tr > ';
+        HtmlStr += ' </td ></tr> ';
         if (AddCategory) {
             $("#tbody").append(HtmlStr);
+            $("#btnadd" + Jitmobj.UnitID).text(Jitmobj.Name);
+
         }
         else {
-            $('#' + Jitmobj.CatID).remove();
-            $("#tbody").append(HtmlStr);
+            $("#Btn" + Jitmobj.UnitID).text(Jitmobj.Name);
+
+
+
+            //$('#' + Jitmobj.UnitID).remove();
+            //$("#tbody").append(HtmlStr);
         }
     }
-    $(".showhr").click(function () {
-        $(this).closest('tr').nextUntil("tr:has(.showhr)").toggle("slow", function () { });
-    });
+
 </script>
