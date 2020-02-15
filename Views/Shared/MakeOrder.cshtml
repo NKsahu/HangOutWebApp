@@ -1360,10 +1360,12 @@
              $("#C_save").removeAttr('disabled');
          }
          if ($(event).attr('id') == "C_mobile") {
-             if ($(event).val().length == 10 && $("#C_name").val()=="") {
+             if ($(event).val().length == 10 && $("#C_name").val() == "") {
                  GetContactNameByMobile($(event).val());
+                 $("#C_name").focus();
              }
-             $("#C_name").focus();
+             
+             
          }
      }
      function SaveLocalContact() {
