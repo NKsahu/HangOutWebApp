@@ -199,8 +199,8 @@
 <script>
     setTimeout(function () { $(window).trigger('resize'); }, 100);
     $(".DateField").datepicker();
-    //$("#wid").hide();
-    //$("#cwid").hide();
+    $("#wid").hide();
+    $("#cwid").hide();
     $(document).on('change', function () {
         $("#Oid").show();
         var values = $("#did").val();
@@ -208,20 +208,20 @@
             $("#Oid").hide();
         }
     });
-    //$(document).on('change', function () {
-    //    $("#wid").hide();
-    //    var values = $("#pid").val();
-    //    if (values === "1") {
-    //        $("#wid").show();
-    //    }
-    //});
-    //$(document).on('change', function () {
-    //    $("#cwid").hide();
-    //    var values = $("#cid").val();
-    //    if (values === "1") {
-    //        $("#cwid").show();
-    //    }
-    //});
+    $(document).on('change', function () {
+        $("#wid").hide();
+        var values = $("#pid").val();
+        if (values === "1") {
+            $("#wid").show();
+        }
+    });
+    $(document).on('change', function () {
+        $("#cwid").hide();
+        var values = $("#cid").val();
+        if (values === "1") {
+            $("#cwid").show();
+        }
+    });
 
 </script>
 
