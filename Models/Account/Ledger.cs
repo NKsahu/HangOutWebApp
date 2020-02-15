@@ -34,6 +34,13 @@ namespace HangOut.Models.Account
         public string Email { get; set; }
         public string Remarks { get; set; }
 
+        public Ledger()
+        {
+          
+            ID = 0;
+            Name = "";
+          
+        }
 
 
 
