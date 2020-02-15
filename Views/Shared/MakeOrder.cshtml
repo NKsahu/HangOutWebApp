@@ -358,10 +358,10 @@
             <div class="row">
                 <input type="hidden" id="ContactId" value="0"/>
                 <div class="col-md-5">
-                    <input id="C_mobile" type="text" onchange="ChangeContactList()" class="OnlyNum form-control" placeholder="Mobile No" />
+                    <input id="C_mobile" type="text" maxlength="10" onkeyup="ChangeContactList(this)" class="OnlyNum form-control" placeholder="Mobile No" />
                 </div>
                 <div class="col-md-5">
-                    <input id="C_name" onchange="ChangeContactList()" type="text" class=" form-control" placeholder="Customer Name" />
+                    <input id="C_name" onkeyup="ChangeContactList(this)" type="text" class=" form-control" placeholder="Customer Name" />
                 </div>
                 <div class="col-md-2">
                     <button id="C_save" onclick="SaveLocalContact()" class="btn btn-success">save</button>
@@ -683,9 +683,7 @@
             }
             event.style.backgroundColor = '#e2dbdb';
         }
-    // setTimeout(function () { GeTablesTakeAwya() }, 1000);
      function GeTablesTakeAwya() {
-         console.log("table list");
          $.ajax({
              type: 'POST',
              url: "/WebApi/TableAndTakeAway?Type=" + OrgType + "&OrderById=" + LoginId,
@@ -830,7 +828,6 @@
              var ShowStatus = TablesList[i].SeatingUser == null ? "" : TablesList[i].SeatingUser;
              if (Status == 1) {
                  clasName = "tableFree";
-                 //ShowStatus = "Unoccupied";
              } else if (Status == 2) {
                  clasName = "tableBooked";
              }
@@ -853,6 +850,8 @@
             var ObjOrderName = TablesList.find(x => {
                 return x.Table_or_RowID == TableOrMWid;
             });
+            $("#C_mobile").val('');
+            $("#C_name").val('');
             $("#TorTWID").text(ObjOrderName.Table_or_SheetName);
             //assign CurrOid of Perticuar Table Or Sheat or NewTakeAway
             CurrOID = ObjOrderName.CurrOID;
@@ -1354,11 +1353,17 @@
      $("#DashBoard").change(function () {
          DashBoard();
      });
-     function ChangeContactList() {
+     function ChangeContactList(event) {
          var ContctID = $("#ContactId").val();
          console.log("value=" + ContctID);
          if (ContctID>=0) {
              $("#C_save").removeAttr('disabled');
+         }
+         if ($(event).attr('id') == "C_mobile") {
+             if ($(event).val().length == 10 && $("#C_name").val()=="") {
+                 GetContactNameByMobile($(event).val());
+             }
+             $("#C_name").focus();
          }
      }
      function SaveLocalContact() {
@@ -1392,5 +1397,19 @@
              });
          }
         
+     }
+     function GetContactNameByMobile(MobileNo) {
+         $.ajax({
+             type: 'POST',
+             url: "/CommonApi/GetNameByMobileNo?MobileNo=" + MobileNo,
+             success: function (data) {
+                 var Jobj = JSON.parse(data);
+                 if (Jobj.Status == 200) {
+                     $("#C_name").val(Jobj.CName);
+                 }
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+             }
+         });
      }
     </script>

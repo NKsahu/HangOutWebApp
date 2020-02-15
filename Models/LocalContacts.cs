@@ -11,6 +11,7 @@ namespace HangOut.Models
         public int ContctID { get; set; }
         public string MobileNo { get; set; }
         public string Cust_Name { get; set; }
+        public int OrgId { get; set; }
         public int Save()
         {
             int Row = 0;
@@ -21,7 +22,7 @@ namespace HangOut.Models
                 string Quary = "";
                 if (this.ContctID == 0)
                 {
-                    Quary = "Insert Into LocalContacts Values (@MobileNo,@Cust_Name);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into LocalContacts Values (@MobileNo,@Cust_Name,@OrgId);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
@@ -33,6 +34,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Cust_Name", this.Cust_Name);
                 if (this.ContctID == 0)
                 {
+                    cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
                     this.ContctID = Row;
                 }
@@ -73,19 +75,25 @@ namespace HangOut.Models
             finally { cmd.Dispose(); con.Con.Close(); }
             return (listUnit);
         }
-        public static LocalContacts GetOne(int ID)
+        public static LocalContacts GetOne(int ID=0,string Mobile=null)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             LocalContacts ObjTmp = new LocalContacts();
-
             try
             {
-                string Query = "SELECT * FROM  LocalContacts where ContctID=" + ID;
+                string Query = "SELECT TOP 1 * FROM  LocalContacts";
+                if (ID > 0)
+                {
+                    Query+=" where ContctID=" + ID;
+                }
+                else if (Mobile != null)
+                {
+                    Query += " where MobileNo=" + Mobile;
+                }
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@ContctID", ID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -97,7 +105,7 @@ namespace HangOut.Models
             catch (System.Exception e)
             { e.ToString(); }
 
-            finally { Con.Close(); }
+            finally { cmd.Dispose(); Con.Close(); }
 
             return (ObjTmp);
         }
