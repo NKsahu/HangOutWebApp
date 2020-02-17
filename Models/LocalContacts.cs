@@ -90,14 +90,15 @@ namespace HangOut.Models
                 {
                     Query+=" where ContctID=" + ID;
                 }
-                else if (Mobile != null&&ID==0)
+                else if (Mobile != null)
                 {
+
                     Query += " where MobileNo=" + Mobile;
                 }
-                if (CurrOrgObj != null)
-                {
-                    Query += " and OrgId=" + CurrOrgObj["OrgId"];
-                }
+                //if (CurrOrgObj != null)
+                //{
+                //    Query += " and OrgId=" + CurrOrgObj["OrgId"];
+                //}
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
