@@ -30,6 +30,7 @@ namespace HangOut.Models.Account
         public int CollectionDay { get; set; }
 
         public DateTime CalculationStartFrom { get; set; }
+        public DateTime LisenceRenewalDate { get; set; }
         public int TDSApplicable { get; set; }
         public string Email { get; set; }
         public string Remarks { get; set; }
@@ -217,8 +218,8 @@ namespace HangOut.Models.Account
         {
 
             List<DebtorType> type = new List<DebtorType>();
-            type.Add(new DebtorType { Id = 0, Name = "Organization" });
-            type.Add(new DebtorType { Id = 1, Name = "Usual" });
+            type.Add(new DebtorType { Id = 1, Name = "Organization" });
+            type.Add(new DebtorType { Id = 2, Name = "Usual" });
         
             return type;
         }
