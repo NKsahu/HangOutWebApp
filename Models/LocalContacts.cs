@@ -55,10 +55,16 @@ namespace HangOut.Models
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
+            var CurrOrgObj = HttpContext.Current.Request.Cookies["UserInfo"];
             List<LocalContacts> listUnit = new List<LocalContacts>();
             try
             {
-                string Quary = "Select * from LocalContacts ORDER BY ContctID DESC";
+                string Quary = "Select * from LocalContacts ";
+                if(CurrOrgObj!=null&& CurrOrgObj["OrgID"]!="0")
+                {
+                      Quary = "Select * from LocalContacts where OrgId="+ CurrOrgObj["OrgID"];
+
+                }
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 

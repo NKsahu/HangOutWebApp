@@ -64,5 +64,11 @@ namespace HangOut.Controllers
             OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
             return View(ordDiscntChrge);
         }
+        public ActionResult LocalContactIndex()
+        {
+
+            List<LocalContacts> listcontact = LocalContacts.GetAll();
+            return View(listcontact);
+        }
     }
 }
