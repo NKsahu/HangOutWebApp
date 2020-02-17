@@ -149,36 +149,36 @@
         var Jitmobj = Jobj.data;
         console.log(Jitmobj);
         hidedpt("INTGSTBL");
+        reload('/INTGSTBL/Index');
         $('#waiting').hide();
-        var HtmlStr = "<tr id='" + Jitmobj.GSID + "'>";
-        HtmlStr += '<td>' + Jitmobj.GSID + '</td>';
-        HtmlStr += '<td>' + Jitmobj.Name + '</td>';
-        HtmlStr += '<td>' + Jitmobj.UnitID + '</td>';
-        HtmlStr += '<td>' + Jitmobj.Qty + '</td>';
-        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.GSID + ')"> Edit</button>';
-        HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.GSID
-        HtmlStr += ')"> Delete</button></td ></tr > ';
-        if (AddGoods) {
-            $("#Tbody").append(HtmlStr);
-        }
-        else {
-            $('#' + Jitmobj.GSID).remove();
-            $("#Tbody").append(HtmlStr);
-        }
+        //var HtmlStr = "<tr id='" + Jitmobj.GSID + "'>";
+        //HtmlStr += '<td>' + Jitmobj.GSID + '</td>';
+        //HtmlStr += '<td>' + Jitmobj.Name + '</td>';
+        //HtmlStr += '<td>' + Jitmobj.UnitID + '</td>';
+        //HtmlStr += '<td>' + Jitmobj.Qty + '</td>';
+        //HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.GSID + ')"> Edit</button>';
+        //HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.GSID
+        //HtmlStr += ')"> Delete</button></td ></tr > ';
+        //if (AddGoods) {
+        //    $("#Tbody").append(HtmlStr);
+        //}
+        //else {
+        //    $('#' + Jitmobj.GSID).remove();
+        //    $("#Tbody").append(HtmlStr);
+        //}
     }
-    function ListService(ID) {
-        $('#waiting').show();
-        console.log("sad");
+    function reload(url) {
         $.ajax({
             type: 'GET',
-            url: "/INTGSTBL/ServiceCreateEdit?ID=" + ID,
+            url: url,
             success: function (data) {
-                
+                $("#DynamicData").html(data);
                 $('#waiting').hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $('#waiting').hide();
             }
         });
+
     }
 </script>
