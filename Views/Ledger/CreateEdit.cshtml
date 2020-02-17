@@ -70,7 +70,7 @@
                         SelectList sl = new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID ", "Name");
                     }
 
-                    @Html.DropDownListFor(Model => Model.OrgId, sl, "Select Orgonization", new { @class = "form-control" })
+                    @Html.DropDownListFor(Model => Model.OrgId, sl, "Select Orgonization", new { @class = "form-control",onchange= "GetOrgType(this)" })
                     @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
 
                 </div>
@@ -241,9 +241,12 @@
                 type: 'POST',
                 url: "/CommonApi/getOrgType?orgId=" + orgId,
                 success: function (data) {
-                    makedpt("CurrOrder");
-                    $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
-                    showdpt("CurrOrder");
+                    var JsonObj = JSON.parse(data);
+                    if (JsonObj.Status == 200) {
+                        var OrgType = JsonObj.OrgType;
+                        var Statid = parseInt(JsonObj.Stateid);
+                        
+                    }
                     $("#waiting").hide();
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback

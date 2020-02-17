@@ -202,5 +202,24 @@ namespace HangOut.Controllers
             }
         }
 
+        public JObject getOrgType(int orgId)
+        {
+            HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(orgId);
+            if (objOrg != null && objOrg.OrgID > 0)
+            {
+                JObject result = new JObject();
+                result.Add("Status", 200);
+                result.Add("OrgType", objOrg.OrgTypes);
+                result.Add("Stateid", objOrg.State);
+                return result;
+            }
+            else
+            {
+                JObject result = new JObject();
+                result.Add("Status", 400);
+                return result;
+            }
+        }
+
     }
 }
