@@ -59,6 +59,9 @@ namespace HangOut.Controllers
         {
             return View();
         }
-      
+        public ActionResult DiscntCharge(Int64 SeatingId)
+        {
+            return View();
+        }
     }
 }
