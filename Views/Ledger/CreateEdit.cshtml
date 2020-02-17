@@ -82,7 +82,7 @@
         </div>
             <div class="row" id="bid">
              
-                 <div class="col-md-2">
+                 <div class="col-md-2" id="LisenceRenewalDateShow">
                    @Html.Label("LisenceRenewalDate")
                    @Html.TextBoxFor(model => model.LisenceRenewalDate, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
                  </div>
@@ -210,11 +210,13 @@
     $(".DateField").datepicker();
     $("#wid").hide();
     $("#cwid").hide();
+    $("#bid").hide();
+    $("#LisenceRenewalDateShow").hide();
     $(document).on('change', function () {
         $("#Oid").show();
         $("#bid").show();
         var values = $("#did").val();
-        if (values === "1") {
+        if (values === "2") {
             $("#Oid").hide();
             $("#bid").hide();
         }
@@ -245,7 +247,15 @@
                     if (JsonObj.Status == 200) {
                         var OrgType = JsonObj.OrgType;
                         var Statid = parseInt(JsonObj.Stateid);
-                        
+                        $("#State").val(Statid);
+                        if (OrgType == 1) {
+                            $("#LisenceRenewalDateShow").show();
+
+                        }
+                        else
+                        {
+                            $("#LisenceRenewalDateShow").hide();
+                        }
                     }
                     $("#waiting").hide();
                 },
