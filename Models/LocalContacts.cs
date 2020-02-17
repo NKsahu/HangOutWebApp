@@ -92,6 +92,7 @@ namespace HangOut.Models
                 }
                 else if (Mobile != null)
                 {
+
                     Query += " where MobileNo=" + Mobile;
                 }
                 //if (CurrOrgObj != null)
