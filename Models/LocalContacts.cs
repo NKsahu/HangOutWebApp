@@ -95,7 +95,7 @@ namespace HangOut.Models
 
                     Query += " where MobileNo=" + Mobile;
                 }
-                if (CurrOrgObj != null)
+                if (CurrOrgObj != null &&ID==0)
                 {
                     Query += " and OrgId=" + CurrOrgObj["OrgId"];
                 }
