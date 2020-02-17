@@ -53,7 +53,7 @@ namespace HangOut.Models.Inventory
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
             return Row;
-
+ 
         }
         public static List<INTUnits> GetAll()
         {
