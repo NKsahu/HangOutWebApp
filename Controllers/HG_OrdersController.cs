@@ -7,7 +7,7 @@ using HangOut.Models.Common;
 using System.Web.Mvc;
 
 namespace HangOut.Controllers
-{ [LoginFilter]
+{ 
     public class HG_OrdersController : Controller
     {
         // GET: HG_Order
