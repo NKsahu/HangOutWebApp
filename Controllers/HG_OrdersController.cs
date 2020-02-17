@@ -68,7 +68,7 @@ namespace HangOut.Controllers
         {
 
             List<LocalContacts> listcontact = LocalContacts.GetAll();
-           listcontact.Distinct();
+           //listcontact.Distinct();
             return View(listcontact);
         }
     }
