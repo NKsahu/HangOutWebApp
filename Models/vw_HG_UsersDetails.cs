@@ -196,7 +196,7 @@ namespace HangOut.Models
             vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
             try
             {
-                string Query = "SELECT * FROM HG_UsersDetails where UserCode=" + UserCode.ToString()+"";
+                string Query = "SELECT TOP 1 * FROM HG_UsersDetails where UserCode=" + UserCode.ToString()+"";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -235,7 +235,7 @@ namespace HangOut.Models
             vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
             try
             {
-                string Query = "SELECT * FROM HG_UsersDetails where UserId='" + UserLogin+ "'";
+                string Query = "SELECT TOP 1 * FROM HG_UsersDetails where UserId='" + UserLogin+ "'";
                 cmd = new System.Data.SqlClient.SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

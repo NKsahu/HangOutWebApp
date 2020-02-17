@@ -81,6 +81,7 @@ namespace HangOut.Models
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
+            var CurrOrgObj = HttpContext.Current.Request.Cookies["UserInfo"];
             LocalContacts ObjTmp = new LocalContacts();
             try
             {
@@ -89,9 +90,13 @@ namespace HangOut.Models
                 {
                     Query+=" where ContctID=" + ID;
                 }
-                else if (Mobile != null)
+                else if (Mobile != null&&ID==0)
                 {
                     Query += " where MobileNo=" + Mobile;
+                }
+                if (CurrOrgObj != null)
+                {
+                    Query += " and OrgId=" + CurrOrgObj["OrgId"];
                 }
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
