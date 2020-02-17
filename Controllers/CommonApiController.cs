@@ -175,22 +175,22 @@ namespace HangOut.Controllers
 
         public JObject GetNameByMobileNo(string MobileNo)
         {
-            
-            LocalContacts localContacts = LocalContacts.GetOne(Mobile: MobileNo);
             JObject result = new JObject();
-            if (localContacts != null && localContacts.ContctID > 0)
+            vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().MobileAlreadyExist(MobileNo);
+            if (ObjUser != null && ObjUser.UserCode > 0)
             {
                 result.Add("Status", 200);
-                result.Add("CName", localContacts.Cust_Name);
+                result.Add("CName", ObjUser.UserName);
                 return result;
             }
             else
             {
-                vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().MobileAlreadyExist(MobileNo);
-                if (ObjUser != null && ObjUser.UserCode > 0)
+                LocalContacts localContacts = LocalContacts.GetOne(Mobile: MobileNo);
+                
+                if (localContacts != null && localContacts.ContctID > 0)
                 {
                     result.Add("Status", 200);
-                    result.Add("CName", ObjUser.UserName);
+                    result.Add("CName", localContacts.Cust_Name);
                     return result;
                 }
                 else
@@ -198,8 +198,9 @@ namespace HangOut.Controllers
                     result.Add("Status", 400);
                     return result;
                 }
-                
+
             }
+            
         }
 
         public JObject getOrgType(int orgId)
