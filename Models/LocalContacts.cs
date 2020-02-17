@@ -59,10 +59,10 @@ namespace HangOut.Models
             List<LocalContacts> listUnit = new List<LocalContacts>();
             try
             {
-                string Quary = "Select * from LocalContacts ";
+                string Quary = "DISTINCT(MobileNo),* from LocalContacts ";
                 if(CurrOrgObj!=null&& CurrOrgObj["OrgID"]!="0")
                 {
-                      Quary = "Select * from LocalContacts where OrgId="+ CurrOrgObj["OrgID"];
+                      Quary = "DISTINCT(MobileNo),* from LocalContacts where OrgId=" + CurrOrgObj["OrgID"];
 
                 }
                 cmd = new SqlCommand(Quary, con.Con);
