@@ -136,19 +136,29 @@ namespace HangOut.Controllers
         public JObject SaveLocalContact(string Mobile,string Cname,int ContctID)
         {
             LocalContacts localContacts = new LocalContacts();
-             if (ContctID > 0)
+            if (ContctID > 0)
             {
-                localContacts = LocalContacts.GetOne(ID:ContctID);
+                localContacts = LocalContacts.GetOne(ID: ContctID);
                 localContacts.MobileNo = Mobile;
                 localContacts.Cust_Name = Cname;
             }
             else
             {
-                var UserInfo = Request.Cookies["UserInfo"];
-                int OrgId = int.Parse(UserInfo["OrgId"]);
-                localContacts.MobileNo = Mobile;
-                localContacts.Cust_Name = Cname;
-                localContacts.OrgId = OrgId;
+                localContacts = LocalContacts.GetOne(Mobile: Mobile);
+                if (localContacts != null && localContacts.ContctID > 0)
+                {
+                    localContacts.MobileNo = Mobile;
+                    localContacts.Cust_Name = Cname;
+                }
+                else
+                {
+                       var UserInfo = Request.Cookies["UserInfo"];
+                        int OrgId = int.Parse(UserInfo["OrgId"]);
+                       localContacts = new LocalContacts();
+                        localContacts.MobileNo = Mobile;
+                        localContacts.Cust_Name = Cname;
+                        localContacts.OrgId = OrgId;
+                }
             }
             JObject result = new JObject();
            if(localContacts.Save() > 0)
@@ -165,6 +175,7 @@ namespace HangOut.Controllers
 
         public JObject GetNameByMobileNo(string MobileNo)
         {
+            
             LocalContacts localContacts = LocalContacts.GetOne(Mobile: MobileNo);
             JObject result = new JObject();
             if (localContacts != null && localContacts.ContctID > 0)
@@ -175,8 +186,19 @@ namespace HangOut.Controllers
             }
             else
             {
-                result.Add("Status", 400);
-                return result;
+                vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().MobileAlreadyExist(MobileNo);
+                if (ObjUser != null && ObjUser.UserCode > 0)
+                {
+                    result.Add("Status", 200);
+                    result.Add("CName", ObjUser.UserName);
+                    return result;
+                }
+                else
+                {
+                    result.Add("Status", 400);
+                    return result;
+                }
+                
             }
         }
 
