@@ -56,11 +56,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.ID == 0)
                 {
-                    Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks,@LisenceRenewalDate);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks where ID=@ID";
+                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks,@LisenceRenewalDate=LisenceRenewalDate where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID", this.ID);
@@ -83,7 +83,8 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@TDSApplicable", this.TDSApplicable);
                 cmd.Parameters.AddWithValue("@Email", this.Email);
                 cmd.Parameters.AddWithValue("@Remarks", this.Remarks);
-      
+                cmd.Parameters.AddWithValue("@LisenceRenewalDate", this.LisenceRenewalDate);
+
 
                 if (this.ID == 0)
                 {
@@ -227,8 +228,8 @@ namespace HangOut.Models.Account
         {
 
             List<PaymentFrequency> ptype = new List<PaymentFrequency>();
-            ptype.Add(new PaymentFrequency { Id = 0, Name = "Daily" });
-            ptype.Add(new PaymentFrequency { Id = 1, Name = "Weekly" });
+            ptype.Add(new PaymentFrequency { Id = 1, Name = "Daily" });
+            ptype.Add(new PaymentFrequency { Id = 2, Name = "Weekly" });
 
             return ptype;
         }
@@ -251,8 +252,8 @@ namespace HangOut.Models.Account
         {
 
             List<CollectionFrequency> ptype = new List<CollectionFrequency>();
-            ptype.Add(new CollectionFrequency { Id = 0, Name = "Daily" });
-            ptype.Add(new CollectionFrequency { Id = 1, Name = "Weekly" });
+            ptype.Add(new CollectionFrequency { Id = 1, Name = "Daily" });
+            ptype.Add(new CollectionFrequency { Id = 2, Name = "Weekly" });
 
             return ptype;
         }
@@ -276,7 +277,7 @@ namespace HangOut.Models.Account
 
             List<TdsApplicable> ptype = new List<TdsApplicable>();
             ptype.Add(new TdsApplicable { Id = 1, Name = "Yes" });
-            ptype.Add(new TdsApplicable { Id = 0, Name = "No" });
+            ptype.Add(new TdsApplicable { Id = 2, Name = "No" });
 
 
             return ptype;

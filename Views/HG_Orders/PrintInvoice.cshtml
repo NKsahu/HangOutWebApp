@@ -3,7 +3,7 @@
 @{ Layout = null;}
 @{
     double delivercharges = 0.00;
-    int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
+   // int OrgId = int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
     string PaymentMode = "";
     Int64 OID = Int64.Parse(Request.QueryString["OID"]);
     HG_Orders ObjOrder = new HG_Orders();
@@ -31,7 +31,7 @@
     }
     OrderItems = OrderItems.FindAll(x => x.Status != 4);
     // OrderItems = OrderItems.FindAll(x => x.Status != 4); //not cancedled items
-    HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
+    HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(ObjOrder.OrgId);
     string InvoiceHeading = "Test-1";
     string OrgName = "OrgName";
     string AddressLine1 = "";
