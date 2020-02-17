@@ -14,7 +14,9 @@ namespace HangOut.Models.Inventory
         public int Typeid { get; set; }//1=Goods and 2 = Service
         public int UnitID { get; set; }
         public double Qty { get; set; }
-
+        public double Prize { get; set; }
+        public double Tax { get; set; }
+        public double TotalPrize { get; set; }
         public int Save()
         {
             int Row = 0;
@@ -25,11 +27,11 @@ namespace HangOut.Models.Inventory
                 string Quary = "";
                 if (this.GSID == 0)
                 {
-                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@Prize,@Tax,@TotalPrize);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty where GSID=@GSID";
+                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,Prize=@Prize,Tax=@Tax,TotalPrize=@TotalPrize where GSID=@GSID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@GSID", this.GSID);
@@ -38,6 +40,9 @@ namespace HangOut.Models.Inventory
                 cmd.Parameters.AddWithValue("@Typeid", this.Typeid);
                 cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
                 cmd.Parameters.AddWithValue("@Qty", this.Qty);
+                cmd.Parameters.AddWithValue("@Prize", this.Prize);
+                cmd.Parameters.AddWithValue("@Tax", this.Tax);
+                cmd.Parameters.AddWithValue("@TotalPrize", this.TotalPrize);
                 if (this.GSID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -76,6 +81,9 @@ namespace HangOut.Models.Inventory
                     OBJINT.Typeid = SDR.GetInt32(3);
                     OBJINT.UnitID = SDR.GetInt32(4);
                     OBJINT.Qty = SDR.GetDouble(5);
+                    OBJINT.Prize = SDR.GetDouble(6);
+                    OBJINT.Tax = SDR.GetDouble(7);
+                    OBJINT.TotalPrize = SDR.GetDouble(8);
                     listintcat.Add(OBJINT);
                 }
             }
@@ -106,6 +114,9 @@ namespace HangOut.Models.Inventory
                     ObjTmp.Typeid = SDR.GetInt32(3);
                     ObjTmp.UnitID = SDR.GetInt32(4);
                     ObjTmp.Qty = SDR.GetDouble(5);
+                    ObjTmp.Prize = SDR.GetDouble(6);
+                    ObjTmp.Tax= SDR.GetDouble(7);
+                    ObjTmp.TotalPrize = SDR.GetDouble(8);
 
                 }
             }
@@ -146,6 +157,7 @@ namespace HangOut.Models.Inventory
         public static List<InventoryType> ListOrgTypeidList()
         {
             List<InventoryType> list = new List<InventoryType>();
+            list.Add(new InventoryType { Typeid = 0 , Name = "Select Type" });
             list.Add(new InventoryType { Typeid = 1 , Name = "Goods" });
             list.Add(new InventoryType { Typeid = 2 , Name = "Service" });
             return list;

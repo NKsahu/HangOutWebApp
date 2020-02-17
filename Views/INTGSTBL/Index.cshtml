@@ -17,7 +17,7 @@
         <div class="col-md-4">
         </div>
         <div class="col-md-4">
-            <a href="/Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">Category</a>
+            <a href="/Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default  blackTest form-control">Category</a>
 
         </div>
     </div>
@@ -50,7 +50,16 @@
                         Unit
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Qty)
+                         Opening Stock
+                    </th>
+                    <th>
+                        prize
+                    </th>
+                    <th>
+                        Tax
+                    </th>
+                    <th>
+                        Total prize
                     </th>
                     <th></th>
                 </tr>
@@ -71,6 +80,9 @@
                             @OBJUnits.Name
                         </td>
                         <td>@Obj.Qty</td>
+                        <td>@Obj.Prize</td>
+                        <td>@Obj.Tax</td>
+                        <td>@Obj.TotalPrize</td>
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.GSID)"> Edit</button>
                             <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.GSID)"> Delete</button>
