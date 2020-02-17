@@ -29,6 +29,15 @@ namespace HangOut.Controllers.Inventory
         [HttpPost]
         public ActionResult CreateEdit(INTGSTBL Obj)
         {
+          if(Obj.Typeid==1)
+            {
+
+           
+           if( Obj.Qty==0)
+            {
+                return Json(new { msg = "Opening Stock Required" });
+            }
+            }
             int i = Obj.Save();
             if (i > 0)
                 return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);

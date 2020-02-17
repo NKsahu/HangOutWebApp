@@ -7,7 +7,7 @@ using HangOut.Models.Common;
 using System.Web.Mvc;
 
 namespace HangOut.Controllers
-{ [LoginFilter]
+{ 
     public class HG_OrdersController : Controller
     {
         // GET: HG_Order
@@ -59,6 +59,17 @@ namespace HangOut.Controllers
         {
             return View();
         }
-      
+        public ActionResult DiscntCharge(Int64 SeatingId)
+        {
+            OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
+            return View(ordDiscntChrge);
+        }
+        public ActionResult LocalContactIndex()
+        {
+
+            List<LocalContacts> listcontact = LocalContacts.GetAll();
+           listcontact.Distinct();
+            return View(listcontact);
+        }
     }
 }

@@ -33,7 +33,7 @@
                         </td>
                         <td>
                             <div class="row">
-                                <button id="Btn@(item.UnitID)" type="button"  class="btn btn-info text-center form-control header" data-toggle="collapse" data-target="#Clp@(item.UnitID)">@item.Name</button>
+                                <button id="Btn@(item.UnitID)" type="button"  class="btn btn-info text-center form-control header" data-toggle="collapse" data-target="#Clp@(item.UnitID)">@item.Name  &nbsp;<i class="fas fa-arrow-down" style="font-size:20px"></i></button>
                             </div>
                             <div  class="row collapse"id="Clp@(item.UnitID)">
                                 <table style="width:100%" >
@@ -64,7 +64,7 @@
                             </div>
                         </td>
                         <td>
-                            <button onclick="CreateEdit('0',@item.UnitID)" id="btnadd" class="btn btn-info form-control">Add Unit</button>
+                            <button onclick="CreateEdit('0',@item.UnitID)" id="btnadd" class="btn btn-info form-control">Add Conversion</button>
                         </td>
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.UnitID,'0')"> Edit</button>
