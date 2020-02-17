@@ -90,7 +90,7 @@ namespace HangOut.Models
                 {
                     Query+=" where ContctID=" + ID;
                 }
-                else if (Mobile != null&&ID==0)
+                else if (Mobile != null)
                 {
                     Query += " where MobileNo=" + Mobile;
                 }
