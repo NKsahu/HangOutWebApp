@@ -57,21 +57,21 @@
             <div class="col-md-4">
                 @Html.LabelFor(model => model.Prize, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.EditorFor(model => model.Prize, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.Prize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
                 @Html.ValidationMessageFor(model => model.Prize, "", new { @class = "text-danger" })
 
             </div> 
             <div class="col-md-4">
                 @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
                 @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
 
             </div> 
             <div class="col-md-4">
                 @Html.LabelFor(model => model.TotalPrize, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.EditorFor(model => model.TotalPrize, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.TotalPrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" , @readonly = "readonly"} })
                 @Html.ValidationMessageFor(model => model.TotalPrize, "", new { @class = "text-danger" })
 
             </div>
@@ -86,14 +86,27 @@
     </div>
 </div>
 <script>
-    $(document).on('change', function () {
+    $(document).change(function () {
         $("#Opening").hide();
+        console.log("sa");
         var Type = $("#Typeid").val();
+        if (Type === "0") {
+            $("#Opening").hide();
+        }
         if (Type === "1") {
             $("#Opening").show();
         } else {
             $("#Opening").hide();
         }
-        
+        $("#Prize,#Tax").change(
+            function () {
+                CalculateTax();
+            });
+        function CalculateTax() {
+            var Price = parseFloat($("#Prize").val());
+            var TaxPercentage = parseFloat($("#Tax").val());
+            var taxAmt = (Price * TaxPercentage) / 100;
+            $("#TotalPrize").val(Price + taxAmt).change();
+        }
     });
 </script>

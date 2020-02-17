@@ -92,28 +92,28 @@
                     @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" id="MarginOnCash">
                     @Html.LabelFor(model => model.MarginOnCash, htmlAttributes: new { @class = "control-label  " })
 
                     @Html.EditorFor(model => model.MarginOnCash, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.MarginOnCash, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" id="TaxOnAboveMargin">
                     @Html.LabelFor(model => model.TaxOnAboveMargin, htmlAttributes: new { @class = "control-label  " })
 
                     @Html.EditorFor(model => model.TaxOnAboveMargin, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.TaxOnAboveMargin, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" id="MarginOnline">
                     @Html.LabelFor(model => model.MarginOnline, htmlAttributes: new { @class = "control-label  " })
 
                     @Html.EditorFor(model => model.MarginOnline, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.MarginOnline, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2"id="TaxOnAboveMarginOnline">
                     @Html.LabelFor(model => model.TaxOnAboveMarginOnline, htmlAttributes: new { @class = "control-label  " })
 
                     @Html.EditorFor(model => model.TaxOnAboveMarginOnline, new { htmlAttributes = new { @class = "form-control" } })
@@ -121,7 +121,7 @@
 
                 </div>
                 @{
-                    <div class="col-md-2">
+                    <div class="col-md-2" id="PaymentFrequency">
                         @Html.Label("PaymentFrequency")
                         @Html.DropDownListFor(model => model.PaymentFrequency, new SelectList(Ledger.PFrequency(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", id = "pid" })
                         @Html.ValidationMessageFor(model => model.PaymentFrequency, "", new { @class = "text-danger" })
@@ -142,7 +142,7 @@
 
                 }
                 @{
-                    <div class="col-md-2">
+                    <div class="col-md-2" id="CollectionFrequency">
                         @Html.Label("CollectionFrequency")
                         @Html.DropDownListFor(model => model.CollectionFrequency, new SelectList(Ledger.CFrequency(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", id = "cid" })
                         @Html.ValidationMessageFor(model => model.CollectionFrequency, "", new { @class = "text-danger" })
@@ -162,7 +162,7 @@
 
 
                 }
-                <div class="col-md-2">
+                <div class="col-md-2" id="CalculationStartFrom">
                     @Html.Label("CalculationStartFrom")
                     @Html.TextBoxFor(model => model.CalculationStartFrom, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
                 </div>
@@ -170,7 +170,7 @@
 
 
 
-                    <div class="col-md-2">
+                    <div class="col-md-2" id="TDSApplicable">
                         @Html.Label("TDS Applicable")
                         @Html.DropDownListFor(model => model.TDSApplicable, new SelectList(Ledger.TDS(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.TDSApplicable, "", new { @class = "text-danger" })
@@ -211,6 +211,7 @@
     $("#wid").hide();
     $("#cwid").hide();
     $("#bid").hide();
+    $("#Oid").hide();
     $("#LisenceRenewalDateShow").hide();
     $(document).on('change', function () {
         $("#Oid").show();
@@ -250,12 +251,33 @@
                         $("#State").val(Statid);
                         if (OrgType == 1) {
                             $("#LisenceRenewalDateShow").show();
+                            $("#MarginOnCash").hide();
+                            $("#TaxOnAboveMargin").hide();
+                            $("#MarginOnline").hide();
+                            $("#TaxOnAboveMarginOnline").hide();
+                            $("#PaymentFrequency").hide();
+                            $("#wid").hide();
+                            $("#CollectionFrequency").hide();
+                            $("#cwid").hide();
+                            $("#CalculationStartFrom").hide();
+                            $("#TDSApplicable").hide();
 
                         }
                         else
                         {
                             $("#LisenceRenewalDateShow").hide();
-                        }
+                            $("#MarginOnCash").show();
+                            $("#TaxOnAboveMargin").show();
+                            $("#MarginOnline").show();
+                            $("#TaxOnAboveMarginOnline").show();
+                            $("#PaymentFrequency").show();
+                            $("#wid").show();
+                            $("#CollectionFrequency").show();
+                            $("#cwid").show();
+                            $("#CalculationStartFrom").show();
+                            $("#TDSApplicable").show();
+                           
+                        } 
                     }
                     $("#waiting").hide();
                 },
