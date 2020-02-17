@@ -71,30 +71,7 @@
 
     }
 }
-<style>
-    @@media print {
-        body * {
-            visibility: hidden;
-        }
 
-        #section-to-print {
-            width: 21cm;
-            height: 29.7cm;
-            margin: 0mm 0mm 0mm 0mm;
-        }
-
-            #section-to-print * {
-                visibility: visible;
-            }
-    }
-
-    .print:last-child {
-        page-break-after: auto;
-    }
-    .TblBorder {
-        border: 1px dotted black !important;
-    }
-</style>
 
 <div class="row">
     <button id="A4Print" onclick="window.print();"> PRINT (A-4) </button>
@@ -208,16 +185,46 @@
     </div>
     <div class="print"></div>
 </div>
+@if(Request.QueryString["RemoveJs"]!=null&& Request.QueryString["RemoveJs"] == "1")
+{
 
+}
+else
+{
+<style>
+    @@media print {
+        body * {
+            visibility: hidden;
+        }
+
+        #section-to-print {
+            width: 21cm;
+            height: 29.7cm;
+            margin: 0mm 0mm 0mm 0mm;
+        }
+
+            #section-to-print * {
+                visibility: visible;
+            }
+    }
+
+    .print:last-child {
+        page-break-after: auto;
+    }
+
+    .TblBorder {
+        border: 1px dotted black !important;
+    }
+</style>
 <script>
     function PrintElem() {
         var Section = $('#section-to-print').html();
-       // console.log("Section  " + Section);
-        
+        // console.log("Section  " + Section);
+
         // PrintToken();
         Popup(Section);
-       // printNew(Section);
-       // Popup2(Section);
+        // printNew(Section);
+        // Popup2(Section);
     }
 
     function Popup(data) {
@@ -226,15 +233,15 @@
         //   myWindow.document.write('<body>');
         myWindow.document.write(data);
         // myWindow.document.write('</body></html>');
-       //  // necessary for IE >= 10
+        //  // necessary for IE >= 10
         myWindow.document.close();
         myWindow.onload = function () { // necessary if the div contain images
-           // myWindow.focus(); // necessary for IE >= 10
+            // myWindow.focus(); // necessary for IE >= 10
             myWindow.print();
             myWindow.close();
         };
         myWindow.onfocus = function () { myWindow.close(); }
-     //  return true;
+        //  return true;
     }
     function printNew(data) {
         var printContents = data;
@@ -254,8 +261,10 @@
         mywindow.close();
         true;
     }
-    
+
 </script>
+}
+
 
 
 
