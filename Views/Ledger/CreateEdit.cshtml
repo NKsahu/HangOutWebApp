@@ -28,7 +28,7 @@
             <div class="col-md-2">
                 @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control OnlyChar", required = "required" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 
             </div>
@@ -80,7 +80,7 @@
                 @Html.HiddenFor(model => model.OrgId)
             }
         </div>
-            <div class="row" id="bid">
+            <div class="row">
              
                  <div class="col-md-2" id="LisenceRenewalDateShow">
                    @Html.Label("LisenceRenewalDate")
@@ -191,7 +191,7 @@
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.TextAreaFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
 
                 </div>
@@ -213,29 +213,60 @@
     $("#bid").hide();
     $("#Oid").hide();
     $("#LisenceRenewalDateShow").hide();
-    $(document).on('change', function () {
-        $("#Oid").show();
-        $("#bid").show();
-        var values = $("#did").val();
-        if (values === "2") {
-            $("#Oid").hide();
-            $("#bid").hide();
-        }
+    $("#MarginOnCash").hide();
+    $("#TaxOnAboveMargin").hide();
+    $("#MarginOnline").hide();
+    $("#TaxOnAboveMarginOnline").hide();
+    $("#PaymentFrequency").hide();
+    $("#wid").hide();
+    $("#CollectionFrequency").hide();
+    $("#cwid").hide();
+    $("#CalculationStartFrom").hide();
+    $("#TDSApplicable").hide();
+
+    OnOrgChnage();
+    $("#did").change(function () {
+        OnOrgChnage();
     });
-    $(document).on('change', function () {
-        $("#wid").hide();
+    function OnOrgChnage() {
+        var values = $("#did").val();
+        if (values === "2" || values === "") {
+            $("#Oid").hide();
+            $("#LisenceRenewalDateShow").hide();
+           // $("#bid").hide();
+        }
+        else {
+            $("#Oid").show();
+          //  $("#bid").show();
+
+        }
+    }
+    OnpaymentFrequencyChnage();
+    $("#pid").change(function () {
+        OnpaymentFrequencyChnage();
+    });
+    function OnpaymentFrequencyChnage() {
         var values = $("#pid").val();
-        if (values === "1") {
+        if (values === "2" || values === "") {
+            $("#wid").hide();          
+        }
+        else {
             $("#wid").show();
         }
+    }
+    OnCollectionFrequencyChnage();
+    $("#cid").change(function () {
+        OnCollectionFrequencyChnage();
     });
-    $(document).on('change', function () {
-        $("#cwid").hide();
+    function OnCollectionFrequencyChnage() {
         var values = $("#cid").val();
-        if (values === "1") {
+        if (values === "2" || values === "") {
+            $("#cwid").hide();
+        }
+        else {
             $("#cwid").show();
         }
-    });
+    }
     function GetOrgType(event) {
         var orgId = $(event).val();
        
@@ -249,7 +280,7 @@
                         var OrgType = JsonObj.OrgType;
                         var Statid = parseInt(JsonObj.Stateid);
                         $("#State").val(Statid);
-                        if (OrgType == 1) {
+                        if (OrgType == 1 || OrgType == 0) {
                             $("#LisenceRenewalDateShow").show();
                             $("#MarginOnCash").hide();
                             $("#TaxOnAboveMargin").hide();
@@ -261,10 +292,10 @@
                             $("#cwid").hide();
                             $("#CalculationStartFrom").hide();
                             $("#TDSApplicable").hide();
-
+                            //  $("#bid").hide();
                         }
-                        else
-                        {
+                        else {
+                            $("#LisenceRenewalDateShow").val("");
                             $("#LisenceRenewalDateShow").hide();
                             $("#MarginOnCash").show();
                             $("#TaxOnAboveMargin").show();
@@ -276,9 +307,11 @@
                             $("#cwid").show();
                             $("#CalculationStartFrom").show();
                             $("#TDSApplicable").show();
-                           
-                        } 
+                            // $("#bid").show();
+
+                        }
                     }
+               
                     $("#waiting").hide();
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
