@@ -17,7 +17,6 @@ namespace HangOut.Models
 
 
 
-
     }
     public class DiscntCharge
     {
