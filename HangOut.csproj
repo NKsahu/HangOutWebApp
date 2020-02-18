@@ -495,6 +495,7 @@
     <Content Include="Views\JournalEntry\CreateEdit.cshtml" />
     <Content Include="Views\HG_Orders\DiscntCharge.cshtml" />
     <Content Include="Views\HG_Orders\LocalContactIndex.cshtml" />
+    <Content Include="Views\INTGSTBL\CreateEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
