@@ -71,5 +71,10 @@ namespace HangOut.Controllers
            //listcontact.Distinct();
             return View(listcontact);
         }
+        public ActionResult TestPrinting()
+        {
+
+            return View();
+        }
     }
 }
