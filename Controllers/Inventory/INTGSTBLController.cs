@@ -45,32 +45,22 @@ namespace HangOut.Controllers.Inventory
                 return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
-        public ActionResult ServiceIndex()
+       public ActionResult ItemsCreateEdit(int ID)
         {
-            List<INTGSTBL> listgstbl = INTGSTBL.GetAll();
-            return View(listgstbl);
-        }
-        public ActionResult ServiceCreateEdit(int ID)
-        {
-            INTGSTBL Obj = new INTGSTBL();
-            if (ID > 0)
+            INTItems iNTItems = new INTItems();
+            if(ID>0)
             {
-                Obj = Obj.GetOne(ID);
+                iNTItems = iNTItems.GetOne(ID);
             }
-
-            return View(Obj);
+            return View(iNTItems);
         }
         [HttpPost]
-        public ActionResult ServiceCreateEdit(INTGSTBL Obj)
+        public ActionResult ItemsCreateEdit(INTItems iNTItems)
         {
-            int i = Obj.Save();
+            int i = iNTItems.Save();
             if (i > 0)
-                return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
+                return Json(new { data = iNTItems }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
-        }
-        public ActionResult Error()
-        {
-            return View();
         }
     }
 }

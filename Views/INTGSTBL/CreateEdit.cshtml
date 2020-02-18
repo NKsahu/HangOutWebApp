@@ -119,20 +119,32 @@
     });
     function typehide() {
         var Type = $("#Typeid").val();
-        if (Type === "0") {
+        if (Type == "0") {
             $("#Opening").hide();
             $("#ISSaleable").parent('div').parent('div').hide();
-
+            $("#Prize").parent('div').hide();
+            $("#Tax").parent('div').hide();
+            $("#TotalPrize").parent('div').hide();
         }
-        if (Type === "1") {
+        else {
             $("#Opening").show();
             $("#ISSaleable").parent('div').parent('div').show();
-        } else {
-            $("#Opening").hide();
-            $("#ISSaleable").parent('div').parent('div').hide();
             $("#Prize").parent('div').show();
             $("#Tax").parent('div').show();
             $("#TotalPrize").parent('div').show();
+        }
+        if (Type == "1") {
+            $("#Opening").show();
+            $("#ISSaleable").parent('div').parent('div').show();
+            $("#Prize").parent('div').hide();
+            $("#Tax").parent('div').hide();
+            $("#TotalPrize").parent('div').hide();
+        } else {
+            $("#Opening").hide();
+            $("#ISSaleable").parent('div').parent('div').hide();
+           
+            $("#ISdirectlyPurchased").parent('div').parent('div').hide();
+            $("#ISProcessed").parent('div').parent('div').hide();
 
         }
     }
@@ -176,7 +188,21 @@
         Processedchange();
     });
     function Processedchange() {
+        console.log("ggg");
         if ($("#ISProcessed").is(':checked')) {
+        $.ajax({
+            type: 'GET',
+            url: "/INTGSTBL/ItemsCreateEdit?ID=0" ,
+            success: function (data) {
+                makedpt("INTItems");
+                $("#INTItems > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("INTItems");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+            });
             $("#Prize").parent('div').show();
             $("#Tax").parent('div').show();
             $("#TotalPrize").parent('div').show();
@@ -186,5 +212,7 @@
             $("#Tax").parent('div').hide();
             $("#TotalPrize").parent('div').hide();
         }
+
+       
     }
 </script>
