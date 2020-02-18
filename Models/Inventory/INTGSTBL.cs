@@ -17,6 +17,9 @@ namespace HangOut.Models.Inventory
         public double Prize { get; set; }
         public double Tax { get; set; }
         public double TotalPrize { get; set; }
+        public bool ISSaleable { get; set; }
+        public bool ISdirectlyPurchased { get; set; }
+        public bool ISProcessed { get; set; }
         public int Save()
         {
             int Row = 0;
@@ -27,11 +30,11 @@ namespace HangOut.Models.Inventory
                 string Quary = "";
                 if (this.GSID == 0)
                 {
-                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@Prize,@Tax,@TotalPrize);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@Prize,@Tax,@TotalPrize,@ISSaleable,@ISdirectlyPurchased,@ISProcessed);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,Prize=@Prize,Tax=@Tax,TotalPrize=@TotalPrize where GSID=@GSID";
+                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,Prize=@Prize,Tax=@Tax,TotalPrize=@TotalPrize,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed where GSID=@GSID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@GSID", this.GSID);
@@ -43,6 +46,9 @@ namespace HangOut.Models.Inventory
                 cmd.Parameters.AddWithValue("@Prize", this.Prize);
                 cmd.Parameters.AddWithValue("@Tax", this.Tax);
                 cmd.Parameters.AddWithValue("@TotalPrize", this.TotalPrize);
+                cmd.Parameters.AddWithValue("@ISSaleable", this.ISSaleable);
+                cmd.Parameters.AddWithValue("@ISdirectlyPurchased", this.ISdirectlyPurchased);
+                cmd.Parameters.AddWithValue("@ISProcessed", this.ISProcessed);
                 if (this.GSID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -84,6 +90,9 @@ namespace HangOut.Models.Inventory
                     OBJINT.Prize = SDR.GetDouble(6);
                     OBJINT.Tax = SDR.GetDouble(7);
                     OBJINT.TotalPrize = SDR.GetDouble(8);
+                    OBJINT.ISSaleable = SDR.GetBoolean(9);
+                    OBJINT.ISdirectlyPurchased = SDR.GetBoolean(10);
+                    OBJINT.ISProcessed = SDR.GetBoolean(11);
                     listintcat.Add(OBJINT);
                 }
             }
@@ -117,6 +126,9 @@ namespace HangOut.Models.Inventory
                     ObjTmp.Prize = SDR.GetDouble(6);
                     ObjTmp.Tax= SDR.GetDouble(7);
                     ObjTmp.TotalPrize = SDR.GetDouble(8);
+                    ObjTmp.ISSaleable = SDR.GetBoolean(9);
+                    ObjTmp.ISdirectlyPurchased = SDR.GetBoolean(10);
+                    ObjTmp.ISProcessed = SDR.GetBoolean(11);
 
                 }
             }
