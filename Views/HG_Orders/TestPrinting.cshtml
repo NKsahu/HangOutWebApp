@@ -76,13 +76,10 @@
         body * {
             visibility: hidden;
         }
-
-        #section-to-print {
-            width: 21cm;
-            height: 29.7cm;
-            margin: 0mm 0mm 0mm 0mm;
+        *, html, body {
+            margin: 0;
+            padding: 0;
         }
-
             #section-to-print * {
                 visibility: visible;
             }
@@ -96,10 +93,6 @@
         border: 1px dotted black !important;
     }
 </style>
-<div class="row">
-    <button id="A4Print" onclick="window.print();"> PRINT (A-4) </button>
-    <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
-</div>
 <div style="border:2px solid black " id="section-to-print">
     <div id="PrintHeight">
         <div>
