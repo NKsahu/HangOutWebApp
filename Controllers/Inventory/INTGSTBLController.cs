@@ -13,11 +13,13 @@ namespace HangOut.Controllers.Inventory
         public ActionResult Index()
         {
             List<INTGSTBL> listINTGSTBL = INTGSTBL.GetAll();
+            
             return View(listINTGSTBL);
         }
         public ActionResult CreateEdit(int ID)
         {
             INTGSTBL Obj = new INTGSTBL();
+             
             if (ID > 0)
             {
                 Obj = Obj.GetOne(ID);

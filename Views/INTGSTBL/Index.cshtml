@@ -53,6 +53,15 @@
                          Opening Stock
                     </th>
                     <th>
+                        Is Saleable
+                    </th>
+                    <th>
+                        Direct Purchesed
+                    </th>
+                    <th>
+                        Is processed
+                    </th>
+                    <th>
                         prize
                     </th>
                     <th>
@@ -80,6 +89,9 @@
                             @OBJUnits.Name
                         </td>
                         <td>@Obj.Qty</td>
+                        <td>@Obj.ISSaleable</td>
+                        <td>@Obj.ISdirectlyPurchased</td>
+                        <td>@Obj.ISProcessed</td>
                         <td>@Obj.Prize</td>
                         <td>@Obj.Tax</td>
                         <td>@Obj.TotalPrize</td>
