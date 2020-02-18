@@ -71,139 +71,150 @@
 
     }
 }
-<style>
-    @@media print {
-        body * {
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+    <style>
+        @@media print {
+            body *
+
+        {
             visibility: hidden;
         }
+
         *, html, body {
             margin: 0;
             padding: 0;
         }
-            #section-to-print * {
-                visibility: visible;
-            }
-    }
 
-    .print:last-child {
-        page-break-after: auto;
-    }
+        #section-to-print * {
+            visibility: visible;
+        }
 
-    .TblBorder {
-        border: 1px dotted black !important;
-    }
-</style>
-<div style="border:2px solid black " id="section-to-print">
-    <div id="PrintHeight">
-        <div>
-            <h4 style="text-align:center">@InvoiceHeading</h4>
-            <h3 style="text-align:center">@OrgName</h3>
-            <h5 style="text-align:center">@AddressLine1</h5>
-            @if (AddressLine2 != null && AddressLine2.Replace(" ", "") != "")
-            {
-                <h5 style="text-align:center">@AddressLine2</h5>
-            }
-            @if (AddressLine3 != null && AddressLine3.Replace(" ", "") != "")
-            {
-                <h5 style="text-align:center">@AddressLine3</h5>
-            }
-            <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
-            @if (Licence2 != null && Licence2.Replace(" ", "") != "")
-            {
-                <h5 style="text-align:center">@Licence2  @Licence3</h5>
-            }
-        </div>
-        <div style="text-align:center">
-            <h5>Seating :&nbsp; @Seating</h5>
-            <h5>Order No: @OrderNo Ticket No:@TicketNos</h5>
-            <h5>Date:@OrderDate.ToString("dd/MM hh:mm tt") Mode :@PaymentMode</h5>
-        </div>
-        <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
-            <thead>
-                <tr>
-                    <th style="text-align:center">Item </th>
-                    <th style="text-align:center">Qty</th>
-                    <th style="text-align:center">Rate</th>
-                    <th style="text-align:center">Amt</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var items in GroupByItems)
-                {
-                    var ObjSingleItm = items.First();
-                    double Amt = 0.00;
-                    string Style = "background-color:#e05c5c";
-                    int Cnt = items.Sum(x => x.Count);
-                    Amt = ObjSingleItm.CostPrice * Cnt;
-                    AmountTotal += Amt;
-                    Qty += Cnt;
-                    RateTotal += ObjSingleItm.CostPrice;
-                    Style = "background-color:white";
-                    GrandTotal += ObjSingleItm.Price * Cnt;
-                    TotalTax += OrgType.TotalTax(ObjSingleItm.CostPrice, ObjSingleItm.TaxInItm, Cnt);
+        }
 
-                    // Qty += items.Qty;
-                    HG_Items hG_Items = ItemList.Find(x => x.ItemID == ObjSingleItm.FID);
-                    <tr style="@(Style)">
-                        <td style="text-align:left;font-size:small;">@hG_Items.Items</td>
-                        <td style="text-align:right ;font-size:small;">@Cnt</td>
-                        <td style="text-align:right; font-size:small;">@ObjSingleItm.CostPrice.ToString("0.00")</td>
-                        <td style="text-align:right;font-size:small;">@Amt.ToString("0.00")</td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="4" style="text-align:left;border-top: 1px dotted black;"></td>
-                </tr>
-                <tr>
-                    <td style="text-align:left;">Total</td>
-                    <td style="text-align:right">@Qty.ToString() </td>
-                    <td style="text-align:right"></td>
-                    <td style="text-align:right">@AmountTotal.ToString("0.00")</td>
-                </tr>
-                @if (TotalTax > 0)
-                {
-                    <tr>
-                        <td style="text-align:left">Total Tax</td>
-                        <td style="text-align:right"> </td>
-                        <td style="text-align:right"></td>
-                        <td style="text-align:right">@TotalTax.ToString("0.00")</td>
-                    </tr>
-                }
-                @if (delivercharges > 0)
-                {
-                    <tr>
-                        <td style="text-align:left">Del Chrg</td>
-                        <td style="text-align:right"> </td>
-                        <td style="text-align:right"></td>
-                        <td style="text-align:right">@delivercharges.ToString("0.00")</td>
-                    </tr>
-                }
-                @if (TotalTax > 0 || delivercharges > 0)
-                {
-                    <tr>
-                        <td style="text-align:left">GTotal</td>
-                        <td style="text-align:right"> </td>
-                        <td style="text-align:right"></td>
-                        <td style="text-align:right">@GrandTotal.ToString("0.00")</td>
-                    </tr>
-                }
-            </tfoot>
-        </table>
-        <div style="border-top:1px dotted black;margin:5px 0px 5px 0px;">
-            <p>Note:</p>
+        .print:last-child {
+            page-break-after: auto;
+        }
+
+        .TblBorder {
+            border: 1px dotted black !important;
+        }
+    </style>
+    <div style="border:2px solid black " id="section-to-print">
+        <div id="PrintHeight">
             <div>
-                @Printremark
+                <h4 style="text-align:center">@InvoiceHeading</h4>
+                <h3 style="text-align:center">@OrgName</h3>
+                <h5 style="text-align:center">@AddressLine1</h5>
+                @if (AddressLine2 != null && AddressLine2.Replace(" ", "") != "")
+                {
+                    <h5 style="text-align:center">@AddressLine2</h5>
+                }
+                @if (AddressLine3 != null && AddressLine3.Replace(" ", "") != "")
+                {
+                    <h5 style="text-align:center">@AddressLine3</h5>
+                }
+                <h5 style="text-align:center">Phone  @Phoneno         @GstNo</h5>
+                @if (Licence2 != null && Licence2.Replace(" ", "") != "")
+                {
+                    <h5 style="text-align:center">@Licence2  @Licence3</h5>
+                }
             </div>
-            <p style="page-break-after:auto;text-align:center;margin:10px 0px 10px 0px;">@PoweredBy</p>
-        </div>
-    </div>
-    <div class="print"></div>
-</div>
+            <div style="text-align:center">
+                <h5>Seating :&nbsp; @Seating</h5>
+                <h5>Order No: @OrderNo Ticket No:@TicketNos</h5>
+                <h5>Date:@OrderDate.ToString("dd/MM hh:mm tt") Mode :@PaymentMode</h5>
+            </div>
+            <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">Item </th>
+                        <th style="text-align:center">Qty</th>
+                        <th style="text-align:center">Rate</th>
+                        <th style="text-align:center">Amt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var items in GroupByItems)
+                    {
+                        var ObjSingleItm = items.First();
+                        double Amt = 0.00;
+                        string Style = "background-color:#e05c5c";
+                        int Cnt = items.Sum(x => x.Count);
+                        Amt = ObjSingleItm.CostPrice * Cnt;
+                        AmountTotal += Amt;
+                        Qty += Cnt;
+                        RateTotal += ObjSingleItm.CostPrice;
+                        Style = "background-color:white";
+                        GrandTotal += ObjSingleItm.Price * Cnt;
+                        TotalTax += OrgType.TotalTax(ObjSingleItm.CostPrice, ObjSingleItm.TaxInItm, Cnt);
 
-    
-   
+                        // Qty += items.Qty;
+                        HG_Items hG_Items = ItemList.Find(x => x.ItemID == ObjSingleItm.FID);
+                        <tr style="@(Style)">
+                            <td style="text-align:left;font-size:small;">@hG_Items.Items</td>
+                            <td style="text-align:right ;font-size:small;">@Cnt</td>
+                            <td style="text-align:right; font-size:small;">@ObjSingleItm.CostPrice.ToString("0.00")</td>
+                            <td style="text-align:right;font-size:small;">@Amt.ToString("0.00")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" style="text-align:left;border-top: 1px dotted black;"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left;">Total</td>
+                        <td style="text-align:right">@Qty.ToString() </td>
+                        <td style="text-align:right"></td>
+                        <td style="text-align:right">@AmountTotal.ToString("0.00")</td>
+                    </tr>
+                    @if (TotalTax > 0)
+                    {
+                        <tr>
+                            <td style="text-align:left">Total Tax</td>
+                            <td style="text-align:right"> </td>
+                            <td style="text-align:right"></td>
+                            <td style="text-align:right">@TotalTax.ToString("0.00")</td>
+                        </tr>
+                    }
+                    @if (delivercharges > 0)
+                    {
+                        <tr>
+                            <td style="text-align:left">Del Chrg</td>
+                            <td style="text-align:right"> </td>
+                            <td style="text-align:right"></td>
+                            <td style="text-align:right">@delivercharges.ToString("0.00")</td>
+                        </tr>
+                    }
+                    @if (TotalTax > 0 || delivercharges > 0)
+                    {
+                        <tr>
+                            <td style="text-align:left">GTotal</td>
+                            <td style="text-align:right"> </td>
+                            <td style="text-align:right"></td>
+                            <td style="text-align:right">@GrandTotal.ToString("0.00")</td>
+                        </tr>
+                    }
+                </tfoot>
+            </table>
+            <div style="border-top:1px dotted black;margin:5px 0px 5px 0px;">
+                <p>Note:</p>
+                <div>
+                    @Printremark
+                </div>
+                <p style="page-break-after:auto;text-align:center;margin:10px 0px 10px 0px;">@PoweredBy</p>
+            </div>
+        </div>
+        <div class="print"></div>
+    </div>
+    </body></html>
+
+
 
 
 
