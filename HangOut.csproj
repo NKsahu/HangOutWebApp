@@ -377,6 +377,7 @@
     <Compile Include="Models\HG_OrderItem.cs" />
     <Compile Include="Models\Inventory\INTCategory.cs" />
     <Compile Include="Models\Inventory\INTGSTBL.cs" />
+    <Compile Include="Models\Inventory\INTItems.cs" />
     <Compile Include="Models\Inventory\INTUnits.cs" />
     <Compile Include="Models\JoinFoodDo.cs" />
     <Compile Include="Models\LocalContacts.cs" />
@@ -496,6 +497,7 @@
     <Content Include="Views\HG_Orders\DiscntCharge.cshtml" />
     <Content Include="Views\HG_Orders\LocalContactIndex.cshtml" />
     <Content Include="Views\INTGSTBL\CreateEdit.cshtml" />
+    <Content Include="Views\INTGSTBL\ItemsCreateEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
