@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BeginCollectionItem, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\BeginCollectionItem.1.2.1.0\lib\net35\BeginCollectionItem.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
     </Reference>
@@ -497,8 +500,9 @@
     <Content Include="Views\HG_Orders\DiscntCharge.cshtml" />
     <Content Include="Views\HG_Orders\LocalContactIndex.cshtml" />
     <Content Include="Views\INTGSTBL\CreateEdit.cshtml" />
-    <Content Include="Views\INTGSTBL\ItemsCreateEdit.cshtml" />
+    <Content Include="Views\Shared\INTSubItem.cshtml" />
     <Content Include="Views\HG_Orders\TestPrinting.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
