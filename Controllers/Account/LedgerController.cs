@@ -73,6 +73,8 @@ namespace HangOut.Controllers.Account
             }
             if (Obj.MobileNo2 != null)
             {
+
+
                 if (Obj.MobileNo2.Length > 0 && Obj.MobileNo2.Length < 10)
                 {
                     return Json(new { msg = "Please Enter Valid Mobile Number" });
