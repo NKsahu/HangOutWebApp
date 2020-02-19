@@ -31,21 +31,37 @@ namespace HangOut.Controllers.Account
             {
                 Obj.ShortName = "";
             }
-            if (Obj.AccountNumber == null)
+            if (Obj.AccountNumber == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
             {
                 Obj.AccountNumber = "";
             }
-            if (Obj.IFSCCode == null)
+            else
+            {
+                return Json(new { msg = "Please Enter Account Number" });
+            }
+            if (Obj.IFSCCode == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
             {
                 Obj.IFSCCode = "";
             }
-            if (Obj.BankName == null)
+            else
+            {
+                return Json(new { msg = "Please Enter IFSC Code" });
+            }
+            if (Obj.BankName == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
             {
                 Obj.BankName = "";
             }
-            if (Obj.Branch == null)
+            else
+            {
+                return Json(new { msg = "Please Enter Bank Name" });
+            }
+            if (Obj.Branch == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
             {
                 Obj.Branch = "";
+            }
+            else
+            {
+                return Json(new { msg = "Please Enter Branch" });
             }
             if (Obj.Name == null || Obj.Name.Replace(" ","") == "")
             {
@@ -59,7 +75,7 @@ namespace HangOut.Controllers.Account
             {
                 Obj.Remarks = "";
             }
-            if(Obj.DebtorType == 0 )
+            if(Obj.DebtorType == 0 && Obj.ParentGroup!=1)
             {
                 return Json(new { msg = "Please Select Debtor Type" });
             }
@@ -68,7 +84,11 @@ namespace HangOut.Controllers.Account
                 return Json(new { msg = "Please Select Organization Name" });
 
             }
-       
+            if (Obj.ParentGroup == 0)
+            {
+                return Json(new { msg = "Please Select Group Type" });
+            }
+
             if (Obj.DebtorType == 2)
             {
                 Obj.OrgId = 0;
@@ -81,9 +101,26 @@ namespace HangOut.Controllers.Account
                 Obj.CollectionDay = 0;
                 Obj.CollectionFrequency = 0;
                 Obj.TDSApplicable = 0;
-       
+                Obj.ParentGroup = 0;
+
+
             }
-            if(Obj.MobileNo1.Length>0 && Obj.MobileNo1.Length<10)
+            if (Obj.ParentGroup == 1)
+            {
+                Obj.DebtorType = 0;
+                Obj.OrgId = 0;
+                Obj.MarginOnCash = 0;
+                Obj.TaxOnAboveMargin = 0;
+                Obj.MarginOnline = 0;
+                Obj.TaxOnAboveMarginOnline = 0;
+                Obj.PaymentDay = 0;
+                Obj.PaymentFrequency = 0;
+                Obj.CollectionDay = 0;
+                Obj.CollectionFrequency = 0;
+                Obj.TDSApplicable = 0;
+
+            }
+            if (Obj.MobileNo1.Length>0 && Obj.MobileNo1.Length<10)
             {
                 return Json(new { msg = "Please Enter Valid Mobile Number" });
             }

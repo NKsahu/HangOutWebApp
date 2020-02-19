@@ -56,7 +56,7 @@
                 @{
                     <div class="col-md-2">
                         @Html.Label("GroupType")
-                        @Html.DropDownListFor(model => model.ParentGroup, new SelectList(Group.GetAll(), "ID", "Name", Model.ID), "Select Group Type", new { @class = "form-control", required = "required", Id = "GroupId" })
+                        @Html.DropDownListFor(model => model.ParentGroup, new SelectList(Group.GetAll(), "ID", "Name", Model.ID), "Select Group Type", new { @class = "form-control", Id = "GroupId" })
                         @Html.ValidationMessageFor(model => model.ParentGroup, "", new { @class = "text-danger" })
 
                     </div>
@@ -64,7 +64,7 @@
                 @{
                     <div class="col-md-2" id="DebType">
                         @Html.Label("DebtorType")
-                        @Html.DropDownListFor(model => model.DebtorType, new SelectList(Ledger.DTypes(), "ID", "Name", Model.ID), "Select Debtor Type", new { @class = "form-control", required = "required", Id = "did" })
+                        @Html.DropDownListFor(model => model.DebtorType, new SelectList(Ledger.DTypes(), "ID", "Name", Model.ID), "Select Debtor Type", new { @class = "form-control", Id = "did" })
                         @Html.ValidationMessageFor(model => model.DebtorType, "", new { @class = "text-danger" })
 
                     </div>
@@ -184,28 +184,28 @@
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.IFSCCode, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.EditorFor(model => model.IFSCCode, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.EditorFor(model => model.IFSCCode, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.IFSCCode, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
 
                 </div>
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.Branch, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.EditorFor(model => model.Branch, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+                    @Html.EditorFor(model => model.Branch, new { htmlAttributes = new { @class = "form-control "} })
                     @Html.ValidationMessageFor(model => model.Branch, "", new { @class = "text-danger" })
 
                 </div>
@@ -271,6 +271,16 @@
         if (values === "2" || values === "") {
             $("#Oid").hide();
             $("#LisenceRenewalDateShow").hide();
+            $("#MarginOnCash").hide();
+            $("#TaxOnAboveMargin").hide();
+            $("#MarginOnline").hide();
+            $("#TaxOnAboveMarginOnline").hide();
+            $("#PaymentFrequency").hide();
+            $("#wid").hide();
+            $("#CollectionFrequency").hide();
+            $("#cwid").hide();
+            $("#CalculationStartFrom").hide();
+            $("#TDSApplicable").hide();
             // $("#bid").hide();
         }
         else {
