@@ -63,14 +63,16 @@ namespace HangOut.Controllers.Inventory
                 return Json(new { data = iNTItems }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
-        public JObject SaveItems([System.Web.Http.FromBody] INTGSTBL iNTGSTBL)
+        public JObject SaveItems([System.Web.Http.FromBody] INTGSTBL intgst)
         {
-            INTGSTBL OBJINTGSTBL = iNTGSTBL;
+            INTGSTBL OBJINTGSTBL = intgst;
             OBJINTGSTBL.Save();
-            List<INTItems> videolist = OBJINTGSTBL.iNTItems;
-
-            INTItems OBJITEM = new INTItems();
-            OBJITEM.Save();
+            List<INTItems> itemlist = OBJINTGSTBL.iNTItems;
+            foreach (var item in itemlist)
+            {
+                item.ItemID = OBJINTGSTBL.GSID;
+                item.Save();
+            }
             return JObject.FromObject(OBJINTGSTBL);
         }
     }
