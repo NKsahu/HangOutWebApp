@@ -102,63 +102,9 @@
             <hr />
             @foreach (var SubItems in Model.iNTItems)
             {
-                @Html.Partial("ChildRow", SubItems)
+                @Html.Partial("INTSubItem", SubItems)
             }
-            <div class="row MainDivs">
-
-                <div class="col-md-3">
-                    @Html.Label("Item")
-                    @Html.DropDownList("IParentId", new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control", required = "required" })
-
-
-                </div>
-                <div class="col-md-3">
-                    @Html.Label("Quantity")
-                    @Html.Editor("IQty", new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-
-                </div>
-                <div class="col-md-3">
-                    @{ List<INTUnits> listuni = INTUnits.GetAll();
-                        listuni = listuni.FindAll(x => x.ParentId != 0);
-                    }
-                    @Html.Label("Unit")
-                    @Html.DropDownList("IUnitID", new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
-
-                </div>
-                <div class="col-md-3" id="btn">
-                    <span class="float-right">
-                        <a class="btn btn-success btn-sm" onclick="DuplicateDiv();" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
-                    </span>
-                </div>
-            </div>
-            <!--Hidden div-->
-            @*<div class="row aa MainDivs" style="display:none" OrderNo="1" id="CreateCopy">
-                <div class="col-md-3">
-                    @Html.Label("Item")
-                    @Html.DropDownList("IParentId", new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control", required = "required" })
-
-
-                </div>
-                <div class="col-md-3">
-                    @Html.Label("Quantity")
-                    @Html.Editor("IQty", new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-
-                </div>
-                <div class="col-md-3">
-                    @{ List<INTUnits> listun = INTUnits.GetAll();
-                        listun = listun.FindAll(x => x.ParentId != 0);
-                    }
-                    @Html.Label("Unit")
-                    @Html.DropDownList("IUnitID", new SelectList(listun, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
-
-                </div>
-                <div class="col-md-3" id="bt">
-                    <span class="float-right">
-                        <a class="btn btn-success btn-sm aa" onclick="DuplicateDiv();" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
-                    </span>
-                </div>
-            </div>*@
-            <!--end -->
+            
             <div id="HeadDiv" style="display:none"></div>
             <div class="col-md-1">
                 @Html.Label("Save", new { @class = "text-white" })
