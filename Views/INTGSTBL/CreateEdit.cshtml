@@ -100,15 +100,15 @@
 
             </div>
             <hr />
-            @foreach (var SubItems in Model.iNTItems)
+            foreach (var SubItems in Model.iNTItems)
             {
                 @Html.Partial("INTSubItem", SubItems)
             }
-            
+
             <div id="HeadDiv" style="display:none"></div>
-            <div class="col-md-1">
+            <div class="col-sm-1">
                 @Html.Label("Save", new { @class = "text-white" })
-                <input style="margin-top:25px" type="submit" value="Save" class="btn btn-success" />
+                <input type="submit" value="Save" class="btn btn-success" />
 
             </div>
         }
@@ -130,7 +130,7 @@
             $("#Prize").parent('div').hide();
             $("#Tax").parent('div').hide();
             $("#TotalPrize").parent('div').hide();
-            $("#IParentId").parent('div').hide();
+            $("#ItemID").parent('div').hide();
             $("#IQty").parent('div').hide();
             $("#IUnitID").parent('div').hide();
             $("#btn").hide();
@@ -141,9 +141,9 @@
             $("#Prize").parent('div').show();
             $("#Tax").parent('div').show();
             $("#TotalPrize").parent('div').show();
-            //$("#IParentId").parent('div').show();
-            //$("#IQty").parent('div').show();
-            //$("#IUnitID").parent('div').show();
+            $("#ItemID").parent('div').show();
+            $("#IQty").parent('div').show();
+            $("#IUnitID").parent('div').show();
         }
         if (Type == "1") {
             $("#Opening").show();
@@ -151,7 +151,10 @@
             $("#Prize").parent('div').hide();
             $("#Tax").parent('div').hide();
             $("#TotalPrize").parent('div').hide();
-            $("#btn").hide();
+            $("#ItemID").parent('div').hide();
+            $("#IQty").parent('div').hide();
+            $("#IUnitID").parent('div').hide();
+           $("#btn").hide();
         } else {
             $("#Opening").hide();
             $("#ISSaleable").parent('div').parent('div').hide();
@@ -159,7 +162,9 @@
             $("#ISdirectlyPurchased").parent('div').parent('div').hide();
             $("#ISProcessed").parent('div').parent('div').hide();
             $("#btn").hide();
-
+            $("#ItemID").parent('div').hide();
+            $("#IQty").parent('div').hide();
+            $("#IUnitID").parent('div').hide();
         }
     }
     $("#Prize,#Tax").change(
@@ -207,7 +212,7 @@
             $("#Prize").parent('div').show();
             $("#Tax").parent('div').show();
             $("#TotalPrize").parent('div').show();
-            $("#IParentId").parent('div').show();
+            $("#ItemID").parent('div').show();
             $("#IQty").parent('div').show();
             $("#IUnitID").parent('div').show();
             $("#btn").show();
@@ -216,7 +221,7 @@
             $("#Prize").parent('div').hide();
             $("#Tax").parent('div').hide();
             $("#TotalPrize").parent('div').hide();
-            $("#IParentId").parent('div').hide();
+            $("#ItemID").parent('div').hide();
             $("#IQty").parent('div').hide();
             $("#IUnitID").parent('div').hide();
             $("#btn").hide();
@@ -231,75 +236,5 @@
         clonediv.attr('OrderNo', MainDivsCnt);
         clonediv.insertBefore("#HeadDiv");
     }
-    function save() {
-        var GSTBLList = [];
-        // public List < Video > Videos { get; set; }
-        var GSTBLLDivList = document.getElementsByClassName("MainDivs");
-        for (var i = 1; i < GSTBLLDivList.length; i++) {
-            var ObjDiv = $(GSTBLLDivList[i]);
-            var CatID = ObjDiv.find('#Name').val();
-            var Name = ObjDiv.find('.discript').val();
-            var Typeid = ObjDiv.find('.Source').val();
-            var UnitID = ObjDiv.find('.checked').is(':checked');
-            var Qty = ObjDiv.find('.droupdown').val();
-            var Prize = ObjDiv.attr('OrderNo');
-            var Tax = ObjDiv.find('.restaurent').is(':checked');
-            var TotalPrize = ObjDiv.find('.theater').is(':checked');
-            var ISSaleable = ObjDiv.find('.postpaid').is(':checked');
-            var ISdirectlyPurchased = ObjDiv.find('.prepaid').is(':checked');
-            var ISProcessed = ObjDiv.find('.prepaid').is(':checked');
-            var ID = ObjDiv.find('.videoID').val();
-            
-            var ObjVideo = {};
-            ObjVideo.ID = ID;
-            ObjVideo.Title = title;
-            ObjVideo.Discription = Discription;
-            ObjVideo.Link = Link;
-            ObjVideo.IsImp = piority;
-            ObjVideo.Languange = droupdown;
-            ObjVideo.serialnumber = serialnumber;
-            ObjVideo.Restaurant = Restaurant;
-            ObjVideo.theater = theater;
-            ObjVideo.postpaid = postpaid;
-            ObjVideo.prepaid = prepaid;
-            VideosList.push(ObjVideo);
-        }
-        VidCategory.Videos = VideosList;
-        $('#waiting').show();
-        $.ajax({
-            type: 'POST',
-            url: "/Video/SaveCategory",
-            data: JSON.stringify(VidCategory),
-            contentType: "application/json",
-            success: function (data) {
-                hidedpt("HG_Category");
-                $('#waiting').hide();
-                console.log("ss");
-                var ObjcatVideo = JSON.parse(data);
-                var strhtml = '<li OrderNo="' + ObjcatVideo.OrderNo + '" CatId="' + ObjcatVideo.Id + '"><button class="btn btn-success button" style="font-size:25px; box-shadow: 0 4px #999; margin-left: 5px;"';
-                var Secondhtml = "onclick='LoadCategoryPopup(\"" + ObjcatVideo.Id + "\")'><span>" + ObjcatVideo.Name + "</span>";
-                Secondhtml += '</button>';
-                Secondhtml += '<div class="row">';
-                Secondhtml += '<div class="col-md-6 text-center">';
-                Secondhtml += "<a onclick='divup(this)'><i style=' font-size:30px;color:#138692' class='fas fa-long-arrow-alt-left'></i></a>";
-                Secondhtml += '</div>';
-                Secondhtml += '<div class="col-md-6 text-center">';
-                Secondhtml += "<a onclick ='divdown(this)' ><i style=' font-size:30px;color:#138692' class='fas fa-long-arrow-alt-right'></i></a>";
-                Secondhtml += '</div>';
-                Secondhtml += '</div>';
-                Secondhtml += '</li>';
-                Secondhtml += '</ul>';
-
-                if (VidCategory.Id == 0) {
-                    $("#MyCategory").append(strhtml + Secondhtml);
-                }
-
-            },
-
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $('#waiting').hide();
-            }
-        });
-
-    }
+    
 </script>
