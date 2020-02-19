@@ -23,6 +23,17 @@ namespace HangOut.Controllers.Inventory
 
             if (ID > 0)
             {
+                if (Obj.GSID !=0)
+                {
+                    Obj = Obj.GetOne(ID);
+                }
+                foreach (var Subitem in Obj.iNTItems)
+                {
+                    if(Subitem.SubItemID!=0)
+                    {
+                        Obj = Obj.GetOne(ID);
+                    }
+                }
                 Obj = Obj.GetOne(ID);
             }
             else
