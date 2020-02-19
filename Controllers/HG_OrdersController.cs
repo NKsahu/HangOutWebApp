@@ -73,7 +73,6 @@ namespace HangOut.Controllers
         }
         public ActionResult TestPrinting()
         {
-
             return View();
         }
     }
