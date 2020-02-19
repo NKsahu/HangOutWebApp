@@ -77,8 +77,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-    <style>
-        @@media print {
+    <style type="text/css" media="print">
+        @@page {
+    size: auto;   /* auto is the initial value */
+    margin: 0;  /* this affects the margin in the printer settings */
+           }
+       
             body * {
                 visibility: hidden;
             }
@@ -91,8 +95,6 @@
             #section-to-print * {
                 visibility: visible;
             }
-        }
-
         .print:last-child {
             page-break-after: auto;
         }
