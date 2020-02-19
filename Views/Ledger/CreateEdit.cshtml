@@ -20,78 +20,79 @@
             @Html.HiddenFor(model => model.ID)
 
 
-        <div class="row">
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
-
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control OnlyChar", required = "required" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.ShortName, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ShortName, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.MobileNo1, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.MobileNo1, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
-                @Html.ValidationMessageFor(model => model.MobileNo1, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.MobileNo2, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.MobileNo2, new { htmlAttributes = new { @class = "form-control OnlyNum" } })
-                @Html.ValidationMessageFor(model => model.MobileNo2, "", new { @class = "text-danger" })
-
-            </div>
-            @{
-                <div class="col-md-2">
-                    @Html.Label("DebtorType")
-                    @Html.DropDownListFor(model => model.DebtorType, new SelectList(Ledger.DTypes(), "ID", "Name", Model.ID), "Select Debtor Type", new { @class = "form-control", required = "required", Id = "did" })
-                    @Html.ValidationMessageFor(model => model.DebtorType, "", new { @class = "text-danger" })
-
-                </div>
-            }
-            @if (ObjOrg["OrgId"] == "0" || ObjOrg["OrgId"] == null)
-            {
-                <div class="col-md-2" id="Oid">
-                    @Html.Label("Organization")
-                    @{
-
-                        SelectList sl = new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID ", "Name");
-                    }
-
-                    @Html.DropDownListFor(Model => Model.OrgId, sl, "Select Orgonization", new { @class = "form-control",onchange= "GetOrgType(this)" })
-                    @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
-
-                </div>
-            }
-            else
-            {
-                @Html.HiddenFor(model => model.OrgId)
-            }
-        </div>
             <div class="row">
-             
-                 <div class="col-md-2" id="LisenceRenewalDateShow">
-                   @Html.Label("LisenceRenewalDate")
-                   @Html.TextBoxFor(model => model.LisenceRenewalDate, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
-                 </div>
-                <div class=" col-md-2">
-                    @Html.Label("State")
-                    @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId", "Name"), "Select States", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control OnlyChar", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 
                 </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ShortName, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShortName, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.MobileNo1, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.MobileNo1, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.MobileNo1, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.MobileNo2, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.MobileNo2, new { htmlAttributes = new { @class = "form-control OnlyNum" } })
+                    @Html.ValidationMessageFor(model => model.MobileNo2, "", new { @class = "text-danger" })
+
+                </div>
+                @{
+                    <div class="col-md-2">
+                        @Html.Label("GroupType")
+                        @Html.DropDownListFor(model => model.ParentGroup, new SelectList(Group.GetAll(), "ID", "Name", Model.ID), "Select Group Type", new { @class = "form-control", Id = "GroupId" })
+                        @Html.ValidationMessageFor(model => model.ParentGroup, "", new { @class = "text-danger" })
+
+                    </div>
+                }
+                @{
+                    <div class="col-md-2" id="DebType">
+                        @Html.Label("DebtorType")
+                        @Html.DropDownListFor(model => model.DebtorType, new SelectList(Ledger.DTypes(), "ID", "Name", Model.ID), "Select Debtor Type", new { @class = "form-control", Id = "did" })
+                        @Html.ValidationMessageFor(model => model.DebtorType, "", new { @class = "text-danger" })
+
+                    </div>
+                }
+
+                @if (ObjOrg["OrgId"] == "0" || ObjOrg["OrgId"] == null)
+                {
+                    <div class="col-md-2" id="Oid">
+                        @Html.Label("Organization")
+                        @{
+
+                            SelectList sl = new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID ", "Name");
+                        }
+
+                        @Html.DropDownListFor(Model => Model.OrgId, sl, "Select Orgonization", new { @class = "form-control", onchange = "GetOrgType(this)" })
+                        @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
+
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(model => model.OrgId)
+                }
+                <div class="col-md-2" id="LisenceRenewalDateShow">
+                    @Html.Label("LisenceRenewalDate")
+                    @Html.TextBoxFor(model => model.LisenceRenewalDate, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+                </div>
+               
                 <div class="col-md-2" id="MarginOnCash">
                     @Html.LabelFor(model => model.MarginOnCash, htmlAttributes: new { @class = "control-label  " })
 
@@ -113,7 +114,7 @@
                     @Html.ValidationMessageFor(model => model.MarginOnline, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2"id="TaxOnAboveMarginOnline">
+                <div class="col-md-2" id="TaxOnAboveMarginOnline">
                     @Html.LabelFor(model => model.TaxOnAboveMarginOnline, htmlAttributes: new { @class = "control-label  " })
 
                     @Html.EditorFor(model => model.TaxOnAboveMarginOnline, new { htmlAttributes = new { @class = "form-control" } })
@@ -177,10 +178,45 @@
 
                     </div>
 
-
                 }
             </div>
+            <div class="row" id="Bankdetails">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.IFSCCode, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.IFSCCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.IFSCCode, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Branch, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.Branch, new { htmlAttributes = new { @class = "form-control "} })
+                    @Html.ValidationMessageFor(model => model.Branch, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
             <div class="row">
+                <div class=" col-md-2">
+                    @Html.Label("State")
+                    @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId", "Name"), "Select States", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+
+                </div>
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label  " })
 
@@ -208,6 +244,8 @@
 <script>
     setTimeout(function () { $(window).trigger('resize'); }, 100);
     $(".DateField").datepicker();
+    $("#Bankdetails").hide();
+    $("#DebType").hide();
     $("#wid").hide();
     $("#cwid").hide();
     $("#bid").hide();
@@ -233,12 +271,57 @@
         if (values === "2" || values === "") {
             $("#Oid").hide();
             $("#LisenceRenewalDateShow").hide();
-           // $("#bid").hide();
+            $("#MarginOnCash").hide();
+            $("#TaxOnAboveMargin").hide();
+            $("#MarginOnline").hide();
+            $("#TaxOnAboveMarginOnline").hide();
+            $("#PaymentFrequency").hide();
+            $("#wid").hide();
+            $("#CollectionFrequency").hide();
+            $("#cwid").hide();
+            $("#CalculationStartFrom").hide();
+            $("#TDSApplicable").hide();
+            // $("#bid").hide();
         }
         else {
             $("#Oid").show();
-          //  $("#bid").show();
+            //  $("#bid").show();
 
+        }
+    }
+    ShowBankDetails();
+    $("#GroupId").change(function () {
+        ShowBankDetails();
+    });
+    function ShowBankDetails() {
+        var values = $("#GroupId").val();
+        if (values === "1") {
+            $("#Bankdetails").show();
+            $("#wid").hide();
+            $("#cwid").hide();
+            $("#bid").hide();
+            $("#Oid").hide();
+            $("#LisenceRenewalDateShow").hide();
+            $("#MarginOnCash").hide();
+            $("#TaxOnAboveMargin").hide();
+            $("#MarginOnline").hide();
+            $("#TaxOnAboveMarginOnline").hide();
+            $("#PaymentFrequency").hide();
+            $("#wid").hide();
+            $("#CollectionFrequency").hide();
+            $("#cwid").hide();
+            $("#CalculationStartFrom").hide();
+            $("#TDSApplicable").hide();
+            $("#DebType").hide();
+        }
+        else if (values === "2")
+        {
+            $("#DebType").show();
+            $("#Bankdetails").hide();
+        }
+        else {
+            $("#Bankdetails").hide();
+            $("#DebType").hide();
         }
     }
     OnpaymentFrequencyChnage();
@@ -247,8 +330,8 @@
     });
     function OnpaymentFrequencyChnage() {
         var values = $("#pid").val();
-        if (values === "2" || values === "") {
-            $("#wid").hide();          
+        if (values === "1" || values === "") {
+            $("#wid").hide();
         }
         else {
             $("#wid").show();
@@ -260,7 +343,7 @@
     });
     function OnCollectionFrequencyChnage() {
         var values = $("#cid").val();
-        if (values === "2" || values === "") {
+        if (values === "1" || values === "") {
             $("#cwid").hide();
         }
         else {
@@ -269,56 +352,56 @@
     }
     function GetOrgType(event) {
         var orgId = $(event).val();
-       
-            $("#waiting").show();
-            $.ajax({
-                type: 'POST',
-                url: "/CommonApi/getOrgType?orgId=" + orgId,
-                success: function (data) {
-                    var JsonObj = JSON.parse(data);
-                    if (JsonObj.Status == 200) {
-                        var OrgType = JsonObj.OrgType;
-                        var Statid = parseInt(JsonObj.Stateid);
-                        $("#State").val(Statid);
-                        if (OrgType == 1 || OrgType == 0) {
-                            $("#LisenceRenewalDateShow").show();
-                            $("#MarginOnCash").hide();
-                            $("#TaxOnAboveMargin").hide();
-                            $("#MarginOnline").hide();
-                            $("#TaxOnAboveMarginOnline").hide();
-                            $("#PaymentFrequency").hide();
-                            $("#wid").hide();
-                            $("#CollectionFrequency").hide();
-                            $("#cwid").hide();
-                            $("#CalculationStartFrom").hide();
-                            $("#TDSApplicable").hide();
-                            //  $("#bid").hide();
-                        }
-                        else {
-                            $("#LisenceRenewalDateShow").val("");
-                            $("#LisenceRenewalDateShow").hide();
-                            $("#MarginOnCash").show();
-                            $("#TaxOnAboveMargin").show();
-                            $("#MarginOnline").show();
-                            $("#TaxOnAboveMarginOnline").show();
-                            $("#PaymentFrequency").show();
-                            $("#wid").show();
-                            $("#CollectionFrequency").show();
-                            $("#cwid").show();
-                            $("#CalculationStartFrom").show();
-                            $("#TDSApplicable").show();
-                            // $("#bid").show();
 
-                        }
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/CommonApi/getOrgType?orgId=" + orgId,
+            success: function (data) {
+                var JsonObj = JSON.parse(data);
+                if (JsonObj.Status == 200) {
+                    var OrgType = JsonObj.OrgType;
+                    var Statid = parseInt(JsonObj.Stateid);
+                    $("#State").val(Statid);
+                    if (OrgType == 1 || OrgType == 0) {
+                        $("#LisenceRenewalDateShow").show();
+                        $("#MarginOnCash").hide();
+                        $("#TaxOnAboveMargin").hide();
+                        $("#MarginOnline").hide();
+                        $("#TaxOnAboveMarginOnline").hide();
+                        $("#PaymentFrequency").hide();
+                        $("#wid").hide();
+                        $("#CollectionFrequency").hide();
+                        $("#cwid").hide();
+                        $("#CalculationStartFrom").hide();
+                        $("#TDSApplicable").hide();
+                        //  $("#bid").hide();
                     }
-               
-                    $("#waiting").hide();
-                },
-                error: function (jqXhr, textStatus, errorMessage) { // error callback
-                    $("#waiting").hide();
+                    else {
+                        $("#LisenceRenewalDateShow").val("");
+                        $("#LisenceRenewalDateShow").hide();
+                        $("#MarginOnCash").show();
+                        $("#TaxOnAboveMargin").show();
+                        $("#MarginOnline").show();
+                        $("#TaxOnAboveMarginOnline").show();
+                        $("#PaymentFrequency").show();
+                        // $("#wid").show();
+                        $("#CollectionFrequency").show();
+                        // $("#cwid").show();
+                        $("#CalculationStartFrom").show();
+                        $("#TDSApplicable").show();
+                        // $("#bid").show();
+
+                    }
                 }
-            });
-        
+
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+
     }
 </script>
 

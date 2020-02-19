@@ -34,6 +34,12 @@ namespace HangOut.Models.Account
         public int TDSApplicable { get; set; }
         public string Email { get; set; }
         public string Remarks { get; set; }
+        public int ParentGroup { get; set; }
+        public string AccountNumber { get; set; }
+        public string IFSCCode { get; set; }
+        public string BankName { get; set; }
+        public string Branch { get; set; }
+      
 
         public Ledger()
         {
@@ -56,11 +62,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.ID == 0)
                 {
-                    Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks,@LisenceRenewalDate);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks,@LisenceRenewalDate,@ParentGroup,@AccountNumber,@IFSCCode,@BankName,@Branch);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks,@LisenceRenewalDate=LisenceRenewalDate where ID=@ID";
+                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks,@LisenceRenewalDate=LisenceRenewalDate,@AccountNumber=AccountNumber,@IFSCCode=IFSCCode,@BankName=BankName,@Branch=Branch where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID", this.ID);
@@ -84,6 +90,11 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@Email", this.Email);
                 cmd.Parameters.AddWithValue("@Remarks", this.Remarks);
                 cmd.Parameters.AddWithValue("@LisenceRenewalDate", this.LisenceRenewalDate);
+                cmd.Parameters.AddWithValue("@ParentGroup", this.ParentGroup);
+                cmd.Parameters.AddWithValue("@AccountNumber", this.AccountNumber);
+                cmd.Parameters.AddWithValue("@IFSCCode", this.IFSCCode);
+                cmd.Parameters.AddWithValue("@BankName", this.BankName);
+                cmd.Parameters.AddWithValue("@Branch", this.BankName);
 
 
                 if (this.ID == 0)
@@ -118,27 +129,33 @@ namespace HangOut.Models.Account
 
                 while (SDR.Read())
                 {
-                    Ledger OBJLDR = new Ledger();
+                    Ledger OBJLDR = new Ledger(); 
                     OBJLDR.ID = SDR.GetInt32(0);
                     OBJLDR.Name = SDR.GetString(1);
-                    OBJLDR.ShortName = SDR.GetString(2);
-                    OBJLDR.MobileNo1 = SDR.GetString(3);
-                    OBJLDR.MobileNo2 = SDR.GetString(4);
-                    OBJLDR.DebtorType = SDR.GetInt32(5);
-                    OBJLDR.OrgId = SDR.GetInt32(6);
-                    OBJLDR.State = SDR.GetInt32(7);
-                    OBJLDR.MarginOnCash = SDR.GetDouble(8);
-                    OBJLDR.TaxOnAboveMargin = SDR.GetInt32(9);
-                    OBJLDR.MarginOnline = SDR.GetDouble(10);
-                    OBJLDR.TaxOnAboveMarginOnline = SDR.GetInt32(11);
-                    OBJLDR.PaymentFrequency = SDR.GetInt32(12);
-                    OBJLDR.PaymentDay = SDR.GetInt32(13);
-                    OBJLDR.CollectionFrequency = SDR.GetInt32(14);
-                    OBJLDR.CollectionDay = SDR.GetInt32(15);
-                    OBJLDR.CalculationStartFrom = SDR.GetDateTime(16);
-                    OBJLDR.TDSApplicable = SDR.GetInt32(17);
-                    OBJLDR.Email = SDR.GetString(18);
-                    OBJLDR.Remarks = SDR.GetString(19);
+                    //OBJLDR.ShortName = SDR.GetString(2);
+                    //OBJLDR.MobileNo1 = SDR.GetString(3);
+                    //OBJLDR.MobileNo2 = SDR.GetString(4);
+                    //OBJLDR.DebtorType = SDR.GetInt32(5);
+                    //OBJLDR.OrgId = SDR.GetInt32(6);
+                    //OBJLDR.State = SDR.GetInt32(7);
+                    //OBJLDR.MarginOnCash = SDR.GetDouble(8);
+                    //OBJLDR.TaxOnAboveMargin = SDR.GetInt32(9);
+                    //OBJLDR.MarginOnline = SDR.GetDouble(10);
+                    //OBJLDR.TaxOnAboveMarginOnline = SDR.GetInt32(11);
+                    //OBJLDR.PaymentFrequency = SDR.GetInt32(12);
+                    //OBJLDR.PaymentDay = SDR.GetInt32(13);
+                    //OBJLDR.CollectionFrequency = SDR.GetInt32(14);
+                    //OBJLDR.CollectionDay = SDR.GetInt32(15);
+                    //OBJLDR.CalculationStartFrom = SDR.GetDateTime(16);
+                    //OBJLDR.TDSApplicable = SDR.GetInt32(17);
+                    //OBJLDR.Email = SDR.GetString(18);
+                    //OBJLDR.Remarks = SDR.GetString(19);
+                    //OBJLDR.LisenceRenewalDate = SDR.GetDateTime(20);
+                    //OBJLDR.ParentGroup = SDR.GetInt32(21);
+                    //OBJLDR.AccountNumber = SDR.GetString(22);
+                    //OBJLDR.IFSCCode = SDR.GetString(23);
+                    //OBJLDR.BankName = SDR.GetString(24);
+                    //OBJLDR.Branch = SDR.GetString(25);
 
                     LedgerList.Add(OBJLDR);
                 }
@@ -184,6 +201,11 @@ namespace HangOut.Models.Account
                     OBJLDR.TDSApplicable = SDR.GetInt32(17);
                     OBJLDR.Email = SDR.GetString(18);
                     OBJLDR.Remarks = SDR.GetString(19);
+                    OBJLDR.ParentGroup = SDR.GetInt32(20);
+                    OBJLDR.AccountNumber = SDR.GetString(21);
+                    OBJLDR.IFSCCode = SDR.GetString(22);
+                    OBJLDR.BankName = SDR.GetString(23);
+                    OBJLDR.Branch = SDR.GetString(24);
 
                 }
             }
@@ -282,6 +304,7 @@ namespace HangOut.Models.Account
 
             return ptype;
         }
+        
     }
 }
 public class DebtorType
