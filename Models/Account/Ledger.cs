@@ -39,7 +39,9 @@ namespace HangOut.Models.Account
         public string IFSCCode { get; set; }
         public string BankName { get; set; }
         public string Branch { get; set; }
-      
+        public int ManualPaymentDays { get; set; }
+        public int ManualCollectionDays { get; set; }
+
 
         public Ledger()
         {
@@ -62,11 +64,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.ID == 0)
                 {
-                    Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks,@LisenceRenewalDate,@ParentGroup,@AccountNumber,@IFSCCode,@BankName,@Branch);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks,@LisenceRenewalDate,@ParentGroup,@AccountNumber,@IFSCCode,@BankName,@Branch,@ManualPaymentDays,@ManualCollectionDays);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks,@LisenceRenewalDate=LisenceRenewalDate,@AccountNumber=AccountNumber,@IFSCCode=IFSCCode,@BankName=BankName,@Branch=Branch where ID=@ID";
+                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks,@LisenceRenewalDate=LisenceRenewalDate,@AccountNumber=AccountNumber,@IFSCCode=IFSCCode,@BankName=BankName,@Branch=Branch,@ManualPaymentDays=ManualPaymentDays,@ManualCollectionDays=ManualCollectionDays where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID", this.ID);
@@ -95,7 +97,8 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@IFSCCode", this.IFSCCode);
                 cmd.Parameters.AddWithValue("@BankName", this.BankName);
                 cmd.Parameters.AddWithValue("@Branch", this.BankName);
-
+                cmd.Parameters.AddWithValue("@ManualPaymentDays", this.ManualPaymentDays);
+                cmd.Parameters.AddWithValue("@ManualCollectionDays", this.ManualCollectionDays);
 
                 if (this.ID == 0)
                 {
@@ -201,12 +204,14 @@ namespace HangOut.Models.Account
                     OBJLDR.TDSApplicable = SDR.GetInt32(17);
                     OBJLDR.Email = SDR.GetString(18);
                     OBJLDR.Remarks = SDR.GetString(19);
-                    OBJLDR.ParentGroup = SDR.GetInt32(20);
-                    OBJLDR.AccountNumber = SDR.GetString(21);
-                    OBJLDR.IFSCCode = SDR.GetString(22);
-                    OBJLDR.BankName = SDR.GetString(23);
-                    OBJLDR.Branch = SDR.GetString(24);
-
+                    OBJLDR.LisenceRenewalDate = SDR.GetDateTime(20);
+                    OBJLDR.ParentGroup = SDR.GetInt32(21);
+                    OBJLDR.AccountNumber = SDR.GetString(22);
+                    OBJLDR.IFSCCode = SDR.GetString(23);
+                    OBJLDR.BankName = SDR.GetString(24);
+                    OBJLDR.Branch = SDR.GetString(25);
+                    OBJLDR.ManualPaymentDays = SDR.GetInt32(26);
+                    OBJLDR.ManualCollectionDays = SDR.GetInt32(27);
                 }
             }
             catch (System.Exception e)
@@ -252,6 +257,7 @@ namespace HangOut.Models.Account
             List<PaymentFrequency> ptype = new List<PaymentFrequency>();
             ptype.Add(new PaymentFrequency { Id = 1, Name = "Daily" });
             ptype.Add(new PaymentFrequency { Id = 2, Name = "Weekly" });
+            ptype.Add(new PaymentFrequency { Id = 3, Name = "Manual" });
 
             return ptype;
         }
@@ -276,6 +282,7 @@ namespace HangOut.Models.Account
             List<CollectionFrequency> ptype = new List<CollectionFrequency>();
             ptype.Add(new CollectionFrequency { Id = 1, Name = "Daily" });
             ptype.Add(new CollectionFrequency { Id = 2, Name = "Weekly" });
+            ptype.Add(new CollectionFrequency { Id = 3, Name = "Manual" });
 
             return ptype;
         }

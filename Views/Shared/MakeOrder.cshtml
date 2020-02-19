@@ -344,7 +344,6 @@
                 <div class=" col-xs-6 col-md-9 sp-grid-items-scroll-with-noticebar">
                     <div class="row" id="ItemList">
 
-
                     </div>
 
 
@@ -983,22 +982,24 @@
                     else {
                         var JsonMsg = JsonObj.MSG.split(",");
                         var PaymentSts = JsonMsg[2];
-                        $.alert({
-                            title: 'Alert!',
-                            content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
-                        });
+                        //$.alert({
+                        //    title: 'Alert!',
+                        //    content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
+                        //});
                         console.log("Msh pay" + PaymentSts);
                         if (PaymentSts != "0") {
                             $("#FinalAmt").html('0.00');
                             $("#FinalAmtCharge").text('CHARGE 0.00');
                             ChargeAmt = 0.00;
-                            GenInvoice(0, JsonMsg[0]);
+                           //GenInvoice(0, JsonMsg[0]);
                         }
                         else {
                             var finalAmt = parseFloat($("#FinalAmt").text());
                             ChargeAmt = ChargeAmt + finalAmt;
                             $("#FinalAmtCharge").text('CHARGE ' + ChargeAmt.toFixed(2) +' /Rs.');
                         }
+
+
                         $("tr.ItemsTr").remove();
                         CurrOID = JsonMsg[0];
                         for (var i = 0; i < TablesList.length; i++) {
@@ -1411,6 +1412,22 @@
                  }
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback
+             }
+         });
+     }
+     function DisplyOrderConfirmMsg(OID,TicketNo) {
+         $.confirm({
+             title: 'Alert !',
+             content:'Order No: ' + OID + ' & Ticket No ' + TicketNo,
+             buttons: {
+                 Ok: {
+                     text: 'OK',
+                     btnClass: 'btn-info',
+                     action: function () {
+                        
+                     }
+                 },
+                 
              }
          });
      }
