@@ -79,21 +79,18 @@
 <body>
     <style>
         @@media print {
-            body *
+            body * {
+                visibility: hidden;
+            }
 
-        {
-            visibility: hidden;
-        }
+            *, html, body {
+                margin: 0;
+                padding: 0;
+            }
 
-        *, html, body {
-            margin: 0;
-            padding: 0;
-        }
-
-        #section-to-print * {
-            visibility: visible;
-        }
-
+            #section-to-print * {
+                visibility: visible;
+            }
         }
 
         .print:last-child {
@@ -212,7 +209,8 @@
         </div>
         <div class="print"></div>
     </div>
-    </body></html>
+</body>
+</html>
 
 
 
