@@ -304,15 +304,7 @@ namespace HangOut.Models.Account
 
             return ptype;
         }
-        public static List<GroupType> GroupTypes()
-        {
-
-            List<GroupType> Gtype = new List<GroupType>();
-            Gtype.Add(new GroupType { Id = 1, Name = "Daily" });
-            Gtype.Add(new GroupType { Id = 2, Name = "Weekly" });
-
-            return Gtype;
-        }
+        
     }
 }
 public class DebtorType
@@ -341,11 +333,6 @@ public class CollectionWeekly
     public string Name { get; set; }
 }
 public class TdsApplicable
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-}
-public class GroupType
 {
     public int Id { get; set; }
     public string Name { get; set; }
