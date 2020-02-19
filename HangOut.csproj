@@ -377,6 +377,7 @@
     <Compile Include="Models\HG_OrderItem.cs" />
     <Compile Include="Models\Inventory\INTCategory.cs" />
     <Compile Include="Models\Inventory\INTGSTBL.cs" />
+    <Compile Include="Models\Inventory\INTItems.cs" />
     <Compile Include="Models\Inventory\INTUnits.cs" />
     <Compile Include="Models\JoinFoodDo.cs" />
     <Compile Include="Models\LocalContacts.cs" />
@@ -482,7 +483,6 @@
     <Content Include="Views\vw_HG_UsersDetails\Inventry.cshtml" />
     <Content Include="Views\INTGSTBL\Index.cshtml" />
     <Content Include="Views\HG_Orders\PrintKot.cshtml" />
-    <Content Include="Views\INTGSTBL\CreateEdit.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Category\CreateEdit.cshtml" />
     <Content Include="Views\INTGSTBL\ServiceIndex.cshtml" />
@@ -496,6 +496,9 @@
     <Content Include="Views\JournalEntry\CreateEdit.cshtml" />
     <Content Include="Views\HG_Orders\DiscntCharge.cshtml" />
     <Content Include="Views\HG_Orders\LocalContactIndex.cshtml" />
+    <Content Include="Views\INTGSTBL\CreateEdit.cshtml" />
+    <Content Include="Views\INTGSTBL\ItemsCreateEdit.cshtml" />
+    <Content Include="Views\HG_Orders\TestPrinting.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
