@@ -23,6 +23,17 @@ namespace HangOut.Controllers.Inventory
 
             if (ID > 0)
             {
+                if (Obj.GSID !=0)
+                {
+                    Obj = Obj.GetOne(ID);
+                }
+                foreach (var Subitem in Obj.iNTItems)
+                {
+                    if(Subitem.SubItemID!=0)
+                    {
+                        Obj = Obj.GetOne(ID);
+                    }
+                }
                 Obj = Obj.GetOne(ID);
             }
             else
@@ -46,6 +57,11 @@ namespace HangOut.Controllers.Inventory
                 }
             }
             int i = Obj.Save();
+            foreach(var Subitem in Obj.iNTItems)
+            {
+                Subitem.IParentId = Obj.GSID;
+                Subitem.Save();
+            }
             if (i > 0)
                 return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");

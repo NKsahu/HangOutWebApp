@@ -3,6 +3,8 @@
 @{
     Layout = null;
     List<INTUnits> listUnits = INTUnits.GetAll();
+    List<INTItems> listItems = INTItems.GetAll();
+    
     List<InventoryType> inventoryTypes = InventoryType.ListOrgTypeidList();
 }
 <div class="card">
@@ -76,30 +78,34 @@
             <tbody id="Tbody">
                 @foreach (INTGSTBL Obj in Model)
                 {
-                    <tr id="@Obj.GSID">
-                        <td>@Obj.GSID</td>
-                        <td>@Obj.Name</td>
-                        <td>
-                              
-                              @{ InventoryType OBjinventory = inventoryTypes.Find(x => x.Typeid==Obj.Typeid);} 
-                            @OBjinventory.Name
-                                            </td>
-                        <td>
-                            @{INTUnits OBJUnits = listUnits.Find(x => x.UnitID == Obj.UnitID); }
-                            @OBJUnits.Name
-                        </td>
-                        <td>@Obj.Qty</td>
-                        <td>@Obj.ISSaleable</td>
-                        <td>@Obj.ISdirectlyPurchased</td>
-                        <td>@Obj.ISProcessed</td>
-                        <td>@Obj.Prize</td>
-                        <td>@Obj.Tax</td>
-                        <td>@Obj.TotalPrize</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.GSID)"> Edit</button>
-                            <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.GSID)"> Delete</button>
-                        </td>
-                    </tr>
+                <tr id="@Obj.GSID">
+                    <td>@Obj.GSID</td>
+                    <td>@Obj.Name</td>
+                    <td>
+
+                        @{ InventoryType OBjinventory = inventoryTypes.Find(x => x.Typeid == Obj.Typeid);}
+                        @OBjinventory.Name
+                    </td>
+                    <td>
+                        @{INTUnits OBJUnits = listUnits.Find(x => x.UnitID == Obj.UnitID); }
+                        @OBJUnits.Name
+                    </td>
+                    <td>@Obj.Qty</td>
+                    <td>@Obj.ISSaleable</td>
+                    <td>@Obj.ISdirectlyPurchased</td>
+                    <td>@Obj.ISProcessed</td>
+                    <td>@Obj.Prize</td>
+                    <td>@Obj.Tax</td>
+                    <td>@Obj.TotalPrize</td>
+                    @foreach(var item in listItems)
+                    {
+
+                    }
+                    <td>
+                        <button class="btn btn-warning btn-sm " onclick="CreateEdit('@Obj.GSID','')"> Edit</button>
+                        <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.GSID)"> Delete</button>
+                    </td>
+                </tr>
                 }
 
             </tbody>

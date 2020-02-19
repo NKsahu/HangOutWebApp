@@ -8,7 +8,7 @@ namespace HangOut.Models.Inventory
 {
     public class INTItems
     {
-
+        public int SubItemID { get; set; }
         public int ItemID { get; set; }
         public double IQty { get; set; }
         public int IUnitID { get; set; }
@@ -22,23 +22,24 @@ namespace HangOut.Models.Inventory
             try
             {
                 string Quary = "";
-                if (this.ItemID == 0)
+                if (this.SubItemID == 0)
                 {
-                    Quary = "Insert Into INTItems Values (@Qty,@UnitID,@GSID);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into INTItems Values (@ItemID,@Qty,@UnitID,@GSID);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update INTItems Set Qty=@Qty,UnitID=@UnitID,GSID=@GSID where ItemID=@ItemID";
+                    Quary = "Update INTItems Set ItemID=@ItemID, Qty=@Qty,UnitID=@UnitID,GSID=@GSID where SubItemID=@SubItemID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
+                cmd.Parameters.AddWithValue("@SubItemID", this.SubItemID);
                 cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
                 cmd.Parameters.AddWithValue("@Qty", this.IQty);
                 cmd.Parameters.AddWithValue("@UnitID", this.IUnitID);
                 cmd.Parameters.AddWithValue("@GSID", this.IParentId);
-                if (this.ItemID == 0)
+                if (this.SubItemID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
-                    this.ItemID = Row;
+                    this.SubItemID = Row;
                 }
                 else
                 {
@@ -60,17 +61,18 @@ namespace HangOut.Models.Inventory
             List<INTItems> listUnit = new List<INTItems>();
             try
             {
-                string Quary = "Select * from INTItems ORDER BY ItemID DESC";
+                string Quary = "Select * from INTItems ORDER BY SubItemID DESC";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
                 while (SDR.Read())
                 {
                     INTItems OBJINT = new INTItems();
-                    OBJINT.ItemID = SDR.GetInt32(0);
-                    OBJINT.IQty = SDR.GetDouble(1);
-                    OBJINT.IUnitID = SDR.GetInt32(2);
-                    OBJINT.IParentId = SDR.GetInt32(3);
+                    OBJINT.SubItemID = SDR.GetInt32(0);
+                    OBJINT.ItemID = SDR.GetInt32(1);
+                    OBJINT.IQty = SDR.GetDouble(2);
+                    OBJINT.IUnitID = SDR.GetInt32(3);
+                    OBJINT.IParentId = SDR.GetInt32(4);
                     listUnit.Add(OBJINT);
                 }
             }
@@ -88,16 +90,17 @@ namespace HangOut.Models.Inventory
 
             try
             {
-                string Query = "SELECT * FROM  INTItems where ItemID=" + ID;
+                string Query = "SELECT * FROM  INTItems where SubItemID=" + ID;
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@ItemID", ID);
+                cmd.Parameters.AddWithValue("@SubItemID", ID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    ObjTmp.ItemID = SDR.GetInt32(0);
-                    ObjTmp.IQty = SDR.GetDouble(1);
-                    ObjTmp.IUnitID = SDR.GetInt32(2);
-                    ObjTmp.IParentId = SDR.GetInt32(3);
+                    ObjTmp.SubItemID = SDR.GetInt32(0);
+                    ObjTmp.ItemID = SDR.GetInt32(1);
+                    ObjTmp.IQty = SDR.GetDouble(2);
+                    ObjTmp.IUnitID = SDR.GetInt32(3);
+                    ObjTmp.IParentId = SDR.GetInt32(4);
                 }
             }
             catch (System.Exception e)
