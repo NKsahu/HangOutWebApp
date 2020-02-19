@@ -99,12 +99,12 @@
                 </div>
 
             </div>
-            <hr />
-            foreach (var SubItems in Model.iNTItems)
-            {
+            <div class="row">
+                @foreach (var SubItems in Model.iNTItems)
+                {
                 @Html.Partial("INTSubItem", SubItems)
-            }
-
+                }
+            </div>
             <div id="HeadDiv" style="display:none"></div>
             <div class="col-sm-1">
                 @Html.Label("Save", new { @class = "text-white" })
