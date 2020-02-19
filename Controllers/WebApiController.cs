@@ -822,7 +822,7 @@ namespace HangOut.Controllers
                 {
                     SendMsgChef(OrgId, NewOID,Ticketno);
 
-                    PushNotification.NewOrderMsg(topics, NewOID, Ticketno);
+                   PushNotification.NewOrderMsg(topics, NewOID, Ticketno);
                     
                 }
                 else if (PaymtSts > 0 && ObjTorS.Type != "3")
