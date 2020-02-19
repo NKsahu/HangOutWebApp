@@ -13,7 +13,7 @@
             @Html.HiddenFor(model => model.id)
             @Html.HiddenFor(model => model.OrgId)
             @Html.HiddenFor(model => model.OrdCanlMinTime)
-            @Html.HiddenFor(model=>model.CheckBoxStatus)
+            @Html.HiddenFor(model => model.CheckBoxStatus)
             List<SelectListItem> Bycash = new List<SelectListItem>();
             List<SelectListItem> ByOnline = new List<SelectListItem>();
             var UserInfo = Request.Cookies["UserInfo"];
@@ -21,23 +21,23 @@
             HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
             string OrgType = OrgObj.OrgID > 0 ? OrgObj.OrgTypes : "0";
             Bycash = new List<SelectListItem>() {
-                new SelectListItem{Text="NO",Value="2"},new SelectListItem{Text="YES",Value="1"}
-                };
+            new SelectListItem{Text="NO",Value="2"},new SelectListItem{Text="YES",Value="1"}
+            };
             ByOnline = new List<SelectListItem>() {
-                new SelectListItem{Text="YES",Value="1"},new SelectListItem{Text="NO",Value="2"}
-                };
+            new SelectListItem{Text="YES",Value="1"},new SelectListItem{Text="NO",Value="2"}
+            };
             List<SelectListItem> CrosVerification = new List<SelectListItem>()
-                                                                                            {
-                                                                          new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="By Otp",Value="1"}
-                                                                                            };
+                                                                                        {
+                                                                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="By Otp",Value="1"}
+                                                                                        };
             <div style="padding:5px;border:2px solid black; border-radius:5px;">
                 <div class="row">
                     <div class="col-md-2">
                         @{
                             List<SelectListItem> EnableOrdering = new List<SelectListItem>()
-                                                                                            {
-                                                                          new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                                                                            };
+                                                                                                        {
+                                                                                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                                                        };
                         }
                         @Html.Label("Enable Delivery Charge", htmlAttributes: new { @class = "control-label  " })
                         @Html.DropDownListFor(model => model.EnblDeleryChrg, EnableOrdering, new { @class = "form-control ", required = "required" })
@@ -51,9 +51,9 @@
                     <div class="col-md-2 enableCrg">
                         @{
                             List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
-                                                                                            {
-                                                                          new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
-                                                                                            };
+                                                                                                        {
+                                                                                      new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                                                        };
                         }
                         @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
                         @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd, new { @class = "form-control ", required = "required" })
@@ -62,9 +62,9 @@
                     <div class="col-md-2 enableCrg">
                         @{
                             List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
-                                                                                            {
-                                                                          new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
-                                                                                            };
+                                                                                                        {
+                                                                                      new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
+                                                                                                        };
                         }
                         @Html.Label("Charge Type", htmlAttributes: new { @class = "control-label  " })
                         @Html.DropDownListFor(model => model.DeleryChrgType, DeliveryChrType, new { @class = "form-control ", required = "required" })
@@ -143,12 +143,24 @@
                 <div class="row">
                     <div class="col-md-3">
                         @Html.Label("Cross Verification", htmlAttributes: new { @class = "control-label  " })
-                        @Html.DropDownListFor(model => model.CrxVerification, CrosVerification, new { @class = "form-control ",  required = "required" })
+                        @Html.DropDownListFor(model => model.CrxVerification, CrosVerification, new { @class = "form-control ", required = "required" })
                         @Html.ValidationMessageFor(model => model.CrxVerification, "", new { @class = "text-danger" })
                     </div>
-                    
+
                 </div>
             </div>
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+                <h5 style="text-align:center;color:black">Customer App</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Label("Cross Verification", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.CrxVerification, CrosVerification, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.CrxVerification, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+            </div>
+
             <div class="col-sm-1">
                 @Html.Label("Save", new { @class = "text-white " })
                 <input type="submit" value="Save" class="btn btn-success form-control" />
