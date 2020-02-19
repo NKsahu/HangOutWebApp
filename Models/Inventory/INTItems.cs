@@ -10,9 +10,9 @@ namespace HangOut.Models.Inventory
     {
 
         public int ItemID { get; set; }
-        public double Qty { get; set; }
-        public int UnitID { get; set; }
-        public int GSID { get; set; }
+        public double IQty { get; set; }
+        public int IUnitID { get; set; }
+        public int IParentId { get; set; }
         
         public int Save()
         {
@@ -32,9 +32,9 @@ namespace HangOut.Models.Inventory
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
-                cmd.Parameters.AddWithValue("@Qty", this.Qty);
-                cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
-                cmd.Parameters.AddWithValue("@GSID", this.GSID);
+                cmd.Parameters.AddWithValue("@Qty", this.IQty);
+                cmd.Parameters.AddWithValue("@UnitID", this.IUnitID);
+                cmd.Parameters.AddWithValue("@GSID", this.IParentId);
                 if (this.ItemID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -68,9 +68,9 @@ namespace HangOut.Models.Inventory
                 {
                     INTItems OBJINT = new INTItems();
                     OBJINT.ItemID = SDR.GetInt32(0);
-                    OBJINT.Qty = SDR.GetDouble(1);
-                    OBJINT.UnitID = SDR.GetInt32(2);
-                    OBJINT.GSID = SDR.GetInt32(3);
+                    OBJINT.IQty = SDR.GetDouble(1);
+                    OBJINT.IUnitID = SDR.GetInt32(2);
+                    OBJINT.IParentId = SDR.GetInt32(3);
                     listUnit.Add(OBJINT);
                 }
             }
@@ -95,9 +95,9 @@ namespace HangOut.Models.Inventory
                 while (SDR.Read())
                 {
                     ObjTmp.ItemID = SDR.GetInt32(0);
-                    ObjTmp.Qty = SDR.GetDouble(1);
-                    ObjTmp.UnitID = SDR.GetInt32(2);
-                    ObjTmp.GSID = SDR.GetInt32(3);
+                    ObjTmp.IQty = SDR.GetDouble(1);
+                    ObjTmp.IUnitID = SDR.GetInt32(2);
+                    ObjTmp.IParentId = SDR.GetInt32(3);
                 }
             }
             catch (System.Exception e)
