@@ -27,6 +27,11 @@ namespace HangOut.Models
         public string Contact2 { get; set; }
         public int CrxVerification { get; set; }//customer cross verification { 0:"NO",1:"By-Otp",2: "By-Camera"
         public bool CheckBoxStatus { get; set; }
+        //====printer
+        public int InvoicePrinting { get; set; }
+        public int NoOfCopy { get; set; }
+        public int KotPrinting { get; set; }
+        public int NoOfCopyKot { get; set; }
         public OrgSetting()
         {
             CheckBoxStatus = true;
@@ -136,6 +141,19 @@ namespace HangOut.Models
 
             return Temp;
         }
-
+        public static List<InvoicePtrSetting> GetPtrSetting()
+        {
+            List<InvoicePtrSetting> invoicePtrSetting = new List<InvoicePtrSetting>();
+            invoicePtrSetting.Add(new InvoicePtrSetting { Id = 0, Name = "No" });
+            invoicePtrSetting.Add(new InvoicePtrSetting { Id = 1, Name = "Ask" });
+            invoicePtrSetting.Add(new InvoicePtrSetting { Id = 2, Name = "Auto" });
+            return invoicePtrSetting;
+        }
     }
+    
+}
+public class InvoicePtrSetting
+{
+   public int Id { get; set; }
+    public string Name { get; set; }
 }
