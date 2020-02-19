@@ -31,6 +31,22 @@ namespace HangOut.Controllers.Account
             {
                 Obj.ShortName = "";
             }
+            if (Obj.AccountNumber == null)
+            {
+                Obj.AccountNumber = "";
+            }
+            if (Obj.IFSCCode == null)
+            {
+                Obj.IFSCCode = "";
+            }
+            if (Obj.BankName == null)
+            {
+                Obj.BankName = "";
+            }
+            if (Obj.Branch == null)
+            {
+                Obj.Branch = "";
+            }
             if (Obj.Name == null || Obj.Name.Replace(" ","") == "")
             {
                 return Json(new { msg = "Please Enter Name" });
