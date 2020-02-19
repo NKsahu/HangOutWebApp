@@ -25,6 +25,10 @@ namespace HangOut.Controllers.Inventory
             {
                 Obj = Obj.GetOne(ID);
             }
+            else
+            {
+                Obj.iNTItems.Add(new INTItems { IParentId = ID, IQty = 0, ItemID = 0, IUnitID = 0 });
+            }
 
             return View(Obj);
         }
