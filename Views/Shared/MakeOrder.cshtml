@@ -982,10 +982,10 @@
                     else {
                         var JsonMsg = JsonObj.MSG.split(",");
                         var PaymentSts = JsonMsg[2];
-                        $.alert({
-                            title: 'Alert!',
-                            content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
-                        });
+                        //$.alert({
+                        //    title: 'Alert!',
+                        //    content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
+                        //});
                         console.log("Msh pay" + PaymentSts);
                         if (PaymentSts != "0") {
                             $("#FinalAmt").html('0.00');
@@ -998,6 +998,8 @@
                             ChargeAmt = ChargeAmt + finalAmt;
                             $("#FinalAmtCharge").text('CHARGE ' + ChargeAmt.toFixed(2) +' /Rs.');
                         }
+
+
                         $("tr.ItemsTr").remove();
                         CurrOID = JsonMsg[0];
                         for (var i = 0; i < TablesList.length; i++) {
@@ -1410,6 +1412,22 @@
                  }
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback
+             }
+         });
+     }
+     function DisplyOrderConfirmMsg(OID,TicketNo) {
+         $.confirm({
+             title: 'Alert !',
+             content:'Order No: ' + OID + ' & Ticket No ' + TicketNo,
+             buttons: {
+                 Ok: {
+                     text: 'OK',
+                     btnClass: 'btn-info',
+                     action: function () {
+                        
+                     }
+                 },
+                 
              }
          });
      }
