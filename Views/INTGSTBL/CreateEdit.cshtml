@@ -131,33 +131,22 @@
  
 
 <script>
-
     typehide();
+    $("#Qty").parent('div').hide();
+    $("#ISSaleable").parent('div').parent('div').hide();
+    $("#PurchasedPrize").parent('div').hide();
+    $("#PurchasedTax").parent('div').hide();
+    $(".MainDivs").hide();
+    $("#SaleTax").parent('div').hide();
+    $("#SalePrize").parent('div').hide();
+    $("#ServiceTax").parent('div').hide();
+    $("#ServicePrize").parent('div').hide();
+    
     $("#Typeid").change(function () {
         typehide();
     });
     function typehide() {
         var Type = $("#Typeid").val();
-        if (Type == "0") {
-            $("#Qty").parent('div').hide();
-            $("#ISSaleable").parent('div').parent('div').hide();
-            $("#PurchasedPrize").parent('div').hide();
-            $("#PurchasedTax").parent('div').hide();
-            $(".MainDivs").hide();
-            $("#SaleTax").parent('div').hide();
-            $("#SalePrize").parent('div').hide();
-            $("#ServiceTax").parent('div').hide();
-            $("#ServicePrize").parent('div').hide();
-        }
-        else {
-            $("#Qty").parent('div').hide();
-            $("#ISSaleable").parent('div').parent('div').show();
-            $("#PurchasedPrize").parent('div').hide();
-            $("#PurchasedTax").parent('div').hide();
-            $(".MainDivs").hide();
-            $("#ServiceTax").parent('div').show();
-            $("#ServicePrize").parent('div').show();
-        }
         if (Type == "1") {
             $("#Qty").parent('div').show();
             $("#ISSaleable").parent('div').parent('div').show();
@@ -180,6 +169,14 @@
             $("#PurchasedTax").parent('div').hide();
             $("#ServiceTax").parent('div').show();
             $("#ServicePrize").parent('div').show();
+        }
+        if (Type == "2") {
+            $("#ServiceTax").parent('div').show();
+            $("#ServicePrize").parent('div').show();
+        }
+        else {
+            $("#ServiceTax").parent('div').hide();
+            $("#ServicePrize").parent('div').hide();
         }
     }
     $("#Prize,#Tax").change(
@@ -238,15 +235,14 @@
         else {
             $(".MainDivs").hide();
         }
-        //
     }
     function DuplicateDiv() {
         console.log('hh');
         var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
         var clonediv = $('#CreateCopy').clone();
-        clonediv.show();
-        clonediv.attr('OrderNo', MainDivsCnt);
+        clonediv.show(MainDivsCnt);
         clonediv.insertBefore("#HeadDiv");
     }
     
 </script>
+ 
