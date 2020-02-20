@@ -133,8 +133,8 @@
 <script>
     
     typehide();
-    $("#Qty").parent('div').hide();
-    $("#ISSaleable").parent('div').parent('div').hide();
+   // $("#Qty").parent('div').hide();
+   // $("#ISSaleable").parent('div').parent('div').hide();
     $("#PurchasedPrize").parent('div').hide();
     $("#PurchasedTax").parent('div').hide();
     $(".MainDivs").hide();
@@ -241,10 +241,11 @@
     }
     function DuplicateDiv() {
         console.log('hh');
-        var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
-        var clonediv = $('#CreateCopy').clone();
-        clonediv.show(MainDivsCnt);
+       // var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
+        var clonediv = $("#Creacopydiv").clone();
+        clonediv.show();
         clonediv.insertBefore("#HeadDiv");
+
     }
     
 </script>
