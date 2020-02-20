@@ -42,7 +42,7 @@ namespace HangOut.Models.Inventory
                 }
                 else
                 {
-                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServicePrize where GSID=@GSID";
+                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServiceTax where GSID=@GSID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@GSID", this.GSID);
