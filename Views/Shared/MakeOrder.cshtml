@@ -16,20 +16,13 @@
 
     .tablink, .tablink2 {
         background-color: #ffffff;
-        /*color: white;*/
         float: left;
         padding: 5px;
-        /*border: none;*/
         outline: none;
         cursor: pointer;
         font-size: 15px;
         width: 25%;
     }
-
-    /*.tablink2:hover, .tablink:hover {
-        background-color: #000000;
-    }*/
-
     p .card {
         font-size: 12px !important;
         border-bottom: 1px solid #ebeef0;
@@ -253,6 +246,9 @@
     }
     .RightBtn{
         float:right;
+    }
+    .PrintBtnWidth{
+        width:20%;
     }
 </style>
 <div class="row">
@@ -534,7 +530,11 @@
      var ChargeAmt = 0.00;
      var CurrentOrder = 0;// which means table or  takeaway id
      var CurrOID = 0; //current Order Id;
-        var finalAmt = 0.00;
+     var finalAmt = 0.00;
+     //===printer setting
+     var PrintInvoice = 0;//false
+     var NoOfCopy = 0;
+     //=======
         var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
         var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
         var ItemHtmlSecond = " <span><small class='text-muted'>";
@@ -967,12 +967,14 @@
                 }
             }
         }
-        function PostOrder(Obj) {
+     function PostOrder(Obj) {
+         $("#waiting").show();
             $.ajax({
                 type: 'POST',
                 url: "/WebApi/PostOrder?Obj=" + JSON.stringify(Obj),
                 success: function (data) {
                     var JsonObj = JSON.parse(data);
+                    $("#waiting").hide();
                     if (JsonObj.Status == 400) {
                         $.alert({
                             title: 'Alert!',
@@ -986,7 +988,7 @@
                         //    title: 'Alert!',
                         //    content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
                         //});
-                        DisplyOrderConfirmMsg(JsonMsg[0], JsonMsg[1]);
+                        
                         console.log("Msh pay" + PaymentSts);
                         if (PaymentSts != "0") {
                             $("#FinalAmt").html('0.00');
@@ -999,24 +1001,27 @@
                             ChargeAmt = ChargeAmt + finalAmt;
                             $("#FinalAmtCharge").text('CHARGE ' + ChargeAmt.toFixed(2) +' /Rs.');
                         }
-
-
                         $("tr.ItemsTr").remove();
                         CurrOID = JsonMsg[0];
                         for (var i = 0; i < TablesList.length; i++) {
                             if (TablesList[i].Table_or_RowID == CurrentOrder) {
                                 TablesList[i].CurrOID = JsonMsg[0];
-                                return;
+                                break;
                             }
                         }
+                        if (PrintInvoice == 1) {
+                            AskNofCopyPrint(JsonMsg[0], JsonMsg[1]);
+                        }
+                        else {
+                            DisplyOrderConfirmMsg(JsonMsg[0], JsonMsg[1]);
+                        }
+                        
                     }
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                     $("#waiting").hide();
                 }
             });
-
-
         }
         function SUBMIT() {
          DeliveryCharge(1);
@@ -1419,20 +1424,84 @@
      function DisplyOrderConfirmMsg(OID,TicketNo) {
          $.confirm({
              title: 'Alert !',
-             content:'Order No: ' + OID + ' & Ticket No ' + TicketNo,
+             content: 'Order No: ' + OID + ' & Ticket No ' + TicketNo,
              buttons: {
                  Ok: {
                      text: 'OK',
                      btnClass: 'btn-info',
                      action: function () {
-                         //window.open(
-                         //    'POSMyApp:4321',
-                         //    '_blank' // <- This is what makes it open in a new window.
-                         //);
-                         window.location.href = "foodDo:"+OID;
+                         if (PrintInvoice == 2) {
+                             OpenPrinter(OID, NoOfCopy);
+                         }
                      }
                  },
                  
+             }
+         });
+     }
+     function AskNofCopyPrint(OID, Ticket) {
+         $.confirm({
+             title: 'Print Invoice',
+             content: 'Order No: ' + OID + ' & Ticket No ' + Ticket,
+             closeIcon: true,
+             buttons: {
+                Zero: {
+                    text: '0',
+                    btnClass: 'btn-info btn-lg PrintBtnWidth',
+                    columnClass: 'col-md-3',
+                     action: function () {
+                         
+                     }
+                 },
+                 One: {
+                     text: '1',
+                     btnClass: 'btn-info btn-lg PrintBtnWidth',
+                     columnClass: 'col-md-3',
+                     action: function () {
+                         OpenPrinter(OID, 1);
+                     }
+                 },
+                 Two: {
+                     text: '2',
+                     btnClass: 'btn-info btn-lg PrintBtnWidth',
+                     columnClass: 'col-md-3',
+                     action: function () {
+                         OpenPrinter(OID, 2);
+                     }
+                 },
+                 Three: {
+                     text: '3',
+                     btnClass: 'btn-info btn-lg PrintBtnWidth',
+                     columnClass: 'col-md-3',
+                     action: function () {
+                         OpenPrinter(OID, 3);
+                     }
+                 },
+             },
+             onOpenBefore: function () {
+                 $(".jconfirm-buttons").css('width', '100%');
+             },
+             onDestroy: function () {
+                 $(".jconfirm-buttons").removeAttr('width');
+             }
+         });
+     }
+     function OpenPrinter(OID, NoOfCpy) {
+         window.location.href = "foodDo:1&"+OID+"&"+NoOfCpy;
+     }
+     GetPrinterSetting();
+     function GetPrinterSetting() {
+         $.ajax({
+             type: 'POST',
+             url: "/CommonApi/OrgSettng",
+             success: function (data) {
+                 var Jobj = JSON.parse(data);
+                 PrintInvoice = Jobj.InvoicePrinting;
+                 NoOfCopy = Jobj.NoOfCopy;
+                 console.log("prin=" + PrintInvoice + " copy=" + NoOfCopy);
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
              }
          });
      }
