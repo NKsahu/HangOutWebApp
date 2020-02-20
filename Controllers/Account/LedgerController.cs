@@ -1,4 +1,5 @@
 ﻿using HangOut.Models.Account;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -153,12 +154,21 @@ namespace HangOut.Controllers.Account
             {
                 Obj.MobileNo1 = "";
             }
-            int i = Obj.Save();
-            if (i > 0)
-                return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
-            return RedirectToAction("Error");
-        }
+            try
+            {
+                int i = Obj.Save();
+                if (i > 0)
+                    return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { msg = ex.Message.ToString() });
+            }
 
+
+            return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
+
+        }
 
         public ActionResult Delete(int ID)
         {
