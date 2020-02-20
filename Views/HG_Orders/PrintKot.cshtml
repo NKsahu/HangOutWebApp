@@ -1,4 +1,5 @@
 ﻿@using HangOut.Models;
+@using HangOut.Models.DynamicList;
 @{
     /**/
 
@@ -11,81 +12,87 @@
     {
         TicketNo = int.Parse(Request.QueryString["TicketNo"]);
     }
-    OID = 6;
-    TicketNo = 1;
+    OID =int.Parse(Request.QueryString["OID"]);
+   // TicketNo = 1;
     HG_Orders objorder = new HG_Orders().GetOne(OID);
     List<HG_OrderItem> orderItems = new HG_OrderItem().GetAll(OID);
     //  orderItems= orderItems.FindAll(x=)
     int SN = 0;
     int QtyTotoal = 0;
-    <style>
-        @@media print {
-            
-            html, body {
-                margin: 0;
-                padding: 0;
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <style type="text/css">
+            @@page {
+                size: auto; /* auto is the initial value */
+                margin: 0; /* this affects the margin in the printer settings */
+            }
+
+            body * {
                 visibility: hidden;
+            }
+
+            *, html, body {
+                margin: 0;
             }
 
             #section-to-print * {
                 visibility: visible;
+                margin: 0;
             }
 
-            .print:last-child {
-                page-break-after: auto;
+            .TblBorder {
+                border: 1px dotted black !important;
             }
-        }
-    </style>
-    <div class="row">
-        <button id="A4Print" onclick="window.print();"> PRINT (A-4) </button>
-        <button id="Thermal" onclick="PrintElem()"> PRINT(POS)</button>
-    </div>
-    <div style="border:2px solid black " id="section-to-print">
-
-        <div id="PrintHeight">
-            <div>
-                <h2 style="text-align:center">KOT</h2>
-                <h3 style="text-align:center">SEATING:&nbsp;@HG_Tables_or_Sheat.Seating(objorder.Table_or_SheatId)  &thinsp;&nbsp; No:@TicketNo</h3>
-                <h5 style="text-align:center">ORDER NO:&nbsp;@OID</h5>
-                <h5 style="text-align:center">DATE:&nbsp;12/02/20  TIME:&nbsp;6:30 PM</h5>
-                <h5 style="text-align:center">CASH (200 RS)</h5>
-                <h5 style="text-align:center">PLACED BY:&nbsp;CUSTOMER(8956325698)</h5>
-            </div>
-            <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
-                <thead>
-                    <tr>
-                        <th style="text-align:center">S.NO.</th>
-                        <th style="text-align:center">ITEM NAME </th>
-                        <th style="text-align:center">QTY</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var items in orderItems)
-                    {
-                        SN++;
-                        HG_Items hG_Items = new HG_Items().GetOne(items.FID);
-                        QtyTotoal += items.Count;
+        </style>
+        <div style="border:2px solid black " id="section-to-print">
+            <div id="PrintHeight">
+                <div>
+                    <h2 style="text-align:center">KOT</h2>
+                    <h3 style="text-align:center">SEATING:&nbsp;@HG_Tables_or_Sheat.Seating(objorder.Table_or_SheatId)  &thinsp;&nbsp; No:@TicketNo</h3>
+                    <h5 style="text-align:center">ORDER NO:&nbsp;@OID</h5>
+                    <h5 style="text-align:center">DATE:&nbsp;@objorder.Create_Date.ToString("dd/MM/yyyy HH:mm tt")</h5>
+                    <h5 style="text-align:center">@OrgType.PaymentMode(objorder.PaymentStatus)</h5>
+                    <h5 style="text-align:center">PLACED BY:&nbsp;CUSTOMER(8956325698)</h5>
+                </div>
+                <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
+                    <thead>
                         <tr>
-                            <td style="text-align:left;font-size:small;">@SN</td>
-                            <td style="text-align:left;font-size:small;">@hG_Items.Items</td>
-                            <td style="text-align:right ;font-size:small;">@items.Count</td>
+                            <th style="text-align:center">S.NO.</th>
+                            <th style="text-align:center">ITEM NAME </th>
+                            <th style="text-align:center">QTY</th>
                         </tr>
-                    }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4" style="text-align:left;border-top: 1px dotted black;"></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left;"></td>
-                        <td style="text-align:right">TOTAL</td>
-                        <td style="text-align:right">@QtyTotoal</td>
-                    </tr>
-                </tfoot>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var items in orderItems)
+                        {
+                            SN++;
+                            HG_Items hG_Items = new HG_Items().GetOne(items.FID);
+                            QtyTotoal += items.Count;
+                            <tr>
+                                <td style="text-align:left;font-size:small;">@SN</td>
+                                <td style="text-align:left;font-size:small;">@hG_Items.Items</td>
+                                <td style="text-align:right ;font-size:small;">@items.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" style="text-align:left;border-top: 1px dotted black;"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;"></td>
+                            <td style="text-align:right">TOTAL</td>
+                            <td style="text-align:right">@QtyTotoal</td>
+                        </tr>
+                    </tfoot>
+                </table>
 
+            </div>
+            <div style="page-break-after:auto" class="print"></div>
         </div>
-        <div class="print"></div>
-    </div>
-
+    </body>
+</html>
 }
