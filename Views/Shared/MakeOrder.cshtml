@@ -986,6 +986,7 @@
                         //    title: 'Alert!',
                         //    content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
                         //});
+                        DisplyOrderConfirmMsg(JsonMsg[0], JsonMsg[1]);
                         console.log("Msh pay" + PaymentSts);
                         if (PaymentSts != "0") {
                             $("#FinalAmt").html('0.00');
@@ -1424,7 +1425,11 @@
                      text: 'OK',
                      btnClass: 'btn-info',
                      action: function () {
-                        
+                         //window.open(
+                         //    'POSMyApp:4321',
+                         //    '_blank' // <- This is what makes it open in a new window.
+                         //);
+                         window.location.href = "foodDo:"+OID;
                      }
                  },
                  
