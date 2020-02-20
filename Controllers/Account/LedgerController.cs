@@ -51,39 +51,73 @@ namespace HangOut.Controllers.Account
             {
                 Obj.ShortName = "";
             }
-            if (Obj.AccountNumber == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
+            if(Obj.ParentGroup!=1)
             {
-                Obj.AccountNumber = "";
+                if (Obj.AccountNumber == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
+                {
+                    Obj.AccountNumber = "";
+                }
+                else
+                {
+                    return Json(new { msg = "Please Enter Account Number" });
+                }
             }
-            else
+            else if(Obj.AccountNumber == null)
             {
-                return Json(new { msg = "Please Enter Account Number" });
+               return Json(new { msg = "Please Enter Account Number" });
             }
-            if (Obj.IFSCCode == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
+
+            if (Obj.ParentGroup != 1)
             {
-                Obj.IFSCCode = "";
+                if (Obj.IFSCCode == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
+                {
+                    Obj.IFSCCode = "";
+                }
+                else
+                {
+                    return Json(new { msg = "Please Enter IFSC Code" });
+                }
             }
-            else
+            else if (Obj.IFSCCode == null)
             {
                 return Json(new { msg = "Please Enter IFSC Code" });
             }
-            if (Obj.BankName == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
+
+
+            if (Obj.ParentGroup != 1)
             {
-                Obj.BankName = "";
+                if (Obj.BankName == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
+                {
+                    Obj.BankName = "";
+                }
+                else
+                {
+                    return Json(new { msg = "Please Enter Bank Name" });
+                }
             }
-            else
+            else if (Obj.BankName == null)
             {
                 return Json(new { msg = "Please Enter Bank Name" });
             }
-            if (Obj.Branch == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
-            {
-                Obj.Branch = "";
-            }
 
-            else
+
+            if (Obj.ParentGroup != 1)
+            {
+                if (Obj.Branch == null && (Obj.DebtorType == 0 || Obj.DebtorType == 1 || Obj.DebtorType == 2))
+                {
+                    Obj.Branch = "";
+                }
+
+                else
+                {
+                    return Json(new { msg = "Please Enter Branch" });
+                }
+            }
+            else if (Obj.Branch == null)
             {
                 return Json(new { msg = "Please Enter Branch" });
             }
+
             if (Obj.Name == null || Obj.Name.Replace(" ","") == "")
             {
                 return Json(new { msg = "Please Enter Name" });
