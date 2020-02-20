@@ -114,7 +114,6 @@ namespace HangOut.Models.Account
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
-            GetAll();
             return Row;
 
         }
@@ -217,7 +216,7 @@ namespace HangOut.Models.Account
             catch (System.Exception e)
             { e.ToString(); }
 
-            finally { Con.Close(); }
+            finally { cmd.Dispose(); SDR.Close(); Con.Close(); }
 
             return (OBJLDR);
         }
