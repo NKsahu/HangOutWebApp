@@ -35,12 +35,26 @@ namespace HangOut.Controllers.Account
         [HttpPost]
         public ActionResult CreateEdit(Ledger Obj)
         {
-            return Json(new { msg = "calculation date" + Obj.CalculationStartFrom });
-            return Json(new { msg = "Lisense date" + Obj.LisenceRenewalDate });
+            DateTime isnulldate =  default(DateTime);
             if (Obj.CalculationStartFrom==null)
             {
+                return Json(new { msg = "calculation date" + Obj.CalculationStartFrom });
+                
                 Obj.CalculationStartFrom = DateTime.Now;
             }
+            if (Obj.CalculationStartFrom.Equals("1/1/0001 12:00:00 AM"))
+            {
+                return Json(new { msg = "calculation date" + Obj.CalculationStartFrom });
+
+                Obj.CalculationStartFrom = DateTime.Now;
+            }
+            if (Obj.CalculationStartFrom.Equals(isnulldate))
+            {
+                return Json(new { msg = "IsNull date" + isnulldate });
+
+                Obj.CalculationStartFrom = DateTime.Now;
+            }
+
             if (Obj.LisenceRenewalDate == null)
             {
                 Obj.LisenceRenewalDate = DateTime.Now;
