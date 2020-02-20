@@ -114,7 +114,6 @@ namespace HangOut.Models.Account
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
-            GetAll();
             return Row;
 
         }
