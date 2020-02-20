@@ -115,5 +115,14 @@
             clonediv.insertBefore("#HeadDiv");
         }
     });
+    $("#drid").keypress(function (event) {
+        if (event.keyCode === 13) {
+            var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
+            var clonediv = $('#CreateCopy').clone();
+            clonediv.show();
+            clonediv.attr('OrderNo', MainDivsCnt);
+            clonediv.insertBefore("#HeadDiv");
+        }
+    });
 
 </script>

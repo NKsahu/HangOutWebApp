@@ -75,10 +75,14 @@ namespace HangOut.Controllers.Account
             {
                 Obj.Remarks = "";
             }
-            if(Obj.DebtorType == 0 && Obj.ParentGroup!=1)
-            {
-                return Json(new { msg = "Please Select Debtor Type" });
-            }
+            //if(Obj.DebtorType == 0 && Obj.ParentGroup==1)
+            //{
+               
+            //}
+            //else
+            //{
+            //    return Json(new { msg = "Please Select Debtor Type" });
+            //}
             if (Obj.DebtorType==1 && Obj.OrgId==0)
             {
                 return Json(new { msg = "Please Select Organization Name" });
@@ -120,10 +124,11 @@ namespace HangOut.Controllers.Account
                 Obj.TDSApplicable = 0;
 
             }
-            if (Obj.MobileNo1.Length>0 && Obj.MobileNo1.Length<10)
-            {
-                return Json(new { msg = "Please Enter Valid Mobile Number" });
-            }
+
+            //if (Obj.MobileNo1.Length>0 && Obj.MobileNo1.Length<10)
+            //{
+            //    return Json(new { msg = "Please Enter Valid Mobile Number" });
+            //}
             if (Obj.MobileNo2 != null)
             {
                 if (Obj.MobileNo2.Length > 0 && Obj.MobileNo2.Length < 10)
@@ -134,6 +139,18 @@ namespace HangOut.Controllers.Account
             else
             {
                 Obj.MobileNo2 = "";
+            }
+        
+            if (Obj.MobileNo1 != null)
+            {
+                if (Obj.MobileNo1.Length > 0 && Obj.MobileNo1.Length < 10)
+                {
+                    return Json(new { msg = "Please Enter Valid Mobile Number" });
+                }
+            }
+            else
+            {
+                Obj.MobileNo1 = "";
             }
             int i = Obj.Save();
             if (i > 0)
