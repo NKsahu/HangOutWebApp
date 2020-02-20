@@ -7,7 +7,7 @@
 @using HangOut.Models.Inventory;
 @using (Html.BeginCollectionItem("iNTItems"))
 {
-    <div class="row MainDivs"  id="CreateCopy">
+    <div class="row MainDivs"  OrderNo="1" id="CreateCopy">
         @Html.HiddenFor(model => model.SubItemID)
         <div class="col-md-3">
             @Html.Label("Item")
@@ -34,7 +34,7 @@
             </span>
         </div>
     </div>
-    <div id="HeadDiv" style="display:none"></div>
+   
 }
 
 <!--Hidden div-->

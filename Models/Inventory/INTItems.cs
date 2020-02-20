@@ -28,7 +28,7 @@ namespace HangOut.Models.Inventory
                 }
                 else
                 {
-                    Quary = "Update INTItems Set ItemID=@ItemID, Qty=@Qty,UnitID=@UnitID,GSID=@GSID where SubItemID=@SubItemID";
+                    Quary = "Update INTItems Set ItemID=@ItemID,Qty=@Qty,UnitID=@UnitID,GSID=@GSID where SubItemID=@SubItemID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@SubItemID", this.SubItemID);

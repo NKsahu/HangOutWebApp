@@ -131,6 +131,7 @@
  
 
 <script>
+    
     typehide();
     $("#Qty").parent('div').hide();
     $("#ISSaleable").parent('div').parent('div').hide();
@@ -179,16 +180,16 @@
             $("#ServicePrize").parent('div').hide();
         }
     }
-    $("#Prize,#Tax").change(
-        function () {
-            CalculateTax();
-        });
-    function CalculateTax() {
-        var Price = parseFloat($("#Prize").val());
-        var TaxPercentage = parseFloat($("#Tax").val());
-        var taxAmt = (Price * TaxPercentage) / 100;
-        $("#TotalPrize").val(Price + taxAmt).change();
-    }
+    //$("#Prize,#Tax").change(
+    //    function () {
+    //        CalculateTax();
+    //    });
+    //function CalculateTax() {
+    //    var Price = parseFloat($("#Prize").val());
+    //    var TaxPercentage = parseFloat($("#Tax").val());
+    //    var taxAmt = (Price * TaxPercentage) / 100;
+    //    $("#TotalPrize").val(Price + taxAmt).change();
+    //}
     SalableChange();
     directchange();
     Processedchange();
@@ -208,6 +209,7 @@
             $("#SalePrize").parent('div').hide();
         }
     }
+    directchange();
     $("#ISdirectlyPurchased").change(function () {
         directchange();
     });
@@ -224,6 +226,7 @@
             $("#PurchasedTax").parent('div').hide();
         }
     }
+    Processedchange();
     $("#ISProcessed").change(function () {
         Processedchange();
     });
