@@ -16,89 +16,103 @@
         @using (Ajax.BeginForm("CreateEdit", "INTGSTBL", new { ID = Model.GSID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.GSID)
-            <div class="row">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.ValidationMessageFor(model => model.GSID, "", new { @class = "text-danger" })
-                <div class="col-md-4">
-                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+        <div class="row">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.GSID, "", new { @class = "text-danger" })
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
 
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-md-4">
-                    @Html.Label("Category")
-                    @Html.DropDownListFor(model => model.CatID, new SelectList(INTCategory.GetAll(), "CatID", "Name", Model.CatID), "Select Category Name", new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.CatID, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-4">
-                    @Html.Label("Type")
-                    @Html.DropDownListFor(model => model.Typeid, new SelectList(InventoryType.ListOrgTypeidList(), "Typeid", "Name", Model.Typeid), new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.Typeid, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-md-4">
-                    @{ List<INTUnits> listunit = INTUnits.GetAll();
-                        listunit = listunit.FindAll(x => x.ParentId == 0);
-                    }
-                    @Html.Label("Unit")
-                    @Html.DropDownListFor(model => model.UnitID, new SelectList(listunit, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-md-4" id="Opening">
-                    @Html.Label("Opening Stock")
-                    @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-md-4">
-                    <div class="checkbox mt-4">
-                        @Html.Label("IS Saleable")
-
-                        @Html.EditorFor(model => model.ISSaleable)
-                        @Html.ValidationMessageFor(model => model.ISSaleable, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="checkbox mt-4">
-                        @Html.Label("IS Directly Purchased")
-                        @Html.EditorFor(model => model.ISdirectlyPurchased)
-                        @Html.ValidationMessageFor(model => model.ISdirectlyPurchased, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="col-md-4 ">
-                    <div class="checkbox mt-4">
-                        @Html.Label("IS Processed")
-
-                        @Html.EditorFor(model => model.ISProcessed)
-                        @Html.ValidationMessageFor(model => model.ISProcessed, "", new { @class = "text-danger", })
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    @Html.LabelFor(model => model.Prize, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.Prize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Prize, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-md-4">
-                    @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-md-4">
-                    @Html.LabelFor(model => model.TotalPrize, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.TotalPrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required", @readonly = "readonly" } })
-                    @Html.ValidationMessageFor(model => model.TotalPrize, "", new { @class = "text-danger" })
-
-                </div>
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 
             </div>
+            <div class="col-md-4">
+                @Html.Label("Category")
+                @Html.DropDownListFor(model => model.CatID, new SelectList(INTCategory.GetAll(), "CatID", "Name", Model.CatID), "Select Category Name", new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.CatID, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Type")
+                @Html.DropDownListFor(model => model.Typeid, new SelectList(InventoryType.ListOrgTypeidList(), "Typeid", "Name", Model.Typeid), new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.Typeid, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @{ List<INTUnits> listunit = INTUnits.GetAll();
+                    listunit = listunit.FindAll(x => x.ParentId == 0);
+                }
+                @Html.Label("Unit")
+                @Html.DropDownListFor(model => model.UnitID, new SelectList(listunit, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4" id="Opening">
+                @Html.Label("Service Prize")
+                @Html.EditorFor(model => model.ServicePrize, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.ServicePrize, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4" id="Opening">
+                @Html.Label("Service Tax")
+                @Html.EditorFor(model => model.ServiceTax, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.ServiceTax, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4" id="Opening">
+                @Html.Label("Opening Stock")
+                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                <div class="checkbox mt-4">
+                    @Html.Label("IS Saleable")
+
+                    @Html.EditorFor(model => model.ISSaleable)
+                    @Html.ValidationMessageFor(model => model.ISSaleable, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Sale Prize")
+                @Html.EditorFor(model => model.SalePrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Sale Tax")
+                @Html.EditorFor(model => model.SaleTax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.SaleTax, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                <div class="checkbox mt-4">
+                    @Html.Label("IS Directly Purchased")
+                    @Html.EditorFor(model => model.ISdirectlyPurchased)
+                    @Html.ValidationMessageFor(model => model.ISdirectlyPurchased, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Purchased Prize")
+                @Html.EditorFor(model => model.PurchasedPrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.PurchasedPrize, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Purchased Tax")
+                @Html.EditorFor(model => model.PurchasedTax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.PurchasedTax, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4 ">
+                <div class="checkbox mt-4">
+                    @Html.Label("IS Processed")
+
+                    @Html.EditorFor(model => model.ISProcessed)
+                    @Html.ValidationMessageFor(model => model.ISProcessed, "", new { @class = "text-danger", })
+                </div>
+            </div>
+
+        </div>
              
                 foreach (var SubItems in Model.iNTItems)
                 {
@@ -127,25 +141,32 @@
         if (Type == "0") {
             $("#Opening").hide();
             $("#ISSaleable").parent('div').parent('div').hide();
-            $("#Prize").parent('div').hide();
-            $("#Tax").parent('div').hide();
-            $("#TotalPrize").parent('div').hide();
+            $("#PurchasedPrize").parent('div').hide();
+            $("#PurchasedTax").parent('div').hide();
             $(".MainDivs").hide();
+            $("#SaleTax").parent('div').hide();
+            $("#SalePrize").parent('div').hide();
+            $("#ServiceTax").parent('div').hide();
+            $("#ServicePrize").parent('div').hide();
         }
         else {
             $("#Opening").show();
             $("#ISSaleable").parent('div').parent('div').show();
-            $("#Prize").parent('div').show();
-            $("#Tax").parent('div').show();
-            $("#TotalPrize").parent('div').show();
+            $("#PurchasedPrize").parent('div').hide();
+            $("#PurchasedTax").parent('div').hide();
             $(".MainDivs").hide();
+            $("#ServiceTax").parent('div').show();
+            $("#ServicePrize").parent('div').show();
         }
         if (Type == "1") {
             $("#Opening").show();
             $("#ISSaleable").parent('div').parent('div').show();
-            $("#Prize").parent('div').hide();
-            $("#Tax").parent('div').hide();
-            $("#TotalPrize").parent('div').hide();
+            $("#SaleTax").parent('div').hide();
+            $("#SalePrize").parent('div').hide();
+            $("#PurchasedPrize").parent('div').hide();
+            $("#PurchasedTax").parent('div').hide();
+             $("#ServiceTax").parent('div').hide();
+            $("#ServicePrize").parent('div').hide();
             $(".MainDivs").hide();
         } else {
             $("#Opening").hide();
@@ -153,6 +174,12 @@
             $("#ISdirectlyPurchased").parent('div').parent('div').hide();
             $("#ISProcessed").parent('div').parent('div').hide();
             $(".MainDivs").hide();
+            $("#SaleTax").parent('div').hide();
+            $("#SalePrize").parent('div').hide();
+            $("#PurchasedPrize").parent('div').hide();
+            $("#PurchasedTax").parent('div').hide();
+            $("#ServiceTax").parent('div').show();
+            $("#ServicePrize").parent('div').show();
         }
     }
     $("#Prize,#Tax").change(
@@ -174,9 +201,14 @@
     function SalableChange() {
         if ($("#ISSaleable").is(':checked')) {
             $("#ISdirectlyPurchased").parent('div').parent('div').show();
+            $("#SaleTax").parent('div').show();
+            $("#SalePrize").parent('div').show();
+           
         }
         else {
             $("#ISdirectlyPurchased").parent('div').parent('div').hide();
+            $("#SaleTax").parent('div').hide();
+            $("#SalePrize").parent('div').hide();
         }
     }
     $("#ISdirectlyPurchased").change(function () {
@@ -185,9 +217,14 @@
     function directchange() {
         if ($("#ISdirectlyPurchased").is(':checked')) {
             $("#ISProcessed").parent('div').parent('div').show();
+            $("#PurchasedPrize").parent('div').show();
+            $("#PurchasedTax").parent('div').show();
+
         }
         else {
             $("#ISProcessed").parent('div').parent('div').hide();
+            $("#PurchasedPrize").parent('div').hide();
+            $("#PurchasedTax").parent('div').hide();
         }
     }
     $("#ISProcessed").change(function () {
@@ -196,15 +233,9 @@
     function Processedchange() {
         console.log("ggg");
         if ($("#ISProcessed").is(':checked')) {
-            $("#Prize").parent('div').show();
-            $("#Tax").parent('div').show();
-            $("#TotalPrize").parent('div').show();
             $(".MainDivs").show();
         }
         else {
-            $("#Prize").parent('div').hide();
-            $("#Tax").parent('div').hide();
-            $("#TotalPrize").parent('div').hide();
             $(".MainDivs").hide();
         }
         //

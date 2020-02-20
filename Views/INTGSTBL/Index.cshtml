@@ -56,19 +56,29 @@
                         Is Saleable
                     </th>
                     <th>
-                        Direct Purchesed
+                        Sale Prize
+                    </th>
+                    <th>
+                        Sale Tax
+                    </th>
+                    <th>
+                        Direct Purchased
+                    </th>
+                    <th>
+                        Purchased Prize
+                    </th>
+                    <th>
+                        Purchased Tax
                     </th>
                     <th>
                         Is processed
                     </th>
+                     
                     <th>
-                        prize
+                        Service Tax
                     </th>
                     <th>
-                        Tax
-                    </th>
-                    <th>
-                        Total prize
+                        Service prize
                     </th>
                     <th></th>
                 </tr>
@@ -90,12 +100,15 @@
                     </td>
                     <td>@Obj.Qty</td>
                     <td>@Obj.ISSaleable</td>
+                    <td>@Obj.SalePrize</td>
+                    <td>@Obj.SaleTax</td>
                     <td>@Obj.ISdirectlyPurchased</td>
+                    <td>@Obj.PurchasedPrize</td>
+                    <td>@Obj.PurchasedTax</td>
                     <td>@Obj.ISProcessed</td>
-                    <td>@Obj.Prize</td>
-                    <td>@Obj.Tax</td>
-                    <td>@Obj.TotalPrize</td>
-                    
+                    <td>@Obj.ServicePrize</td>
+                    <td>@Obj.ServiceTax</td>
+
                     <td>
                         <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.GSID)"> Edit</button>
                     </td>
