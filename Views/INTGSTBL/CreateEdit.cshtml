@@ -48,14 +48,14 @@
             </div>
             <div class="col-md-4">
                 @Html.Label("Service Prize")
-                @Html.EditorFor(model => model.ServicePrize, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.ServicePrize, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ServicePrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
 
             </div>
             <div class="col-md-4">
-                @Html.Label("Service Tax")
-                @Html.EditorFor(model => model.ServiceTax, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.ServiceTax, "", new { @class = "text-danger" })
+                @Html.Label("Service Sale")
+                @Html.EditorFor(model => model.ServiceTax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
 
             </div>
             <div class="col-md-4">
@@ -146,8 +146,8 @@
             $(".MainDivs").hide();
             $("#SaleTax").parent('div').hide();
             $("#SalePrize").parent('div').hide();
-            $("#ServiceTax").hide();
-            $("#ServicePrize").hide();
+            $("#ServiceTax").parent('div').hide();
+            $("#ServicePrize").parent('div').hide();
         }
         else {
             $("#Qty").parent('div').hide();
@@ -155,8 +155,8 @@
             $("#PurchasedPrize").parent('div').hide();
             $("#PurchasedTax").parent('div').hide();
             $(".MainDivs").hide();
-            $("#ServiceTax").hide();
-            $("#ServicePrize").hide();
+            $("#ServiceTax").parent('div').show();
+            $("#ServicePrize").parent('div').show();
         }
         if (Type == "1") {
             $("#Qty").parent('div').show();
