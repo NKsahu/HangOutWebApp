@@ -186,6 +186,7 @@ namespace HangOut.Models
         }
         public HG_OrganizationDetails GetOne(int OrgID )
         {
+
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
