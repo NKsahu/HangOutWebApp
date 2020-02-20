@@ -14,12 +14,15 @@ namespace HangOut.Models.Inventory
         public int Typeid { get; set; }//1=Goods and 2 = Service
         public int UnitID { get; set; }
         public double Qty { get; set; }
-        public double Prize { get; set; }
-        public double Tax { get; set; }
-        public double TotalPrize { get; set; }
+        public double PurchasedPrize { get; set; }
+        public double PurchasedTax { get; set; }
+        public double SalePrize { get; set; }
+        public double SaleTax { get; set; }
         public bool ISSaleable { get; set; }
         public bool ISdirectlyPurchased { get; set; }
         public bool ISProcessed { get; set; }
+        public double ServicePrize { get; set; }
+        public double ServiceTax{ get; set; }
         public List<INTItems>iNTItems { get; set; }
         public INTGSTBL()
         {
@@ -35,11 +38,11 @@ namespace HangOut.Models.Inventory
                 string Quary = "";
                 if (this.GSID == 0)
                 {
-                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@Prize,@Tax,@TotalPrize,@ISSaleable,@ISdirectlyPurchased,@ISProcessed);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@PurchasedPrize,@PurchasedTax,@SalePrize,@SaleTax,@ISSaleable,@ISdirectlyPurchased,@ISProcessed,@ServicePrize,@ServiceTax);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,Prize=@Prize,Tax=@Tax,TotalPrize=@TotalPrize,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed where GSID=@GSID";
+                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServicePrize where GSID=@GSID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@GSID", this.GSID);
@@ -48,12 +51,15 @@ namespace HangOut.Models.Inventory
                 cmd.Parameters.AddWithValue("@Typeid", this.Typeid);
                 cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
                 cmd.Parameters.AddWithValue("@Qty", this.Qty);
-                cmd.Parameters.AddWithValue("@Prize", this.Prize);
-                cmd.Parameters.AddWithValue("@Tax", this.Tax);
-                cmd.Parameters.AddWithValue("@TotalPrize", this.TotalPrize);
+                cmd.Parameters.AddWithValue("@PurchasedPrize", this.PurchasedPrize);
+                cmd.Parameters.AddWithValue("@PurchasedTax", this.PurchasedTax);
+                cmd.Parameters.AddWithValue("@SalePrize", this.SalePrize);
+                cmd.Parameters.AddWithValue("@SaleTax", this.SaleTax);
                 cmd.Parameters.AddWithValue("@ISSaleable", this.ISSaleable);
                 cmd.Parameters.AddWithValue("@ISdirectlyPurchased", this.ISdirectlyPurchased);
                 cmd.Parameters.AddWithValue("@ISProcessed", this.ISProcessed);
+                cmd.Parameters.AddWithValue("@ServicePrize", this.ServicePrize);
+                cmd.Parameters.AddWithValue("@ServiceTax", this.ServiceTax);
                 if (this.GSID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -92,12 +98,15 @@ namespace HangOut.Models.Inventory
                     OBJINT.Typeid = SDR.GetInt32(3);
                     OBJINT.UnitID = SDR.GetInt32(4);
                     OBJINT.Qty = SDR.GetDouble(5);
-                    OBJINT.Prize = SDR.GetDouble(6);
-                    OBJINT.Tax = SDR.GetDouble(7);
-                    OBJINT.TotalPrize = SDR.GetDouble(8);
-                    OBJINT.ISSaleable = SDR.GetBoolean(9);
-                    OBJINT.ISdirectlyPurchased = SDR.GetBoolean(10);
-                    OBJINT.ISProcessed = SDR.GetBoolean(11);
+                    OBJINT.PurchasedPrize = SDR.GetDouble(6);
+                    OBJINT.PurchasedTax = SDR.GetDouble(7);
+                    OBJINT.SalePrize = SDR.GetDouble(8);
+                    OBJINT.SaleTax = SDR.GetDouble(9);
+                    OBJINT.ISSaleable = SDR.GetBoolean(10);
+                    OBJINT.ISdirectlyPurchased = SDR.GetBoolean(11);
+                    OBJINT.ISProcessed = SDR.GetBoolean(12);
+                    OBJINT.ServicePrize = SDR.GetDouble(13);
+                    OBJINT.ServiceTax = SDR.GetDouble(14);
                     listintcat.Add(OBJINT);
                 }
             }
@@ -128,12 +137,15 @@ namespace HangOut.Models.Inventory
                     ObjTmp.Typeid = SDR.GetInt32(3);
                     ObjTmp.UnitID = SDR.GetInt32(4);
                     ObjTmp.Qty = SDR.GetDouble(5);
-                    ObjTmp.Prize = SDR.GetDouble(6);
-                    ObjTmp.Tax= SDR.GetDouble(7);
-                    ObjTmp.TotalPrize = SDR.GetDouble(8);
-                    ObjTmp.ISSaleable = SDR.GetBoolean(9);
-                    ObjTmp.ISdirectlyPurchased = SDR.GetBoolean(10);
-                    ObjTmp.ISProcessed = SDR.GetBoolean(11);
+                    ObjTmp.PurchasedPrize = SDR.GetDouble(6);
+                    ObjTmp.PurchasedTax= SDR.GetDouble(7);
+                    ObjTmp.SalePrize = SDR.GetDouble(8);
+                    ObjTmp.SaleTax = SDR.GetDouble(9);
+                    ObjTmp.ISSaleable = SDR.GetBoolean(10);
+                    ObjTmp.ISdirectlyPurchased = SDR.GetBoolean(11);
+                    ObjTmp.ISProcessed = SDR.GetBoolean(12);
+                    ObjTmp.ServicePrize = SDR.GetDouble(13);
+                    ObjTmp.ServiceTax = SDR.GetDouble(14);
 
                 }
             }

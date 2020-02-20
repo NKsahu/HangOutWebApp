@@ -20,21 +20,10 @@ namespace HangOut.Controllers.Inventory
         public ActionResult CreateEdit(int ID)
         {
             INTGSTBL Obj = new INTGSTBL();
-
             if (ID > 0)
             {
-                if (Obj.GSID !=0)
-                {
-                    Obj = Obj.GetOne(ID);
-                }
-                foreach (var Subitem in Obj.iNTItems)
-                {
-                    if(Subitem.SubItemID!=0)
-                    {
-                        Obj = Obj.GetOne(ID);
-                    }
-                }
                 Obj = Obj.GetOne(ID);
+                Obj.iNTItems = INTItems.GetAll(ID);
             }
             else
             {
@@ -66,34 +55,6 @@ namespace HangOut.Controllers.Inventory
                 return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
-        public ActionResult ItemsCreateEdit(int ID)
-        {
-            INTItems iNTItems = new INTItems();
-            if (ID > 0)
-            {
-                iNTItems = iNTItems.GetOne(ID);
-            }
-            return View(iNTItems);
-        }
-        [HttpPost]
-        public ActionResult ItemsCreateEdit(INTItems iNTItems)
-        {
-            int i = iNTItems.Save();
-            if (i > 0)
-                return Json(new { data = iNTItems }, JsonRequestBehavior.AllowGet);
-            return RedirectToAction("Error");
-        }
-        public JObject SaveItems([System.Web.Http.FromBody] INTGSTBL intgst)
-        {
-            INTGSTBL OBJINTGSTBL = intgst;
-            OBJINTGSTBL.Save();
-            List<INTItems> itemlist = OBJINTGSTBL.iNTItems;
-            foreach (var item in itemlist)
-            {
-                item.ItemID = OBJINTGSTBL.GSID;
-                item.Save();
-            }
-            return JObject.FromObject(OBJINTGSTBL);
-        }
+       
     }
 }

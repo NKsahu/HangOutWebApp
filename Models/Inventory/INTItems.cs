@@ -53,7 +53,7 @@ namespace HangOut.Models.Inventory
             return Row;
 
         }
-        public static List<INTItems> GetAll()
+        public static List<INTItems> GetAll(int GSID)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -61,7 +61,7 @@ namespace HangOut.Models.Inventory
             List<INTItems> listUnit = new List<INTItems>();
             try
             {
-                string Quary = "Select * from INTItems ORDER BY SubItemID DESC";
+                string Quary = "Select * from INTItems where GSID="+ GSID;
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
@@ -79,36 +79,6 @@ namespace HangOut.Models.Inventory
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
             return (listUnit);
-        }
-        public INTItems GetOne(int ID)
-        {
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
-            Con.Open();
-            SqlCommand cmd = null;
-            SqlDataReader SDR = null;
-            INTItems ObjTmp = new INTItems();
-
-            try
-            {
-                string Query = "SELECT * FROM  INTItems where SubItemID=" + ID;
-                cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@SubItemID", ID);
-                SDR = cmd.ExecuteReader();
-                while (SDR.Read())
-                {
-                    ObjTmp.SubItemID = SDR.GetInt32(0);
-                    ObjTmp.ItemID = SDR.GetInt32(1);
-                    ObjTmp.IQty = SDR.GetDouble(2);
-                    ObjTmp.IUnitID = SDR.GetInt32(3);
-                    ObjTmp.IParentId = SDR.GetInt32(4);
-                }
-            }
-            catch (System.Exception e)
-            { e.ToString(); }
-
-            finally { Con.Close(); }
-
-            return (ObjTmp);
         }
     }
 }
