@@ -216,7 +216,7 @@ namespace HangOut.Models.Account
             catch (System.Exception e)
             { e.ToString(); }
 
-            finally { Con.Close(); }
+            finally { cmd.Dispose(); SDR.Close(); Con.Close(); }
 
             return (OBJLDR);
         }
