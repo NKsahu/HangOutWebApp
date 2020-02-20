@@ -503,6 +503,7 @@
     <Content Include="Views\Shared\INTSubItem.cshtml" />
     <Content Include="Views\HG_Orders\TestPrinting.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
+    <Content Include="Views\Ledger\TheaterLedgerIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
