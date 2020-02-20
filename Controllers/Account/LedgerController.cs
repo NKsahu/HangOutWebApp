@@ -59,6 +59,7 @@ namespace HangOut.Controllers.Account
             {
                 Obj.Branch = "";
             }
+
             else
             {
                 return Json(new { msg = "Please Enter Branch" });
