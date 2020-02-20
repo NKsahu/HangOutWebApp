@@ -143,7 +143,7 @@ namespace HangOut.Models
             }
             catch (System.Exception e) { e.ToString(); }
             finally { cmd.Dispose();Con.Close(); }
-            return listOfuser;
+            return listOfuser; 
         }
         //this is get One Function
         public vw_HG_UsersDetails Checkvw_HG_UsersDetails()
