@@ -117,6 +117,56 @@ namespace HangOut.Models.Account
             return Row;
 
         }
+        public static List<Ledger> GetAllTheatersList()
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<Ledger> LedgerList = new List<Ledger>();
+            try
+            {
+                string Quary = "Select * from ACLedger where ParentGroup=2 and DebtorType=1 ORDER BY ID DESC";
+                cmd = new SqlCommand(Quary, con.Con);
+                SDR = cmd.ExecuteReader();
+
+                while (SDR.Read())
+                {
+                    Ledger OBJLDR = new Ledger();
+                    OBJLDR.ID = SDR.GetInt32(0);
+                    OBJLDR.Name = SDR.GetString(1);
+                    //OBJLDR.ShortName = SDR.GetString(2);
+                    //OBJLDR.MobileNo1 = SDR.GetString(3);
+                    //OBJLDR.MobileNo2 = SDR.GetString(4);
+                    //OBJLDR.DebtorType = SDR.GetInt32(5);
+                    //OBJLDR.OrgId = SDR.GetInt32(6);
+                    //OBJLDR.State = SDR.GetInt32(7);
+                    //OBJLDR.MarginOnCash = SDR.GetDouble(8);
+                    //OBJLDR.TaxOnAboveMargin = SDR.GetInt32(9);
+                    //OBJLDR.MarginOnline = SDR.GetDouble(10);
+                    //OBJLDR.TaxOnAboveMarginOnline = SDR.GetInt32(11);
+                    //OBJLDR.PaymentFrequency = SDR.GetInt32(12);
+                    //OBJLDR.PaymentDay = SDR.GetInt32(13);
+                    //OBJLDR.CollectionFrequency = SDR.GetInt32(14);
+                    //OBJLDR.CollectionDay = SDR.GetInt32(15);
+                    //OBJLDR.CalculationStartFrom = SDR.GetDateTime(16);
+                    //OBJLDR.TDSApplicable = SDR.GetInt32(17);
+                    //OBJLDR.Email = SDR.GetString(18);
+                    //OBJLDR.Remarks = SDR.GetString(19);
+                    //OBJLDR.LisenceRenewalDate = SDR.GetDateTime(20);
+                    //OBJLDR.ParentGroup = SDR.GetInt32(21);
+                    //OBJLDR.AccountNumber = SDR.GetString(22);
+                    //OBJLDR.IFSCCode = SDR.GetString(23);
+                    //OBJLDR.BankName = SDR.GetString(24);
+                    //OBJLDR.Branch = SDR.GetString(25);
+
+                    LedgerList.Add(OBJLDR);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return (LedgerList);
+        }
+
         public static List<Ledger> GetAll()
         {
             DBCon con = new DBCon();
@@ -125,7 +175,7 @@ namespace HangOut.Models.Account
             List<Ledger> LedgerList = new List<Ledger>();
             try
             {
-                string Quary = "Select * from ACLedger ORDER BY ID DESC";
+                string Quary = "Select * from ACLedger where DebtorType=0 ORDER BY ID DESC";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 

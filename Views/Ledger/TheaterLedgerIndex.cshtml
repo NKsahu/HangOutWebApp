@@ -1,0 +1,85 @@
+﻿@model IEnumerable<HangOut.Models.Account.Ledger>
+@using HangOut.Models.Account;
+@{
+
+    Layout = null;
+}
+
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="text-center">Theater Ledger</h3>
+    </div>
+    <div class="row pt-5">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Ledger</button>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table" id="TBLID" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.PGID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Type)
+                        </th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="Tbody">
+                @foreach (Ledger Obj in Model)
+                {
+                    <tr id="@Obj.ID">
+                        <td>@Obj.ID</td>
+                        <td>@Obj.Name</td>
+
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
+                            @*<button class="btn btn-danger btn-sm " onclick="Delete(@Obj.ID)"> Delete</button>*@
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+    var AddLedger = false;
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddLedger = false;
+        } else {
+            AddLedger = true;
+        }
+        $.ajax({
+            type: 'GET',
+            url: "/Ledger/CreateEdit?ID=" + ID,
+            success: function (data) {
+                makedpt("Ledger");
+                $("#Ledger > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("Ledger");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+</script>
