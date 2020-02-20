@@ -99,12 +99,12 @@
                 </div>
 
             </div>
-            <div class="row">
-                @foreach (var SubItems in Model.iNTItems)
+             
+                foreach (var SubItems in Model.iNTItems)
                 {
                 @Html.Partial("INTSubItem", SubItems)
                 }
-            </div>
+            
             <div id="HeadDiv" style="display:none"></div>
             <div class="col-sm-1">
                 @Html.Label("Save", new { @class = "text-white" })
@@ -138,9 +138,7 @@
             $("#Prize").parent('div').show();
             $("#Tax").parent('div').show();
             $("#TotalPrize").parent('div').show();
-            $("#ItemID").parent('div').show();
-            $("#IQty").parent('div').show();
-            $("#IUnitID").parent('div').show();
+            $(".MainDivs").hide();
         }
         if (Type == "1") {
             $("#Opening").show();
@@ -152,13 +150,9 @@
         } else {
             $("#Opening").hide();
             $("#ISSaleable").parent('div').parent('div').hide();
-
             $("#ISdirectlyPurchased").parent('div').parent('div').hide();
             $("#ISProcessed").parent('div').parent('div').hide();
-            $("#btn").hide();
-            $("#ItemID").parent('div').hide();
-            $("#IQty").parent('div').hide();
-            $("#IUnitID").parent('div').hide();
+            $(".MainDivs").hide();
         }
     }
     $("#Prize,#Tax").change(
@@ -202,7 +196,6 @@
     function Processedchange() {
         console.log("ggg");
         if ($("#ISProcessed").is(':checked')) {
-           
             $("#Prize").parent('div').show();
             $("#Tax").parent('div').show();
             $("#TotalPrize").parent('div').show();
@@ -212,10 +205,7 @@
             $("#Prize").parent('div').hide();
             $("#Tax").parent('div').hide();
             $("#TotalPrize").parent('div').hide();
-            $("#ItemID").parent('div').hide();
-            $("#IQty").parent('div').hide();
-            $("#IUnitID").parent('div').hide();
-            $("#btn").hide();
+            $(".MainDivs").hide();
         }
         //
     }

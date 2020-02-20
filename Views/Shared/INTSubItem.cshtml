@@ -7,8 +7,8 @@
 @using HangOut.Models.Inventory;
 @using (Html.BeginCollectionItem("iNTItems"))
 {
-    <div class="row MainDivs">
-
+    <div class="row MainDivs" OrderNo="1" id="CreateCopy">
+        @Html.HiddenFor(model=>model.SubItemID)
         <div class="col-md-3">
             @Html.Label("Item")
             @Html.DropDownListFor(model => model.ItemID, new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control", required = "required" })

@@ -3,8 +3,6 @@
 @{
     Layout = null;
     List<INTUnits> listUnits = INTUnits.GetAll();
-    List<INTItems> listItems = INTItems.GetAll();
-    
     List<InventoryType> inventoryTypes = InventoryType.ListOrgTypeidList();
 }
 <div class="card">
@@ -97,13 +95,9 @@
                     <td>@Obj.Prize</td>
                     <td>@Obj.Tax</td>
                     <td>@Obj.TotalPrize</td>
-                    @foreach(var item in listItems)
-                    {
-
-                    }
+                    
                     <td>
-                        <button class="btn btn-warning btn-sm " onclick="CreateEdit('@Obj.GSID','')"> Edit</button>
-                        <button class="btn btn-danger btn-sm " onclick="Delete(@Obj.GSID)"> Delete</button>
+                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.GSID)"> Edit</button>
                     </td>
                 </tr>
                 }
@@ -115,32 +109,6 @@
 </div>
 <script>
     var AddGoods = false;
-    function Delete(ID) {
-        if (confirm('Are You Sure')) {
-            $('#waiting').show();
-            $.ajax({
-                type: 'GET',
-                url: "/INTGSTBL/Delete?ID=" + ID,
-                success: function (data) {
-                    //  var da = JSON.parse(data);
-                    if (data.msg != null && data.msg != "") {
-                        alert(data.msg);
-
-                    }
-                    else {
-                        $("#" + ID).hide();
-                    }
-                    console.log(data);
-                    $('#waiting').hide();
-                },
-                error: function (jqXhr, textStatus, errorMessage) { // error callback
-                    console.log(errorMessage);
-                    Onfail(errorMessage.MSG);
-                    $('#waiting').hide();
-                }
-            });
-        }
-    }
     function CreateEdit(ID) {
         if (ID != "0") {
             AddGoods = false;
@@ -149,7 +117,7 @@
         }
         $.ajax({
             type: 'GET',
-            url: "/INTGSTBL/CreateEdit?ID=" + ID,
+            url: "/INTGSTBL/CreateEdit?ID=" + ID ,
             success: function (data) {
                 makedpt("INTGSTBL");
                 $("#INTGSTBL > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -169,21 +137,6 @@
         hidedpt("INTGSTBL");
         reload('/INTGSTBL/Index');
         $('#waiting').hide();
-        //var HtmlStr = "<tr id='" + Jitmobj.GSID + "'>";
-        //HtmlStr += '<td>' + Jitmobj.GSID + '</td>';
-        //HtmlStr += '<td>' + Jitmobj.Name + '</td>';
-        //HtmlStr += '<td>' + Jitmobj.UnitID + '</td>';
-        //HtmlStr += '<td>' + Jitmobj.Qty + '</td>';
-        //HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.GSID + ')"> Edit</button>';
-        //HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.GSID
-        //HtmlStr += ')"> Delete</button></td ></tr > ';
-        //if (AddGoods) {
-        //    $("#Tbody").append(HtmlStr);
-        //}
-        //else {
-        //    $('#' + Jitmobj.GSID).remove();
-        //    $("#Tbody").append(HtmlStr);
-        //}
     }
     function reload(url) {
         $.ajax({
