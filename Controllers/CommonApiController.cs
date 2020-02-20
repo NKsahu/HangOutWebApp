@@ -60,12 +60,6 @@ namespace HangOut.Controllers
             }
             return jObject;
         }
-        public JObject CustomerCnt(int OrgId)
-        {
-            JObject result = new JObject();
-
-            return result;
-        }
         //=========FEEDBACK API===========
         public JObject FeedBack(Int64 OID,int CID)
         {
@@ -222,5 +216,12 @@ namespace HangOut.Controllers
             }
         }
 
+        public JObject OrgSettng()
+        {
+            var UserInfo = Request.Cookies["UserInfo"];
+            int Orgid = int.Parse(UserInfo["OrgId"]);
+            OrgSetting orgSetting = OrgSetting.Getone(Orgid);
+            return JObject.FromObject(orgSetting);
+        }
     }
 }
