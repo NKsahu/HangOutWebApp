@@ -46,19 +46,19 @@
                 @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4" id="Opening">
+            <div class="col-md-4">
                 @Html.Label("Service Prize")
-                @Html.EditorFor(model => model.ServicePrize, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.ServicePrize, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ServicePrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4" id="Opening">
-                @Html.Label("Service Tax")
-                @Html.EditorFor(model => model.ServiceTax, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.ServiceTax, "", new { @class = "text-danger" })
+            <div class="col-md-4">
+                @Html.Label("Service Sale")
+                @Html.EditorFor(model => model.ServiceTax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-md-4" id="Opening">
+            <div class="col-md-4">
                 @Html.Label("Opening Stock")
                 @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                 @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
@@ -139,7 +139,7 @@
     function typehide() {
         var Type = $("#Typeid").val();
         if (Type == "0") {
-            $("#Opening").hide();
+            $("#Qty").parent('div').hide();
             $("#ISSaleable").parent('div').parent('div').hide();
             $("#PurchasedPrize").parent('div').hide();
             $("#PurchasedTax").parent('div').hide();
@@ -150,7 +150,7 @@
             $("#ServicePrize").parent('div').hide();
         }
         else {
-            $("#Opening").show();
+            $("#Qty").parent('div').hide();
             $("#ISSaleable").parent('div').parent('div').show();
             $("#PurchasedPrize").parent('div').hide();
             $("#PurchasedTax").parent('div').hide();
@@ -159,7 +159,7 @@
             $("#ServicePrize").parent('div').show();
         }
         if (Type == "1") {
-            $("#Opening").show();
+            $("#Qty").parent('div').show();
             $("#ISSaleable").parent('div').parent('div').show();
             $("#SaleTax").parent('div').hide();
             $("#SalePrize").parent('div').hide();
@@ -169,7 +169,7 @@
             $("#ServicePrize").parent('div').hide();
             $(".MainDivs").hide();
         } else {
-            $("#Opening").hide();
+            $("#Qty").parent('div').hide();
             $("#ISSaleable").parent('div').parent('div').hide();
             $("#ISdirectlyPurchased").parent('div').parent('div').hide();
             $("#ISProcessed").parent('div').parent('div').hide();

@@ -38,11 +38,11 @@ namespace HangOut.Models.Inventory
                 string Quary = "";
                 if (this.GSID == 0)
                 {
-                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@Prize,@Tax,@PurchasedPrize,@PurchasedTax,@SalePrize,@SaleTax,@ISSaleable,@ISdirectlyPurchased,@ISProcessed,@ServicePrize,@ServiceTax);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@PurchasedPrize,@PurchasedTax,@SalePrize,@SaleTax,@ISSaleable,@ISdirectlyPurchased,@ISProcessed,@ServicePrize,@ServiceTax);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,Prize=@Prize,Tax=@Tax,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServicePrize where GSID=@GSID";
+                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServicePrize where GSID=@GSID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@GSID", this.GSID);
