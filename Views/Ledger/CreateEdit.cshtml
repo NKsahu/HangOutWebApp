@@ -79,7 +79,7 @@
                         SelectList sl = new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID ", "Name");
                     }
 
-                    @Html.DropDownListFor(Model => Model.OrgId, sl, "Select Orgonization", new { @class = "form-control", onchange = "GetOrgType(this)" })
+                    @Html.DropDownListFor(Model => Model.OrgId, sl, "Select Organization", new { @class = "form-control", onchange = "GetOrgType(this)" })
                     @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
 
                 </div>
@@ -92,7 +92,21 @@
                 @Html.Label("LisenceRenewalDate")
                 @Html.TextBoxFor(model => model.LisenceRenewalDate, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
             </div>
+            <div class="col-md-2" id="YearlyRenewalCharges">
+                @Html.LabelFor(model => model.YearlyRenewalCharges, htmlAttributes: new { @class = "control-label  " })
 
+                @Html.EditorFor(model => model.YearlyRenewalCharges, new { htmlAttributes = new { @class = "form-control", } })
+                @Html.ValidationMessageFor(model => model.YearlyRenewalCharges, "", new { @class = "text-danger" })
+
+            </div>
+            @{
+                <div class="col-md-2" id="Tax">
+                    @Html.Label("Tax")
+                    @Html.DropDownListFor(model => model.Tax, new SelectList(Ledger.tax(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", id = "TaxId" })
+                    @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+
+                </div>
+            }
             <div class="col-md-2" id="MarginOnCash">
                 @Html.LabelFor(model => model.MarginOnCash, htmlAttributes: new { @class = "control-label  " })
 
@@ -170,7 +184,7 @@
             <div class="col-md-2" id="ManualCollectionDay">
                 @Html.LabelFor(model => model.ManualCollectionDays, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.EditorFor(model => model.ManualCollectionDays, new { htmlAttributes = new { @class = "form-control"} })
+                @Html.EditorFor(model => model.ManualCollectionDays, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ManualCollectionDays, "", new { @class = "text-danger" })
 
             </div>
@@ -272,6 +286,8 @@
     $("#cwid").hide();
     $("#CalculationStartFrom").hide();
     $("#TDSApplicable").hide();
+    $("#YearlyRenewalCharges").hide();
+    $("#Tax").hide();
 
     OnOrgChnage();
     $("#did").change(function () {
@@ -292,6 +308,8 @@
             $("#cwid").hide();
             $("#CalculationStartFrom").hide();
             $("#TDSApplicable").hide();
+            $("#YearlyRenewalCharges").hide();
+            $("#Tax").hide();
             // $("#bid").hide();
         }
         else {
@@ -326,6 +344,8 @@
             $("#DebType").hide();
             $("#ManualPaymentDays").hide();
             $("#ManualCollectionDay").hide();
+            $("#YearlyRenewalCharges").hide();
+            $("#Tax").hide();
         }
         else if (values === "2")
         {
@@ -335,6 +355,7 @@
         else {
             $("#Bankdetails").hide();
             $("#DebType").hide();
+            $("#Oid").hide();
         }
     }
     OnpaymentFrequencyChnage();
@@ -392,10 +413,12 @@
                     $("#State").val(Statid);
                     if (OrgType == 1 || OrgType == 0) {
                         $("#LisenceRenewalDateShow").show();
+                        $("#YearlyRenewalCharges").show();
+                        $("#Tax").show();
                         $("#MarginOnCash").hide();
                         $("#TaxOnAboveMargin").hide();
-                        $("#MarginOnline").hide();
-                        $("#TaxOnAboveMarginOnline").hide();
+                        $("#MarginOnline").show();
+                        $("#TaxOnAboveMarginOnline").show();
                         $("#PaymentFrequency").hide();
                         $("#wid").hide();
                         $("#CollectionFrequency").hide();
@@ -416,6 +439,8 @@
                         // $("#cwid").show();
                         $("#CalculationStartFrom").show();
                         $("#TDSApplicable").show();
+                        $("#YearlyRenewalCharges").hide();
+                        $("#Tax").hide();
                         // $("#bid").show();
 
                     }
