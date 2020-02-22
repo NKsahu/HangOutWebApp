@@ -49,6 +49,11 @@ namespace HangOut.Models
         public string InvoiceTitle { get; set; }
         public string invoicePhone { get; set; }
         public int DistrictId { get; set; }
+        public int InvoicePrintting { get; set; }
+        public int NuOfCopy { get; set; }
+        public int OrderDisplay { get; set; }
+        public int PrinttingType { get; set; }
+        public int Copy { get; set; }
         public HG_OrganizationDetails()
         {
             EntryDate = DateTime.Now;
@@ -73,7 +78,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.OrgID  == 0)
                 {
-                    Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status,@PaymentType,@InvoiceHeading,@AddressLine2,@AddressLin3,@License2,@License3,@PrintRemark,@CustomerOrdering,@InvoiceTitle,@InvoicePhone,@DistrictId);";
+                    Query = "Insert into  HG_OrganizationDetails  values(@OrgTypes,@HeadName,@Name,@Address,@City,@State,@PinCode,@Phone,@Cell,@Email,@WebSite,@Logo,@DOR,@DOE,@GSTNO,@PANNO,@BankName,@ACNO,@AcType,@EntryBy,@EntryDate,@UpdateDate,@Status,@PaymentType,@InvoiceHeading,@AddressLine2,@AddressLin3,@License2,@License3,@PrintRemark,@CustomerOrdering,@InvoiceTitle,@InvoicePhone,@DistrictId,@InvoicePrintting,@NuOfCopy,@OrderDisplay,@PrinttingType,@Copy);";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy",int.Parse(HttpContext.Current.Request.Cookies["UserInfo"]["UserCode"]));
                     cmd.Parameters.AddWithValue("@EntryDate",System.DateTime.Now);
@@ -81,7 +86,7 @@ namespace HangOut.Models
                 }
                 else
                 {
-                    Query = "update  HG_OrganizationDetails set HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType,InvoiceHeading=@InvoiceHeading,AddressLine2=@AddressLine2,AddressLin3=@AddressLin3,License2=@License2,License3=@License3,PrintRemark=@PrintRemark,CustomerOrdering=@CustomerOrdering,InvoiceTitle=@InvoiceTitle,InvoicePhone=@InvoicePhone,DistrictId=@DistrictId where OrgID =@OrgID ";
+                    Query = "update  HG_OrganizationDetails set HeadName =@HeadName,Name=@Name,Address=@Address,City=@City,State=@State,PinCode=@PinCode,Phone=@Phone,Cell=@Cell,Email=@Email,WebSite=@WebSite,Logo=@Logo,DOR=@DOR,DOE=@DOE,GSTNO=@GSTNO,PANNO=@PANNO,BankName=@BankName,ACNO=@ACNO,AcType=@AcType,UpdateDate=@UpdateDate,Status=@Status,PaymentType=@PaymentType,InvoiceHeading=@InvoiceHeading,AddressLine2=@AddressLine2,AddressLin3=@AddressLin3,License2=@License2,License3=@License3,PrintRemark=@PrintRemark,CustomerOrdering=@CustomerOrdering,InvoiceTitle=@InvoiceTitle,InvoicePhone=@InvoicePhone,DistrictId=@DistrictId,InvoicePrintting=@InvoicePrintting,NuOfCopy=@NuOfCopy,OrderDisplay=@OrderDisplay,PrinttingType=@PrinttingType,Copy=@Copy where OrgID =@OrgID ";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@OrgID ", this.OrgID );
                 }
@@ -116,6 +121,11 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@InvoiceTitle", this.InvoiceTitle);
                 cmd.Parameters.AddWithValue("@InvoicePhone", this.invoicePhone);
                 cmd.Parameters.AddWithValue("@DistrictId", this.DistrictId);
+                cmd.Parameters.AddWithValue("@InvoicePrintting", this.InvoicePrintting);
+                cmd.Parameters.AddWithValue("@NuOfCopy", this.NuOfCopy);
+                cmd.Parameters.AddWithValue("@OrderDisplay", this.OrderDisplay);
+                cmd.Parameters.AddWithValue("@PrinttingType", this.PrinttingType);
+                cmd.Parameters.AddWithValue("@Copy", this.Copy);
                 Row = cmd.ExecuteNonQuery();
                 this.OrgID  = Row;
             }
@@ -176,6 +186,11 @@ namespace HangOut.Models
                     ObjTmp.InvoiceTitle = SDR.GetString(32);
                     ObjTmp.invoicePhone = SDR.GetString(33);
                     ObjTmp.DistrictId = SDR.GetInt32(34);
+                    ObjTmp.InvoicePrintting = SDR.GetInt32(35);
+                    ObjTmp.NuOfCopy = SDR.GetInt32(36);
+                    ObjTmp.OrderDisplay = SDR.GetInt32(37);
+                    ObjTmp.PrinttingType = SDR.GetInt32(38);
+                    ObjTmp.Copy = SDR.GetInt32(39);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -231,6 +246,11 @@ namespace HangOut.Models
                     ObjTmp.InvoiceTitle = SDR.GetString(32);
                     ObjTmp.invoicePhone = SDR.GetString(33);
                     ObjTmp.DistrictId = SDR.GetInt32(34);
+                    ObjTmp.InvoicePrintting = SDR.GetInt32(35);
+                    ObjTmp.NuOfCopy = SDR.GetInt32(36);
+                    ObjTmp.OrderDisplay = SDR.GetInt32(37);
+                    ObjTmp.PrinttingType = SDR.GetInt32(38);
+                    ObjTmp.Copy = SDR.GetInt32(39);
                 }
             }
             catch (System.Exception e)
