@@ -35,7 +35,19 @@ namespace HangOut.Controllers.Account
         [HttpPost]
         public ActionResult CreateEdit(Ledger Obj)
         {
-            if(Obj.ShortName==null)
+            DateTime isnulldate =  default(DateTime);
+          
+            if (Obj.CalculationStartFrom.Equals(isnulldate))
+            {              
+                Obj.CalculationStartFrom = DateTime.Now;
+            }
+
+            if (Obj.LisenceRenewalDate.Equals(isnulldate))
+            {
+                Obj.LisenceRenewalDate = DateTime.Now;
+            }
+            
+            if (Obj.ShortName==null)
             {
                 Obj.ShortName = "";
             }

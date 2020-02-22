@@ -56,12 +56,13 @@ namespace HangOut.Models.Account
 
         public int Save()
         {
-            int Row = 0;
-            DBCon con = new DBCon();
-            SqlCommand cmd = null;
+           
+                int Row = 0;
+                DBCon con = new DBCon();
+                SqlCommand cmd = null;
+                string Quary = "";
             try
             {
-                string Quary = "";
                 if (this.ID == 0)
                 {
                     Quary = "Insert Into ACLedger Values (@Name,@ShortName,@MobileNo1,@MobileNo2,@DebtorType,@OrgId,@State,@MarginOnCash,@TaxOnAboveMargin,@MarginOnline,@TaxOnAboveMarginOnline,@PaymentFrequency,@PaymentDay,@CollectionFrequency,@CollectionDay,@CalculationStartFrom,@TDSApplicable,@Email,@Remarks,@LisenceRenewalDate,@ParentGroup,@AccountNumber,@IFSCCode,@BankName,@Branch,@ManualPaymentDays,@ManualCollectionDays);SELECT SCOPE_IDENTITY();";
@@ -110,7 +111,6 @@ namespace HangOut.Models.Account
                     Row = cmd.ExecuteNonQuery();
                     //this.ID = Row;
                 }
-
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
