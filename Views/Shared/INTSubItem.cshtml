@@ -1,38 +1,32 @@
 ﻿@model HangOut.Models.Inventory.INTItems
 @using HtmlHelpers.BeginCollectionItem
+@using HangOut.Models.Inventory;
 @{
     Layout = null;
 
 }
-@using HangOut.Models.Inventory;
-<html>
-<head>
-</head>
-<body>
-
-
+<div class="iNTItem">
     @using (Html.BeginCollectionItem("iNTItems"))
     {
         <div class="row MainDivs" id="Creacopydiv">
-            @Html.HiddenFor(model => model.SubItemID)
+            @Html.HiddenFor(model => model.SubItemID, new { @class = "SUBITEMID" })
             <div class="col-md-3">
                 @Html.Label("Item")
-                @Html.DropDownListFor(model => model.ItemID, new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control", required = "required" })
-
-
+              @*  @Html.DropDownListFor(model => model.ItemID, new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control", required = "required" })*@
+                <input type="text" class="form-control" />
             </div>
             <div class="col-md-3">
                 @Html.Label("Quantity")
-                @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-
+               @* @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })*@
+                <input type="text"  class="form-control"/>
             </div>
             <div class="col-md-3">
-                @{ List<INTUnits> listuni = INTUnits.GetAll();
-                    listuni = listuni.FindAll(x => x.ParentId != 0);
-                }
+                @*@{ List<INTUnits> listuni = INTUnits.GetAll();
+            listuni = listuni.FindAll(x => x.ParentId != 0);
+        }*@
                 @Html.Label("Unit")
-                @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
-
+                @* @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })*@
+                <input type="text" class="form-control" />
             </div>
             <div class="col-md-3" id="btn">
                 <span class="float-right">
@@ -40,33 +34,7 @@
                 </span>
             </div>
         </div>
-
+        <div id="HeadDiv" style="display:none"></div>
     }
+</div>
 
-    <!--Hidden div-->
-     <div class="row aa MainDivs" id="Creacopydiv2" style="display:none"> 
-        @Html.HiddenFor(model => model.SubItemID)
-        <div class="col-md-3">
-            @Html.Label("Item")
-            @Html.DropDownList("IParentId", new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control", required = "required" })
-
-
-        </div>
-        <div class="col-md-3">
-            @Html.Label("Quantity")
-            @Html.Editor("IQty", new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-
-        </div>
-        <div class="col-md-3">
-            @{ List<INTUnits> listun = INTUnits.GetAll();
-                listun = listun.FindAll(x => x.ParentId != 0);
-            }
-            @Html.Label("Unit")
-            @Html.DropDownList("IUnitID", new SelectList(listun, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
-
-        </div>
-
-    </div>
-    <!--end -->
-</body>
-</html>
