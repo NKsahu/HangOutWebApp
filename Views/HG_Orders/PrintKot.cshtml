@@ -13,10 +13,18 @@
         TicketNo = int.Parse(Request.QueryString["TicketNo"]);
     }
     OID =int.Parse(Request.QueryString["OID"]);
-   // TicketNo = 1;
+    // TicketNo = 1;
     HG_Orders objorder = new HG_Orders().GetOne(OID);
     List<HG_OrderItem> orderItems = new HG_OrderItem().GetAll(OID);
-    //  orderItems= orderItems.FindAll(x=)
+    if (TicketNo > 0)
+    {
+        orderItems = orderItems.FindAll(x => x.TickedNo == TicketNo);
+    }
+
+    var ObjFirst = orderItems.FirstOrDefault();
+    var UserTyps = new HG_UserTypes().GetAll(all:true);
+    var ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)ObjFirst.OrdById);
+    var UserType = UserTyps.Find(x => x.UserType == ObjUser.UserType);
     int SN = 0;
     int QtyTotoal = 0;
     <html>
@@ -51,11 +59,11 @@
             <div id="PrintHeight">
                 <div>
                     <h2 style="text-align:center">KOT</h2>
-                    <h3 style="text-align:center">SEATING:&nbsp;@HG_Tables_or_Sheat.Seating(objorder.Table_or_SheatId)  &thinsp;&nbsp; No:@TicketNo</h3>
+                    <h3 style="text-align:center">SEATING:&nbsp;@HG_Tables_or_Sheat.Seating(objorder.Table_or_SheatId)  &thinsp;&nbsp; Ticket No:@TicketNo</h3>
                     <h5 style="text-align:center">ORDER NO:&nbsp;@OID</h5>
-                    <h5 style="text-align:center">DATE:&nbsp;@objorder.Create_Date.ToString("dd/MM/yyyy HH:mm tt")</h5>
+                    <h5 style="text-align:center">DATE:&nbsp;@objorder.Create_Date.ToString("dd/MM/yyyy hh:mm tt")</h5>
                     <h5 style="text-align:center">@OrgType.PaymentMode(objorder.PaymentStatus)</h5>
-                    <h5 style="text-align:center">PLACED BY:&nbsp;CUSTOMER(8956325698)</h5>
+                    <h5 style="text-align:center">PLACED BY:&nbsp;@UserType.UserTypeName ( @ObjUser.UserId )</h5>
                 </div>
                 <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
                     <thead>
