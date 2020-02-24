@@ -306,6 +306,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Account\BalanceStatementController.cs" />
     <Compile Include="Controllers\Account\GroupController.cs" />
     <Compile Include="Controllers\Account\LedgerController.cs" />
     <Compile Include="Controllers\CityController.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\BalanceStatement.cs" />
     <Compile Include="Models\Account\Group.cs" />
     <Compile Include="Models\Account\JournalEntry.cs" />
     <Compile Include="Models\Account\Ledger.cs" />
@@ -517,6 +519,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
+    <Folder Include="Views\BalanceStatement\" />
     <Folder Include="Views\CommonApi\" />
   </ItemGroup>
   <ItemGroup>

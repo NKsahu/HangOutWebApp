@@ -29,7 +29,7 @@ namespace HangOut.Controllers
         {
             JournalEntry jObj = new JournalEntry();
             List<JournalEntry> jObjList = new List<JournalEntry>();
-
+            List<HG_Orders> OrdersDetails = new List<HG_Orders>();
             List<HG_OrganizationDetails> OrgList = new List<HG_OrganizationDetails>();
             double totalAmount = 0.00;
             for (int i = 0; i < CompletedItems.Count; i++)
@@ -68,12 +68,23 @@ namespace HangOut.Controllers
                     jObj.CRLedgerId = LedgerDetails.ID;
                     jObj.JEDAmount = CompletedItems[i].CostPrice;
                 }
+
                 jObjList.Add(jObj);
             }
             jObj.Date = DateTime.Now;
             jObj.Amount = totalAmount;
             jObj.GroupId = 5;
-            jObj.Narration = "";
+            HG_Orders ord = new HG_Orders().GetOne(CompletedItems[0].OID);
+
+            if (ord.Status=="1")
+            {
+                jObj.Narration = "Payment of Order No." + CompletedItems[0].OID;
+            }
+            else 
+            {
+                jObj.Narration = "Online Payment of Order No." + CompletedItems[0].OID;
+            }
+         
             
             jObj.Save(jObjList);
 
