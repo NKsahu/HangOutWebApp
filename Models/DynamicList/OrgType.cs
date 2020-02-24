@@ -9,6 +9,7 @@ namespace HangOut.Models.DynamicList
     {
         public string id { get; set; }
         public string Name { get; set; }
+        public static int[] mystates { get; set; }
         public static List<OrgType> List { get; set; }
         public List<OrgType> ListOrgTypeList()
         {
@@ -109,5 +110,11 @@ namespace HangOut.Models.DynamicList
                 return "NON-VEG";
             }
         }
+
+        //public static int[] states ()
+        //{
+        //    mystates[0] = 17;
+        //    return mystates;
+        //}
     }
 }
