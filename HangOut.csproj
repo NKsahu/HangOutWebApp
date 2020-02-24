@@ -504,6 +504,7 @@
     <Content Include="Views\HG_Orders\TestPrinting.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\Ledger\TheaterLedgerIndex.cshtml" />
+    <Content Include="Views\INTGSTBL\AddSubItem.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
