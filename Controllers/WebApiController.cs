@@ -985,6 +985,7 @@ namespace HangOut.Controllers
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(obj.OrgId);
             bool Status = false;
             int ChangeOtpTbl = 0;
+            Int64 OrdId = 0;
             foreach(var order in OrderList)
             {
                 if (ObjOrg.PaymentType == 1)// prepaid case only accept payment 
@@ -1069,13 +1070,14 @@ namespace HangOut.Controllers
                         Status = false;
                     }
                 }
-
+                OrdId = order.OID;
             }
             if (Status)
             {
               
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
+                jObject.Add("OID", OrdId);
                 jObject.Add("ChangeOtp", ChangeOtpTbl);
             }
             else
