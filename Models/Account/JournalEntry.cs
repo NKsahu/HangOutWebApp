@@ -18,6 +18,11 @@ namespace HangOut.Models.Account
         public string Narration { get; set; }
         public double Amount { get; set; }
         public int GroupId { get; set; }
+        public int JournalEntryId { get; set; }
+        public int DRLedgerId { get; set; }
+        public int CRLedgerId { get; set; }
+        public int JEDAmount { get; set; }
+        
 
 
         public int Save()
@@ -34,7 +39,7 @@ namespace HangOut.Models.Account
                 }
                 else
                 {
-                    Quary = "Update ACGroup Set Date=@Date,Amount=@Amount,Narration=@Narration,@GroupId=GroupId where ID=@ID";
+                    Quary = "Update ACJournalEntry Set Date=@Date,Amount=@Amount,Narration=@Narration,@GroupId=GroupId where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID", this.ID);
@@ -52,6 +57,10 @@ namespace HangOut.Models.Account
                     Row = cmd.ExecuteNonQuery();
                     //this.CategoryID = Row;
                 }
+                JournalEntry jdObj = new JournalEntry();
+
+                jdObj.JournalEntryId = Row;
+                
 
             }
             catch (Exception e) { e.ToString(); }
