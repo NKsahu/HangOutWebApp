@@ -1291,10 +1291,10 @@
                             ResetOrder(CurrentOrder, 1);
                         }
                         if (PrintInvoice == 1) {
-                            AskNofCopyPrint(1, , JsonMsg[1]);
+                            AskNofCopyPrint(1, Jobj.OID, 0);
                         }
                         else {
-                            OpenPrinter(1, 0, NoOfCopy, 0);
+                            OpenPrinter(1, Jobj.OID, NoOfCopy, 0);
                                
                         }
                         //GenInvoice(OldOtp,0);
@@ -1489,6 +1489,10 @@
      function AskNofCopyPrint(Type, OID, Ticket) {
          console.log(" AskNofCopyPrint Type=" + Type);
          var Msg = "";
+         var ContentMsg = 'Order No: ' + OID;
+         if (Ticket > 0) {
+             ContentMsg+=' & Ticket No ' + Ticket;
+         }
          if (Type == 1) {
              Msg = "Print Invoice";
          }
@@ -1497,7 +1501,7 @@
          }
          $.confirm({
              title: Msg,
-             content: 'Order No: ' + OID + ' & Ticket No ' + Ticket,
+             content: ContentMsg,
              closeIcon: true,
              buttons: {
                 Zero: {
