@@ -8,7 +8,8 @@ using HangOut.Models.DynamicList;
 using System;
 using System.Net;
 using paytm;
-using HangOut.Models.Account;
+using HangOut.Controllers.Account;
+
 namespace HangOut.Controllers
 {
     public class WebApiController : Controller
@@ -983,6 +984,7 @@ namespace HangOut.Controllers
             JObject jObject = new JObject();
             //JournalEntry jObj = new JournalEntry();
             JournalEntryController journalControllerObj = new JournalEntryController();
+            BalanceStatementController balanceStatement = new BalanceStatementController();
             List<HG_Orders> OrderList = new List<HG_Orders>();
             HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat();
             List<HG_OrderItem> OrdrItmsList = new List<HG_OrderItem>();
@@ -1028,7 +1030,7 @@ namespace HangOut.Controllers
                         //=======Journal Entry======
                         try
                         {
-                            journalControllerObj.GetDetails(CompletedItems);
+                            balanceStatement.GetDetails(CompletedItems);
                         }
                         catch(Exception ex)
                         {
