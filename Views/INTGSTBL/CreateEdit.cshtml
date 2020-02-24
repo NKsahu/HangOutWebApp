@@ -137,7 +137,7 @@
    // $("#ISSaleable").parent('div').parent('div').hide();
     $("#PurchasedPrize").parent('div').hide();
     $("#PurchasedTax").parent('div').hide();
-   // $(".MainDivs").hide();
+   // $(".aa").hide();
     $("#SaleTax").parent('div').hide();
     $("#SalePrize").parent('div').hide();
     $("#ServiceTax").parent('div').hide();
@@ -233,19 +233,37 @@
     function Processedchange() {
         console.log("ggg");
         if ($("#ISProcessed").is(':checked')) {
-            $(".MainDivs").show();
+            $(".aa").show();
         }
         else {
-            $(".MainDivs").hide();
+            $(".aa").hide();
         }
     }
     function DuplicateDiv() {
  
        // var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
-        var clonediv = $("#Creacopydiv").clone();
-        clonediv.find('.SUBITEMID').val('0');
-        clonediv.show();
-        clonediv.insertBefore("#HeadDiv");
+        //var clonediv = $("#Creacopydiv").clone();
+        //clonediv.find('.SUBITEMID').val('0');
+        //clonediv.show();
+        //clonediv.insertBefore("#HeadDiv");
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/INTGSTBL/AddSubItem",
+            success: function (data) {
+               // $("#HeadDiv").after(data);
+                $('#waiting').hide();
+                var strhtml = '<div class="col-md-3" id="btn">';
+                strhtml+=   '<span class="float-right">';
+                strhtml += '<a class="btn btn-success btn-sm" onclick="DuplicateDiv();" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>';
+                strhtml += '</span>';
+                strhtml += '</div>';
+                $("#HeadDiv").append(strhtml + data );
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
 
     }
     
