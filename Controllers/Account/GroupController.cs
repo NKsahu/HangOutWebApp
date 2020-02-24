@@ -26,7 +26,7 @@ namespace HangOut.Controllers.Account
 
             return View(Obj);
         }
-        // category create edit
+        // Group create edit
         [HttpPost]
         public ActionResult CreateEdit(Group Obj)
          {
