@@ -118,9 +118,9 @@
                                 List<SelectListItem> PrinttingType = new List<SelectListItem>()
                                                                                    {
                                                                  new SelectListItem{Text="NO",Value="0"},
-                                                                 new SelectListItem{Text="Ask",Value="1"},
                                                                  new SelectListItem{Text="Auto",Value="2"}
                                                                                    };
+                                //new SelectListItem{Text="Ask",Value="1"},
                             }
                             @Html.DropDownListFor(model => model.InvoicePrintting, PrinttingType, new { @class = "form-control ", required = "required",   })
 
@@ -154,9 +154,9 @@
                             @{
                                 List<SelectListItem> printType = new List<SelectListItem>()
                                                    {
-                                 new SelectListItem{Text="ASK",Value="1"},
                                  new SelectListItem{Text="Auto",Value="2"}
                                                    };
+                                //new SelectListItem{Text="ASK",Value="1"},
                             }
                             @Html.DropDownListFor(model => model.PrinttingType, printType, new { @class = "form-control ", required = "required" })
 
@@ -205,20 +205,20 @@
         if (Invoice == "2") {
             $("#PrinttingType").parent('div').show();
             $("#Copy").parent('div').hide();
-             
 
         } else {
             $("#PrinttingType").parent('div').hide();
             $("#Copy").parent('div').hide();
 
         }
+        TypeChange();
     };
     $("#PrinttingType").change(function () {
         TypeChange();
     });
     function TypeChange() {
         var Invoice = $("#PrinttingType").val();
-        if (Invoice == "2") {
+        if (Invoice == "2" && $("#OrderDisplay").val()=="2") {
             $("#Copy").parent('div').show();
         } else {
             $("#Copy").parent('div').hide();

@@ -5,33 +5,34 @@
 }
 @using (Html.BeginCollectionItem("iNTItems"))
 {
-<div class="row" id="Creacopydiv">
-    @Html.HiddenFor(model => model.SubItemID, new { @class = "SUBITEMID" })
-    <div class="col-md-3">
-        @Html.Label("Item")
-        @Html.DropDownListFor(model => model.ItemID, new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control", required = "required" })
-        @* @Html.EditorFor(model => model.ItemID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
+    <div class="row" id="Creacopydiv">
+        @Html.HiddenFor(model => model.SubItemID, new { @class = "SUBITEMID" })
+        <div class="col-md-3">
+            @Html.Label("Item")
+            @Html.DropDownListFor(model => model.ItemID, new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control"  })
+            @* @Html.EditorFor(model => model.ItemID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
+
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Quantity")
+            @* @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })*@
+            @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control  " } })
+
+        </div>
+        <div class="col-md-3">
+            @{ List<INTUnits> listuni = INTUnits.GetAll();
+                listuni = listuni.FindAll(x => x.ParentId != 0);
+            }
+            @Html.Label("Unit")
+            @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control"  })
+            @*@Html.EditorFor(model => model.IUnitID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
+        </div>
+        <div class="col-md-3" id="btn">
+            <span class="float-right">
+                <a class="btn btn-success btn-sm" onclick="DuplicateDiv(this);" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
+            </span>
+        </div>
 
     </div>
-    <div class="col-md-3">
-        @Html.Label("Quantity")
-        @* @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })*@
-        @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })
 
-    </div>
-    <div class="col-md-3">
-        @{ List<INTUnits> listuni = INTUnits.GetAll();
-            listuni = listuni.FindAll(x => x.ParentId != 0);
-        }
-        @Html.Label("Unit")
-        @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
-        @*@Html.EditorFor(model => model.IUnitID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
-    </div>
-    <div class="col-md-3" id="btn">
-        <span class="float-right">
-            <a class="btn btn-success btn-sm" onclick="DuplicateDiv();" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
-        </span>
-    </div>
-     
-</div>
-                }
+}

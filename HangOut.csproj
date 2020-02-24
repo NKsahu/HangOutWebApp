@@ -390,6 +390,7 @@
     <Compile Include="Models\OrdMenuCtgItems.cs" />
     <Compile Include="Models\OrgSetting.cs" />
     <Compile Include="Models\PaytmResn.cs" />
+    <Compile Include="Models\PendingPrints.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
     <Compile Include="PosHandler.ashx.cs">
       <DependentUpon>PosHandler.ashx</DependentUpon>
