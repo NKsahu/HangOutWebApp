@@ -1012,13 +1012,24 @@
                                 break;
                             }
                         }
-                        if (PrintInvoice == 1) {
-                            AskNofCopyPrint(JsonMsg[0], JsonMsg[1]);
+                        if (PrintInvoice == 1 && Obj.PaymtType != 0) {
+                            AskNofCopyPrint(1,JsonMsg[0], JsonMsg[1]);
                         }
                         else {
-                            DisplyOrderConfirmMsg(JsonMsg[0], JsonMsg[1]);
+                            if (Obj.PaymtType != 0) {
+                                DisplyOrderConfirmMsg(1, JsonMsg[0], JsonMsg[1]);
+                            }
+                            else {
+                                ConfirmOrder(JsonMsg[0], JsonMsg[1]);
+                            }
                         }
-                        
+                        // kot mode on and auto print
+                        if (OrderDisplay == 2 && KotPrintType == 2 && Obj.Status!=3) {
+                            DisplyOrderConfirmMsg(2, JsonMsg[0], JsonMsg[1]);
+                        }
+                        else if (OrderDisplay == 2 && KotPrintType == 1 && Obj.Status != 3) {
+                            AskNofCopyPrint(2, JsonMsg[0], JsonMsg[1]);
+                        }
                     }
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -1279,8 +1290,14 @@
                         if (Jobj.ChangeOtp > 0) {
                             ResetOrder(CurrentOrder, 1);
                         }
-                        
-                        GenInvoice(OldOtp,0);
+                        if (PrintInvoice == 1) {
+                            AskNofCopyPrint(1, , JsonMsg[1]);
+                        }
+                        else {
+                            OpenPrinter(1, 0, NoOfCopy, 0);
+                               
+                        }
+                        //GenInvoice(OldOtp,0);
                         $("#defaultOpen").click();
                     }
 
@@ -1424,17 +1441,44 @@
              }
          });
      }
-     function DisplyOrderConfirmMsg(OID,TicketNo) {
+     function ConfirmOrder(OID, TicketNo) {
          $.confirm({
-             title: 'Print Invoice',
+             title: "Alert",
              content: 'Order No: ' + OID + ' & Ticket No ' + TicketNo,
              buttons: {
                  Ok: {
                      text: 'OK',
                      btnClass: 'btn-info',
                      action: function () {
-                         if (PrintInvoice == 2) {
-                             OpenPrinter(1,OID, NoOfCopy,TicketNo);
+
+                     }
+                 },
+
+             }
+         });
+     }
+     function DisplyOrderConfirmMsg(Type, OID, TicketNo) {
+         console.log(" DisplyOrderConfirmMsg Type=" + Type)
+         var Msg = "";
+         if (Type == 2) {
+             Msg = "Print Kot";
+         }
+         else if (Type == 1) {
+             Msg = "Print Invoice";
+         }
+         $.confirm({
+             title: Msg,
+             content: 'Order No: ' + OID + ' & Ticket No ' + TicketNo,
+             buttons: {
+                 Ok: {
+                     text: 'OK',
+                     btnClass: 'btn-info',
+                     action: function () {
+                         if (PrintInvoice == 2 && Type == 1) {
+                             OpenPrinter(Type, OID, NoOfCopy, TicketNo);
+                         }
+                         else if (Type == 2 && OrderDisplay == 2) {
+                             OpenPrinter(Type, OID, KotNoOfCopy, TicketNo);
                          }
                      }
                  },
@@ -1442,9 +1486,17 @@
              }
          });
      }
-     function AskNofCopyPrint(OID, Ticket) {
+     function AskNofCopyPrint(Type, OID, Ticket) {
+         console.log(" AskNofCopyPrint Type=" + Type);
+         var Msg = "";
+         if (Type == 1) {
+             Msg = "Print Invoice";
+         }
+         else if (Type == 2) {
+             Msg = "Print Kot";
+         }
          $.confirm({
-             title: 'Print Invoice',
+             title: Msg,
              content: 'Order No: ' + OID + ' & Ticket No ' + Ticket,
              closeIcon: true,
              buttons: {
@@ -1461,7 +1513,7 @@
                      btnClass: 'btn-info btn-lg PrintBtnWidth',
                      columnClass: 'col-md-3',
                      action: function () {
-                         OpenPrinter(1,OID, 1,TicketNo);
+                         OpenPrinter(Type, OID, 1, Ticket);
                      }
                  },
                  Two: {
@@ -1469,7 +1521,7 @@
                      btnClass: 'btn-info btn-lg PrintBtnWidth',
                      columnClass: 'col-md-3',
                      action: function () {
-                         OpenPrinter(1,OID, 2,TicketNo);
+                         OpenPrinter(Type, OID, 2, Ticket);
                      }
                  },
                  Three: {
@@ -1477,7 +1529,7 @@
                      btnClass: 'btn-info btn-lg PrintBtnWidth',
                      columnClass: 'col-md-3',
                      action: function () {
-                         OpenPrinter(1,OID, 3,TicketNo);
+                         OpenPrinter(Type, OID, 3, Ticket);
                      }
                  },
              },
