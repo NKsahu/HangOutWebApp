@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using HangOut.Models.Inventory;
-using Newtonsoft.Json.Linq;
-
 namespace HangOut.Controllers.Inventory
 {
     public class INTGSTBLController : Controller
@@ -23,13 +18,7 @@ namespace HangOut.Controllers.Inventory
             if (ID > 0)
             {
                 Obj = Obj.GetOne(ID);
-                int jjj = int.Parse(Request.QueryString["ID"]);
-                List<INTGSTBL> listgsdt = INTGSTBL.GetAll();
-                listgsdt = listgsdt.FindAll(x => x.GSID == jjj);
-                foreach (var subitems in listgsdt)
-                {
-                    Obj.iNTItems = INTItems.GetAll(ID);
-                }
+               Obj.iNTItems = INTItems.GetAll(ID);
             }
             else
             {
@@ -50,14 +39,15 @@ namespace HangOut.Controllers.Inventory
                 }
 
             }
-            int i = Obj.Save();
-            foreach(var Subitem in Obj.iNTItems)
-            {
-                Subitem.IParentId = Obj.GSID;
-                Subitem.Save();
-            }
-            if (i > 0)
-                return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
+           
+                int i = Obj.Save();
+                foreach (var Subitem in Obj.iNTItems)
+                {
+                    Subitem.IParentId = Obj.GSID;
+                    Subitem.Save();
+                }
+                if (i > 0)
+                    return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
 

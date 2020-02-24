@@ -708,10 +708,11 @@ namespace HangOut.Controllers
                     DeliveryChargeAmt= orgSetting.DeliveryCharge;
                 }
             }
-            if (AppType == 3 && ObjOrg.OrderDisplay == 2)// check KOT mode enable
+            if (ObjOrg.OrderDisplay == 2 &&AppType==3)// check KOT mode enable
             {
                 Status = 3;// mark complete all items
             }
+            
             if (PymentPageOpen.ListPytmPgOpen.Find(x => x.OID==OID) != null)
             {
                 PostResult.Add("Status", 400);
@@ -834,6 +835,21 @@ namespace HangOut.Controllers
                     SendMsgChef(OrgId, NewOID,Ticketno);
                     PushNotification.NewOrderMsg(topics, NewOID, Ticketno);
                 }
+
+                //=========auto printing to table========
+                //if (ObjOrg.OrderDisplay == 2 &&AppType!=3)
+                //{
+                //    PendingPrints pendingPrints = new PendingPrints
+                //    {
+                //        OID = OID,
+                //        TicketNo = Ticketno,
+                //        InvoiceNoCopy = 0,
+                //        KotNoOfCopy = ObjOrg.Copy,
+                //        OrgId = ObjOrders.OrgId
+                //    };
+                //    pendingPrints.Save();
+                //}
+                
             }
             else
             {

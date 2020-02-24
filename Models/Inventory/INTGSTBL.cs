@@ -22,8 +22,8 @@ namespace HangOut.Models.Inventory
         public bool ISdirectlyPurchased { get; set; }
         public bool ISProcessed { get; set; }
         public double ServicePrize { get; set; }
-        public double ServiceTax{ get; set; }
-        public List<INTItems>iNTItems { get; set; }
+        public double ServiceTax { get; set; }
+        public List<INTItems> iNTItems { get; set; }
         public INTGSTBL()
         {
             //Qty = 0;
@@ -36,7 +36,7 @@ namespace HangOut.Models.Inventory
             //ISProcessed = false;
             iNTItems = new List<INTItems>();
         }
-       
+
         public int Save()
         {
             int Row = 0;
@@ -147,7 +147,7 @@ namespace HangOut.Models.Inventory
                     ObjTmp.UnitID = SDR.GetInt32(4);
                     ObjTmp.Qty = SDR.GetDouble(5);
                     ObjTmp.PurchasedPrize = SDR.GetDouble(6);
-                    ObjTmp.PurchasedTax= SDR.GetDouble(7);
+                    ObjTmp.PurchasedTax = SDR.GetDouble(7);
                     ObjTmp.SalePrize = SDR.GetDouble(8);
                     ObjTmp.SaleTax = SDR.GetDouble(9);
                     ObjTmp.ISSaleable = SDR.GetBoolean(10);
@@ -195,9 +195,9 @@ namespace HangOut.Models.Inventory
         public static List<InventoryType> ListOrgTypeidList()
         {
             List<InventoryType> list = new List<InventoryType>();
-            list.Add(new InventoryType { Typeid = 0 , Name = "Select Type" });
-            list.Add(new InventoryType { Typeid = 1 , Name = "Goods" });
-            list.Add(new InventoryType { Typeid = 2 , Name = "Service" });
+            list.Add(new InventoryType { Typeid = 0, Name = "Select Type" });
+            list.Add(new InventoryType { Typeid = 1, Name = "Goods" });
+            list.Add(new InventoryType { Typeid = 2, Name = "Service" });
             return list;
         }
     }

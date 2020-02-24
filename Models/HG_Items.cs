@@ -199,7 +199,7 @@ namespace HangOut.Models
                     ObjTmp.ItemAvaibility = SDR.GetInt32(19);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             { e.ToString(); }
 
             finally { Con.Close(); }
