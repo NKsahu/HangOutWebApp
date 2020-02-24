@@ -220,8 +220,14 @@ namespace HangOut.Controllers
         {
             var UserInfo = Request.Cookies["UserInfo"];
             int Orgid = int.Parse(UserInfo["OrgId"]);
-            OrgSetting orgSetting = OrgSetting.Getone(Orgid);
-            return JObject.FromObject(orgSetting);
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(Orgid);
+            JObject result = new JObject();
+            result.Add("InvoicePrint", ObjOrg.InvoicePrintting);
+            result.Add("InvoiceNoOfCopy", ObjOrg.NuOfCopy);
+            result.Add("OrdDisaply", ObjOrg.OrderDisplay);
+            result.Add("KotPrint", ObjOrg.PrinttingType);
+            result.Add("NoOfCopy", ObjOrg.Copy);
+            return result;
         }
     }
 }

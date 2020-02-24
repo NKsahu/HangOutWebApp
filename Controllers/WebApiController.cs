@@ -8,6 +8,7 @@ using HangOut.Models.DynamicList;
 using System;
 using System.Net;
 using paytm;
+using HangOut.Models.Account;
 namespace HangOut.Controllers
 {
     public class WebApiController : Controller
@@ -672,8 +673,7 @@ namespace HangOut.Controllers
                 OID = ObjOrders.OID;
             }
             //check customer ordering enable
-            HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
-            if (OrgObj.CustomerOrdering==false&& CustomerOrdering==0)
+            if (ObjOrg.CustomerOrdering==false&& CustomerOrdering==0)
             {
                 PostResult.Add("Status", 400);
                 PostResult.Add("MSG", "Customer Ordering is UnActive");
@@ -708,13 +708,18 @@ namespace HangOut.Controllers
                     DeliveryChargeAmt= orgSetting.DeliveryCharge;
                 }
             }
-            
+            if (AppType == 3 && ObjOrg.OrderDisplay == 2)// check KOT mode enable
+            {
+                Status = 3;// mark complete all items
+            }
             if (PymentPageOpen.ListPytmPgOpen.Find(x => x.OID==OID) != null)
             {
                 PostResult.Add("Status", 400);
                 PostResult.Add("MSG", "Can't Change Order After Redirect To Payment Page");
                 return PostResult;
             }
+
+
             //=========Order Logic Here===================
             string OrderSts = "1"; //placed by defualt
             if (Status == 3 && PaymtSts > 0)
@@ -960,6 +965,7 @@ namespace HangOut.Controllers
         public JObject CompleteOrder(int PaymentType,int UpdatedBy, Int64 OID = 0, int TorSid = 0)
         {
             JObject jObject = new JObject();
+           // JournalEntry jObj = new JournalEntry();
             List<HG_Orders> OrderList = new List<HG_Orders>();
             HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat();
             List<HG_OrderItem> OrdrItmsList = new List<HG_OrderItem>();
@@ -979,6 +985,7 @@ namespace HangOut.Controllers
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(obj.OrgId);
             bool Status = false;
             int ChangeOtpTbl = 0;
+            Int64 OrdId = 0;
             foreach(var order in OrderList)
             {
                 if (ObjOrg.PaymentType == 1)// prepaid case only accept payment 
@@ -991,7 +998,9 @@ namespace HangOut.Controllers
                     order.Save();
                     Status = true;
                     OrdrItmsList=new HG_OrderItem().GetAll(order.OID);
-                    var CompltedOrCacelOdrItms = OrdrItmsList.FindAll(x => x.Status == 3 || x.Status == 4);
+                    List<HG_OrderItem> CompletedItems = OrdrItmsList.FindAll(x => x.Status == 3);
+
+                     var CompltedOrCacelOdrItms = OrdrItmsList.FindAll(x => x.Status == 3 || x.Status == 4);
                     if (CompltedOrCacelOdrItms.Count == OrdrItmsList.Count)
                     {
                         obj.Status = 1;// free table
@@ -999,6 +1008,19 @@ namespace HangOut.Controllers
                         obj.save();
                         order.Status = "3";//completed
                         order.Save();
+                        //=======Journal Entry======
+
+                        //double totalAmount = 0.00;
+                        //for(int i = 0; i < CompletedItems.Count; i++)
+                        //{
+                        //    totalAmount += CompletedItems[i].Count * CompletedItems[i].Price;
+
+                        //}
+                        //jObj.Date = DateTime.Now;
+                        //jObj.Amount = totalAmount;
+                        //jObj.GroupId = 5;
+                        //jObj.Save();
+                        ///==============
                         ChangeOtpTbl = 1;
                         if (obj.Type != "3")
                         {
@@ -1033,6 +1055,7 @@ namespace HangOut.Controllers
                             obj.save();
                             ChangeOtpTbl = 1;
                             order.Status = "3";//3 order completed
+
                             order.Save();
                             if (obj.Type != "3")
                             {
@@ -1047,13 +1070,14 @@ namespace HangOut.Controllers
                         Status = false;
                     }
                 }
-
+                OrdId = order.OID;
             }
             if (Status)
             {
               
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
+                jObject.Add("OID", OrdId);
                 jObject.Add("ChangeOtp", ChangeOtpTbl);
             }
             else
