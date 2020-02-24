@@ -672,8 +672,7 @@ namespace HangOut.Controllers
                 OID = ObjOrders.OID;
             }
             //check customer ordering enable
-            HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
-            if (OrgObj.CustomerOrdering==false&& CustomerOrdering==0)
+            if (ObjOrg.CustomerOrdering==false&& CustomerOrdering==0)
             {
                 PostResult.Add("Status", 400);
                 PostResult.Add("MSG", "Customer Ordering is UnActive");
@@ -708,13 +707,18 @@ namespace HangOut.Controllers
                     DeliveryChargeAmt= orgSetting.DeliveryCharge;
                 }
             }
-            
+            if (AppType == 3 && ObjOrg.OrderDisplay == 2)// check KOT mode enable
+            {
+                Status = 3;// mark complete all items
+            }
             if (PymentPageOpen.ListPytmPgOpen.Find(x => x.OID==OID) != null)
             {
                 PostResult.Add("Status", 400);
                 PostResult.Add("MSG", "Can't Change Order After Redirect To Payment Page");
                 return PostResult;
             }
+
+
             //=========Order Logic Here===================
             string OrderSts = "1"; //placed by defualt
             if (Status == 3 && PaymtSts > 0)

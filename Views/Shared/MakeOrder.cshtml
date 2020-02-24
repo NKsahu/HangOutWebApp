@@ -534,6 +534,9 @@
      //===printer setting
      var PrintInvoice = 0;//false
      var NoOfCopy = 0;
+     var OrderDisplay = 1;//default Mobile
+     var KotPrintType = 0;
+     var KotNoOfCopy = 0;
      //=======
         var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
         var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
@@ -1423,7 +1426,7 @@
      }
      function DisplyOrderConfirmMsg(OID,TicketNo) {
          $.confirm({
-             title: 'Alert !',
+             title: 'Print Invoice',
              content: 'Order No: ' + OID + ' & Ticket No ' + TicketNo,
              buttons: {
                  Ok: {
@@ -1431,7 +1434,7 @@
                      btnClass: 'btn-info',
                      action: function () {
                          if (PrintInvoice == 2) {
-                             OpenPrinter(OID, NoOfCopy);
+                             OpenPrinter(1,OID, NoOfCopy,TicketNo);
                          }
                      }
                  },
@@ -1458,7 +1461,7 @@
                      btnClass: 'btn-info btn-lg PrintBtnWidth',
                      columnClass: 'col-md-3',
                      action: function () {
-                         OpenPrinter(OID, 1);
+                         OpenPrinter(1,OID, 1,TicketNo);
                      }
                  },
                  Two: {
@@ -1466,7 +1469,7 @@
                      btnClass: 'btn-info btn-lg PrintBtnWidth',
                      columnClass: 'col-md-3',
                      action: function () {
-                         OpenPrinter(OID, 2);
+                         OpenPrinter(1,OID, 2,TicketNo);
                      }
                  },
                  Three: {
@@ -1474,7 +1477,7 @@
                      btnClass: 'btn-info btn-lg PrintBtnWidth',
                      columnClass: 'col-md-3',
                      action: function () {
-                         OpenPrinter(OID, 3);
+                         OpenPrinter(1,OID, 3,TicketNo);
                      }
                  },
              },
@@ -1486,8 +1489,9 @@
              }
          });
      }
-     function OpenPrinter(OID, NoOfCpy) {
-         window.location.href = "foodDo:1&"+OID+"&"+NoOfCpy;
+     function OpenPrinter(Type,OID, NoOfCpy,TicketNo) {
+         window.location.href = "foodDo:" + Type + "&" + OID + "&" + NoOfCpy + "&" + TicketNo;
+         return;
      }
      GetPrinterSetting();
      function GetPrinterSetting() {
@@ -1496,9 +1500,11 @@
              url: "/CommonApi/OrgSettng",
              success: function (data) {
                  var Jobj = JSON.parse(data);
-                 PrintInvoice = Jobj.InvoicePrinting;
-                 NoOfCopy = Jobj.NoOfCopy;
-                 console.log("prin=" + PrintInvoice + " copy=" + NoOfCopy);
+                 PrintInvoice = Jobj.InvoicePrint;
+                 NoOfCopy = Jobj.InvoiceNoOfCopy;
+                 OrderDisplay = Jobj.OrdDisaply;
+                 KotPrintType = Jobj.KotPrint;
+                 KotNoOfCopy = Jobj.NoOfCopy;
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback
                  $("#waiting").hide();
