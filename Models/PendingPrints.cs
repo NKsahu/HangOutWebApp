@@ -54,6 +54,43 @@ namespace HangOut.Models
             finally { cmd.Dispose(); dBCon.Con.Close(); }
             return ROW;
         }
+        public static void SaveKotPrint(HG_Orders order, int NoOfCopy,int TicketNo=0)
+        {
+            PendingPrints pendingPrints = new PendingPrints();
+            pendingPrints.OID = order.OID;
+            pendingPrints.OrgId = order.OrgId;
+            pendingPrints.KotNoOfCopy = NoOfCopy;
+            pendingPrints.TicketNo = TicketNo;
+            try
+            {
+                pendingPrints.Save();
+            }
+            catch(Exception e)
+            {
+
+            }
+
+        }
+        //if (ObjOrg.OrderDisplay == 2 && AppType != 3 && ObjOrg.PrinttingType == 2 && (PaymtSts > 0 ||ObjOrg.PaymentType==2))
+               // {
+               //     PendingPrints.SaveKotPrint(ObjOrders, ObjOrg.Copy, Ticketno);
+               // }
+    public static void SaveInvoicePrint(HG_Orders order, int NoOfCopy)
+        {
+            PendingPrints pendingPrints = new PendingPrints();
+            pendingPrints.OID = order.OID;
+            pendingPrints.OrgId = order.OrgId;
+            pendingPrints.KotNoOfCopy = NoOfCopy;
+            pendingPrints.TicketNo = 0;
+            try
+            {
+                pendingPrints.Save();
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
         public static List<PendingPrints>GetAll()
         {
             DBCon dBCon = new DBCon();
