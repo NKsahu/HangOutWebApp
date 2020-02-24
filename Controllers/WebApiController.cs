@@ -8,6 +8,7 @@ using HangOut.Models.DynamicList;
 using System;
 using System.Net;
 using paytm;
+using HangOut.Models.Account;
 namespace HangOut.Controllers
 {
     public class WebApiController : Controller
@@ -964,6 +965,7 @@ namespace HangOut.Controllers
         public JObject CompleteOrder(int PaymentType,int UpdatedBy, Int64 OID = 0, int TorSid = 0)
         {
             JObject jObject = new JObject();
+           // JournalEntry jObj = new JournalEntry();
             List<HG_Orders> OrderList = new List<HG_Orders>();
             HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat();
             List<HG_OrderItem> OrdrItmsList = new List<HG_OrderItem>();
@@ -995,7 +997,9 @@ namespace HangOut.Controllers
                     order.Save();
                     Status = true;
                     OrdrItmsList=new HG_OrderItem().GetAll(order.OID);
-                    var CompltedOrCacelOdrItms = OrdrItmsList.FindAll(x => x.Status == 3 || x.Status == 4);
+                    List<HG_OrderItem> CompletedItems = OrdrItmsList.FindAll(x => x.Status == 3);
+
+                     var CompltedOrCacelOdrItms = OrdrItmsList.FindAll(x => x.Status == 3 || x.Status == 4);
                     if (CompltedOrCacelOdrItms.Count == OrdrItmsList.Count)
                     {
                         obj.Status = 1;// free table
@@ -1003,6 +1007,19 @@ namespace HangOut.Controllers
                         obj.save();
                         order.Status = "3";//completed
                         order.Save();
+                        //=======Journal Entry======
+
+                        //double totalAmount = 0.00;
+                        //for(int i = 0; i < CompletedItems.Count; i++)
+                        //{
+                        //    totalAmount += CompletedItems[i].Count * CompletedItems[i].Price;
+
+                        //}
+                        //jObj.Date = DateTime.Now;
+                        //jObj.Amount = totalAmount;
+                        //jObj.GroupId = 5;
+                        //jObj.Save();
+                        ///==============
                         ChangeOtpTbl = 1;
                         if (obj.Type != "3")
                         {
@@ -1037,6 +1054,7 @@ namespace HangOut.Controllers
                             obj.save();
                             ChangeOtpTbl = 1;
                             order.Status = "3";//3 order completed
+
                             order.Save();
                             if (obj.Type != "3")
                             {
