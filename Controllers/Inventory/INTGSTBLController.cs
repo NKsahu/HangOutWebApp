@@ -61,6 +61,12 @@ namespace HangOut.Controllers.Inventory
                 return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
+
+        public ActionResult AddSubItem()
+        {
+            INTItems iNTItems = new INTItems();
+            return View(iNTItems);
+        }
        
     }
 }
