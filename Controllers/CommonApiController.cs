@@ -163,6 +163,7 @@ namespace HangOut.Controllers
             //public int FeedbkId { get; set; }
             //public string ObjectiveOptions { get; set; }
             //public int CID { get; set; }
+            // 0:Star,1: Objective,2:Subjective,3:Like Dislike Ok,4:star-subjective,5 :remark by user
             //public int OrgId { get; set; }
             JObject result = new JObject();
             FeedbkResponse ObjRes =JsonConvert.DeserializeObject<FeedbkResponse>(JObj);
