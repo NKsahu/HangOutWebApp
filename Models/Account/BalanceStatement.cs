@@ -74,7 +74,7 @@ namespace HangOut.Models.Account
                 Obj.CRAmount = amt + ((amt * 5) / 100);
                 Obj.Date = DateTime.Now;
                // Obj.Amount = Amount;
-                BalanceStatement TotalBalance = BalanceStatement.GetAll();
+                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation();
                 Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
                 Obj.OrgId = OrgId;
                 Obj.OrderId = OrderId;
@@ -103,7 +103,7 @@ namespace HangOut.Models.Account
                 
                 Obj.Date = DateTime.Now;
                 //Obj.Amount = Amount;
-                BalanceStatement TotalBalance = BalanceStatement.GetAll();
+                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation();
                 Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
                 Obj.OrgId = OrgId;
                 Obj.OrderId = OrderId;
@@ -149,7 +149,7 @@ namespace HangOut.Models.Account
             return Row;
 
         }
-        public static BalanceStatement GetAll()
+        public static BalanceStatement GetAllForBalanceCalculation()
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
