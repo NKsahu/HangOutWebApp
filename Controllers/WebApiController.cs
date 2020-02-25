@@ -965,7 +965,7 @@ namespace HangOut.Controllers
         public JObject CompleteOrder(int PaymentType,int UpdatedBy, Int64 OID = 0, int TorSid = 0)
         {
             JObject jObject = new JObject();
-           // JournalEntry jObj = new JournalEntry();
+            //JournalEntry jObj = new JournalEntry();
             List<HG_Orders> OrderList = new List<HG_Orders>();
             HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat();
             List<HG_OrderItem> OrdrItmsList = new List<HG_OrderItem>();
@@ -1011,7 +1011,7 @@ namespace HangOut.Controllers
                         //=======Journal Entry======
 
                         //double totalAmount = 0.00;
-                        //for(int i = 0; i < CompletedItems.Count; i++)
+                        //for (int i = 0; i < CompletedItems.Count; i++)
                         //{
                         //    totalAmount += CompletedItems[i].Count * CompletedItems[i].Price;
 
@@ -1019,6 +1019,7 @@ namespace HangOut.Controllers
                         //jObj.Date = DateTime.Now;
                         //jObj.Amount = totalAmount;
                         //jObj.GroupId = 5;
+                        //jObj.Narration = "";
                         //jObj.Save();
                         ///==============
                         ChangeOtpTbl = 1;
