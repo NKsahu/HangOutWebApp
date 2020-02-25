@@ -506,6 +506,7 @@
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\Ledger\TheaterLedgerIndex.cshtml" />
     <Content Include="Views\INTGSTBL\AddSubItem.cshtml" />
+    <Content Include="Views\BalanceStatement\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -517,7 +518,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
-    <Folder Include="Views\BalanceStatement\" />
     <Folder Include="Views\CommonApi\" />
   </ItemGroup>
   <ItemGroup>
