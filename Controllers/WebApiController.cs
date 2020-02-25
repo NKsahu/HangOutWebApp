@@ -760,7 +760,7 @@ namespace HangOut.Controllers
             }
             else
             {
-                HG_Orders ObjOrder = new HG_Orders()
+                ObjOrders = new HG_Orders()
                 {
                     Create_By = CID,
                     Create_Date = DateTime.Now,
@@ -778,7 +778,7 @@ namespace HangOut.Controllers
                     DeliveryCharge = DeliveryChargeAmt,
                    ContactId = ContactId <= 0 ? 0 : ContactId// -1 contact id for Customer Order foodo app
             };
-                NewOID= ObjOrder.Save();
+                NewOID= ObjOrders.Save();
             }
                 if (NewOID > 0)
                 {
