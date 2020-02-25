@@ -98,5 +98,26 @@
                 }
             });
 
+    }
+    function JsonSuccess(Jobj) {
+
+        var Jitmobj = Jobj.data;
+        console.log(Jitmobj);
+        hidedpt("Ledger");
+        $('#waiting').hide();
+        var HtmlStr = "<tr id='" + Jitmobj.ID + "'>";
+        HtmlStr += '<td>' + Jitmobj.ID + '</td>';
+        HtmlStr += '<td>' + Jitmobj.Name + '</td>';
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ID + ')"> Edit</button>';
+        HtmlStr += '<button class="btn btn-success btn-sm " onclick="BalanceStatement(' + Jitmobj.OrgId
+        HtmlStr += ')"> Balance Statement</button></td ></tr > ';
+        if (AddLedger) {
+            $("#Tbody").append(HtmlStr);
         }
+        else {
+            $('#' + Jitmobj.ID).remove();
+            $("#Tbody").append(HtmlStr);
+        }
+    }
+
 </script>
