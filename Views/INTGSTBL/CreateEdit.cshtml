@@ -251,14 +251,8 @@
             type: 'GET',
             url: "/INTGSTBL/AddSubItem",
             success: function (data) {
-                 $("#HeadDiv").after(data);
                 $('#waiting').hide();
-                //var strhtml = '<div class="col-md-3" id="btn">';
-                //strhtml+=   '<span class="float-right">';
-                //strhtml += '<a class="btn btn-success btn-sm" onclick="DuplicateDiv();" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>';
-                //strhtml += '</span>';
-                //strhtml += '</div>';
-                //$("#HeadDiv").append(strhtml + data );
+                $("#HeadDiv").before(data); 
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $('#waiting').hide();
