@@ -44,15 +44,19 @@
     }
 </div>
  <script>
+     ChangeUnit();
      $("#ItemID").change(function () {
          console.log("sqa");
+         ChangeUnit();
+     });
+         function ChangeUnit(ID) {
          var value = $("#ItemID").val();
          if (value >0) {
              $.ajax({
                  type: "GET",
-                 url: "/INTGSTBL/GETID" ,
+                 url: "/INTGSTBL/GETID?ID="+ID ,
                  success: function (data) {
-                     $("#IUnitID").html(data);
+                     $("#IUnitID").val(data);
                      //alert(data.Name);
                  },
                  error: function (xhr) {
@@ -60,7 +64,7 @@
                  }
              });
          }
-         
-     });
+         }
+     
  </script> 
  
