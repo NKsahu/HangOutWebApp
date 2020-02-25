@@ -73,11 +73,11 @@
                 </div>
                 @{
                     List<SelectListItem> FoodType = new List<SelectListItem>()
-                                                                {
-                                                                    new SelectListItem{Text="VEG",Value="1"},
-                                                                    new SelectListItem{Text="NON-VEG",Value="2"},
+                                                                    {
+                                                                        new SelectListItem{Text="VEG",Value="1"},
+                                                                        new SelectListItem{Text="NON-VEG",Value="2"},
 
-                                                                };
+                                                                    };
                 }
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.ItemMode, htmlAttributes: new { @class = "control-label  " })
@@ -98,127 +98,135 @@
                     @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-md-2">
+                @*<div class="col-md-2">
                     @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
 
                     @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
                     @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control autodouble", required = "required", @readonly = "readonly", } })
-                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-                </div>
+                </div>*@
                 @{
-                    List<SelectListItem> AddOnOption = new List<SelectListItem>()
-                                                                {
-                                                                    new SelectListItem{Text="NO",Value="1"},
-                                                                    new SelectListItem{Text="YES",Value="2"},
+                        <div class="col-md-2">
+                            @Html.Label("Tax %")
+                            @Html.DropDownListFor(model => model.Tax, new SelectList(HG_Items.ItemTaxes(), "ID", "Name", Model.Tax), "Select Tax", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
 
-                                                                };
+                        </div>
                 }
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.ApplyAddOn, htmlAttributes: new { @class = "control-label  " })
-                    <div class="checkbox">
-                        @Html.DropDownListFor(model => model.ApplyAddOn, AddOnOption, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.ApplyAddOn, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.AddOnCatId)
-                    @Html.DropDownListFor(model => model.AddOnCatId, new SelectList(new HG_Category().GetAll(CategoryType: 2), "CategoryID", "Category", Model.CategoryID), "Select Addon ", new { @class = "form-control", val = Model.CategoryID })
-                    @Html.ValidationMessageFor(model => model.AddOnCatId, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-1">
-                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.Status)
-                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", required = "required" })
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label  " })
+
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control autodouble", required = "required", @readonly = "readonly", } })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                        </div>
+                        @{
+                            List<SelectListItem> AddOnOption = new List<SelectListItem>()
+                                                                        {
+                                                                            new SelectListItem{Text="NO",Value="1"},
+                                                                            new SelectListItem{Text="YES",Value="2"},
+
+                                                                        };
+                        }
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.ApplyAddOn, htmlAttributes: new { @class = "control-label  " })
+                            <div class="checkbox">
+                                @Html.DropDownListFor(model => model.ApplyAddOn, AddOnOption, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ApplyAddOn, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.AddOnCatId)
+                            @Html.DropDownListFor(model => model.AddOnCatId, new SelectList(new HG_Category().GetAll(CategoryType: 2), "CategoryID", "Category", Model.CategoryID), "Select Addon ", new { @class = "form-control", val = Model.CategoryID })
+                            @Html.ValidationMessageFor(model => model.AddOnCatId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-1">
+                            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
+                            <div class="col-md-10">
+                                <div class="checkbox">
+                                    @Html.EditorFor(model => model.Status)
+                                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", required = "required" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            @Html.Label("Save", new { @class = "text-white" })
+                            <input type="submit" value="Save" class="btn btn-success" />
+
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-1">
-                    @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="Save" class="btn btn-success" />
-
-                </div>
+                }
             </div>
-        }
-    </div>
-</div>
-<script>
-    $(document).ready(function () {
-        GetDrowpDownCity();
-        $("#OrgID").change(function () {
-            GetDrowpDownCity();
-        });
-        $("#CostPrice,#Tax").change(
-            function(){
-                CalculateTax();
-            });
-        function GetDrowpDownCity() {
-            var OrgID = $("#OrgID").val();
-            console.log("OrgId " + OrgID);
-            var categoryvalue = $("#CategoryID").attr("val");
-            if (OrgID == "" || OrgID == null) {
-                OrgID = "0";
-            }
-            var Obj = "{OID: " + OrgID + "}";
-            $("#waiting").show();
-            $.ajax({
-                url: "/WebApi/GetMenulist?Obj=" + Obj,
-                type: "GET",
-                success: function (data) {
-                    var JsonArray = JSON.parse(data);
-                    $("#CategoryID").html("");
-                    $('<option>', { value: "0", text: "Select" }).html("Select").appendTo("#CategoryID");
-                    if (JsonArray.length > 0) {
-                        $.each(JsonArray, function (i, Obj) {      // bind the dropdown list using json result
-                            $('<option>',
-                                {
-                                    value: Obj.CategoryID,
-                                    text: Obj.Category
-                                }).html(Obj.Category).appendTo("#CategoryID");
-                        });
-                        $("#CategoryID").val(categoryvalue);
+        </div>
+        <script>
+            $(document).ready(function () {
+                GetDrowpDownCity();
+                $("#OrgID").change(function () {
+                    GetDrowpDownCity();
+                });
+                $("#CostPrice,#Tax").change(
+                    function(){
+                        CalculateTax();
+                    });
+                function GetDrowpDownCity() {
+                    var OrgID = $("#OrgID").val();
+                    console.log("OrgId " + OrgID);
+                    var categoryvalue = $("#CategoryID").attr("val");
+                    if (OrgID == "" || OrgID == null) {
+                        OrgID = "0";
                     }
+                    var Obj = "{OID: " + OrgID + "}";
+                    $("#waiting").show();
+                    $.ajax({
+                        url: "/WebApi/GetMenulist?Obj=" + Obj,
+                        type: "GET",
+                        success: function (data) {
+                            var JsonArray = JSON.parse(data);
+                            $("#CategoryID").html("");
+                            $('<option>', { value: "0", text: "Select" }).html("Select").appendTo("#CategoryID");
+                            if (JsonArray.length > 0) {
+                                $.each(JsonArray, function (i, Obj) {      // bind the dropdown list using json result
+                                    $('<option>',
+                                        {
+                                            value: Obj.CategoryID,
+                                            text: Obj.Category
+                                        }).html(Obj.Category).appendTo("#CategoryID");
+                                });
+                                $("#CategoryID").val(categoryvalue);
+                            }
 
 
 
-                    $("#waiting").hide();
-                },
-                error: function (Xr, Status, ErrorMsg) {
-                    $("#CategoryID").html("");
-                    $('<option>', { value: "0", text: "Select" }).html("Select").appendTo("#CategoryID");
-                    $("#waiting").hide();
+                            $("#waiting").hide();
+                        },
+                        error: function (Xr, Status, ErrorMsg) {
+                            $("#CategoryID").html("");
+                            $('<option>', { value: "0", text: "Select" }).html("Select").appendTo("#CategoryID");
+                            $("#waiting").hide();
+                        }
+                    });
+                }
+                function CalculateTax() {
+                    var CostPrice = parseFloat($("#CostPrice").val());
+                    var TaxPercentage = parseFloat($("#Tax").val());
+                    var taxAmt = (CostPrice * TaxPercentage) / 100;
+                    $("#Price").val(CostPrice + taxAmt).change();
+                }
+                $("#ApplyAddOn").change(function () {
+                    ApplyAddon();
+                });
+                ApplyAddon();
+                function ApplyAddon() {
+                    var IsApplied = $("#ApplyAddOn").val();
+                    if (IsApplied != null && IsApplied == "2") {
+                        $("#AddOnCatId").parent('div').show();
+                    }
+                    else {
+                        $("#AddOnCatId").parent('div').hide();
+                    }
                 }
             });
-        }
-        function CalculateTax() {
-            var CostPrice = parseFloat($("#CostPrice").val());
-            var TaxPercentage = parseFloat($("#Tax").val());
-            var taxAmt = (CostPrice * TaxPercentage) / 100;
-            $("#Price").val(CostPrice + taxAmt).change();
-        }
-        $("#ApplyAddOn").change(function () {
-            ApplyAddon();
-        });
-        ApplyAddon();
-        function ApplyAddon() {
-            var IsApplied = $("#ApplyAddOn").val();
-            if (IsApplied != null && IsApplied == "2") {
-                $("#AddOnCatId").parent('div').show();
-            }
-            else {
-                $("#AddOnCatId").parent('div').hide();
-            }
-        }
-    });
 
 
 
 
-</script>
+        </script>
 

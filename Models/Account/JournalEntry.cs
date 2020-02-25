@@ -10,6 +10,7 @@ namespace HangOut.Models.Account
     {
         public int Entrytype { get; set; }
         public int ID { get; set; }
+        public int JDID { get; set; }
         public double Debit { get; set; }
         public double Credit { get; set; }
         public DateTime Date { get; set; }
@@ -21,11 +22,11 @@ namespace HangOut.Models.Account
         public int JournalEntryId { get; set; }
         public int DRLedgerId { get; set; }
         public int CRLedgerId { get; set; }
-        public int JEDAmount { get; set; }
+        public double JEDAmount { get; set; }
         
 
 
-        public int Save()
+        public int Save(List<JournalEntry> jdobj)
         {
             int Row = 0;
             DBCon con = new DBCon();
@@ -57,15 +58,65 @@ namespace HangOut.Models.Account
                     Row = cmd.ExecuteNonQuery();
                     //this.CategoryID = Row;
                 }
+
                 JournalEntry jdObj = new JournalEntry();
-
-                jdObj.JournalEntryId = Row;
-                
-
+                foreach(var item in jdobj)
+                {
+                    jdObj = new JournalEntry();
+                    jdObj.JournalEntryId = Row;
+                    jdObj.CRLedgerId = item.CRLedgerId;
+                    jdObj.GroupId = item.GroupId;
+                    jdObj.JEDAmount = item.JEDAmount;
+                    jdObj.Date = Date;
+                    jdObj.JDSave();
+                }
+               
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
             return Row;
+
+        }
+
+        public int JDSave()
+        {
+            int JRow = 0;
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            try
+            {
+                string Quary = "";
+                if (this.JDID == 0)
+                {
+                    Quary = "Insert Into ACJournalEntryDetails Values (@JornalEntryId,@GroupId,@DRLedgerId,@CRLedgerId,@Amount,@Date);SELECT SCOPE_IDENTITY();";
+                }
+                else
+                {
+                    Quary = "Update ACJournalEntryDetails Set JournalEntryId=@JornalEntryId,GroupId=@GroupId,DRLedgerId=@DRLedgerId,CRLedgerId=@CRLedgerId,Amount=@Amount,Date=@Date where ID=@ID";
+                }
+                cmd = new SqlCommand(Quary, con.Con);
+                cmd.Parameters.AddWithValue("@ID", this.ID);
+                cmd.Parameters.AddWithValue("@JornalEntryId", this.JournalEntryId);
+                cmd.Parameters.AddWithValue("@GroupId", this.GroupId);
+                cmd.Parameters.AddWithValue("@DRLedgerId", this.DRLedgerId);
+                cmd.Parameters.AddWithValue("@CRLedgerId", this.CRLedgerId);
+                cmd.Parameters.AddWithValue("@Amount", this.JEDAmount);
+                cmd.Parameters.AddWithValue("@Date", this.Date);
+                if (this.JDID == 0)
+                {
+                    JRow = Convert.ToInt32(cmd.ExecuteScalar());
+                    this.JDID = JRow;
+                }
+                else
+                {
+                    JRow = cmd.ExecuteNonQuery();
+                    //this.CategoryID = Row;
+                }
+                          
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return JRow;
 
         }
 

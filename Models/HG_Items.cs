@@ -228,5 +228,21 @@ namespace HangOut.Models
             }
             return R;
         }
+        public static List<ItemTax> ItemTaxes()
+        {
+
+            List<ItemTax> taxes = new List<ItemTax>();
+            taxes.Add(new ItemTax { Id = 5, Name = "5%" });
+            taxes.Add(new ItemTax { Id = 12, Name = "12%" });
+            taxes.Add(new ItemTax { Id = 18, Name = "18%" });
+            taxes.Add(new ItemTax { Id = 28, Name = "28%" });
+
+            return taxes;
+        }
     }
+}
+public class ItemTax
+{
+    public double Id { get; set; }
+    public string Name { get; set; }
 }
