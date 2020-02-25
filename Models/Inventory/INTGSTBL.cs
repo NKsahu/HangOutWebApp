@@ -26,8 +26,17 @@ namespace HangOut.Models.Inventory
         public List<INTItems>iNTItems { get; set; }
         public INTGSTBL()
         {
+            //Qty = 0;
+            //PurchasedPrize = 0;
+            //PurchasedTax = 0;
+            //SalePrize = 0;
+            //SaleTax = 0;
+            //ISSaleable = false;
+            //ISdirectlyPurchased = false;
+            //ISProcessed = false;
             iNTItems = new List<INTItems>();
         }
+       
         public int Save()
         {
             int Row = 0;

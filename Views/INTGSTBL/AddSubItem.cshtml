@@ -9,14 +9,14 @@
         @Html.HiddenFor(model => model.SubItemID, new { @class = "SUBITEMID" })
         <div class="col-md-3">
             @Html.Label("Item")
-            @Html.DropDownListFor(model => model.ItemID, new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control", required = "required" })
+            @Html.DropDownListFor(model => model.ItemID, new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control"  })
             @* @Html.EditorFor(model => model.ItemID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
 
         </div>
         <div class="col-md-3">
             @Html.Label("Quantity")
             @* @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })*@
-            @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })
+            @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control  " } })
 
         </div>
         <div class="col-md-3">
@@ -24,7 +24,7 @@
                 listuni = listuni.FindAll(x => x.ParentId != 0);
             }
             @Html.Label("Unit")
-            @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
+            @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control"  })
             @*@Html.EditorFor(model => model.IUnitID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
         </div>
         <div class="col-md-3" id="btn">

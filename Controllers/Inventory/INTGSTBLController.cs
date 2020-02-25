@@ -44,12 +44,11 @@ namespace HangOut.Controllers.Inventory
         {
             if (Obj.Typeid == 1)
             {
-
-
                 if (Obj.Qty == 0)
                 {
                     return Json(new { msg = "Opening Stock Required" });
                 }
+
             }
             int i = Obj.Save();
             foreach(var Subitem in Obj.iNTItems)

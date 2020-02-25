@@ -48,19 +48,19 @@
             </div>
             <div class="col-md-4">
                 @Html.Label("Service Prize")
-                @Html.EditorFor(model => model.ServicePrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.EditorFor(model => model.ServicePrize, new { htmlAttributes = new { @class = "form-control  "  } })
                 @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
 
             </div>
             <div class="col-md-4">
                 @Html.Label("Service Sale")
-                @Html.EditorFor(model => model.ServiceTax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.EditorFor(model => model.ServiceTax, new { htmlAttributes = new { @class = "form-control  "  } })
                 @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
 
             </div>
             <div class="col-md-4">
                 @Html.Label("Opening Stock")
-                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
 
             </div>
@@ -74,13 +74,13 @@
             </div>
             <div class="col-md-4">
                 @Html.Label("Sale Prize")
-                @Html.EditorFor(model => model.SalePrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.EditorFor(model => model.SalePrize, new { htmlAttributes = new { @class = "form-control "  } })
                 @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
 
             </div>
             <div class="col-md-4">
                 @Html.Label("Sale Tax")
-                @Html.EditorFor(model => model.SaleTax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.EditorFor(model => model.SaleTax, new { htmlAttributes = new { @class = "form-control  " } })
                 @Html.ValidationMessageFor(model => model.SaleTax, "", new { @class = "text-danger" })
 
             </div>
@@ -93,13 +93,13 @@
             </div>
             <div class="col-md-4">
                 @Html.Label("Purchased Prize")
-                @Html.EditorFor(model => model.PurchasedPrize, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.EditorFor(model => model.PurchasedPrize, new { htmlAttributes = new { @class = "form-control  "  } })
                 @Html.ValidationMessageFor(model => model.PurchasedPrize, "", new { @class = "text-danger" })
 
             </div>
             <div class="col-md-4">
                 @Html.Label("Purchased Tax")
-                @Html.EditorFor(model => model.PurchasedTax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                @Html.EditorFor(model => model.PurchasedTax, new { htmlAttributes = new { @class = "form-control  "  } })
                 @Html.ValidationMessageFor(model => model.PurchasedTax, "", new { @class = "text-danger" })
 
             </div>
