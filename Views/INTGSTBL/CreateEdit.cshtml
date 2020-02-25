@@ -239,7 +239,7 @@
             $(".aa").hide();
         }
     }
-    function DuplicateDiv() {
+    function DuplicateDiv(event) {
  
        // var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
         //var clonediv = $("#Creacopydiv").clone();
@@ -252,7 +252,9 @@
             url: "/INTGSTBL/AddSubItem",
             success: function (data) {
                 $('#waiting').hide();
-                $("#HeadDiv").before(data); 
+              //  $("#HeadDiv").before(data); //#HeadDiv
+                var parent = $(event).parent('span').parent('div').parent('div');
+                $(data).insertAfter(parent);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $('#waiting').hide();
