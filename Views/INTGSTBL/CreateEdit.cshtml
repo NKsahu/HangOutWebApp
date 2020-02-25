@@ -254,19 +254,19 @@
         });
 
     }
-    change();
+    Unitchange();
     $("#ItemID").change(function () {
-        change();
+        Unitchange();
         console.log("sqa");
     });
-    function change(ID) {
+    function Unitchange(ID) {
         var value = $("#ItemID").val();
-        if (value >0) {
+        if (value>0) {
             $.ajax({
                 type: "GET",
                 url: "/INTGSTBL/GETID?ID=" + ID,
                 success: function (data) {
-                    $("#IUnitID").html(data);
+                    $("#IUnitID").val(data);
                     //alert(data.Name);
                 },
                 error: function (xhr) {
@@ -275,7 +275,7 @@
             });
         }
     }
-
+    
     
 </script>
  

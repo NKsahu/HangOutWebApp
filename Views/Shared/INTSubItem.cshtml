@@ -11,8 +11,11 @@
         <div class="row aa">
             @Html.HiddenFor(model => model.SubItemID, new { @class = "SUBITEMID" })
             <div class="col-md-3">
+                @{ List<INTUnits> listunit = INTUnits.GetAll();
+                   listunit = listunit.FindAll(x => x.ParentId == 0);
+                    }
                 @Html.Label("Item")
-                @Html.DropDownListFor(model => model.ItemID, new SelectList(INTGSTBL.GetAll(), "GSID", "Name"), "Select Item", new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ItemID, new SelectList (listunit, "UnitID", "Name"), "Select Item", new { @class = "form-control" })
                 @* @Html.EditorFor(model => model.ItemID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
 
             </div>
@@ -23,13 +26,13 @@
 
             </div>
             <div class="col-md-3">
-                @{ List<INTUnits> listuni = INTUnits.GetAll();
-                    listuni = listuni.FindAll(x => x.ParentId != 0);
-                }
-                @Html.Label("Unit")
-                @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control" })
-                @*@Html.EditorFor(model => model.IUnitID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
-
+                @{List<INTUnits>listuni = INTUnits.GetAll();
+                    listuni = listuni.FindAll(x => x.ParentId >0);
+                    var UnitID = listuni.FindAll(x => x.ParentId ==Model.IUnitID );
+                    }
+                    @Html.Label("Unit")
+                    @Html.DropDownListFor(model => model.IUnitID, new SelectList(UnitID, "UnitID", "Name"), "Select Unit", new { @class = "form-control" })
+                    @*@Html.EditorFor(model => model.IUnitID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
             </div>
             <div class="col-md-3" id="btn">
                 <span class="float-right">
@@ -41,17 +44,13 @@
     }
 </div>
  <script>
-     change();
      $("#ItemID").change(function () {
-         change();
          console.log("sqa");
-     });
-     function change(ID) {
          var value = $("#ItemID").val();
          if (value >0) {
              $.ajax({
                  type: "GET",
-                 url: "/INTGSTBL/GETID?ID=" + ID,
+                 url: "/INTGSTBL/GETID" ,
                  success: function (data) {
                      $("#IUnitID").html(data);
                      //alert(data.Name);
@@ -61,6 +60,7 @@
                  }
              });
          }
-     }
+         
+     });
  </script> 
  

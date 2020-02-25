@@ -6,6 +6,7 @@ using System.Linq;
 using HangOut.Models.Feedbk;
 using System.Web.Mvc;
 using System;
+using Newtonsoft.Json;
 
 namespace HangOut.Controllers
 {
@@ -116,7 +117,7 @@ namespace HangOut.Controllers
             }
             return respose;
         }
-        public JObject SubmitFeedBk(Int64 OID)
+        public static Feedbk SubmitFeedBk(Int64 OID)
         {
             Feedbk feedBack = Feedbk.GetOne(OID);
         //    public int FeedBkId { get; set; }
@@ -125,12 +126,88 @@ namespace HangOut.Controllers
         //public int FeedbkFormId { get; set; }
             if (feedBack.FeedBkId == 0)
             {
-                feedBack = new Feedbk();
-
+                HG_Orders hG_Orders = new HG_Orders().GetOne(OID);
+                HG_Tables_or_Sheat hG_Tables_Or_Sheat = new HG_Tables_or_Sheat().GetOne(hG_Orders.Table_or_SheatId);
+               
+                    feedBack = new Feedbk();
+                    feedBack.FeedbkFormId = hG_Tables_Or_Sheat.FDBKId;
+                    feedBack.OrgId = hG_Orders.OrgId;
+                    feedBack.OrderId = OID;
+                    feedBack.save();
+                    return feedBack;
+                
             }
-            return new JObject();
+            else
+            {
+                return feedBack;
+            }
+         
         }
-        
+        public JObject PostFdBkResponse(string JObj)
+        {
+            //    public int QID { get; set; }
+            //public int ResponseType { get; set; }
+            //public int FeedbkFormId { get; set; }
+            //public int StarCnt { get; set; }
+            //public string Subject { get; set; }
+            //public int LikeCnt { get; set; }
+            //public int DislikeCnt { get; set; }
+            //public int NormalOkCnt { get; set; }
+            //public int FeedbkId { get; set; }
+            //public string ObjectiveOptions { get; set; }
+            //public int CID { get; set; }
+            //public int OrgId { get; set; }
+            JObject result = new JObject();
+            FeedbkResponse ObjRes =JsonConvert.DeserializeObject<FeedbkResponse>(JObj);
+            Int64 OID = ObjRes.OID;
+            Feedbk feedbk = SubmitFeedBk(OID);
+            if (feedbk.FeedBkId > 0)
+            {
+                ObjRes.FeedbkFormId = feedbk.FeedbkFormId;
+                ObjRes.FeedbkId = feedbk.FeedBkId;
+                ObjRes.OrgId = feedbk.OrgId;
+                ObjRes.save();
+                result.Add("Status", 200);
+                return result;
+            }
+            else
+            {
+                result.Add("Status", 400);
+                return result;
+            }
+    }
+        public JObject PostFdBkItems(string JObj)
+        {
+        //     public Int64 ItemID { get; set; }
+        //public int Rating { get; set; }
+        //public string Comment { get; set; }
+        //public int ResponseType { get; set; }
+        //public int CID { get; set; }
+        //public int LikeCnt { get; set; }
+        //public int DislikeCnt { get; set; }
+        //public int OkCnt { get; set; }
+        //public int FeedbkFormID { get; set; }
+        //public int FeedBkID { get; set; }
+        //public int OrgId { get; set; }
+        JObject result = new JObject();
+        FeedbkItem ObjFDBJItem = JsonConvert.DeserializeObject<FeedbkItem>(JObj);
+            Int64 OID = ObjFDBJItem.OID;
+            Feedbk feedbk = SubmitFeedBk(OID);
+            if (feedbk.FeedBkId > 0)
+            {
+                ObjFDBJItem.FeedbkFormID = feedbk.FeedbkFormId;
+                ObjFDBJItem.FeedBkID = feedbk.FeedBkId;
+                ObjFDBJItem.OrgId = feedbk.OrgId;
+                ObjFDBJItem.save();
+                result.Add("Status", 200);
+                return result;
+            }
+            else
+            {
+                result.Add("Status", 400);
+                return result;
+            }
+        }
         //========local contact list=======
         public JObject SaveLocalContact(string Mobile,string Cname,int ContctID)
         {
