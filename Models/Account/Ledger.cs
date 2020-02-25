@@ -67,7 +67,8 @@ namespace HangOut.Models.Account
                 }
                 else
                 {
-                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks,@LisenceRenewalDate=LisenceRenewalDate,@AccountNumber=AccountNumber,@IFSCCode=IFSCCode,@BankName=BankName,@Branch=Branch,@ManualPaymentDays=ManualPaymentDays,@ManualCollectionDays=ManualCollectionDays,@YearlyRenewalCharges=YearlyRenewalCharges,@Tax=Tax where ID=@ID";
+                    Quary = "Update ACLedger Set Name=@Name,ShortName=@ShortName,MobileNo1=@MobileNo1,MobileNo2=@MobileNo2,DebtorType=@DebtorType,OrgId=@OrgId,State=@State,MarginOnCash=@MarginOnCash,TaxOnAboveMargin=@TaxOnAboveMargin,MarginOnline=@MarginOnline,TaxOnAboveMarginOnline=@TaxOnAboveMarginOnline,PaymentFrequency=@PaymentFrequency,PaymentDay=@PaymentDay,CollectionFrequency=@CollectionFrequency,CollectionDay=@CollectionDay,CalculationStartFrom=@CalculationStartFrom,TDSApplicable=@TDSApplicable,Email=@Email,Remarks=@Remarks,LisenceRenewalDate=@LisenceRenewalDate,ParentGroup=@ParentGroup,AccountNumber=@AccountNumber,IFSCCode=@IFSCCode,BankName=@BankName,Branch=@Branch,ManualPaymentDays=@ManualPaymentDays," +
+                        "ManualCollectionDays=@ManualCollectionDays,YearlyRenewalCharges=@YearlyRenewalCharges,Tax=@Tax where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID", this.ID);
@@ -176,6 +177,60 @@ namespace HangOut.Models.Account
             try
             {
                 string Quary = "Select * from ACLedger where DebtorType=0 ORDER BY ID DESC";
+                cmd = new SqlCommand(Quary, con.Con);
+                SDR = cmd.ExecuteReader();
+
+                while (SDR.Read())
+                {
+                    Ledger OBJLDR = new Ledger();
+                    OBJLDR.ID = SDR.GetInt32(0);
+                    OBJLDR.Name = SDR.GetString(1);
+                    OBJLDR.ShortName = SDR.GetString(2);
+                    OBJLDR.MobileNo1 = SDR.GetString(3);
+                    OBJLDR.MobileNo2 = SDR.GetString(4);
+                    OBJLDR.DebtorType = SDR.GetInt32(5);
+                    OBJLDR.OrgId = SDR.GetInt32(6);
+                    OBJLDR.State = SDR.GetInt32(7);
+                    OBJLDR.MarginOnCash = SDR.GetDouble(8);
+                    OBJLDR.TaxOnAboveMargin = SDR.GetInt32(9);
+                    OBJLDR.MarginOnline = SDR.GetDouble(10);
+                    OBJLDR.TaxOnAboveMarginOnline = SDR.GetInt32(11);
+                    OBJLDR.PaymentFrequency = SDR.GetInt32(12);
+                    OBJLDR.PaymentDay = SDR.GetInt32(13);
+                    OBJLDR.CollectionFrequency = SDR.GetInt32(14);
+                    OBJLDR.CollectionDay = SDR.GetInt32(15);
+                    OBJLDR.CalculationStartFrom = SDR.GetDateTime(16);
+                    OBJLDR.TDSApplicable = SDR.GetInt32(17);
+                    OBJLDR.Email = SDR.GetString(18);
+                    OBJLDR.Remarks = SDR.GetString(19);
+                    OBJLDR.LisenceRenewalDate = SDR.GetDateTime(20);
+                    OBJLDR.ParentGroup = SDR.GetInt32(21);
+                    OBJLDR.AccountNumber = SDR.GetString(22);
+                    OBJLDR.IFSCCode = SDR.GetString(23);
+                    OBJLDR.BankName = SDR.GetString(24);
+                    OBJLDR.Branch = SDR.GetString(25);
+                    OBJLDR.ManualPaymentDays = SDR.GetInt32(26);
+                    OBJLDR.ManualCollectionDays = SDR.GetInt32(27);
+                    //OBJLDR.YearlyRenewalCharges = SDR.GetDouble(28);
+                    //OBJLDR.Tax = SDR.GetDouble(29);
+
+                    LedgerList.Add(OBJLDR);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return (LedgerList);
+        }
+
+        public static List<Ledger> GetAllList()
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<Ledger> LedgerList = new List<Ledger>();
+            try
+            {
+                string Quary = "Select * from ACLedger ORDER BY ID DESC";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 

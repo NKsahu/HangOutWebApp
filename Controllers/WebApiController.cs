@@ -966,6 +966,7 @@ namespace HangOut.Controllers
         {
             JObject jObject = new JObject();
             //JournalEntry jObj = new JournalEntry();
+            JournalEntryController journalControllerObj = new JournalEntryController();
             List<HG_Orders> OrderList = new List<HG_Orders>();
             HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat();
             List<HG_OrderItem> OrdrItmsList = new List<HG_OrderItem>();
@@ -1009,8 +1010,8 @@ namespace HangOut.Controllers
                         order.Status = "3";//completed
                         order.Save();
                         //=======Journal Entry======
-
-                        //double totalAmount = 0.00;
+                        journalControllerObj.GetDetails(CompletedItems);
+                        //double to;talAmount = 0.00;
                         //for (int i = 0; i < CompletedItems.Count; i++)
                         //{
                         //    totalAmount += CompletedItems[i].Count * CompletedItems[i].Price;
