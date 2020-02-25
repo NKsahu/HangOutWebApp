@@ -215,6 +215,38 @@ namespace HangOut.Models.Account
             finally { cmd.Dispose(); con.Con.Close(); }
             return (BalanceStatementList);
         }
+        public static List<BalanceStatement> GetByOrgId(int OrgId)
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<BalanceStatement> BalanceStatementList = new List<BalanceStatement>();
+            try
+            {
+                string Quary = "Select * from ACBalanceStatement where OrgId=" + OrgId; 
+                cmd = new SqlCommand(Quary, con.Con);
+                SDR = cmd.ExecuteReader();
+
+                while (SDR.Read())
+                {
+                    BalanceStatement OBJBS = new BalanceStatement();
+                    OBJBS.BID = SDR.GetInt32(0);
+                    OBJBS.Date = SDR.GetDateTime(1);
+                    OBJBS.Amount = SDR.GetDouble(2);
+                    OBJBS.Narration = SDR.GetString(3);
+                    OBJBS.OrderId = SDR.GetInt32(4);
+                    OBJBS.OrgId = SDR.GetInt32(5);
+                    OBJBS.CRAmount = SDR.GetDouble(6);
+                    OBJBS.DRAmount = SDR.GetDouble(7);
+                    OBJBS.Balance = SDR.GetDouble(8);
+                    BalanceStatementList.Add(OBJBS);
+                }
+
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return (BalanceStatementList);
+        }
     }
 
 }  

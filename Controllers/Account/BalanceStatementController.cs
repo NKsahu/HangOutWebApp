@@ -11,12 +11,21 @@ namespace HangOut.Controllers.Account
     public class BalanceStatementController : Controller
     {
         // GET: BalanceStatement
-        public ActionResult Index()
+        public ActionResult Index(int OrgId=0)
         {
-            List<BalanceStatement> balanceStatements = BalanceStatement.GetAllList();
-            return View(balanceStatements);
+            if(OrgId>0)
+            {
+                List<BalanceStatement> balanceStatements = BalanceStatement.GetByOrgId(OrgId);
+                return View(balanceStatements);
+            }
+            else
+            {
+                List<BalanceStatement> balanceStatements = BalanceStatement.GetAllList();
+                return View(balanceStatements);
+            }
+         
         }
-
+   
 
         public ActionResult GetDetails(List<HG_OrderItem> CompletedItems)
         {
