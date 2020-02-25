@@ -149,6 +149,8 @@
         if (Type == "1") {
             $("#Qty").parent('div').show();
             $("#ISSaleable").parent('div').parent('div').show();
+            $("#ISdirectlyPurchased").parent('div').parent('div').show();
+            $("#ISProcessed").parent('div').parent('div').show();
             $("#SaleTax").parent('div').hide();
             $("#SalePrize").parent('div').hide();
             $("#PurchasedPrize").parent('div').hide();
@@ -229,7 +231,6 @@
         Processedchange();
     });
     function Processedchange() {
-        console.log("ggg");
         if ($("#ISProcessed").is(':checked')) {
             $(".aa").show();
         }
@@ -253,6 +254,28 @@
         });
 
     }
+    change();
+    $("#ItemID").change(function () {
+        change();
+        console.log("sqa");
+    });
+    function change(ID) {
+        var value = $("#ItemID").val();
+        if (value >0) {
+            $.ajax({
+                type: "GET",
+                url: "/INTGSTBL/GETID?ID=" + ID,
+                success: function (data) {
+                    $("#IUnitID").html(data);
+                    //alert(data.Name);
+                },
+                error: function (xhr) {
+                    alert("Error");
+                }
+            });
+        }
+    }
+
     
 </script>
  
