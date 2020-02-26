@@ -837,20 +837,11 @@ namespace HangOut.Controllers
                     PushNotification.NewOrderMsg(topics, NewOID, Ticketno);
                 }
 
-                //=========auto printing to table========
-                //if (ObjOrg.OrderDisplay == 2 &&AppType!=3)
-                //{
-                //    PendingPrints pendingPrints = new PendingPrints
-                //    {
-                //        OID = OID,
-                //        TicketNo = Ticketno,
-                //        InvoiceNoCopy = 0,
-                //        KotNoOfCopy = ObjOrg.Copy,
-                //        OrgId = ObjOrders.OrgId
-                //    };
-                //    pendingPrints.Save();
-                //}
-                
+                if (ObjOrg.OrderDisplay == 2 && AppType != 3 && ObjOrg.PrinttingType == 2 && (PaymtSts > 0 || ObjOrg.PaymentType == 2))
+                {
+                    PendingPrints.SaveKotPrint(ObjOrders, ObjOrg.Copy, Ticketno);
+                }
+
             }
             else
             {
@@ -979,7 +970,7 @@ namespace HangOut.Controllers
 
             return jObject;
         }
-        public JObject CompleteOrder(int PaymentType,int UpdatedBy, Int64 OID = 0, int TorSid = 0)
+        public JObject CompleteOrder(int PaymentType,int UpdatedBy, Int64 OID = 0, int TorSid = 0,int AppType=0)
         {
             JObject jObject = new JObject();
             //JournalEntry jObj = new JournalEntry();
@@ -1062,6 +1053,10 @@ namespace HangOut.Controllers
                         string[] topics = { "0", ObjOrg.OrgID.ToString() };
                         PushNotification.NewOrderMsg(topics, order.OID, 0);
                     }
+                    if (ObjOrg.OrderDisplay == 2 && AppType != 3 &&ObjOrg.PrinttingType==2)
+                    {
+                        PendingPrints.SaveKotPrint(order, ObjOrg.Copy,hG_OrderItems: OrdrItmsList);
+                    }
                     
                 }
                 else
@@ -1099,6 +1094,10 @@ namespace HangOut.Controllers
                     }
                 }
                 OrdId = order.OID;
+                if (ObjOrg.OrderDisplay == 2 && AppType != 3 && ObjOrg.InvoicePrintting == 2)
+                {
+                    PendingPrints.SaveInvoicePrint(order, ObjOrg.NuOfCopy);
+                }
             }
             if (Status)
             {

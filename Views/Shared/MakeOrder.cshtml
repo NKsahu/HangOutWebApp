@@ -1267,7 +1267,7 @@
         function CompleteOrder(PaymentType) {
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/CompleteOrder?PaymentType="+PaymentType+"&UpdatedBy="+LoginId+"&OID=0&TorSid="+CurrentOrder,
+                url: "/WebApi/CompleteOrder?PaymentType=" + PaymentType + "&UpdatedBy=" + LoginId + "&OID=0&TorSid=" + CurrentOrder +"&AppType=3",
                 success: function (data) {
                     var Jobj = JSON.parse(data);
                     if (Jobj.Status == 400) {
