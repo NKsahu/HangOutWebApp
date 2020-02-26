@@ -8,7 +8,7 @@
 <div class="iNTItem">
     @using (Html.BeginCollectionItem("iNTItems"))
     {
-        <div class="row aa" >
+        <div class="row aa">
             @Html.HiddenFor(model => model.SubItemID, new { @class = "SUBITEMID" })
             <div class="col-md-3">
                 @Html.Label("Item")
@@ -40,4 +40,27 @@
         <div id="HeadDiv" style="display:none"></div>
     }
 </div>
-
+ <script>
+     change();
+     $("#ItemID").change(function () {
+         change();
+         console.log("sqa");
+     });
+     function change(ID) {
+         var value = $("#ItemID").val();
+         if (value >0) {
+             $.ajax({
+                 type: "GET",
+                 url: "/INTGSTBL/GETID?ID=" + ID,
+                 success: function (data) {
+                     $("#IUnitID").html(data);
+                     //alert(data.Name);
+                 },
+                 error: function (xhr) {
+                     alert("Error");
+                 }
+             });
+         }
+     }
+ </script> 
+ 

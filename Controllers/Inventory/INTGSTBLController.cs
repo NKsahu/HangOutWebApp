@@ -14,6 +14,7 @@ namespace HangOut.Controllers.Inventory
         }
         public ActionResult CreateEdit(int ID)
         {
+           
             INTGSTBL Obj = new INTGSTBL();
             if (ID > 0)
             {
@@ -31,6 +32,7 @@ namespace HangOut.Controllers.Inventory
         [HttpPost]
         public ActionResult CreateEdit(INTGSTBL Obj)
         {
+           
             if (Obj.Typeid == 1)
             {
                 if (Obj.Qty == 0)
@@ -56,7 +58,15 @@ namespace HangOut.Controllers.Inventory
             INTItems iNTItems = new INTItems();
             return View(iNTItems);
         }
-       
-       
+        public ActionResult GETID()
+        {
+            int ID = int.Parse(Request.QueryString["IParentId"]);
+            List<INTUnits> listunit = INTUnits.GetAll();
+            if (ID!=0)
+            {
+                listunit = listunit.FindAll(x => x.ParentId == ID);
+            }
+            return View(listunit);
+        }
     }
 }

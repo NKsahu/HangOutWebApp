@@ -119,9 +119,14 @@ namespace HangOut.Controllers
         public JObject SubmitFeedBk(Int64 OID)
         {
             Feedbk feedBack = Feedbk.GetOne(OID);
+        //    public int FeedBkId { get; set; }
+        //public int OrgId { get; set; }
+        //public Int64 OrderId { get; set; }
+        //public int FeedbkFormId { get; set; }
             if (feedBack.FeedBkId == 0)
             {
-               // feedBack.o
+                feedBack = new Feedbk();
+
             }
             return new JObject();
         }
@@ -229,5 +234,6 @@ namespace HangOut.Controllers
             result.Add("NoOfCopy", ObjOrg.Copy);
             return result;
         }
+        
     }
 }

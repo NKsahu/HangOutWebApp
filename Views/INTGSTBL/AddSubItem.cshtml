@@ -21,8 +21,10 @@
 
         </div>
         <div class="col-md-3">
-            @{ List<INTUnits> listuni = INTUnits.GetAll();
-                listuni = listuni.FindAll(x => x.ParentId != 0);
+            @{
+                
+                List<INTUnits> listuni = INTUnits.GetAll();
+                listuni = listuni.FindAll(x => x.ParentId !=0);
             }
             @Html.Label("Unit")
             @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control" })
@@ -37,3 +39,6 @@
     </div>
 
 }
+ 
+ 
+
