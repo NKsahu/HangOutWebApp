@@ -6,18 +6,21 @@ namespace HangOut.Models.Feedbk
 {
     public class FeedbkItem
     {
-       public Int64  ItemID { get; set; }
-       public int Rating { get; set; }
-       public string Comment { get; set; }
-       public int FeedbkFormID { get; set; }
-       public int FeedBkID { get; set; }
-       public int  ResponseType { get; set; }
-       public DateTime CreateOn { get; set; }
-       public int CID { get; set; }
+        public Int64 ItemID { get; set; }
+        public int Rating { get; set; }
+        public string Comment { get; set; }
+        public int FeedbkFormID { get; set; }
+        public int FeedBkID { get; set; }
+        public int ResponseType { get; set; }
+        public DateTime CreateOn { get; set; }
+        public int CID { get; set; }
         public int OrgId { get; set; }
         public int LikeCnt { get; set; }
         public int DislikeCnt { get; set; }
         public int OkCnt { get; set; }
+        public FeedbkItem(){
+            CreateOn = DateTime.Now;
+            }
         public int save()
         {
             int R = 0;
