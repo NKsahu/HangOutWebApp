@@ -54,21 +54,47 @@ namespace HangOut.Models
             finally { cmd.Dispose(); dBCon.Con.Close(); }
             return ROW;
         }
-        public static void SaveKotPrint(HG_Orders order, int NoOfCopy,int TicketNo=0)
+        public static void SaveKotPrint(HG_Orders order, int NoOfCopy,int TicketNo=0,List<HG_OrderItem> hG_OrderItems=null)
         {
-            PendingPrints pendingPrints = new PendingPrints();
-            pendingPrints.OID = order.OID;
-            pendingPrints.OrgId = order.OrgId;
-            pendingPrints.KotNoOfCopy = NoOfCopy;
-            pendingPrints.TicketNo = TicketNo;
-            try
+            if (TicketNo == 0)
             {
-                pendingPrints.Save();
+                var tickets = hG_OrderItems.GroupBy(x => x.TickedNo);
+                foreach(var ticket in tickets)
+                {
+                    PendingPrints pendingPrints = new PendingPrints();
+                    pendingPrints.OID = order.OID;
+                    pendingPrints.OrgId = order.OrgId;
+                    pendingPrints.KotNoOfCopy = NoOfCopy;
+                    pendingPrints.InvoiceNoCopy = 0;
+                    pendingPrints.TicketNo = ticket.Key;
+                    try
+                    {
+                        pendingPrints.Save();
+                    }
+                    catch (Exception e)
+                    {
+                    }
+                }
+                
             }
-            catch(Exception e)
+            else
             {
+                PendingPrints pendingPrints = new PendingPrints();
+                pendingPrints.OID = order.OID;
+                pendingPrints.OrgId = order.OrgId;
+                pendingPrints.KotNoOfCopy = NoOfCopy;
+                pendingPrints.InvoiceNoCopy = 0;
+                pendingPrints.TicketNo = TicketNo;
+                try
+                {
+                    pendingPrints.Save();
+                }
+                catch (Exception e)
+                {
 
+                }
             }
+            
 
         }
         //if (ObjOrg.OrderDisplay == 2 && AppType != 3 && ObjOrg.PrinttingType == 2 && (PaymtSts > 0 ||ObjOrg.PaymentType==2))
@@ -80,7 +106,8 @@ namespace HangOut.Models
             PendingPrints pendingPrints = new PendingPrints();
             pendingPrints.OID = order.OID;
             pendingPrints.OrgId = order.OrgId;
-            pendingPrints.KotNoOfCopy = NoOfCopy;
+            pendingPrints.InvoiceNoCopy = NoOfCopy;
+            pendingPrints.KotNoOfCopy = 0;
             pendingPrints.TicketNo = 0;
             try
             {

@@ -105,11 +105,11 @@ namespace HangOut.Models.Common
                     dataStream.Write(byteArray, 0, byteArray.Length);
                     try
                     {
-                        using (System.Net.WebResponse tResponse = tRequest.GetResponse())
+                        using (WebResponse tResponse = tRequest.GetResponse())
                         {
-                            using (System.IO.Stream dataStreamResponse = tResponse.GetResponseStream())
+                            using (Stream dataStreamResponse = tResponse.GetResponseStream())
                             {
-                                using (System.IO.StreamReader tReader = new System.IO.StreamReader(dataStreamResponse))
+                                using (StreamReader tReader = new System.IO.StreamReader(dataStreamResponse))
                                 {
                                     System.String sResponseFromServer = tReader.ReadToEnd();
                                     //return sResponseFromServer;

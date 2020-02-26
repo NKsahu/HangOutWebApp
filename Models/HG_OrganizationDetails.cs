@@ -49,10 +49,10 @@ namespace HangOut.Models
         public string InvoiceTitle { get; set; }
         public string invoicePhone { get; set; }
         public int DistrictId { get; set; }
-        public int InvoicePrintting { get; set; }
+        public int InvoicePrintting { get; set; }// 0 no,1:ask,2 auto
         public int NuOfCopy { get; set; }
-        public int OrderDisplay { get; set; }
-        public int PrinttingType { get; set; }
+        public int OrderDisplay { get; set; } // 1 :mobile mode ,2 : KOt mode
+        public int PrinttingType { get; set; }// // 0 no,1:ask,2 auto
         public int Copy { get; set; }
         public HG_OrganizationDetails()
         {
