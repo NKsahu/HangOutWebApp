@@ -39,7 +39,7 @@ namespace HangOut.Models
                 }
                 cmd.Parameters.AddWithValue("InvoiceNoCopy", this.InvoiceNoCopy);
                 cmd.Parameters.AddWithValue("KotNoOfCopy", this.KotNoOfCopy);
-                if (this.OID == 0)
+                if (this.ID == 0)
                 {
                     ROW = Convert.ToInt32(cmd.ExecuteScalar());
                     this.ID = ROW;
