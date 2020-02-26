@@ -17,39 +17,38 @@ namespace HangOut.Models
         public int TicketNo { get; set; }
         public Int64 Save()
         {
-            Int64 ROW = 0;
+            int ROW = 0;
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
             try
             {
                 string Query = "";
-                if(this. ID==0)
+                if(this.ID==0)
                 {
-                    Query = "INSERT INTO PendingPrints values (@OID,@OrgId,@InvoiceNoCopy,@KotNoOfCopy,@Createdate,@TicketNo)";
+                    Query = "INSERT INTO pendingprint values (@OID,@OrgId,@InvoiceNoCopy,@KotNoOfCopy,@Createdate,@TicketNo)";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("", this.Createdate);
+                    cmd.Parameters.AddWithValue("OID", this.OID);
+                    cmd.Parameters.AddWithValue("OrgId", this.OrgId);
+                    cmd.Parameters.AddWithValue("TicketNo", this.TicketNo);
                 }
                 else
                 {
-                    Query = "Update PendingPrints set InvoiceNoCopy=@InvoiceNoCopy,KotNoOfCopy=@KotNoOfCopy where  ID=@ ID";
+                    Query = "Update pendingprint set InvoiceNoCopy=@InvoiceNoCopy,KotNoOfCopy=@KotNoOfCopy where  ID=@ID";
+                    cmd.Parameters.AddWithValue("ID", this.ID);
                 }
-                cmd.Parameters.AddWithValue("ID", this.ID);
-                cmd.Parameters.AddWithValue("OID", this.OID);
-                cmd.Parameters.AddWithValue("OrgId", this.OrgId);
                 cmd.Parameters.AddWithValue("InvoiceNoCopy", this.InvoiceNoCopy);
                 cmd.Parameters.AddWithValue("KotNoOfCopy", this.KotNoOfCopy);
-                cmd.Parameters.AddWithValue("TicketNo", this.TicketNo);
                 if (this.OID == 0)
                 {
                     ROW = Convert.ToInt32(cmd.ExecuteScalar());
-                    this.OID = ROW;
+                    this.ID = ROW;
                 }
                 else
                 {
                     ROW = cmd.ExecuteNonQuery();
                     //this.CategoryID = Row;
                 }
-
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); dBCon.Con.Close(); }
@@ -63,7 +62,7 @@ namespace HangOut.Models
             List<PendingPrints> listpending = new List<PendingPrints>();
             try
             {
-                string Quary = "Select * from PendingPrints   ORDER BY OrgID  DESC";
+                string Quary = "Select * from pendingprint ";
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 SDR = cmd.ExecuteReader();
 
@@ -76,6 +75,7 @@ namespace HangOut.Models
                     OBJPENDING.InvoiceNoCopy = SDR.GetInt32(3);
                     OBJPENDING.KotNoOfCopy = SDR.GetInt32(4);
                     OBJPENDING.Createdate = SDR.GetDateTime(5);
+                    OBJPENDING.TicketNo = SDR.GetInt32(6);
                     listpending.Add(OBJPENDING);
                 }
             }
