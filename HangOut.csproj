@@ -489,8 +489,6 @@
     <Content Include="Views\HG_Orders\PrintKot.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Category\CreateEdit.cshtml" />
-    <Content Include="Views\INTGSTBL\ServiceIndex.cshtml" />
-    <Content Include="Views\INTGSTBL\ServiceCreateEdit.cshtml" />
     <Content Include="Views\Units\Index.cshtml" />
     <Content Include="Views\Units\CreateEdit.cshtml" />
     <Content Include="Views\Group\Index.cshtml" />
