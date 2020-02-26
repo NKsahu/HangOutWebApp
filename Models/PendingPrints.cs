@@ -7,12 +7,14 @@ using System.Web;
 namespace HangOut.Models
 {
     public class PendingPrints
-    {
+    {   
+        public int ID { get; set; }
         public Int64 OID { get; set; }
         public int OrgId { get; set; }
         public int InvoiceNoCopy { get; set; }
         public int KotNoOfCopy { get; set; }
         public DateTime Createdate { get; set; }
+        public int TicketNo { get; set; }
         public Int64 Save()
         {
             Int64 ROW = 0;
@@ -21,21 +23,22 @@ namespace HangOut.Models
             try
             {
                 string Query = "";
-                if(this.OID==0)
+                if(this. ID==0)
                 {
-                    Query = "INSERT INTO PendingPrints values (@OID,@OrgId,@InvoiceNoCopy,@KotNoOfCopy,@Createdate)";
+                    Query = "INSERT INTO PendingPrints values (@OID,@OrgId,@InvoiceNoCopy,@KotNoOfCopy,@Createdate,@TicketNo)";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("", this.Createdate);
                 }
                 else
                 {
-                    Query = "Update PendingPrints set InvoiceNoCopy=@InvoiceNoCopy,KotNoOfCopy=@KotNoOfCopy where OID=@OID";
+                    Query = "Update PendingPrints set InvoiceNoCopy=@InvoiceNoCopy,KotNoOfCopy=@KotNoOfCopy where  ID=@ ID";
                 }
-                
-                cmd.Parameters.AddWithValue("",this.OID);
-                cmd.Parameters.AddWithValue("",this.OrgId);
-                cmd.Parameters.AddWithValue("",this.InvoiceNoCopy);
-                cmd.Parameters.AddWithValue("",this.KotNoOfCopy);
+                cmd.Parameters.AddWithValue("ID", this.ID);
+                cmd.Parameters.AddWithValue("OID", this.OID);
+                cmd.Parameters.AddWithValue("OrgId", this.OrgId);
+                cmd.Parameters.AddWithValue("InvoiceNoCopy", this.InvoiceNoCopy);
+                cmd.Parameters.AddWithValue("KotNoOfCopy", this.KotNoOfCopy);
+                cmd.Parameters.AddWithValue("TicketNo", this.TicketNo);
                 if (this.OID == 0)
                 {
                     ROW = Convert.ToInt32(cmd.ExecuteScalar());
@@ -67,11 +70,12 @@ namespace HangOut.Models
                 while (SDR.Read())
                 {
                     PendingPrints OBJPENDING = new PendingPrints();
-                    OBJPENDING.OID = SDR.GetInt64(0);
-                    OBJPENDING.OrgId = SDR.GetInt32(1);
-                    OBJPENDING.InvoiceNoCopy = SDR.GetInt32(2);
-                    OBJPENDING.KotNoOfCopy = SDR.GetInt32(3);
-                    OBJPENDING.Createdate = SDR.GetDateTime(4);
+                    OBJPENDING.ID = SDR.GetInt32(0);
+                    OBJPENDING.OID = SDR.GetInt64(1);
+                    OBJPENDING.OrgId = SDR.GetInt32(2);
+                    OBJPENDING.InvoiceNoCopy = SDR.GetInt32(3);
+                    OBJPENDING.KotNoOfCopy = SDR.GetInt32(4);
+                    OBJPENDING.Createdate = SDR.GetDateTime(5);
                     listpending.Add(OBJPENDING);
                 }
             }
