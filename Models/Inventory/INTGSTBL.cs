@@ -22,8 +22,8 @@ namespace HangOut.Models.Inventory
         public bool ISdirectlyPurchased { get; set; }
         public bool ISProcessed { get; set; }
         public double ServicePrize { get; set; }
-        public double ServiceTax{ get; set; }
-        public List<INTItems>iNTItems { get; set; }
+        public double ServiceTax { get; set; }
+        public List<INTItems> iNTItems { get; set; }
         public INTGSTBL()
         {
             //Qty = 0;
@@ -42,47 +42,47 @@ namespace HangOut.Models.Inventory
             int Row = 0;
             DBCon con = new DBCon();
             SqlCommand cmd = null;
-            //try
-            //{
-            string Quary = "";
-            if (this.GSID == 0)
+            try
             {
-                Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@PurchasedPrize,@PurchasedTax,@SalePrize,@SaleTax,@ISSaleable,@ISdirectlyPurchased,@ISProcessed,@ServicePrize,@ServiceTax);SELECT SCOPE_IDENTITY();";
+                string Quary = "";
+                if (this.GSID == 0)
+                {
+                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@PurchasedPrize,@PurchasedTax,@SalePrize,@SaleTax,@ISSaleable,@ISdirectlyPurchased,@ISProcessed,@ServicePrize,@ServiceTax);SELECT SCOPE_IDENTITY();";
+                }
+                else
+                {
+                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServiceTax where GSID=@GSID";
+                }
+                cmd = new SqlCommand(Quary, con.Con);
+                cmd.Parameters.AddWithValue("@GSID", this.GSID);
+                cmd.Parameters.AddWithValue("@CatID", this.CatID);
+                cmd.Parameters.AddWithValue("@Name", this.Name);
+                cmd.Parameters.AddWithValue("@Typeid", this.Typeid);
+                cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
+                cmd.Parameters.AddWithValue("@Qty", this.Qty);
+                cmd.Parameters.AddWithValue("@PurchasedPrize", this.PurchasedPrize);
+                cmd.Parameters.AddWithValue("@PurchasedTax", this.PurchasedTax);
+                cmd.Parameters.AddWithValue("@SalePrize", this.SalePrize);
+                cmd.Parameters.AddWithValue("@SaleTax", this.SaleTax);
+                cmd.Parameters.AddWithValue("@ISSaleable", this.ISSaleable);
+                cmd.Parameters.AddWithValue("@ISdirectlyPurchased", this.ISdirectlyPurchased);
+                cmd.Parameters.AddWithValue("@ISProcessed", this.ISProcessed);
+                cmd.Parameters.AddWithValue("@ServicePrize", this.ServicePrize);
+                cmd.Parameters.AddWithValue("@ServiceTax", this.ServiceTax);
+                if (this.GSID == 0)
+                {
+                    Row = Convert.ToInt32(cmd.ExecuteScalar());
+                    this.GSID = Row;
+                }
+                else
+                {
+                    Row = cmd.ExecuteNonQuery();
+                    //this.CategoryID = Row;
+                }
+
             }
-            else
-            {
-                Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServiceTax where GSID=@GSID";
-            }
-            cmd = new SqlCommand(Quary, con.Con);
-            cmd.Parameters.AddWithValue("@GSID", this.GSID);
-            cmd.Parameters.AddWithValue("@CatID", this.CatID);
-            cmd.Parameters.AddWithValue("@Name", this.Name);
-            cmd.Parameters.AddWithValue("@Typeid", this.Typeid);
-            cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
-            cmd.Parameters.AddWithValue("@Qty", this.Qty);
-            cmd.Parameters.AddWithValue("@PurchasedPrize", this.PurchasedPrize);
-            cmd.Parameters.AddWithValue("@PurchasedTax", this.PurchasedTax);
-            cmd.Parameters.AddWithValue("@SalePrize", this.SalePrize);
-            cmd.Parameters.AddWithValue("@SaleTax", this.SaleTax);
-            cmd.Parameters.AddWithValue("@ISSaleable", this.ISSaleable);
-            cmd.Parameters.AddWithValue("@ISdirectlyPurchased", this.ISdirectlyPurchased);
-            cmd.Parameters.AddWithValue("@ISProcessed", this.ISProcessed);
-            cmd.Parameters.AddWithValue("@ServicePrize", this.ServicePrize);
-            cmd.Parameters.AddWithValue("@ServiceTax", this.ServiceTax);
-            if (this.GSID == 0)
-            {
-                Row = Convert.ToInt32(cmd.ExecuteScalar());
-                this.GSID = Row;
-            }
-            else
-            {
-                Row = cmd.ExecuteNonQuery();
-                //this.CategoryID = Row;
-            }
-        
-           // }
-            //catch (Exception e) { e.ToString(); }
-             cmd.Dispose(); con.Con.Close(); 
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
             return Row;
 
         }
@@ -147,7 +147,7 @@ namespace HangOut.Models.Inventory
                     ObjTmp.UnitID = SDR.GetInt32(4);
                     ObjTmp.Qty = SDR.GetDouble(5);
                     ObjTmp.PurchasedPrize = SDR.GetDouble(6);
-                    ObjTmp.PurchasedTax= SDR.GetDouble(7);
+                    ObjTmp.PurchasedTax = SDR.GetDouble(7);
                     ObjTmp.SalePrize = SDR.GetDouble(8);
                     ObjTmp.SaleTax = SDR.GetDouble(9);
                     ObjTmp.ISSaleable = SDR.GetBoolean(10);
@@ -195,9 +195,9 @@ namespace HangOut.Models.Inventory
         public static List<InventoryType> ListOrgTypeidList()
         {
             List<InventoryType> list = new List<InventoryType>();
-            list.Add(new InventoryType { Typeid = 0 , Name = "Select Type" });
-            list.Add(new InventoryType { Typeid = 1 , Name = "Goods" });
-            list.Add(new InventoryType { Typeid = 2 , Name = "Service" });
+            list.Add(new InventoryType { Typeid = 0, Name = "Select Type" });
+            list.Add(new InventoryType { Typeid = 1, Name = "Goods" });
+            list.Add(new InventoryType { Typeid = 2, Name = "Service" });
             return list;
         }
     }
