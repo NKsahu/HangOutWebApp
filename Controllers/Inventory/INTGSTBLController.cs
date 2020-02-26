@@ -23,13 +23,7 @@ namespace HangOut.Controllers.Inventory
             if (ID > 0)
             {
                 Obj = Obj.GetOne(ID);
-                int jjj = int.Parse(Request.QueryString["ID"]);
-                List<INTGSTBL> listgsdt = INTGSTBL.GetAll();
-                listgsdt = listgsdt.FindAll(x => x.GSID == jjj);
-                foreach (var subitems in listgsdt)
-                {
-                    Obj.iNTItems = INTItems.GetAll(ID);
-                }
+               Obj.iNTItems = INTItems.GetAll(ID);
             }
             else
             {
