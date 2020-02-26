@@ -13,45 +13,45 @@ namespace HangOut.Models.Inventory
         public double IQty { get; set; }
         public int IUnitID { get; set; }
         public int IParentId { get; set; }
-        
+
         public int Save()
         {
             int Row = 0;
             DBCon con = new DBCon();
             SqlCommand cmd = null;
-            //try
-            //{
-                string Quary = "";
-                if (this.SubItemID == 0)
-                {
-                    Quary = "Insert Into INTItems Values (@ItemID,@Qty,@UnitID,@GSID);SELECT SCOPE_IDENTITY();";
-                }
-                else
-                {
-                    Quary = "Update INTItems Set ItemID=@ItemID,Qty=@Qty,UnitID=@UnitID,GSID=@GSID where SubItemID=@SubItemID";
-                }
-                cmd = new SqlCommand(Quary, con.Con);
-                cmd.Parameters.AddWithValue("@SubItemID", this.SubItemID);
-                cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
-                cmd.Parameters.AddWithValue("@Qty", this.IQty);
-                cmd.Parameters.AddWithValue("@UnitID", this.IUnitID);
-                cmd.Parameters.AddWithValue("@GSID", this.IParentId);
-                if (this.SubItemID == 0)
-                {
-                    Row = Convert.ToInt32(cmd.ExecuteScalar());
-                    this.SubItemID = Row;
-                }
-                else
-                {
-                    Row = cmd.ExecuteNonQuery();
-                    //this.CategoryID = Row;
-                }
+             try
+             {
+            string Quary = "";
+            if (this.SubItemID == 0)
+            {
+                Quary = "Insert Into INTItems Values (@ItemID,@Qty,@UnitID,@GSID);SELECT SCOPE_IDENTITY();";
+            }
+            else
+            {
+                Quary = "Update INTItems Set ItemID=@ItemID,Qty=@Qty,UnitID=@UnitID,GSID=@GSID where SubItemID=@SubItemID";
+            }
+            cmd = new SqlCommand(Quary, con.Con);
+            cmd.Parameters.AddWithValue("@SubItemID", this.SubItemID);
+            cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
+            cmd.Parameters.AddWithValue("@Qty", this.IQty);
+            cmd.Parameters.AddWithValue("@UnitID", this.IUnitID);
+            cmd.Parameters.AddWithValue("@GSID", this.IParentId);
+            if (this.SubItemID == 0)
+            {
+                Row = Convert.ToInt32(cmd.ExecuteScalar());
+                this.SubItemID = Row;
+            }
+            else
+            {
+                Row = cmd.ExecuteNonQuery();
+                //this.CategoryID = Row;
+            }
 
-          //  }
-            //catch (Exception e) { e.ToString(); }
-             cmd.Dispose(); con.Con.Close(); 
+        }
+            catch (Exception e) { e.ToString(); }
+            finally {cmd.Dispose(); con.Con.Close();} 
             return Row;
-
+             
         }
         public static List<INTItems> GetAll(int GSID)
         {

@@ -23,6 +23,7 @@ namespace HangOut.Models.Account
         public int DRLedgerId { get; set; }
         public int CRLedgerId { get; set; }
         public double JEDAmount { get; set; }
+        public int OrderId { get; set; }
         
 
 
@@ -36,11 +37,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.ID == 0)
                 {
-                    Quary = "Insert Into ACJournalEntry Values (@Date,@Amount,@Narration,@GroupId);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACJournalEntry Values (@Date,@Amount,@Narration,@GroupId,@OrderId);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACJournalEntry Set Date=@Date,Amount=@Amount,Narration=@Narration,@GroupId=GroupId where ID=@ID";
+                    Quary = "Update ACJournalEntry Set Date=@Date,Amount=@Amount,Narration=@Narration,GroupId=@GroupId,OrderId=@OrderId where ID=@ID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ID", this.ID);
@@ -48,6 +49,7 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@Amount", this.Amount);
                 cmd.Parameters.AddWithValue("@Narration", this.Narration);
                 cmd.Parameters.AddWithValue("@GroupId", this.GroupId);
+                cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
                 if (this.ID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());

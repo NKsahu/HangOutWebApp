@@ -1026,7 +1026,15 @@ namespace HangOut.Controllers
                         order.Status = "3";//completed
                         order.Save();
                         //=======Journal Entry======
-                        journalControllerObj.GetDetails(CompletedItems);
+                        try
+                        {
+                            journalControllerObj.GetDetails(CompletedItems);
+                        }
+                        catch(Exception ex)
+                        {
+
+                        }
+                        
                         //double to;talAmount = 0.00;
                         //for (int i = 0; i < CompletedItems.Count; i++)
                         //{

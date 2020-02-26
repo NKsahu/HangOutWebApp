@@ -39,8 +39,7 @@ namespace HangOut.Controllers.Inventory
                 }
 
             }
-            try
-            {
+           
                 int i = Obj.Save();
                 foreach (var Subitem in Obj.iNTItems)
                 {
@@ -49,12 +48,7 @@ namespace HangOut.Controllers.Inventory
                 }
                 if (i > 0)
                     return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
-            }
-            catch(System.Exception e)
-            {
-                 return Json(new { msg = e.Message.ToString() });
-            }
-            return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Error");
         }
 
         public ActionResult AddSubItem()
