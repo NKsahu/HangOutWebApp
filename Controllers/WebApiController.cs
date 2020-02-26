@@ -1028,17 +1028,7 @@ namespace HangOut.Controllers
 
                         //}
                         
-                        //double to;talAmount = 0.00;
-                        //for (int i = 0; i < CompletedItems.Count; i++)
-                        //{
-                        //    totalAmount += CompletedItems[i].Count * CompletedItems[i].Price;
-
-                        //}
-                        //jObj.Date = DateTime.Now;
-                        //jObj.Amount = totalAmount;
-                        //jObj.GroupId = 5;
-                        //jObj.Narration = "";
-                        //jObj.Save();
+                       
                         ///==============
                         ChangeOtpTbl = 1;
                         if (obj.Type != "3")
