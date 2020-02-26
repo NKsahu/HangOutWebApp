@@ -20,6 +20,13 @@ namespace HangOut.Models.Feedbk
         public DateTime  CreateDate { get; set; }
         public int CID { get; set; }
         public int OrgId { get; set; }
+        //
+        public Int64 OID { get; set; }
+        public FeedbkResponse()
+        {
+            CreateDate = DateTime.Now;
+            Subject = "";
+        }
         public int save()
         {
             int R = 0;
