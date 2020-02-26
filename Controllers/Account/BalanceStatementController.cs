@@ -13,7 +13,8 @@ namespace HangOut.Controllers.Account
         // GET: BalanceStatement
         public ActionResult Index()
         {
-            return View();
+            List<BalanceStatement> balanceStatements = BalanceStatement.GetAllList();
+            return View(balanceStatements);
         }
 
 
@@ -36,15 +37,20 @@ namespace HangOut.Controllers.Account
             bObj.Amount = totalAmount;
             bObj.OrgId = LedgerDetails.OrgId;
             bObj.OrderId = CompletedItems[0].OID;
+            BalanceStatement TotalBalance = BalanceStatement.GetAll();
+            bObj.Balance = TotalBalance.Balance + totalAmount;
             HG_Orders ord = new HG_Orders().GetOne(CompletedItems[0].OID);
 
-            if (ord.Status == "1")
+            if (ord.PaymentStatus == 1 || ord.PaymentStatus==2)
             {
-                bObj.Narration = "Payment of Order No." + CompletedItems[0].OID;
+                //bObj.SaveCRValue();
+                bObj.isCash = true;
+
             }
-            else
+            else if(ord.PaymentStatus==3)
             {
                 bObj.Narration = "Online Payment of Order No." + CompletedItems[0].OID;
+                bObj.isCash = false;
             }
             bObj.Save();
 
