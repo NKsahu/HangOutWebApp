@@ -27,7 +27,7 @@ namespace HangOut.Models
                 {
                     Query = "INSERT INTO pendingprint values (@OID,@OrgId,@InvoiceNoCopy,@KotNoOfCopy,@Createdate,@TicketNo)";
                     cmd = new SqlCommand(Query, dBCon.Con);
-                    cmd.Parameters.AddWithValue("", this.Createdate);
+                    cmd.Parameters.AddWithValue("Createdate", DateTime.Now.Date);
                     cmd.Parameters.AddWithValue("OID", this.OID);
                     cmd.Parameters.AddWithValue("OrgId", this.OrgId);
                     cmd.Parameters.AddWithValue("TicketNo", this.TicketNo);
