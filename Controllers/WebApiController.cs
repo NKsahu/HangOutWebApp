@@ -837,15 +837,19 @@ namespace HangOut.Controllers
                 }
 
                 //=========auto printing to table========
-                PendingPrints pendingPrints = new PendingPrints
+                if (ObjOrg.OrderDisplay == 2 &&AppType!=3)
                 {
-                    OID = OID,
-                    TicketNo = Ticketno,
-                    InvoiceNoCopy = 0,
-                    KotNoOfCopy=ObjOrg.Copy,
-                    OrgId=ObjOrders.OrgId
-                };
-                pendingPrints.Save();
+                    PendingPrints pendingPrints = new PendingPrints
+                    {
+                        OID = OID,
+                        TicketNo = Ticketno,
+                        InvoiceNoCopy = 0,
+                        KotNoOfCopy = ObjOrg.Copy,
+                        OrgId = ObjOrders.OrgId
+                    };
+                    pendingPrints.Save();
+                }
+                
             }
             else
             {
