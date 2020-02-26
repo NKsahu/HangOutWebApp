@@ -1028,14 +1028,14 @@ namespace HangOut.Controllers
                         order.Status = "3";//completed
                         order.Save();
                         //=======Journal Entry======
-                        try
-                        {
-                            balanceStatement.GetDetails(CompletedItems);
-                        }
-                        catch(Exception ex)
-                        {
+                        //try
+                        //{
+                        //    balanceStatement.GetDetails(CompletedItems);
+                        //}
+                        //catch(Exception ex)
+                        //{
 
-                        }
+                        //}
                         
                         //double to;talAmount = 0.00;
                         //for (int i = 0; i < CompletedItems.Count; i++)
