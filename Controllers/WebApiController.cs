@@ -708,15 +708,11 @@ namespace HangOut.Controllers
                     DeliveryChargeAmt= orgSetting.DeliveryCharge;
                 }
             }
-            if (AppType == 3 && ObjOrg.OrderDisplay == 2)// check KOT mode enable
+            if (ObjOrg.OrderDisplay == 2)// check KOT mode enable
             {
                 Status = 3;// mark complete all items
             }
-            if (AppType == 2 || AppType == 1 && (ObjOrg.OrderDisplay == 2))
-            {
-                Status = 3;
-                
-            }
+            
             if (PymentPageOpen.ListPytmPgOpen.Find(x => x.OID==OID) != null)
             {
                 PostResult.Add("Status", 400);
