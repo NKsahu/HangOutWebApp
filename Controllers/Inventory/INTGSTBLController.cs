@@ -39,15 +39,22 @@ namespace HangOut.Controllers.Inventory
                 }
 
             }
-            int i = Obj.Save();
-            foreach(var Subitem in Obj.iNTItems)
+            try
             {
-                Subitem.IParentId = Obj.GSID;
-                Subitem.Save();
+                int i = Obj.Save();
+                foreach (var Subitem in Obj.iNTItems)
+                {
+                    Subitem.IParentId = Obj.GSID;
+                    Subitem.Save();
+                }
+                if (i > 0)
+                    return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
             }
-            if (i > 0)
-                return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
-            return RedirectToAction("Error");
+            catch(System.Exception e)
+            {
+                 return Json(new { msg = e.Message.ToString() });
+            }
+            return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AddSubItem()

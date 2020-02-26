@@ -36,53 +36,53 @@ namespace HangOut.Models.Inventory
             //ISProcessed = false;
             iNTItems = new List<INTItems>();
         }
-       
+
         public int Save()
         {
             int Row = 0;
             DBCon con = new DBCon();
             SqlCommand cmd = null;
-            try
+            //try
+            //{
+            string Quary = "";
+            if (this.GSID == 0)
             {
-                string Quary = "";
-                if (this.GSID == 0)
-                {
-                    Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@PurchasedPrize,@PurchasedTax,@SalePrize,@SaleTax,@ISSaleable,@ISdirectlyPurchased,@ISProcessed,@ServicePrize,@ServiceTax);SELECT SCOPE_IDENTITY();";
-                }
-                else
-                {
-                    Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServiceTax where GSID=@GSID";
-                }
-                cmd = new SqlCommand(Quary, con.Con);
-                cmd.Parameters.AddWithValue("@GSID", this.GSID);
-                cmd.Parameters.AddWithValue("@CatID", this.CatID);
-                cmd.Parameters.AddWithValue("@Name", this.Name);
-                cmd.Parameters.AddWithValue("@Typeid", this.Typeid);
-                cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
-                cmd.Parameters.AddWithValue("@Qty", this.Qty);
-                cmd.Parameters.AddWithValue("@PurchasedPrize", this.PurchasedPrize);
-                cmd.Parameters.AddWithValue("@PurchasedTax", this.PurchasedTax);
-                cmd.Parameters.AddWithValue("@SalePrize", this.SalePrize);
-                cmd.Parameters.AddWithValue("@SaleTax", this.SaleTax);
-                cmd.Parameters.AddWithValue("@ISSaleable", this.ISSaleable);
-                cmd.Parameters.AddWithValue("@ISdirectlyPurchased", this.ISdirectlyPurchased);
-                cmd.Parameters.AddWithValue("@ISProcessed", this.ISProcessed);
-                cmd.Parameters.AddWithValue("@ServicePrize", this.ServicePrize);
-                cmd.Parameters.AddWithValue("@ServiceTax", this.ServiceTax);
-                if (this.GSID == 0)
-                {
-                    Row = Convert.ToInt32(cmd.ExecuteScalar());
-                    this.GSID = Row;
-                }
-                else
-                {
-                    Row = cmd.ExecuteNonQuery();
-                    //this.CategoryID = Row;
-                }
-
+                Quary = "Insert Into INTGSTBL Values (@CatID,@Name,@Typeid,@UnitID,@Qty,@PurchasedPrize,@PurchasedTax,@SalePrize,@SaleTax,@ISSaleable,@ISdirectlyPurchased,@ISProcessed,@ServicePrize,@ServiceTax);SELECT SCOPE_IDENTITY();";
             }
-            catch (Exception e) { e.ToString(); }
-            finally { cmd.Dispose(); con.Con.Close(); }
+            else
+            {
+                Quary = "Update INTGSTBL Set CatID=@CatID,Name=@Name,Typeid=@Typeid,UnitID=@UnitID,Qty=@Qty,PurchasedPrize=@PurchasedPrize,PurchasedTax=@PurchasedTax,SalePrize=@SalePrize,SaleTax=@SaleTax,ISSaleable=@ISSaleable,ISdirectlyPurchased=@ISdirectlyPurchased,ISProcessed=@ISProcessed,ServicePrize=@ServicePrize,ServiceTax=@ServiceTax where GSID=@GSID";
+            }
+            cmd = new SqlCommand(Quary, con.Con);
+            cmd.Parameters.AddWithValue("@GSID", this.GSID);
+            cmd.Parameters.AddWithValue("@CatID", this.CatID);
+            cmd.Parameters.AddWithValue("@Name", this.Name);
+            cmd.Parameters.AddWithValue("@Typeid", this.Typeid);
+            cmd.Parameters.AddWithValue("@UnitID", this.UnitID);
+            cmd.Parameters.AddWithValue("@Qty", this.Qty);
+            cmd.Parameters.AddWithValue("@PurchasedPrize", this.PurchasedPrize);
+            cmd.Parameters.AddWithValue("@PurchasedTax", this.PurchasedTax);
+            cmd.Parameters.AddWithValue("@SalePrize", this.SalePrize);
+            cmd.Parameters.AddWithValue("@SaleTax", this.SaleTax);
+            cmd.Parameters.AddWithValue("@ISSaleable", this.ISSaleable);
+            cmd.Parameters.AddWithValue("@ISdirectlyPurchased", this.ISdirectlyPurchased);
+            cmd.Parameters.AddWithValue("@ISProcessed", this.ISProcessed);
+            cmd.Parameters.AddWithValue("@ServicePrize", this.ServicePrize);
+            cmd.Parameters.AddWithValue("@ServiceTax", this.ServiceTax);
+            if (this.GSID == 0)
+            {
+                Row = Convert.ToInt32(cmd.ExecuteScalar());
+                this.GSID = Row;
+            }
+            else
+            {
+                Row = cmd.ExecuteNonQuery();
+                //this.CategoryID = Row;
+            }
+        
+           // }
+            //catch (Exception e) { e.ToString(); }
+             cmd.Dispose(); con.Con.Close(); 
             return Row;
 
         }

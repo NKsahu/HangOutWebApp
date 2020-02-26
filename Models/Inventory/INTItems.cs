@@ -19,8 +19,8 @@ namespace HangOut.Models.Inventory
             int Row = 0;
             DBCon con = new DBCon();
             SqlCommand cmd = null;
-            try
-            {
+            //try
+            //{
                 string Quary = "";
                 if (this.SubItemID == 0)
                 {
@@ -47,9 +47,9 @@ namespace HangOut.Models.Inventory
                     //this.CategoryID = Row;
                 }
 
-            }
-            catch (Exception e) { e.ToString(); }
-            finally { cmd.Dispose(); con.Con.Close(); }
+          //  }
+            //catch (Exception e) { e.ToString(); }
+             cmd.Dispose(); con.Con.Close(); 
             return Row;
 
         }
