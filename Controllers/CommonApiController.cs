@@ -109,6 +109,12 @@ namespace HangOut.Controllers
                     }
                     jArray.Add(jObject);
                  }
+                //=====add customer review comment in last at feedback
+                JObject jObject = new JObject();
+                jObject.Add("QID", 0);
+                jObject.Add("Title", "");
+                jObject.Add("QuestionType",5);
+                jObject.Add("FeedBkFormID",0);
                 respose.Add("Questions", jArray);
             }
             else
