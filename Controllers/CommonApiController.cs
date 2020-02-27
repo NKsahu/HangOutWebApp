@@ -156,6 +156,7 @@ namespace HangOut.Controllers
             //public string ObjectiveOptions { get; set; }
             //public int CID { get; set; }
             //public int OrgId { get; set; }
+            JObject result = new JObject();
             FeedbkResponse ObjRes = Newtonsoft.Json.JsonConvert.DeserializeObject<FeedbkResponse>(JObj);
             Int64 OID = ObjRes.OID;
             Feedbk feedbk = SubmitFeedBk(OID);
@@ -164,8 +165,19 @@ namespace HangOut.Controllers
                 ObjRes.FeedbkFormId = feedbk.FeedbkFormId;
                 ObjRes.FeedbkId = feedbk.FeedBkId;
                 ObjRes.save();
+                result.Add("Status", 200);
+                return result;
+            }
+            else
+            {
+                result.Add("Status", 400);
+                return result;
             }
     }
+        public JObject PostFdBkItems(string JObj)
+        {
+
+        }
         //========local contact list=======
         public JObject SaveLocalContact(string Mobile,string Cname,int ContctID)
         {
