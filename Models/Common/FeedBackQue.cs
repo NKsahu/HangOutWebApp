@@ -8,10 +8,10 @@ namespace HangOut.Models.Common
 {
     public class FeedBackQue
     {
-       public int ID { get; set; }
-      public string Title { get; set; }
-      public bool Status { get; set; }
-      public int QuestionType { get; set; }// 0:Star,1: Objective,2:Subjective,3:Like Dislike Ok,4:star-subjective
+       public int ID { get; set; }  // QID is zero (0 ) form customer feedback response 
+       public string Title { get; set; }
+      public bool Status { get; set; } // false :disable, true :active
+      public int QuestionType { get; set; }// 0:Star,1: Objective,2:Subjective,3:Like Dislike Ok,4:star-subjective,5 :remark by user
         public int FeedBkFormID { get; set; }
         public int OrderNo { get; set; }
         public List<FeedbkObj> Objectives { get; set; }
