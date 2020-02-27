@@ -27,11 +27,11 @@
             </div>
             <div class="col-md-3">
                 @{List<INTUnits>listuni = INTUnits.GetAll();
-                    listuni = listuni.FindAll(x => x.ParentId >0);
-                    var UnitID = listuni.FindAll(x => x.ParentId ==Model.IUnitID );
+                   // listuni = listuni.FindAll(x => x.ParentId >0);
+                   // var UnitID = listuni.FindAll(x => x.ParentId ==Model.IUnitID );
                     }
                     @Html.Label("Unit")
-                    @Html.DropDownListFor(model => model.IUnitID, new SelectList(UnitID, "UnitID", "Name"), "Select Unit", new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name"), "Select Unit", new { @class = "form-control" })
                     @*@Html.EditorFor(model => model.IUnitID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
             </div>
             <div class="col-md-3" id="btn">
@@ -44,15 +44,19 @@
     }
 </div>
  <script>
+     ChangeUnit();
      $("#ItemID").change(function () {
          console.log("sqa");
+         ChangeUnit();
+     });
+         function ChangeUnit(ID) {
          var value = $("#ItemID").val();
          if (value >0) {
              $.ajax({
                  type: "GET",
-                 url: "/INTGSTBL/GETID" ,
+                 url: "/INTGSTBL/GETID?ID="+ID ,
                  success: function (data) {
-                     $("#IUnitID").html(data);
+                     $("#IUnitID").val(data);
                      //alert(data.Name);
                  },
                  error: function (xhr) {
@@ -60,7 +64,7 @@
                  }
              });
          }
-         
-     });
+         }
+     
  </script> 
  

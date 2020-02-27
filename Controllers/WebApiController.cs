@@ -1019,16 +1019,16 @@ namespace HangOut.Controllers
                         order.Status = "3";//completed
                         order.Save();
                         //=======Journal Entry======
-                        //try
-                        //{
-                        //    balanceStatement.GetDetails(CompletedItems);
-                        //}
-                        //catch(Exception ex)
-                        //{
+                        try
+                        {
+                            balanceStatement.GetDetails(CompletedItems);
+                        }
+                        catch (Exception ex)
+                        {
 
-                        //}
-                        
-                       
+                        }
+
+
                         ///==============
                         ChangeOtpTbl = 1;
                         if (obj.Type != "3")
