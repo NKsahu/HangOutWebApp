@@ -25,12 +25,14 @@ namespace HangOut.Models.Feedbk
                 if(FeedBkId ==0)
                 {
                     Quary = "Insert into FeedBk values(@OrgId,@OrderId,@FeedbkFormId,@CreateOn);select SCOPE_IDENTITY();";
-                }else
+                    cmd = new SqlCommand(Quary, con.Con);
+                }
+                else
                 {
                     Quary = "Update FeedBk Set OrgId=@OrgId,OrderId=@OrderId,FeedbkFormId=@FeedbkFormId where FeedBkId=@FeedBkId";
+                    cmd = new SqlCommand(Quary, con.Con);
+                    cmd.Parameters.AddWithValue("@FeedBkId", this.FeedBkId);
                 }
-                cmd = new SqlCommand(Quary, con.Con);
-                cmd.Parameters.AddWithValue("@FeedBkId", this.FeedBkId);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
                 cmd.Parameters.AddWithValue("@FeedbkFormId", this.FeedbkFormId);
@@ -89,7 +91,7 @@ namespace HangOut.Models.Feedbk
             Feedbk feedbk = new Feedbk();
             try
             {
-                string Quary = "Select TOP 1 * From FeedBk where OrderId="+OID;
+                string Quary = "Select TOP 1 * From FeedBk where OrderId=" + OID;
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
