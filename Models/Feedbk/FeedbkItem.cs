@@ -42,6 +42,7 @@ namespace HangOut.Models.Feedbk
                 cmd.Parameters.AddWithValue("@Comment", this.Comment);
                 cmd.Parameters.AddWithValue("@FeedbkFormID ", this.FeedbkFormID );
                 cmd.Parameters.AddWithValue("@FeedBkID", this.FeedBkID);
+                cmd.Parameters.AddWithValue("@ResponseType", this.ResponseType);
                 cmd.Parameters.AddWithValue("@CreateOn", DateTime.Now);
                 cmd.Parameters.AddWithValue("@CID", this.CID);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
