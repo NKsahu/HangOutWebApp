@@ -165,6 +165,7 @@ namespace HangOut.Controllers
             {
                 ObjRes.FeedbkFormId = feedbk.FeedbkFormId;
                 ObjRes.FeedbkId = feedbk.FeedBkId;
+                ObjRes.OrgId = feedbk.OrgId;
                 ObjRes.save();
                 result.Add("Status", 200);
                 return result;
@@ -196,6 +197,7 @@ namespace HangOut.Controllers
             {
                 ObjFDBJItem.FeedbkFormID = feedbk.FeedbkFormId;
                 ObjFDBJItem.FeedBkID = feedbk.FeedBkId;
+                ObjFDBJItem.OrgId = feedbk.OrgId;
                 ObjFDBJItem.save();
                 result.Add("Status", 200);
                 return result;
