@@ -1663,7 +1663,7 @@ namespace HangOut.Controllers
                         order.Status = "3";
                         TorSObj.Status = 1;
                         TorSObj.Otp = OTPGeneretion.Generate();
-                        TorSObj.save();// free table 
+                        TorSObj.save();// free table                
                         order.Update_By = UpdateBy;
                         if (TorSObj.Type != "3")
                         {
@@ -1683,7 +1683,7 @@ namespace HangOut.Controllers
                         order.Status ="3";
                         TorSObj.Status = 1;
                         TorSObj.Otp = OTPGeneretion.Generate();
-                        TorSObj.save();
+                        TorSObj.save();                  
                         if (TorSObj.Type != "3")
                         {
                             SendMsgCustomer(order.CID, order.OID);
