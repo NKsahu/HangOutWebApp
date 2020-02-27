@@ -36,10 +36,9 @@ namespace HangOut.Models.Feedbk
             try
             {
                 string Quary = "";
-                if (QID == 0)
-                {
+               
                     Quary = "Insert into FeedbkResponse values(@QID,@ResponseType,@FeedbkFormId,@StarCnt ,@Subject,@LikeCnt,@DislikeCnt,@NormalOkCnt,@FeedbkId,@ObjectiveOptions,@CreateDate,@CID,@OrgId);";
-                }
+                
                 //else
                 //{
                 //    Quary = "Update FeedbkResponse Set ResponseType=@ResponseType,FeedbkFormId=@FeedbkFormId,StarCnt =@StarCnt ,Subject=@Subject,LikeCnt=@LikeCnt,DislikeCnt=@DislikeCnt,NormalOkCnt=@NormalOkCnt,FeedbkId=@FeedbkId,ObjectiveOptions=@ObjectiveOptions,CreateDate=@CreateDate,CID=@CID where QID=@QID ";

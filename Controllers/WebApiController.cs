@@ -638,6 +638,7 @@ namespace HangOut.Controllers
         // make order
         public JObject PostOrder(string Obj)
         {
+            BalanceStatementController balanceStatement = new BalanceStatementController();
             JObject Params = JObject.Parse(Obj);
             Int64 CID = Int64.Parse(Params["CID"].ToString());
             int OrgId = int.Parse(Params["OrgID"].ToString());
@@ -709,7 +710,7 @@ namespace HangOut.Controllers
                     DeliveryChargeAmt= orgSetting.DeliveryCharge;
                 }
             }
-            if (ObjOrg.OrderDisplay == 2)// check KOT mode enable
+            if (ObjOrg.OrderDisplay == 2 &&AppType==3)// check KOT mode enable
             {
                 Status = 3;// mark complete all items
             }
@@ -760,7 +761,7 @@ namespace HangOut.Controllers
             }
             else
             {
-                HG_Orders ObjOrder = new HG_Orders()
+                ObjOrders = new HG_Orders()
                 {
                     Create_By = CID,
                     Create_Date = DateTime.Now,
@@ -778,7 +779,7 @@ namespace HangOut.Controllers
                     DeliveryCharge = DeliveryChargeAmt,
                    ContactId = ContactId <= 0 ? 0 : ContactId// -1 contact id for Customer Order foodo app
             };
-                NewOID= ObjOrder.Save();
+                NewOID= ObjOrders.Save();
             }
                 if (NewOID > 0)
                 {
@@ -841,7 +842,23 @@ namespace HangOut.Controllers
                 {
                     PendingPrints.SaveKotPrint(ObjOrders, ObjOrg.Copy, Ticketno);
                 }
+                if(ObjOrders.Status=="3")
+                {
+                    //for balance Statement
+                    List<HG_OrderItem> OrdrItmsList = new List<HG_OrderItem>();
+                    OrdrItmsList = new HG_OrderItem().GetAll(ObjOrders.OID);
+                    List<HG_OrderItem> CompletedItems = OrdrItmsList.FindAll(x => x.Status == 3);
+                    //==============
+                    //=======balanceStatement========
+                    try
+                    {
+                        balanceStatement.GetDetails(CompletedItems);
+                    }
+                    catch (Exception ex)
+                    {
 
+                    }
+                }
             }
             else
             {
@@ -1059,7 +1076,9 @@ namespace HangOut.Controllers
                         order.PayReceivedBy = UpdatedBy;
                         order.PaymentStatus = PaymentType;// update payment status
                         order.Save();
-                        //
+                        //for balance Statement
+                        List<HG_OrderItem> CompletedItems = OrdrItmsList.FindAll(x => x.Status == 3);
+                        //==============
                         var CompletedOrCancelItems = OrderItems.FindAll(x => x.Status == 3 || x.Status == 4);// completed or canceled
                         if (OrderItems.Count == CompletedOrCancelItems.Count)
                         {
@@ -1070,6 +1089,16 @@ namespace HangOut.Controllers
                             order.Status = "3";//3 order completed
 
                             order.Save();
+                            //=======Journal Entry======
+                            try
+                            {
+                                balanceStatement.GetDetails(CompletedItems);
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                            ///==============
                             if (obj.Type != "3")
                             {
                                 SendMsgCustomer(order.CID, order.OID);
@@ -1599,7 +1628,8 @@ namespace HangOut.Controllers
         {
             HG_Orders order = new HG_Orders().GetOne(OID);
             List<HG_OrderItem> OrderItemListAll  = new HG_OrderItem().GetAll(OID);
-           var OrderItemList = OrderItemListAll.FindAll(x => x.TickedNo == TickedNo);
+            BalanceStatementController balanceStatement = new BalanceStatementController();
+            var OrderItemList = OrderItemListAll.FindAll(x => x.TickedNo == TickedNo);
             OrderItemList = OrderItemList.FindAll(X => X.Status != 3 && X.Status != 4); //NOT ALREADY CANCEL NOT COMPLETED
             HashSet<Int64> OIIDHash = new HashSet<Int64>();
             OIIDHash.Add(0);
@@ -1657,13 +1687,27 @@ namespace HangOut.Controllers
                 }
                 if (ObjOrg.PaymentType==1)// prepaid
                 {
+                    //for balance Statement
+                    List<HG_OrderItem> CompletedItems = OrderItemListAll.FindAll(x => x.Status == 3);
+                    //==============
                     var completedOrCancelorderItems = OrderItemListAll.FindAll(x => x.Status == 3 || x.Status == 4);//cancel and Completed
                     if (OrderItemListAll.Count == completedOrCancelorderItems.Count)
                     {
                         order.Status = "3";
                         TorSObj.Status = 1;
                         TorSObj.Otp = OTPGeneretion.Generate();
-                        TorSObj.save();// free table 
+                        TorSObj.save();// free table  
+                       //=============Balance Statement==============
+                                 
+                        try
+                        {
+                            balanceStatement.GetDetails(CompletedItems);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }               
+                        //============================================
                         order.Update_By = UpdateBy;
                         if (TorSObj.Type != "3")
                         {
@@ -1680,10 +1724,24 @@ namespace HangOut.Controllers
                     var completedOrCancelorderItems = OrderItemListAll.FindAll(x => x.Status == 3 || x.Status == 4);//cancel and Completed
                     if (OrderItemListAll.Count == completedOrCancelorderItems.Count && order.PaymentStatus != 0)
                     {
+                        //for balance Statement
+                        List<HG_OrderItem> CompletedItems = OrderItemListAll.FindAll(x => x.Status == 3);
+                        //==============
                         order.Status ="3";
                         TorSObj.Status = 1;
                         TorSObj.Otp = OTPGeneretion.Generate();
                         TorSObj.save();
+                        //=============Balance Statement==============
+
+                        try
+                        {
+                            balanceStatement.GetDetails(CompletedItems);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        //============================================
                         if (TorSObj.Type != "3")
                         {
                             SendMsgCustomer(order.CID, order.OID);

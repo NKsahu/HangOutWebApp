@@ -13,11 +13,6 @@ namespace HangOut
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
-                name: "Inventory",
-                url: "Inventory/{controller}/{action}/{id}",
-                defaults: new { controller = "vw_HG_UsersDetails", action = "vw_HG_UsersDetails", id = UrlParameter.Optional }
-            );
-            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "vw_HG_UsersDetails", action = "vw_HG_UsersDetails", id = UrlParameter.Optional }

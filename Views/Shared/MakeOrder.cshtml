@@ -1399,8 +1399,8 @@
          var Mobile = $("#C_mobile").val();
          var C_name = $("#C_name").val();
          var ContctID = $("#ContactId").val();
-         if (Mobile == "" && C_name == "") {
-             alert("One Field required");
+         if (Mobile == "") {
+             alert("Mobile No required");
              return;
          }
          if ( Mobile != "" && (Mobile.length < 10 || Mobile.length>10)) {
@@ -1460,8 +1460,10 @@
      function DisplyOrderConfirmMsg(Type, OID, TicketNo) {
          console.log(" DisplyOrderConfirmMsg Type=" + Type)
          var Msg = "";
-         if (Type == 2) {
-             Msg = "Print Kot";
+         if (Type == 2 && OrderDisplay == 2) {
+             OpenPrinter(Type, OID, KotNoOfCopy, TicketNo);
+             return;
+             //Msg = "Print Kot";
          }
          else if (Type == 1) {
              Msg = "Print Invoice";
@@ -1477,9 +1479,7 @@
                          if (PrintInvoice == 2 && Type == 1) {
                              OpenPrinter(Type, OID, NoOfCopy, TicketNo);
                          }
-                         else if (Type == 2 && OrderDisplay == 2) {
-                             OpenPrinter(Type, OID, KotNoOfCopy, TicketNo);
-                         }
+                         
                      }
                  },
                  
