@@ -6,6 +6,7 @@ using System.Linq;
 using HangOut.Models.Feedbk;
 using System.Web.Mvc;
 using System;
+using Newtonsoft.Json;
 
 namespace HangOut.Controllers
 {
@@ -157,7 +158,7 @@ namespace HangOut.Controllers
             //public int CID { get; set; }
             //public int OrgId { get; set; }
             JObject result = new JObject();
-            FeedbkResponse ObjRes = Newtonsoft.Json.JsonConvert.DeserializeObject<FeedbkResponse>(JObj);
+            FeedbkResponse ObjRes =JsonConvert.DeserializeObject<FeedbkResponse>(JObj);
             Int64 OID = ObjRes.OID;
             Feedbk feedbk = SubmitFeedBk(OID);
             if (feedbk.FeedBkId > 0)
@@ -176,7 +177,34 @@ namespace HangOut.Controllers
     }
         public JObject PostFdBkItems(string JObj)
         {
-
+        //     public Int64 ItemID { get; set; }
+        //public int Rating { get; set; }
+        //public string Comment { get; set; }
+        //public int ResponseType { get; set; }
+        //public int CID { get; set; }
+        //public int LikeCnt { get; set; }
+        //public int DislikeCnt { get; set; }
+        //public int OkCnt { get; set; }
+        //public int FeedbkFormID { get; set; }
+        //public int FeedBkID { get; set; }
+        //public int OrgId { get; set; }
+        JObject result = new JObject();
+        FeedbkItem ObjFDBJItem = JsonConvert.DeserializeObject<FeedbkItem>(JObj);
+            Int64 OID = ObjFDBJItem.OID;
+            Feedbk feedbk = SubmitFeedBk(OID);
+            if (feedbk.FeedBkId > 0)
+            {
+                ObjFDBJItem.FeedbkFormID = feedbk.FeedbkFormId;
+                ObjFDBJItem.FeedBkID = feedbk.FeedBkId;
+                ObjFDBJItem.save();
+                result.Add("Status", 200);
+                return result;
+            }
+            else
+            {
+                result.Add("Status", 400);
+                return result;
+            }
         }
         //========local contact list=======
         public JObject SaveLocalContact(string Mobile,string Cname,int ContctID)

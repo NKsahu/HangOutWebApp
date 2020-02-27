@@ -18,6 +18,8 @@ namespace HangOut.Models.Feedbk
         public int LikeCnt { get; set; }
         public int DislikeCnt { get; set; }
         public int OkCnt { get; set; }
+        //
+        public Int64 OID { get; set; }
         public FeedbkItem(){
             CreateOn = DateTime.Now;
             }
