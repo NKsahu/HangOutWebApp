@@ -58,15 +58,19 @@ namespace HangOut.Controllers.Inventory
             INTItems iNTItems = new INTItems();
             return View(iNTItems);
         }
-        public ActionResult GETID()
+        public JsonResult GetAmt(int PRID)
         {
-            int ID = int.Parse(Request.QueryString["IParentId"]);
-            List<INTUnits> listunit = INTUnits.GetAll();
-            if (ID!=0)
-            {
-                listunit = listunit.FindAll(x => x.ParentId == ID);
-            }
-            return View(listunit);
+            List<Rental> ListRentals = new Rental().GetAll();
+            Rental OnjRentals = ListRentals.Find(x => x.RantalID == PRID);
+            List<RoomTable> ListRooms = new RoomTable().GetAll();
+            RoomTable ObjRooms = ListRooms.Find(x => x.RID == OnjRentals.RID);
+            List<RantPaid> ListRentPaids = new RantPaid().GetAll();
+            RantPaid RentPaidsobj = ListRentPaids.Find(x => x.RantalID == PRID);
+            List<BlockD> listblock = new BlockD().GetAll();
+            BlockD objblock = listblock.Find(x => x.DDID == PRID);
+            List<Login> listlogin = new Login().GetAll();
+            Login OBJLogin = listlogin.Find(x => x.ID == OnjRentals.ID);
+            return Json(new { RID = ObjRooms.RID, RentAgreementFor = OnjRentals.RentAgreementFor, RoomNumber = ObjRooms.RoomNumber, RantAmt = ObjRooms.RantAmt, DDID = ObjRooms.DDID, ID = OBJLogin.ID }, JsonRequestBehavior.AllowGet);
         }
     }
 }
