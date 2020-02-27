@@ -75,5 +75,9 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult EditOrder(Int64 OID)
+        {
+            return View();
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿
 @{
-    Layout = null;
+                /**/
+
+                Layout = null;
 }
 <div class="card">
     <div class="card-header text-center"><b>Filter</b></div>
@@ -55,7 +57,7 @@
                         OrderStstList.Add(objp3Osl);
                         OrderStstList.Add(objp4Osl);
                     }
-                    @Html.DropDownList("OrdSts", OrderStstList, new { @class = "form-control"})
+                    @Html.DropDownList("OrdSts", OrderStstList, new { @class = "form-control" })
                 </div>
 
                 <div class="col-md-3">
@@ -94,62 +96,81 @@
 
 </div>
 <script>
-            $(document).ready(function () {
-                function Search() {
-                    $("#waiting").show();
-                    var Pmode = $("#PMode").val();
-                    var Fdate = $("#Fdate").val();
-                    var Tdate = $("#Tdate").val();
-                    var PlacedBy = $("#PlacedBy").val();
-                    var OrdSts = $("#OrdSts").val();
-                    $.ajax({
-                        url: "/Reports/PastOrder?PMode=" + Pmode + "&Fdate=" + Fdate + "&Tdate=" + Tdate + "&PlacedBy=" + PlacedBy + "&OrdSts=" + OrdSts,
-                        type: "GET",
-                        success: function (data) {
-                            $("#waiting").hide();
-                            $("#List").html(data);
+    $(document).ready(function () {
+        function Search() {
+            $("#waiting").show();
+            var Pmode = $("#PMode").val();
+            var Fdate = $("#Fdate").val();
+            var Tdate = $("#Tdate").val();
+            var PlacedBy = $("#PlacedBy").val();
+            var OrdSts = $("#OrdSts").val();
+            $.ajax({
+                url: "/Reports/PastOrder?PMode=" + Pmode + "&Fdate=" + Fdate + "&Tdate=" + Tdate + "&PlacedBy=" + PlacedBy + "&OrdSts=" + OrdSts,
+                type: "GET",
+                success: function (data) {
+                    $("#waiting").hide();
+                    $("#List").html(data);
 
-                        },
-                        error: function (jqXhr, textStatus, errorMessage) { // error callback
-                            $("#waiting").hide();
-                        }
-
-                    });
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
                 }
-                $("#Search").click(function () {
-                    Search();
-                });
 
             });
-            function Details(OID) {
-                //HG_OrderItem
-                //OID
-                $("#waiting").show();
-                $.ajax({
-                    type: 'POST',
-                    url: "/HG_OrderItem/index?OID=" + OID,
-                    success: function (data) {
-                        makedpt("CurrOrder");
-                        $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
-                        showdpt("CurrOrder");
-                        $("#waiting").hide();
-                    },
-                    error: function (jqXhr, textStatus, errorMessage) { // error callback
-                        $("#waiting").hide();
-                    }
-                });
+        }
+        $("#Search").click(function () {
+            Search();
+        });
+
+    });
+    function Details(OID) {
+        //HG_OrderItem
+        //OID
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/HG_OrderItem/index?OID=" + OID,
+            success: function (data) {
+                makedpt("CurrOrder");
+                $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CurrOrder");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
 
     }
-            function PrintInvoice(OID) {
+    function PrintInvoice(OID) {
 
-          $("#waiting").show();
-          $.ajax({
+        $("#waiting").show();
+        $.ajax({
             type: 'POST',
             url: "/HG_Orders/PrintInvoice?&OID=" + OID,
             success: function (data) {
                 makedpt("invoice");
                 $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
                 showdpt("invoice");
+                $("#waiting").hide();
+                //var Jobje = JSON.parse(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+
+    }
+    function EditOrder(OID) {
+        console.log("asa");
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/HG_Orders/EditOrder?OID=" + OID,
+            success: function (data) {
+                makedpt("EditOrder");
+                $("#EditOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("EditOrder");
                 $("#waiting").hide();
                 //var Jobje = JSON.parse(data);
             },

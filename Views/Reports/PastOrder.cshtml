@@ -53,6 +53,7 @@
             <td>Payment Mode</td>
             <td>Details</td>
             <td>Print</td>
+            <td>Edit Order</td>
         </tr>
     </thead>
     <tbody>
@@ -80,6 +81,9 @@
             </td>
             <td>
                 <button class="btn btn-sm btn-outline-info" onclick="PrintInvoice('@Ord.OID');">Invoice</button>
+            </td>
+            <td>
+                <button class="btn btn-sm btn btn-danger" onclick="EditOrder('@Ord.OID');">Edit Order</button>
             </td>
         </tr>
         }
