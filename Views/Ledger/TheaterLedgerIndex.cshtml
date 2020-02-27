@@ -49,7 +49,7 @@
 
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
-                            @*<button class="btn btn-danger btn-sm " onclick="Delete(@Obj.ID)"> Delete</button>*@
+                            <button class="btn btn-success btn-sm " onclick="Get(@Obj.OrgId)"> Balance Statement</button>
                         </td>
                     </tr>
                 }
@@ -82,4 +82,21 @@
         });
 
     }
+    function Get(OrgId) {
+                
+            $.ajax({
+                type: 'GET',
+                url: "/BalanceStatement/Index?OrgId=" + OrgId,
+                success: function (data) {
+                    makedpt("BalanceStatement");
+                    $("#BalanceStatement > .modal-dialog > .modal-content > .modal-body").html(data);
+                    showdpt("BalanceStatement");
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+
+        }
 </script>
