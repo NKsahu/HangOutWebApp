@@ -8,19 +8,19 @@ namespace HangOut.Models
 
     public class HG_OrderItem
     {
-        public System.Int64 OIID { get; set; }
-        public System.Int64 FID { get; set; }//FID mean food ID
+        public Int64 OIID { get; set; }
+        public Int64 FID { get; set; }//FID mean food ID
         public double Price { get; set; }// single item*count = price TotalWithTax
         public int Count { get; set; }
         public string Qty { get; set; }
-        public System.Int64 OID { get; set; }
+        public Int64 OID { get; set; }
         public bool Deleted { get; set; }
         public int Status { get; set; }//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
-        public System.DateTime OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
         public int UpdatedBy { get; set; }
-        public System.DateTime UpdationDate { get; set; }
+        public DateTime UpdationDate { get; set; }
         public int TickedNo { get; set; }
-        public int ChefSeenBy { get; set; }
+        public int ChefSeenBy { get; set; }// item complete or cancel by
         public int OrgId { get; set; }
         public Int64 OrdById { get; set; }// Item order by id
         public double TaxInItm { get; set; }//single item Tax*Count  =Tax
@@ -78,7 +78,7 @@ namespace HangOut.Models
                     }
                 }
             }
-            catch (System.Exception e) { this.OIID = 0; e.ToString(); }
+            catch (Exception e) { this.OIID = 0; e.ToString(); }
             finally { cmd.Dispose(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return Row;
         }
@@ -88,7 +88,7 @@ namespace HangOut.Models
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             System.Data.SqlClient.SqlCommand cmd = null;
             System.Data.SqlClient.SqlDataReader SDR = null;
-            System.Collections.Generic.List<HG_OrderItem> ListTmp = new System.Collections.Generic.List<HG_OrderItem>();
+            List<HG_OrderItem> ListTmp = new List<HG_OrderItem>();
             DBCon Obj = new DBCon();
             try
             {
