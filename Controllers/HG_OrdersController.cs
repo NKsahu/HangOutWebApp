@@ -110,7 +110,7 @@ namespace HangOut.Controllers
             }
             if (discntCharge.OID > 0)
             {
-
+                discntCharge.Save();
             }
             else
             {

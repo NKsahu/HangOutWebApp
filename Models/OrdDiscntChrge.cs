@@ -36,20 +36,20 @@ namespace HangOut.Models
                 if (this.ID == 0)
                 {
                     Quary = "Insert Into OrdDiscntChrge Values (@Title,@OID,@Type,@Amt,@Tax,@Remark,@Datetime);SELECT SCOPE_IDENTITY();";
+                    cmd = new SqlCommand(Quary, con.Con);
+                    cmd.Parameters.AddWithValue("@Datetime", DateTime.Now);
                 }
                 else
                 {
-                    Quary = "Update OrdDiscntChrge Set Title=@Title,OID=@OID,Type=@Type,Amt=@Amt,Tax=@Tax,Remark=@Remark,Datetime=@Datetime where ID=@ID";
+                    Quary = "Update OrdDiscntChrge Set Title=@Title,OID=@OID,Type=@Type,Amt=@Amt,Tax=@Tax,Remark=@Remark where ID=@ID";
+                    cmd = new SqlCommand(Quary, con.Con);
+                    cmd.Parameters.AddWithValue("@ID", this.ID);
                 }
-                cmd = new SqlCommand(Quary, con.Con);
-                cmd.Parameters.AddWithValue("@ID", this.ID);
                 cmd.Parameters.AddWithValue("@Title", this.Title);
                 cmd.Parameters.AddWithValue("@Type", this.Type);
                 cmd.Parameters.AddWithValue("@Amt", this.Amt);
                 cmd.Parameters.AddWithValue("@Tax", this.Tax);
                 cmd.Parameters.AddWithValue("@Remark", this.Remark);
-                cmd.Parameters.AddWithValue("@Datetime", DateTime.Now);
-                
                 if (this.ID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -68,18 +68,17 @@ namespace HangOut.Models
 
         }
         
-        public static OrdDiscntChrge GetOne(int ID )
+        public static OrdDiscntChrge GetAll(int ID )
         {
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
-            Con.Open();
+            DBCon Con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             OrdDiscntChrge ObjTmp = new OrdDiscntChrge();
             try
             {
-                string Query = "SELECT   * FROM  OrdDiscntChrge";
+                string Query = "SELECT  * FROM  OrdDiscntChrge";
                 
-                cmd = new SqlCommand(Query, Con);
+                cmd = new SqlCommand(Query, Con.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -95,7 +94,7 @@ namespace HangOut.Models
             catch (System.Exception e)
             { e.ToString(); }
 
-            finally { cmd.Dispose(); Con.Close(); }
+            finally { cmd.Dispose(); Con.Con.Close();Con = null; }
 
             return (ObjTmp);
         }
