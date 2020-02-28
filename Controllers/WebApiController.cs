@@ -656,7 +656,7 @@ namespace HangOut.Controllers
             ListOfOrder = ListOfOrder.FindAll(x => x.OrgId == OrgId);
             HG_Orders ObjOrders = ListOfOrder.Find(x => x.Table_or_SheatId == TableorSheatId && x.TableOtp == ObjTorS.Otp);
             JObject PostResult = new JObject();
-            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID && x.OrgId==OrgId && x.TableorSheatOrTaleAwayId==TableorSheatId);
+            List<Cart> ListCart = Cart.List.FindAll(x => x.CID == CID  && x.TableorSheatOrTaleAwayId==TableorSheatId);
             ListCart = ListCart.FindAll(x => x.Count > 0);
             OrgSetting orgSetting = OrgSetting.Getone(ObjOrg.OrgID);
             Int64 OID = 0;
@@ -866,7 +866,7 @@ namespace HangOut.Controllers
                 PostResult.Add("MSG", "Unable To Place Order Try Again.");
                 return PostResult;
             }
-            Cart.List.RemoveAll(x => x.CID == CID && x.OrgId==OrgId &&x.TableorSheatOrTaleAwayId==TableorSheatId);
+            Cart.List.RemoveAll(x => x.CID == CID &&x.TableorSheatOrTaleAwayId==TableorSheatId);
             return PostResult;
         }
 
