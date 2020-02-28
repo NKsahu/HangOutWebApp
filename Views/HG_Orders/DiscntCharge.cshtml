@@ -29,36 +29,33 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="col-md-12">
                 @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label  " })
-                @Html.TextBoxFor(model => model.Title, new { @class = "form-control", required = "required" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control ", autocomplete = "off" , required = "required" })
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-6">
-                @Html.Label("Rs/-")
-                @Html.EditorFor(model => model.Amt, new { @class = "form-control autodouble" })
+            <div class="col-md-5">
+                @Html.Label("Rs")
+                @Html.TextBoxFor(model => model.Amt, new { @class = "form-control autodouble" })
                 @Html.ValidationMessageFor(model => model.Amt, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-6">
-                @Html.Label("Tax %")
-                @Html.EditorFor(model => model.Tax, new { @class = "form-control autodouble", })
+            <div class="col-md-2">
+                <label style="text-align:center">OR</label>
+            </div>
+            <div class="col-md-5">
+                @Html.Label("Tax")
+                @Html.TextBoxFor(model => model.Tax, new { @class = "form-control autodouble", })
                 @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
-
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 @Html.Label("Remark")
-                @Html.EditorFor(model => model.Remark, new { @class = "form-control " })
+                @Html.TextBoxFor(model => model.Remark, new { @class = "form-control " })
                 @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
-
+                @Html.Label("", new { @class = "text-white" })
+                <input type="button" value="Cancel" class="btn btn-danger" />
             </div>
-            <div class="col-md-1">
-                @Html.Label("Cancel", new { @class = "text-white" })
-                <input type="button" value="Save" class="btn btn-danger" />
-            </div>
-            <div class="col-md-1">
-                @Html.Label("Submit", new { @class = "text-white" })
+            <div class="col-md-3">
+                @Html.Label("", new { @class = "text-white" })
                 <input type="submit" value="Save" class="btn btn-success" />
             </div>
         </div>

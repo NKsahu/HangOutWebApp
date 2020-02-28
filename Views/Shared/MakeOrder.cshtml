@@ -383,7 +383,7 @@
                                     <tbody id="AddItem"></tbody>
                                 </table>
                             </div>
-
+                           
                             <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn">
                                 <!---->
                                 <div class="row" style="width:100%">
@@ -395,6 +395,19 @@
                                     <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
                                         <button type="button" class="form-control btn btn-success sp-f2-hotkey">
                                             bypass CHEF
+                                        </button>
+                                    </div>
+                                </div>
+                                <!--discount and charge-->
+                                <div class="row" style="width:100%">
+                                    <div id="AddCharge" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
+                                        <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="AddChargeDiscnt(2);">
+                                            Add Charge
+                                        </button>
+                                    </div>
+                                    <div id="Discnt" class="btn-group col-md-6" role="group" style="width:50%; padding:10px">
+                                        <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="AddChargeDiscnt(1);">
+                                            Discount
                                         </button>
                                     </div>
                                 </div>
@@ -515,7 +528,7 @@
      var TablesList = null;
      var ItemList = null;
      var ChargeAmt = 0.00;
-     var CurrentOrder = 0;// which means table or  takeaway id
+     var CurrentOrder = 0;// which means SeatingId  Table/Seat/TakeAway
      var CurrOID = 0; //current Order Id;
      var finalAmt = 0.00;
      //===printer setting
@@ -1552,6 +1565,22 @@
                  OrderDisplay = Jobj.OrdDisaply;
                  KotPrintType = Jobj.KotPrint;
                  KotNoOfCopy = Jobj.NoOfCopy;
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
+             }
+         });
+     }
+     function AddChargeDiscnt(Type) {
+         $("#waiting").show();
+         $.ajax({
+             type: 'GET',
+             url: "/HG_Orders/DiscntCharge?SeatingId="+CurrentOrder+"&Type="+Type,
+             success: function (data) {
+                 makedpt("DiscntCharge", 400,400);
+                 $("#DiscntCharge > .modal-dialog > .modal-content > .modal-body").html(data);
+                 showdpt("DiscntCharge");
+                 $("#waiting").hide();
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback
                  $("#waiting").hide();
