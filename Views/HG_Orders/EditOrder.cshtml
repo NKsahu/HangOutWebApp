@@ -57,18 +57,18 @@
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-right">
-                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]" id="@Order.OIID,@Order.Count" >
+                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]" OIID="@Order.OIID" onclick="MinusItemQty(this)" >
                                             <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
                                         </button>
                                     </span>
                                 </div>
                                 <div class="Col-md-1" >
-                                    <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" min="0" max="10000000" size="10" id="value">
+                                    <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" id="@Order.OIID" min="0" max="20" size="10">
 
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-left">
-                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  onclick="Addsum(@Order.OIID,@ItemPrice);">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  OIID="@Order.OIID" onclick="PlusItemQty(this)">
                                             <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
                                         </button>
                                     </span>
@@ -81,7 +81,7 @@
                         <td>
                             @Order.TickedNo
                         </td>
-                        <td id="txtCal">
+                        <td id="IntPrice@(Order.OIID)">
                             @ItemPrice.ToString("0.00")
                         </td>
                     </tr>
@@ -227,25 +227,11 @@
             e.preventDefault();
         }
     });
-    //Addvalue();
-   
-   
-    //function Addvalue(index) {
-    //    console.log("sss");
-    //    var value = parseInt($("#value").val());
-    //    var inputVal = parseInt($('#txtCal', this).eq(index).text());
-    //        var total = inputVal * value;
-    //        $('#Quantity').eq(index).text(total);
-       
-        
-    //}
     $(document).on('click'  , function (i) {
         Addsum(i);
 
     });
     $(document).on("keyup", "#txtCal", Addsum);
-    
-    
     function Addsum(ID, Price) {
         console.log("ss");
        
@@ -270,6 +256,32 @@
     }
 </script>
 <script>
+    function MinusItemQty(Event) {
+      var Cnt=parseInt($(Event).attr('OIID').val());
+        $(Event).val(Cnt - 1);
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Orders/UpdateAmt?ID=" +  + "&Price=" + Price,
+            success: function (data) {
+                var qnty = parseInt($("#value").val());
+                var price = Price;
+                var total = 0;
+                if (!isNaN(qnty) && !isNaN(price)) {
+                    total = qnty * price;
+                }
+                $(data).find("#txtCal").val(total);
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function PlusItemQty(Event) {
+        var Cnt = parseInt($(Event).val());
+        $(Event).val(Cnt + 1);
+    }
     $(document).ready(function () {
         $('table thead th').each(function (i) {
             calculateColumn(i);
