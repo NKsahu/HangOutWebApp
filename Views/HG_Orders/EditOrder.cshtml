@@ -261,6 +261,18 @@
         total = qnty * price * 2;
         $(this).find("#txtCal").val(total.toFixed(2));
         });
+        $.ajax({
+            type: 'GET',
+            url: "/ HG_Orders/UpdateAmt",
+            success: function (data) {
+                $('#waiting').hide();
+                var parent = $(event).parent('span').parent('div').parent('div');
+                $(data).insertAfter(parent);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
     }
 </script>
 <script>
