@@ -2066,6 +2066,7 @@ namespace HangOut.Controllers
                     jObject.Add("DeliveryType", orgSetting.DeleryChrgType);
                 }
             }
+            jObject.Add("VerifyBy", orgSetting.CrxVerification);
             return jObject;
         }
         [HttpPost]
