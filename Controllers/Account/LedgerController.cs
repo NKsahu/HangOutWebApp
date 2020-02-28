@@ -41,7 +41,7 @@ namespace HangOut.Controllers.Account
 
             LedgerObj = LedgerObj.GetOne(0,Obj.OrgId);
            
-            if (Obj.OrgId == LedgerObj.OrgId)
+            if (Obj.OrgId == LedgerObj.OrgId && Obj.ID==0)
             {
                 return Json(new { msg = "Already Created" });
             }
