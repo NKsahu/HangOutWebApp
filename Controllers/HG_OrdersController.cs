@@ -104,13 +104,14 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "fill  Single Option" }, JsonRequestBehavior.AllowGet);
             }
-            if (discntCharge.Amt <= 0 || discntCharge.Tax <= 0)
+            if (discntCharge.Amt <= 0 && discntCharge.Tax <= 0)
             {
                 return Json(new { msg = "value cannot be zero" }, JsonRequestBehavior.AllowGet);
             }
             if (discntCharge.OID > 0)
             {
-                discntCharge.Save();
+                DiscntCharge.ListDiscntChrge.Add(discntCharge);
+                OrdDiscntChrge.RemoveDiscntCharge(discntCharge.SeatingId, discntCharge.SeatingOtp,discntCharge.OID);
             }
             else
             {
@@ -118,12 +119,12 @@ namespace HangOut.Controllers
             }
             return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult UpdateAmt(int ID,int Count)
+        public ActionResult UpdateAmt(int ID,int Cnt)
         {
-                 HG_OrderItem OBJOrderItem = new HG_OrderItem().GetOne(ID);
-            OBJOrderItem.OIID = ID;
-            OBJOrderItem.Count = Count;
-            return Json(new { data = OBJOrderItem }, JsonRequestBehavior.AllowGet);
+            HG_OrderItem OBJOrderItem = new HG_OrderItem().GetOne(ID);
+            OBJOrderItem.Count = Cnt;
+            double price = OBJOrderItem.Count * OBJOrderItem.Price;
+            return Json(new { data=price.ToString("0.0") }, JsonRequestBehavior.AllowGet);
         }
     }
 }
