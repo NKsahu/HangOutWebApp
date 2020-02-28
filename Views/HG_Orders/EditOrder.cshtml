@@ -51,31 +51,108 @@
                             @ObjOrder.Items
                         </td>
                         <td>
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]">
-                                        <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
-                                    </button>
-                                </span>
-                                <input type="text" name="quant[2]" class="form-control input-number text-center" value="@Order.Count" min="1" max="10000000">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
-                                        <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
-                                    </button>
-                                </span>
+                            <div class="row">
+                                <div class="col-md-4">
+
+                                </div>
+                                <div class="Col-md-1">
+                                    <span class="input-group-btn float-right">
+                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]" >
+                                            <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="Col-md-1">
+                                    <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" min="0" max="10000000" size="10" id="value">
+
+                                </div>
+                                <div class="Col-md-1">
+                                    <span class="input-group-btn float-left">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  onclick="Addvalue(this);">
+                                            <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+
+                                </div>
                             </div>
                         </td>
                         <td>
                             @Order.TickedNo
                         </td>
-                        <td>
+                        <td class="txtCal">
                             @ItemPrice.ToString("0.00")
                         </td>
                     </tr>
                 }
+
             </tbody>
 
-        </table>
+        </table> 
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-md-5">
+                        @Html.Label("Total")
+                    </div>
+                    <div class="col-md-5">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-6">
+                        @Html.Label("Total Quantity")
+                    </div>
+                    <div class="col-6">
+                        <label for="male" id="Quantity"> </label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-6">
+
+                    </div>
+                    <div class="col-4">
+                        @Html.Label("Total Amount")
+                    </div>
+                    <div class="col-2">
+                        <label for="male" id="jjj"> </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Payment Mode")
+                @{
+                    List<SelectListItem> li = new List<SelectListItem>();
+                    SelectListItem obj1 = new SelectListItem() { Text = "Select Peyment Type", Value = "0" };
+                    SelectListItem obj2 = new SelectListItem() { Text = "Cash", Value = "1" };
+                    SelectListItem obj3 = new SelectListItem() { Text = "Bank/Wallet", Value = "2" };
+                    SelectListItem obj4 = new SelectListItem() { Text = "FoodDo", Value = "3" };
+                    li.Add(obj1);
+                    li.Add(obj2);
+                    li.Add(obj3);
+                    li.Add(obj4);
+
+                }
+                @Html.DropDownList("PMode", li, new { @class = "form-control " })
+            </div>
+            <div class="col-sm-1">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input type="submit" value="Save" class="btn btn-success" style="margin-top: 28px;">
+
+            </div>
+        </div>
     </div>
 </div>
 <script>
@@ -150,12 +227,64 @@
             e.preventDefault();
         }
     });
+    
+    function Addvalue(event) {
+        console.log("sss");
+        var value = parseInt($("#value").val());
+        //var totalvalue = $(event).parent('tr').parent('tbody').find(".txtCal").val(); 
+        var i = 0;
+        var rows = $("#myTableId").find("tbody tr");
+        var inputVal =rows.eq(i).find("td :input").val();
+        var Total = inputVal * value;
+        var GrandTotal = Total * 2;
+        document.getElementById("#txtCal").innerHTML = GrandTotal;
+    }
+
+   
 </script>
+<script>
+    $(document).ready(function () {
+        $('table thead th').each(function (i) {
+            calculateColumn(i);
+            
+        });
+    });
+
+    function calculateColumn(index) {
+        var total = 0;
+        $('table tr').each(function () {
+            var value = parseInt($('.txtCal', this).eq(index).text());
+            if (!isNaN(value)) {
+                total += value;
+            }
+        });
+        $('#jjj').eq(index).text(total);
+    }
+    
+</script>
+@*<script>
+    $(document).ready(function () {
+        $('table thead th').each(function (i) {
+            calculateQty(i);
+        });
+    });
+    function calculateQty(index) {
+        var total = 0;
+        $('table tr').each(function () {
+            console.log("sda");
+            var value = parseInt($('.text-center', this).parent('div').parent('div').eq(index).text());
+            if (!isNaN(value)) {
+                total += value;
+            }
+        });
+        $('#Quantity').eq(index).text(total);
+    }
+</script>*@
 <style>
     body {
         font-family: "Open Sans", helvetica, arial;
     }
-
+    
     table {
         width: 500px; /* For Responsive design set 100% */
         border-collapse: collapse;

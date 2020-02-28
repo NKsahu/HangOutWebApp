@@ -1,46 +1,64 @@
 ﻿@model HangOut.Models.OrdDiscntChrge
 @{
     Layout = null;
+    string TitleType = "";
+    string TaxTitle = "";
+    if (Request.QueryString["Type"] == "1")
+    {
+        TitleType = "Discount";
+        TaxTitle = " % ";
+    }
+    else if (Request.QueryString["Type"] == "2")
+    {
+        TitleType = "Charge";
+        TaxTitle = "Tax %";
+    }
 }
 
 <div class="card">
     <div class="card-header">
-        <h4 style="text-align:center;color:#000000"><b>ORGONIZATION</b></h4>
+        <h4 style="text-align:center;color:#000000"><b>@TitleType</b></h4>
         <hr />
     </div>
     <div class="card-body">
 
-        @using (Ajax.BeginForm("CreateEdit", "HG_OrganizationDetails", new { OrgID = Model.OrgID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("DiscntCharge", "HG_Orders", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-            
+            @Html.HiddenFor(model => model.ID)
+            @Html.HiddenFor(model => model.Type)
+            @Html.HiddenFor(model => model.OID)
+            @Html.HiddenFor(model=>model.SeatingId)
         <div class="row">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="col-md-2">
+            <div class="col-md-12">
                 @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label  " })
-                @Html.TextBoxFor(model => model.Title, new { @class = "form-control", required = "required" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control ", autocomplete = "off" , required = "required" })
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.Tax, new { @class = "form-control", required = "required" })
-                @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-2">
-                @Html.Label("Price")
-                @Html.EditorFor(model => model.Amt, new { @class = "form-control", required = "required" })
+            <div class="col-md-5">
+                @Html.Label("Rs")
+                @Html.TextBoxFor(model => model.Amt, new { @class = "form-control autodouble" })
                 @Html.ValidationMessageFor(model => model.Amt, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
-                @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.Tax, new { @class = "form-control", required = "required" })
+                <label style="text-align:center">OR</label>
+            </div>
+            <div class="col-md-5">
+                @Html.Label(TaxTitle)
+                @Html.TextBoxFor(model => model.Tax, new { @class = "form-control autodouble", })
                 @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-1">
-                @Html.Label("Save", new { @class = "text-white" })
-                <input type="submit" value="Save" class="btn btn-success" />
+            <div class="col-md-12">
+                @Html.Label("Remark")
+                @Html.TextBoxFor(model => model.Remark, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-1">
-                @Html.Label("Save", new { @class = "text-white" })
+            <div class="col-md-3">
+                @Html.Label("", new { @class = "text-white" })
+                <input type="button" value="Cancel" class="btn btn-danger" />
+            </div>
+            <div class="col-md-3">
+                @Html.Label("", new { @class = "text-white" })
                 <input type="submit" value="Save" class="btn btn-success" />
             </div>
         </div>

@@ -59,8 +59,9 @@ namespace HangOut.Controllers
         {
             return View();
         }
-        public ActionResult DiscntCharge(Int64 SeatingId)
+        public ActionResult DiscntCharge(Int64 SeatingId,int Type)
         {
+            List<HG_Orders> orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
             return View(ordDiscntChrge);
         }
@@ -78,6 +79,12 @@ namespace HangOut.Controllers
         public ActionResult EditOrder(Int64 OID)
         {
             return View();
+        }
+        [HttpPost]
+        public ActionResult DiscntCharge(DiscntCharge discntCharge)
+        {
+
+           return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
         }
     }
 }
