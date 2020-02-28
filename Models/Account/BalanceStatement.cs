@@ -72,7 +72,7 @@ namespace HangOut.Models.Account
 
                 double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
                 Obj.CRAmount = amt + ((amt * 5) / 100);
-                Obj.Date = DateTime.Now;
+                Obj.Date = Date;
                // Obj.Amount = Amount;
                 BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation();
                 Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
@@ -101,7 +101,7 @@ namespace HangOut.Models.Account
                     Obj.CRAmount = amt + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
                 }
                 
-                Obj.Date = DateTime.Now;
+                Obj.Date = Date;
                 //Obj.Amount = Amount;
                 BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation();
                 Obj.Balance = TotalBalance.Balance - Obj.CRAmount;

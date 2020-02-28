@@ -1,4 +1,5 @@
-﻿using HangOut.Models.Account;
+﻿using HangOut.Models;
+using HangOut.Models.Account;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -225,5 +226,7 @@ namespace HangOut.Controllers.Account
         {
             return View();
         }
+
+      
     }
 }
