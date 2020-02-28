@@ -710,7 +710,7 @@ namespace HangOut.Controllers
                     DeliveryChargeAmt= orgSetting.DeliveryCharge;
                 }
             }
-            if (ObjOrg.OrderDisplay == 2 &&AppType==3)// check KOT mode enable
+            if (ObjOrg.OrderDisplay == 2)// check KOT mode enable
             {
                 Status = 3;// mark complete all items
             }
@@ -2066,6 +2066,7 @@ namespace HangOut.Controllers
                     jObject.Add("DeliveryType", orgSetting.DeleryChrgType);
                 }
             }
+            jObject.Add("VerifyBy", orgSetting.CrxVerification);
             return jObject;
         }
         [HttpPost]

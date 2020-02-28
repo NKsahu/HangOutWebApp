@@ -42,7 +42,7 @@
                     //    GrandTotal += ItemPrice;
                     //}
 
-                    <tr>
+                    <tr class="item">
                         <td>
                             &nbsp;
                         </td>
@@ -57,18 +57,18 @@
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-right">
-                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]" >
+                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]" id="@Order.OIID,@Order.Count" >
                                             <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
                                         </button>
                                     </span>
                                 </div>
-                                <div class="Col-md-1">
-                                    <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" min="0" max="10000000" size="10" id="value">
+                                <div class="Col-md-1" >
+                                    <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" min="0" max="10000000" size="10" >
 
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-left">
-                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  onclick="Addvalue(this);">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  onclick="Addsum(@Order.OIID,@Order.Count);">
                                             <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
                                         </button>
                                     </span>
@@ -81,7 +81,7 @@
                         <td>
                             @Order.TickedNo
                         </td>
-                        <td class="txtCal">
+                        <td id="txtCal">
                             @ItemPrice.ToString("0.00")
                         </td>
                     </tr>
@@ -227,20 +227,52 @@
             e.preventDefault();
         }
     });
-    
-    function Addvalue(event) {
-        console.log("sss");
-        var value = parseInt($("#value").val());
-        //var totalvalue = $(event).parent('tr').parent('tbody').find(".txtCal").val(); 
-        var i = 0;
-        var rows = $("#myTableId").find("tbody tr");
-        var inputVal =rows.eq(i).find("td :input").val();
-        var Total = inputVal * value;
-        var GrandTotal = Total * 2;
-        document.getElementById("#txtCal").innerHTML = GrandTotal;
-    }
-
+    //Addvalue();
    
+   
+    //function Addvalue(index) {
+    //    console.log("sss");
+    //    var value = parseInt($("#value").val());
+    //    var inputVal = parseInt($('#txtCal', this).eq(index).text());
+    //        var total = inputVal * value;
+    //        $('#Quantity').eq(index).text(total);
+       
+        
+    //}
+    $(document).on('click'  , function (i) {
+        Addsum(i);
+
+    });
+    $(document).on("keyup", "#txtCal", Addsum);
+    
+    console.log("ss");
+    function Addsum(ID,Count) {
+        $(".item").each(function () {
+
+            $.ajax({
+                type: 'GET',
+                url: "/ HG_Orders/UpdateAmt?ID=" + ID + "&Count=" + Count,
+                success: function (data) {
+                    var qnty = 1;
+                    var price = 1;
+                    var total = 1;
+                    if (!isNaN(parseInt($("#value").val()))) {
+                        qnty = parseInt($("#value").val());
+                    }
+                    if (!isNaN(parseFloat($(this).find("#txtCal").text()))) {
+                        price = parseFloat($(this).find("#txtCal").text());
+                    }
+
+                    total = qnty * price * 2;
+                    $(this).find("#txtCal").val(total.data);
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $('#waiting').hide();
+                }
+            });
+        });
+    }
 </script>
 <script>
     $(document).ready(function () {
@@ -253,12 +285,32 @@
     function calculateColumn(index) {
         var total = 0;
         $('table tr').each(function () {
-            var value = parseInt($('.txtCal', this).eq(index).text());
+            var value = parseInt($('#txtCal', this).eq(index).text());
             if (!isNaN(value)) {
                 total += value;
             }
         });
         $('#jjj').eq(index).text(total);
+    }
+
+    $('table thead th').each(function (i) {
+        findvalue(i);
+
+    });
+   
+    console.log("g");
+    function findvalue(index) {
+        var total = 0;
+        var qnty = 1;
+        
+        
+        $(".item").each(function () {
+            if (!isNaN(parseInt($("#value").val()))) {
+                qnty = parseInt($("#value").val());
+            }
+            total += qnty;
+        });
+        $('#Quantity').eq(index).text(total);
     }
     
 </script>

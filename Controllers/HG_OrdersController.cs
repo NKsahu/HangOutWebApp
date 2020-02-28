@@ -59,10 +59,19 @@ namespace HangOut.Controllers
         {
             return View();
         }
-        public ActionResult DiscntCharge(Int64 SeatingId,int Type)
+        public ActionResult DiscntCharges(Int64 SeatingId,int Type)
         {
-            List<HG_Orders> orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
+            HG_Tables_or_Sheat SeatingObj = new HG_Tables_or_Sheat().GetOne(SeatingId);
+            List<HG_Orders> orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            var  ObjOrder = orders.Find(x => x.Table_or_SheatId == SeatingId && x.TableOtp == SeatingObj.Otp);
+            if (ObjOrder != null &&ObjOrder.Status!="3"&&ObjOrder.Status!="4")
+            {
+                ordDiscntChrge.OID = ObjOrder.OID;
+            }
+            ordDiscntChrge.Type = Type;
+            ordDiscntChrge.SeatingId = SeatingId;
+            ordDiscntChrge.SeatingOtp = SeatingObj.Otp;
             return View(ordDiscntChrge);
         }
         public ActionResult LocalContactIndex()
@@ -81,10 +90,40 @@ namespace HangOut.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult DiscntCharge(DiscntCharge discntCharge)
+        public ActionResult SaveDiscntCharge(OrdDiscntChrge discntCharge)
         {
-
-           return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
+            if (discntCharge.Remark == null)
+            {
+                discntCharge.Remark = "";
+            }
+            if(discntCharge.Title==null||discntCharge.Title.Replace(" ", "") == "")
+            {
+                return Json(new { msg = "Title required" }, JsonRequestBehavior.AllowGet);
+            }
+            if (discntCharge.Amt > 0 && discntCharge.Tax > 0)
+            {
+                return Json(new { msg = "fill  Single Option" }, JsonRequestBehavior.AllowGet);
+            }
+            if (discntCharge.Amt <= 0 || discntCharge.Tax <= 0)
+            {
+                return Json(new { msg = "value cannot be zero" }, JsonRequestBehavior.AllowGet);
+            }
+            if (discntCharge.OID > 0)
+            {
+                discntCharge.Save();
+            }
+            else
+            {
+                DiscntCharge.ListDiscntChrge.Add(discntCharge);
+            }
+            return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UpdateAmt(int ID,int Count)
+        {
+                 HG_OrderItem OBJOrderItem = new HG_OrderItem().GetOne(ID);
+            OBJOrderItem.OIID = ID;
+            OBJOrderItem.Count = Count;
+            return Json(new { data = OBJOrderItem }, JsonRequestBehavior.AllowGet);
         }
     }
 }

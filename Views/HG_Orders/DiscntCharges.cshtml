@@ -22,12 +22,13 @@
     </div>
     <div class="card-body">
 
-        @using (Ajax.BeginForm("DiscntCharge", "HG_Orders", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("SaveDiscntCharge", "HG_Orders", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.ID)
             @Html.HiddenFor(model => model.Type)
             @Html.HiddenFor(model => model.OID)
             @Html.HiddenFor(model=>model.SeatingId)
+            @Html.HiddenFor(model=>model.SeatingOtp)
         <div class="row">
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="col-md-12">
