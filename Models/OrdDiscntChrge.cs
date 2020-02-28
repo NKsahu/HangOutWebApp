@@ -98,9 +98,20 @@ namespace HangOut.Models
 
             return (ObjTmp);
         }
+        public static void RemoveDiscntCharge(Int64 SeatingId,int Otp)
+        {
+            List<OrdDiscntChrge> discntCharges = DiscntCharge.ListDiscntChrge.FindAll(x => x.SeatingId == SeatingId && x.SeatingOtp == Otp);
+            foreach (var discntCharg in discntCharges)
+            {
+                discntCharg.Save();
+            }
+            DiscntCharge.ListDiscntChrge.RemoveAll(x => x.SeatingId == SeatingId && x.SeatingOtp == Otp);
+            
+        }
     }
     public class DiscntCharge
     {
         public static List<OrdDiscntChrge> ListDiscntChrge { get; set; }
     }
+   
 }

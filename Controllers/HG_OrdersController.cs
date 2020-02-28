@@ -104,13 +104,14 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "fill  Single Option" }, JsonRequestBehavior.AllowGet);
             }
-            if (discntCharge.Amt <= 0 || discntCharge.Tax <= 0)
+            if (discntCharge.Amt <= 0 && discntCharge.Tax <= 0)
             {
                 return Json(new { msg = "value cannot be zero" }, JsonRequestBehavior.AllowGet);
             }
             if (discntCharge.OID > 0)
             {
-                discntCharge.Save();
+                DiscntCharge.ListDiscntChrge.Add(discntCharge);
+                OrdDiscntChrge.RemoveDiscntCharge(discntCharge.SeatingId, discntCharge.SeatingOtp);
             }
             else
             {
