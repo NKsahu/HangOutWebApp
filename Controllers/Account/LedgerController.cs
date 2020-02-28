@@ -27,7 +27,7 @@ namespace HangOut.Controllers.Account
             Ledger Obj = new Ledger();
             if (ID > 0)
             {
-                Obj = Obj.GetOne(ID);
+                Obj = Obj.GetOne(ID,0);
             }
 
             return View(Obj);
@@ -36,6 +36,15 @@ namespace HangOut.Controllers.Account
         [HttpPost]
         public ActionResult CreateEdit(Ledger Obj)
         {
+
+            Ledger LedgerObj = new Ledger();
+
+            LedgerObj = LedgerObj.GetOne(0,Obj.OrgId);
+           
+            if (Obj.OrgId == LedgerObj.OrgId)
+            {
+                return Json(new { msg = "Already Created" });
+            }
             DateTime isnulldate =  default(DateTime);
           
             if (Obj.CalculationStartFrom.Equals(isnulldate))

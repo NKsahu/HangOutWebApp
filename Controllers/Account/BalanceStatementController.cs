@@ -45,7 +45,7 @@ namespace HangOut.Controllers.Account
             }
             Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1 
             && x.OrgId == CompletedItems[0].OrgId).FirstOrDefault();
-
+          
                 bObj.Date = DateTime.Now;
                 bObj.Amount = totalAmount;
                 bObj.OrgId = LedgerDetails.OrgId;
@@ -66,14 +66,17 @@ namespace HangOut.Controllers.Account
                     bObj.isCash = false;
                 }
                 bObj.Save();
-                        
+                    
             return Json(new { data = bObj }, JsonRequestBehavior.AllowGet);
         }
 
         // Insert Into Balance Stement After Registration from Calaculation start Date 
         public ActionResult InsertIntoBalanceStementAfterRegistration(DateTime CalaculationStartFrom,int OrgId)
         {
+
             BalanceStatement bObj = new BalanceStatement();
+
+          
             List<BalanceStatement> jObjList = new List<BalanceStatement>();
             List<HG_Orders> OrdersDetails = new List<HG_Orders>();
             List<HG_OrganizationDetails> OrgList = new List<HG_OrganizationDetails>();          

@@ -291,7 +291,7 @@ namespace HangOut.Models.Account
             finally { cmd.Dispose(); con.Con.Close(); }
             return (LedgerList);
         }
-        public Ledger GetOne(int ID)
+        public Ledger GetOne(int ID,int OrgId)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -301,10 +301,23 @@ namespace HangOut.Models.Account
 
             try
             {
-                string Query = "SELECT * FROM  ACLedger where ID=@ID";
-                cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@ID", ID);
-                SDR = cmd.ExecuteReader();
+                string Query = "SELECT * FROM  ACLedger";
+                if (ID > 0)
+                {
+                    Query = "SELECT * FROM  ACLedger where ID=@ID";
+                    cmd = new SqlCommand(Query, Con);
+                    cmd.Parameters.AddWithValue("@ID", ID);
+                    SDR = cmd.ExecuteReader();
+                }
+                else
+                {
+                    Query = "SELECT * FROM  ACLedger where OrgId=@OrgId";
+                    cmd = new SqlCommand(Query, Con);
+                    cmd.Parameters.AddWithValue("@OrgId", OrgId);
+                    SDR = cmd.ExecuteReader();
+                }
+                
+         
                 while (SDR.Read())
                 {
                    

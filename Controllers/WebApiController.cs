@@ -751,7 +751,7 @@ namespace HangOut.Controllers
                 NewOID = OID;
                 ObjOrders.Status = OrderSts;
                 ObjOrders.Update_By = CID;
-                ObjOrders.OrderByIds = ObjOrders.OrderByIds + CID.ToString() + ",";
+                ObjOrders.DisntChargeIDs = ObjOrders.DisntChargeIDs;
                 ObjOrders.Update_Date = DateTime.Now;
                 ObjOrders.DeliveryCharge = ObjOrders.DeliveryCharge + DeliveryChargeAmt;
                 ObjOrders.PaymentStatus = PaymtSts;
@@ -774,7 +774,7 @@ namespace HangOut.Controllers
                     PaymentStatus = PaymtSts,
                     TableOtp = ObjTorS.Otp,
                     PayReceivedBy = (int)CID,
-                    OrderByIds = CID.ToString() + ",",
+                    DisntChargeIDs = CID.ToString() + ",",
                     OrderApprovlSts = 0,
                     DeliveryCharge = DeliveryChargeAmt,
                    ContactId = ContactId <= 0 ? 0 : ContactId// -1 contact id for Customer Order foodo app
@@ -2351,7 +2351,7 @@ namespace HangOut.Controllers
             TodayOrderList = TodayOrderList.FindAll(x => x.Status != "3" && x.Status!="4");
             TodayOrderList = TodayOrderList.FindAll(x => TorShash.Contains(x.Table_or_SheatId));
             TodayOrderList = TodayOrderList.OrderBy(x => x.Create_Date).ToList();
-            var countnumber = TodayOrderList.FindIndex(x => x.Table_or_SheatId == TorSId && x.OrderByIds.Contains(CID.ToString()));
+            var countnumber = TodayOrderList.FindIndex(x => x.Table_or_SheatId == TorSId);
             countnumber= countnumber+1;
             JObject result = new JObject();
             if (countnumber == 0)

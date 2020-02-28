@@ -22,7 +22,7 @@
     </div>
     <div class="card-body">
 
-        @using (Ajax.BeginForm("SaveDiscntCharge", "HG_Orders", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("SaveDiscntCharge", "HG_Orders", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.ID)
             @Html.HiddenFor(model => model.Type)
@@ -56,7 +56,7 @@
             </div>
             <div class="col-md-3">
                 @Html.Label("", new { @class = "text-white" })
-                <input type="button" value="Cancel" class="btn btn-danger" />
+                <input type="button" onclick="hidedpt('DiscntCharge')" value="Cancel" class="btn btn-danger" />
             </div>
             <div class="col-md-3">
                 @Html.Label("", new { @class = "text-white" })
@@ -66,5 +66,11 @@
         }
     </div>
 </div>
-
+<script>
+    function JsonSuccess(Jobj) {
+        $("#waiting").hide();
+        hidedpt('DiscntCharge');
+    }
+        
+</script>
 
