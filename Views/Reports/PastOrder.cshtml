@@ -4,12 +4,18 @@
     Layout = null;
     double TotalAmt = 0.00;
     int SN = 0;
+    var UserInfo = Request.Cookies["UserInfo"];
+    var OrgId = int.Parse(UserInfo["OrgId"]);
     List<HG_Orders> TodayOrderList = new List<HG_Orders>();
     if (Request.QueryString["Fdate"]!=null&& Request.QueryString["Tdate"] != null)
     {
         DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
         DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
         TodayOrderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
+    }
+    if (OrgId > 0  &&UserInfo["UserType"]!=null)
+    {
+        TodayOrderList = TodayOrderList.FindAll(x => x.OrgId == OrgId);
     }
     if (Request.QueryString["PMode"] != null && Request.QueryString["PMode"]!="-1")
     {
@@ -22,8 +28,8 @@
     }
     if(Request.QueryString["PlacedBy"]!=null&& Request.QueryString["PlacedBy"] != "0")
     {
-       // var UserInfo = Request.Cookies["UserInfo"];
-       // int OrgId = int.Parse(UserInfo["OrgId"]);
+        // var UserInfo = Request.Cookies["UserInfo"];
+        // int OrgId = int.Parse(UserInfo["OrgId"]);
         HashSet<int> hashUser = new HashSet<int>();
         List<vw_HG_UsersDetails> userlist = new vw_HG_UsersDetails().GetAll();
         if (Request.QueryString["PlacedBy"] == "ONR" || Request.QueryString["PlacedBy"]=="CA")

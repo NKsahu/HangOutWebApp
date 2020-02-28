@@ -2,6 +2,8 @@
 @{
     Layout = null;
     int Sn = 1;
+    var UserInfo = Request.Cookies["UserInfo"];
+    var OrgId = int.Parse(UserInfo["OrgId"]);
     List<HG_Orders> ListOrder = new List<HG_Orders>();
     int CountTotal = 0;
     double AmtTotal = 0.00;
@@ -106,6 +108,10 @@
                                     DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                                     ListOrder = new HG_Orders().GetListByGetDate(FromDate, Todate);
                                     ListOrder = ListOrder.FindAll(x => x.Status == "3");
+                                    if (OrgId > 0)
+                                    {
+                                        ListOrder = ListOrder.FindAll(x => x.OrgId == OrgId);
+                                    }
                                     if (Request.QueryString["PMode"] != null && Request.QueryString["PMode"] != "-1")
                                     {
                                         ListOrder = ListOrder.FindAll(X => X.PaymentStatus == int.Parse(Request.QueryString["PMode"]));

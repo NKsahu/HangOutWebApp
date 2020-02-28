@@ -16,7 +16,11 @@ namespace HangOut.Models
       public string Remark { get; set; }
      public Int64 SeatingId { get; set; }
 
-
+    public OrdDiscntChrge()
+        {
+            Amt = 0.00;
+            Tax = 0.00;
+        }
 
     }
     public class DiscntCharge
