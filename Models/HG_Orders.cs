@@ -25,7 +25,7 @@ namespace HangOut.Models
         public int PaymentStatus { get; set; }//{'0':'unpaid',1:'PaidBycash','2':'by online','3':'ByFoodPaymeGateway'}
         public int PayReceivedBy { get; set; }
         public int TableOtp { get; set; }
-        public string OrderByIds { get; set; }//  Order by IDS comma seprated
+        public string DisntChargeIDs { get; set; }// discntCharges CSV IDS
         public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken Orde  or Not
         public double DeliveryCharge { get; set; }// delivery charge amount
         public int ContactId { get; set; }// customer local Contact Id;
@@ -39,9 +39,10 @@ namespace HangOut.Models
             this.Table_or_SheatId = 0;
             this.PayReceivedBy = 0;
             this.ContactId = 0;
+            this.DisntChargeIDs="";
         }
 
-        public System.Int64 Save()
+        public Int64 Save()
         {
             System.Data.SqlClient.SqlCommand cmd = null;
             DBCon Obj = new DBCon();
@@ -67,13 +68,13 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@PaymentStatus", this.PaymentStatus);
                 cmd.Parameters.AddWithValue("@PayReceivedBy", this.PayReceivedBy);
                 cmd.Parameters.AddWithValue("@TableOtp", this.TableOtp);
-                cmd.Parameters.AddWithValue("@OrderByIds", this.OrderByIds);
+                cmd.Parameters.AddWithValue("@OrderByIds", this.DisntChargeIDs);
                 cmd.Parameters.AddWithValue("@OrdAprovalSts", this.OrderApprovlSts);
                 cmd.Parameters.AddWithValue("@DeliveryCharge", this.DeliveryCharge);
                 cmd.Parameters.AddWithValue("@ContactId", this.ContactId);
                 if (this.OID == 0)
                 {
-                    R = System.Convert.ToInt64(cmd.ExecuteScalar());
+                    R = Convert.ToInt64(cmd.ExecuteScalar());
                     this.OID = R;
                 }
                 else
@@ -134,7 +135,7 @@ namespace HangOut.Models
                         PaymentStatus=SDR.GetInt32(10),
                         PayReceivedBy=SDR.GetInt32(11),
                         TableOtp=SDR.GetInt32(12),
-                        OrderByIds=SDR.GetString(13),
+                        DisntChargeIDs= SDR.GetString(13),
                         OrderApprovlSts=SDR.GetInt32(14),
                         DeliveryCharge=SDR.GetDouble(15),
                         ContactId=SDR.GetInt32(16)
@@ -174,7 +175,7 @@ namespace HangOut.Models
                 ObjTemp.PaymentStatus = SDR.GetInt32(10);
                 ObjTemp.PayReceivedBy = SDR.GetInt32(11);
                 ObjTemp.TableOtp =SDR.GetInt32(12);
-                ObjTemp.OrderByIds = SDR.GetString(13);
+                ObjTemp.DisntChargeIDs = SDR.GetString(13);
                 ObjTemp.OrderApprovlSts = SDR.GetInt32(14);
                 ObjTemp.DeliveryCharge= SDR.GetDouble(15);
                 ObjTemp.ContactId = SDR.GetInt32(16);
@@ -240,7 +241,7 @@ namespace HangOut.Models
                         PaymentStatus=SDR.GetInt32(10),
                        PayReceivedBy = SDR.GetInt32(11),
                         TableOtp =SDR.GetInt32(12),
-                        OrderByIds = SDR.GetString(13),
+                        DisntChargeIDs = SDR.GetString(13),
                         OrderApprovlSts=SDR.GetInt32(14),
                         DeliveryCharge = SDR.GetDouble(15),
                        ContactId = SDR.GetInt32(16)
