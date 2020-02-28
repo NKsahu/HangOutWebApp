@@ -2,13 +2,16 @@
 @{
     Layout = null;
     string TitleType = "";
+    string TaxTitle = "";
     if (Request.QueryString["Type"] == "1")
     {
         TitleType = "Discount";
+        TaxTitle = " % ";
     }
     else if (Request.QueryString["Type"] == "2")
     {
         TitleType = "Charge";
+        TaxTitle = "Tax %";
     }
 }
 
@@ -41,7 +44,7 @@
                 <label style="text-align:center">OR</label>
             </div>
             <div class="col-md-5">
-                @Html.Label("Tax")
+                @Html.Label(TaxTitle)
                 @Html.TextBoxFor(model => model.Tax, new { @class = "form-control autodouble", })
                 @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
             </div>
