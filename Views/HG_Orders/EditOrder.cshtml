@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-right">
-                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]" >
+                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]" id="@Order.OIID,@Order.Count" >
                                             <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
                                         </button>
                                     </span>
@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-left">
-                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  onclick="Addsum(this);">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  onclick="Addsum(@Order.OIID,@Order.Count);">
                                             <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
                                         </button>
                                     </span>
@@ -246,32 +246,31 @@
     $(document).on("keyup", "#txtCal", Addsum);
     
     console.log("ss");
-    function Addsum() {
-    $(".item").each(function () {
-        var qnty = 1;
-        var price = 1;
-        var total = 1;
-        if (!isNaN(parseInt($("#value").val())))  {
-            qnty = parseInt($("#value").val());
-        }
-        if (!isNaN(parseFloat($(this).find("#txtCal").text()))) {
-            price = parseFloat($(this).find("#txtCal").text());
-        }
-        
-        total = qnty * price * 2;
-        $(this).find("#txtCal").val(total.toFixed(2));
-        });
-        $.ajax({
-            type: 'GET',
-            url: "/ HG_Orders/UpdateAmt",
-            success: function (data) {
-                $('#waiting').hide();
-                var parent = $(event).parent('span').parent('div').parent('div');
-                $(data).insertAfter(parent);
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $('#waiting').hide();
-            }
+    function Addsum(ID,Count) {
+        $(".item").each(function () {
+
+            $.ajax({
+                type: 'GET',
+                url: "/ HG_Orders/UpdateAmt?ID=" + ID + "&Count=" + Count,
+                success: function (data) {
+                    var qnty = 1;
+                    var price = 1;
+                    var total = 1;
+                    if (!isNaN(parseInt($("#value").val()))) {
+                        qnty = parseInt($("#value").val());
+                    }
+                    if (!isNaN(parseFloat($(this).find("#txtCal").text()))) {
+                        price = parseFloat($(this).find("#txtCal").text());
+                    }
+
+                    total = qnty * price * 2;
+                    $(this).find("#txtCal").val(total.data);
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $('#waiting').hide();
+                }
+            });
         });
     }
 </script>
