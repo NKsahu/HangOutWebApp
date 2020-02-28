@@ -90,10 +90,33 @@ namespace HangOut.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult DiscntCharge(DiscntCharge discntCharge)
+        public ActionResult DiscntCharge(OrdDiscntChrge discntCharge)
         {
+            if (discntCharge.Remark == null)
+            {
+                discntCharge.Remark = "";
+            }
+            if(discntCharge.Title==null||discntCharge.Title.Replace(" ", "") == "")
+            {
+                return Json(new { msg = "Title required" }, JsonRequestBehavior.AllowGet);
+            }
+            if (discntCharge.Amt > 0 && discntCharge.Tax > 0)
+            {
+                return Json(new { msg = "fill  Single Option" }, JsonRequestBehavior.AllowGet);
+            }
+            if (discntCharge.Amt <= 0 || discntCharge.Tax <= 0)
+            {
+                return Json(new { msg = "value cannot be zero" }, JsonRequestBehavior.AllowGet);
+            }
+            if (discntCharge.OID > 0)
+            {
 
-           return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+
+            }
+            return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
         }
     }
 }
