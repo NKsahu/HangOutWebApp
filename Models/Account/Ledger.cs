@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
-
+using HangOut.Controllers.Account;
 
 namespace HangOut.Models.Account
 {
@@ -108,6 +108,16 @@ namespace HangOut.Models.Account
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
                     this.ID = Row;
+                    BalanceStatementController balanceStatement = new BalanceStatementController();
+                    try
+                     {
+                        balanceStatement.InsertIntoBalanceStementAfterRegistration(CalculationStartFrom, OrgId);
+                     }
+                    catch (Exception ex)
+                    {
+                        ex.ToString();
+                    }
+                                                           
                 }
                 else
                 {
