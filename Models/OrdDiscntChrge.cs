@@ -15,6 +15,7 @@ namespace HangOut.Models
       public double Tax { get; set; }
       public string Remark { get; set; }
      public Int64 SeatingId { get; set; }
+        public int SeatingOtp { get; set; }
 
     public OrdDiscntChrge()
         {
