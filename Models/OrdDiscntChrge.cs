@@ -101,9 +101,28 @@ namespace HangOut.Models
         public static void RemoveDiscntCharge(Int64 SeatingId,int Otp)
         {
             List<OrdDiscntChrge> discntCharges = DiscntCharge.ListDiscntChrge.FindAll(x => x.SeatingId == SeatingId && x.SeatingOtp == Otp);
-            foreach (var discntCharg in discntCharges)
+            string DisntChargeIDs = "";
+            for(int i=0;i<discntCharges.Count;i++)
             {
-                discntCharg.Save();
+                discntCharges[i].Save();
+                if (i == 0)
+                {
+                    DisntChargeIDs += discntCharges[i].ID.ToString();
+                }
+                else
+                {
+                    DisntChargeIDs +=","+ discntCharges[i].ID.ToString();
+                }
+                
+            }
+            if (DisntChargeIDs != "")
+            {
+                HG_Orders hG_Orders = new HG_Orders().GetOne(discntCharges[0].OID);
+                if (hG_Orders.OID > 0)
+                {
+                    hG_Orders.DisntChargeIDs = DisntChargeIDs;
+                    hG_Orders.Save();
+                }
             }
             DiscntCharge.ListDiscntChrge.RemoveAll(x => x.SeatingId == SeatingId && x.SeatingOtp == Otp);
             
