@@ -207,7 +207,7 @@ namespace HangOut.Models
 
         }
         public List<HG_Orders> GetListByGetDate(DateTime Formdate , DateTime Todate)
-        {var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
+        {
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<HG_Orders> ListTmp = new List<HG_Orders>();
@@ -218,10 +218,10 @@ namespace HangOut.Models
             try
             {
                 string Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("MM/dd/yyyy")+"' and '"+ theDate.ToString("MM/dd/yyyy HH:mm:ss")+"' ORDER BY OID DESC";
-                if(CurrOrgID!=null && CurrOrgID["OrgId"] != "0")
-                {
-                 Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("MM/dd/yyyy") + "' and '" + theDate.ToString("MM/dd/yyyy HH:mm:ss") + "' and OrgId="+ CurrOrgID["OrgId"]+ " ORDER BY OID DESC";
-                }
+                //if(CurrOrgID!=null && CurrOrgID["OrgId"] != "0")
+                //{
+                // Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("MM/dd/yyyy") + "' and '" + theDate.ToString("MM/dd/yyyy HH:mm:ss") + "' and OrgId="+ CurrOrgID["OrgId"]+ " ORDER BY OID DESC";
+                //}
                 cmd = new SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
