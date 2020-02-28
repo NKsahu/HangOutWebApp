@@ -79,5 +79,11 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult DiscntCharge(DiscntCharge discntCharge)
+        {
+
+           return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
+        }
     }
 }
