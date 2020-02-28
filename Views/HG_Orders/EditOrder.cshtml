@@ -63,12 +63,12 @@
                                     </span>
                                 </div>
                                 <div class="Col-md-1" >
-                                    <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" min="0" max="10000000" size="10" >
+                                    <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" min="0" max="10000000" size="10" id="value">
 
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-left">
-                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  onclick="Addsum(@Order.OIID,@Order.Count);">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  onclick="Addsum(@Order.OIID,@ItemPrice);">
                                             <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
                                         </button>
                                     </span>
@@ -245,33 +245,28 @@
     });
     $(document).on("keyup", "#txtCal", Addsum);
     
-    console.log("ss");
-    function Addsum(ID,Count) {
-        $(".item").each(function () {
-
+    
+    function Addsum(ID, Price) {
+        console.log("ss");
+       
             $.ajax({
                 type: 'GET',
-                url: "/ HG_Orders/UpdateAmt?ID=" + ID + "&Count=" + Count,
+                url: "/HG_Orders/UpdateAmt?ID=" + ID + "&Price=" + Price,
                 success: function (data) {
-                    var qnty = 1;
-                    var price = 1;
-                    var total = 1;
-                    if (!isNaN(parseInt($("#value").val()))) {
-                        qnty = parseInt($("#value").val());
+                    var qnty = parseInt($("#value").val());
+                    var price = Price;
+                    var total = 0;
+                    if (!isNaN(qnty) && !isNaN(price)) {
+                        total = qnty * price  ;
                     }
-                    if (!isNaN(parseFloat($(this).find("#txtCal").text()))) {
-                        price = parseFloat($(this).find("#txtCal").text());
-                    }
-
-                    total = qnty * price * 2;
-                    $(this).find("#txtCal").val(total.data);
+                    $(data).find("#txtCal").val(total);
 
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                     $('#waiting').hide();
                 }
             });
-        });
+         
     }
 </script>
 <script>
