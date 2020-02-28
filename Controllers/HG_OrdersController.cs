@@ -118,5 +118,10 @@ namespace HangOut.Controllers
             }
             return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult UpdateAmt(int ID)
+        {
+                 HG_OrderItem OBJOrderItem = new HG_OrderItem().GetOne(ID);
+            return View();
+        }
     }
 }
