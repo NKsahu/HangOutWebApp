@@ -59,7 +59,7 @@ namespace HangOut.Controllers
         {
             return View();
         }
-        public ActionResult DiscntCharge(Int64 SeatingId,int Type)
+        public ActionResult DiscntCharges(Int64 SeatingId,int Type)
         {
             OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
             HG_Tables_or_Sheat SeatingObj = new HG_Tables_or_Sheat().GetOne(SeatingId);
@@ -90,7 +90,7 @@ namespace HangOut.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult DiscntCharge(OrdDiscntChrge discntCharge)
+        public ActionResult SaveDiscntCharge(OrdDiscntChrge discntCharge)
         {
             if (discntCharge.Remark == null)
             {
@@ -110,11 +110,11 @@ namespace HangOut.Controllers
             }
             if (discntCharge.OID > 0)
             {
-
+                discntCharge.Save();
             }
             else
             {
-
+                DiscntCharge.ListDiscntChrge.Add(discntCharge);
             }
             return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
         }
