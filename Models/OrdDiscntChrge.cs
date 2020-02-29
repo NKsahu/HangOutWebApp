@@ -89,8 +89,8 @@ namespace HangOut.Models
                     ObjTmp.Title = SDR.GetString(Index++);
                     ObjTmp.OID = SDR.GetInt64(Index++);
                     ObjTmp.Type = SDR.GetInt32(Index++);
-                    ObjTmp.Amt = SDR.GetInt32(Index++);
-                    ObjTmp.Tax = SDR.GetInt32(Index++);
+                    ObjTmp.Amt = SDR.GetDouble(Index++);
+                    ObjTmp.Tax = SDR.GetDouble(Index++);
                     ObjTmp.Remark = SDR.GetString(Index++);
                     ObjTmp.Datetime = SDR.GetDateTime(Index++);
                     TmpList.Add(ObjTmp);
