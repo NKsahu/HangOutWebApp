@@ -649,6 +649,7 @@ namespace HangOut.Controllers
             int PaymtSts=Params["PaymtType"]!=null? int.Parse(Params["PaymtType"].ToString()) :0;//payment mode type
             int ContactId=Params["ContactId"]!=null? int.Parse(Params["ContactId"].ToString()) : 0;// local contact id
             double DeliveryChargeAmt = 0.00;
+            int ItemPrepaireBy = 0;
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             List<HG_Items> ItemList = new HG_Items().GetAll(OrgId);
@@ -714,7 +715,9 @@ namespace HangOut.Controllers
             {
                 Status = 3;// mark complete all items
             }
-            
+            if (Status == 3 && (AppType == 2 || AppType == 3)){
+                ItemPrepaireBy =(int) CID;
+            }
             if (PymentPageOpen.ListPytmPgOpen.Find(x => x.OID==OID) != null)
             {
                 PostResult.Add("Status", 400);
@@ -798,7 +801,7 @@ namespace HangOut.Controllers
                         Status = Status,
                         TickedNo = Ticketno,
                         OrgId = OrgId,
-                        ChefSeenBy = (Status!=3?0:(int)CID),
+                        ChefSeenBy = ItemPrepaireBy,
                         OrderDate = DateTime.Now,
                         UpdatedBy=0,
                         UpdationDate=DateTime.Now,
