@@ -69,21 +69,22 @@ namespace HangOut.Models
 
         }
         
-        public static OrdDiscntChrge GetAll(int ID )
+        public static List<OrdDiscntChrge> GetAll(string IDS)
         {
             DBCon Con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            OrdDiscntChrge ObjTmp = new OrdDiscntChrge();
+            List<OrdDiscntChrge> TmpList = new List<OrdDiscntChrge>();
             try
             {
-                string Query = "SELECT  * FROM  OrderDiscntCharge";
+                string Query = "SELECT * FROM OrderDiscntCharge where ID IN("+IDS+")";
                 
                 cmd = new SqlCommand(Query, Con.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
                     int Index = 0;
+                    OrdDiscntChrge ObjTmp = new OrdDiscntChrge();
                     ObjTmp. ID = SDR.GetInt32(Index++);
                     ObjTmp.Title = SDR.GetString(Index++);
                     ObjTmp.OID = SDR.GetInt64(Index++);
@@ -92,14 +93,15 @@ namespace HangOut.Models
                     ObjTmp.Tax = SDR.GetInt32(Index++);
                     ObjTmp.Remark = SDR.GetString(Index++);
                     ObjTmp.Datetime = SDR.GetDateTime(Index++);
+                    TmpList.Add(ObjTmp);
                 }
             }
             catch (Exception e)
             { e.ToString(); }
 
-            finally { cmd.Dispose(); Con.Con.Close();Con = null; }
+            finally { SDR.Close(); cmd.Dispose(); Con.Con.Close();Con = null; }
 
-            return (ObjTmp);
+            return (TmpList);
         }
         public static void RemoveDiscntCharge(Int64 SeatingId,int Otp,Int64 OID)
         {

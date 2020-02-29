@@ -11,7 +11,13 @@
         return;
     }
     HG_Orders order = new HG_Orders().GetOne(OrderId);
-    List<HG_Items> listItem = new HG_Items().GetAll();
+    List<HG_Items> listItem = new HG_Items().GetAll(order.OrgId);
+    List<OrdDiscntChrge> ordDiscntChrges = new List<OrdDiscntChrge>();
+    if (order.DisntChargeIDs != "")
+    {
+        List<OrdDiscntChrge> ordDiscntChrges = OrdDiscntChrge.GetAll(order.DisntChargeIDs);
+    }
+
     HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
     List<HG_UserTypes> UsertypleList = new HG_UserTypes().GetAll(all:true);
     List<HG_OrderItem> listorder = new HG_OrderItem().GetAll(OrderId);
