@@ -150,12 +150,12 @@ namespace HangOut.Controllers.Account
 
             return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetAllCommission(int OrgId)
-        {
+        //public ActionResult GetAllCommission(int OrgId)
+        //{
 
 
 
-            return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
-        }
+        //   // return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
+        //}
     }
 }
