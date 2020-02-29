@@ -124,8 +124,38 @@ namespace HangOut.Controllers.Account
             return Json(new { data = bObj }, JsonRequestBehavior.AllowGet);
         }
 
-        //public ActionResult mergeAndSendToAcoount(DateTime CalaculationStartFrom, int OrgId)
-        //{
-        //}
+        public ActionResult mergeAndSendToAcoount(int OrgId,DateTime CalculationStartFrom)
+        {
+            BalanceStatement BSObj = new BalanceStatement();
+            int entryCount = BalanceStatement.GetByOrgId(OrgId).Count();
+            double totalAmount = BalanceStatement.GetByOrgId(OrgId).Select(s=>s.Amount).Sum();
+            BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+
+            BSObj.Narration = "Online Payment received Entry No."+ entryCount;
+            BSObj.CRAmount = totalAmount-TotalBalance.Balance;
+            BSObj.Date = DateTime.Now;
+            BSObj.OrgId = OrgId;
+            BSObj.EntryNo = entryCount;
+            BSObj.SaveOpeningValue();
+
+            BalanceStatement Obj = new BalanceStatement();
+            double totalCommission = BalanceStatement.GetByOrgId(OrgId).Select(s => s.CRAmount).Sum();
+
+            Obj.Narration = "Commission Invoice No.";
+            Obj.Amount = totalCommission;
+            Obj.Date = DateTime.Now;
+            Obj.OrgId = OrgId;
+            Obj.EntryNo = entryCount;
+            Obj.SaveOpeningValue();
+
+            return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetAllCommission(int OrgId)
+        {
+
+
+
+            return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
