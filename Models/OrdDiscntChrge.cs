@@ -98,7 +98,7 @@ namespace HangOut.Models
 
             return (ObjTmp);
         }
-        public static void RemoveDiscntCharge(Int64 SeatingId,int Otp)
+        public static void RemoveDiscntCharge(Int64 SeatingId,int Otp,Int64 OID)
         {
             List<OrdDiscntChrge> discntCharges = DiscntCharge.ListDiscntChrge.FindAll(x => x.SeatingId == SeatingId && x.SeatingOtp == Otp);
             string DisntChargeIDs = "";
@@ -117,7 +117,8 @@ namespace HangOut.Models
             }
             if (DisntChargeIDs != "")
             {
-                HG_Orders hG_Orders = new HG_Orders().GetOne(discntCharges[0].OID);
+                
+                HG_Orders hG_Orders = new HG_Orders().GetOne(OID);
                 if (hG_Orders.OID > 0)
                 {
                     if(hG_Orders.DisntChargeIDs!=""&& hG_Orders.DisntChargeIDs != "0")
