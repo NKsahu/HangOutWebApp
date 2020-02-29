@@ -774,7 +774,6 @@ namespace HangOut.Controllers
                     PaymentStatus = PaymtSts,
                     TableOtp = ObjTorS.Otp,
                     PayReceivedBy = (int)CID,
-                    DisntChargeIDs = CID.ToString() + ",",
                     OrderApprovlSts = 0,
                     DeliveryCharge = DeliveryChargeAmt,
                    ContactId = ContactId <= 0 ? 0 : ContactId// -1 contact id for Customer Order foodo app
