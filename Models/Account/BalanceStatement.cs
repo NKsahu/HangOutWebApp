@@ -79,7 +79,7 @@ namespace HangOut.Models.Account
                 Obj.Date = Date;
                
                // Obj.Amount = Amount;
-                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation().Last();
+                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
                 Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
                 Obj.OrgId = OrgId;
                 Obj.OrderId = OrderId;
@@ -109,7 +109,7 @@ namespace HangOut.Models.Account
                 
                 Obj.Date = Date;
                 //Obj.Amount = Amount;
-                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation().Last();
+                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
                 Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
                 Obj.OrgId = OrgId;
                 Obj.OrderId = OrderId;
@@ -157,7 +157,43 @@ namespace HangOut.Models.Account
             return Row;
 
         }
-        public static List<BalanceStatement> GetAllForBalanceCalculation()
+        public int SaveOpeningValue()
+        {
+            int Row = 0;
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            try
+            {
+                string Quary = "";
+
+                Quary = "Insert Into ACBalanceStatement Values (@Date,@Amount,@Narration,@OrderId,@OrgId,@CRAmount,@DRAmount,@Balance,@TaxOnCash,@TaxOnOnline);SELECT SCOPE_IDENTITY();";
+
+
+                cmd = new SqlCommand(Quary, con.Con);
+                cmd.Parameters.AddWithValue("@BID", this.BID);
+                cmd.Parameters.AddWithValue("@Date", this.Date);
+                cmd.Parameters.AddWithValue("@Amount", this.Amount);
+                cmd.Parameters.AddWithValue("@Narration", this.Narration);
+                cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
+                cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
+                cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
+                cmd.Parameters.AddWithValue("@DRAmount", this.DRAmount);
+                cmd.Parameters.AddWithValue("@Balance", this.Balance);
+                cmd.Parameters.AddWithValue("@TaxOnCash", this.TaxOnCash);
+                cmd.Parameters.AddWithValue("@TaxOnOnline", this.TaxOnOnline);
+
+                Row = Convert.ToInt32(cmd.ExecuteScalar());
+                this.BID = Row;
+
+
+
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return Row;
+
+        }
+        public static List<BalanceStatement> GetAllForBalanceCalculation(int OrgId)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -166,8 +202,9 @@ namespace HangOut.Models.Account
           // BalanceStatement OBJBS = new BalanceStatement();
             try
             {
-                string Quary = "Select * from ACBalanceStatement";
+                string Quary = "Select * from ACBalanceStatement where OrgId=@OrgId";
                 cmd = new SqlCommand(Quary, con.Con);
+                cmd.Parameters.AddWithValue("@OrgId", OrgId);
                 SDR = cmd.ExecuteReader();
 
                 while (SDR.Read())

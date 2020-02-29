@@ -108,16 +108,29 @@ namespace HangOut.Models.Account
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
                     this.ID = Row;
-                    BalanceStatementController balanceStatement = new BalanceStatementController();
-                    try
-                     {
-                        balanceStatement.InsertIntoBalanceStementAfterRegistration(CalculationStartFrom, OrgId);
-                     }
-                    catch (Exception ex)
+                    if (DebtorType == 1 && ParentGroup == 2)
                     {
-                        ex.ToString();
+                        HG_OrganizationDetails org = new HG_OrganizationDetails();
+                        org = org.GetOne(OrgId);
+                        if (org.OrgTypes == "2")
+                        {
+                            BalanceStatementController balanceStatement = new BalanceStatementController();
+                            BalanceStatement BSObj = new BalanceStatement();
+                            try
+                            {
+                                BSObj.Narration = "Opening Balance";
+                                BSObj.Amount = 0.00;
+                                BSObj.Date = CalculationStartFrom;
+                                BSObj.OrgId = OrgId;
+                                BSObj.SaveOpeningValue();
+                                balanceStatement.InsertIntoBalanceStementAfterRegistration(CalculationStartFrom, OrgId);
+                            }
+                            catch (Exception ex)
+                            {
+                                ex.ToString();
+                            }
+                        }
                     }
-                                                           
                 }
                 else
                 {
