@@ -17,6 +17,8 @@ namespace HangOut.Models.Account
         public double DRAmount { get; set; }
         public double Balance { get; set; }
         public bool isCash { get; set; }
+        public double TaxOnCash { get; set; }
+        public double TaxOnOnline { get; set; }
 
 
         public int Save()
@@ -32,11 +34,11 @@ namespace HangOut.Models.Account
                     string Quary = "";
                     if (this.BID == 0)
                     {
-                        Quary = "Insert Into ACBalanceStatement Values (@Date,@Amount,@Narration,@OrderId,@OrgId,@CRAmount,@DRAmount,@Balance);SELECT SCOPE_IDENTITY();";
+                        Quary = "Insert Into ACBalanceStatement Values (@Date,@Amount,@Narration,@OrderId,@OrgId,@CRAmount,@DRAmount,@Balance,@TaxOnCash,@TaxOnOnline);SELECT SCOPE_IDENTITY();";
                     }
                     else
                     {
-                        Quary = "Update ACBalanceStatement Set Date=@Date,Amount=@Amount,Narration=@Narration,OrderId=@OrderId,OrgId=@OrgId,CRAmount=@CRAmount,DRAmount=@DRAmount,Balance=@Balance where ID=@ID";
+                        Quary = "Update ACBalanceStatement Set Date=@Date,Amount=@Amount,Narration=@Narration,OrderId=@OrderId,OrgId=@OrgId,CRAmount=@CRAmount,DRAmount=@DRAmount,Balance=@Balance,TaxOnCash=@TaxOnCash,TaxOnOnline=@TaxOnOnline where ID=@ID";
                     }
                     cmd = new SqlCommand(Quary, con.Con);
                     cmd.Parameters.AddWithValue("@BID", this.BID);
@@ -48,6 +50,8 @@ namespace HangOut.Models.Account
                     cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
                     cmd.Parameters.AddWithValue("@DRAmount", this.DRAmount);
                     cmd.Parameters.AddWithValue("@Balance", this.Balance);
+                    cmd.Parameters.AddWithValue("@TaxOnCash", this.TaxOnCash);
+                    cmd.Parameters.AddWithValue("@TaxOnOnline", this.TaxOnOnline);
                     if (this.BID == 0)
                     {
                         Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -73,8 +77,9 @@ namespace HangOut.Models.Account
                 double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
                 Obj.CRAmount = amt + ((amt * 5) / 100);
                 Obj.Date = Date;
+               
                // Obj.Amount = Amount;
-                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation();
+                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation().Last();
                 Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
                 Obj.OrgId = OrgId;
                 Obj.OrderId = OrderId;
@@ -93,17 +98,18 @@ namespace HangOut.Models.Account
                 {
                     double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
                     Obj.CRAmount = amt + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
-
+                    Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
                 }
                 else if (ord.PaymentStatus == 3)
                 {
                     double amt = (Amount * LedgerDetails.MarginOnline) / 100;
                     Obj.CRAmount = amt + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+                    Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
                 }
                 
                 Obj.Date = Date;
                 //Obj.Amount = Amount;
-                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation();
+                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation().Last();
                 Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
                 Obj.OrgId = OrgId;
                 Obj.OrderId = OrderId;
@@ -124,7 +130,7 @@ namespace HangOut.Models.Account
             {
                 string Quary = "";
             
-                Quary = "Insert Into ACBalanceStatement Values (@Date,@Amount,@Narration,@OrderId,@OrgId,@CRAmount,@DRAmount,@Balance);SELECT SCOPE_IDENTITY();";
+                Quary = "Insert Into ACBalanceStatement Values (@Date,@Amount,@Narration,@OrderId,@OrgId,@CRAmount,@DRAmount,@Balance,@TaxOnCash,@TaxOnOnline);SELECT SCOPE_IDENTITY();";
                 
               
                 cmd = new SqlCommand(Quary, con.Con);
@@ -137,8 +143,10 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
                 cmd.Parameters.AddWithValue("@DRAmount", this.DRAmount);
                 cmd.Parameters.AddWithValue("@Balance", this.Balance);
-                
-                 Row = Convert.ToInt32(cmd.ExecuteScalar());
+                cmd.Parameters.AddWithValue("@TaxOnCash", this.TaxOnCash);
+                cmd.Parameters.AddWithValue("@TaxOnOnline", this.TaxOnOnline);
+
+                Row = Convert.ToInt32(cmd.ExecuteScalar());
                  this.BID = Row;
 
 
@@ -149,22 +157,22 @@ namespace HangOut.Models.Account
             return Row;
 
         }
-        public static BalanceStatement GetAllForBalanceCalculation()
+        public static List<BalanceStatement> GetAllForBalanceCalculation()
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<BalanceStatement> BalanceStatementList = new List<BalanceStatement>();
-            BalanceStatement OBJBS = new BalanceStatement();
+          // BalanceStatement OBJBS = new BalanceStatement();
             try
             {
-                string Quary = "Select * from ACBalanceStatement";              
+                string Quary = "Select * from ACBalanceStatement";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
-               
+
                 while (SDR.Read())
                 {
-                    OBJBS = new BalanceStatement();
+                    BalanceStatement OBJBS = new BalanceStatement();
                     OBJBS.BID = SDR.GetInt32(0);
                     OBJBS.Date = SDR.GetDateTime(1);
                     OBJBS.Amount = SDR.GetDouble(2);
@@ -174,13 +182,13 @@ namespace HangOut.Models.Account
                     OBJBS.CRAmount = SDR.GetDouble(6);
                     OBJBS.DRAmount = SDR.GetDouble(7);
                     OBJBS.Balance = SDR.GetDouble(8);
-                   
+                    BalanceStatementList.Add(OBJBS);
                 }
-                
+
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
-            return (OBJBS);
+            return (BalanceStatementList);
         }
         public static List<BalanceStatement> GetAllList()
         {

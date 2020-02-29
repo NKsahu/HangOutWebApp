@@ -111,7 +111,7 @@ namespace HangOut.Controllers
             if (discntCharge.OID > 0)
             {
                 DiscntCharge.ListDiscntChrge.Add(discntCharge);
-                OrdDiscntChrge.RemoveDiscntCharge(discntCharge.SeatingId, discntCharge.SeatingOtp);
+                OrdDiscntChrge.RemoveDiscntCharge(discntCharge.SeatingId, discntCharge.SeatingOtp,discntCharge.OID);
             }
             else
             {

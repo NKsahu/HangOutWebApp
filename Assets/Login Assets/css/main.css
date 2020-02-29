@@ -85,15 +85,6 @@ input {
 	border: none;
 }
 
-textarea {
-  outline: none;
-  border: none;
-}
-
-textarea:focus, input:focus {
-  border-color: transparent !important;
-}
-
 input::-webkit-input-placeholder { color: #4b2354;}
 input:-moz-placeholder { color: #4b2354;}
 input::-moz-placeholder { color: #4b2354;}
@@ -115,32 +106,7 @@ button:hover {
 	cursor: pointer;
 }
 
-iframe {
-	border: none !important;
-}
 
-
-
-/*//////////////////////////////////////////////////////////////////
-[ Utility ]*/
-.txt1 {
-  font-family: SourceSansPro-Regular;
-  font-size: 16px;
-  line-height: 1.4;
-  color: #999999;
-}
-
-.txt2 {
-  font-family: SourceSansPro-Regular;
-  font-size: 16px;
-  line-height: 1.4;
-  color: #4b2354;
-}
-
-.hov1:hover {
-  color: #4b2354;
-  text-decoration: underline;
-}
 
 
 /*//////////////////////////////////////////////////////////////////

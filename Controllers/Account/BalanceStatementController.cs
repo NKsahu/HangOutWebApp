@@ -50,7 +50,7 @@ namespace HangOut.Controllers.Account
                 bObj.Amount = totalAmount;
                 bObj.OrgId = LedgerDetails.OrgId;
                 bObj.OrderId = CompletedItems[0].OID;
-                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation();
+                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation().Last();
                 bObj.Balance = TotalBalance.Balance + totalAmount;
                 HG_Orders ord = new HG_Orders().GetOne(CompletedItems[0].OID);
 
@@ -100,7 +100,7 @@ namespace HangOut.Controllers.Account
                     bObj.Amount = totalAmt;
                     bObj.OrgId = LedgerDetails.OrgId;
                     bObj.OrderId = orderitemlist[0].OID;
-                    BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation();
+                    BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation().Last();
                     bObj.Balance = TotalBalance.Balance + totalAmt;
                     HG_Orders order = new HG_Orders().GetOne(orderitemlist[0].OID);
 
