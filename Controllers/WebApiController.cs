@@ -815,6 +815,7 @@ namespace HangOut.Controllers
                         return PostResult;
                         }
                     }
+                OrdDiscntChrge.RemoveDiscntCharge(ObjOrders.Table_or_SheatId, ObjOrders.TableOtp);
                 if (OrderSts == "3")
                 {
                     ObjTorS.Status = 1;// free table
