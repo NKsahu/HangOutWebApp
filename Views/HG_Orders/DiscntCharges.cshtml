@@ -33,7 +33,7 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="col-md-12">
                 @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label  " })
-                @Html.TextBoxFor(model => model.Title, new { @class = "form-control ", autocomplete = "off" , required = "required" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control ", autocomplete = "off", required = "required" })
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-5">
@@ -41,17 +41,26 @@
                 @Html.TextBoxFor(model => model.Amt, new { @class = "form-control autodouble" })
                 @Html.ValidationMessageFor(model => model.Amt, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-2">
-                <label style="text-align:center">OR</label>
-            </div>
-            <div class="col-md-5">
-                @Html.Label(TaxTitle)
-                @Html.TextBoxFor(model => model.Tax, new { @class = "form-control autodouble", })
-                @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-            </div>
+
+            @if (Request.QueryString["Type"] == "2")
+            {
+                @Html.HiddenFor(model => model.Tax);
+            }
+            else
+            {
+                <div class="col-md-2">
+                    <label style="text-align:center">OR</label>
+                </div>
+                <div class="col-md-5">
+                    @Html.Label(TaxTitle)
+                    @Html.TextBoxFor(model => model.Tax, new { @class = "form-control autodouble", })
+                    @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                </div>
+            }
+
             <div class="col-md-12">
                 @Html.Label("Remark")
-                @Html.TextBoxFor(model => model.Remark, new { @class = "form-control " })
+                @Html.TextBoxFor(model => model.Remark, new { @class = "form-control ", required = "required" })
                 @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
