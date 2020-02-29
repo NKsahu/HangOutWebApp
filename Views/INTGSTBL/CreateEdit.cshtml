@@ -180,16 +180,7 @@
             $("#ServicePrize").parent('div').hide();
         }
     }
-    //$("#Prize,#Tax").change(
-    //    function () {
-    //        CalculateTax();
-    //    });
-    //function CalculateTax() {
-    //    var Price = parseFloat($("#Prize").val());
-    //    var TaxPercentage = parseFloat($("#Tax").val());
-    //    var taxAmt = (Price * TaxPercentage) / 100;
-    //    $("#TotalPrize").val(Price + taxAmt).change();
-    //}
+   
     SalableChange();
     directchange();
     Processedchange();
@@ -254,19 +245,16 @@
         });
 
     }
-    Unitchange();
-    $("#ItemID").change(function () {
-        Unitchange();
+    $("#UnitID").on("change", function () {
         console.log("sqa");
-    });
-    function Unitchange(ID) {
-        var value = $("#ItemID").val();
-        if (value>0) {
+        var value = $("#UnitID").val();
+        if (value != "" && value != 0) {
             $.ajax({
-                type: "GET",
-                url: "/INTGSTBL/GETID?ID=" + ID,
+                type: 'GET',
+                data: { value: value },
+                url: "/INTGSTBL/GETID",
                 success: function (data) {
-                    $("#IUnitID").val(data);
+                    $("#IUnitID").html(data);
                     //alert(data.Name);
                 },
                 error: function (xhr) {
@@ -274,8 +262,7 @@
                 }
             });
         }
-    }
-    
-    
+
+    });
 </script>
  

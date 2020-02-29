@@ -56,7 +56,7 @@
                                     </span>
                                 </div>
                                 <div class="Col-md-1">
-                                    <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" id="@Order.OIID" min="0" max="20" size="10">
+                                    <input type="text" name="quant[2]" class="QTY form-control input-number text-center" value="@Order.Count" id="@Order.OIID" min="1" max="20" size="10">
 
                                 </div>
                                 <div class="Col-md-1">
@@ -74,7 +74,7 @@
                         <td>
                             @Order.TickedNo
                         </td>
-                        <td onchange="btn(this);"  class=" CkeckorNot" id="IntPrice@(Order.OIID)">
+                        <td class="ItemPrize" id="IntPrice@(Order.OIID)">
                             @ItemPrice.ToString("0.00")
                         </td>
                     </tr>
@@ -110,7 +110,7 @@
                                 Count += Amt;
                             }
                         } 
-                        <label for="male" id="Quantity">@Count</label>
+                        <label  id="Quantity">@Count</label>
                     </div>
                 </div>
 
@@ -134,7 +134,7 @@
                                 TotalAmt += Amt;
                             }
                         }
-                        <label for="male" id="jjj" totalAmt="@TotalAmt">@TotalAmt</label>
+                        <label  id="TotalAMT">@TotalAmt</label>
                     </div>
                 </div>
 
@@ -179,6 +179,8 @@
             url: "/HG_Orders/UpdateAmt?ID=" + OIID + "&Cnt=" + Cnt,
             success: function (data) {
                 $("#IntPrice" + OIID).text(data);
+                ChangeQtySum();
+                ChangetotalAmt();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $('#waiting').hide();
@@ -197,38 +199,32 @@
             success: function (data) {
                 //  var MainData = JSON.parse(data);
                 $("#IntPrice" + OIID).text(data);
-               
+                ChangeQtySum();
+                ChangetotalAmt();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $('#waiting').hide();
             }
         });
     }
-
-    $(".btn-success").click(function () {
+    function ChangeQtySum() {
+        var ListQty = document.getElementsByClassName('QTY');
+        var totalQty = 0;
+        for (var i = 0; i < ListQty.length; i++) {
+            totalQty +=parseInt(ListQty[i].value);
+        }
+        $("#Quantity").text(totalQty);
+         
+    }
+    function ChangetotalAmt() {
+        var AmtList = document.getElementsByClassName('ItemPrize');
+        var totalAMT = 0;
         console.log("ss");
-        TotalAmt = 0;
-        value = 0;
-        var value = parseFloat   ($('#CkeckorNot', this).text());
-        value += TotalAmt;
-        $("#jjj").val(value).change();
-    });
-    //function btn(Event) {
-    //    console.log("ss");
-    //    TotalAmt = 0;
-    //    value = 0;
-    //    var OIID = $(Event).attr('OIID');
-    //    var Cnt = parseFloat($("#" + OIID).val());
-    //    TotalAmt = Cnt;
-    //    //JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy, int OID)
-    //    $("#IntPrice" + OIID).each(function (index) {
-    //        console.log(index);
-    //         value += TotalAmt;
-    //        $("#jjj").val(value).change();
-    //    });
-    //}
-   
-     
+        for (var i = 0; i < AmtList.length; i++) {
+            totalAMT += parseInt(AmtList[i].text);
+        }
+        $("#TotalAMT").text(totalAMT);
+    }
 </script>
 <style>
     body {
