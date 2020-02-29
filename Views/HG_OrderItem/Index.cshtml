@@ -224,11 +224,12 @@
                                 if (discntcharge.Amt > 0)
                                 {
                                     Amt = discntcharge.Amt;
-                                    GrandTotal += Amt;
+                                    GrandTotal -= Amt;
                                 }
                                 else if (discntcharge.Tax > 0)
                                 {
-
+                                     Amt = (GrandTotal * discntcharge.Tax) / 100;
+                                    GrandTotal -= Amt;
                                 }
                                 <tr>
                                     <td>@discntcharge.Title</td>
@@ -241,7 +242,17 @@
                                 </tr>
                                 break;
                             case 2:
-                                Amt = discntcharge.Amt > 0 ? discntcharge.Amt : discntcharge.Tax;
+                                 Amt = 0.00;
+                                if (discntcharge.Amt > 0)
+                                {
+                                    Amt = discntcharge.Amt;
+                                    GrandTotal += Amt;
+                                }
+                                else if (discntcharge.Tax > 0)
+                                {
+                                    Amt = (GrandTotal * discntcharge.Tax) / 100;
+                                    GrandTotal += Amt;
+                                }
                                 <tr>
                                     <td>@discntcharge.Title</td>
                                     <td></td>
