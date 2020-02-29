@@ -1,5 +1,5 @@
 ﻿@using HangOut.Models
-@{     Layout = null;
+@{ Layout = null;
     Int64 OrderID = Int64.Parse(Request.QueryString["OID"]);
     var OrderItems = new HG_OrderItem().GetAll(OrderID);
     List<HG_Items> listItem = new HG_Items().GetAll();
@@ -35,13 +35,6 @@
                 @foreach (var Order in OrderItems)
                 {
                     double ItemPrice = Order.Price * Order.Count;
-                    //if (Order.Status != 4)
-                    //{
-                    //    QtyTotal += item.Count;
-                    //    AmtTotal += ItemPrice;
-                    //    GrandTotal += ItemPrice;
-                    //}
-
                     <tr class="item">
                         <td>
                             &nbsp;
@@ -57,18 +50,18 @@
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-right">
-                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]" OIID="@Order.OIID" onclick="MinusItemQty(this)" >
+                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" OIID="@Order.OIID" onclick="MinusItemQty(this)">
                                             <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
                                         </button>
                                     </span>
                                 </div>
-                                <div class="Col-md-1" >
+                                <div class="Col-md-1">
                                     <input type="text" name="quant[2]" class=" form-control input-number text-center" value="@Order.Count" id="@Order.OIID" min="0" max="20" size="10">
 
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-left">
-                                        <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]"  OIID="@Order.OIID" onclick="PlusItemQty(this)">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" OIID="@Order.OIID" onclick="PlusItemQty(this)">
                                             <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
                                         </button>
                                     </span>
@@ -81,7 +74,7 @@
                         <td>
                             @Order.TickedNo
                         </td>
-                        <td id="IntPrice@(Order.OIID)">
+                        <td onchange="btn(this);"  class=" CkeckorNot" id="IntPrice@(Order.OIID)">
                             @ItemPrice.ToString("0.00")
                         </td>
                     </tr>
@@ -89,7 +82,7 @@
 
             </tbody>
 
-        </table> 
+        </table>
         <div class="row">
             <div class="col-4">
                 <div class="row">
@@ -97,7 +90,7 @@
                         @Html.Label("Total")
                     </div>
                     <div class="col-md-5">
-                        
+
                     </div>
                 </div>
             </div>
@@ -107,7 +100,17 @@
                         @Html.Label("Total Quantity")
                     </div>
                     <div class="col-6">
-                        <label for="male" id="Quantity"> </label>
+                        @{
+                            double Count = 0;
+                            foreach (var amt in OrderItems)
+                            {
+
+                                List<HG_OrderItem> ListIt = new HG_OrderItem().GetAll(amt.OID);
+                                double Amt = amt.Count;
+                                Count += Amt;
+                            }
+                        } 
+                        <label for="male" id="Quantity">@Count</label>
                     </div>
                 </div>
 
@@ -121,7 +124,17 @@
                         @Html.Label("Total Amount")
                     </div>
                     <div class="col-2">
-                        <label for="male" id="jjj"> </label>
+                        @{
+                            double TotalAmt = 0;
+                            foreach (var amt in OrderItems)
+                            {
+
+                                List<HG_OrderItem> ListIt = new HG_OrderItem().GetAll(amt.OID);
+                                double Amt = amt.Price * amt.Count;
+                                TotalAmt += Amt;
+                            }
+                        }
+                        <label for="male" id="jjj" totalAmt="@TotalAmt">@TotalAmt</label>
                     </div>
                 </div>
 
@@ -156,121 +169,16 @@
     </div>
 </div>
 <script>
-    $('.btn-number').click(function (e) {
-        e.preventDefault();
-
-        fieldName = $(this).attr('data-field');
-        type = $(this).attr('data-type');
-        var input = $("input[name='" + fieldName + "']");
-        var currentVal = parseInt(input.val());
-        if (!isNaN(currentVal)) {
-            if (type == 'minus') {
-
-                if (currentVal > input.attr('min')) {
-                    input.val(currentVal - 1).change();
-                }
-                if (parseInt(input.val()) == input.attr('min')) {
-                    $(this).attr('disabled', true);
-                }
-
-            } else if (type == 'plus') {
-
-                if (currentVal < input.attr('max')) {
-                    input.val(currentVal + 1).change();
-                }
-                if (parseInt(input.val()) == input.attr('max')) {
-                    $(this).attr('disabled', true);
-                }
-
-            }
-        } else {
-            input.val(0);
-        }
-    });
-    $('.input-number').focusin(function () {
-        $(this).data('oldValue', $(this).val());
-    });
-    $('.input-number').change(function () {
-
-        minValue = parseInt($(this).attr('min'));
-        maxValue = parseInt($(this).attr('max'));
-        valueCurrent = parseInt($(this).val());
-
-        name = $(this).attr('name');
-        if (valueCurrent >= minValue) {
-            $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
-        } else {
-            alert('Sorry, the minimum value was reached');
-            $(this).val($(this).data('oldValue'));
-        }
-        if (valueCurrent <= maxValue) {
-            $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
-        } else {
-            alert('Sorry, the maximum value was reached');
-            $(this).val($(this).data('oldValue'));
-        }
-
-
-    });
-    $(".input-number").keydown(function (e) {
-        // Allow: backspace, delete, tab, escape, enter and .
-        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
-            // Allow: Ctrl+A
-            (e.keyCode == 65 && e.ctrlKey === true) ||
-            // Allow: home, end, left, right
-            (e.keyCode >= 35 && e.keyCode <= 39)) {
-            // let it happen, don't do anything
-            return;
-        }
-        // Ensure that it is a number and stop the keypress
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
-    });
-    $(document).on('click'  , function (i) {
-        Addsum(i);
-
-    });
-    $(document).on("keyup", "#txtCal", Addsum);
-    function Addsum(ID, Price) {
-        console.log("ss");
-       
-            $.ajax({
-                type: 'GET',
-                url: "/HG_Orders/UpdateAmt?ID=" + ID + "&Price=" + Price,
-                success: function (data) {
-                    var qnty = parseInt($("#value").val());
-                    var price = Price;
-                    var total = 0;
-                    if (!isNaN(qnty) && !isNaN(price)) {
-                        total = qnty * price  ;
-                    }
-                    $(data).find("#txtCal").val(total);
-
-                },
-                error: function (jqXhr, textStatus, errorMessage) { // error callback
-                    $('#waiting').hide();
-                }
-            });
-         
-    }
-</script>
-<script>
     function MinusItemQty(Event) {
-      var Cnt=parseInt($(Event).attr('OIID').val());
-        $(Event).val(Cnt - 1);
+        var OIID = $(Event).attr('OIID');
+        var Cnt = parseFloat($("#" + OIID).val());
+        Cnt--;
+        $("#" + OIID).val(Cnt);
         $.ajax({
             type: 'GET',
-            url: "/HG_Orders/UpdateAmt?ID=" +  + "&Price=" + Price,
+            url: "/HG_Orders/UpdateAmt?ID=" + OIID + "&Cnt=" + Cnt,
             success: function (data) {
-                var qnty = parseInt($("#value").val());
-                var price = Price;
-                var total = 0;
-                if (!isNaN(qnty) && !isNaN(price)) {
-                    total = qnty * price;
-                }
-                $(data).find("#txtCal").val(total);
-
+                $("#IntPrice" + OIID).text(data);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $('#waiting').hide();
@@ -279,71 +187,54 @@
 
     }
     function PlusItemQty(Event) {
-        var Cnt = parseInt($(Event).val());
-        $(Event).val(Cnt + 1);
-    }
-    $(document).ready(function () {
-        $('table thead th').each(function (i) {
-            calculateColumn(i);
-            
-        });
-    });
-
-    function calculateColumn(index) {
-        var total = 0;
-        $('table tr').each(function () {
-            var value = parseInt($('#txtCal', this).eq(index).text());
-            if (!isNaN(value)) {
-                total += value;
+        var OIID = $(Event).attr('OIID');
+        var Cnt = parseFloat($("#" + OIID).val());
+        Cnt++;
+        $("#" + OIID).val(Cnt);
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Orders/UpdateAmt?ID=" + OIID + "&Cnt=" + Cnt,
+            success: function (data) {
+                //  var MainData = JSON.parse(data);
+                $("#IntPrice" + OIID).text(data);
+               
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
             }
         });
-        $('#jjj').eq(index).text(total);
     }
 
-    $('table thead th').each(function (i) {
-        findvalue(i);
-
+    $(".btn-success").click(function () {
+        console.log("ss");
+        TotalAmt = 0;
+        value = 0;
+        var value = parseFloat   ($('#CkeckorNot', this).text());
+        value += TotalAmt;
+        $("#jjj").val(value).change();
     });
+    //function btn(Event) {
+    //    console.log("ss");
+    //    TotalAmt = 0;
+    //    value = 0;
+    //    var OIID = $(Event).attr('OIID');
+    //    var Cnt = parseFloat($("#" + OIID).val());
+    //    TotalAmt = Cnt;
+    //    //JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy, int OID)
+    //    $("#IntPrice" + OIID).each(function (index) {
+    //        console.log(index);
+    //         value += TotalAmt;
+    //        $("#jjj").val(value).change();
+    //    });
+    //}
    
-    console.log("g");
-    function findvalue(index) {
-        var total = 0;
-        var qnty = 1;
-        
-        
-        $(".item").each(function () {
-            if (!isNaN(parseInt($("#value").val()))) {
-                qnty = parseInt($("#value").val());
-            }
-            total += qnty;
-        });
-        $('#Quantity').eq(index).text(total);
-    }
-    
+     
 </script>
-@*<script>
-    $(document).ready(function () {
-        $('table thead th').each(function (i) {
-            calculateQty(i);
-        });
-    });
-    function calculateQty(index) {
-        var total = 0;
-        $('table tr').each(function () {
-            console.log("sda");
-            var value = parseInt($('.text-center', this).parent('div').parent('div').eq(index).text());
-            if (!isNaN(value)) {
-                total += value;
-            }
-        });
-        $('#Quantity').eq(index).text(total);
-    }
-</script>*@
 <style>
     body {
         font-family: "Open Sans", helvetica, arial;
     }
-    
+
     table {
         width: 500px; /* For Responsive design set 100% */
         border-collapse: collapse;
