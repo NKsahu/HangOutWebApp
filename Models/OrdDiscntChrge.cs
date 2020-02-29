@@ -120,12 +120,22 @@ namespace HangOut.Models
                 HG_Orders hG_Orders = new HG_Orders().GetOne(discntCharges[0].OID);
                 if (hG_Orders.OID > 0)
                 {
-                    hG_Orders.DisntChargeIDs = DisntChargeIDs;
+                    if(hG_Orders.DisntChargeIDs!=""&& hG_Orders.DisntChargeIDs != "0")
+                    {
+                        hG_Orders.DisntChargeIDs = hG_Orders.DisntChargeIDs+","+ DisntChargeIDs;
+                    }
+                    else
+                    {
+                        hG_Orders.DisntChargeIDs = DisntChargeIDs;
+                    }
+                   
                     hG_Orders.Save();
                 }
             }
-            DiscntCharge.ListDiscntChrge.RemoveAll(x => x.SeatingId == SeatingId && x.SeatingOtp == Otp);
-            
+            if (discntCharges.Count > 0)
+            {
+                DiscntCharge.ListDiscntChrge.RemoveAll(x => x.SeatingId == SeatingId && x.SeatingOtp == Otp);
+            }
         }
     }
     public class DiscntCharge
