@@ -58,12 +58,12 @@ namespace HangOut.Controllers.Inventory
             INTItems iNTItems = new INTItems();
             return View(iNTItems);
         }
-        public JsonResult GETID()
+        public JsonResult GETID(int ID)
         {
-            int UnitID = int.Parse(Request.QueryString["ParentId"]);
+            
             List<INTUnits> ListUnit = INTUnits.GetAll();
-            ListUnit = ListUnit.FindAll(x => x.ParentId == UnitID);
-            return Json(new { ListUnit });
+            ListUnit = ListUnit.FindAll(x => x.ParentId == ID);
+            return Json(new {data= ListUnit });
         }
     }
 }
