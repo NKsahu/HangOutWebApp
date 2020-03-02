@@ -1,9 +1,7 @@
 ﻿using HangOut.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using HangOut.Models.Common;
+using Newtonsoft.Json.Linq;
 using System.Web.Mvc;
 
 namespace HangOut.Controllers
@@ -90,6 +88,27 @@ namespace HangOut.Controllers
             return View();
         }
         [HttpPost]
+        public JsonResult SaveEditOrder(Int64 OID,int PMode)
+        {
+            var UserInfo = Request.Cookies["UserInfo"];
+            var UserType = UserInfo["UserType"];
+            HG_Orders ObjOrder = new HG_Orders().GetOne(OID);
+            ObjOrder.PaymentStatus = PMode;
+            if (UserType != "SA")
+            {
+                if (ObjOrder.Create_Date < DateTime.Now.AddDays(-2).Date)
+                {
+                    return Json(new { msg = "Can't Modify Order After 2 days" });
+                }
+                if (ObjOrder.PaymentStatus == 3 &&PMode!= ObjOrder.PaymentStatus)
+                {
+                    return Json(new { msg = "Can't change Payment mode" });
+                }
+            }
+            ObjOrder.Save();
+            return Json(new { data = OID }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
         public ActionResult SaveDiscntCharge(OrdDiscntChrge discntCharge)
         {
             double AmtToAdded = 0.00;
@@ -120,12 +139,44 @@ namespace HangOut.Controllers
             }
             return Json(new { data = AmtToAdded}, JsonRequestBehavior.AllowGet);
         }
-        public string UpdateAmt(int ID,int Cnt)
+        public JObject UpdateAmt(int ID,int Cnt,int Pmode)
         {
             HG_OrderItem OBJOrderItem = new HG_OrderItem().GetOne(ID);
-            OBJOrderItem.Count = Cnt;
-            double price = OBJOrderItem.Count * OBJOrderItem.Price;
-            return price.ToString("0.00");
+            var UserInfo = Request.Cookies["UserInfo"];
+            var UserType = UserInfo["UserType"];
+            JObject result = new JObject();
+            if (UserType != "SA")
+            {
+                if (OBJOrderItem.OrderDate < DateTime.Now.AddDays(-2).Date)
+                {
+                    result.Add("Status", 400);
+                    result.Add("MSG", "Can't Modify Order After 2 days");
+                    return result;
+                }
+                if (Pmode==3)
+                {
+                    result.Add("Status", 400);
+                    result.Add("MSG", "Can't change Payment mode");
+                    return result;
+                }
+            }
+            double price = 0.0;
+            if (Cnt > 0)
+            {
+                
+                OBJOrderItem.Count = Cnt;
+                OBJOrderItem.Save();
+                price = OBJOrderItem.Count * OBJOrderItem.Price;
+                result.Add("Status", 200);
+                result.Add("MSG", price.ToString("0.00"));
+            }
+            else
+            {
+                result.Add("Status", 400);
+                result.Add("MSG", "Quantity Can't be minus");
+                return result;
+            }
+            return result;
         }
          
     }
