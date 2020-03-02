@@ -162,7 +162,7 @@ namespace HangOut.Controllers
                 }
             }
             double price = 0.0;
-            if (Cnt > 0)
+            if (Cnt >= 0)
             {
                 
                 OBJOrderItem.Count = Cnt;
