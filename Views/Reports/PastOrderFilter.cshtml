@@ -217,7 +217,7 @@
     function EditOrder(OID) {
         $("#waiting").show();
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: "/HG_Orders/EditOrder?OID=" + OID,
             success: function (data) {
                 makedpt("EditOrder");
