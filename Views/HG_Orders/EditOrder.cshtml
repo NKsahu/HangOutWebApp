@@ -218,11 +218,10 @@
     }
     function ChangetotalAmt() {
         var AmtList = document.getElementsByClassName('ItemPrize');
-        var a = parseInt(AmtList);
         var TotalAmount = 0;
         console.log("ss");
-        for (var i = 0; i <a.length; i++) {
-            TotalAmount += a[i];
+        for (var i = 0; i < AmtList.length; i++) {
+            TotalAmount += parseInt(AmtList[i].val);
         }
         $("#TotalAmount").text(TotalAmount);
     }
