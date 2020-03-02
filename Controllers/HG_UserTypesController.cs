@@ -56,6 +56,11 @@ namespace HangOut.Controllers
         {
             return View();
         }
+       
+        public ActionResult OpenFoodDoApp()
+        {
+            return View();
+        }
 
     }
 }

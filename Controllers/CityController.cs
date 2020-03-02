@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+
 using HangOut.Models.Common;
 using HangOut.Models;
 namespace HangOut.Controllers

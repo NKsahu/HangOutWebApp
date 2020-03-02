@@ -83,7 +83,7 @@ namespace HangOut.Controllers
         {
             return View();
         }
-        public ActionResult EditOrder(Int64 OID)
+        public ActionResult EditOrder(Int64 OID ,int PtmMode)
         {
             return View();
         }
@@ -105,6 +105,7 @@ namespace HangOut.Controllers
                     return Json(new { msg = "Can't change Payment mode" });
                 }
             }
+            
             ObjOrder.Save();
             return Json(new { data = OID }, JsonRequestBehavior.AllowGet);
         }
@@ -165,7 +166,7 @@ namespace HangOut.Controllers
             {
                 
                 OBJOrderItem.Count = Cnt;
-                OBJOrderItem.Save();
+                //OBJOrderItem.Save();
                 price = OBJOrderItem.Count * OBJOrderItem.Price;
                 result.Add("Status", 200);
                 result.Add("MSG", price.ToString("0.00"));
