@@ -127,5 +127,6 @@ namespace HangOut.Controllers
             double price = OBJOrderItem.Count * OBJOrderItem.Price;
             return price.ToString("0.00");
         }
+         
     }
 }
