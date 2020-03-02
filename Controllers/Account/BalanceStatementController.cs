@@ -220,6 +220,7 @@ namespace HangOut.Controllers.Account
             S1Obj.OrgId = LastRecords.OrgId;
             S1Obj.Save();
             mergeAndSendToAcoount(LastRecords.OrgId);
+            EntryToAccount(LastRecords.OrgId);
             return Json(new { data = CObj }, JsonRequestBehavior.AllowGet);
         }
 
@@ -229,6 +230,12 @@ namespace HangOut.Controllers.Account
             Accounts Obj = new Accounts();
 
             Accounts AObj = new Accounts();
+
+            Accounts AObj1 = new Accounts();
+
+            Accounts ADObj = new Accounts();
+
+            List<Accounts> ADObjList = new List<Accounts>();
 
             Commission AllCommissions = Commission.GetAllCommissions().Last();
 
@@ -249,9 +256,62 @@ namespace HangOut.Controllers.Account
             {
                 Obj.DRAmount = LastRecords.Balance;
             }
-            Obj.SaveOpeningAccountbalance();
+            Obj.SaveGeneral();
 
+            AObj.DRAmount = AllSales.SaleAmount;
+            AObj.Narration = "Online Payment received Entry No."+ AllSales.EntryNo;
+            AObj.Balance = AllSales.SaleAmount;
+            AObj.Date = DateTime.Now;
+            AObj.SaveGeneral();
 
+            //===============================================
+            HG_OrganizationDetails Objitem = new HG_OrganizationDetails();
+            HG_OrganizationDetails State = Objitem.GetAll(OrgId).FirstOrDefault();
+
+            Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+           && x.OrgId == OrgId).FirstOrDefault();
+
+            AObj1.CRAmount = AllCommissions.CommissionAmount;
+            AObj1.Narration = "Commission Invoice No." + AllCommissions.EntryNo;
+            AObj1.Balance = AllSales.SaleAmount - AllCommissions.CommissionAmount;
+            AObj1.Date = DateTime.Now;
+            
+            // entry to Account Details
+            if(State.State=="17")
+            {
+
+               for(int i=1;i<=2;i++)
+                {
+                    ADObj = new Accounts();
+                    if (i==1)
+                    {
+                        ADObj.ADDate = DateTime.Now;
+                        ADObj.ADAmount = AllCommissions.CommissionAmount * (LedgerDetails.TaxOnAboveMargin / 2) / 100;
+                        ADObj.CRLedgerId = 13;
+                        ADObj.ADGroupId = 3;
+                        ADObjList.Add(ADObj);
+                    }
+                    else if(i==2)
+                    {
+                        ADObj.ADDate = DateTime.Now;
+                        ADObj.ADAmount = AllCommissions.CommissionAmount * (LedgerDetails.TaxOnAboveMargin / 2) / 100;
+                        ADObj.CRLedgerId = 17;
+                        ADObj.ADGroupId = 3;
+                        ADObjList.Add(ADObj);
+                    }
+                }
+            }
+            else
+            {
+                ADObj.ADDate = DateTime.Now;
+                ADObj.ADAmount = (AllCommissions.CommissionAmount * LedgerDetails.TaxOnAboveMargin) / 100;
+                ADObj.CRLedgerId = 21;
+                ADObj.ADGroupId = 3;
+                ADObjList.Add(ADObj);
+            }
+
+            //=============================
+            AObj1.Save(ADObjList);
 
             return Json(new { data = AllCommissions }, JsonRequestBehavior.AllowGet);
         }

@@ -97,11 +97,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.ADID == 0)
                 {
-                    Quary = "Insert Into ACAccountDetails Values (@AID,@Date,@Amount,@GroupId,@DRLedgerId,@CRLedgerId,);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACAccountDetails Values (@AID,@Date,@Amount,@GroupId,@DRLedgerId,@CRLedgerId);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACAccountDetails Set AID=@AID,Date=@Date,Amount=@Amount,GroupId=@GroupId,DRLedgerId=@DRLedgerId,CRLedgerId=@CRLedgerId, where ADID=@ADID";
+                    Quary = "Update ACAccountDetails Set AID=@AID,Date=@Date,Amount=@Amount,GroupId=@GroupId,DRLedgerId=@DRLedgerId,CRLedgerId=@CRLedgerId where ADID=@ADID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ADID", this.ADID);
@@ -130,7 +130,7 @@ namespace HangOut.Models.Account
 
         }
 
-        public int SaveOpeningAccountbalance()
+        public int SaveGeneral()
         {
             int Row = 0;
             DBCon con = new DBCon();
@@ -172,6 +172,34 @@ namespace HangOut.Models.Account
             finally { cmd.Dispose(); con.Con.Close(); }
             return Row;
 
+        }
+
+        public static List<Accounts> GetAll()
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<Accounts> GroupList = new List<Accounts>();
+            try
+            {
+                string Quary = "Select * from ACAccount ORDER BY ID DESC";
+                cmd = new SqlCommand(Quary, con.Con);
+                SDR = cmd.ExecuteReader();
+
+                while (SDR.Read())
+                {
+                    Accounts OBJAC = new Accounts();
+                    OBJAC.AID = SDR.GetInt32(0);
+                    OBJAC.Narration = SDR.GetString(1);
+                    OBJAC.DRAmount = SDR.GetDouble(2);
+                    OBJAC.CRAmount = SDR.GetDouble(3);
+                    OBJAC.Balance = SDR.GetDouble(4);
+                    GroupList.Add(OBJAC);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return (GroupList);
         }
     }
 }
