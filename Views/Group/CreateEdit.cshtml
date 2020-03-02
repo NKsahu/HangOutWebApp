@@ -38,15 +38,15 @@
                     @Html.ValidationMessageFor(model => model.PGID, "", new { @class = "text-danger" })
 
                 </div>
-            }
+            }*@
             @{
                 <div class="col-md-3">
                     @Html.Label("Type")
-                    @Html.DropDownListFor(model => model.Type, new SelectList(Group.GTypes(), "ID", "Name", Model.ID), "Select Type", new { @class = "form-control", required = "required" })
+                    @Html.DropDownListFor(model => model.Type, new SelectList(Group.GTypes(), "ID", "Name", Model.ID), "Select Type", new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 
                     </div>
-                    }*@
+             }
 
                     <div class="col-md-1">
                         @Html.Label("Save", new { @class = "text-white" })
