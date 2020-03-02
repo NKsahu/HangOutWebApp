@@ -179,27 +179,30 @@ namespace HangOut.Models.Account
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            List<Accounts> GroupList = new List<Accounts>();
+            List<Accounts> ACList = new List<Accounts>();
             try
             {
-                string Quary = "Select * from ACAccount ORDER BY ID DESC";
+                string Quary = "Select * from ACAccount ";
                 cmd = new SqlCommand(Quary, con.Con);
+            
                 SDR = cmd.ExecuteReader();
 
                 while (SDR.Read())
                 {
                     Accounts OBJAC = new Accounts();
                     OBJAC.AID = SDR.GetInt32(0);
-                    OBJAC.Narration = SDR.GetString(1);
+                    OBJAC.Date = SDR.GetDateTime(1);
                     OBJAC.DRAmount = SDR.GetDouble(2);
                     OBJAC.CRAmount = SDR.GetDouble(3);
-                    OBJAC.Balance = SDR.GetDouble(4);
-                    GroupList.Add(OBJAC);
+                    OBJAC.Narration = SDR.GetString(4);
+                    OBJAC.Balance = SDR.GetDouble(5);
+                    OBJAC.GroupId = SDR.GetInt32(6);
+                    ACList.Add(OBJAC);
                 }
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
-            return (GroupList);
+            return (ACList);
         }
     }
 }

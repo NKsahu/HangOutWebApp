@@ -306,7 +306,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Account\AccountControllers.cs" />
+    <Compile Include="Controllers\Account\AccountsController.cs" />
     <Compile Include="Controllers\Account\BalanceStatementController.cs" />
     <Compile Include="Controllers\Account\CommissionController.cs" />
     <Compile Include="Controllers\Account\GroupController.cs" />
@@ -515,6 +515,7 @@
     <Content Include="Views\BalanceStatement\Index.cshtml" />
     <Content Include="Views\HG_Orders\EditOrder.cshtml" />
     <Content Include="Views\HG_UserTypes\OpenFoodDoApp.cshtml" />
+    <Content Include="Views\Accounts\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
