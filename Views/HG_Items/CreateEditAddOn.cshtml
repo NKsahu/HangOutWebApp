@@ -24,6 +24,7 @@
             //  public int AddOnCatId { get; set; }// addon category id
            @Html.HiddenFor(model => model.OrgID)
             @Html.HiddenFor(model => model.CategoryID)
+            @Html.HiddenFor(Model=>Model.ItemAvaibility)
         <div class="row">
 
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })

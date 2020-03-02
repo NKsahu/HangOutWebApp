@@ -16,9 +16,6 @@
                     <div class="col-md-4">
 
                     </div>
-                    <div class="col-sm-1">
-                         <button   class="btn btn-success" id="AddNewCity"  onclick="AddCity();"    ><i class="fa fa-plus">ADD</i></button>
-                    </div>
                 </div>
                 <div class="card-header text-center"><b>Filter</b></div>
 
@@ -48,32 +45,82 @@
 
             </div>
 
+            <script>
+                function Delete(ID) {
+                    if (confirm('Are You Sure')) {
+                        $('#waiting').show();
+                        $.ajax({
+                            type: 'GET',
+                            url: "/City/DeleteCity?ID=" + ID,
+                            success: function (data) {
+                                //  var da = JSON.parse(data);
+                                if (data.msg != null && data.msg != "") {
+                                    alert(data.msg);
 
+                                }
+                                else {
+                                    $("#" + ID).hide();
+                                }
+                                console.log(data);
+                                $('#waiting').hide();
+                            },
+                            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                                console.log(errorMessage);
+                                Onfail(errorMessage.MSG);
+                                $('#waiting').hide();
+                            }
+                        });
+                    }
+                }
+                function Search() {
+                    $("#waiting").show();
+                    var StateCode = $("#SID").val();
+                    $.ajax({
+                        url: "/City/index?Type=2&StateCode=" + StateCode,
+                        type: "GET",
+                        success: function (data) {
+                            $("#List2").html("");
+                            $("#List").html("");
+                            $("#List").html(data);
+                            $("#waiting").hide();
+                        },
+                        error: function (jqXhr, textStatus, errorMessage) { // error callback
+                            $("#waiting").hide();
+                        }
 
+                    });
+                }
+                $("#Search").click(function () {
+                    Search();
+                });
+            </script>
             break;
+            
     }
 }
 
 <div class="col" id="List2">
     <div class="card">
-        <div class="card-header">City List </div>
+        <div class="card-header">City/District List </div>
         <div class="card-body">
             <table class="table table-hover table-bordered text-center" id="TBLID">
                 <thead>
                     <tr>
                         <th> Code </th>
                         <th> Name </th>
-
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>@item.CityId</td>
-                            <td>@item.Name</td>
-                        </tr>
+                    <tr id="@item.CityId">
+                        <td>@item.CityId</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.CityId)"> Delete</button>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -82,62 +129,10 @@
 
 </div>
  
+
+     
  
-<script>
-    $(document).ready(function () {
 
-        setTimeout(function () {
 
-            function Search() {
-                $("#waiting").show();
-                var StateCode = $("#SID").val();
-                $.ajax({
-                    url: "/City/index?Type=2&StateCode=" + StateCode,
-                    type: "GET",
-                    success: function (data) {
-                        $("#List2").html("");
-                        $("#List").html("");
-                        $("#List").html(data);
-                        $("#waiting").hide();
-                    },
-                    error: function (jqXhr, textStatus, errorMessage) { // error callback
-                        $("#waiting").hide();
-                    }
-
-                });
-            }
-            $("#Search").click(function () {
-                Search();
-            });
-
-        }, 2000);
-    });
-
-</script>
-<script>
-    function AddCity() {
-        $("#waiting").show();
-        $.ajax({
-            type: 'GET',
-            url: "/City/CreateEdit?CityId=0" ,
-            success: function (data) {
-                makedpt("AddCity");
-                $("#AddCity > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("AddCity");
-                $("#waiting").hide();
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
-
-    }
-
-    function ReturnRow(data) {
-        var JsonObj = JSON.parse(data);
-        var table = $('#TBLID').DataTable();
-        table.row.add([JsonArray[i].CityId, JsonArray[i].Name]).draw();//.//node();
-    }
-</script>
 
 

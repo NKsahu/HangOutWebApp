@@ -32,87 +32,199 @@
             @Html.HiddenFor(model => model.PANNO);
             @Html.HiddenFor(model => model.AcType);
             @Html.HiddenFor(model => model.Status);
-            @Html.HiddenFor(model=>model.CustomerOrdering)
-        <div class="row">
-            <div class="col-md-3">
-                @Html.Label("Invoice Heading", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.IvoiceHeading, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.IvoiceHeading, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.CustomerOrdering)
+            @Html.HiddenFor(model => model.Name)
+            @Html.HiddenFor(model => model.Phone)
+            @Html.HiddenFor(model => model.DistrictId)
 
-            </div>
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-12">
-                <div class="card-header">
-                    <h3 style="text-align:center;color:black"><b>Document Setup </b></h3>
-                    <hr />
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.Label("Invoice Heading *", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.IvoiceHeading, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Invoice,Bill" } })
+                    @Html.ValidationMessageFor(model => model.IvoiceHeading, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("Invoice Title *", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.InvoiceTitle, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "foodDo" } })
+                    @Html.ValidationMessageFor(model => model.InvoiceTitle, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-12">
+                    <div class="card-header">
+                        <h3 style="text-align:center;color:black"><b>Document Setup </b></h3>
+                        <hr />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    @Html.Label("Address 1", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-6">
+                    @Html.Label("Address 2", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.AddressLin2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AddressLin2, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-6">
+                    @Html.Label("Address 3", htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.AddressLine3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AddressLine3, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-6">
+
+
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Phone", new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.invoicePhone, new { htmlAttributes = new { @class = "form-control", @placeholder = "Contact No" } })
+                    @Html.ValidationMessageFor(model => model.invoicePhone, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="col-md-3">
+                    @Html.Label("Field 1", new { @class = "control-label" })
+                    @Html.EditorFor(model => model.GSTNO, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.GSTNO, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-3">
+                    @Html.Label("Field 2", new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Licence2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Licence2, "", new { @class = "text-danger" })
+
+                </div>
+
+                <div class="col-md-3">
+                    @Html.Label("Field 3", new { @class = "control-label " })
+                    @Html.EditorFor(model => model.License3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-10">
+                    @Html.Label("Remark/ Note", htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.PrintRemark, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-12" style="padding:4px;border:2px solid black; border-radius:5px; margin-top:10px;">
+                    <h5 class="text-center"><b><u>Invoice Printting</u></b></h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            @Html.Label("Invoice Printting")
+                            
+                            @{
+                                List<SelectListItem> PrinttingType = new List<SelectListItem>()
+                                                                                   {
+                                                                 new SelectListItem{Text="NO",Value="0"},
+                                                                 new SelectListItem{Text="Auto",Value="2"}
+                                                                                   };
+                                //new SelectListItem{Text="Ask",Value="1"},
+                            }
+                            @Html.DropDownListFor(model => model.InvoicePrintting, PrinttingType, new { @class = "form-control ", required = "required",   })
+
+                        </div>
+                        <div class="Col-md-4">
+                            @Html.Label("Number Of Copy")
+                            @Html.EditorFor(model => model.NuOfCopy, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-12" style="padding:4px;border:2px solid black; border-radius:5px; margin-top:10px;">
+                    <h5 class="text-center"><b><u>KOT Printting</u></b></h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            @Html.Label("Order Display")
+                            @{
+                                List<SelectListItem> OrderType = new List<SelectListItem>()
+                                                                   {
+                                                 new SelectListItem{Text="Mobile",Value="1"},
+                                                 new SelectListItem{Text="KOT",Value="2"}
+                                                                   };
+                            }
+                            @Html.DropDownListFor(model => model.OrderDisplay, OrderType, new { @class = "form-control ", required = "required"   })
+
+                        </div>
+                        <div class="col-md-4">
+                            @Html.Label("Printting Type")
+                            @{
+                                List<SelectListItem> printType = new List<SelectListItem>()
+                                                   {
+                                 new SelectListItem{Text="Auto",Value="2"}
+                                                   };
+                                //new SelectListItem{Text="ASK",Value="1"},
+                            }
+                            @Html.DropDownListFor(model => model.PrinttingType, printType, new { @class = "form-control ", required = "required" })
+
+
+                        </div>
+                        <div class="Col-md-4">
+                            @Html.Label("Number Of Copy")
+                            @Html.EditorFor(model => model.Copy, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input type="submit" value="Save" class="btn btn-success" />
+
                 </div>
             </div>
-            <div class="col-md-6">
-                @Html.Label("Address 1", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="col-md-6">
-                @Html.Label("Address 2", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.AddressLin2, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.AddressLin2, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="col-md-6">
-                @Html.Label("Address 3", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.AddressLine3, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.AddressLine3, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="col-md-6">
-
-
-            </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="col-md-3">
-                @Html.Label("License 1", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.GSTNO, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.GSTNO, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="col-md-3">
-                @Html.Label("License 2", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.Licence2, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.Licence2, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="col-md-3">
-                @Html.Label("License 3", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.License3, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-10">
-                @Html.Label("Remark", htmlAttributes: new { @class = "control-label  " })
-                @Html.EditorFor(model => model.PrintRemark, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
-
-            </div>
-            <div class="col-sm-1">
-                @Html.Label("Save", new { @class = "text-white" })
-                <input type="submit" value="Save" class="btn btn-success" />
-
-            </div>
-        </div>
         }
     </div>
 </div>
 
+<script>
+    InvoiceChange();
+    KOTChange();
+    TypeChange();
+   // $("#nucopy").parent('div').hide();
+    $("#InvoicePrintting").change(function () {
+        InvoiceChange();
+    });
+    function InvoiceChange () {
+        var Invoice = $("#InvoicePrintting").val();
+        if (Invoice =="2") {
+            $("#NuOfCopy").parent('div').show();
+
+        } else {
+            $("#NuOfCopy").parent('div').hide();
+
+        }
+    };
+    $("#OrderDisplay").change(function () {
+        KOTChange();
+    });
+    function KOTChange () {
+        var Invoice = $("#OrderDisplay").val();
+        if (Invoice == "2") {
+            $("#PrinttingType").parent('div').show();
+            $("#Copy").parent('div').hide();
+
+        } else {
+            $("#PrinttingType").parent('div').hide();
+            $("#Copy").parent('div').hide();
+
+        }
+        TypeChange();
+    };
+    $("#PrinttingType").change(function () {
+        TypeChange();
+    });
+    function TypeChange() {
+        var Invoice = $("#PrinttingType").val();
+        if (Invoice == "2" && $("#OrderDisplay").val()=="2") {
+            $("#Copy").parent('div').show();
+        } else {
+            $("#Copy").parent('div').hide();
+
+        }
+    };
+
+</script>
 

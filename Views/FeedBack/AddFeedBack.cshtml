@@ -1,0 +1,343 @@
+﻿@using HangOut.Models.Common;
+@{
+    Layout = null;
+}
+<style>
+    .SubItem {
+        max-height: 250px;
+        width: 100%;
+        overflow-y: scroll;
+        border:1px solid green;
+    }
+    .QueTitle{
+        margin-top:20px;
+    }
+</style>
+<div class="card row">
+<div class="card-header">
+<h3 class="text-center">FeedBack Form</h3>
+</div>
+<div class="card">
+    <!--Hidden Elements-->
+    <div class="row questions" style="display:none;border:1px solid black; " id="question0" OrderNo="0">
+        <div class="col-md-5">
+            <input type="text" class="form-control QueTitle" placeholder="Enter Question Title" />
+            <input type="hidden" class="QID" value="0" />
+        </div>
+        <div class="col-md-1">
+            <input type="checkbox" class="form-control QueStatus" />
+        </div>
+        <div class="col-md-4">
+            <label> Response Type</label>
+            <select class="form-control QuestionType" id="QuestionType" onchange="ShowObjective(this)">
+                <option value="0">Star</option>
+                <option value="4">Star-Subjective</option>
+                <option value="1">Objective</option>
+                <option value="2">Subjective</option>
+                <option value="3">Like Dislike Ok</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label></label>
+            <a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link">
+                <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+            </a>
+        </div>
+        <div class="col-md-1">
+            <label></label>
+            <a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link">
+                <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+            </a>
+        </div>
+        <div id="Objective" class="row SubItem" style="display:none">
+            <div class="col-md-12">
+                <select class="form-control OptionType">
+                    <option value="0">Single Mode</option>
+                    <option value="1">Multiple</option>
+                </select>
+            </div>
+            <div class="col-md-12 SubQuestions">
+                <input type="text" SubQId="0" placeholder="Option" class="form-control SubQuestion" />
+            </div>
+
+            <button onclick="AddTitle(this)" style="width:10%;margin-left:45%;margin-right:45%;margin-top:5px;" class="btn btn-danger ">
+                <i class="fas fa-plus-circle"></i>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-12 SubQuestions" id="ObjectiveID" style="display:none">
+        <input type="text" SubQId="0" placeholder="Option" class="form-control SubQuestion" />
+    </div>
+    <!--End Elements-->
+    @{
+        if (Request.QueryString["Id"] != "0")
+        {
+            FeedbkForm feedbkForm = FeedbkForm.GetOne(int.Parse(Request.QueryString["Id"]));
+            List<FeedBackQue> ListQuestions = FeedBackQue.GetAll(feedbkForm.Id);
+            ListQuestions = ListQuestions.OrderBy(x => x.OrderNo).ToList();
+            var QuestionTyps = FeedBackQue.QuestioType();
+            var ObjectiveModes = FeedbkObj.QusObjective();
+            <div class="row" style="margin-bottom:10px;">
+                <div class="col-md-8">
+                    <input type="text" value="@feedbkForm.Name" class="form-control" placeholder="Form Name" id="FeedbackForm" />
+                    <input type="hidden" id="FeedBkFormID" value="@feedbkForm.Id" />
+                </div>
+                <div class="col-md-4">
+                    @{
+                        string check = feedbkForm.Status ? "checked" : " ";
+                    }
+                    <input type="checkbox" @check class="form-control" id="FeedfackSts" />
+                </div>
+            </div>
+            foreach (var ques in ListQuestions)
+            {
+                <div class="row questions" style="border:1px solid black; " id="question0" OrderNo="@ques.OrderNo">
+                    <div class="col-md-5">
+                        <input type="text" class="form-control QueTitle" readonly placeholder="Enter Question Title" value="@ques.Title" />
+                        <input type="hidden" class="QID" value="@ques.ID"/>
+                    </div>
+                    <div class="col-md-1">
+                        @{ 
+                            string CheckSts = ques.Status ? "checked" : "";
+                            var Qoptin = QuestionTyps.Find(x => x.Id == ques.QuestionType);
+                        }
+                        <input type="checkbox" @CheckSts class="form-control QueStatus" />
+                    </div>
+                    <div class="col-md-4">
+                        <label> Response Type</label>
+                        <select class="form-control QuestionType" id="QuestionType" onchange="ShowObjective(this)">
+                            <option value="@Qoptin.Id">@Qoptin.Name</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <label></label>
+                        <a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link">
+                            <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <label></label>
+                        <a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link">
+                            <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+                        </a>
+                    </div>
+                    @if (ques.QuestionType == 1)
+                    {
+                        var Subquestions = FeedbkObj.GetAll(ques.ID);
+                        var FirstObj = Subquestions.FirstOrDefault();
+                        var ObjectiveMode = ObjectiveModes.Find(x => x.id == FirstObj.ObjectiveType);
+                    
+                    <div id="Objective" class="row SubItem">
+                        <div class="col-md-12">
+                            <select class="form-control OptionType">
+                                <option value="@ObjectiveMode.id">@ObjectiveMode.Name</option>
+                            </select>
+                        </div>
+                        @foreach (var Objective in Subquestions)
+                        {
+                            <div class="col-md-12 SubQuestions">
+                                <input type="text" SubQId="@Objective.id" placeholder="Option"  readonly value="@Objective.Name" class="form-control SubQuestion" />
+                            </div>
+
+                        }
+                        <button onclick="AddTitle(this)" style="width:10%;margin-left:45%;margin-right:45%;margin-top:5px;" class="btn btn-danger ">
+                            <i class="fas fa-plus-circle"></i>
+                        </button>
+                    </div>
+                    }
+                </div>
+
+            }
+        }
+                            else
+                            {
+            <div class="row" style="margin-bottom:10px;">
+                <div class="col-md-8">
+                    <input type="text" class="form-control" placeholder="Form Name" id="FeedbackForm" />
+                    <input type="hidden" id="FeedBkFormID" value="0" />
+                </div>
+                <div class="col-md-4">
+                    <input type="checkbox" class="form-control" id="FeedfackSts" />
+                </div>
+            </div>
+            <div class="row questions" id="question" style="border:1px solid black;" OrderNo="1">
+                <div class="col-md-5">
+                    <input type="text" readonly value="ITEM FEEDBACK" class="form-control QueTitle" placeholder="Enter Question Title" />
+                    <input type="hidden" class="QID" value="0" />
+                </div>
+                <div class="col-md-1">
+                    <input type="checkbox" class="form-control QueStatus" />
+                </div>
+                <div class="col-md-4">
+                    <label> Response Type</label>
+                    <select class="form-control QuestionType" id="QuestionType" onchange="ShowObjective(this)">
+                        <option value="0">Star</option>
+                        <option value="3">Like Dislike Ok</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <label></label>
+                    <a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link">
+                        <i class="fas fa-arrow-down" style="font-size:x-large"></i>
+                    </a>
+                </div>
+                <div class="col-md-1">
+                    <label></label>
+                    <a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link">
+                        <i class="fas fa-arrow-up" style="font-size:x-large"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    }
+    <!--START DESIGN FROM HERE -->
+    <div id="HeadDiv" style="display:none"></div>
+    <button onclick="ShalloCopy()" class="btn btn-danger" style="margin-right:90%">
+        <i class="fas fa-plus-circle"></i>
+    </button>
+    <button style="margin-top:10px;margin-right:90%" class="btn btn-success " onclick="Submit()">
+        Submit
+    </button>
+</div>
+</div>
+<script>
+    function ShalloCopy() {
+        var ColyDiv = $("#question0").clone();
+        var QuestionCnt = document.getElementsByClassName("questions").length;
+        ColyDiv.attr("OrderNo", QuestionCnt);
+        ColyDiv.show();
+        ColyDiv.insertBefore("#HeadDiv"); 
+    }
+    function AddTitle(event) {
+        var SubItem = $("#ObjectiveID").clone();
+        SubItem.show();
+        SubItem.insertBefore($(event));
+        //SubItem.insertBefore("#SubDiv");
+    }
+    function ShowObjective(event) {
+        console.log("AAYA value=" + $(event).val());
+        if ($(event).val() == "1") {
+            $(event).parent('div').parent('div').find('.SubItem').show();
+        }
+        else {
+            $(event).parent('div').parent('div').find('.SubItem').hide();
+        }
+       
+    }
+    function RowDown(event) {
+        var li = $(event).parent('div').parent('div');
+        // var li = $(this).closest('li');
+        var next = li.next();
+        if (next.length && next.hasClass("questions")) {
+            var OrderNoCurr = parseInt(li.attr('OrderNo'));
+            var OrderNoNxt = parseInt(next.attr('OrderNo'));
+            console.log(OrderNoCurr);
+            li.attr('OrderNo', OrderNoCurr + 1);
+            next.attr('OrderNo', OrderNoNxt - 1);
+            li.detach().insertAfter(next);
+        }
+    }
+    function RowUp(event) {
+        var li = $(event).parent('div').parent('div');
+        var prev = li.prev();
+        if (prev.length && prev.hasClass("questions")) {
+
+            var OrderNoCur = parseInt(li.attr('OrderNo'));
+            var OrderNoPre = parseInt(prev.attr('OrderNo'));
+            console.log(OrderNoCur);
+            li.attr('OrderNo', OrderNoCur - 1);
+            prev.attr('OrderNo', OrderNoPre + 1);
+            li.detach().insertBefore(prev);
+        }
+    }
+    function Submit() {
+        var listQue = document.getElementsByClassName("questions");
+        //start from i=0 skip first hidden copy div
+        var FormName = $("#FeedbackForm").val();
+        if (FormName == null || FormName == "") {
+            alert("Enter Form Name");
+            return;
+        }
+        var FormStatus = $("#FeedfackSts").is(':checked');
+        var FeedBkFormID = $("#FeedBkFormID").val();
+        var ObjFeedbkForm = {};
+        ObjFeedbkForm.Id = FeedBkFormID;
+        ObjFeedbkForm.Name = FormName;
+        ObjFeedbkForm.OrgId = 0;
+        ObjFeedbkForm.Status = FormStatus;
+        var QuestionList = [];
+        var AllowQuesn = 3;
+        var CntAllwd = 0;
+        for (var i = 1; i < listQue.length; i++) {
+            var ObjQue = $(listQue[i]);
+            var QuestionTitle = ObjQue.find('.QueTitle').val();
+            var QueStatus = ObjQue.find('.QueStatus').is(':checked');
+            if (QueStatus==true||QueStatus) {
+                CntAllwd += 1;
+            }
+            if (CntAllwd > AllowQuesn) {
+                alert("Maximum 3 Question Allowed in Single Form");
+                return;
+            }
+            var QuestionType = ObjQue.find('.QuestionType').val();
+            var OrderNo = ObjQue.attr("OrderNo");
+            var ObjQues = {};
+            ObjQues.Title = QuestionTitle;
+            ObjQues.Status = QueStatus;
+            ObjQues.QuestionType = QuestionType;
+            ObjQues.FeedBkFormID = FeedBkFormID;
+            ObjQues.OrderNo = OrderNo;
+            ObjQues.ID = ObjQue.find('.QID').val();
+            console.log("QID" + ObjQues.ID);
+          
+           //  Check Is Objective
+            if (QuestionType == "1") {
+                var OptionType = ObjQue.find('.OptionType').val();
+                var ObjectiveList = [];
+                var ListSubQuestions = listQue[i].getElementsByClassName("SubQuestion");
+                for (var j = 0; j < ListSubQuestions.length; j++) {
+                    var option = ListSubQuestions[j].value;
+                    
+                    var FeedBkObjective = {};
+                    FeedBkObjective.Name = option;
+                    FeedBkObjective.ObjectiveType = OptionType;
+                    FeedBkObjective.QuestionId = ObjQues.ID;
+                    FeedBkObjective.id = ListSubQuestions[j].getAttribute("SubQId");
+                    ObjectiveList.push(FeedBkObjective);
+                    console.log("ListSubQuestions[j].getAttribut==" + ListSubQuestions[j].getAttribute("SubQId"));
+                    //public int id { get; set; }
+                   // public int QuestionId{ get; set; }
+                }
+                ObjQues.Objectives = ObjectiveList;
+            }
+            QuestionList.push(ObjQues);
+        }
+        ObjFeedbkForm.Questions = QuestionList;
+        $('#waiting').show();
+        $.ajax({
+            type: 'POST',
+            url: "/FeedBack/SaveFeedBack",
+            data: JSON.stringify(ObjFeedbkForm),
+            contentType: "application/json",
+            success: function (data) {
+                //var OMId = parseInt(data);
+                var Obj = JSON.parse(data);
+                //var Id = Obj.Id;
+                var str = '<ul class"CustmUl">';
+                str += '<li>'+Obj.Name+'</li>';
+                str += '<li>'+Obj.Create+'</li>';
+                str += '<li>Filled 0</li>';
+                str += '<li>Placed 0</li></ul>';
+               // $("#Menus").append('<block class="ShowMenu" ondblclick="AddNewForm(' + Id + ')" id=' + Id + '>' +str + '</block>');//ondblclick="AddNewForm(' + Obj.Id + ')"
+                if (FeedBkFormID ==0) {
+                    $("#Menus").append('<block class="ShowMenu " onclick="ActiveMenu(this)"  OMID=' + Obj.Id + ' id="M' + Obj.Id + '">' + str + '</block>');
+                }
+                hidedpt("FeedBack");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+</script>

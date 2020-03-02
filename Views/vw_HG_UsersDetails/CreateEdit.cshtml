@@ -2,14 +2,19 @@
  @{ Layout = null;}
 @using HangOut.Models
 @{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll();
-    List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();
     var UserTypeList = new HG_UserTypes().GetAll();
+    List<HG_OrganizationDetails> ListOrg=new HG_OrganizationDetails().GetAll();
     UserTypeList = UserTypeList.FindAll(x => x.UserType != "CUST");
-
+    var UserInfo = Request.Cookies["UserInfo"];
+    var UserType = UserInfo["UserType"];
+    if (UserType == "SA")
+    {
+        ListOrg.Add(new HG_OrganizationDetails { OrgID = -1, Name = "POSTPAID-ADMIN" });
+    }
     }
 <div class="card">
     <div class="card-header">
-        <h4 style="text-align:center;color:#000000"><b>LIST OF USER  </b></h4>
+        <h4 style="text-align:center;color:#000000"><b> USER  </b></h4>
         <hr />
     </div>
     <div class="card-body">
@@ -17,21 +22,24 @@
         {
             @Html.HiddenFor(model => model.UserCode)
             @Html.HiddenFor(model => model.CurrentStatus)
+            @Html.HiddenFor(model => model.JoinByOrg)
+            @Html.HiddenFor(model => model.EntryDate)
+            @Html.HiddenFor(model => model.EntryBy)
+            @Html.HiddenFor(model=>model.TickUntick)
         <div class="row">
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.UserType, htmlAttributes: new { @class = "control-label  " })
 
-                @Html.DropDownListFor(model => model.UserType, new SelectList(UserTypeList, "UserType", "UserTypeName", Model.UserType), "Select User Type", new { @class = "form-control" ,required= "required" })
+                @Html.DropDownListFor(model => model.UserType, new SelectList(UserTypeList, "UserType", "UserTypeName", Model.UserType), "Select User Type", new { @class = "form-control", required = "required" })
                 @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
 
             </div>
-            <div class="col-sm-4 hh">
-                @Html.LabelFor(model => model.OrgID, htmlAttributes: new { @class = "control-label  " })
+                <div class="col-sm-4 hh">
+                    @Html.LabelFor(model => model.OrgID, htmlAttributes: new { @class = "control-label  " })
+                    @Html.DropDownListFor(model => model.OrgID, new SelectList(ListOrg, "OrgID", "Name", Model.OrgID), "Select Name", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
 
-                @Html.DropDownListFor(model => model.OrgID, new  SelectList( new HG_OrganizationDetails().GetAll(),"OrgID","Name",Model.OrgID),"Select Name",new{ @class = "form-control"  }  )
-                @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
-
-            </div>
+                </div>
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label  " })
 
@@ -40,11 +48,9 @@
 
             </div>
             <div class="col-sm-4">
-                @Html.Label("Mobile No", htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control OnlyNum", required = "required" } })
+                @Html.Label("User Id", htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
                 @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
-
             </div>
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label  " })
@@ -54,22 +60,23 @@
 
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.EMail, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.EMail, new { htmlAttributes = new { @class = "form-control", type ="email",  } })
+                @Html.EditorFor(model => model.EMail, new { htmlAttributes = new { @class = "form-control", type = "email", } })
                 @Html.ValidationMessageFor(model => model.EMail, "", new { @class = "text-danger" })
 
             </div>
-
-
-
-            <div class="col-sm-4">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.IsHeadChef, htmlAttributes: new { @class = "control-label  " })
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsHeadChef)
+                    @Html.ValidationMessageFor(model => model.IsHeadChef, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-2">
                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Status)
-                    @Html.ValidationMessageFor(model => model.Status,"", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                 </div>
-
             </div>
             <div class="col-sm-1 ">
                 @Html.Label("SAVE", new { @class = "text-white" })
@@ -83,9 +90,11 @@
 </div>
 <script>
     $(document).ready(function () {
-        HideShowOrg();
+       HideShowOrg();
+        ShowHideHChef();
         $("#UserType").change(function () {
             HideShowOrg();
+            ShowHideHChef();
         });
         function HideShowOrg() {
             var value = $("#UserType").val();
@@ -95,6 +104,15 @@
                 $("#OrgID").parent('div').show();
             }
 
+        }
+        function ShowHideHChef() {
+            var UserType = $('#UserType').val();
+            if (UserType == "CH") {
+                $("#IsHeadChef").parent('div').parent('div').show();
+            }
+            else {
+                $("#IsHeadChef").parent('div').parent('div').hide();
+            }
         }
        
     });

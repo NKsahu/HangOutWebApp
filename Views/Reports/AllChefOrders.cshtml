@@ -1,0 +1,312 @@
+﻿@using HangOut.Models;
+@using HangOut.Models.Common;
+@{
+    Layout = null;
+    var Userinfo = Request.Cookies["UserInfo"];
+    int orgId = int.Parse(Userinfo["OrgId"]);
+    int Usercode = int.Parse(Userinfo["UserCode"]);
+    string TickSts = "Checked";
+    HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(orgId);
+    int OrgType = 1;
+    if (ObjOrg != null && ObjOrg.OrgTypes == "2")
+    {
+        OrgType = 2;
+    }
+    OrgSetting orgSetting = OrgSetting.Getone(orgId);
+    if (orgSetting.id > 0 && orgSetting.CheckBoxStatus == false)
+    {
+        TickSts = "";
+    }
+    List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(OrgType);
+    List<HG_FloorSide_or_RowName> ListFsorRowNa = new HG_FloorSide_or_RowName().GetAll(OrgType);
+    List<HG_Floor_or_ScreenMaster> ListFrorScr = new HG_Floor_or_ScreenMaster().GetAll(OrgType);
+    List<HG_OrderItem> OrderItems = new HG_OrderItem().GetAllByOrg(orgId, ChefId: 0, Status: "(Status=1 or Status=2)");
+    List<HG_Orders> PendingOrders = new HG_Orders().GetAll(OrgId: orgId, Status: 1);
+    if (orgId==0||( ObjOrg.OrgID>0 && ObjOrg.PaymentType == 1))
+    {
+        PendingOrders = PendingOrders.FindAll(x => x.PaymentStatus != 0);
+    }
+    int Count = 0;
+    HashSet<Int64> OIdsHash = new HashSet<Int64>(PendingOrders.Select(x => x.OID).ToArray());
+    OrderItems = OrderItems.FindAll(x => OIdsHash.Contains(x.OID));
+    OrderItems = OrderItems.OrderByDescending(x => x.Status).ToList();
+    var GroupByTickets = OrderItems.GroupBy(x => new { x.TickedNo, x.OID });//.Select(y=>y);
+    var ItemsList = new HG_Items().GetAll(orgId);
+    List<vw_HG_UsersDetails> ListUsers = new vw_HG_UsersDetails().GetAll(OrgId: orgId);
+    List<HG_UserTypes> ListUserType = new HG_UserTypes().GetAll();
+}
+@Html.Hidden("UserCode", Usercode)
+<style>
+    input[type="checkbox"] {
+        width: 25px; /*Desired width*/
+        height: 25px; /*Desired height*/
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h3 class="text-center" style="color:blue">Head Chef Panel</h3>
+        <input type="checkbox" @TickSts OrgId="@orgId" onchange="DefaultTickSts(this)"> Default Action
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @foreach(var TicketObj in GroupByTickets)
+            {
+                Count++;
+                string Seating = Count.ToString()+". ";
+                var orderItems = TicketObj.ToList();
+                var firstitm = orderItems.First();
+                var ChefId = firstitm.ChefSeenBy;
+                Int64 PlacedBy = firstitm.OrdById;
+                HG_Orders objOrder = new HG_Orders().GetOne(firstitm.OID);
+                var ObjTorS = ListTorS.Find(x => x.Table_or_RowID == objOrder.Table_or_SheatId);
+                string UserPlcedBy = "";
+                if (PlacedBy > 0)
+                {
+                    var ObjPlacedBy = new vw_HG_UsersDetails().GetSingleByUserId((int)PlacedBy);
+                    var UserType = ListUserType.Find(x => x.UserType == ObjPlacedBy.UserType);
+                    if (UserType != null)
+                    {
+                        UserPlcedBy = UserType.UserTypeName + "( " + ObjPlacedBy.UserName + "-" + ObjPlacedBy.UserId + " )";
+                    }
+
+                }
+
+                string ChefName = "";
+                if (ChefId > 0)
+                {
+                    var Objchef = ListUsers.Find(x => x.UserCode == ChefId);
+                    if (Objchef != null)
+                    {
+                        ChefName ="Chef :  " +Objchef.UserName;
+                    }
+                }
+                if (ObjTorS != null)
+                {
+                    var ObjFlrOrScr = ListFrorScr.Find(x => x.Floor_or_ScreenID == ObjTorS.Floor_or_ScreenId);
+                    if (ObjFlrOrScr != null)
+                    {
+                        Seating += ObjFlrOrScr.Name;
+                    }
+                    var ObjFsideOrRowName = ListFsorRowNa.Find(x => x.ID == ObjTorS.FloorSide_or_RowNoID);
+                    if (ObjFsideOrRowName != null)
+                    {
+                        Seating +=" " + ObjFsideOrRowName.FloorSide_or_RowName;
+                    }
+                    Seating +=" " + ObjTorS.Table_or_SheetName;
+                }
+                // Seating += "  Order No:" + firstitm.OID+ "   Ticket No: " + TicketObj.Key;
+            <div class="col-md-12" id="@(firstitm.TickedNo)" style="border:1px solid">
+                <pre style="margin:0px !important;"><h6>@Seating &nbsp;&nbsp; Order No:@firstitm.OID &nbsp;&nbsp;Ticket No:@firstitm.TickedNo &nbsp;&nbsp; Time:@firstitm.OrderDate.ToString("dd-MM hh:mm tt") &nbsp;&nbsp;By:@UserPlcedBy <div style="float:right"><i class="fas fa-eye" style="color:green" onclick="Details(@objOrder.OID);"></i></div></h6></pre>
+                @if (ChefName != "")
+                {
+                    <h6 style="color:blue"> @ChefName</h6>
+                }
+                @{
+                    var OrderObj = PendingOrders.Find(x => x.OID == firstitm.OID);
+                    OrdNotice ObjNotice = OrdNotice.GetOne(OrderObj.OID);
+                    double DeliveryCharge = 0.00;
+                    if (OrderObj.DeliveryCharge > 0)
+                    {
+                        List<HG_Ticket> ListTickets = HG_Ticket.GetByOID(OrderObj.OID);
+                        HG_Ticket ObjTicket = ListTickets.Find(x => x.TicketNo == firstitm.TickedNo);
+                        if (ObjTicket != null && ObjTicket.TicketNo > 0)
+                        {
+                            DeliveryCharge = ObjTicket.DeliveryCharge;
+                        }
+                    }
+
+                    if (OrderObj.PaymentStatus == 1 && ObjNotice != null && ObjNotice.OID > 0)
+                    {
+                        double Amt = DeliveryCharge;
+                        for (int i = 0; i < orderItems.Count; i++)
+                        {
+                            Amt += orderItems[i].Price * orderItems[i].Count;
+                        }
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(OrderObj.PayReceivedBy);
+                        if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain
+                        {
+                            <p style="color:red">CASH ON DELIVERY: @Amt.ToString("0.00") Rs/</p>
+                        }
+                        else if (ObjUser == null || ObjUser.UserCode <= 0)
+                        {
+                            <p style="color:red">CASH ON DELIVERY: @Amt.ToString("0.00") Rs/</p>
+                        }
+                    }
+                    else if (OrderObj.PaymentStatus == 3)
+                    {
+                        <p style="color:green">PAID ONLINE</p>
+                    }
+                    else if (OrderObj.PaymentStatus == 2)
+                    {
+                        <p style="color:green">PAID BANK / WALLET</p>
+                    }
+                    else if (objOrder.PaymentStatus == 1)
+                    {
+                        <p style="color:green">PAID CASH</p>
+                    }
+
+                }
+                <button onclick="MarkCompleteTicket(@firstitm.OIID)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td><input style="margin:2px" @TickSts type="checkbox" onclick="TickAll(this,@firstitm.OIID)">Tick</td>
+                            <td>Item Name</td>
+                            <td>Qty</td>
+
+                        </tr>
+                    </thead>
+                    <tbody id="Tickt@(firstitm.OIID)" TicketNo="@firstitm.TickedNo" DeliveryAmt="@DeliveryCharge">
+                        @foreach (var items in orderItems)
+                        {
+                            var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
+                            double Amt = items.Price * items.Count;
+                            <tr>
+                                <td><input class=" CkeckorNot" @TickSts type="checkbox"  id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
+                                <td>@FoodObj.Items</td>
+                                <td>@items.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function MarkCompleteTicket(OIID) {
+        var canceledCount = 0;
+        var Checkdcount = 0;
+        var UpdatedBy = $("#UserCode").val();
+        var CheckedID = ",";
+        var OID = 0;
+        var TotalAmt = 0.00;
+        var CancelAmt = 0.00;
+        var TotalCnt = 0;
+        var TicketNo = 0;
+        TotalAmt = parseFloat($("#Tickt" + OIID).attr('DeliveryAmt'));
+        TicketNo = $("#Tickt" + OIID).attr('TicketNo');
+        //JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy, int OID)
+        $("#Tickt" + OIID+" > tr").each(function (index, tr) {
+            console.log(index);
+            var value = $(tr).find('.CkeckorNot').is(":checked");
+            var OIID = $(tr).find('.CkeckorNot').val();
+            if (value) {
+                Checkdcount += 1;
+                CheckedID += OIID + ",";
+            }
+            else {
+                canceledCount += 1;
+                CancelAmt += parseFloat($(tr).find('.CkeckorNot').attr("Amt"));
+            }
+            TotalAmt += parseFloat($(tr).find('.CkeckorNot').attr("Amt"));
+            OID = $(tr).find('.CkeckorNot').attr("OID");
+            TotalCnt = TotalCnt + 1;
+        });
+        var  Msg = 'Mark order complete?';
+        if (TotalCnt == canceledCount) {
+            TotalAmt = 0.00;
+        }
+        else {
+            TotalAmt = TotalAmt - CancelAmt;
+        }
+        if (canceledCount > 0) {
+            Msg = canceledCount+" unticked items will be cancelled.Updated amount is Rs "+TotalAmt.toFixed(2)+" Proceed further?";
+        }
+        $.confirm({
+            title: 'Mark Complete',
+            content: Msg,
+            type: canceledCount > 0 ? 'red' : 'green',
+            buttons: {
+                btnClass: 'btn-green',
+                confirm: function () {
+                    $.ajax({
+                        url: "/WebApi/ChangeOrderItemStatus?CheckedID=" + CheckedID + "&TickedNo=" + TicketNo + "&UpdateBy=" + UpdatedBy + "&OID=" + OID,
+                        type: "GET",
+                        success: function (data) {
+                           
+                            var Json = JSON.parse(data);
+                            if (Json.Status == 200) {
+                                $("#" + TicketNo).remove();
+                                //$.alert({
+                                //    title: 'Alert',
+                                //    content: 'Completed Succesfully',
+                                //});
+                                var Cnt = parseInt($("#ChefUnpaid").text());
+                                if (Cnt > 0) {
+                                    Cnt = Cnt - 1;
+                                    $("#ChefUnpaid").text(Cnt);
+                                }
+                               
+                            }
+                            else {
+                                $.alert({
+                                    title: 'Alert',
+                                    content: 'Unable To Completed Try Again',
+                                });
+                            }
+                            
+                        },
+                        error: function (Xr, Status, ErrorMsg) {
+
+                        }
+                    });
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+
+    }
+    function TickAll(event,OIID) {
+        var prop = false;
+        if (event.checked) {
+            prop = true;
+        }
+        $("#Tickt"+ OIID+ " > tr").each(function (index, tr) {
+            //$(tr).find('.CkeckorNot').removeAttr('checked');
+            $(tr).find('.CkeckorNot').prop('checked', prop);
+            
+        });
+    }
+    function Details(OID) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/HG_OrderItem/index?OID=" + OID,
+            success: function (data) {
+                makedpt("CurrOrder");
+                $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CurrOrder");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    function DefaultTickSts(event) {
+        var OrgId = $(event).attr('OrgId');
+        var checkStst = false;
+        if (event.checked) {
+            checkStst = true;
+            $(event).attr('checked', true);
+        }
+        else {
+            $(event).prop('checked', false);
+        }
+        $.ajax({
+            url: "/CommonApi/OrgTickUntick?OrgId=" + OrgId + "&Status=" + checkStst,
+            type: "GET",
+            success: function (data) {
+              
+            },
+            error: function (Xr, Status, ErrorMsg) {
+
+            }
+        });
+    }
+</script>

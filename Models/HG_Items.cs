@@ -36,6 +36,10 @@ namespace HangOut.Models
         public int AddOnType { get; set; }// {0 None, 1 Base 2 Addons}
         [Display(Name = "Discription")]
         public string ItemDiscription { get; set; }
+        public int ItemAvaibility { get; set; }//{ 0:available ,1 unavailable}
+
+        //========
+        public string Categoryname { get; set; }
         public HG_Items()
         {
             Image = "";
@@ -59,7 +63,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.ItemID == 0)
                 {
-                    Query = "Insert into  HG_Items  values(@CategoryID,@OrgID,@Items,@Price,@Plates,@ItemMode,@Discount,@EntryBy,@EntryDate,@UpdateDate,@Status,@Item_Img,@ApplyAddOn,@CostPrice,@AddOnCatId,@Type,@AddOnType,@ItmDiscriptn); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  HG_Items  values(@CategoryID,@OrgID,@Items,@Price,@Plates,@ItemMode,@Discount,@EntryBy,@EntryDate,@UpdateDate,@Status,@Item_Img,@ApplyAddOn,@CostPrice,@AddOnCatId,@Type,@AddOnType,@ItmDiscriptn,@ItemAvaibility); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
@@ -67,7 +71,7 @@ namespace HangOut.Models
                 }
                 else
                 {
-                    Query = "update  HG_Items set CategoryID=@CategoryID,OrgID =@OrgID,Items=@Items,Price=@Price,Plates=@Plates,ItemMode=@ItemMode,Discount=@Discount,EntryBy=@EntryBy,UpdateDate=@UpdateDate,Status=@Status,Item_Img=@Item_Img,ApplyAddOn=@ApplyAddOn,CostPrice=@CostPrice,AddOnCatId=@AddOnCatId,Type=@Type,AddOnType=@AddOnType,ItmDiscriptn=@ItmDiscriptn where ItemID=@ItemID";
+                    Query = "update  HG_Items set CategoryID=@CategoryID,OrgID =@OrgID,Items=@Items,Price=@Price,Plates=@Plates,ItemMode=@ItemMode,Discount=@Discount,EntryBy=@EntryBy,UpdateDate=@UpdateDate,Status=@Status,Item_Img=@Item_Img,ApplyAddOn=@ApplyAddOn,CostPrice=@CostPrice,AddOnCatId=@AddOnCatId,Type=@Type,AddOnType=@AddOnType,ItmDiscriptn=@ItmDiscriptn,ItemAvaibility=@ItemAvaibility where ItemID=@ItemID";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
                     cmd.Parameters.AddWithValue("@EntryBy", EntryBy);
@@ -88,6 +92,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Type", this.Type);
                 cmd.Parameters.AddWithValue("@AddOnType", this.AddOnType);
                 cmd.Parameters.AddWithValue("@ItmDiscriptn", this.ItemDiscription);
+                cmd.Parameters.AddWithValue("@ItemAvaibility", this.ItemAvaibility);
                 if (this.ItemID == 0)
                 {
                     Row = System.Convert.ToInt32(cmd.ExecuteScalar());
@@ -142,6 +147,7 @@ namespace HangOut.Models
                     ObjTmp.Qty = SDR.GetString(5);
                     ObjTmp.ItemMode = SDR.GetString(6);
                     ObjTmp.Tax = SDR.GetDouble(7);
+                    ObjTmp.UpdateDate = SDR.GetDateTime(10);
                     ObjTmp.Status = SDR.GetBoolean(11);
                     ObjTmp.Image = SDR.GetString(12);
                     ObjTmp.ApplyAddOn = SDR.GetInt32(13);
@@ -150,6 +156,7 @@ namespace HangOut.Models
                     ObjTmp.Type = SDR.GetInt32(16);
                     ObjTmp.AddOnType = SDR.GetInt32(17);
                     ObjTmp.ItemDiscription = SDR.GetString(18);
+                    ObjTmp.ItemAvaibility = SDR.GetInt32(19);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -189,9 +196,10 @@ namespace HangOut.Models
                     ObjTmp.Type = SDR.GetInt32(16);
                     ObjTmp.AddOnType = SDR.GetInt32(17);
                     ObjTmp.ItemDiscription = SDR.GetString(18);
+                    ObjTmp.ItemAvaibility = SDR.GetInt32(19);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             { e.ToString(); }
 
             finally { Con.Close(); }
@@ -199,7 +207,7 @@ namespace HangOut.Models
             return (ObjTmp);
         }
 
-        public int Dell(int ID)
+        public static int Dell(Int64 ID)
         {
             int R = 0;
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -220,5 +228,21 @@ namespace HangOut.Models
             }
             return R;
         }
+        public static List<ItemTax> ItemTaxes()
+        {
+
+            List<ItemTax> taxes = new List<ItemTax>();
+            taxes.Add(new ItemTax { Id = 5, Name = "5%" });
+            taxes.Add(new ItemTax { Id = 12, Name = "12%" });
+            taxes.Add(new ItemTax { Id = 18, Name = "18%" });
+            taxes.Add(new ItemTax { Id = 28, Name = "28%" });
+
+            return taxes;
+        }
     }
+}
+public class ItemTax
+{
+    public double Id { get; set; }
+    public string Name { get; set; }
 }

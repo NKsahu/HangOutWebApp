@@ -1,7 +1,12 @@
 ﻿@model IEnumerable<HangOut.Models.vw_HG_UsersDetails>
     @{ Layout = null;}
 @using HangOut.Models
-@{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll();}
+@{ List<HG_UserTypes> listuser = new HG_UserTypes().GetAll();
+    var UserInfo = Request.Cookies["UserInfo"];
+    string UserType = UserInfo["UserType"];
+    List<HG_OrganizationDetails> ListOrg = new List<HG_OrganizationDetails>();
+
+    }
 
 <div class="card">
     <div class="card-header">
@@ -16,7 +21,13 @@
                     <th>
                         @Html.DisplayNameFor(model => model.UserCode)
                     </th>
-                    
+                    @if (UserType == "SA")
+                    {
+                        ListOrg = new HG_OrganizationDetails().GetAll();
+                    <th>
+                        @Html.DisplayName("Outlet Name")
+                    </th>
+                    }
                     <th>
                         @Html.DisplayNameFor(model => model.UserType)
                     </th>
@@ -24,19 +35,14 @@
                         @Html.DisplayNameFor(model => model.UserName)
                     </th>
                     <th>
-                        @Html.DisplayName("Mobile No")
+                        @Html.DisplayName("User Id")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Password)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EMail)
+                        @Html.DisplayName("E-mail")
                     </th>
-                     
-                    <th>
-                        @Html.DisplayNameFor(model => model.Status)
-                    </th>
-                   
                     <th></th>
                 </tr>
                 </thead>
@@ -47,7 +53,19 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.UserCode)
                     </td>
-                    
+                    @if (UserType == "SA")
+                    {
+                        var ObjUser = ListOrg.Find(x => x.OrgID == item.OrgID);
+                        if (ObjUser != null)
+                        {
+                            <td>@ObjUser.Name</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+                    }
                     <td>
                         @{ HG_UserTypes objuser = listuser.Find(x => x.UserType == item.UserType);}
                         @objuser.UserTypeName
@@ -65,11 +83,6 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.EMail)
                     </td>
-                     
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                  
                     <td>
                         <a href="/vw_HG_UsersDetails/CreateEdit?ID=@item.UserCode" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
                     </td>

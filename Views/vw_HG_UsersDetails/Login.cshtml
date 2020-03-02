@@ -1,33 +1,8 @@
 ﻿@model HangOut.Models.vw_HG_UsersDetails
-<!DOCTYPE html>
-<html >
-
 <head>
-    <title>Login V9</title>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
-    <!--===============================================================================================-->
-    <link href="~/Assets/Login Assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
-    <link href="~/Assets/Login Assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
-    <link href="~/Assets/Login Assets/fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
-    <link href="~/Assets/Login Assets/vendor/animate/animate.css" rel="stylesheet" />
-    <!--===============================================================================================-->
-    <link href="~/Assets/Login Assets/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
-    <link href="~/Assets/Login Assets/vendor/animsition/css/animsition.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
-    <link href="~/Assets/Login Assets/vendor/select2/select2.min.css" rel="stylesheet" />
-    <!--===============================================================================================-->
-    <link href="~/Assets/Login Assets/vendor/daterangepicker/daterangepicker.css" rel="stylesheet" />
-    <!--===============================================================================================-->
     <link href="~/Assets/Login Assets/css/util.css" rel="stylesheet" />
     <link href="~/Assets/Login Assets/css/main.css" rel="stylesheet" />
-    <!--===============================================================================================-->
 </head>
 <style>
     #LoginModal {
@@ -35,73 +10,44 @@
     }
 </style>
 <body>
+    <div id="Master">
 
+        <div class="container-login100" style=" background-image: url('../../Assets/Login Assets/images/fooddo.jpg');">
+            <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
+                @using (Ajax.BeginForm("LoginPost", "vw_HG_UsersDetails", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "Master", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+                {
+                    <form class="login100-form validate-form">
+                        <span class="login100-form-title p-b-37">
+                            Sign In
+                        </span>
 
-    <div class="container-login100" style=" background-image: url('../../Assets/Login Assets/images/fooddo.jpg') ; 
-        
-">
-        <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30" >
-            @using(Ajax.BeginForm("LoginPost", "vw_HG_UsersDetails", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
-            {
-            <form class="login100-form validate-form">
-                <span class="login100-form-title p-b-37">
-                    Sign In
-                </span>
+                        <div style="width:100%" class="  m-b-25" data-validate="Enter User Name">
+                            @Html.TextBoxFor(model => model.UserId, new { @class = "input100", required = "required", placeholder = "User Name", type = "text" })
+                            <span class="focus-input100"></span>
+                        </div>
 
-                <div style="width:100%" class="  m-b-25" data-validate="Enter User Name">
-                    @Html.TextBoxFor(model=>model.UserId,new { @class= "input100" , required= "required", placeholder = "User Name" ,type="text"} )
-                    <span class="focus-input100"></span>
-                </div>
+                        <div style="width:100%" class="  m-b-25" data-validate="Enter password">
+                            @Html.TextBoxFor(model => model.Password, new { @class = "input100", required = "required", placeholder = "Password", id = "myInput", type = "password" })
+                            <span class="focus-input100"></span>
+                        </div>
+                        <div class="wrap-input100 validate-input m-b-25">
+                            <input type="checkbox" onclick="myFunction()">Show Password
+                        </div>
+                        <div class="container-login100-form-btn">
+                            <button class="login100-form-btn" type="submit">
+                                Sign In
+                            </button>
+                        </div>
 
-                <div style="width:100%" class="  m-b-25" data-validate="Enter password">
-                    @Html.TextBoxFor(model => model.Password, new { @class = "input100", required = "required", placeholder = "Password" ,id= "myInput",type="password" })
-                    <span class="focus-input100"></span>
-                </div>
-                <div class="wrap-input100 validate-input m-b-25">
-                    <input type="checkbox" onclick="myFunction()">Show Password
-                </div>
-                <div class="container-login100-form-btn">
-                    <button class="login100-form-btn" type="submit" >
-                        Sign In
-                    </button>
-                </div>
+                    </form>
+                }
 
-            </form>
-            }
-            
+            </div>
         </div>
     </div>
-
-
-
-    <div id="dropDownSelect1"></div>
-
-    <!--===============================================================================================-->
-    <script src="~/Assets/Login Assets/vendor/jquery/jquery-3.2.1.min.js"></script>
-
-    <!--===============================================================================================-->
-    <script src="~/Assets/Login Assets/vendor/animsition/js/animsition.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="~/Assets/Login Assets/vendor/bootstrap/js/popper.js"></script>
-    <script src="~/Assets/Login Assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="~/Assets/Login Assets/vendor/select2/select2.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="~/Assets/Login Assets/vendor/daterangepicker/moment.min.js"></script>
-    <script src="~/Assets/Login Assets/vendor/daterangepicker/daterangepicker.js"></script>
-    <!--===============================================================================================-->
-    <script src="~/Assets/Login Assets/vendor/countdowntime/countdowntime.js"></script>
-    
-    <!--===============================================================================================-->
-    <script src="~/Assets/Login Assets/js/main.js"></script>
 </body>
-</html>
-<script type="text/javascript">
-    $('#LoginModal').modal('show');
-</script>
-
 <script>
-    
+  //  $('#LoginModal').modal('show');
     function myFunction() {
         var x = document.getElementById("myInput");
         if (x.type === "password") {
@@ -109,6 +55,6 @@
         } else {
             x.type = "password";
         }
-        }
-     
+    }
+    
 </script>

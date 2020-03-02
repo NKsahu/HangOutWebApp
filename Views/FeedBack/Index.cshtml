@@ -1,0 +1,328 @@
+﻿
+@{
+    Layout = null;
+}
+<style>
+    .SelectedMenu {
+        background-color: #a9bf1a;
+    }
+
+    .SelectedTable {
+        background-color: #a9bf1a;
+    }
+
+    div.scrollmenu {
+        background-color: aqua;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+        div.scrollmenu block {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-left: solid 1px black;
+            text-decoration: none;
+        }
+
+    div.scrollTables {
+        background-color: white;
+        overflow: auto;
+        white-space: nowrap;
+    }
+
+        div.scrollTables blockTable {
+            display: inline-block;
+            text-align: center;
+            width: 35%;
+            height: 250px;
+            overflow-y: auto;
+            border-right: solid 2px #f00;
+            text-decoration: none;
+        }
+
+    div.scrollmenu a:hover {
+        background-color: #777;
+    }
+
+    block.selected {
+        color: green;
+    }
+    
+    
+.formdiv{
+    background-color:aqua;
+    border:1px solid black;
+    height:100px;
+}
+    .CustomUl {
+       text-align:center;
+       list-style-type:none;
+    }
+    .CustmUl {
+        list-style-type: none;
+        margin-top:10%;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Feedback Form</h3>
+    </div>
+    </hr>
+    
+    <div class="scrollmenu" id="Menus">
+        <block id="AddNew" class="ShowMenu" ondblclick="AddNewForm(0)">
+            <i class="fa fa-plus" style="font-size:x-large" aria-hidden="true"></i><ul class="CustmUl"><li class="CustmUl">&nbsp</li></ul>
+        </block>
+    </div>
+</div>
+    <div class=" scrollTables" id="Floor">
+
+        <blockTable>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 style="text-align:right">Floor1</h4>
+                </div>
+                <div class="col-md-2">
+                    <input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
+                </div>
+            </div>
+            <div class="row" id="AddSeat">
+
+            </div>
+        </blockTable>
+
+
+
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-danger form-control " onclick="Apply()">Apply</button>
+        </div>
+        <div class="col-md-5">
+
+        </div>
+    </div>
+
+
+<script>
+    
+    function AddNewForm(id) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/FeedBack/AddFeedBack?Id="+id,
+            success: function (data) {
+                makedpt("FeedBack");
+                $("#FeedBack > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("FeedBack");
+                $('#waiting').hide();
+                // }
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    var TblShetList = [];
+    var categorylist = [];
+    var FormList = [];
+    LoadFeedBkForm();
+    function LoadFeedBkForm() {
+        $.ajax({
+            type: 'POST',
+            url: "/FeedBack/ListFeedBack",
+            success: function (data) {
+                var OrderMenuList = JSON.parse(data);
+                ShowOrderMenus(OrderMenuList);
+                // }
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+
+
+    }
+    function ShowOrderMenus(list) {
+        $("#Menus").html('');
+        $("#Floor").html('');
+        $("#Menus").append('<block id="AddNew" onclick="AddNewForm(0)"><i class="fa fa-plus" style="font-size:x-large" aria-hidden="true"></i><ul class="CustmUl"><li class="CustmUl">&nbsp</li></ul></block>');
+        FormList = list.FormList;
+        var SelectedMenu = -5;
+        for (var i = 0; i < FormList.length; i++) {
+            var Addcls = "";
+            if (FormList[i].Status == true) {
+                // Addcls = "SelectedMenu";
+                SelectedMenu = FormList[i].Id;
+            }
+            var str = '<ul >';
+            str += '<li>' + FormList[i].Name + '</li>';
+            str += '<li>' + FormList[i].Create + '</li>';
+            str += '<li>Filled 0</li>';
+            str += '<li>Placed 0</li></ul>';
+            //
+            $("#Menus").append('<block class="ShowMenu ' + Addcls + '" onclick="ActiveMenu(this)" ondblclick="AddNewForm(' + FormList[i].Id + ')"  OMID=' + FormList[i].Id + ' id="M' + FormList[i].Id + '">' + str + '</block>');
+        }
+        categorylist = list.FloorList;
+
+        for (var i = 0; i < categorylist.length; i++) {
+            var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
+            FloorHtml += '<h4 style="text-align:right">' + categorylist[i].Name + '</h4> </div><div class="col-md-6">';
+            var TablesOrSheat = ' <div class="row">';
+            var TableSHaetList = categorylist[i].TableSheatList;
+            var TotalSelectedTble = 0;
+            for (var j = 0; j < TableSHaetList.length; j++) {
+                TblShetList.push(TableSHaetList[j]);
+                var Tablecls = "";
+                if (TableSHaetList[j].FDBKId == SelectedMenu) {
+                    // Tablecls = "SelectedTable";
+                    TotalSelectedTble += 1;
+                }
+                TablesOrSheat += '<div class="col-md-3 card ' + Tablecls + '"  onclick="ActiveTable(this)" TSID="' + TableSHaetList[j].Table_or_RowID + '" id="TS' + TableSHaetList[j].Table_or_RowID + '" childs="' + categorylist[i].Floor_or_ScreenID + '" ><p>' + TableSHaetList[j].Table_or_SheetName + '</p></div>';
+            }
+
+            TablesOrSheat += '<div class="col-md-3 " onclick="AddTorS(this)" id="Add' + categorylist[i].Floor_or_ScreenID + '"><p><i class="fa fa-plus" aria-hidden="true"></i></p></div>';
+            TablesOrSheat += "</div>";
+            var CheckBoxCls = "";
+            if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
+                // CheckBoxCls = "checked";
+            }
+            FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="' + categorylist[i].Floor_or_ScreenID + '" id="FS' + categorylist[i].Floor_or_ScreenID + '" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+            FloorHtml += TablesOrSheat;
+            FloorHtml += '</blockTable>';
+            $("#Floor").append(FloorHtml);
+
+        }
+        var AddNew = '<blockTable><div class="row"><div class="col-md-12"> <i class="fa fa-plus" aria-hidden="true"></i></div></div></blockTable>';
+        $("#Floor").append(AddNew);
+    }
+    function ActiveMenu(event) {
+        console.log("h");
+        for (var i = 0; i < TblShetList.length; i++) {
+            $("#TS" + TblShetList[i].Table_or_RowID).removeClass('SelectedTable');
+        }
+        var lis = document.getElementsByClassName("ShowMenu");
+        for (var i = 0; i < lis.length; i++) {
+            var li = $(lis[i]);
+            li.removeClass('SelectedMenu');
+        }
+        var MenuId = parseInt($(event).attr("OMID"));
+        var SelectedTables = TblShetList.filter(function (x) {
+            return x.FDBKId == MenuId;
+        });
+        for (var i = 0; i < SelectedTables.length; i++) {
+            $("#TS" + SelectedTables[i].Table_or_RowID).addClass('SelectedTable');
+        }
+        // var TotalSelectedCount = SelectedTables.length;
+
+        // console.log('aaya3');
+        $(event).addClass('SelectedMenu');
+    }
+    function ActiveScrn(event) {
+        var Idname = $(event).attr('FSID');
+        var ListTables = document.querySelectorAll("[childs='" + Idname + "']");
+        if ($(event).is(':checked')) {
+            for (var i = 0; i < ListTables.length; i++) {
+                var table = $(ListTables[i]);
+                table.addClass('SelectedTable');
+            }
+
+        }
+        else {
+            for (var i = 0; i < ListTables.length; i++) {
+                var table = $(ListTables[i]);
+                table.removeClass('SelectedTable');
+
+            }
+        }
+    }
+    function ActiveTable(event) {
+
+        if ($(event).hasClass('SelectedTable')) {
+            $(event).removeClass('SelectedTable');
+        }
+        else {
+            $(event).addClass('SelectedTable');
+        }
+    }
+    function Apply() {
+        console.log("test");
+        var lis = document.getElementsByClassName("SelectedMenu");
+        if (lis.length < 1) {
+            $.alert({
+                title: 'Alert!',
+                content: 'Active Feedback Form First',
+            });
+            return;
+        }
+        $("#waiting").show();
+        var Menu = $(lis[0]);
+        var MenuId = parseInt(Menu.attr('OMID'));
+        var menuName = Menu.text();
+        var TableList = [];
+        var SelectedTables = document.getElementsByClassName("SelectedTable");
+        for (var i = 0; i < SelectedTables.length; i++) {
+            for (var j = 0; j < TblShetList.length; j++) {
+                if (TblShetList[j].Table_or_RowID == $(SelectedTables[i]).attr('TSID')) {
+                    TblShetList[j].FDBKId = MenuId;
+                    break;
+                }
+
+            }
+
+            TableList.push($(SelectedTables[i]).attr('TSID'));
+        }
+        var Jobj = {};
+        Jobj.OMID = MenuId;
+        Jobj.TorSIDs = TableList;
+        Jobj.OrgId = OrgId;
+
+        $.ajax({
+            type: 'POST',
+            url: "/FeedBack/ActiveForm",
+            data: JSON.stringify(Jobj),
+            contentType: "application/json",
+            success: function (data) {
+                var status = parseInt(data);
+                // if (status > 0) {
+                $.alert({
+                    title: 'Alert',
+                    content: 'Active',
+                });
+                //}
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function AddTorS(event) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Tables_or_Sheat/CreateEdit?ID=0",
+            success: function (data) {
+                makedpt("CreateTorS");
+                $("#CreateTorS > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateTorS");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+</script>
+
+
+
+
+

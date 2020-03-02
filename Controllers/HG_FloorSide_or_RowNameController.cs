@@ -38,7 +38,7 @@ namespace HangOut.Controllers
         {
             int i = ObjRowName.save();
             if (i > 0)
-                return RedirectToAction("RowIndex",new { Type=2});
+            return Json(new {data= ObjRowName }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
         }
         public ActionResult CreateEdit(int ID)
@@ -53,15 +53,41 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_FloorSide_or_RowName ObjRowName)
         {
+            List<HG_FloorSide_or_RowName> Listscr = new HG_FloorSide_or_RowName().GetAll(1);//floor side Type=2
+            var ObjFlrExist = Listscr.Find(x => x.FloorSide_or_RowName.ToUpper() == ObjRowName.FloorSide_or_RowName.ToUpper() && x.ID != ObjRowName.ID);
+            if (ObjFlrExist != null)
+            {
+                return Json(new { msg = "Floor Side Name Already Exist" }, JsonRequestBehavior.AllowGet);
+            }
             int i = ObjRowName.save();
             if (i > 0)
-                return RedirectToAction("Index",new {Type=1 });
+                return Json(new { data = ObjRowName }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("Error");
-             
+
         }
         public ActionResult Error()
         {
             return View();
         }
+        public ActionResult Delete(int ID)
+        {
+            HG_FloorSide_or_RowName ObjFscr = new HG_FloorSide_or_RowName().GetOne(ID);
+            if (ObjFscr != null)
+            {
+                List<HG_Tables_or_Sheat> ListTorS = new HG_Tables_or_Sheat().GetAll(int.Parse(ObjFscr.Type));
+                ListTorS = ListTorS.FindAll(x => x.FloorSide_or_RowNoID == ObjFscr.ID);
+                if (ListTorS.Count > 0)
+                {
+                    return Json(new { msg = "Already Used In Seating " }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    int id = HG_FloorSide_or_RowName.Dell(ID);
+                }
+            }
+            return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

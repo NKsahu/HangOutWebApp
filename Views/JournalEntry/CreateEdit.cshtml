@@ -1,0 +1,128 @@
+﻿@model HangOut.Models.Account.JournalEntry
+@using HangOut.Models.Common
+@using HangOut.Models.Account;
+
+@{
+    Layout = null;
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:#000000"><b>Journal Entry</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+
+        @using (Ajax.BeginForm("CreateEdit", "JournalEntry", new { ID = Model.ID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.ID)
+
+
+            <div class="row">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+
+                @{
+                    <div class="col-md-3">
+                        @Html.Label("EntryType")
+                        @Html.DropDownListFor(model => model.Entrytype, new SelectList(JournalEntry.EType(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.Entrytype, "", new { @class = "text-danger" })
+
+                    </div>
+                }
+                <div class="col-md-3">
+                    @Html.Label("Date")
+                    @Html.TextBoxFor(model => model.Date, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+                </div>
+            </div>
+            <hr />
+            <span style="display:inline-block;height:100%;width:100%;border: 1px solid black;padding:5px;padding-bottom:25px;">
+                <div class="row" id="CreateCopy">
+
+                    @{
+                        <div class="col-md-1">
+                            @Html.Label("Type")
+                            @Html.DropDownListFor(model => model.Type, new SelectList(JournalEntry.JType(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", required = "required", id = "did" })
+                            @Html.ValidationMessageFor(model => model.Entrytype, "", new { @class = "text-danger" })
+
+                        </div>
+                    }
+
+                    @{
+                        <div class="col-md-3">
+                            @Html.Label("Account")
+                            @Html.DropDownListFor(model => model.Account, new SelectList(Ledger.GetAll(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(model => model.Account, "", new { @class = "text-danger" })
+
+                        </div>
+                    }
+                    <div class="col-md-2" id="drid">
+                        @Html.LabelFor(model => model.Debit, htmlAttributes: new { @class = "control-label  " })
+
+                        @Html.EditorFor(model => model.Debit, new { htmlAttributes = new { @class = "form-control", id = "drid" } })
+                        @Html.ValidationMessageFor(model => model.Debit, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-2" id="cid">
+                        @Html.LabelFor(model => model.Credit, htmlAttributes: new { @class = "control-label  " })
+
+                        @Html.EditorFor(model => model.Credit, new { htmlAttributes = new { @class = "form-control",id= "cid" } })
+                        @Html.ValidationMessageFor(model => model.Credit, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div id="HeadDiv" style="display:none"></div>
+            </span>
+            <hr />
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.Label("Narration")
+                    @Html.TextAreaFor(model => model.Narration, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Narration, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input style="margin-top:25px" type="submit" value="Save" class="btn btn-success" />
+
+                </div>
+            </div>
+            }
+
+
+        </div>
+</div>
+<script>
+    $(document).on('change', function () {
+        var values = $("#did").val();
+        if (values === "1") {
+            $("#cid").show();
+            $("#drid").hide();
+        }
+        else if (values === "0")
+        {
+            $("#drid").show();
+            $("#cid").hide();
+        }
+    });
+    $("#cid").keypress(function (event) {
+        if (event.keyCode === 13) {
+            var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
+            var clonediv = $('#CreateCopy').clone();
+            clonediv.show();
+            clonediv.attr('OrderNo', MainDivsCnt);
+            clonediv.insertBefore("#HeadDiv");
+        }
+    });
+    $("#drid").keypress(function (event) {
+        if (event.keyCode === 13) {
+            var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
+            var clonediv = $('#CreateCopy').clone();
+            clonediv.show();
+            clonediv.attr('OrderNo', MainDivsCnt);
+            clonediv.insertBefore("#HeadDiv");
+        }
+    });
+
+</script>

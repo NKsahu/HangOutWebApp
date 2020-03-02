@@ -1,0 +1,379 @@
+﻿@{ Layout = null;}
+@using HangOut.Models.Common
+<div class="card">
+    <div class="card-header">
+        @*<div class="row">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><u><b>LEARNER:BABA</b></u></h5>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-primary">Switch Learner</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+    <div class="card-body">
+
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <ul class="nav-fill nav-justified" style="list-style-type:none;padding-left:0" id="CategoryList">
+                    <li class="card">
+                        <div class="row">
+                            <div class="col-md-12 pt-3 ">
+                                <button class="btn btn-success form-control" style="font-size:25px" onclick="ShowVideso('0')">ALL</button>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li class="card">
+                        <div class="row">
+                            <div class="col-md-12 pt-3 ">
+                                <button class="btn btn-success form-control" style="font-size:25px" onclick="WatchVideo()">Must Watch Video</button>
+                            </div>
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div class="scrollbar" id="style-1">
+                    <div class="force-overflow">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="form-control droupdown" name="StudentGender" id="droupdown">
+                                    <option value="1">Hindi</option>
+                                    <option value="2">English</option>
+                                    <option value="3">Urdu</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <input id="search" type="text" class="form-control text-center" onkeyup="SearchItem('search','filter')" placeholder="search in TITLE & DESCRIPTION">
+                            </div>
+                        </div>
+                        <ol class="nav-fill nav-justified" id="VideoList">
+                            <li class="mt-2">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <button class="btn btn-dark form-control text-left">
+                                            <h5><u>Title:</u></h5>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <button class="btn btn-secondary form-control text-left">
+                                            <h5><u>FFEEDAS</u></h5>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-dark form-control text-left"><h5><u>Discription:</u></h5></button>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <button class="btn btn-secondary form-control text-left">
+                                            <h5><u>fgsdsd</u></h5>
+                                        </button>
+                                    </div>
+                                    <div class=" col-md-1 text-center">
+                                        <i class=" fa fa-align-right"></i>
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-dark form-control text-left"><h5><u>link:</u></h5></button>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <button class="btn btn-secondary form-control text-left " id="link">
+                                            <h5><u>sdfdsf</u></h5>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-primary " onclick="PlayVideo();">Learn Now</button>&nbsp;
+                                        <button class="btn btn-primary " aria-label="Close" style="display:none" onclick="StopVideo();">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4"><button class="btn btn-primary  ">Mark Completed</button></div>
+                                    <div class="col-md-6 collapse">
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    var VideosList = [];
+    var VideoMark = [];
+    $("#droupdown").change(function () {
+        console.log("asdsad");
+        var language = $("#droupdown").val();
+        var CurrentVideos = VideosList.filter(function (x) {
+            return x.Languange == language;
+        });
+        ShowVidelos(CurrentVideos);
+    });
+    function PlayVideo(id) {
+        var ObjVideo = VideosList.find(x => {
+            return x.ID == id;
+        });
+        var obj = {
+            "video": {
+                "value": "<iframe title='YouTube video player' type=\"text/html\" width='640' height='390' src=" + ObjVideo.Link + " frameborder='0' allowFullScreen></iframe>"
+            }
+        };
+        $("." + id).html(obj.video.value);
+        $("#Btn" + id).show();
+        $("." + id).show();
+    }
+    function StopVideo(id) {
+        var ObjVideo = VideosList.find(x => {
+            return x.ID == id;
+        });
+        $("." + id).html(ObjVideo).StopVideo;
+        $("#Btn" + id).hide();
+        $("." + id).hide();
+    }
+    LoadVideos();
+    function LoadVideos() {
+        $.ajax({
+            type: 'POST',
+            url: "/Video/VideoList",
+            contentType: "application/json",
+            success: function (data) {
+                var objects = JSON.parse(data);
+                var CategoryList = objects.CategoryList;
+                VideoMark = objects.videomarks;
+                // $("#CategoryList").html('');
+                $("#VideoList").html('');
+                for (var i = 0; i < CategoryList.length; i++) {
+                    var ObjCategory = CategoryList[i];
+                    var CatName = ObjCategory.CatName;
+                    var CatId = ObjCategory.CatId;
+                    var VideoList = ObjCategory.Videos;
+
+                    var html = '<li class="card">';
+                    html += '<div class="row">'
+                    html += '<div class="col-md-12 pt-3 ">'
+                    html += "<button class='btn btn-success form-control' onclick='ShowVideso(\"" + CatId + "\")' style='font-size:25px'>" + CatName + "</button>";
+                    html += '</div>';
+                    html += '</div></li>';
+                    //ShowVidelos()
+                    //  $("#VideoList").append(videohtml);
+                    for (var j = 0; j < VideoList.length; j++) {
+                        VideosList.push(VideoList[j]);
+                    }
+                    $("#CategoryList").append(html);
+                }
+                ShowVidelos(VideosList);
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function markComplete(videoId) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'POST',
+            url: "/Video/MarkComplete?videoId=" + videoId,
+            contentType: "application/json",
+            success: function (data) {
+                $('#waiting').hide();
+                var mark = {};
+                mark.VideoID = videoId;
+                VideoMark.push(mark);
+                var markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
+                $("#Mark" + videoId).html(markCmplthtml);
+            },
+
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function ShowVideso(CatId) {
+        var CurrentVideos = [];
+        if (CatId == "0") {
+            CurrentVideos = VideosList;
+        }
+        else {
+            CurrentVideos = VideosList.filter(function (x) {
+                return x.CategoryId == CatId;
+            });
+        }
+        ShowVidelos(CurrentVideos);
+    }
+    function ShowVidelos(CurrentVideos) {
+        $("#VideoList").html('');
+        for (var j = 0; j < CurrentVideos.length; j++) {
+            var VideoObj = CurrentVideos[j];
+            // VideosList.push(VideoObj);
+            var Title = VideoObj.Title;
+            var Discription = VideoObj.Discription;
+
+            var Link = VideoObj.Link;
+            var Languange = VideoObj.Languange;
+            var SerialNumber = VideoObj.SerialNumber;
+            var VideoId = VideoObj.ID;
+            var IsImp = VideoObj.IsImp;
+            var icons = '<i class=" fa fa-align-right"></i>';
+            if (IsImp == true) {
+                icons = '<i class="fas fa-star" style="color:green;font-size:40px"></i>';
+            }
+            var ObjmarkVideo = VideoMark.find(x => {
+                return x.VideoID == VideoId;
+            });
+            var markCmplthtml = "<div class='col-md-4 ' id='Mark" + VideoId + "'><button class='btn btn-primary' onclick='markComplete(\"" + VideoId + "\");' >Mark Completed</button></div>";
+            if (ObjmarkVideo != null && ObjmarkVideo != undefined) {
+                markCmplthtml = "<div class='col-md-4 mt-1'> <i class='fas fa-check-circle' style='color:green;font-size:40px'></i></div>";
+            }
+
+            var videohtml = '<li class="mt-2 firstdiv filter" id="VidLi'+VideoId+'">';
+            videohtml += '<div class="row">';
+            videohtml += '<div class="col-md-2">';
+            videohtml += '    <button class="btn btn-dark form-control text-left">';
+            videohtml += '        <h5>Title:</h5>';
+            videohtml += '    </button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-9 "  >';
+            videohtml += '    <button class="btn btn-secondary form-control text-left seconddiv filter2 " VideoID="'+VideoId+'" data-name="deepak" >';
+            videohtml += '        <h5>' + Title + '</h5>';
+            videohtml += '    </button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-2">';
+            videohtml += '    <button class="btn btn-dark form-control text-left w-100"style="padding-bottom: 000px;padding-right: 00px;padding-top: 0.00px;padding-left: 00px;"><h5>Description:</h5></button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-9">';
+            videohtml += '  <div id="style-1" style="height:80px;" class="btn-secondary scrollb filter2" VideoID="' + VideoId +'"> ';
+            videohtml += VideoObj.Discription;
+            videohtml += '</div>';
+            videohtml += '</div>';
+            videohtml += '<div class=" col-md-1 text-center">';
+            videohtml += icons;
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-2">';
+            videohtml += '    <button class="btn btn-dark form-control text-left"><h5>Language:</h5></button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-9">';
+            videohtml += '    <button class="btn btn-secondary form-control text-left link">';
+            videohtml += '        <h5 class="text-left" >' + Language(Languange) + '</h5>';
+            videohtml += '    </button>';
+            videohtml += '</div>';
+            videohtml += '<div class="col-md-4"></div>';
+            videohtml += "<div class='col-md-4'><button class='btn btn-primary' onclick='PlayVideo(\"" + VideoId + "\");'>Learn Now</button>&nbsp;&nbsp;";
+            videohtml += "<button class='btn btn-primary ' id='Btn" + VideoId + "' aria-label='Close' style='display:none' onclick='StopVideo(\"" + VideoId + "\");'>";
+            videohtml += '<span aria-hidden="true">&times;</span></button></div>';
+            videohtml += markCmplthtml;
+            videohtml += '  <div class="col-md-6 collapse ' + VideoId + '">';
+            videohtml += '  </div>';
+            videohtml += '</div>';
+            videohtml += '</li>';
+            $("#VideoList").append(videohtml);
+        }
+    }
+    function Language(id) {
+        //{
+        //    1: Hindi, 2: English, 3: Urdu
+        if (id == "1") {
+            return "Hindi";
+        }
+        else if (id == "2") {
+            return "English";
+        }
+        else if (id == "3") {
+            return "Urdu";
+        }
+    }
+    function WatchVideo() {
+
+        var VideosListImp = VideosList.filter(function (x) {
+            return x.IsImp == true;
+        });
+        ShowVidelos(VideosListImp);
+    }
+     
+    function SearchItem(SearchItem, hideClsName) {
+        var input = document.getElementById(SearchItem);
+        var filter = input.value.toLowerCase();
+        var nodes = document.getElementsByClassName(hideClsName);
+        for (i = 0; i < nodes.length; i++) {
+            if (nodes[i].innerText.toLowerCase().includes(filter)) {
+                console.log(nodes[i]);
+               // var node = $(nodes[i]);
+               //var videois= $(node).attr('VideoID');
+               // console.log("ssss" + videois);
+               // $("#VidLi" + videois).show();
+               // $(node).parent('div').parent('div').parent('li').show();
+               nodes[i].style.display = "block";
+            } else {
+               // var node = $(nodes[i]);
+                //var videois = $(node).attr('VideoID');
+               // console.log("ssss" + videois);
+                //$("#VidLi" + videois).hide();
+                nodes[i].style.display = "none";
+               // $(node).parent('div').parent('div').parent('li').hide();
+            }
+        }
+    }
+</script>
+<style>
+    .show-read-more .more-text {
+        display: none;
+    }
+
+    .card {
+        height: 80px;
+    }
+
+    #wrapper {
+        text-align: center;
+        width: 500px;
+        margin: auto;
+    }
+
+    #style-1::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        background-color: #ff0000;
+    }
+
+    #style-1::-webkit-scrollbar {
+        width: 12px;
+        background-color: #ff0000;
+    }
+
+    #style-1::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #b6ff00;
+    }
+
+    .scrollbar {
+        float: left;
+        height: 80%;
+        width: 99%;
+        background: #F5F5F5;
+        overflow-y: scroll;
+        margin-bottom: 25px;
+    }
+</style>
+<style>
+    .scrollb {
+        float: left;
+        height: 100%;
+        width: 100%;
+        overflow-y: scroll;
+    }
+</style> 

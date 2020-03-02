@@ -1,0 +1,310 @@
+﻿@using HangOut.Models
+@{ Layout = null;
+    Int64 OrderID = Int64.Parse(Request.QueryString["OID"]);
+    HG_Orders HG_Order = new HG_Orders().GetOne(OrderID);
+    var OrderItems = new HG_OrderItem().GetAll(OrderID);
+    List<HG_Items> listItem = new HG_Items().GetAll();
+
+}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="text-center text-danger"><b><u>EditOrder</u></b></h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover w-100 css-serial" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        S.No
+                    </th>
+                    <th>
+                        Item
+                    </th>
+                    <th>
+                        QTY
+                    </th>
+                    <th>
+                        Ticket No
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Order in OrderItems)
+                {
+                    double ItemPrice = Order.Price * Order.Count;
+                    <tr class="item">
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td>
+                            @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == Order.FID); }
+                            @ObjOrder.Items
+                        </td>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-4">
+
+                                </div>
+                                <div class="Col-md-1">
+                                    <span class="input-group-btn float-right">
+                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" OIID="@Order.OIID" onclick="MinusItemQty(this)">
+                                            <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="Col-md-1">
+                                    <input type="text" class="QTY form-control input-number text-center " readonly value="@Order.Count" id="@Order.OIID" min="0" step="5" size="10" />
+
+                                </div>
+                                <div class="Col-md-1">
+                                    <span class="input-group-btn float-left">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" OIID="@Order.OIID" onclick="PlusItemQty(this)">
+                                            <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            @Order.TickedNo
+                        </td>
+                        <td class="ItemPrize" id="IntPrice@(Order.OIID)">
+                            @ItemPrice.ToString("0.00")
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-md-5">
+                        @Html.Label("Total")
+                    </div>
+                    <div class="col-md-5">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-6">
+                        @Html.Label("Total Quantity")
+                    </div>
+                    <div class="col-6">
+                        @{
+                            double Count = 0;
+                            foreach (var amt in OrderItems)
+                            {
+
+                                List<HG_OrderItem> ListIt = new HG_OrderItem().GetAll(amt.OID);
+                                double Amt = amt.Count;
+                                Count += Amt;
+                            }
+                        }
+                        <label id="Quantity">@Count</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-6">
+
+                    </div>
+                    <div class="col-4">
+                        @Html.Label("Total Amount")
+                    </div>
+                    <div class="col-2">
+                        @{
+                            double TotalAmt = 0;
+                            foreach (var amt in OrderItems)
+                            {
+
+                                List<HG_OrderItem> ListIt = new HG_OrderItem().GetAll(amt.OID);
+                                double Amt = amt.Price * amt.Count;
+                                TotalAmt += Amt;
+                            }
+                        }
+                        <label id="TotalAmount">@TotalAmt</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr />
+        @using (Ajax.BeginForm("SaveEditOrder", "HG_Orders", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.Hidden("OID", OrderID);
+                    @Html.Hidden("PtmMode", HG_Order.PaymentStatus)
+                </div>
+                <div class="col-md-4">
+                    @Html.Label("Payment Mode")
+                    @{
+                        List<SelectListItem> li = new List<SelectListItem>();
+                        SelectListItem obj1 = new SelectListItem() { Text = "Select Peyment Type", Value = "0" };
+                        SelectListItem obj2 = new SelectListItem() { Text = "Cash", Value = "1" };
+                        SelectListItem obj3 = new SelectListItem() { Text = "Bank/Wallet", Value = "2" };
+                        SelectListItem obj4 = new SelectListItem() { Text = "FoodDo", Value = "3" };
+                        if (HG_Order.PaymentStatus == 3)
+                        {
+                            li.Add(obj4);
+                        }
+                        else
+                        {
+                            li.Add(obj1);
+                            li.Add(obj2);
+                            li.Add(obj3);
+                        }
+                    }
+                    @Html.DropDownList("PMode", li, new { @class = "form-control " })
+                </div>
+                <div class="col-sm-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input type="submit" value="Save" class="btn btn-success" style="margin-top: 28px;">
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    function MinusItemQty(Event) {
+        var OIID = $(Event).attr('OIID');
+        var Cnt = parseFloat($("#" + OIID).val());
+        Cnt--;
+        if (Cnt < 0) {
+            alert("Quntity Can't be Minus");
+            return;
+        }
+        var Pmode = $("#PtmMode").val();
+        
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Orders/UpdateAmt?ID=" + OIID + "&Cnt=" + Cnt + "&Pmode=" + Pmode,
+            success: function (data) {
+
+                var Jobj = JSON.parse(data);
+                if (Jobj.Status == 400) {
+                    alert(Jobj.MSG);
+                    return;
+                }
+                else {
+                    $("#" + OIID).val(Cnt);
+                    $("#IntPrice" + OIID).text(Jobj.MSG);
+                    ChangeQtySum();
+                    ChangetotalAmt();
+                }
+                
+                // not();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function PlusItemQty(Event) {
+        var OIID = $(Event).attr('OIID');
+        var Cnt = parseFloat($("#" + OIID).val());
+        var Pmode = $("#PtmMode").val();
+        Cnt++;
+        
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Orders/UpdateAmt?ID=" + OIID + "&Cnt=" + Cnt + "&Pmode=" + Pmode,
+            success: function (data) {
+                var Jobj = JSON.parse(data);
+                if (Jobj.Status == 400) {
+                    alert(Jobj.MSG);
+                    return;
+                }
+                else {
+                    $("#IntPrice" + OIID).text(Jobj.MSG);
+                    $("#" + OIID).val(Cnt);
+                    ChangeQtySum();
+                    ChangetotalAmt();
+                }
+                
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function ChangeQtySum() {
+        var ListQty = document.getElementsByClassName('QTY');
+        var totalQty = 0;
+        for (var i = 0; i < ListQty.length; i++) {
+            totalQty += parseInt(ListQty[i].value);
+        }
+        $("#Quantity").text(totalQty);
+
+    }
+    function ChangetotalAmt() {
+        var TotalAmount = 0;
+        var AmtList = document.getElementsByClassName('ItemPrize');
+        for (var i = 0; i < AmtList.length; i++) {
+            TotalAmount += parseFloat(AmtList[i].innerHTML);
+        }
+        $("#TotalAmount").text(TotalAmount);
+    }
+    function JsonSuccess(Jobj) {
+        hidedpt('EditOrder');
+    }
+</script>
+<style>
+    body {
+        font-family: "Open Sans", helvetica, arial;
+    }
+
+    table {
+        width: 500px; /* For Responsive design set 100% */
+        border-collapse: collapse;
+        margin: 30px 0px 30px;
+        background-color: #fff;
+        font-size: 14px;
+    }
+
+        table tr {
+            height: 40px;
+        }
+
+        table th {
+            background: #03493e;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        table td, th {
+            padding: 6px 6px 6px 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        /* CSS3 Zebra Striping */
+        table tr:nth-of-type(odd) {
+            background: #eee;
+        }
+
+    /* Automatic Serial Number Row */
+    .css-serial {
+        counter-reset: serial-number; /* Set the serial number counter to 0 */
+    }
+
+        .css-serial td:first-child:before {
+            counter-increment: serial-number; /* Increment the serial number counter */
+            content: counter(serial-number); /* Display the counter */
+        }
+</style>

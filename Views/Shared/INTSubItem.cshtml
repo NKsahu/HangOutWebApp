@@ -1,0 +1,66 @@
+﻿@model HangOut.Models.Inventory.INTItems
+@using HtmlHelpers.BeginCollectionItem
+@using HangOut.Models.Inventory;
+@{
+    Layout = null;
+
+}
+<div class="iNTItem">
+    @using (Html.BeginCollectionItem("iNTItems"))
+    {
+        <div class="row aa">
+            @Html.HiddenFor(model => model.SubItemID, new { @class = "SUBITEMID" })
+            <div class="col-md-3">
+                @{ List<INTUnits> listunit = INTUnits.GetAll();
+                   listunit = listunit.FindAll(x => x.ParentId == 0);
+                    }
+                @Html.Label("Item")
+                @Html.DropDownListFor(model => model.ItemID, new SelectList (listunit, "UnitID", "Name",Model.ItemID), "Select Item", new { @class = "form-control" })
+                @* @Html.EditorFor(model => model.ItemID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
+
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Quantity")
+                @* @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })*@
+                @Html.EditorFor(model => model.IQty, new { htmlAttributes = new { @class = "form-control  " } })
+
+            </div>
+            <div class="col-md-3">
+                @{List<INTUnits>listuni = INTUnits.GetAll();
+                   // listuni = listuni.FindAll(x => x.ParentId >0);
+                   // var UnitID = listuni.FindAll(x => x.ParentId ==Model.IUnitID );
+                    }
+                    @Html.Label("Unit")
+                    @Html.DropDownListFor(model => model.IUnitID, new SelectList(listuni, "UnitID", "Name",Model.IUnitID), "Select Unit", new { @class = "form-control" })
+                    @*@Html.EditorFor(model => model.IUnitID, new { htmlAttributes = new { @class = "form-control  ", required = "required" } })*@
+            </div>
+            <div class="col-md-3" id="btn">
+                <span class="float-right">
+                    <a class="btn btn-success " onclick="DuplicateDiv(this);" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
+                </span>
+            </div>
+        </div>
+        <div id="HeadDiv" style="display:none"></div>
+    }
+</div>
+ @*<script>
+     $("#ItemID").on("change", function () {
+         console.log("sqa");
+         var value = $("#ItemID").val();
+         if (value != "" && value != 0) {
+             $.ajax({
+                 type: "GET",
+                 url: "/INTGSTBL/GETID",
+                 success: function (data) {
+                     $("#IUnitID").html(data);
+                     //alert(data.Name);
+                 },
+                 error: function (xhr) {
+                     alert("Error");
+                 }
+             });
+         }
+
+     });
+ </script>*@ 
+ 

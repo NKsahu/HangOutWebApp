@@ -1,0 +1,268 @@
+﻿@model HangOut.Models.Inventory.INTGSTBL
+@using HangOut.Models.Inventory;
+@{
+
+    Layout = null;
+    var ObjOrg = Request.Cookies["UserInfo"];
+}
+@using HangOut.Models
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:#000000"><b>Add Items</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+
+        @using (Ajax.BeginForm("CreateEdit", "INTGSTBL", new { ID = Model.GSID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.GSID)
+        <div class="row">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.GSID, "", new { @class = "text-danger" })
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Category")
+                @Html.DropDownListFor(model => model.CatID, new SelectList(INTCategory.GetAll(), "CatID", "Name", Model.CatID), "Select Category Name", new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.CatID, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Type")
+                @Html.DropDownListFor(model => model.Typeid, new SelectList(InventoryType.ListOrgTypeidList(), "Typeid", "Name", Model.Typeid), new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.Typeid, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @{ List<INTUnits> listunit = INTUnits.GetAll();
+                    listunit = listunit.FindAll(x => x.ParentId == 0);
+                }
+                @Html.Label("Unit")
+                @Html.DropDownListFor(model => model.UnitID, new SelectList(listunit, "UnitID", "Name"), "Select Unit", new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.UnitID, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Service Prize")
+                @Html.EditorFor(model => model.ServicePrize, new { htmlAttributes = new { @class = "form-control  "  } })
+                @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Service Sale")
+                @Html.EditorFor(model => model.ServiceTax, new { htmlAttributes = new { @class = "form-control  "  } })
+                @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Opening Stock")
+                @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                <div class="checkbox mt-4">
+                    @Html.Label("IS Saleable")
+
+                    @Html.EditorFor(model => model.ISSaleable)
+                    @Html.ValidationMessageFor(model => model.ISSaleable, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Sale Prize")
+                @Html.EditorFor(model => model.SalePrize, new { htmlAttributes = new { @class = "form-control "  } })
+                @Html.ValidationMessageFor(model => model.SalePrize, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Sale Tax")
+                @Html.EditorFor(model => model.SaleTax, new { htmlAttributes = new { @class = "form-control  " } })
+                @Html.ValidationMessageFor(model => model.SaleTax, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                <div class="checkbox mt-4">
+                    @Html.Label("IS Directly Purchased")
+                    @Html.EditorFor(model => model.ISdirectlyPurchased)
+                    @Html.ValidationMessageFor(model => model.ISdirectlyPurchased, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Purchased Prize")
+                @Html.EditorFor(model => model.PurchasedPrize, new { htmlAttributes = new { @class = "form-control  "  } })
+                @Html.ValidationMessageFor(model => model.PurchasedPrize, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Purchased Tax")
+                @Html.EditorFor(model => model.PurchasedTax, new { htmlAttributes = new { @class = "form-control  "  } })
+                @Html.ValidationMessageFor(model => model.PurchasedTax, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-4 ">
+                <div class="checkbox mt-4">
+                    @Html.Label("IS Processed")
+
+                    @Html.EditorFor(model => model.ISProcessed)
+                    @Html.ValidationMessageFor(model => model.ISProcessed, "", new { @class = "text-danger", })
+                </div>
+            </div>
+
+        </div>
+             
+                foreach (var SubItems in Model.iNTItems)
+                {
+                @Html.Partial("INTSubItem", SubItems)
+                }
+            
+           
+            <div class="col-sm-1">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input type="submit" value="Save" class="btn btn-success" />
+
+            </div>
+        }
+    </div>
+</div>
+<script>
+    
+    typehide();
+   // $("#Qty").parent('div').hide();
+   // $("#ISSaleable").parent('div').parent('div').hide();
+    $("#PurchasedPrize").parent('div').hide();
+    $("#PurchasedTax").parent('div').hide();
+   // $(".aa").hide();
+    $("#SaleTax").parent('div').hide();
+    $("#SalePrize").parent('div').hide();
+   // $("#ServiceTax").parent('div').hide();
+   // $("#ServicePrize").parent('div').hide();
+    
+    $("#Typeid").change(function () {
+        typehide();
+    });
+    function typehide() {
+        var Type = $("#Typeid").val();
+        if (Type == "1") {
+            $("#Qty").parent('div').show();
+            $("#ISSaleable").parent('div').parent('div').show();
+            $("#ISdirectlyPurchased").parent('div').parent('div').show();
+            $("#ISProcessed").parent('div').parent('div').show();
+            $("#SaleTax").parent('div').hide();
+            $("#SalePrize").parent('div').hide();
+            $("#PurchasedPrize").parent('div').hide();
+            $("#PurchasedTax").parent('div').hide();
+             $("#ServiceTax").parent('div').hide();
+            $("#ServicePrize").parent('div').hide();
+          //  $(".MainDivs").hide();
+        } else {
+            $("#Qty").parent('div').hide();
+            $("#ISSaleable").parent('div').parent('div').hide();
+            $("#ISdirectlyPurchased").parent('div').parent('div').hide();
+            $("#ISProcessed").parent('div').parent('div').hide();
+           // $(".MainDivs").hide();
+            $("#SaleTax").parent('div').hide();
+            $("#SalePrize").parent('div').hide();
+            $("#PurchasedPrize").parent('div').hide();
+            $("#PurchasedTax").parent('div').hide();
+            $("#ServiceTax").parent('div').show();
+            $("#ServicePrize").parent('div').show();
+        }
+        if (Type == "2") {
+            $("#ServiceTax").parent('div').show();
+            $("#ServicePrize").parent('div').show();
+        }
+        else {
+            $("#ServiceTax").parent('div').hide();
+            $("#ServicePrize").parent('div').hide();
+        }
+    }
+   
+    SalableChange();
+    directchange();
+    Processedchange();
+    $("#ISSaleable").change(function () {
+        SalableChange();
+    });
+    function SalableChange() {
+        if ($("#ISSaleable").is(':checked')) {
+            $("#ISdirectlyPurchased").parent('div').parent('div').show();
+            $("#SaleTax").parent('div').show();
+            $("#SalePrize").parent('div').show();
+           
+        }
+        else {
+            $("#ISdirectlyPurchased").parent('div').parent('div').hide();
+            $("#SaleTax").parent('div').hide();
+            $("#SalePrize").parent('div').hide();
+        }
+    }
+    directchange();
+    $("#ISdirectlyPurchased").change(function () {
+        directchange();
+    });
+    function directchange() {
+        if ($("#ISdirectlyPurchased").is(':checked')) {
+            $("#ISProcessed").parent('div').parent('div').show();
+            $("#PurchasedPrize").parent('div').show();
+            $("#PurchasedTax").parent('div').show();
+
+        }
+        else {
+            $("#ISProcessed").parent('div').parent('div').hide();
+            $("#PurchasedPrize").parent('div').hide();
+            $("#PurchasedTax").parent('div').hide();
+        }
+    }
+    Processedchange();
+    $("#ISProcessed").change(function () {
+        Processedchange();
+    });
+    function Processedchange() {
+        if ($("#ISProcessed").is(':checked')) {
+            $(".aa").show();
+        }
+        else {
+            $(".aa").hide();
+        }
+    }
+    function DuplicateDiv(event) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/INTGSTBL/AddSubItem",
+            success: function (data) {
+                $('#waiting').hide();
+                var parent = $(event).parent('span').parent('div').parent('div');
+                $(data).insertAfter(parent);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    $("#UnitID").on("change", function () {
+        console.log("sqa");
+        var value = $("#UnitID").val();
+        if (value != "" && value != 0) {
+            $.ajax({
+                type: 'GET',
+                data: { value: value },
+                url: "/INTGSTBL/GETID",
+                success: function (data) {
+                    $("#IUnitID").html(data);
+                    //alert(data.Name);
+                },
+                error: function (xhr) {
+                    alert("Error");
+                }
+            });
+        }
+
+    });
+</script>
+ 

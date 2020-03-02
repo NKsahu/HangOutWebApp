@@ -1,0 +1,236 @@
+﻿@model HangOut.Models.OrgSetting
+@using HangOut.Models;
+@{
+    Layout = null;
+}
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:black"><b>Order Settings</b></h3>
+    </div>
+    <div class="card-body">
+        @using (Ajax.BeginForm("SaveSetting", "HG_OrganizationDetails", new { OrgID = Model.OrgId }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", }))
+        {
+            @Html.HiddenFor(model => model.id)
+            @Html.HiddenFor(model => model.OrgId)
+            @Html.HiddenFor(model => model.OrdCanlMinTime)
+            @Html.HiddenFor(model => model.CheckBoxStatus)
+            List<SelectListItem> Bycash = new List<SelectListItem>();
+            List<SelectListItem> ByOnline = new List<SelectListItem>();
+            var UserInfo = Request.Cookies["UserInfo"];
+            int OrgId = int.Parse(UserInfo["OrgId"]);
+            HG_OrganizationDetails OrgObj = new HG_OrganizationDetails().GetOne(OrgId);
+            string OrgType = OrgObj.OrgID > 0 ? OrgObj.OrgTypes : "0";
+            Bycash = new List<SelectListItem>() {
+        new SelectListItem{Text="NO",Value="2"},new SelectListItem{Text="YES",Value="1"}
+        };
+            ByOnline = new List<SelectListItem>() {
+        new SelectListItem{Text="YES",Value="1"},new SelectListItem{Text="NO",Value="2"}
+        };
+            List<SelectListItem> CrosVerification = new List<SelectListItem>()
+                                                                                    {
+                                                                  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="By Otp",Value="1"}
+                                                                                    };
+            <div style="padding:5px;border:2px solid black; border-radius:5px;">
+                <div class="row">
+                    <div class="col-md-2">
+                        @{
+                            List<SelectListItem> EnableOrdering = new List<SelectListItem>()
+                                                                                                                    {
+                                                                                                  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                                                                    };
+                        }
+                        @Html.Label("Enable Delivery Charge", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.EnblDeleryChrg, EnableOrdering, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.EnblDeleryChrg, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 enableCrg">
+                        @Html.Label("Min Order Amt", htmlAttributes: new { @class = "control-label  " })
+                        @Html.EditorFor(model => model.MinOrderAmt, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.MinOrderAmt, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 enableCrg">
+                        @{
+                            List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
+                                                                                                                    {
+                                                                                                  new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
+                                                                                                                    };
+                        }
+                        @Html.Label("Allow Min Order Below", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.AcptMinOrd, AlwMinOrd, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.AcptMinOrd, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 enableCrg">
+                        @{
+                            List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
+                                                                                                                    {
+                                                                                                  new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
+                                                                                                                    };
+                        }
+                        @Html.Label("Charge Type", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.DeleryChrgType, DeliveryChrType, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.DeleryChrgType, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2 enableCrg">
+                        @Html.Label("Charge Amt", htmlAttributes: new { @class = "control-label  " })
+                        @Html.EditorFor(model => model.DeliveryCharge, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
+                        @Html.ValidationMessageFor(model => model.DeliveryCharge, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <h5 class="enableCrg" style="text-align:center"> Apply Charges On</h5>
+                <div class="row enableCrg " style="padding:10px;">
+                    <div class="col-md-2">
+                        @Html.Label("Customer App", htmlAttributes: new { @class = "control-label  " })
+                        @Html.CheckBoxFor(model => model.ApplyInCustomerApp, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ApplyInCustomerApp, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.Label("Captain App", htmlAttributes: new { @class = "control-label  " })
+                        @Html.CheckBoxFor(model => model.ApplyInCaptainApp, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ApplyInCaptainApp, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.Label("Admin Panel", htmlAttributes: new { @class = "control-label  " })
+                        @Html.CheckBoxFor(model => model.ApplyInAdminPanel, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ApplyInAdminPanel, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+            </div>
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+                <h5 style="padding-top:8px; text-align:center">Canteen Contact</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.Label("Heading 1", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.ContactHead1, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ContactHead1, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Label("Contact", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.Contact1, new { @class = "form-control OnlyNum" })
+                        @Html.ValidationMessageFor(model => model.Contact1, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Label("Heading 2", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.ContacHead2, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.ContacHead2, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.Label("Contact", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.Contact2, new { @class = "form-control OnlyNum" })
+                        @Html.ValidationMessageFor(model => model.Contact2, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+                <h5 style="text-align:center;color:black">Payment Modes</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Label("By Online", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.ByOnline, ByOnline, new { @class = "form-control ", style = (OrgType == "2" ? "pointer-events:none" : ""), required = "required" })
+                        @Html.ValidationMessageFor(model => model.ByOnline, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.Label("By Cash", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.ByCash, Bycash, new { @class = "form-control ", style = (OrgType == "1" ? "pointer-events:none" : ""), required = "required" })
+                        @Html.ValidationMessageFor(model => model.ByCash, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+                <h5 style="text-align:center;color:black">Customer App</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Label("Cross Verification", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.CrxVerification, CrosVerification, new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.CrxVerification, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+            </div>
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+                <h5 style="text-align:center;color:black">INVOICE Print Setup</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Label("Invoice Printing", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.InvoicePrinting, new SelectList(OrgSetting.GetPtrSetting(), "Id", "Name"), new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.InvoicePrinting, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.Label("Number Of Copy", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.NoOfCopy, new { @class = "form-control OnlyNum"})
+                        @Html.ValidationMessageFor(model => model.NoOfCopy, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;display:none">
+                <h5 style="text-align:center;color:black">KOT Print Setup</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        @Html.Label("KOT Printing", htmlAttributes: new { @class = "control-label  " })
+                        @Html.DropDownListFor(model => model.KotPrinting, new SelectList(OrgSetting.GetPtrSetting(), "Id", "Name"), new { @class = "form-control ", required = "required" })
+                        @Html.ValidationMessageFor(model => model.KotPrinting, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.Label("Number Of Copy", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.NoOfCopyKot, new { @class = "form-control OnlyNum ",  })
+                        @Html.ValidationMessageFor(model => model.NoOfCopy, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1">
+                @Html.Label("Save", new { @class = "text-white " })
+                <input type="submit" value="Save" class="btn btn-success form-control" />
+            </div>
+        }
+    </div>
+        </div>
+<script>
+    setTimeout(function () {$(window).trigger('resize'); },500);
+    AlowMinOrdAcpt();
+        EnableDeliveryChrg();
+        function AlowMinOrdAcpt() {
+            var Sts = $("#AcptMinOrd").val();
+            if (Sts == "0") {
+            $("#DeliveryCharge").parent('div').hide();
+            $("#DeleryChrgType").parent('div').hide();
+            }
+            else {
+            $("#DeliveryCharge").parent('div').show();
+            $("#DeleryChrgType").parent('div').show();
+            }
+        }
+    $("#AcptMinOrd").change(function () {
+            AlowMinOrdAcpt();
+        });
+    
+    function EnableDeliveryChrg() {
+            var DeliveryCrgYesNo = $("#EnblDeleryChrg").val();
+            if (DeliveryCrgYesNo == "0") {
+            $(".enableCrg").hide();
+            $("#AcptMinOrd").val('0');
+            }
+            else {
+            $(".enableCrg").show();
+            }
+            AlowMinOrdAcpt();
+        }
+    $("#EnblDeleryChrg").change(function () {
+            EnableDeliveryChrg();
+    });
+    $("#InvoicePrinting").change(function () {
+        InvoiceOption();
+    });
+    InvoiceOption();
+    function InvoiceOption() {
+        var option = $("#InvoicePrinting").val();
+        if (option == "2") {
+            $("#NoOfCopy").parent('div').show();
+        }
+        else {
+            $("#NoOfCopy").parent('div').hide();
+        }
+    }
+</script>

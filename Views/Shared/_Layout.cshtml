@@ -3,23 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>foodDo| N-Work Technology</title>
+    <title>foodDo| N-Works Technology</title>
     <link rel="shortcut icon" href="~/Image/app_icon.png" />
     <!-- CSS -->
-
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-messaging.js"></script>
+    <!-- For an optimal experience using Cloud Messaging, also add the Firebase SDK for Analytics. -->
     <link href="~/Assets/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <!-- JS -->
     <script src="~/Assets/jQuery/jquery-3.4.1.min.js"></script>
-
-
     <script src="~/Assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
-    @*<script src="~/Assets/AjaxForm/jquery.unobtrusive-ajax.min.js"></script>*@
     <script src="~/Assets/shortcut.js"></script>
     <script src="~/Assets/Website.js"></script>
     <script src="~/Assets/autonumeric.js"></script>
-
     <!-- Select2 cdn(content deliver network)-->
     <link href="~/Assets/Select2/css/select2.min.css" rel="stylesheet" />
     <script src="~/Assets/Select2/js/select2.min.js"></script>
@@ -27,8 +25,13 @@
     <!-- Bootstrap Date picker -->
     <link href="~/Assets/Datepicker/datepicker.css" rel="stylesheet" />
     <script src="~/Assets/Datepicker/datepicker.js"></script>
+    <script src="~/Assets/shortcut.js"></script>
     <link href="~/Assets/jQuery/animate.css" rel="stylesheet" />
     <link href="~/Assets/Mystyle.css" rel="stylesheet" />
+    <!--notification----->
+    <link href="/Assets/prettify.css" rel="stylesheet" />
+    <link href="/Assets/notify.css" rel="stylesheet" />
+    <!--notification  end----->
     <!--JS Propmpts  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
@@ -36,16 +39,15 @@
     <link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
     <script src="https://www.datatables.net/download/build/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-    @*<script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.min.js"></script>
     <!--responsive voice js-->
 </head>
-<body>
+
+<body style="width:100%">
     <!--Waiting Spinner-->
     <div id="waiting" style="display:none;"><div id="pwaiting"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div></div>
     <!--End Waiting Spinner-->
@@ -76,8 +78,17 @@
             </div>
         </div>
     </div>
-
-
+    <!--Notification count-->
+    <div style="position:fixed;bottom:0px;right:0px;">
+        <button style="color:white;display:inline-block;position:relative;padding:5px 10px;" onclick="ShowPaymtAltdetails()">
+            <i style="color:black;padding:5px;" class="fas fa-rupee-sign" aria-hidden="true"></i>
+            <span class="button__badge" id="CountPymAlt">0</span>
+        </button>
+        <button style="color:white;display:inline-block;position:relative;padding:5px 10px;" onclick="ShowChefOrdre()">
+            <i style="color:black;padding:5px;" class="fas fa-utensils" aria-hidden="true"></i>
+            <span class="button__badge" id="ChefUnpaid">0</span>
+        </button>
+    </div>
 
     <!--pop up modal en-->
 </body>
@@ -131,32 +142,33 @@
     window.onunload = function () {
         null;
     };
-   // setTimeout("preventBack()", 0);
+    // setTimeout("preventBack()", 0);
     //============= End Disable Back button =============
 
     //===cal datatable=====
 
     function LoadDataTable(TblId) {
         var DTblId = TblId;
-        if(TblId == null) {
+        if (TblId == null) {
             DTblId = "TBLID";
         }
-        var table = $("#"+ DTblId).DataTable({
+        var table = $("#" + DTblId).DataTable({
 
             "scrollY": "300px",
             "scrollCollapse": true,
             "paging": false,
+            "aaSorting": [],
             "sScrollX": "100%",
             "bScrollCollapse": true,
             "dom": 'Bfrtip',
-            "buttons": ['excel', 'pdf', { extend: 'print', title: 'Impression', exportOptions: { columns: ':visible' } },]
+            "buttons": [{ extend: 'excel',title:null, exportOptions: {title:null, columns: "thead th:not(.noExport)" } }, 'pdf', { extend: 'print', exportOptions: { columns: ':visible' } },]
         });
         table.buttons.exportData({
             stripHtml: true
         });
 
     }
-
-
 </script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Assets/notify.js"></script>
+<script src="~/Assets/prettify.js"></script>

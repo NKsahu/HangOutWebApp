@@ -23,6 +23,11 @@
     List<HG_Orders> ListOfTodayOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
     ListOfTodayOrder = ListOfTodayOrder.FindAll(x => x.Status == "3");//completed order
     ListOfTodayOrder = ListOfTodayOrder.FindAll(x => x.OrderApprovlSts == 0);
+    if (OrgId > 0 && UserInfo["UserType"] != null)
+    {
+        ListOfTodayOrder = ListOfTodayOrder.FindAll(x => x.OrgId == OrgId);
+    }
+
     if (ListOfTodayOrder.Count > 0)
     {
         SeatingList = new HG_Tables_or_Sheat().GetAll(OrgTypeint);
@@ -51,7 +56,7 @@
                 @foreach (var ObjOrder in ListOfTodayOrder)
                 {
                     string PaymentStatus = "";
-                    double TotalAmt = 0.00;
+                    double TotalAmt = ObjOrder.DeliveryCharge;
                     string Seating = "";
                     HG_Tables_or_Sheat ObjTableSheat = SeatingList.Find(x => x.Table_or_RowID == ObjOrder.Table_or_SheatId);
                     if (ObjTableSheat != null)
@@ -108,4 +113,24 @@
         </table>
     </div>
 </div>
+<script>
+    function Details(OID) {
+        //HG_OrderItem
+        //OID
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/HG_OrderItem/index?OID=" + OID,
+            success: function (data) {
+                makedpt("CurrOrder");
+                $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CurrOrder");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
 
+    }
+</script>

@@ -45,6 +45,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BeginCollectionItem, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\BeginCollectionItem.1.2.1.0\lib\net35\BeginCollectionItem.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -53,6 +62,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\Admin\Downloads\Paytm_Web_Sample_Kit_dotNet-master\.net_4.5\paytm.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -178,15 +188,24 @@
     <Content Include="Assets\Login Assets\vendor\select2\select2.min.js" />
     <Content Include="Assets\MakeOrder.css" />
     <Content Include="Assets\Mystyle.css" />
+    <Content Include="Assets\notify.css" />
+    <Content Include="Assets\notify.js" />
+    <Content Include="Assets\OrderNotify.js" />
+    <Content Include="Assets\prettify.css" />
+    <Content Include="Assets\prettify.js" />
+    <Content Include="Assets\printreceipt.css" />
+    <Content Include="Assets\PushNotication.js" />
     <Content Include="Assets\Select2\css\select2.min.css" />
     <Content Include="Assets\Select2\js\i18n\en.js" />
     <Content Include="Assets\Select2\js\select2.full.min.js" />
     <Content Include="Assets\Select2\js\select2.min.js" />
     <Content Include="Assets\shortcut.js" />
     <Content Include="Assets\Website.js" />
+    <Content Include="firebase-messaging-sw.js" />
     <Content Include="Global.asax" />
     <Content Include="Image\app_icon.png" />
     <Content Include="Image\login.png" />
+    <Content Include="Image\noticefict.mpeg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Assets\bootstrap-4.3.1-dist\css\bootstrap-grid.min.css.map" />
@@ -260,6 +279,8 @@
     <Content Include="Assets\Login Assets\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
     <Content Include="Assets\Login Assets\vendor\bootstrap\css\bootstrap.css.map" />
     <Content Include="Assets\Login Assets\vendor\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Image\sharp.ogg" />
+    <Content Include="PosHandler.ashx" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -284,7 +305,16 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Account\AccountControllers.cs" />
+    <Compile Include="Controllers\Account\BalanceStatementController.cs" />
+    <Compile Include="Controllers\Account\CommissionController.cs" />
+    <Compile Include="Controllers\Account\GroupController.cs" />
+    <Compile Include="Controllers\Account\LedgerController.cs" />
+    <Compile Include="Controllers\Account\SaleController.cs" />
     <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\CommonApiController.cs" />
+    <Compile Include="Controllers\FeedBackController.cs" />
     <Compile Include="Controllers\HG_CategoryController.cs" />
     <Compile Include="Controllers\HG_FloorSide_or_RowNameController.cs" />
     <Compile Include="Controllers\HG_Floor_or_ScreenMasterController.cs" />
@@ -294,29 +324,58 @@
     <Compile Include="Controllers\HG_OrganizationDetailsController.cs" />
     <Compile Include="Controllers\HG_Tables_or_SheatController.cs" />
     <Compile Include="Controllers\HG_UserTypesController.cs" />
+    <Compile Include="Controllers\Inventory\CategoryController.cs" />
+    <Compile Include="Controllers\Inventory\INTGSTBLController.cs" />
+    <Compile Include="Controllers\Inventory\UnitsController.cs" />
+    <Compile Include="Controllers\Account\JournalEntryController.cs" />
     <Compile Include="Controllers\OrderMenuController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
+    <Compile Include="Controllers\VideoController.cs" />
     <Compile Include="Controllers\vw_HG_UsersDetailsController.cs" />
     <Compile Include="Controllers\WebApiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Account\Accounts.cs" />
+    <Compile Include="Models\Account\BalanceStatement.cs" />
+    <Compile Include="Models\Account\Commission.cs" />
+    <Compile Include="Models\Account\Group.cs" />
+    <Compile Include="Models\Account\JournalEntry.cs" />
+    <Compile Include="Models\Account\Ledger.cs" />
+    <Compile Include="Models\Account\Sale.cs" />
     <Compile Include="Models\Common\ActiveMenu.cs" />
     <Compile Include="Models\Common\Cart.cs" />
     <Compile Include="Models\Common\City.cs" />
+    <Compile Include="Models\Common\District.cs" />
+    <Compile Include="Models\Common\FeedBackQue.cs" />
+    <Compile Include="Models\Common\FeedbkForm.cs" />
+    <Compile Include="Models\Common\FeedbkObj.cs" />
+    <Compile Include="Models\Common\LocalCart.cs" />
     <Compile Include="Models\Common\LoginFilter.cs" />
+    <Compile Include="Models\Common\OrdNotice.cs" />
     <Compile Include="Models\Common\OTPGeneretion.cs" />
+    <Compile Include="Models\Common\PushNotification.cs" />
     <Compile Include="Models\Common\QrCode.cs" />
+    <Compile Include="Models\Common\ReadExl.cs" />
     <Compile Include="Models\Common\Select2PagedResult.cs" />
     <Compile Include="Models\Common\Select2Result.cs" />
     <Compile Include="Models\Common\Settings.cs" />
     <Compile Include="Models\Common\State.cs" />
     <Compile Include="Models\Common\UsersMenu.cs" />
+    <Compile Include="Models\Common\Video.cs" />
+    <Compile Include="Models\Common\VideoCategory.cs" />
+    <Compile Include="Models\Common\VideoMark.cs" />
+    <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DBCon.cs" />
+    <Compile Include="Models\DynamicList\JoinCls.cs" />
     <Compile Include="Models\DynamicList\OrgType.cs" />
+    <Compile Include="Models\DynamicList\PymentPageOpen.cs" />
     <Compile Include="Models\DynamicList\Type.cs" />
+    <Compile Include="Models\Feedbk\Feedbk.cs" />
+    <Compile Include="Models\Feedbk\FeedbkItem.cs" />
+    <Compile Include="Models\Feedbk\FeedbkResponse.cs" />
     <Compile Include="Models\HG_Category.cs" />
     <Compile Include="Models\HG_FloorSide_or_RowName.cs" />
     <Compile Include="Models\HG_Floor_or_ScreenMaster.cs" />
@@ -327,12 +386,23 @@
     <Compile Include="Models\HG_Ticket.cs" />
     <Compile Include="Models\HG_UserTypes.cs" />
     <Compile Include="Models\HG_OrderItem.cs" />
+    <Compile Include="Models\Inventory\INTCategory.cs" />
+    <Compile Include="Models\Inventory\INTGSTBL.cs" />
+    <Compile Include="Models\Inventory\INTItems.cs" />
+    <Compile Include="Models\Inventory\INTUnits.cs" />
     <Compile Include="Models\JoinFoodDo.cs" />
+    <Compile Include="Models\LocalContacts.cs" />
+    <Compile Include="Models\OrdDiscntChrge.cs" />
     <Compile Include="Models\OrderMenu.cs" />
     <Compile Include="Models\OrderMenuCategory.cs" />
     <Compile Include="Models\OrdMenuCtgItems.cs" />
+    <Compile Include="Models\OrgSetting.cs" />
     <Compile Include="Models\PaytmResn.cs" />
+    <Compile Include="Models\PendingPrints.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
+    <Compile Include="PosHandler.ashx.cs">
+      <DependentUpon>PosHandler.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +471,49 @@
     <Content Include="Views\HG_OrderItem\Paytm.cshtml" />
     <Content Include="Views\HG_Orders\UndeliveredOrder.cshtml" />
     <Content Include="Views\Reports\ChefUnengaged.cshtml" />
+    <Content Include="Views\HG_OrganizationDetails\OrgSettingEdit.cshtml" />
+    <Content Include="Views\HG_Orders\ByCashAlert.cshtml" />
+    <Content Include="Views\Reports\AllChefOrders.cshtml" />
+    <Content Include="Views\Reports\PastOrderFilter.cshtml" />
+    <Content Include="Views\Reports\PastOrder.cshtml" />
+    <Content Include="Views\HG_OrganizationDetails\Upload.cshtml" />
+    <Content Include="Views\HG_Items\UplExl.cshtml" />
+    <Content Include="Views\City\CreateTeshsile.cshtml" />
+    <Content Include="Views\Reports\JoinFoodDoFilter.cshtml" />
+    <Content Include="Views\Reports\JoinFoodDo.cshtml" />
+    <Content Include="Views\City\IndexTehsil.cshtml" />
+    <Content Include="Views\HG_Items\ItemAvaiBility.cshtml" />
+    <Content Include="Views\Account\AcntHeading.cshtml" />
+    <Content Include="Views\Video\Index.cshtml" />
+    <Content Include="Views\Video\Popupwindow.cshtml" />
+    <Content Include="Views\FeedBack\Index.cshtml" />
+    <Content Include="Views\FeedBack\AddFeedBack.cshtml" />
+    <Content Include="Views\FeedBack\FeedbkShortReport.cshtml" />
+    <Content Include="Views\Video\viewstatuspopupwindow.cshtml" />
+    <Content Include="Views\FeedBack\FeedBkDetails.cshtml" />
+    <Content Include="Views\FeedBack\FeedBackReportFilter.cshtml" />
+    <Content Include="Views\vw_HG_UsersDetails\Inventry.cshtml" />
+    <Content Include="Views\INTGSTBL\Index.cshtml" />
+    <Content Include="Views\HG_Orders\PrintKot.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\Category\CreateEdit.cshtml" />
+    <Content Include="Views\Units\Index.cshtml" />
+    <Content Include="Views\Units\CreateEdit.cshtml" />
+    <Content Include="Views\Group\Index.cshtml" />
+    <Content Include="Views\Ledger\Index.cshtml" />
+    <Content Include="Views\Group\CreateEdit.cshtml" />
+    <Content Include="Views\Ledger\CreateEdit.cshtml" />
+    <Content Include="Views\JournalEntry\CreateEdit.cshtml" />
+    <Content Include="Views\HG_Orders\DiscntCharges.cshtml" />
+    <Content Include="Views\HG_Orders\LocalContactIndex.cshtml" />
+    <Content Include="Views\INTGSTBL\CreateEdit.cshtml" />
+    <Content Include="Views\Shared\INTSubItem.cshtml" />
+    <Content Include="Views\HG_Orders\TestPrinting.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
+    <Content Include="Views\Ledger\TheaterLedgerIndex.cshtml" />
+    <Content Include="Views\INTGSTBL\AddSubItem.cshtml" />
+    <Content Include="Views\BalanceStatement\Index.cshtml" />
+    <Content Include="Views\HG_Orders\EditOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -412,7 +525,9 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
-    <Folder Include="Views\HG_Order\" />
+    <Folder Include="Views\Commission\" />
+    <Folder Include="Views\CommonApi\" />
+    <Folder Include="Views\Sale\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -433,7 +548,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54159</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54159/</IISUrl>
+          <IISUrl>http://localhost:3055/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

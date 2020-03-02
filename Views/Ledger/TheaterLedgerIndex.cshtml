@@ -1,0 +1,130 @@
+﻿@model IEnumerable<HangOut.Models.Account.Ledger>
+@using HangOut.Models.Account;
+@{
+
+    Layout = null;
+}
+
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="text-center">Theater Ledger</h3>
+    </div>
+    <div class="row pt-5">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Ledger</button>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table" id="TBLID" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.PGID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Type)
+                        </th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="Tbody">
+                @foreach (Ledger Obj in Model)
+                {
+                    <tr id="@Obj.ID">
+                        <td>@Obj.ID</td>
+                        <td>@Obj.Name</td>
+
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
+                            <button class="btn btn-success btn-sm " onclick="Get(@Obj.OrgId)"> Balance Statement</button>
+                           <button class="btn btn-info btn-sm " onclick="GetACDetails(@Obj.OrgId)">Merge & Send to Account</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+    var AddLedger = false;
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddLedger = false;
+        } else {
+            AddLedger = true;
+        }
+        $.ajax({
+            type: 'GET',
+            url: "/Ledger/CreateEdit?ID=" + ID,
+            success: function (data) {
+                makedpt("Ledger");
+                $("#Ledger > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("Ledger");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function Get(OrgId) {
+                
+            $.ajax({
+                type: 'GET',
+                url: "/BalanceStatement/Index?OrgId=" + OrgId,
+                success: function (data) {
+                    makedpt("BalanceStatement");
+                    $("#BalanceStatement > .modal-dialog > .modal-content > .modal-body").html(data);
+                    showdpt("BalanceStatement");
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+
+    }
+    function GetACDetails(OrgId) {
+        $.ajax({
+            type: 'GET',
+            url: "/BalanceStatement/GetAllCommission?OrgId=" + OrgId,
+        });
+    }
+    function JsonSuccess(Jobj) {
+
+        var Jitmobj = Jobj.data;
+        console.log(Jitmobj);
+        hidedpt("Ledger");
+        $('#waiting').hide();
+        var HtmlStr = "<tr id='" + Jitmobj.ID + "'>";
+        HtmlStr += '<td>' + Jitmobj.ID + '</td>';
+        HtmlStr += '<td>' + Jitmobj.Name + '</td>';
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ID + ')"> Edit</button>';
+        HtmlStr += '<button class="btn btn-success btn-sm " onclick="BalanceStatement(' + Jitmobj.OrgId
+        HtmlStr += ')"> Balance Statement</button></td ></tr > ';
+        if (AddLedger) {
+            $("#Tbody").append(HtmlStr);
+        }
+        else {
+            $('#' + Jitmobj.ID).remove();
+            $("#Tbody").append(HtmlStr);
+        }
+    }
+
+</script>

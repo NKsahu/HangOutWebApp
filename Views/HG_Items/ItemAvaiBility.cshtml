@@ -1,0 +1,103 @@
+﻿@model IEnumerable<HangOut.Models.HG_Items>
+@{
+    Layout = null;
+    var TotalItem = Model.Count();
+    var AvailableItem = Model.ToList().FindAll(x => x.ItemAvaibility == 0).Count;
+    var unavailableItem = TotalItem - AvailableItem;
+}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-4 alert alert-primary" role="alert">
+                Total Item :&nbsp; @TotalItem
+            </div>
+            <div class="col-md-4 alert alert-success" role="alert">
+                On Item :&nbsp;<span id="onItem">@AvailableItem </span>
+            </div>
+            <div class="col-md-4 alert alert-danger" role="alert">
+                Off Item :&nbsp;<span id="offItem">@unavailableItem</span>
+            </div>
+        </div>
+        
+    </div>
+
+<div class="card-body">
+    <table class="table  w-100" id="TBLID">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Items)
+                </th>
+                <th>
+                    @Html.DisplayName("Last Modified")
+                </th>
+                <th>
+                    @Html.DisplayName("Item Avaibility")
+                </th>
+            </tr>
+        </thead>
+        <tbody id="Tbody">
+            @foreach (var item in Model)
+            {
+              
+                    string title = "Click To Item Unavailable";
+                    string ChekSts = "checked";
+                    if (item.ItemAvaibility == 1)
+                    {
+                        title = "Click To Item available";
+                        ChekSts = "";
+                    }
+               
+            <tr>
+                <td>
+                    @item.Items
+                </td>
+                <td>
+                    @item.UpdateDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    <label class="switch" data-toggle="tooltip" title="@title">
+                        <input type="checkbox" @ChekSts id="@item.ItemID" onchange="ChangeItmAvble(this)">
+                        <span class="slider  round"></span>
+                    </label>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div>
+<script>
+    function ChangeItmAvble(event) {
+            //  var Status = $(event).val();
+        var ItemId = $(event).attr('id');
+            var checkStst = false;
+            if (event.checked) {
+                checkStst = true;
+                $(event).attr('checked', true);
+                var Available =parseInt($("#onItem").text());
+                var unavilable = parseInt($("#offItem").text());
+                $("#onItem").text(Available + 1);
+                $("#offItem").text(unavilable - 1);
+                $("#offItemHome").text(unavilable - 1).change();// navbar offitem count change
+            }
+            else {
+                $(event).prop('checked', false);
+                var Available = parseInt($("#onItem").text());
+                var unavilable = parseInt($("#offItem").text());
+                $("#onItem").text(Available - 1);
+                $("#offItem").text(unavilable + 1);
+                $("#offItemHome").text(unavilable + 1).change();// navbar offitem count change
+            }
+            $.ajax({
+                url: "/CommonApi/ChangeItemAvability?ItemId="+ItemId+"&Status=" + checkStst,
+                type: "GET",
+                success: function (data) {
+                    
+                },
+                error: function (Xr, Status, ErrorMsg) {
+
+                }
+            });
+    }
+</script>

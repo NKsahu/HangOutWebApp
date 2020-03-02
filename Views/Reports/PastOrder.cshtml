@@ -1,0 +1,109 @@
+﻿@using HangOut.Models;
+@using HangOut.Models.DynamicList;
+@{
+    Layout = null;
+    double TotalAmt = 0.00;
+    int SN = 0;
+    var UserInfo = Request.Cookies["UserInfo"];
+    var OrgId = int.Parse(UserInfo["OrgId"]);
+    List<HG_Orders> TodayOrderList = new List<HG_Orders>();
+    if (Request.QueryString["Fdate"]!=null&& Request.QueryString["Tdate"] != null)
+    {
+        DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+        TodayOrderList = new HG_Orders().GetListByGetDate(FromDate, Todate);
+    }
+    if (OrgId > 0  &&UserInfo["UserType"]!=null)
+    {
+        TodayOrderList = TodayOrderList.FindAll(x => x.OrgId == OrgId);
+    }
+    if (Request.QueryString["PMode"] != null && Request.QueryString["PMode"]!="-1")
+    {
+        int PaymentMode = int.Parse(Request.QueryString["PMode"]);
+        TodayOrderList = TodayOrderList.FindAll(x => x.PaymentStatus == PaymentMode);
+    }
+    if (Request.QueryString["OrdSts"] != null&& Request.QueryString["OrdSts"]!="0")
+    {
+        TodayOrderList = TodayOrderList.FindAll(x => x.Status == Request.QueryString["OrdSts"]);
+    }
+    if(Request.QueryString["PlacedBy"]!=null&& Request.QueryString["PlacedBy"] != "0")
+    {
+        // var UserInfo = Request.Cookies["UserInfo"];
+        // int OrgId = int.Parse(UserInfo["OrgId"]);
+        HashSet<int> hashUser = new HashSet<int>();
+        List<vw_HG_UsersDetails> userlist = new vw_HG_UsersDetails().GetAll();
+        if (Request.QueryString["PlacedBy"] == "ONR" || Request.QueryString["PlacedBy"]=="CA")
+        {
+            userlist = userlist.FindAll(x => x.UserType == Request.QueryString["PlacedBy"]);
+            hashUser = new HashSet<int>(userlist.Select(x => x.UserCode).ToArray());
+            TodayOrderList = TodayOrderList.FindAll(x => hashUser.Contains((int)x.CID));
+        }
+        if (Request.QueryString["PlacedBy"] == "CUST")
+        {
+            hashUser = new HashSet<int>(userlist.Select(x => x.UserCode).ToArray());
+            TodayOrderList = TodayOrderList.FindAll(x => !hashUser.Contains((int)x.CID));
+        }
+    }
+}
+
+
+
+<table class="table table-hover" id="TBLID" style="width:100%">
+    <thead>
+        <tr>
+            <td>S.N</td>
+            <td>Order No</td>
+            <td>Date</td>
+            <td> Amt</td>
+            <td>Status</td>
+            <td>Payment Mode</td>
+            <td>Details</td>
+            <td>Print</td>
+            <td>Edit Order</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var Ord in TodayOrderList)
+        {
+            SN += 1;
+            List<HG_OrderItem> ListIt = new HG_OrderItem().GetAll(Ord.OID);
+            ListIt = ListIt.FindAll(x => x.Status != 4);
+            double Amt = Ord.DeliveryCharge;
+            for(int i=0;i< ListIt.Count; i++)
+            {
+                Amt += ListIt[i].Price * ListIt[i].Count;
+            }
+            TotalAmt += Amt;
+
+        <tr>
+            <td>@SN</td>
+            <td>@Ord.OID</td>
+            <td>@Ord.Create_Date.ToString("dd/MM/yy hh:mm")</td>
+            <td>@Amt.ToString("0.00")</td>
+            <td>@OrgType.OrderStatus(Ord.Status)</td>
+            <td>@OrgType.PaymentMode(Ord.PaymentStatus)</td>
+            <td>
+                <button class="btn btn-sm btn-success" onclick="Details('@Ord.OID');"><i class="fas fa-eye"></i></button>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-outline-info" onclick="PrintInvoice('@Ord.OID');">Invoice</button>
+            </td>
+            <td>
+                <button class="btn btn-sm btn btn-danger" onclick="EditOrder('@Ord.OID');">Edit Order</button>
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>TOTAL</td>
+            <td></td>
+            <td></td>
+            <td>@TotalAmt.ToString("0.00")</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>

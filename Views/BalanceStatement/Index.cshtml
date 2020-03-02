@@ -1,0 +1,52 @@
+﻿@model IEnumerable<HangOut.Models.Account.BalanceStatement>
+@using HangOut.Models.Account;
+@{
+
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="text-center">Balance Statement</h3>
+    </div>
+  
+    <div class="card-body">
+        <table class="table" id="TBLID" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Narration)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CRAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Balance)
+                    </th>
+                   
+                </tr>
+            </thead>
+            <tbody id="Tbody">
+                @foreach (BalanceStatement Obj in Model)
+                {
+                <tr id="@Obj.BID">
+                    <td>@Obj.Date</td>
+                    <td>@Obj.Narration</td>
+                    <td>@Obj.Amount</td>
+                    <td>@Obj.CRAmount</td>
+                    <td>@Obj.Balance</td>
+
+                </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

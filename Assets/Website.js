@@ -9,6 +9,7 @@ window.addEventListener("submit", function (e) {
             var xhr = new XMLHttpRequest();
             xhr.open(form.method, form.action);
             xhr.onreadystatechange = function () {
+                console.log("AAYA fsdf");
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     console.log("AAYA");
                     var JObj = "";
@@ -21,9 +22,7 @@ window.addEventListener("submit", function (e) {
 
                     if (JObj.msg != undefined && JObj.msg != "") {
                         Onfail(JObj.msg);
-                        //$("#waiting").hide();
-                        //$("#WarningModel .modal-body").html(JObj.msg);
-                        //$("#WarningModel").modal();
+                        
                     }
                     else if (JObj.url != undefined) {
                         window.location.href = JObj.url;

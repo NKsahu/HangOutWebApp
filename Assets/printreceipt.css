@@ -1,0 +1,7 @@
+﻿*, html, body {
+    margin: 0;
+    padding: 0;
+}
+ .TblBorder {
+    border: 1px dotted black
+}

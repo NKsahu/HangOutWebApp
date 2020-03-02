@@ -1,0 +1,141 @@
+﻿@model IEnumerable<HangOut.Models.Account.Ledger>
+@using HangOut.Models.Account;
+@{
+
+    Layout = null;
+}
+
+<div class="card">
+
+    <div class="card-header">
+        <h3 class="text-center">Ledger</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="/Group/Index" style="background-color:white" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control"> Group</a>
+        </div>
+        <div class="col-md-6">
+            <a href="/Ledger/Index"  data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">Ledger</a>
+        </div>
+
+    </div>
+    <div class="row pt-5">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Ledger</button>
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table" id="TBLID" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.PGID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Type)
+                        </th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="Tbody">
+                @foreach (Ledger Obj in Model)
+                {
+                    <tr id="@Obj.ID">
+                        <td>@Obj.ID</td>
+                        <td>@Obj.Name</td>
+                       
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
+                            @*<button class="btn btn-danger btn-sm " onclick="Delete(@Obj.ID)"> Delete</button>*@
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+    var AddLedger = false;
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/Ledger/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
+    }
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddLedger = false;
+        } else {
+            AddLedger = true;
+        }
+        $.ajax({
+            type: 'GET',
+            url: "/Ledger/CreateEdit?ID=" + ID,
+            success: function (data) {
+                makedpt("Ledger");
+                $("#Ledger > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("Ledger");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function JsonSuccess(Jobj) {
+
+        var Jitmobj = Jobj.data;
+        console.log(Jitmobj);
+        hidedpt("Ledger");
+        $('#waiting').hide();
+        var HtmlStr = "<tr id='" + Jitmobj.ID + "'>";
+        HtmlStr += '<td>' + Jitmobj.ID + '</td>';
+        HtmlStr += '<td>' + Jitmobj.Name + '</td>';
+        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ID + ')"> Edit</button>';
+        //HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ID
+        //HtmlStr += ')"> Delete</button></td ></tr > ';
+        if (AddLedger) {
+            $("#Tbody").append(HtmlStr);
+        }
+        else {
+            $('#' + Jitmobj.ID).remove();
+            $("#Tbody").append(HtmlStr);
+        }
+    }
+
+</script>

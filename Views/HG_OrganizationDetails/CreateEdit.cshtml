@@ -4,8 +4,12 @@
     Layout = null;
 }
 @using HangOut.Models.Common
-@{List<City> listcity = new List<City>(); }
-@{List<State> liststate = new List<State>();}
+@{List<City> listcity = new List<City>();
+    List<State> liststate = new List<State>();
+    List<District> ListTehsil = new District().GetAllByStsCity(0,0);
+    var UserInfo = Request.Cookies["UserInfo"];
+    var UserType = UserInfo["UserType"];
+    }
 <div class="card">
     <div class="card-header">
         <h4 style="text-align:center;color:#000000"><b>ORGONIZATION</b></h4>
@@ -15,7 +19,6 @@
 
         @using (Ajax.BeginForm("CreateEdit", "HG_OrganizationDetails", new { OrgID = Model.OrgID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-
             @Html.HiddenFor(model => model.OrgID)
             @Html.HiddenFor(model => model.DOE);
             @Html.HiddenFor(model => model.EntryDate);
@@ -28,136 +31,125 @@
             @Html.HiddenFor(model => model.AcType)
             @Html.HiddenFor(model => model.PrintRemark)
             @Html.HiddenFor(model => model.CustomerOrdering)
-            <div class="row">
-
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.OrgTypes, htmlAttributes: new { @class = "control-label  " })
-                    @Html.DropDownListFor(model => model.OrgTypes, new SelectList(OrgType.List, "id", "Name"), new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.OrgTypes, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="col-sm-4">
-                    @{
-                        List<SelectListItem> sl = new List<SelectListItem>();
-                        SelectListItem slobj = new SelectListItem();
-                        slobj.Value = "1";
-                        slobj.Text = "Prepaid";
-                        SelectListItem slobj2 = new SelectListItem();
-                        slobj2.Value = "2";
-                        slobj2.Text = "PostPaid";
-                        sl.Add(slobj);
-                        sl.Add(slobj2);
-
-                    }
-                    @Html.LabelFor(model => model.PaymentType, htmlAttributes: new { @class = "control-label  " })
-                    @Html.DropDownListFor(model => model.PaymentType, sl, new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.PaymentType, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.HeadName, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.HeadName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.HeadName, "", new { @class = "text-danger" })
-
-                </div>
-
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-
-                </div>
-
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId", "Name", Model.State), "Select State", new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.DropDownListFor(model => model.City, new SelectList(listcity, "CityId", "Name", Model.City), new { @class = "form-control", val = Model.City })
-                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.PinCode, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.PinCode, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.PinCode, "", new { @class = "text-danger" })
-
-                </div>
-
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
-
-                </div>
-
-
-
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.PANNO, htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.PANNO, new { htmlAttributes = new { @class = "form-control", } })
-                    @Html.ValidationMessageFor(model => model.PANNO, "", new { @class = "text-danger" })
-
-                </div>
-
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
-
-                </div>
-
-                <div class="col-sm-12">
-                    @Html.LabelFor(model => model.ACNO, htmlAttributes: new { @class = "control-label  " })
-                    @Html.EditorFor(model => model.ACNO, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ACNO, "", new { @class = "text-danger" })
-
-                </div>
-                <div class="col-sm-4">
-                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-                    <div class="checkbox">
-                        @Html.EditorFor(model => model.Status)
-                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="col-sm-1">
-                    @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="Save" class="btn btn-success" />
-
-                </div>
+            @Html.HiddenFor(model => model.InvoiceTitle)
+            @Html.HiddenFor(model => model.invoicePhone)
+            @Html.HiddenFor(model=>model.Status)
+            @Html.HiddenFor(model=>model.InvoicePrintting)
+            @Html.HiddenFor(model=>model.NuOfCopy)
+            @Html.HiddenFor(model=>model.OrderDisplay)
+            @Html.HiddenFor(model=>model.Copy)
+            @Html.HiddenFor(model=>model.PrinttingType)
+        <div class="row">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.OrgTypes, htmlAttributes: new { @class = "control-label  " })
+                @Html.DropDownListFor(model => model.OrgTypes, new SelectList(OrgType.List, "id", "Name"), new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.OrgTypes, "", new { @class = "text-danger" })
             </div>
+
+            <div class="col-md-3">
+                @{
+                    List<SelectListItem> sl = new List<SelectListItem>();
+                    SelectListItem slobj = new SelectListItem();
+                    slobj.Value = "1";
+                    slobj.Text = "Prepaid";
+                    SelectListItem slobj2 = new SelectListItem();
+                    slobj2.Value = "2";
+                    slobj2.Text = "PostPaid";
+                    sl.Add(slobj);
+                    sl.Add(slobj2);
+                }
+                @Html.LabelFor(model => model.PaymentType, htmlAttributes: new { @class = "control-label  " })
+                @Html.DropDownListFor(model => model.PaymentType, sl, new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.PaymentType, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.HeadName, htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.HeadName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.HeadName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label  " })
+                @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId", "Name", Model.State), "Select State", new { @class = "form-control", required = "required" })
+                @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("District/City")
+                @Html.DropDownListFor(model => model.City, new SelectList(listcity, "CityId", "Name", Model.City), new { @class = "form-control", val = Model.City, required = "required" })
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+            @if (UserType != null && UserType == "SA")
+            {
+                <div class="col-md-1">
+                    <button type="button" class="btn  btn-success btn-md" onclick="CreateCity('0')">Add </button>
+                </div>
+            }
+
+            <div class="col-md-3">
+                @Html.Label("TALUKA/TEHSIL")
+                @Html.DropDownListFor(model => model.DistrictId, new SelectList(ListTehsil, "Id", "Name", Model.DistrictId), "Select District", new { @class = "form-control", val = Model.DistrictId, required = "required" })
+                @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
+            </div>
+            @if (UserType != null && UserType == "SA")
+            {
+                <div class="col-md-1">
+                    <button type="button" class="btn  btn-success btn-md" onclick="CreateTehsil('0')">Add </button>
+                </div>
+            }
+
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.PinCode, htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.PinCode, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.PinCode, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.PANNO, htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.PANNO, new { htmlAttributes = new { @class = "form-control", } })
+                @Html.ValidationMessageFor(model => model.PANNO, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md6">
+                @Html.LabelFor(model => model.ACNO, htmlAttributes: new { @class = "control-label  " })
+                @Html.EditorFor(model => model.ACNO, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ACNO, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-1">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
         }
     </div>
 </div>
 
 <script>
-    $(document).ready(function () {
-        GetDrowpDownCity();
+    
+    GetDrowpDownCity();
         $("#State").change(function () {
-
             GetDrowpDownCity();
-
         });
-      
         function GetDrowpDownCity() {
             var StateId = $("#State").val();
             var CityValue = $("#City").attr("val");
@@ -168,6 +160,7 @@
                 type: "POST",
                 success: function (data) {
                     var JsonArray = JSON.parse(data);
+                    $("#City").html('');
                     $("#City").val('0');
                     $('<option>',{value: "0",text: "Select"}).html("Select").appendTo("#City");
                     if (JsonArray.length > 0) {
@@ -179,9 +172,13 @@
                                     
                                 }).html(Obj.Name).appendTo("#City");
                         });
-                        $("#City").val(CityValue);
+                        $("#City").val(CityValue).change();
                     }
                     $("#waiting").hide();
+                    //$("#City").val('1');
+                    if ($("#City").val() == undefined || $("#City").val() == null || $("#City").val() == "0" || CityValue=="") {
+                        $('#City>option:eq(0)').attr('selected', true);
+                    }
                 },
                 error: function (Xr, Status, ErrorMsg) {
                     $("#City").val('0');
@@ -190,10 +187,100 @@
                 }
             });
         }
-        
+    var AddTr = false;
+    function CreateCity(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/City/CreateEdit?CityId=" + ID + "",
+            success: function (data) {
+                makedpt("CreateCity");
+                $("#CreateCity > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateCity");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function JsonSuccess(Jobj) {
+        hidedpt("CreateCity");
+        $('#waiting').hide();
+        GetDrowpDownCity();
+        LoadTehSil();
+
+    }
+    $("#City").change(function () {
+        if ($("#City").val() != "" && $("#City").val() != "0") {
+            if ($("#State").val() != "" && $("#City").val() != "0") {
+                LoadTehSil();
+            }
+        }
     });
-   
+    function CreateTehsil(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/City/CreateTeshsile?ID=" + ID + "",
+            success: function (data) {
+                makedpt("CreateCity");
+                $("#CreateCity > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateCity");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function LoadTehSil() {
+        $("#waiting").show();
+        var TehsilId = $("#DistrictId").attr("val");
+        var City = $("#City").val();
+        var State = $("#State").val();
+        $.ajax({
+            url: "/WebApi/TehsilList?StateId="+State+"&CityId="+City,
+            type: "POST",
+            success: function (data) {
+                var JsonArray = JSON.parse(data);
+                $("#DistrictId").html('');
+                $("#DistrictId").val('0');
+                $('<option>', { value: "0", text: "Select" }).html("Select").appendTo("#DistrictId");
+                if (JsonArray.length > 0) {
+                    $.each(JsonArray, function (i, Obj) {      // bind the dropdown list using json result              
+                        $('<option>',
+                            {
+                                value: Obj.Id,
+                                text: Obj.Name
 
-
-
+                            }).html(Obj.Name).appendTo("#DistrictId");
+                    });
+                    
+                }
+                if (TehsilId != undefined && TehsilId != null && TehsilId != "" && TehsilId != "0") {
+                    $("#DistrictId").val(TehsilId);
+                }
+                $("#waiting").hide();
+                //$("#City").val('1');
+                
+            },
+            error: function (Xr, Status, ErrorMsg) {
+                $("#DistrictId").val('0');
+                $('<option>', { value: "0", text: "Select" }).html("Select").appendTo("#DistrictId");
+                $("#waiting").hide();
+            }
+        });
+    }
+    setTimeout(function () { LoadTehSil(); }, 100); 
 </script>

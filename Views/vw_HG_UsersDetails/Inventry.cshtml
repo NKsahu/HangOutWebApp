@@ -1,0 +1,154 @@
+﻿@using HangOut.Models.Common;
+<!-- header -->
+@if (Request.Cookies["UserInfo"] == null)
+{
+    Response.Redirect("~/vw_HG_UsersDetails/vw_HG_UsersDetails");
+}
+<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #33bb6f, #30bb66, #30bb5b, #31bb50, #33bb44);z-index:1;">
+    <div class="col-md-8 col-12 text-md-left text-center mt-0">
+        <a class="text-white navbar-brand pl-3" style="font-size:15px;"> Inventory </a>
+        <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
+    </div>
+
+    <div class="col-md-4 col-12  text-md-right text-center p-md-2 p-2 border-top  mt-0">
+        <div class="btn-group mt-0">
+            <a href="/vw_HG_UsersDetails/Account" class="text-white m-1"><i class="fas fa-sync-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
+            <a href="/vw_HG_UsersDetails/Admin" class="text-white m-1"><i class="fas fa-laptop"></i></a>
+            <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
+            <div class="dropdown-menu dropdown-menu-right text-center pb-0">
+                <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
+                <button id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
+
+                <style>
+                    #logoutbtn > i:hover {
+                        border: none !important;
+                        background: none !important;
+                    }
+                </style>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+<div class="row">
+    <!-- admin side menus -->
+    <div id="admin-side-menu" class="col-md-2 col-12 ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
+        <ul id="myaccordion" class="list-unstyled mb-0">
+            @{
+
+                var UserType = Request.Cookies["UserInfo"]["UserType"];
+                List<UsersMenu> List = new UsersMenu().GetAll();
+                List<UsersMenu> AccountMenuList = List.FindAll(x => x.Section == "INVENTORY" && x.ParentMenuId == 0);
+                AccountMenuList = AccountMenuList.OrderBy(x => x.MenuOrderNo).ToList();
+                List<UsersMenu> AccountSubMenuList = List.FindAll(x => x.Section == "INVENTORY" && x.ParentMenuId != 0);
+                foreach (var ObjMenuLi in AccountMenuList)
+                {
+                    if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink != "")
+                    {
+                        <li class="nav-item" data-parent="#myaccordion">
+                            <a class="nav-link" href="@ObjMenuLi.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@ObjMenuLi.Menu_Icon"></i>@ObjMenuLi.MenuDisplayName</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link have-sub-menu collapsed" href="#" data-target="#ID@(ObjMenuLi.Menu_Id)" data-toggle="collapse">
+                                <i class="fa fa-desktop-alt"></i>@ObjMenuLi.MenuDisplayName<span class="fa fa-plus"></span>
+                            </a>
+                            <ul id="ID@(ObjMenuLi.Menu_Id)" class="collapse list-unstyled" data-parent="#myaccordion">
+                                @{
+                                    List<UsersMenu> ChileMenus = AccountSubMenuList.FindAll(x => x.ParentMenuId == ObjMenuLi.Menu_Id);
+                                    ChileMenus = ChileMenus.OrderBy(x => x.MenuOrderNo).ToList();
+                                    foreach (var SubMenu in ChileMenus)
+                                    {
+
+
+                                        <li class="nav-item" data-parent="#myaccordion">
+                                            <a class="nav-link" href="@SubMenu.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@SubMenu.Menu_Icon"></i>@SubMenu.MenuDisplayName</a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+
+                    }
+
+                }
+
+            }
+
+        </ul>
+    </div>
+    <!-- End admin side menus -->
+    <div class="col-md-10 col-12 mt-0 p-0" id="DynamicData">
+       
+    </div>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        // loading time set size
+        if ($(window).width() <= 700) {
+            $("#admin-side-menu").addClass("d-none");
+            $("#DynamicData").removeAttr("class");
+            $("#DynamicData").addClass("col-md-12 col-12 mt-0 p-0");
+        }
+        else {
+            $("#admin-side-menu").removeClass("d-none");
+            $("#DynamicData").removeAttr("class");
+            $("#DynamicData").addClass("col-md-10 col-12 mt-0 p-0");
+        }
+
+
+        // onclick admin toggle menu btn
+        $("#toggle-admin-menu").click(function () {
+            if ($("#admin-side-menu").hasClass("d-none")) {
+                    $("#admin-side-menu").removeClass("d-none");
+                    $("#DynamicData").removeAttr("class");
+                    $("#DynamicData").addClass("col-md-10 mt-0 p-0");
+                }
+                else {
+                    $("#admin-side-menu").addClass("d-none");
+                    $("#DynamicData").removeAttr("class");
+                    $("#DynamicData").addClass("col-md-12 mt-0 p-0");
+                }
+            });
+
+        // accordian toggle
+            $("#admin-side-menu > ul > li > a").click(function () {
+                $("#admin-side-menu > ul > li").removeClass("activeted");
+                $(this).parent("li").addClass("activeted");
+
+                if ($(this).hasClass("have-sub-menu")) {
+                        $("#admin-side-menu > ul > li").find("span").removeClass("fa-minus");
+                        $("#admin-side-menu > ul > li").find("span").addClass("fa-plus");
+                    if ($(this).hasClass("collapsed")) {
+                        $(this).find("span").removeClass("fa-plus");
+                        $(this).find("span").addClass("fa-minus");
+                    }
+                }
+        });
+
+        $("#logoutbtn").click(function () {
+            $.ajax({
+                url: "/vw_HG_UsersDetails/LogOut",
+                type: "GET",
+                success: function (data) {
+                    window.location = "/vw_HG_UsersDetails/vw_HG_UsersDetails";
+                },
+                error: function (Xr, Status, ErrorMsg) {
+                    window.location = "/vw_HG_UsersDetails/vw_HG_UsersDetails";
+
+                }
+            });
+
+        });
+
+    });
+</script>
+
+

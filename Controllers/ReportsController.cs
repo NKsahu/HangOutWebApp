@@ -14,5 +14,28 @@ namespace HangOut.Controllers
 
             return View();
         }
+        public ActionResult AllChefOrders()
+        {
+
+            return View();
+        }
+        public ActionResult PastOrderFilter()
+        {
+            return View();
+        }
+        public ActionResult PastOrder()
+        {
+
+            return View();
+        }
+        public ActionResult JoinFoodDoFilter()
+        {
+           return View();
+        }
+        public ActionResult JoinFoodDo()
+        {
+            return View();
+        }
+        
     }
 }

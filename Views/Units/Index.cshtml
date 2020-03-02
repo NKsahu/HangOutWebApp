@@ -1,0 +1,146 @@
+﻿@model IEnumerable<HangOut.Models.Inventory.INTUnits>
+@using HangOut.Models.Inventory;
+@{
+    Layout = null;
+    var Subunitlist = INTUnits.GetAll();
+    Subunitlist = Subunitlist.FindAll(x => x.ParentId > 0);
+}
+<div class="card">
+    <div class="card-header">
+        <h5 class="text-center"><b>Units</b></h5>
+    </div>
+    <button onclick="CreateEdit('0','0')" class="btn btn-info form-control">Add Unit</button>
+    <div class="card-body">
+        <table class="table table-bordered table-hover w-100" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UnitID)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @foreach (INTUnits item in Model)
+                {
+                    //parent tr
+                    <tr id="@item.UnitID" class="click">
+                        <td >
+                            @Html.DisplayFor(modelItem => item.UnitID)
+                        </td>
+                        <td>
+                            <div class="row">
+                                <button id="Btn@(item.UnitID)" type="button"  class="btn btn-info text-center form-control header" data-toggle="collapse" data-target="#Clp@(item.UnitID)">@item.Name  &nbsp;<i class="fas fa-arrow-down" style="font-size:20px"></i></button>
+                            </div>
+                            <div  class="row collapse"id="Clp@(item.UnitID)">
+                                <table style="width:100%" >
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Unit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            var lisunits = Subunitlist.FindAll(x => x.ParentId == item.UnitID);
+                                         }
+                                        @foreach (var Obj in lisunits)
+                                        {
+                                                <tr >
+                                                    <td>
+                                                        @Obj.Name
+                                                    </td>
+                                                    <td>
+                                                       @Obj.Unit 
+                                                    </td>
+                                                </tr>
+                                             
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <td>
+                            <button onclick="CreateEdit('0',@item.UnitID)" id="btnadd" class="btn btn-info form-control">Add Conversion</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.UnitID,'0')"> Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    var AddCategory = false;
+    function CreateEdit(ID, ParentId) {
+        if (ID != "0") {
+            AddCategory = false;
+        } else {
+            AddCategory = true;
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: "/Units/CreateEdit?ID=" + ID + "&ParentId=" + ParentId,
+            success: function (data) {
+                makedpt("INTUnits");
+                $("#INTUnits > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("INTUnits");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+
+    function reload(url) {
+        $.ajax({
+            type: 'GET',
+            url: url,
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+
+
+    function JsonSuccess(Jobj) {
+
+        var Jitmobj = Jobj.data;
+        console.log("ggg");
+        hidedpt("INTUnits");
+        reload('/Units/Index');
+        $('#waiting').hide();
+        //var HtmlStr = "<tr id='" + Jitmobj.UnitID + "'>";
+        //HtmlStr += '<td>' + Jitmobj.UnitID + '</td>';
+        //HtmlStr += '<td><div class="row">';
+        //HtmlStr += '<button id="Btn' + Jitmobj.UnitID + '" type="button"  class="btn btn-info text-center form-control header" data-toggle="collapse" data-target="#Clp' + Jitmobj.UnitID+'">'+Jitmobj.Name+'</button></div></td>';
+        //HtmlStr += '<td><button  onclick="CreateEdit(' + Jitmobj.UnitID + ')" class="btn btn-info form-control">Add Unit</button>';
+        //HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.UnitID + ')"> Edit</button>';
+        //HtmlStr += ' </td ></tr> ';
+        //if (AddCategory) {
+        //    $("#tbody").append(HtmlStr);
+        //    $("#btnadd" + Jitmobj.UnitID).text(Jitmobj.Name);
+
+        //}
+        //else {
+        //    $("#Btn" + Jitmobj.UnitID).text(Jitmobj.Name);
+            
+        //    //$('#' + Jitmobj.UnitID).remove();
+        //    //$("#tbody").append(HtmlStr);
+        //}
+    }
+
+</script>

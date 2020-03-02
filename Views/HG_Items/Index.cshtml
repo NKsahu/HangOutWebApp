@@ -1,21 +1,40 @@
 ﻿@model IEnumerable<HangOut.Models.HG_Items>
-   @using HangOut.Models
+@using HangOut.Models
+@using HangOut.Models.DynamicList
 @{
     Layout = null;
 }
 @{ List<HG_Category> listitems = new HG_Category().GetAll();}
-
 <div class="card">
     <div class="card-header">
         <h3 style="text-align:center"><b>ITEM</b> </h3>
         <hr />
+        <button style="float:left;" onclick="BULKEXCELUPL()" class="btn btn-lg btn-info ">BULK UPLOAD</button>
+        <button style="float:right !important;" onclick="DownloadExl()" class="btn btn-lg btn-info ">DOWNLOAD EXCEL</button>
     </div>
-    <a href="/HG_Items/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+    <div class="row">
+        <div class="col-md-4">
+            <a  href="/HG_Items/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"  class="btn btn-default blackBackground blackTest form-control">ITEM</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/HG_Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">CATEGORY</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/HG_Category/AddonsIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"  class="btn btn-default blackTest form-control">ADD ON</a>
+        </div>
+
+    </div>
     <div class="card-body">
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
         <table class="table table-hover w-100" id="TBLID">
             <thead>
                 <tr>
-                   
                     <th>
                         @Html.DisplayName("Category Name")
                     </th>
@@ -23,41 +42,178 @@
                         @Html.DisplayNameFor(model => model.Items)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Price)
+                        @Html.DisplayNameFor(model => model.ItemMode)
                     </th>
-
                     <th>
-                        @Html.DisplayNameFor(model => model.Status)
+                        @Html.DisplayName("Discription")
                     </th>
-                    <th></th>
+                    <th>
+                        @Html.DisplayName("Cost Price")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Tax %")
+                    </th>
+                    <th class="noExport"> </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="Tbody">
                 @foreach (var item in Model)
                 {
-                <tr>
-                   
-                   
-                    <td>
-                        @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
-                        @objcategory.Category
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Items)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        <a href=" /HG_Items/CreateEdit?ID=@item.ItemID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                    </td>
-                </tr>
+                    <tr id="@item.ItemID">
+                        <td>
+                            @{HG_Category objcategory = listitems.Find(x => x.CategoryID == item.CategoryID); }
+                            @objcategory.Category
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Items)
+                        </td>
+                        <td>
+                            @OrgType.ItemMode(item.ItemMode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemDiscription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CostPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tax)
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.ItemID)"> Edit</button>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.ItemID)"> Delete</button>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_Items/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
+
+    }
+    var AddTr = false;
+    function JsonSuccess(Jobj) {
+        if (Jobj.data != undefined && Jobj.data == '1') {
+            $('#waiting').hide();
+            alert('Uploaded');
+        }
+        else {
+            hidedpt("CreateItem");
+            $('#waiting').hide();
+            var Jitmobj = Jobj.data;
+            if (Jitmobj.ItemID != 'undefined' && Jitmobj.ItemID != null) {
+                var HtmlStr = "<tr id='" + Jitmobj.ItemID + "'>";
+                HtmlStr += '<td>' + Jitmobj.Categoryname + '</td>';
+                HtmlStr += '<td>' + Jitmobj.Items + '</td>';
+                HtmlStr += '<td>' + ItemMode(Jitmobj.ItemMode) + '</td>';
+                HtmlStr += '<td>' + Jitmobj.ItemDiscription + '</td>';
+                HtmlStr += '<td>' + Jitmobj.CostPrice + '</td>';
+                HtmlStr += '<td>' + Jitmobj.Tax + '</td>';
+                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit('+Jitmobj.ItemID+')"> Edit</button>';
+                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete('+Jitmobj.ItemID+')"> Delete</button></td></tr>';
+                if (AddTr) {
+                    $("#Tbody").append(HtmlStr);
+                }
+                else {
+                    $('#' + Jitmobj.ItemID).remove();
+                    $("#Tbody").append(HtmlStr);
+                }
+            }
+        }
+    }
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/CreateEdit?ID=" + ID,
+            success: function (data) {
+                makedpt("CreateItem");
+                $("#CreateItem > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateItem");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function BULKEXCELUPL() {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/UplExl",
+            success: function (data) {
+                makedpt("CreateSheat");
+                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSheat");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function AddCategory() {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Category/CreateEdit?ID=0",
+            success: function (data) {
+                makedpt("CreateItem");
+                $("#CreateItem > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateItem");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function DownloadExl() {
+        if (confirm('Are You Sure')) {
+            $('.buttons-excel').click();
+        }
+
+    }
+    function ItemMode(mode) {
+        if (mode == "1") {
+            return "VEG";
+        }
+        else {
+            return "NON-VEG";
+        }
+    }
+</script>

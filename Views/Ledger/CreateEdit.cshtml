@@ -1,0 +1,467 @@
+﻿@model HangOut.Models.Account.Ledger
+@using HangOut.Models.Common
+@using HangOut.Models.Account;
+@{ List<State> listcity = new State().GetAll();}
+@{
+    Layout = null;
+    var ObjOrg = Request.Cookies["UserInfo"];
+}
+
+@using HangOut.Models
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:#000000"><b>Account Ledger</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+
+        @using (Ajax.BeginForm("CreateEdit", "Ledger", new { ID = Model.ID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.ID)
+
+
+        <div class="row">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.ID, "", new { @class = "text-danger" })
+
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.ShortName, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ShortName, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.MobileNo1, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.MobileNo1, new { htmlAttributes = new { @class = "form-control OnlyNum" } })
+                @Html.ValidationMessageFor(model => model.MobileNo1, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.MobileNo2, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.MobileNo2, new { htmlAttributes = new { @class = "form-control OnlyNum" } })
+                @Html.ValidationMessageFor(model => model.MobileNo2, "", new { @class = "text-danger" })
+
+            </div>
+            @{
+                <div class="col-md-2">
+                    @Html.Label("GroupType")
+                    @Html.DropDownListFor(model => model.ParentGroup, new SelectList(Group.GetAll(), "ID", "Name", Model.ID), "Select Group Type", new { @class = "form-control", Id = "GroupId" })
+                    @Html.ValidationMessageFor(model => model.ParentGroup, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            @{
+                <div class="col-md-2" id="DebType">
+                    @Html.Label("DebtorType")
+                    @Html.DropDownListFor(model => model.DebtorType, new SelectList(Ledger.DTypes(), "ID", "Name", Model.ID), "Select Debtor Type", new { @class = "form-control", Id = "did" })
+                    @Html.ValidationMessageFor(model => model.DebtorType, "", new { @class = "text-danger" })
+
+                </div>
+            }
+
+            @if (ObjOrg["OrgId"] == "0" || ObjOrg["OrgId"] == null)
+            {
+                <div class="col-md-2" id="Oid">
+                    @Html.Label("Organization")
+                    @{
+
+                        SelectList sl = new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID ", "Name");
+                    }
+
+                    @Html.DropDownListFor(Model => Model.OrgId, sl, "Select Organization", new { @class = "form-control", onchange = "GetOrgType(this)" })
+                    @Html.ValidationMessageFor(model => model.OrgId, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.OrgId)
+            }
+            <div class="col-md-2" id="LisenceRenewalDateShow">
+                @Html.Label("LisenceRenewalDate")
+                @Html.TextBoxFor(model => model.LisenceRenewalDate, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+            </div>
+            <div class="col-md-2" id="YearlyRenewalCharges">
+                @Html.LabelFor(model => model.YearlyRenewalCharges, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.YearlyRenewalCharges, new { htmlAttributes = new { @class = "form-control", } })
+                @Html.ValidationMessageFor(model => model.YearlyRenewalCharges, "", new { @class = "text-danger" })
+
+            </div>
+            @{
+                <div class="col-md-2" id="Tax">
+                    @Html.Label("Tax")
+                    @Html.DropDownListFor(model => model.Tax, new SelectList(Ledger.tax(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", id = "TaxId" })
+                    @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            <div class="col-md-2" id="MarginOnCash">
+                @Html.LabelFor(model => model.MarginOnCash, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.MarginOnCash, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MarginOnCash, "", new { @class = "text-danger" })
+
+            </div>
+            @{
+                <div class="col-md-2" id="TaxOnAboveMargin">
+                    @Html.LabelFor(model => model.TaxOnAboveMargin, htmlAttributes: new { @class = "control-label  " })
+                    @Html.DropDownListFor(model => model.TaxOnAboveMargin, new SelectList(Ledger.tax(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TaxOnAboveMargin, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            <div class="col-md-2" id="MarginOnline">
+                @Html.LabelFor(model => model.MarginOnline, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.MarginOnline, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MarginOnline, "", new { @class = "text-danger" })
+
+            </div>
+            @{
+                <div class="col-md-2" id="TaxOnAboveMarginOnline">
+                    @Html.LabelFor(model => model.TaxOnAboveMarginOnline, htmlAttributes: new { @class = "control-label  " })
+                    @Html.DropDownListFor(model => model.TaxOnAboveMarginOnline, new SelectList(Ledger.tax(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TaxOnAboveMarginOnline, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            @{
+                <div class="col-md-2" id="PaymentFrequency">
+                    @Html.Label("PaymentFrequency")
+                    @Html.DropDownListFor(model => model.PaymentFrequency, new SelectList(Ledger.PFrequency(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", id = "pid" })
+                    @Html.ValidationMessageFor(model => model.PaymentFrequency, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            @{
+
+
+
+                <div class="col-md-2" id="wid">
+                    @Html.Label("PaymentDay")
+                    @Html.DropDownListFor(model => model.PaymentDay, new SelectList(Ledger.WeekDays(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PaymentDay, "", new { @class = "text-danger" })
+
+                </div>
+
+
+            }
+            <div class="col-md-2" id="ManualPaymentDays">
+                @Html.LabelFor(model => model.ManualPaymentDays, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.ManualPaymentDays, new { htmlAttributes = new { @class = "form-control", } })
+                @Html.ValidationMessageFor(model => model.ManualPaymentDays, "", new { @class = "text-danger" })
+
+            </div>
+            @{
+                <div class="col-md-2" id="CollectionFrequency">
+                    @Html.Label("CollectionFrequency")
+                    @Html.DropDownListFor(model => model.CollectionFrequency, new SelectList(Ledger.CFrequency(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", id = "cid" })
+                    @Html.ValidationMessageFor(model => model.CollectionFrequency, "", new { @class = "text-danger" })
+
+                </div>
+            }
+            @{
+
+                <div class="col-md-2" id="cwid">
+                    @Html.Label("CollectionDay")
+                    @Html.DropDownListFor(model => model.CollectionDay, new SelectList(Ledger.CWeekDays(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CollectionDay, "", new { @class = "text-danger" })
+
+                </div>
+
+            }
+            <div class="col-md-2" id="ManualCollectionDay">
+                @Html.LabelFor(model => model.ManualCollectionDays, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.ManualCollectionDays, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ManualCollectionDays, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-2" id="CalculationStartFrom">
+                @Html.Label("CalculationStartFrom")
+                @Html.TextBoxFor(model => model.CalculationStartFrom, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+            </div>
+            @{
+
+
+
+                <div class="col-md-2" id="TDSApplicable">
+                    @Html.Label("TDS Applicable")
+                    @Html.DropDownListFor(model => model.TDSApplicable, new SelectList(Ledger.TDS(), "ID", "Name", Model.ID), "Select", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TDSApplicable, "", new { @class = "text-danger" })
+
+                </div>
+
+            }
+        </div>
+        <div class="row" id="Bankdetails">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.IFSCCode, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.IFSCCode, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IFSCCode, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.BankName, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.Branch, htmlAttributes: new { @class = "control-label  " })
+
+                @Html.EditorFor(model => model.Branch, new { htmlAttributes = new { @class = "form-control " } })
+                @Html.ValidationMessageFor(model => model.Branch, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="col-md-2" style="margin-top:35px;">
+                @Html.Label("Receive Patment from POS?")
+
+                @Html.CheckBoxFor(model => model.ReceivePaymentFromPOS, new { htmlAttributes = new { @class = "form-control " } })
+          
+            </div>
+        </div>
+            <div class="row">
+                <div class=" col-md-2">
+                    @Html.Label("State")
+                    @Html.DropDownListFor(model => model.State, new SelectList(new State().GetAll(), "StateId", "Name"), "Select States", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label  " })
+
+                    @Html.TextAreaFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input style="margin-top:25px" type="submit" value="Save" class="btn btn-success" />
+
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+<script>
+    setTimeout(function () { $(window).trigger('resize'); }, 100);
+    $(".DateField").datepicker();
+    $("#Bankdetails").hide();
+    $("#DebType").hide();
+    $("#wid").hide();
+    $("#cwid").hide();
+    $("#bid").hide();
+    $("#Oid").hide();
+    $("#LisenceRenewalDateShow").hide();
+    $("#MarginOnCash").hide();
+    $("#TaxOnAboveMargin").hide();
+    $("#MarginOnline").hide();
+    $("#TaxOnAboveMarginOnline").hide();
+    $("#PaymentFrequency").hide();
+    $("#wid").hide();
+    $("#CollectionFrequency").hide();
+    $("#cwid").hide();
+    $("#CalculationStartFrom").hide();
+    $("#TDSApplicable").hide();
+    $("#YearlyRenewalCharges").hide();
+    $("#Tax").hide();
+
+    OnOrgChnage();
+    $("#did").change(function () {
+        OnOrgChnage();
+    });
+    function OnOrgChnage() {
+        var values = $("#did").val();
+        if (values === "2" || values === "") {
+            $("#Oid").hide();
+            $("#LisenceRenewalDateShow").hide();
+            $("#MarginOnCash").hide();
+            $("#TaxOnAboveMargin").hide();
+            $("#MarginOnline").hide();
+            $("#TaxOnAboveMarginOnline").hide();
+            $("#PaymentFrequency").hide();
+            $("#wid").hide();
+            $("#CollectionFrequency").hide();
+            $("#cwid").hide();
+            $("#CalculationStartFrom").hide();
+            $("#TDSApplicable").hide();
+            $("#YearlyRenewalCharges").hide();
+            $("#Tax").hide();
+            // $("#bid").hide();
+        }
+        else {
+            $("#Oid").show();
+            //  $("#bid").show();
+
+        }
+    }
+    ShowBankDetails();
+    $("#GroupId").change(function () {
+        ShowBankDetails();
+    });
+    function ShowBankDetails() {
+        var values = $("#GroupId").val();
+        if (values === "1"|| values==="4") {
+            $("#Bankdetails").show();
+            $("#wid").hide();
+            $("#cwid").hide();
+            $("#bid").hide();
+            $("#Oid").hide();
+            $("#LisenceRenewalDateShow").hide();
+            $("#MarginOnCash").hide();
+            $("#TaxOnAboveMargin").hide();
+            $("#MarginOnline").hide();
+            $("#TaxOnAboveMarginOnline").hide();
+            $("#PaymentFrequency").hide();
+            $("#wid").hide();
+            $("#CollectionFrequency").hide();
+            $("#cwid").hide();
+            $("#CalculationStartFrom").hide();
+            $("#TDSApplicable").hide();
+            $("#DebType").hide();
+            $("#ManualPaymentDays").hide();
+            $("#ManualCollectionDay").hide();
+            $("#YearlyRenewalCharges").hide();
+            $("#Tax").hide();
+        }
+        else if (values === "2")
+        {
+            $("#DebType").show();
+            $("#Bankdetails").hide();
+        }
+        else {
+            $("#Bankdetails").hide();
+            $("#DebType").hide();
+            $("#Oid").hide();
+        }
+    }
+    OnpaymentFrequencyChnage();
+    $("#pid").change(function () {
+        OnpaymentFrequencyChnage();
+    });
+    function OnpaymentFrequencyChnage() {
+        var values = $("#pid").val();
+        if (values === "1" || values === "") {
+            $("#wid").hide();
+            $("#ManualPaymentDays").hide();
+        }
+        else if (values === "2") {
+            $("#wid").show();
+            $("#ManualPaymentDays").hide();
+        }
+        else if (values === "3")
+        {
+            $("#wid").hide();
+            $("#ManualPaymentDays").show();
+        }
+    }
+    OnCollectionFrequencyChnage();
+    $("#cid").change(function () {
+        OnCollectionFrequencyChnage();
+    });
+    function OnCollectionFrequencyChnage() {
+        var values = $("#cid").val();
+        if (values === "1" || values === "") {
+            $("#cwid").hide();
+            $("#ManualCollectionDay").hide();
+        }
+        else if (values === "2") {
+            $("#cwid").show();
+            $("#ManualCollectionDay").hide();
+        }
+        else if (values === "3")
+        {
+            $("#ManualCollectionDay").show();
+            $("#cwid").hide();
+        }
+    }
+    function GetOrgType(event) {
+        var orgId = $(event).val();
+
+        $("#waiting").show();
+        $.ajax({
+            type: 'POST',
+            url: "/CommonApi/getOrgType?orgId=" + orgId,
+            success: function (data) {
+                var JsonObj = JSON.parse(data);
+                if (JsonObj.Status == 200) {
+                    var OrgType = JsonObj.OrgType;
+                    var Statid = parseInt(JsonObj.Stateid);
+                    $("#State").val(Statid);
+                    if (OrgType == 1 || OrgType == 0) {
+                        $("#LisenceRenewalDateShow").show();
+                        $("#YearlyRenewalCharges").show();
+                        $("#Tax").show();
+                        $("#MarginOnCash").hide();
+                        $("#TaxOnAboveMargin").hide();
+                        $("#MarginOnline").show();
+                        $("#TaxOnAboveMarginOnline").show();
+                        $("#PaymentFrequency").hide();
+                        $("#wid").hide();
+                        $("#CollectionFrequency").hide();
+                        $("#cwid").hide();
+                        $("#CalculationStartFrom").hide();
+                        $("#TDSApplicable").hide();
+                        //  $("#bid").hide();
+                    }
+                    else {
+                        $("#LisenceRenewalDateShow").hide();
+                        $("#MarginOnCash").show();
+                        $("#TaxOnAboveMargin").show();
+                        $("#MarginOnline").show();
+                        $("#TaxOnAboveMarginOnline").show();
+                        $("#PaymentFrequency").show();
+                        // $("#wid").show();
+                        $("#CollectionFrequency").show();
+                        // $("#cwid").show();
+                        $("#CalculationStartFrom").show();
+                        $("#TDSApplicable").show();
+                        $("#YearlyRenewalCharges").hide();
+                        $("#Tax").hide();
+                        // $("#bid").show();
+
+                    }
+                }
+
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+
+    }
+</script>
+
+

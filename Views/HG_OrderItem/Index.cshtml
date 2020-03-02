@@ -2,17 +2,42 @@
 @using HangOut.Models;
 @using HangOut.Models.DynamicList;
 @{ 
+    string Seating = "";
     string OID = Request.QueryString["OID"];
     Int64 OrderId = Int64.Parse(OID);
+    if (OrderId <= 0)
+    {
+        <h1 style="color:red;text-align:center">No order Yet</h1>
+        return;
+    }
     HG_Orders order = new HG_Orders().GetOne(OrderId);
-    List<HG_Items> listItem = new HG_Items().GetAll();
-    //   List<vw_HG_UsersDetails> UserList = new vw_HG_UsersDetails().GetAll();
-    // UserList.AddRange(new vw_HG_UsersDetails().GetAll("CUST"));
-    List<HG_UserTypes> UsertypleList = new HG_UserTypes().GetAll();
+    List<HG_Items> listItem = new HG_Items().GetAll(order.OrgId);
+    List<OrdDiscntChrge> ordDiscntChrges = new List<OrdDiscntChrge>();
+    if (order.DisntChargeIDs != "")
+    {
+        ordDiscntChrges = OrdDiscntChrge.GetAll(order.DisntChargeIDs);
+        ordDiscntChrges = ordDiscntChrges.OrderBy(x => x.Datetime).ToList();
+    }
+
+    HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(order.OrgId);
+    List<HG_UserTypes> UsertypleList = new HG_UserTypes().GetAll(all:true);
     List<HG_OrderItem> listorder = new HG_OrderItem().GetAll(OrderId);
     var tokens = listorder.Select(x => x.TickedNo);
     tokens = tokens.Distinct();
     var Ticketnos = string.Join(",", tokens);
+    HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
+    HG_Floor_or_ScreenMaster ObjScrFlr = new HG_Floor_or_ScreenMaster().GetOne(ObjTorS.Floor_or_ScreenId);
+    HG_FloorSide_or_RowName ObjFsideRowName = new HG_FloorSide_or_RowName().GetOne(ObjTorS.FloorSide_or_RowNoID);
+    if (ObjScrFlr != null)
+    {
+        Seating = ObjScrFlr.Name+" ";
+    }
+    if (ObjFsideRowName != null)
+    {
+        Seating += ObjFsideRowName.FloorSide_or_RowName + " ";
+    }
+    Seating += ObjTorS.Table_or_SheetName;
+    double GrandTotal = order.DeliveryCharge;
 }
 <style>
 .showDetails {
@@ -30,9 +55,7 @@
         background-color: #f2f2f2;
     }
 
-    .showDetails tr:hover {
-        background-color: #ddd;
-    }
+    
 
     .showDetails th {
         padding-top: 8px;
@@ -40,13 +63,18 @@
         background-color: #4CAF50;
         color: white;
     }
+   
 </style>
 <div class="card">
-    <div style="padding:20px">
-        <h5>Order Date: @order.Create_Date.ToString("ddd-MMM-dd hh:mm")</h5>
-        <h5>Order No:  @order.OID</h5>
-        <h5>Ticket No: @Ticketnos</h5>
-        <h5>Payment Mode: @OrgType.PaymentMode(order.PaymentStatus)</h5>
+    <div style="padding:5px;border:1px solid;">
+        <h5 style="font-weight:bold">@ObjOrg.Name</h5>
+        <h5>Order Date: @order.Create_Date.ToString("ddd-MMM-dd hh:mm tt")     Order No:  @order.OID</h5>
+        <h5>Seating : @Seating Ticket No: @Ticketnos   Payment Mode: @OrgType.PaymentMode(order.PaymentStatus)</h5>
+        @if (order.PaymentStatus == 3)
+        {
+            PaytmResn PatymRes = PaytmResn.Getone(order.OID);
+        <h5> TXNID : @PatymRes.TxnId   TxnAmount: @PatymRes.PaidAmount</h5>
+        }
     </div>
     <div class="card-header">
         <h3>Details :</h3>
@@ -71,11 +99,15 @@
                         @Html.DisplayName("Status")
                     </th>
                     <th>
+                        Ticket No
+                    </th>
+                    <th>
                         @Html.DisplayName("Placed By")
                     </th>
                     <th>
                         @Html.DisplayName("Prepare By")
                     </th>
+
                 </tr>
             </thead>
             <tbody>
@@ -88,19 +120,24 @@
                 {
                     <!-- //"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"-->
                     double ItemPrice = item.Price * item.Count;
-                    QtyTotal += item.Count;
-                    AmtTotal += ItemPrice;
+                    if (item.Status != 4)
+                    {
+                        QtyTotal += item.Count;
+                        AmtTotal += ItemPrice;
+                        GrandTotal += ItemPrice;
+                    }
+
                     string PrePareBy = "";
                     string OrderPlacedBy = "";
                     var PlacedByObj = new vw_HG_UsersDetails().GetSingleByUserId((int)item.OrdById);
-                    var PrepareByObj=new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
+                    var PrepareByObj = new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
                     if (PlacedByObj.UserCode > 0)
                     {
-                        OrderPlacedBy = UsertypleList.Find(x => x.UserType == PlacedByObj.UserType).UserTypeName + " (" + PlacedByObj.UserName + " )";
+                        OrderPlacedBy = UsertypleList.Find(x => x.UserType == PlacedByObj.UserType).UserTypeName + " (" + PlacedByObj.UserId + " )";
                     }
                     if (PrepareByObj.UserCode > 0)
                     {
-                        PrePareBy= UsertypleList.Find(x => x.UserType == PrepareByObj.UserType).UserTypeName + " (" + PrepareByObj.UserId + " )";
+                        PrePareBy = UsertypleList.Find(x => x.UserType == PrepareByObj.UserType).UserTypeName + " (" + PrepareByObj.UserName + " )";
                     }
                     string status = "";
                     string backTrColr = "";
@@ -125,42 +162,122 @@
                         backTrColr = "background-color:red";
                         status = "Cancel";
                     }
-                <tr style="@(backTrColr)">
-                    <td>
-                        @{ sno++; }
-                        @sno
-                    </td>
-                    <td>
-                        @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
-                        @ObjOrder.Items
-                    </td>
-                    <td>
-                        @item.Count
-                    </td>
-                    <td>
-                       @ItemPrice.ToString("0.00")
-                    </td>
-                    <td>
-                        @status
-                    </td>
-                    <td>@OrderPlacedBy</td>
-                    <td>@PrePareBy</td>
-                </tr>
+                    <tr style="@(backTrColr)">
+                        <td>
+                            @{ sno++; }
+                            @sno
+                        </td>
+                        <td>
+                            @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
+                            @ObjOrder.Items
+                        </td>
+                        <td>
+                            @item.Count
+                        </td>
+                        <td>
+                            @ItemPrice.ToString("0.00")
+                        </td>
+                        <td>
+                            @status
+                        </td>
+                        <td>
+                            @item.TickedNo
+                        </td>
+                        <td>@OrderPlacedBy</td>
+                        <td>@PrePareBy</td>
+                    </tr>
                 }
             </tbody>
             <tfoot>
+                @if (order.DeliveryCharge > 0)
+                {
+                    <tr>
+                        <td>ItemTotal</td>
+                        <td></td>
+                        <td>@QtyTotal</td>
+                        <td>@AmtTotal.ToString("0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Delivery Charge</td>
+                        <td></td>
+                        <td></td>
+                        <td>@order.DeliveryCharge.ToString("0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                }
+                @if (ordDiscntChrges.Count > 0)
+                {
+                    foreach (var discntcharge in ordDiscntChrges)
+                    {
+                        switch (discntcharge.Type)
+                        {
+
+                            case 1:
+
+                                double Amt= 0.00;
+                                if (discntcharge.Amt > 0)
+                                {
+                                    Amt = discntcharge.Amt;
+                                    GrandTotal -= Amt;
+                                }
+                                else if (discntcharge.Tax > 0)
+                                {
+                                     Amt = (GrandTotal * discntcharge.Tax) / 100;
+                                    GrandTotal -= Amt;
+                                }
+                                <tr>
+                                    <td>@discntcharge.Title</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>-@Amt.ToString("0.00")</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                break;
+                            case 2:
+                                 Amt = 0.00;
+                                if (discntcharge.Amt > 0)
+                                {
+                                    Amt = discntcharge.Amt;
+                                    GrandTotal += Amt;
+                                }
+                                else if (discntcharge.Tax > 0)
+                                {
+                                    Amt = (GrandTotal * discntcharge.Tax) / 100;
+                                    GrandTotal += Amt;
+                                }
+                                <tr>
+                                    <td>@discntcharge.Title</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@Amt.ToString("0.00")</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                break;
+                        }
+                    }
+
+                }
                 <tr>
                     <td>Total</td>
                     <td></td>
                     <td>@QtyTotal</td>
-                    <td>@AmtTotal.ToString("0.00")</td>
+                    <td>@GrandTotal.ToString("0.00")</td>
                     <td></td>
                     <td></td>
                     <td></td>
                 </tr>
-
             </tfoot>
-        </table>
+            </table>
     </div>
 </div>
 <script>

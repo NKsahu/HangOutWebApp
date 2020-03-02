@@ -1,7 +1,8 @@
 ﻿@using HangOut.Models.Common;
 @using HangOut.Models;
 @{ 
-    string OrgName = "THIK KAR DIYA HU PRIYAL JI";
+    var UserType = Request.Cookies["UserInfo"]["UserType"];
+    string OrgName = "SUPER-ADMIN";
     int Orgid =int.Parse(Request.Cookies["UserInfo"]["OrgId"]);
     string OrgType = "0";
     HG_OrganizationDetails ObgOrg = new HG_OrganizationDetails().GetOne(Orgid);
@@ -14,6 +15,14 @@
     if (ObgOrg.CustomerOrdering)
     {
         CustomerOrdrn = "checked";
+    }
+    if (Orgid == 0)
+    {
+        OrgName = "PREPAID-SUPER-ADMIN";
+    }
+    if (Orgid < 0)
+    {
+        OrgName = "POSTPAID-SUPER-ADMIN";
     }
 }
 <style>
@@ -78,11 +87,12 @@
         }
 </style>
 <!-- header -->
+@Html.Hidden("OrgIdHead", Orgid)
 <header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #33bb6f, #30bb66, #30bb5b, #31bb50, #33bb44);z-index:1;">
     <div class="col-md-3 col-12 text-md-left text-center mt-0">
         <a class="text-white navbar-brand pl-3" style="font-size:15px;">foodDo</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
-
+        <a href="#" onclick="showvideo();" class="text-white ml-md-4"><i class="fas fa-chalkboard-teacher border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
     </div>
     <div class="col-md-6 col-12  text-center mt-0" style="overflow:hidden">
         <a class="text-white text-center navbar-brand pl-3" style="font-size:32px;font-weight:bold;">@OrgName</a>
@@ -92,9 +102,14 @@
             <input type="checkbox" @CustomerOrdrn onchange="SetCustmrOrd(this)">
             <span class="slider round"></span>
         </label>
-        @*<button class="btn btn-lg" onclick=""><i class="fas fa-bell"></i></button>*@
+        @if (UserType == "SA")
+        {
+            <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Inventry"><i class="fas fa-truck-moving"></i></a>
+            <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Account"><i class="fas fa-rupee-sign"></i></a>
+        }
+
         <div class="btn-group mt-0">
-            <a href="/vw_HG_UsersDetails/Admin" class="text-white m-1"><i class="fas fa-tachometer-alt"></i></a>
+            <button class="btn btn-lg text-white " onclick="MakeOrder()"><i class="fas fa-laptop"></i></button>
             <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
             <div class="dropdown-menu dropdown-menu-right text-center pb-0">
                 <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
@@ -112,31 +127,35 @@
 </header>
 
 <div class="row">
-   
+
     <!-- admin side menus -->
     <div id="admin-side-menu" class="col-md-2 col-12  ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
         <ul id="myaccordion" class="list-unstyled mb-0 ">
             @{
-                var UserType = Request.Cookies["UserInfo"]["UserType"];
                 List<UsersMenu> List = new UsersMenu().GetAll();
+                List = List.FindAll(x => x.MenuOrderNo != 400);
                 List<UsersMenu> ADMINMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId == 0);
-                if(UserType!="SA" && UserType != "A")
+                if (UserType != "SA" && UserType != "A")
                 {
                     ADMINMenuList = ADMINMenuList.FindAll(x => x.User_Types.Contains(UserType));
                     if (OrgType == "2")
                     {
-                        ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Restuarant"));
+                        List = List.FindAll(x => !x.MenuLink.Equals("/HG_Tables_or_Sheat/Index?Type=1"));
                     }
                     else
                     {
-                        ADMINMenuList = ADMINMenuList.FindAll(x => !x.MenuDisplayName.Contains("Theater"));
+                        List = List.FindAll(x => !x.MenuLink.Equals("/HG_Tables_or_Sheat/SheetIndex?Type=2"));
                     }
                 }
                 ADMINMenuList = ADMINMenuList.OrderBy(x => x.MenuOrderNo).ToList();
                 List<UsersMenu> AdminSubMenuList = List.FindAll(x => x.Section == "ADMIN" && x.ParentMenuId != 0);
+                if (UserType != "SA" && UserType != "A")
+                {
+                    AdminSubMenuList = AdminSubMenuList.FindAll(x => x.User_Types.Contains(UserType));
+                }
                 foreach (var ObjMenuLi in ADMINMenuList)
                 {
-                    if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink!="")
+                    if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink != "")
                     {
                         <li class="nav-item" data-parent="#myaccordion">
                             <a class="nav-link" href="@ObjMenuLi.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@ObjMenuLi.Menu_Icon"></i>@ObjMenuLi.MenuDisplayName</a>
@@ -154,8 +173,6 @@
                                     ChileMenus = ChileMenus.OrderBy(x => x.MenuOrderNo).ToList();
                                     foreach (var SubMenu in ChileMenus)
                                     {
-
-
                                         <li class="nav-item" data-parent="#myaccordion">
                                             <a class="nav-link" href="@SubMenu.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@SubMenu.Menu_Icon"></i>@SubMenu.MenuDisplayName</a>
                                         </li>
@@ -169,23 +186,43 @@
                 }
 
             }
-            <li  class="nav-item" data-parent="#myaccordion">
+            <!--customize menu here-->
+            @if (UserType != null && UserType != "SA")
+            {
+                List<HG_Items> listItem = new HG_Items().GetAll();
+                var offitem = listItem.FindAll(x => x.ItemAvaibility == 1).Count;
+
+                <li class="nav-item">
+                    <a class="nav-link have-sub-menu collapsed" href="#" data-target="#qkaccess" data-toggle="collapse">
+                        <i class="fa fa-desktop-alt"></i>Quick Access <b id="TotalCntHome" class="w3-badge">@offitem</b><span class="fa fa-plus"></span>
+                    </a>
+                    <ul id="qkaccess" class="collapse list-unstyled" data-parent="#myaccordion">
+                        <li class="nav-item" data-parent="#myaccordion">
+                            <a class="nav-link" href="/HG_Items/ItemAvaiBility" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-star"></i>Item Avaibility <b id="offItemHome" class="w3-badge"> @offitem</b></a>
+                        </li>
+                    </ul>
+                </li>
+
+            }
+            <li class="nav-item" data-parent="#myaccordion">
+                <a class="nav-link" href="/HG_OrganizationDetails/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-school"></i>Setup</a>
+            </li>
+            <li class="nav-item" data-parent="#myaccordion">
                 <a style="display:none" class="nav-link" href="/UsersMenu/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-file-code-o" aria-hidden="true"></i>UserMenus</a>
             </li>
         </ul>
-    </div>
-    <!-- End admin side menus -->
-   
-    <div class="col-md-10 col-12 mt-0 p-0" id="DynamicData">
-        @{
-            Html.RenderPartial("MakeOrder");
+        @if (UserType != null && UserType != "SA")
+            {
+                var CustomerCount = Customer.MyCustomerCnt(Orgid);
+            <div style="border-top:1px solid white;width:100%;padding:2px; position:fixed;left:0px;bottom:0px;color:black;font-weight:bold;margin-left:5px;"><i class="fas fa-users"></i>&nbsp;&nbsp;My Customers :&nbsp;<b style="color:black;background-color:white" class="w3-badge">@CustomerCount</b></div>
         }
+       </div>
+    <!-- End admin side menus -->
+    @*mt-0 p-0*@
+    <div class="col-md-10 col-12 " id="DynamicData">
 
     </div>
-
 </div>
-
-
 <script>
     $(document).ready(function () {
 
@@ -271,5 +308,55 @@
         });
 
     }
+    function AcnHeading() {
+        $("#waiting").show();
+        $.ajax({
+            url: "/Account/AcntHeading",
+            type: "GET",
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $("#waiting").hide();
+            },
+            error: function (Xr, Status, ErrorMsg) {
+                $("#waiting").hide();
+            }
+        });
+    }
+    function MakeOrder() {
+        $("#waiting").show();
+        $.ajax({
+            url: "/HG_OrderItem/MakeOrder",
+            type: "GET",
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $("#waiting").hide();
+            },
+            error: function (Xr, Status, ErrorMsg) {
+                $("#waiting").hide();
+            }
+        });
+    }
+    MakeOrder();
+    $("#offItemHome").change(function () {
+        var val1 =parseInt($("#offItemHome").text());
+        $("#TotalCntHome").text(val1);
+    });
+    function showvideo() {
+        $("#waiting").show();
+        $.ajax({
+            url: "/Video/viewstatuspopupwindow",
+            type: "GET",
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $("#waiting").hide();
+            },
+            error: function (Xr, Status, ErrorMsg) {
+                $("#waiting").hide();
+            }
+        });
+    }
 </script>
+<script src="~/Assets/PushNotication.js"></script>
+<script src="~/Assets/OrderNotify.js"></script>
+
 

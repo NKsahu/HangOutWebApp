@@ -10,7 +10,7 @@ html, body {
 }
 
 body {
-    max-width: 1600px;
+    max-width: 100%; /*1600px*/
 }
 /*th, td {
     white-space: nowrap;
@@ -112,7 +112,7 @@ header .btn-group a i:hover {
         background-color: #121111;
     }
 #admin-side-menu {
-    height: 91vh;
+    height: 150vh;
     overflow-y:auto;
 }
 @media only screen and (max-width: 540px) {
@@ -120,3 +120,34 @@ header .btn-group a i:hover {
         height: auto;
     }
 }
+
+.button__badge {
+    background-color: #fa3e3e;
+    border-radius: 2px;
+    color: white;
+    padding: 1px 3px;
+    font-size: 10px;
+    position: absolute; /* Position the badge within the relatively positioned button */
+    top: 0;
+    right: 0;
+}
+.w3-badge {
+    border-radius: 50%;
+}
+
+.w3-badge, .w3-tag {
+    background-color: #000;
+    color: #3bff03;
+    display: inline-block;
+    padding-left: 6px;
+    padding-right: 6px;
+    text-align: center;
+}
+.blackTest{
+    color:black;
+    border:1px solid green;
+}
+.blackBackground{
+    background-color:#666;
+}
+

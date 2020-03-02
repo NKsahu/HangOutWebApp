@@ -29,7 +29,7 @@ namespace HangOut.Controllers
         {
 
             Obj = Obj.Checkvw_HG_UsersDetails();
-             if (Obj != null)
+             if (Obj != null && Obj.UserType!="CUST"&&Obj.UserType!="CA")
             {
                 HttpCookie cookie = new HttpCookie("UserInfo");
                 cookie.Values.Add("UserCode", Obj.UserCode.ToString());
@@ -37,7 +37,8 @@ namespace HangOut.Controllers
                 cookie.Values.Add("UserType", Obj.UserType);
                cookie.Values.Add("OrgId", Obj.OrgID.ToString());
                 Response.Cookies.Add(cookie);
-                return Json(new { url = "/vw_HG_UsersDetails/Admin" });
+               return RedirectToAction("Admin");
+              //  return Json(new { url = "/vw_HG_UsersDetails/Admin" });
             }
             else
             {
@@ -111,7 +112,7 @@ namespace HangOut.Controllers
             vw_HG_UsersDetails ObjUserAlreadyExist = new vw_HG_UsersDetails().MobileAlreadyExist(Objuser.UserId);
             if (ObjUserAlreadyExist.UserCode > 0 && ObjUserAlreadyExist.UserCode!= Objuser.UserCode)
             {
-                return Json(new { msg = "Mobile Number Already Taken" });
+                return Json(new { msg = "User Id Already Taken" });
             }
             int i = Objuser.save();
                 if(i>0)
@@ -127,6 +128,10 @@ namespace HangOut.Controllers
         public ActionResult Account()
         {
             
+            return View();
+        }
+        public ActionResult Inventry()
+        {
             return View();
         }
         public ActionResult UserStatus()

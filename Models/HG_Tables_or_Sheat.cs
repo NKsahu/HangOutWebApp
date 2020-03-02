@@ -23,12 +23,14 @@ namespace HangOut.Models
         public int Otp { get; set; }
         public int OMID { get; set; } //order menu id
         public string QrCode { get; set; } //QrCode
+        public int FDBKId { get; set; }
         public HG_Tables_or_Sheat()
         {
             Status = 1;
             OMID = 0;
             CreateDate = DateTime.Now;
             QrCode = "";
+            FDBKId = 0;
         }
         public Int64 save()
         {
@@ -41,11 +43,11 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.Table_or_RowID == 0)
                 {
-                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_SheetName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy,@Status,@Otp,@OMID,@QrCode);SELECT SCOPE_IDENTITY();";
+                    Query = "Insert Into HG_Tables_or_Sheat values(@OrgId,@Table_or_SheetName,@Floor_or_ScreenId,@FloorSide_or_RowNoID,@Type,@CreateDate,@CreateBy,@Status,@Otp,@OMID,@QrCode,@FDBKId);SELECT SCOPE_IDENTITY();";
                     this.Otp = OTPGeneretion.Generate();
                 }
                 else
-                Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_SheetName =@Table_or_SheetName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy,Status=@Status,Otp=@Otp,OMID=@OMID,QrCode=@QrCode Where Table_or_RowID=@Table_or_RowID;";
+                Query = "Update HG_Tables_or_Sheat  set OrgId=@OrgId,Table_or_SheetName =@Table_or_SheetName,Floor_or_ScreenId =@Floor_or_ScreenId,FloorSide_or_RowNoID=@FloorSide_or_RowNoID,Type=@Type,CreateDate=@CreateDate,CreateBy=@CreateBy,Status=@Status,Otp=@Otp,OMID=@OMID,QrCode=@QrCode,FDBKId=@FDBKId Where Table_or_RowID=@Table_or_RowID;";
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@Table_or_RowID", this.Table_or_RowID);
                 cmd.Parameters.AddWithValue("@OrgId", this. OrgId);
@@ -59,6 +61,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Otp", this.Otp);
                 cmd.Parameters.AddWithValue("@OMID", this.OMID);
                 cmd.Parameters.AddWithValue("@QrCode", this.QrCode);
+                cmd.Parameters.AddWithValue("@FDBKId", this.FDBKId);
                 if (this.Table_or_RowID == 0)
                 {
                     Row = System.Convert.ToInt64(cmd.ExecuteScalar());
@@ -110,6 +113,7 @@ namespace HangOut.Models
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
                     ObjTemp.QrCode = SDR.IsDBNull(11) ? "0": SDR.GetString(11);
+                    ObjTemp.FDBKId = SDR.GetInt32(12);
                     listTemp.Add(ObjTemp);
                 }
 
@@ -154,8 +158,7 @@ namespace HangOut.Models
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
                     ObjTemp.QrCode = SDR.IsDBNull(11) ? "0" : SDR.GetString(11);
-
-
+                    ObjTemp.FDBKId = SDR.GetInt32(12);
                 }
             }
             catch (System.Exception e)
@@ -165,46 +168,8 @@ namespace HangOut.Models
 
             return (ObjTemp);
         }
-        public List<HG_Tables_or_Sheat> GetAllByOID(int Orgid)
-        {
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
-            Con.Open();
-            SqlCommand cmd = null;
-            SqlDataReader SDR = null;
-            List<HG_Tables_or_Sheat> TempList = new List<HG_Tables_or_Sheat>();
-            try
-            {
-                string Query = "SELECT * FROM  HG_Tables_or_Sheat where OrgId=@OrgId";
-                cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@OrgId", OrgId);
-                SDR = cmd.ExecuteReader();
-                while (SDR.Read())
-                {
-                    HG_Tables_or_Sheat ObjTemp = new HG_Tables_or_Sheat();
-                    ObjTemp.Table_or_RowID = SDR.GetInt64(0);
-                    ObjTemp.OrgId = SDR.GetInt32(1);
-                    ObjTemp.Table_or_SheetName = SDR.GetString(2);
-                    ObjTemp.Floor_or_ScreenId = SDR.GetInt32(3);
-                    ObjTemp.FloorSide_or_RowNoID = SDR.GetInt32(4);
-                    ObjTemp.Type = SDR.GetString(5);
-                    ObjTemp.CreateDate = SDR.GetDateTime(6);
-                    ObjTemp.CreateBy = SDR.GetInt32(7);
-                    ObjTemp.Status = SDR.IsDBNull(8) ? 1 : SDR.GetInt32(8);
-                    ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
-                    ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
-                    ObjTemp.QrCode = SDR.IsDBNull(11) ? "0" : SDR.GetString(11);
-                    TempList.Add(ObjTemp);
-                }
-            }
-            catch (System.Exception e)
-            { e.ToString(); }
 
-            finally { Con.Close(); }
-
-            return (TempList);
-        }
-
-        public int Dell(int ID)
+        public static int Dell(Int64 ID)
         {
             int R = 0;
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -261,6 +226,7 @@ namespace HangOut.Models
                     ObjTemp.Otp = SDR.IsDBNull(9) ? 1000 : SDR.GetInt32(9);
                     ObjTemp.OMID = SDR.IsDBNull(10) ? 0 : SDR.GetInt32(10);
                     ObjTemp.QrCode = SDR.IsDBNull(11) ? "0" : SDR.GetString(11);
+                    ObjTemp.FDBKId = SDR.GetInt32(12);
                     listTemp.Add(ObjTemp);
                 }
 
@@ -269,6 +235,27 @@ namespace HangOut.Models
             finally { Con.Close(); }
 
             return (listTemp);
+        }
+
+        public static string Seating(Int64 SeatId)
+        {
+            HG_Tables_or_Sheat Objseating = new HG_Tables_or_Sheat().GetOne(SeatId);
+            string Seating = "";
+            if (Objseating.Table_or_RowID > 0)
+            {
+                HG_Floor_or_ScreenMaster floor_Or_ScreenMaster = new HG_Floor_or_ScreenMaster().GetOne(Objseating.Floor_or_ScreenId);
+                if (floor_Or_ScreenMaster.Floor_or_ScreenID > 0)
+                {
+                    Seating = floor_Or_ScreenMaster.Name + " ";
+                }
+                HG_FloorSide_or_RowName side_Or_RowName = new HG_FloorSide_or_RowName().GetOne(Objseating.FloorSide_or_RowNoID);
+                if (side_Or_RowName.ID > 0)
+                {
+                    Seating += side_Or_RowName.FloorSide_or_RowName +" ";
+                }
+                Seating += Objseating.Table_or_SheetName;
+            }
+            return Seating;
         }
     }
 }

@@ -1,0 +1,138 @@
+﻿@using HangOut.Models.Common
+@using HangOut.Models;
+@{
+    Layout = null;
+    var CoockieObj = Request.Cookies["UserInfo"];
+    int orgId = int.Parse(CoockieObj["OrgId"]);
+    List<OrdNotice> OrgListNotice = OrdNotice.GetAll(1);
+    OrgListNotice = OrgListNotice.FindAll(x => x.Orgid == orgId);
+    List<vw_HG_UsersDetails> userlist = new vw_HG_UsersDetails().GetAll();
+    List<HG_UserTypes> UserTypeList = new HG_UserTypes().GetAll();
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3>Cash Note Pad </h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @foreach( var Objnotice in OrgListNotice)
+            {
+                string seating = "";
+                HG_Orders Objorder = new HG_Orders().GetOne(Objnotice.OID);
+                HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(Objorder.Table_or_SheatId);
+                HG_FloorSide_or_RowName ObjFSorRN = new HG_FloorSide_or_RowName().GetOne(ObjTorS.FloorSide_or_RowNoID);
+                HG_Floor_or_ScreenMaster ObjForScrn = new HG_Floor_or_ScreenMaster().GetOne(ObjTorS.Floor_or_ScreenId);
+                if (ObjForScrn!=null&&ObjForScrn.Floor_or_ScreenID > 0)
+                {
+                    seating = ObjForScrn.Name;
+                }
+                if (ObjFSorRN!=null&& ObjFSorRN.ID > 0)
+                {
+                    seating +=" "+ ObjFSorRN.FloorSide_or_RowName;
+                }
+                seating += " " + ObjTorS.Table_or_SheetName;
+                var OrderItms = new HG_OrderItem().GetAll(Objorder.OID);
+                OrderItms = OrderItms.FindAll(x => x.Status != 4);
+                double Price = Objorder.DeliveryCharge;
+                HashSet<int> Tockens = new HashSet<int>();
+                for (int i = 0; i < OrderItms.Count; i++)
+                {
+                    Price += OrderItms[i].Count * OrderItms[i].Price;
+                    Tockens.Add(OrderItms[i].TickedNo);
+                }
+                string Tockensary = string.Join(",", Tockens);
+                string OrderBy = " ";
+                var ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(Objorder.PayReceivedBy);
+                var CashBy = "Customer";
+                var OrderByObj= new vw_HG_UsersDetails().GetSingleByUserId((int)Objorder.CID);
+                if (ObjUser.UserCode > 0)
+                {
+                    CashBy = UserTypeList.Find(x => x.UserType == ObjUser.UserType).UserTypeName;
+                }
+                if (OrderByObj != null && OrderByObj.UserCode>0)
+                {
+                    OrderBy= UserTypeList.Find(x => x.UserType == OrderByObj.UserType).UserTypeName +" "+ OrderByObj.UserName+"( " + OrderByObj.UserId + " )";
+                }
+                                 <div class="col-md-12" id="Ord@(Objorder.OID)" style="background-color:#79c57f">
+                     <h6>@seating Order No: @Objorder.OID Ticket No: @Tockensary</h6>
+                     <p>Bill Amt: @Price.ToString("0.00") <button onclick="ShowDetails(@Objorder.OID)" class="btn  btn-sm btn-info">Details</button></p> 
+                     <p>order By @OrderBy</p>
+                     <p>Cash By @CashBy</p>
+                     <div style="padding:5px;"><button style="float:left;" onclick="OrdReject(@Objorder.OID)" class="btn btn-sm btn-danger">Not Received</button>
+                          <button style="float:right"  class="btn btn-sm btn-success" onclick="OrdAcpted(@Objorder.OID)">Received</button>
+                     </div>
+</div>
+
+            }
+        </div>
+    </div>
+</div>
+<script>
+    function OrdAcpted(OID) {
+        $.confirm({
+            title: 'Cash Charged',
+            content: 'Mark Order Completed',
+            buttons: {
+                btnClass: 'btn-green',
+                confirm: function () {
+                    $.ajax({
+                        url: "/WebApi/OrdAcpted?OID=" + OID,
+                        type: "GET",
+                        success: function (data) {
+                            $("#Ord" + OID).remove();
+                            //$.alert({
+                            //    title: 'Alert',
+                            //    content: 'Completed Succesfully',
+                            //});
+                        },
+                        error: function (Xr, Status, ErrorMsg) {
+
+                        }
+                    });
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+    }
+    function OrdReject(OID) {
+        $.confirm({
+            title: 'Cancel Order',
+            content: 'Order will be Canceled',
+            buttons: {
+                btnClass: 'btn btn-warning',
+                confirm: function () {
+                    $.ajax({
+                        url: "/WebApi/CancelOrder?OID=" + OID,
+                        type: "GET",
+                        success: function (data) {
+                            var Json = JSON.parse(data);
+                            if (Json.Status == 200) {
+                                $.alert({
+                                    title: 'Alert',
+                                    content: 'Canceled Succesfully',
+                                });
+                                $("#Ord" + OID).remove();
+                            }
+                            else {
+                                $.alert({
+                                    title: 'Alert',
+                                    content: '' + Json.MSG,
+                                });
+                            }
+                        },
+                        error: function (Xr, Status, ErrorMsg) {
+
+                        }
+                    });
+                },
+                cancel: function () {
+                    // $.alert('Canceled!');
+                }
+            }
+        });
+    }
+</script>
+

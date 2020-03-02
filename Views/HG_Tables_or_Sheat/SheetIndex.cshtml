@@ -7,103 +7,125 @@
     List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll(2);
     List<HG_FloorSide_or_RowName> ListRows = new HG_FloorSide_or_RowName().GetAll(2);
 
-    }
+}
 
 <div class="card">
     <div class="card-header">
-        <h1 style="text-align:center"><b>SEAT</b> </h1>
-        <hr />
+        <h1 style="text-align:center"><b>SEATING</b> </h1>
+        <button style="float:left;" onclick="BULKEXCELUPL()" class="btn btn-lg btn-info ">BULK UPLOAD</button>
+        <button style="float:right !important;" onclick="DownloadExl()" class="btn btn-lg btn-info ">DOWNLOAD EXCEL</button>
+
     </div>
-    <button  onclick="CreateEdit('0')" class="btn btn-success"><i class="fa fa-plus">ADD</i></button>
+    <div class="row">
+        <div class="col-md-4">
+            <a  href="/HG_Tables_or_Sheat/SheetIndex?Type=2" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"  class="btn btn-default blackBackground blackTest  form-control">SEAT</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/HG_Floor_or_ScreenMaster/ScreenIndex?Type=2" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">SCREEN</a>
+        </div>
+        <div class="col-md-4">
+            <a href="/HG_FloorSide_or_RowName/RowIndex?Type=2" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">ROW</a>
+        </div>
+    </div>
     <div class="card-body">
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
         <table class=" table table-bordered table-hover w-100" id="TBLID">
             <thead>
                 <tr>
+
+                    <th>
+                        @Html.DisplayName("Seat")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Screen")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Row")
+                    </th>
                     <th>
                         @Html.DisplayNameFor(model => model.QrCode)
                     </th>
-                    <th>
-                        @Html.DisplayName("Seat  Name")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Row Number")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Screen Number")
-                    </th>
-
-                    <th></th>
+                    <th class="noExport"></th>
                 </tr>
             </thead>
             <tbody id="Tbody">
                 @foreach (var item in Model)
                 {
-                <tr id="@item.Table_or_RowID">
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.QrCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Floor_or_ScreenId)
-                    </td>
-                    <td>
-                        @{
-
-                            var ObjRow = ListRows.Find(x => x.ID == item.FloorSide_or_RowNoID);
-                            if (ObjRow == null)
-                            {
+                    <tr id="@item.Table_or_RowID">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Table_or_SheetName)
+                        </td>
+                        <td>
+                            @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);
+                                if (ObjScreen == null)
+                                {
+                                }
+                                else
+                                {
+                                    @ObjScreen.Name
+                                }
                             }
-                            else
-                            {
-                                @ObjRow.FloorSide_or_RowName
+                        </td>
+                        <td>
+                            @{
+                                var ObjRow = ListRows.Find(x => x.ID == item.FloorSide_or_RowNoID);
+                                if (ObjRow == null)
+                                {
+                                }
+                                else
+                                {
+                                    @ObjRow.FloorSide_or_RowName
+                                }
                             }
-                        }
-                    </td>
-                    <td>
-                        @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);
-                            if (ObjScreen == null)
-                            {
-                            }
-                            else
-                            {
-                                @ObjScreen.Name
-                            }
-
-
-                        }
-
-                    </td>
-                    <td>
-                        <button onclick="CreateEdit(@item.Table_or_RowID)" class="btn btn-warning btn-sm "> Edit</button>
-                    </td>
-                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.QrCode)
+                        </td>
+                        <td>
+                            <button onclick="CreateEdit(@item.Table_or_RowID)" class="btn btn-warning btn-sm "> Edit</button>
+                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.Table_or_RowID)"> Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 <script>
     var AddTr = false;
     function JsonSuccess(Jobj) {
-        hidedpt("CreateSheat");
-        var Jitmobj =JSON.parse(Jobj.data);
-        var HtmlStr = "<tr id='" + Jitmobj.Table_or_RowID + "'>";
-        HtmlStr += '<td>' + Jitmobj.QrCode + '</td>';
-        HtmlStr += '<td>' + Jitmobj.Table_or_SheetName + '</td>';
-        HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
-        HtmlStr += '<td>' + Jitmobj.ScreenName + '</td>';
-        HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button></td></tr>';
-        if (AddTr) {
-            $("#Tbody").append(HtmlStr);
+        if (Jobj.data != undefined && Jobj.data == '1') {
+            $('#waiting').hide();
+            alert('Uploaded');
         }
         else {
-            $('#' + Jitmobj.Table_or_RowID).remove();
-            $("#Tbody").append(HtmlStr);
+            hidedpt("CreateSheat");
+            $('#waiting').hide();
+            var Jitmobj = JSON.parse(Jobj.data);
+            if (Jitmobj.Table_or_RowID != 'undefined' && Jitmobj.Table_or_RowID != null) {
+                var HtmlStr = "<tr id='" + Jitmobj.Table_or_RowID + "'>";
+                HtmlStr += '<td>' + Jitmobj.Table_or_SheetName + '</td>';
+                HtmlStr += '<td>' + Jitmobj.ScreenName + '</td>';
+                HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
+                HtmlStr += '<td>' + Jitmobj.QrCode + '</td>';
+                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button>';
+                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID + ')"> Delete</button></td ></tr > ';
+                if (AddTr) {
+                    $("#Tbody").append(HtmlStr);
+                }
+                else {
+                    $('#' + Jitmobj.Table_or_RowID).remove();
+                    $("#Tbody").append(HtmlStr);
+                }
+            }
         }
-
-        $('#waiting').hide();
     }
-
     function CreateEdit(ID) {
         if (ID != "0") {
             AddTr = false;
@@ -113,7 +135,7 @@
         $('#waiting').show();
         $.ajax({
             type: 'GET',
-            url: "/HG_Tables_or_Sheat/SheetCreateEdit?ID="+ID,
+            url: "/HG_Tables_or_Sheat/SheetCreateEdit?ID=" + ID,
             success: function (data) {
                 makedpt("CreateSheat");
                 $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -126,6 +148,53 @@
         });
 
     }
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_Tables_or_Sheat/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
 
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
+        }
 
+    }
+    function BULKEXCELUPL() {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_OrganizationDetails/Upload",
+            success: function (data) {
+                makedpt("CreateSheat");
+                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSheat");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function DownloadExl() {
+        if (confirm('Are You Sure')) {
+            $('.buttons-excel').click();
+        }
+
+    }
 </script>

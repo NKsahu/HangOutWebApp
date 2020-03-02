@@ -92,13 +92,16 @@
         var TblShetList = [];
         var categorylist = [];
         var MenuList = [];
-        function LoadOrderMenus() {
+    function LoadOrderMenus() {
+        $("#waiting").show();
             $.ajax({
                 type: 'POST',
                 url: "/WebApi/OrderMenuList?OrgId="+OrgId,
                 success: function (data) {
+                    $("#waiting").hide();
                     var OrderMenuList = JSON.parse(data);
                     ShowOrderMenus(OrderMenuList);
+
                     // }
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -334,7 +337,7 @@
         function LoadIndex() {
 
         }
-        setTimeout(function () { LoadOrderMenus(); }, 500);
+        setTimeout(function () { LoadOrderMenus(); }, 100);
     
 </script>
 

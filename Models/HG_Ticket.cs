@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
 
 namespace HangOut.Models
 {
@@ -18,6 +17,7 @@ namespace HangOut.Models
         public Int64 OID { get; set; }// order id
         [Column("CreateDate")]
         public DateTime CreationDate { get; set; }
+        public double DeliveryCharge { get; set; }
         public HG_Ticket()
         {
             CreationDate = DateTime.Now;
@@ -28,12 +28,21 @@ namespace HangOut.Models
             SqlCommand cmd = new SqlCommand();
             try
             {
-                cmd = new SqlCommand("insert into HG_Ticket values(@TicketNo,@OrgId,@OrderId,@CreateDate)", con.Con);
-                cmd.Parameters.AddWithValue("@TicketNo", this.TicketNo);
-                cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
-                cmd.Parameters.AddWithValue("@OrderId", this.OID);
-                cmd.Parameters.AddWithValue("@CreateDate", this.CreationDate.Date);
-                this.TicketId = System.Convert.ToInt32(cmd.ExecuteScalar());
+                if (this.TicketId == 0)
+                {
+                    cmd = new SqlCommand("insert into HG_Ticket values(@TicketNo,@OrgId,@OrderId,@CreateDate,@DeliveryCharge)", con.Con);
+                    cmd.Parameters.AddWithValue("@TicketNo", this.TicketNo);
+                    cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
+                    cmd.Parameters.AddWithValue("@OrderId", this.OID);
+                    cmd.Parameters.AddWithValue("@CreateDate", this.CreationDate.Date);
+                }
+                else
+                {
+                    cmd = new SqlCommand("UPDATE  HG_Ticket set DeliveryCharge=@DeliveryCharge where TID=@TID", con.Con);
+                    cmd.Parameters.AddWithValue("@TID", this.TicketId);
+                }
+                cmd.Parameters.AddWithValue("@DeliveryCharge", this.DeliveryCharge);
+                this.TicketId = System.Convert.ToInt64(cmd.ExecuteNonQuery());
             }
             catch(Exception e)
             {
@@ -64,10 +73,12 @@ namespace HangOut.Models
                 while (sqlDataReader.Read())
                 {
                     HG_Ticket hG_Ticket = new HG_Ticket();
+                    hG_Ticket.TicketId = sqlDataReader.GetInt64(0);
                     hG_Ticket.TicketNo = sqlDataReader.GetInt32(1);
                     hG_Ticket.OrgId = sqlDataReader.GetInt32(2);
                     hG_Ticket.OID = sqlDataReader.GetInt64(3);
                     hG_Ticket.CreationDate = sqlDataReader.GetDateTime(4);
+                    hG_Ticket.DeliveryCharge = sqlDataReader.GetDouble(5);
                     listtemp.Add(hG_Ticket);
                 }
 
@@ -83,7 +94,38 @@ namespace HangOut.Models
 
             return listtemp;
         }
-        
+        public static List<HG_Ticket> GetByOID(Int64 OID)
+        {
+            List<HG_Ticket> listtemp = new List<HG_Ticket>();
+            DBCon con = new DBCon();
+            SqlCommand cmd = new SqlCommand();
+            string query = "select * from HG_Ticket where OrderId ="+OID.ToString();
+            try
+            {
+                cmd = new SqlCommand(query, con.Con);
+                SqlDataReader sqlDataReader = cmd.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    HG_Ticket hG_Ticket = new HG_Ticket();
+                    hG_Ticket.TicketId = sqlDataReader.GetInt64(0);
+                    hG_Ticket.TicketNo = sqlDataReader.GetInt32(1);
+                    hG_Ticket.OrgId = sqlDataReader.GetInt32(2);
+                    hG_Ticket.OID = sqlDataReader.GetInt64(3);
+                    hG_Ticket.CreationDate = sqlDataReader.GetDateTime(4);
+                    hG_Ticket.DeliveryCharge = sqlDataReader.GetDouble(5);
+                    listtemp.Add(hG_Ticket);
+                }
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            finally
+            {
+                con.Con.Close(); con.Con.Dispose(); cmd.Dispose();
+            }
+            return listtemp;
+        }
 
     }
 }
