@@ -72,10 +72,10 @@ namespace HangOut.Controllers
                     {
                        foreach(var ObjOrdMenuItem in ordMenuCtgItems)
                         {
-                            OrderMenuCategory orderMenuCategory = OrderMenuCategory.GetAll(ObjOrdMenuItem.id);
+                            OrderMenuCategory orderMenuCategory = OrderMenuCategory.GetOne(ObjOrdMenuItem.OrdMenuCatId);
                             if (orderMenuCategory != null)
                             {
-                                List<OrdMenuCtgItems> TotalItemInOrderMenu = OrdMenuCtgItems.GetAll(MenuCatTblId: orderMenuCategory.id);
+                                List<OrderMenuCategory> TotalItemInOrderMenu = OrderMenuCategory.GetAll(CategoryId: Objitem.CategoryID);
                                 ObjOrdMenuItem.OrdMenuCatId = orderMenuCategory.id;
                                 ObjOrdMenuItem.OrderNo = TotalItemInOrderMenu.Count + 1;
                                 ObjOrdMenuItem.save();
