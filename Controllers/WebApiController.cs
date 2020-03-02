@@ -828,6 +828,7 @@ namespace HangOut.Controllers
                 }
                 PostResult.Add("Status", 200);
                 PostResult.Add("MSG",NewOID.ToString()+","+Ticketno.ToString()+","+PaymtSts.ToString());
+                PostResult.Add("DeliveryChrge", DeliveryChargeAmt);
                 //send firebase massage new ticket assign
                 string[] topics = { OrgId.ToString(), "0" };
                 if (ObjOrg.PaymentType == 2 &&ObjTorS.Type!="3")// postpaid
