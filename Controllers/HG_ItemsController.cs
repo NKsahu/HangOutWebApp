@@ -59,7 +59,32 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "Select Item Category Name" });
             }
-            Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
+            Objitem.EntryBy = Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
+
+            //check for category change and apply it to OrderMenu Section
+            if (Objitem.ItemID > 0)
+            {
+                HG_Items OldObjItem = new HG_Items().GetOne(Objitem.ItemID);
+                if (OldObjItem.CategoryID != Objitem.CategoryID)
+                {
+                    List<OrdMenuCtgItems> ordMenuCtgItems = OrdMenuCtgItems.GetAll(ItemId: Objitem.ItemID);
+                    if (ordMenuCtgItems.Count>0)
+                    {
+                       foreach(var ObjOrdMenuItem in ordMenuCtgItems)
+                        {
+                            OrderMenuCategory orderMenuCategory = OrderMenuCategory.GetAll(ObjOrdMenuItem.id);
+                            if (orderMenuCategory != null)
+                            {
+                                List<OrdMenuCtgItems> TotalItemInOrderMenu = OrdMenuCtgItems.GetAll(MenuCatTblId: orderMenuCategory.id);
+                                ObjOrdMenuItem.OrdMenuCatId = orderMenuCategory.id;
+                                ObjOrdMenuItem.OrderNo = TotalItemInOrderMenu.Count + 1;
+                                ObjOrdMenuItem.save();
+                            }
+                            
+                        }
+                    }
+                }
+            }
             int i = Objitem.Save();
             if (i > 0 && FoodImg != null)
             {
@@ -71,6 +96,7 @@ namespace HangOut.Controllers
                 if (Objitem.Save() < 1)
                     return Json(new { msg = "Error in Update Items" });
             }
+           
             HG_Category hG_Category = new HG_Category().GetOne(Objitem.CategoryID);
             Objitem.Categoryname = hG_Category.Category;
             return Json(new { data =Objitem}, JsonRequestBehavior.AllowGet);

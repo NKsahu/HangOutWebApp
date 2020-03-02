@@ -29,7 +29,7 @@ namespace HangOut.Models
                 {
                     Query = "Insert into  OrdMenuCategory  values(@CategoryId,@DispalyName,@OrderNo,@OrderMenuId,@Status);select SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, Con);
-                    
+
                 }
                 else
                 {
@@ -63,15 +63,14 @@ namespace HangOut.Models
             return Row;
 
         }
-        public static List<OrderMenuCategory> GetAll(int OderMenuId=0,int CategoryId=0)
+        public static List<OrderMenuCategory> GetAll(int OderMenuId = 0, int CategoryId = 0, int Id = 0)
         {
-            var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<OrderMenuCategory> ListTmp = new List<OrderMenuCategory>();
-             string   Query = "SELECT * FROM  OrdMenuCategory where OrderMenuId=" + OderMenuId.ToString() + " ";
+            string Query = "SELECT * FROM  OrdMenuCategory where OrderMenuId=" + OderMenuId.ToString() + " ";
             if (CategoryId > 0)
             {
                 Query = "SELECT * FROM  OrdMenuCategory where CategoryId=" + CategoryId.ToString() + " ";
@@ -102,6 +101,38 @@ namespace HangOut.Models
             }
 
             return (ListTmp);
+        }
+
+        public static OrderMenuCategory GetOne(int Id)
+        {
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            OrderMenuCategory ObjTmp = new OrderMenuCategory();
+            string Query = "SELECT * FROM  OrdMenuCategory where Id=" + Id.ToString() + " ";
+            try
+            {
+                cmd = new SqlCommand(Query, dBCon.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    int index = 0;
+                    ObjTmp.id = SDR.GetInt32(index++);
+                    ObjTmp.CategoryId = SDR.GetInt32(index++);
+                    ObjTmp.DisplayName = SDR.GetString(index++);
+                    ObjTmp.OrderNo = SDR.GetInt32(index++);
+                    ObjTmp.OrderMenuid = SDR.GetInt32(index++);
+                    ObjTmp.Status = SDR.GetBoolean(index++);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally
+            {
+                dBCon.Con.Close();
+                if (!SDR.IsClosed)
+                    SDR.Close();
+            }
+            return (ObjTmp);
         }
     }
 }
