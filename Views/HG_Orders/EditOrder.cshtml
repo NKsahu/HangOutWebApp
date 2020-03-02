@@ -134,7 +134,7 @@
                                 TotalAmt += Amt;
                             }
                         }
-                        <label  id="TotalAMT">@TotalAmt</label>
+                        <label  id="TotalAmount">@TotalAmt</label>
                     </div>
                 </div>
 
@@ -218,12 +218,13 @@
     }
     function ChangetotalAmt() {
         var AmtList = document.getElementsByClassName('ItemPrize');
-        var totalAMT = 0;
+        var a = parseInt(AmtList);
+        var TotalAmount = 0;
         console.log("ss");
-        for (var i = 0; i < AmtList.length; i++) {
-            totalAMT += parseInt(AmtList[i].text);
+        for (var i = 0; i <a.length; i++) {
+            TotalAmount += a[i];
         }
-        $("#TotalAMT").text(totalAMT);
+        $("#TotalAmount").text(TotalAmount);
     }
 </script>
 <style>
