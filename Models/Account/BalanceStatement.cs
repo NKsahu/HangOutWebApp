@@ -14,7 +14,7 @@ namespace HangOut.Models.Account
         public long OrderId { get; set; }
         public int OrgId { get; set; }
         public double CRAmount { get; set; }
-        public double DRAmount { get; set; }
+        public int EntryNo { get; set; }
         public double Balance { get; set; }
         public bool isCash { get; set; }
         public double TaxOnCash { get; set; }
