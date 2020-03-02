@@ -222,6 +222,8 @@ namespace HangOut.Controllers.Account
             mergeAndSendToAcoount(LastRecords.OrgId);
             return Json(new { data = CObj }, JsonRequestBehavior.AllowGet);
         }
+
+
         public ActionResult EntryToAccount(int OrgId)
         {
             Accounts Obj = new Accounts();
@@ -230,9 +232,24 @@ namespace HangOut.Controllers.Account
 
             Commission AllCommissions = Commission.GetAllCommissions().Last();
 
+            BalanceStatement LastRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+
+            BalanceStatement FirstRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId).Where(w=>w.Narration=="Opening Balance").Last();
+
             Sale AllSales = Sale.GetAllSales().Last();
 
-            
+            Obj.Date = FirstRecords.Date;
+            Obj.Narration = "Opening Balance";
+
+            if(AllSales==null)
+            {
+                Obj.DRAmount = 0.00;
+            }
+            else
+            {
+                Obj.DRAmount = LastRecords.Balance;
+            }
+            Obj.SaveOpeningAccountbalance();
 
 
 

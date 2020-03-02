@@ -130,5 +130,48 @@ namespace HangOut.Models.Account
 
         }
 
+        public int SaveOpeningAccountbalance()
+        {
+            int Row = 0;
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            try
+            {
+                string Quary = "";
+                if (this.AID == 0)
+                {
+                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@GroupId);SELECT SCOPE_IDENTITY();";
+                }
+                else
+                {
+                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,GroupId=@GroupId where AID=@AID";
+                }
+                cmd = new SqlCommand(Quary, con.Con);
+                cmd.Parameters.AddWithValue("@AID", this.AID);
+                cmd.Parameters.AddWithValue("@Date", this.Date);
+                cmd.Parameters.AddWithValue("@DRAmount", this.DRAmount);
+                cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
+                cmd.Parameters.AddWithValue("@Narration", this.Narration);
+                cmd.Parameters.AddWithValue("@Balance", this.Balance);
+                cmd.Parameters.AddWithValue("@GroupId", this.GroupId);
+
+                if (this.AID == 0)
+                {
+                    Row = Convert.ToInt32(cmd.ExecuteScalar());
+                    this.AID = Row;
+                }
+                else
+                {
+                    Row = cmd.ExecuteNonQuery();
+                    //this.CategoryID = Row;
+                }
+
+              
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return Row;
+
+        }
     }
 }
