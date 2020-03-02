@@ -1,6 +1,7 @@
 ﻿@using HangOut.Models
 @{ Layout = null;
     Int64 OrderID = Int64.Parse(Request.QueryString["OID"]);
+    HG_Orders HG_Order = new HG_Orders().GetOne(OrderID);
     var OrderItems = new HG_OrderItem().GetAll(OrderID);
     List<HG_Items> listItem = new HG_Items().GetAll();
 
@@ -56,8 +57,8 @@
                                     </span>
                                 </div>
                                 <div class="Col-md-1">
-                                    <input type="text" name="quant[2]" class="QTY form-control input-number text-center " readonly value="@Order.Count" id="@Order.OIID" min="1" max="2" size="10">
-
+                                    <input type="number"   class="QTY form-control input-number text-center " readonly value="@Order.Count" id="@Order.OIID"  min="0" step="5"    size="10"/>
+                                   
                                 </div>
                                 <div class="Col-md-1">
                                     <span class="input-group-btn float-left">
@@ -152,12 +153,16 @@
                     SelectListItem obj2 = new SelectListItem() { Text = "Cash", Value = "1" };
                     SelectListItem obj3 = new SelectListItem() { Text = "Bank/Wallet", Value = "2" };
                     SelectListItem obj4 = new SelectListItem() { Text = "FoodDo", Value = "3" };
-                    li.Add(obj1);
-                    li.Add(obj2);
-                    li.Add(obj3);
-                    li.Add(obj4);
-
-                     
+                    if (HG_Order.PaymentStatus == 3)
+                    {
+                        li.Add(obj4);
+                    }
+                    else
+                    {
+                        li.Add(obj1);
+                        li.Add(obj2);
+                        li.Add(obj3);
+                    }
                 }
                 @Html.DropDownList("PMode", li, new { @class = "form-control " })
             </div>
@@ -170,26 +175,14 @@
     </div>
 </div>
 <script>
-    $("#PMode").on('change', function () {
-        var type = $("#PMode").val();
-        console.log("aa");
-        if (type == "3") {
-            $(type).filter(function () {
-                return this.text == type;
-            }).attr('selected', true);
-
-
-        }
-    });
-   
-    //var text2 = 'Mushroom pie';
-    //$("#mySelect2 option").filter(function () {
-    //    return this.text == text2;
-    //}).attr('selected', true);
     function MinusItemQty(Event) {
         var OIID = $(Event).attr('OIID');
         var Cnt = parseFloat($("#" + OIID).val());
         Cnt--;
+        if (Cnt < 0) {
+            alert("Quntity Can't be Minus");
+            return;
+        }
         $("#" + OIID).val(Cnt);
         $.ajax({
             type: 'GET',
@@ -198,6 +191,7 @@
                 $("#IntPrice" + OIID).text(data);
                 ChangeQtySum();
                 ChangetotalAmt();
+               // not();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $('#waiting').hide();
@@ -236,7 +230,6 @@
     function ChangetotalAmt() {
         var TotalAmount = 0;
         var AmtList = document.getElementsByClassName('ItemPrize');
-        console.log("ss");
         for (var i = 0; i < AmtList.length; i++) {
             TotalAmount += parseFloat(AmtList[i].innerHTML);
         }
