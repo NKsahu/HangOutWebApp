@@ -1117,7 +1117,7 @@ namespace HangOut.Controllers
                     }
                 }
                 OrdId = order.OID;
-                if (ObjOrg.OrderDisplay == 2 && AppType != 3 && ObjOrg.InvoicePrintting == 2)
+                if (AppType != 3 && ObjOrg.InvoicePrintting == 2)
                 {
                     PendingPrints.SaveInvoicePrint(order, ObjOrg.NuOfCopy);
                 }
