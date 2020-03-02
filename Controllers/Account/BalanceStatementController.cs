@@ -93,8 +93,8 @@ namespace HangOut.Controllers.Account
                 {
                     totalAmt += orderitemlist[i].Count + orderitemlist[i].Price;
                 }        
-                Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
-                && x.OrgId == OrgId).FirstOrDefault();
+                  Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                                       && x.OrgId == OrgId).FirstOrDefault();
 
                     bObj.Date = ord.Create_Date;
                     bObj.Amount = totalAmt;
@@ -124,62 +124,102 @@ namespace HangOut.Controllers.Account
             return Json(new { data = bObj }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult mergeAndSendToAcoount(int OrgId,DateTime CalculationStartFrom)
+        public ActionResult mergeAndSendToAcoount(int OrgId)
         {
             BalanceStatement BSObj = new BalanceStatement();
-            int entryCount = BalanceStatement.GetByOrgId(OrgId).Count();
-            double totalAmount = BalanceStatement.GetByOrgId(OrgId).Select(s=>s.Amount).Sum();
-            BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
 
-            BSObj.Narration = "Online Payment received Entry No."+ entryCount;
-            BSObj.CRAmount = totalAmount-TotalBalance.Balance;
+            Commission CommissionLastrecord = Commission.GetAllCommissions().Last();
+
+            Sale SaleLastrecord = Sale.GetAllSales().Last();
+
+            BSObj.Narration = "Online Payment received Entry No."+ SaleLastrecord.EntryNo;
+            BSObj.CRAmount = SaleLastrecord.SaleAmount;
+
+            BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+            BSObj.Balance = TotalBalance.Balance - BSObj.CRAmount;
+
             BSObj.Date = DateTime.Now;
             BSObj.OrgId = OrgId;
-            BSObj.EntryNo = entryCount;
+            BSObj.EntryNo = SaleLastrecord.EntryNo;
             BSObj.SaveOpeningValue();
 
             BalanceStatement Obj = new BalanceStatement();
-            double totalCommission = BalanceStatement.GetByOrgId(OrgId).Select(s => s.CRAmount).Sum();
+           
 
-            Obj.Narration = "Commission Invoice No.";
-            Obj.Amount = totalCommission;
+            Obj.Narration = "Commission Invoice No."+ CommissionLastrecord.EntryNo;
+            Obj.Amount = CommissionLastrecord.CommissionAmount;
+            BalanceStatement TotalBalances = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+            Obj.Balance = TotalBalances.Balance + Obj.Amount;
             Obj.Date = DateTime.Now;
             Obj.OrgId = OrgId;
-            Obj.EntryNo = entryCount;
+            Obj.EntryNo = CommissionLastrecord.EntryNo;
             Obj.SaveOpeningValue();
 
             return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult GetAllCommission(int OrgId)
         {
+            // Sale table objects//
+            Sale SObj = new Sale();
+            Sale S1Obj = new Sale();
+            //======================//
+
+            // Commission table objects//
             Commission CObj = new Commission();
             Commission CMObj = new Commission();
-            //int entryCount = BalanceStatement.GetByOrgId(OrgId).Count();
+            //==================================
+            
             double totalAmount = BalanceStatement.GetByOrgId(OrgId).Select(s => s.CRAmount).Sum();
             List<BalanceStatement> GetRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId);
+           BalanceStatement LastRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+            Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+              && x.OrgId == OrgId).FirstOrDefault();
 
-            foreach(var data in GetRecords)
-            {           
+            foreach (var data in GetRecords)
+            {  
+              if(data.Narration!= "Opening Balance")
+              {
+                
                 CObj.CommissionAmount = data.CRAmount;
-
-                if (data.TaxOnCash > 0 && data.TaxOnOnline==0)
+                SObj.SaleAmount = data.Amount;
+                if (data.TaxOnCash > 0)
                 {
-                    CObj.TaxOnCommission = data.TaxOnCash;
+                  CObj.TaxOnCommission = (data.CRAmount*data.TaxOnCash)/100;
                 }
-                else if(data.TaxOnOnline>0 && data.TaxOnCash==0)
+                if (data.TaxOnOnline > 0)
                 {
-                    CObj.TaxOnCommission = data.TaxOnOnline;
-                }   
-
-                CObj.BalanceStatementId = data.BID;
+                    CObj.TaxOnCommission = (data.CRAmount * data.TaxOnOnline) / 100;
+                }                         
+               // CObj.BalanceStatementId = data.BID;
+                CObj.OrgId = data.OrgId;
+                SObj.OrgId = data.OrgId;
+               //Save to commision table
                 CObj.Save();
+                //======================//
+                // Save to Sale Table
+                SObj.Save();
+               //====================//
+              }
             }
-            CObj.EntryNo = CObj.EntryNo + 1;
-            CMObj.CommissionAmount = totalAmount;
-            CMObj.CommissionAmount = totalAmount;
-            CMObj.CommissionAmount = totalAmount;
-            CMObj.CommissionAmount = totalAmount;
+            double TotalTaxOnCommission = Commission.GetAllCommissions().Select(s=>s.TaxOnCommission).Sum();
 
+            double TotalSale = Sale.GetAllSales().Select(s => s.SaleAmount).Sum();
+
+
+            CMObj.EntryNo = CMObj.EntryNo + 1;
+            CMObj.CommissionAmount = totalAmount;
+            CMObj.TaxOnCommission = TotalTaxOnCommission;
+            CMObj.BalanceStatementId = LastRecords.BID;
+            CMObj.OrgId = LastRecords.OrgId;
+            CMObj.Save();
+
+
+            S1Obj.EntryNo = S1Obj.EntryNo + 1;
+            S1Obj.SaleAmount = TotalSale;         
+            S1Obj.BalanceStatementId = LastRecords.BID;
+            S1Obj.OrgId = LastRecords.OrgId;
+            S1Obj.Save();
+            mergeAndSendToAcoount(LastRecords.OrgId);
             return Json(new { data = CObj }, JsonRequestBehavior.AllowGet);
         }
     }

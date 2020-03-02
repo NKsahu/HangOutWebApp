@@ -48,7 +48,7 @@ namespace HangOut.Models.Account
                     cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                     cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
-                    cmd.Parameters.AddWithValue("@DRAmount", this.EntryNo);
+                    cmd.Parameters.AddWithValue("@EntryNo", this.EntryNo);
                     cmd.Parameters.AddWithValue("@Balance", this.Balance);
                     cmd.Parameters.AddWithValue("@TaxOnCash", this.TaxOnCash);
                     cmd.Parameters.AddWithValue("@TaxOnOnline", this.TaxOnOnline);
@@ -141,7 +141,7 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
-                cmd.Parameters.AddWithValue("@DRAmount", this.EntryNo);
+                cmd.Parameters.AddWithValue("@EntryNo", this.EntryNo);
                 cmd.Parameters.AddWithValue("@Balance", this.Balance);
                 cmd.Parameters.AddWithValue("@TaxOnCash", this.TaxOnCash);
                 cmd.Parameters.AddWithValue("@TaxOnOnline", this.TaxOnOnline);
@@ -177,7 +177,7 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
                 cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
-                cmd.Parameters.AddWithValue("@DRAmount", this.EntryNo);
+                cmd.Parameters.AddWithValue("@EntryNo", this.EntryNo);
                 cmd.Parameters.AddWithValue("@Balance", this.Balance);
                 cmd.Parameters.AddWithValue("@TaxOnCash", this.TaxOnCash);
                 cmd.Parameters.AddWithValue("@TaxOnOnline", this.TaxOnOnline);
@@ -219,6 +219,8 @@ namespace HangOut.Models.Account
                     OBJBS.CRAmount = SDR.GetDouble(6);
                     OBJBS.EntryNo = SDR.GetInt32(7);
                     OBJBS.Balance = SDR.GetDouble(8);
+                    OBJBS.TaxOnCash = SDR.GetDouble(9);
+                    OBJBS.TaxOnOnline = SDR.GetDouble(10);
                     BalanceStatementList.Add(OBJBS);
                 }
 
@@ -252,6 +254,8 @@ namespace HangOut.Models.Account
                     OBJBS.CRAmount = SDR.GetDouble(6);
                     OBJBS.EntryNo = SDR.GetInt32(7);
                     OBJBS.Balance = SDR.GetDouble(8);
+                    OBJBS.TaxOnCash = SDR.GetDouble(9);
+                    OBJBS.TaxOnOnline = SDR.GetDouble(10);
                     BalanceStatementList.Add(OBJBS);
                 }
 
