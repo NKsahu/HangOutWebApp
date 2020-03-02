@@ -67,22 +67,27 @@ namespace HangOut.Controllers
                 HG_Items OldObjItem = new HG_Items().GetOne(Objitem.ItemID);
                 if (OldObjItem.CategoryID != Objitem.CategoryID)
                 {
-                    List<OrdMenuCtgItems> ordMenuCtgItems = OrdMenuCtgItems.GetAll(ItemId: Objitem.ItemID);
-                    if (ordMenuCtgItems.Count>0)
-                    {
-                       foreach(var ObjOrdMenuItem in ordMenuCtgItems)
+                  List<OrdMenuCtgItems> ListItemsinCategory = OrdMenuCtgItems.GetAll(ItemId:Objitem.ItemID);
+                    List<OrderMenuCategory> MenuCategoryList = OrderMenuCategory.GetAll(CategoryId: Objitem.CategoryID);
+                    foreach (var CtgItem in ListItemsinCategory)
+                  {
+                        foreach(var MenuCategory in MenuCategoryList)
                         {
-                            OrderMenuCategory orderMenuCategory = OrderMenuCategory.GetOne(ObjOrdMenuItem.OrdMenuCatId);
-                            if (orderMenuCategory != null)
+                            List<OrdMenuCtgItems> MenuCategoryItems = OrdMenuCtgItems.GetAll(MenuCatTblId: MenuCategory.id);
+                            if (MenuCategoryItems.Count > 0)
                             {
-                                List<OrderMenuCategory> TotalItemInOrderMenu = OrderMenuCategory.GetAll(CategoryId: Objitem.CategoryID);
-                                ObjOrdMenuItem.OrdMenuCatId = orderMenuCategory.id;
-                                ObjOrdMenuItem.OrderNo = TotalItemInOrderMenu.Count + 1;
-                                ObjOrdMenuItem.save();
+                                var ItemExist = MenuCategoryItems.Find(x => x.ItemId == CtgItem.ItemId);
+                                if (ItemExist == null)
+                                {
+                                    CtgItem.OrderNo = MenuCategoryItems.Count + 1;
+                                    CtgItem.OrdMenuCatId = MenuCategory.id;
+                                    CtgItem.OderMenuId = MenuCategory.OrderMenuid;
+                                    CtgItem.save();
+                                }
                             }
-                            
+
                         }
-                    }
+                    }      
                 }
             }
             int i = Objitem.Save();

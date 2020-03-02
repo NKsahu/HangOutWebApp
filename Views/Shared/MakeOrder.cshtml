@@ -1463,6 +1463,9 @@
              //Msg = "Print Kot";
          }
          else if (Type == 1) {
+             if (PrintInvoice == 2) {
+                 OpenPrinter(Type, OID, NoOfCopy, TicketNo);
+             }
              Msg = "Print Invoice";
          }
          $.confirm({
@@ -1473,9 +1476,7 @@
                      text: 'OK',
                      btnClass: 'btn-info',
                      action: function () {
-                         if (PrintInvoice == 2 && Type == 1) {
-                             OpenPrinter(Type, OID, NoOfCopy, TicketNo);
-                         }
+                      
                          
                      }
                  },

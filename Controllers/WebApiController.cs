@@ -439,6 +439,7 @@ namespace HangOut.Controllers
                 orderMenuCategories = orderMenuCategories.OrderBy(x => x.OrderNo).ToList();
                 List<HG_Items> ListOfItem = new HG_Items().GetAll();
                 List<HG_Category> categoryList = new HG_Category().GetAll();
+                HashSet<Int64> MenuItemIdsHash = new HashSet<Int64>(ListCatItems.Select(x => x.ItemId).ToArray());
                 HashSet<int> CategoryHash = new HashSet<int>(orderMenuCategories.Select(x => x.CategoryId).ToArray());
                 foreach (var ordecategory in orderMenuCategories)
                 {
@@ -480,6 +481,7 @@ namespace HangOut.Controllers
                 }
 
                 categoryList = categoryList.FindAll(x => !CategoryHash.Contains(x.CategoryID));
+                //ListOfItem = ListOfItem.FindAll(x =>!MenuItemIdsHash.Contains(x.ItemID));
                 foreach (var ordecategory in categoryList)
                 {
                     JObject jobj = new JObject();
