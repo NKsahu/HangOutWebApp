@@ -134,8 +134,8 @@ namespace HangOut.Models
                     {
                         hG_Orders.DisntChargeIDs = DisntChargeIDs;
                     }
-                   
                     hG_Orders.Save();
+
                 }
             }
             if (discntCharges.Count > 0)
