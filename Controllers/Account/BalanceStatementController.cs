@@ -222,5 +222,21 @@ namespace HangOut.Controllers.Account
             mergeAndSendToAcoount(LastRecords.OrgId);
             return Json(new { data = CObj }, JsonRequestBehavior.AllowGet);
         }
-    }
+        public ActionResult EntryToAccount(int OrgId)
+        {
+            Accounts Obj = new Accounts();
+
+            Accounts AObj = new Accounts();
+
+            Commission AllCommissions = Commission.GetAllCommissions().Last();
+
+            Sale AllSales = Sale.GetAllSales().Last();
+
+            
+
+
+
+            return Json(new { data = AllCommissions }, JsonRequestBehavior.AllowGet);
+        }
+        }
 }
