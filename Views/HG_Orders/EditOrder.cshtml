@@ -157,6 +157,7 @@
                     li.Add(obj3);
                     li.Add(obj4);
 
+                     
                 }
                 @Html.DropDownList("PMode", li, new { @class = "form-control " })
             </div>
@@ -169,8 +170,22 @@
     </div>
 </div>
 <script>
-    
-    
+    $("#PMode").on('change', function () {
+        var type = $("#PMode").val();
+        console.log("aa");
+        if (type == "3") {
+            $(type).filter(function () {
+                return this.text == type;
+            }).attr('selected', true);
+
+
+        }
+    });
+   
+    //var text2 = 'Mushroom pie';
+    //$("#mySelect2 option").filter(function () {
+    //    return this.text == text2;
+    //}).attr('selected', true);
     function MinusItemQty(Event) {
         var OIID = $(Event).attr('OIID');
         var Cnt = parseFloat($("#" + OIID).val());
