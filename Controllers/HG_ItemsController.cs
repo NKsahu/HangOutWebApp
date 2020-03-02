@@ -59,7 +59,37 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "Select Item Category Name" });
             }
-            Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
+            Objitem.EntryBy = Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
+
+            //check for category change and apply it to OrderMenu Section
+            if (Objitem.ItemID > 0)
+            {
+                HG_Items OldObjItem = new HG_Items().GetOne(Objitem.ItemID);
+                if (OldObjItem.CategoryID != Objitem.CategoryID)
+                {
+                  List<OrdMenuCtgItems> ListItemsinCategory = OrdMenuCtgItems.GetAll(ItemId:Objitem.ItemID);
+                    List<OrderMenuCategory> MenuCategoryList = OrderMenuCategory.GetAll(CategoryId: Objitem.CategoryID);
+                    foreach (var CtgItem in ListItemsinCategory)
+                  {
+                        foreach(var MenuCategory in MenuCategoryList)
+                        {
+                            List<OrdMenuCtgItems> MenuCategoryItems = OrdMenuCtgItems.GetAll(MenuCatTblId: MenuCategory.id);
+                            if (MenuCategoryItems.Count > 0)
+                            {
+                                var ItemExist = MenuCategoryItems.Find(x => x.ItemId == CtgItem.ItemId);
+                                if (ItemExist == null)
+                                {
+                                    CtgItem.OrderNo = MenuCategoryItems.Count + 1;
+                                    CtgItem.OrdMenuCatId = MenuCategory.id;
+                                    CtgItem.OderMenuId = MenuCategory.OrderMenuid;
+                                    CtgItem.save();
+                                }
+                            }
+
+                        }
+                    }      
+                }
+            }
             int i = Objitem.Save();
             if (i > 0 && FoodImg != null)
             {
@@ -71,6 +101,7 @@ namespace HangOut.Controllers
                 if (Objitem.Save() < 1)
                     return Json(new { msg = "Error in Update Items" });
             }
+           
             HG_Category hG_Category = new HG_Category().GetOne(Objitem.CategoryID);
             Objitem.Categoryname = hG_Category.Category;
             return Json(new { data =Objitem}, JsonRequestBehavior.AllowGet);

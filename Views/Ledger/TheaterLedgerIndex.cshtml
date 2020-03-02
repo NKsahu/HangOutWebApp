@@ -50,7 +50,7 @@
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
                             <button class="btn btn-success btn-sm " onclick="Get(@Obj.OrgId)"> Balance Statement</button>
-                           <button class="btn btn-info btn-sm " onclick="GetACDetails(@Obj.OrgId,@Obj.CalculationStartFrom)">Merge & Send to Account</button>
+                           <button class="btn btn-info btn-sm " onclick="GetACDetails(@Obj.OrgId)">Merge & Send to Account</button>
                         </td>
                     </tr>
                 }
@@ -100,10 +100,11 @@
             });
 
     }
-    function GetACDetails(OrgId, CalculationStartFrom) {
-
-      BalanceStatementController balanceStatement = new BalanceStatementController();
-
+    function GetACDetails(OrgId) {
+        $.ajax({
+            type: 'GET',
+            url: "/BalanceStatement/GetAllCommission?OrgId=" + OrgId,
+        });
     }
     function JsonSuccess(Jobj) {
 
