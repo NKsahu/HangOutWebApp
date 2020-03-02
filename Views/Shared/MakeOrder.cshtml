@@ -389,12 +389,12 @@
                                 <div class="row" style="width:100%">
                                     <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
                                         <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
-                                            send to CHEF
+                                            Send to CHEF
                                         </button>
                                     </div>
                                     <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
                                         <button type="button" class="form-control btn btn-success sp-f2-hotkey">
-                                            bypass CHEF
+                                            Direct ADD-To BILL
                                         </button>
                                     </div>
                                 </div>
@@ -987,12 +987,6 @@
                     else {
                         var JsonMsg = JsonObj.MSG.split(",");
                         var PaymentSts = JsonMsg[2];
-                        //$.alert({
-                        //    title: 'Alert!',
-                        //    content: "Order No: " + JsonMsg[0] + " & Ticket No " + JsonMsg[1],
-                        //});
-                        
-                        console.log("Msh pay" + PaymentSts);
                         if (PaymentSts != "0") {
                             $("#FinalAmt").html('0.00');
                             $("#FinalAmtCharge").text('CHARGE 0.00');
@@ -1001,6 +995,7 @@
                         }
                         else {
                             var finalAmt = parseFloat($("#FinalAmt").text());
+                            finalAmt += parseFloat(JsonObj.DeliveryChrge);
                             ChargeAmt = ChargeAmt + finalAmt;
                             $("#FinalAmtCharge").text('CHARGE ' + ChargeAmt.toFixed(2) +' /Rs.');
                         }
@@ -1085,7 +1080,7 @@
                      }
                      var DelivryMsg = 'A ' + incldmsg + ' delivery charge of Rs ' + JsonObj.ChargeAmt + ' applicable ' + Postfix;
                      $.confirm({
-                         title:'<p>'+ DelivryMsg+'</p>',
+                         title:'<p style="color:red;">'+ DelivryMsg+'</p>',
                          content: titlemsg,
                          closeIcon: true,
                          boxWidth: '40%',
@@ -1096,6 +1091,8 @@
                                  btnClass: 'btn-info LeftBtn',
                                  columnClass:'col-md-3',
                                  action: function () {
+                                   //  var finalChargeToShow = ChargeAmt + FinlAmt;
+                                    // $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
                                      PostOrder(Obj);
                                  }
                              },

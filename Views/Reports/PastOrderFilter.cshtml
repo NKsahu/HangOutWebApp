@@ -144,23 +144,76 @@
     }
     function PrintInvoice(OID) {
 
-        $("#waiting").show();
-        $.ajax({
-            type: 'POST',
-            url: "/HG_Orders/PrintInvoice?&OID=" + OID,
-            success: function (data) {
-                makedpt("invoice");
-                $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("invoice");
-                $("#waiting").hide();
-                //var Jobje = JSON.parse(data);
+        //$("#waiting").show();
+        //$.ajax({
+        //    type: 'POST',
+        //    url: "/HG_Orders/PrintInvoice?&OID=" + OID,
+        //    success: function (data) {
+        //        makedpt("invoice");
+        //        $("#invoice > .modal-dialog > .modal-content > .modal-body").html(data);
+        //        showdpt("invoice");
+        //        $("#waiting").hide();
+        //        //var Jobje = JSON.parse(data);
+        //    },
+        //    error: function (jqXhr, textStatus, errorMessage) { // error callback
+        //        $("#waiting").hide();
+        //    }
+        //});
+        $.confirm({
+            title: "Print Invoice",
+            content: "Order No "+OID,
+            closeIcon: true,
+            buttons: {
+                Zero: {
+                    text: '0',
+                    btnClass: 'btn-info btn-lg PrintBtnWidth',
+                    keys: ['0'],
+                    columnClass: 'col-md-3',
+                    action: function () {
+
+                    }
+                },
+                One: {
+                    text: '1',
+                    btnClass: 'btn-info btn-lg PrintBtnWidth',
+                    columnClass: 'col-md-3',
+                    keys: ['1'],
+                    action: function () {
+                        OpenPrinter(1, OID, 1, 0);
+                    }
+                },
+                Two: {
+                    text: '2',
+                    btnClass: 'btn-info btn-lg PrintBtnWidth',
+                    keys: ['2'],
+                    columnClass: 'col-md-3',
+                    action: function () {
+                        OpenPrinter(1, OID, 1, 0);
+                    }
+                },
+                Three: {
+                    text: '3',
+                    btnClass: 'btn-info btn-lg PrintBtnWidth',
+                    columnClass: 'col-md-3',
+                    keys: ['3'],
+                    action: function () {
+                        OpenPrinter(1, OID, 1, 0);
+                    }
+                },
             },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
+            onOpenBefore: function () {
+                $(".jconfirm-buttons").css('width', '100%');
+            },
+            onDestroy: function () {
+                $(".jconfirm-buttons").removeAttr('width');
             }
         });
-
     }
+    function OpenPrinter(Type, OID, NoOfCpy, TicketNo) {
+        window.location.href = "foodDo:" + Type + "&" + OID + "&" + NoOfCpy + "&" + TicketNo;
+        return;
+    }
+    
     function EditOrder(OID) {
         $("#waiting").show();
         $.ajax({

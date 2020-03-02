@@ -61,7 +61,7 @@ namespace HangOut.Models
 
 
         }
-        public static List<OrdMenuCtgItems> GetAll(int OderMenuId=0,Int64 ItemId=0)
+        public static List<OrdMenuCtgItems> GetAll(int OderMenuId=0,Int64 ItemId=0,int MenuCatTblId=0)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
@@ -73,6 +73,10 @@ namespace HangOut.Models
             if (ItemId > 0)
             {
                 Query = "SELECT * FROM  OrderMenuCatItems where ItemId=" + ItemId.ToString() + " ";
+            }
+            else if (MenuCatTblId > 0)
+            {
+                Query = "SELECT * FROM  OrderMenuCatItems where OrdMenuCatId=" + MenuCatTblId.ToString() + " ";
             }
             try
             {
@@ -98,7 +102,6 @@ namespace HangOut.Models
                 if (!SDR.IsClosed)
                     SDR.Close();
             }
-
             return (ListTmp);
         }
     }
