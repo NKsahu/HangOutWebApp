@@ -50,7 +50,8 @@
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
                             <button class="btn btn-success btn-sm " onclick="Get(@Obj.OrgId)"> Balance Statement</button>
-                           <button class="btn btn-info btn-sm " onclick="GetACDetails(@Obj.OrgId)">Merge & Send to Account</button>
+                            <button class="btn btn-info btn-sm " onclick="GetACDetails(@Obj.OrgId)">Merge & Send to Account</button>
+                            <button class="btn btn-info btn-sm " onclick="Delete(@Obj.ID)">Delete</button>
                         </td>
                     </tr>
                 }
@@ -124,6 +125,32 @@
         else {
             $('#' + Jitmobj.ID).remove();
             $("#Tbody").append(HtmlStr);
+        }
+    }
+    function Delete(ID) {
+        if (confirm('Are You Sure')) {
+            $('#waiting').show();
+            $.ajax({
+                type: 'GET',
+                url: "/Ledger/Delete?ID=" + ID,
+                success: function (data) {
+                    //  var da = JSON.parse(data);
+                    if (data.msg != null && data.msg != "") {
+                        alert(data.msg);
+
+                    }
+                    else {
+                        $("#" + ID).hide();
+                    }
+                    console.log(data);
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                    Onfail(errorMessage.MSG);
+                    $('#waiting').hide();
+                }
+            });
         }
     }
 
