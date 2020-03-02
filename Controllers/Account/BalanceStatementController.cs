@@ -150,12 +150,37 @@ namespace HangOut.Controllers.Account
 
             return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
         }
-        //public ActionResult GetAllCommission(int OrgId)
-        //{
+        public ActionResult GetAllCommission(int OrgId)
+        {
+            Commission CObj = new Commission();
+            Commission CMObj = new Commission();
+            //int entryCount = BalanceStatement.GetByOrgId(OrgId).Count();
+            double totalAmount = BalanceStatement.GetByOrgId(OrgId).Select(s => s.CRAmount).Sum();
+            List<BalanceStatement> GetRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId);
 
+            foreach(var data in GetRecords)
+            {           
+                CObj.CommissionAmount = data.CRAmount;
 
+                if (data.TaxOnCash > 0 && data.TaxOnOnline==0)
+                {
+                    CObj.TaxOnCommission = data.TaxOnCash;
+                }
+                else if(data.TaxOnOnline>0 && data.TaxOnCash==0)
+                {
+                    CObj.TaxOnCommission = data.TaxOnOnline;
+                }   
 
-        //   // return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
-        //}
+                CObj.BalanceStatementId = data.BID;
+                CObj.Save();
+            }
+            CObj.EntryNo = CObj.EntryNo + 1;
+            CMObj.CommissionAmount = totalAmount;
+            CMObj.CommissionAmount = totalAmount;
+            CMObj.CommissionAmount = totalAmount;
+            CMObj.CommissionAmount = totalAmount;
+
+            return Json(new { data = CObj }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
