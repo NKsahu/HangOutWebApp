@@ -134,11 +134,10 @@ namespace HangOut.Models.Account
         {
 
             List<Type> type = new List<Type>();
-            type.Add(new Type { Id = 0, Name = "Liability" });
-            type.Add(new Type { Id = 1, Name = "Asset" });
-            type.Add(new Type { Id = 2, Name = "Income" });
-            type.Add(new Type { Id = 3, Name = "Expense" });
-
+            type.Add(new Type { Id = 1, Name = "Personal" });
+            type.Add(new Type { Id = 2, Name = "real" });
+            type.Add(new Type { Id = 3, Name = "Nominal" });
+        
             return type;
         }
     }
