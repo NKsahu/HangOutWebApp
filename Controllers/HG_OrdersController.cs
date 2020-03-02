@@ -92,6 +92,7 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult SaveDiscntCharge(OrdDiscntChrge discntCharge)
         {
+            double AmtToAdded = 0.00;
             if (discntCharge.Remark == null)
             {
                 discntCharge.Remark = "";
@@ -117,7 +118,7 @@ namespace HangOut.Controllers
             {
                 DiscntCharge.ListDiscntChrge.Add(discntCharge);
             }
-            return Json(new { data = discntCharge}, JsonRequestBehavior.AllowGet);
+            return Json(new { data = AmtToAdded}, JsonRequestBehavior.AllowGet);
         }
         public string UpdateAmt(int ID,int Cnt)
         {
