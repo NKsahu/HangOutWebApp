@@ -37,8 +37,8 @@ namespace HangOut.Controllers
                 cookie.Values.Add("UserType", Obj.UserType);
                cookie.Values.Add("OrgId", Obj.OrgID.ToString());
                 Response.Cookies.Add(cookie);
-               return RedirectToAction("Admin");
-              //  return Json(new { url = "/vw_HG_UsersDetails/Admin" });
+              // return RedirectToAction("Admin");
+                return Json(new { url = "/vw_HG_UsersDetails/Admin" });
             }
             else
             {
