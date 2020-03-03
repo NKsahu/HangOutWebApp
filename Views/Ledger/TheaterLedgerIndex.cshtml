@@ -11,14 +11,13 @@
         <h3 class="text-center">Theater Ledger</h3>
     </div>
     <div class="row pt-5">
-        <div class="col-md-4">
 
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add Ledger</button>
-        </div>
-        <div class="col-md-4">
 
+        </div>
+        <div class="col-md-6">
+            <button onclick="GetACDetails()" class="btn btn-info form-control">Merge & Send to Account</button>
         </div>
     </div>
     <div class="card-body">
@@ -50,7 +49,6 @@
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
                             <button class="btn btn-success btn-sm " onclick="Get(@Obj.OrgId)"> Balance Statement</button>
-                            <button class="btn btn-info btn-sm " onclick="GetACDetails(@Obj.OrgId)">Merge & Send to Account</button>
                             <button class="btn btn-info btn-sm " onclick="Delete(@Obj.ID)">Delete</button>
                         </td>
                     </tr>
@@ -101,10 +99,10 @@
             });
 
     }
-    function GetACDetails(OrgId) {
+    function GetACDetails() {
         $.ajax({
             type: 'GET',
-            url: "/BalanceStatement/GetAllCommission?OrgId=" + OrgId,
+            url: "/BalanceStatement/GetAllorganization",
         });
     }
     function JsonSuccess(Jobj) {

@@ -128,9 +128,9 @@ namespace HangOut.Controllers.Account
         {
             BalanceStatement BSObj = new BalanceStatement();
 
-            Commission CommissionLastrecord = Commission.GetAllCommissions().Last();
+            Commission CommissionLastrecord = Commission.GetAllCommissions().Where(w=> w.OrgId == OrgId).Last();
 
-            Sale SaleLastrecord = Sale.GetAllSales().Last();
+            Sale SaleLastrecord = Sale.GetAllSales().Where(w=>w.OrgId == OrgId).Last();
 
             BSObj.Narration = "Online Payment received Entry No."+ SaleLastrecord.EntryNo;
             BSObj.CRAmount = SaleLastrecord.SaleAmount;
@@ -169,6 +169,23 @@ namespace HangOut.Controllers.Account
 
             return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
         }
+
+
+        public ActionResult GetAllorganization()
+        {
+          
+            List<Ledger> LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1 
+            && x.PaymentDay== Convert.ToInt32(DateTime.Now.DayOfWeek)).ToList();
+
+            foreach (var org in LedgerDetails)
+            { 
+                GetAllCommission(org.OrgId);
+            }
+            return Json(new { data = LedgerDetails }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         public ActionResult GetAllCommission(int OrgId)
         {
             // Sale table objects//
@@ -239,29 +256,29 @@ namespace HangOut.Controllers.Account
               }
             }
 
-            int GetLastCalculationRecord = Commission.GetAllCommissions().Select(s => s.BalanceStatementId).Max();
+            int GetLastCalculationRecord = Commission.GetAllCommissions().Where(w=>w.OrgId== OrgId).Select(s => s.BalanceStatementId).Max();
 
             int CommissionId = Commission.GetAllCommissions()
-        .Where(w => w.BalanceStatementId == GetLastCalculationRecord).Select(s => s.CommisionId).FirstOrDefault();
+        .Where(w => w.BalanceStatementId == GetLastCalculationRecord && w.OrgId == OrgId).Select(s => s.CommisionId).FirstOrDefault();
 
             double TotalTaxOnCommission = Commission.GetAllCommissions()
-                    .Where(w=>w.CommisionId> CommissionId).Select(s=>s.TaxOnCommission).Sum();
+                    .Where(w=>w.CommisionId> CommissionId && w.OrgId == OrgId).Select(s=>s.TaxOnCommission).Sum();
 
-            int GetMaxBID = Sale.GetAllSales().Select(s => s.BalanceStatementId).Max();
+            int GetMaxBID = Sale.GetAllSales().Where(w=> w.OrgId == OrgId).Select(s => s.BalanceStatementId).Max();
 
             int SaleId = Sale.GetAllSales()
-                .Where(w => w.SaleId == GetMaxBID).Select(s => s.SaleId).FirstOrDefault();
+                .Where(w => w.SaleId == GetMaxBID && w.OrgId == OrgId).Select(s => s.SaleId).FirstOrDefault();
 
-            double TotalSale = Sale.GetAllSales().Where(w=>w.SaleId> SaleId).Select(s => s.SaleAmount).Sum();
+            double TotalSale = Sale.GetAllSales().Where(w=>w.SaleId> SaleId && w.OrgId == OrgId).Select(s => s.SaleAmount).Sum();
 
             double totalAmount = Commission.GetAllCommissions()
-                               .Where(w => w.CommisionId > CommissionId).Select(s => s.CommissionAmount).Sum();
+                               .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.CommissionAmount).Sum();
 
             int LastEntry = Commission.GetAllCommissions()
-                              .Where(w => w.EntryNo>0).Select(s=>s.EntryNo).Max();
+                              .Where(w => w.EntryNo>0 && w.OrgId == OrgId).Select(s=>s.EntryNo).Max();
 
             int LastSaleEntry = Sale.GetAllSales()
-                              .Where(w => w.EntryNo > 0).Select(s => s.EntryNo).Max();
+                              .Where(w => w.EntryNo > 0 && w.OrgId == OrgId).Select(s => s.EntryNo).Max();
 
             CMObj.EntryNo = LastEntry + 1;
             CMObj.CommissionAmount = totalAmount;
@@ -295,13 +312,13 @@ namespace HangOut.Controllers.Account
 
             List<Accounts> ADObjList = new List<Accounts>();
 
-            Commission AllCommissions = Commission.GetAllCommissions().Last();
+            Commission AllCommissions = Commission.GetAllCommissions().Where(w=> w.OrgId == OrgId).Last();
 
             BalanceStatement LastRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
 
             BalanceStatement FirstRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId).Where(w=>w.Narration=="Opening Balance").Last();
 
-            Sale AllSales = Sale.GetAllSales().Last();
+            Sale AllSales = Sale.GetAllSales().Where(w=> w.OrgId == OrgId).Last();
 
             Obj.Date = FirstRecords.Date;
             Obj.Narration = "Opening Balance";
