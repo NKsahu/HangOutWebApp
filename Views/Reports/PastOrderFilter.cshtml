@@ -214,11 +214,11 @@
         return;
     }
     
-    function EditOrder(OID ) {
+    function EditOrder(OID, PMode ) {
         $("#waiting").show();
         $.ajax({
             type: 'GET',
-            url: "/HG_Orders/EditOrder?OID=" + OID,
+            url: "/HG_Orders/EditOrder?OID=" + OID + "&PMode" + PMode,
             success: function (data) {
                 makedpt("EditOrder");
                 $("#EditOrder > .modal-dialog > .modal-content > .modal-body").html(data);
