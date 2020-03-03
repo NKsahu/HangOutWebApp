@@ -57,19 +57,28 @@ namespace HangOut.Controllers
         {
             return View();
         }
-        public ActionResult DiscntCharges(Int64 SeatingId,int Type)
+        public ActionResult DiscntCharges(Int64 SeatingId,int Type=0,int ID=0)
         {
             OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
-            HG_Tables_or_Sheat SeatingObj = new HG_Tables_or_Sheat().GetOne(SeatingId);
-            List<HG_Orders> orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-            var  ObjOrder = orders.Find(x => x.Table_or_SheatId == SeatingId && x.TableOtp == SeatingObj.Otp);
-            if (ObjOrder != null &&ObjOrder.Status!="3"&&ObjOrder.Status!="4")
+            if (SeatingId > 0)
             {
-                ordDiscntChrge.OID = ObjOrder.OID;
+                HG_Tables_or_Sheat SeatingObj = new HG_Tables_or_Sheat().GetOne(SeatingId);
+                List<HG_Orders> orders = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                var ObjOrder = orders.Find(x => x.Table_or_SheatId == SeatingId && x.TableOtp == SeatingObj.Otp);
+                if (ObjOrder != null && ObjOrder.Status != "3" && ObjOrder.Status != "4")
+                {
+                    ordDiscntChrge.OID = ObjOrder.OID;
+                }
+                ordDiscntChrge.Type = Type;
+                ordDiscntChrge.SeatingId = SeatingId;
+                ordDiscntChrge.SeatingOtp = SeatingObj.Otp;
             }
-            ordDiscntChrge.Type = Type;
-            ordDiscntChrge.SeatingId = SeatingId;
-            ordDiscntChrge.SeatingOtp = SeatingObj.Otp;
+            else if (ID > 0)
+            {
+                ordDiscntChrge = OrdDiscntChrge.GetOne(ID);
+            }
+           
+          
             return View(ordDiscntChrge);
         }
         public ActionResult LocalContactIndex()

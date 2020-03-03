@@ -103,6 +103,11 @@ namespace HangOut.Models
 
             return (TmpList);
         }
+        public static OrdDiscntChrge GetOne(int ID)
+        {
+            OrdDiscntChrge ordDiscntChrge = GetAll(ID.ToString()).FirstOrDefault();
+            return ordDiscntChrge;
+        }
         public static void RemoveDiscntCharge(Int64 SeatingId,int Otp,Int64 OID)
         {
             List<OrdDiscntChrge> discntCharges = DiscntCharge.ListDiscntChrge.FindAll(x => x.SeatingId == SeatingId && x.SeatingOtp == Otp);
