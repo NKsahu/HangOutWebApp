@@ -514,6 +514,7 @@
     <Content Include="Views\INTGSTBL\AddSubItem.cshtml" />
     <Content Include="Views\BalanceStatement\Index.cshtml" />
     <Content Include="Views\HG_Orders\EditOrder.cshtml" />
+    <Content Include="Views\HG_UserTypes\OpenFoodDoApp.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
