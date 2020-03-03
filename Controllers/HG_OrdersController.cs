@@ -166,7 +166,7 @@ namespace HangOut.Controllers
             {
                 
                 OBJOrderItem.Count = Cnt;
-                OBJOrderItem.Save();
+                //OBJOrderItem.Save();
                 price = OBJOrderItem.Count * OBJOrderItem.Price;
                 result.Add("Status", 200);
                 result.Add("MSG", price.ToString("0.00"));
