@@ -228,90 +228,94 @@ namespace HangOut.Controllers.Account
 
             }
 
+            if (GetRecords != null)
+            {
+                BalanceStatement LastRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
 
-            BalanceStatement LastRecords = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+                Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                  && x.OrgId == OrgId).FirstOrDefault();
 
-            Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
-              && x.OrgId == OrgId).FirstOrDefault();
-
-            foreach (var data in GetRecords)
-            {  
-              if(data.Narration!= "Opening Balance")
-              {
-                
-                CObj.CommissionAmount = data.CRAmount;
-                SObj.SaleAmount = data.Amount;
-                if (data.TaxOnCash > 0)
+                foreach (var data in GetRecords)
                 {
-                  CObj.TaxOnCommission = (data.CRAmount*data.TaxOnCash)/100;
+                    if (data.Narration != "Opening Balance")
+                    {
+
+                        CObj.CommissionAmount = data.CRAmount;
+                        SObj.SaleAmount = data.Amount;
+                        if (data.TaxOnCash > 0)
+                        {
+                            CObj.TaxOnCommission = (data.CRAmount * data.TaxOnCash) / 100;
+                        }
+                        if (data.TaxOnOnline > 0)
+                        {
+                            CObj.TaxOnCommission = (data.CRAmount * data.TaxOnOnline) / 100;
+                        }
+                        // CObj.BalanceStatementId = data.BID;
+                        CObj.OrgId = data.OrgId;
+                        SObj.OrgId = data.OrgId;
+                        //Save to commision table
+                        CObj.Save();
+                        //======================//
+                        // Save to Sale Table
+                        SObj.Save();
+                        //====================//
+                    }
                 }
-                if (data.TaxOnOnline > 0)
+
+                if (GetRecords.Count != 1) // used for eliminating Opening Balance entry when there is no data for next entry
                 {
-                    CObj.TaxOnCommission = (data.CRAmount * data.TaxOnOnline) / 100;
-                }                         
-               // CObj.BalanceStatementId = data.BID;
-                CObj.OrgId = data.OrgId;
-                SObj.OrgId = data.OrgId;
-               //Save to commision table
-                CObj.Save();
-                //======================//
-                // Save to Sale Table
-                SObj.Save();
-               //====================//
-              }
+                    int GetLastCalculationRecord = Commission.GetAllCommissions().Where(w => w.OrgId == OrgId).Select(s => s.BalanceStatementId).Max();
+
+                    int CommissionId = Commission.GetAllCommissions()
+                       .Where(w => w.BalanceStatementId == GetLastCalculationRecord && w.OrgId == OrgId).Select(s => s.CommisionId).FirstOrDefault();
+
+                    double TotalTaxOnCommission = Commission.GetAllCommissions()
+                            .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.TaxOnCommission).Sum();
+
+                    int GetMaxBID = Sale.GetAllSales().Where(w => w.OrgId == OrgId).Select(s => s.BalanceStatementId).Max();
+
+                    int SaleId = Sale.GetAllSales()
+                        .Where(w => w.BalanceStatementId == GetMaxBID && w.OrgId == OrgId).Select(s => s.SaleId).FirstOrDefault();
+
+                    double TotalSale = Sale.GetAllSales().Where(w => w.SaleId > SaleId && w.OrgId == OrgId).Select(s => s.SaleAmount).Sum();
+
+                    double totalAmount = Commission.GetAllCommissions()
+                                       .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.CommissionAmount).Sum();
+
+                    try
+                    {
+
+                        LastEntry = Commission.GetAllCommissions()
+                                          .Where(w => w.EntryNo > 0 && w.OrgId == OrgId).Select(s => s.EntryNo).Max();
+
+                        LastSaleEntry = Sale.GetAllSales()
+                                          .Where(w => w.EntryNo > 0 && w.OrgId == OrgId).Select(s => s.EntryNo).Max();
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.ToString();
+                    }
+
+                    CMObj.EntryNo = LastEntry + 1;
+                    CMObj.CommissionAmount = totalAmount;
+                    CMObj.TaxOnCommission = TotalTaxOnCommission;
+                    CMObj.BalanceStatementId = LastRecords.BID;
+                    CMObj.OrgId = LastRecords.OrgId;
+                    CMObj.Save();
+
+
+                    S1Obj.EntryNo = LastSaleEntry + 1;
+                    S1Obj.SaleAmount = TotalSale;
+                    S1Obj.BalanceStatementId = LastRecords.BID;
+                    S1Obj.OrgId = LastRecords.OrgId;
+                    S1Obj.Save();
+
+                    mergeAndSendToAcoount(LastRecords.OrgId);
+                    EntryToAccount(LastRecords.OrgId);
+                }
             }
-
-
-                int GetLastCalculationRecord = Commission.GetAllCommissions().Where(w => w.OrgId == OrgId).Select(s => s.BalanceStatementId).Max();
-
-                int CommissionId = Commission.GetAllCommissions()
-                   .Where(w => w.BalanceStatementId == GetLastCalculationRecord && w.OrgId == OrgId).Select(s => s.CommisionId).FirstOrDefault();
-
-                double TotalTaxOnCommission = Commission.GetAllCommissions()
-                        .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.TaxOnCommission).Sum();
-
-                int GetMaxBID = Sale.GetAllSales().Where(w => w.OrgId == OrgId).Select(s => s.BalanceStatementId).Max();
-
-                int SaleId = Sale.GetAllSales()
-                    .Where(w => w.BalanceStatementId == GetMaxBID && w.OrgId == OrgId).Select(s => s.SaleId).FirstOrDefault();
-
-                double TotalSale = Sale.GetAllSales().Where(w => w.SaleId > SaleId && w.OrgId == OrgId).Select(s => s.SaleAmount).Sum();
-
-                double totalAmount = Commission.GetAllCommissions()
-                                   .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.CommissionAmount).Sum();
-
-            try
-            {
-
-                LastEntry = Commission.GetAllCommissions()
-                                  .Where(w => w.EntryNo > 0 && w.OrgId == OrgId).Select(s => s.EntryNo).Max();
-
-                LastSaleEntry = Sale.GetAllSales()
-                                  .Where(w => w.EntryNo > 0 && w.OrgId == OrgId).Select(s => s.EntryNo).Max();
-
-
-            }
-            catch (Exception ex)
-            {
-                ex.ToString();
-            }
-
-                CMObj.EntryNo = LastEntry + 1;
-                CMObj.CommissionAmount = totalAmount;
-                CMObj.TaxOnCommission = TotalTaxOnCommission;
-                CMObj.BalanceStatementId = LastRecords.BID;
-                CMObj.OrgId = LastRecords.OrgId;
-                CMObj.Save();
-
-
-                S1Obj.EntryNo = LastSaleEntry + 1;
-                S1Obj.SaleAmount = TotalSale;
-                S1Obj.BalanceStatementId = LastRecords.BID;
-                S1Obj.OrgId = LastRecords.OrgId;
-                S1Obj.Save();
-          
-            mergeAndSendToAcoount(LastRecords.OrgId);
-            EntryToAccount(LastRecords.OrgId);
             return Json(new { data = CObj }, JsonRequestBehavior.AllowGet);
         }
 

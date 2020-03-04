@@ -94,7 +94,7 @@ namespace HangOut.Models.Account
         public int ADSave()
         {
             int ARow = 0;
-            DBCon con = new DBCon();
+            DBCon con1 = new DBCon();
             SqlCommand cmd = null;
             try
             {
@@ -107,7 +107,7 @@ namespace HangOut.Models.Account
                 {
                     Quary = "Update ACAccountDetails Set AID=@AID,Date=@Date,Amount=@Amount,GroupId=@GroupId,DRLedgerId=@DRLedgerId,CRLedgerId=@CRLedgerId,OrgId=@OrgId where ADID=@ADID";
                 }
-                cmd = new SqlCommand(Quary, con.Con);
+                cmd = new SqlCommand(Quary, con1.Con);
                 cmd.Parameters.AddWithValue("@ADID", this.ADID);
                 cmd.Parameters.AddWithValue("@AID", this.ACID);
                 cmd.Parameters.AddWithValue("@Date", this.ADDate);
@@ -130,7 +130,7 @@ namespace HangOut.Models.Account
 
             }
             catch (Exception e) { e.ToString(); }
-            finally { cmd.Dispose(); con.Con.Close(); }
+            finally { cmd.Dispose(); con1.Con.Close(); }
             return ARow;
 
         }

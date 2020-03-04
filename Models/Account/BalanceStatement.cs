@@ -272,7 +272,7 @@ namespace HangOut.Models.Account
             List<BalanceStatement> BalanceStatementList = new List<BalanceStatement>();
             try
             {
-                string Quary = "Select * from ACBalanceStatement where OrgId=" + OrgId; 
+                string Quary = "Select * from ACBalanceStatement where OrgId=" + OrgId+ " ORDER BY Date ASC"; 
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
