@@ -46,58 +46,58 @@
                 @foreach (var Order in OrderItems)
                 {
                     double ItemPrice = Order.Price * Order.Count;
-                <tr class="item">
-                    <td>
-                        @SNo
-                       @{ 
-                           SNo++;
-                           Qty += Order.Count;
-                           Total += ItemPrice;
-                       }
-                    </td>
-                    <td>
-                        @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == Order.FID); }
-                        @ObjOrder.Items
-                    </td>
-                    <td>
-                        @Order.Count
-                    </td>
-                    <td>
-                        <div class="row">
-                            <div class="col-md-4">
+                    <tr class="item">
+                        <td>
+                            @SNo
+                            @{
+                                SNo++;
+                                Qty += Order.Count;
+                                Total += ItemPrice;
+                            }
+                        </td>
+                        <td>
+                            @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == Order.FID); }
+                            @ObjOrder.Items
+                        </td>
+                        <td>
+                            @Order.Count
+                        </td>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-4">
 
-                            </div>
-                            <div class="Col-md-1">
-                                <span class="input-group-btn float-right">
-                                    <button type="button" class="btn btn-danger btn-number" data-type="minus" OIID="@Order.OIID" onclick="MinusItemQty(this)">
-                                        <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
-                                    </button>
-                                </span>
-                            </div>
-                            <div class="Col-md-1">
-                                <input type="text" class="QTY form-control input-number text-center " readonly value="@Order.Count" id="@Order.OIID" min="0" step="5" size="10" />
+                                </div>
+                                <div class="Col-md-1">
+                                    <span class="input-group-btn float-right">
+                                        <button type="button" class="btn btn-danger btn-number" data-type="minus" OIID="@Order.OIID" onclick="MinusItemQty(this)">
+                                            <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="Col-md-1">
+                                    <input type="text" class="QTY form-control input-number text-center " readonly value="@Order.Count" id="@Order.OIID" min="0" step="5" size="10" />
 
-                            </div>
-                            <div class="Col-md-1">
-                                <span class="input-group-btn float-left">
-                                    <button type="button" class="btn btn-success btn-number" data-type="plus" OIID="@Order.OIID" onclick="PlusItemQty(this)">
-                                        <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
-                                    </button>
-                                </span>
-                            </div>
-                            <div class="col-md-4">
+                                </div>
+                                <div class="Col-md-1">
+                                    <span class="input-group-btn float-left">
+                                        <button type="button" class="btn btn-success btn-number" data-type="plus" OIID="@Order.OIID" onclick="PlusItemQty(this)">
+                                            <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="col-md-4">
 
+                                </div>
                             </div>
-                        </div>
-                    </td>
+                        </td>
 
-                    <td>
-                        @Order.TickedNo
-                    </td>
-                    <td class="ItemPrize" id="IntPrice@(Order.OIID)">
-                        @ItemPrice.ToString("0.00")
-                    </td>
-                </tr>
+                        <td>
+                            @Order.TickedNo
+                        </td>
+                        <td class="ItemPrize" id="IntPrice@(Order.OIID)">
+                            @ItemPrice.ToString("0.00")
+                        </td>
+                    </tr>
                 }
 
             </tbody>
@@ -118,9 +118,54 @@
             </tfoot>
         </table>
 
-        <div class="row">
-            <h5 class="text-center text-danger"><b><u>Charges And Discount</u></b></h5>
+        @if (ListDicntCharge.Count > 0)
+        {
+        <div class="row" style="width:100%">
+            <div class="col-md-12">
+                <h5 class="text-center text-danger"><b><u>Charges And Discount</u></b></h5>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-2">
+                <button type="button" onclick="AddChargeDiscnt(2,0,@HG_Order.OID)" class="btn btn-success ">
+                    Add Charge
+                </button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" onclick="AddChargeDiscnt(1,0,@HG_Order.OID)" class="btn btn-success ">
+                   Add Discount
+                </button>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-12">
+                <table style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Amt</th>
+                            <th> Tax</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var DiscntCharge in ListDicntCharge)
+                        {
+                            <tr>
+                                <td>@DiscntCharge.Title</td>
+                                <td>@DiscntCharge.Amt.ToString("0.00")</td>
+                                <td>@DiscntCharge.Tax.ToString("0.00")</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm " onclick="AddChargeDiscnt(0,@DiscntCharge.ID,0)">Edit</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
+        }
+
         <hr />
         @using (Ajax.BeginForm("SaveEditOrder", "HG_Orders", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
@@ -231,10 +276,25 @@
         $("#TotalAmount").text(TotalAmount);
     }
     function JsonSuccess(Jobj) {
+        console.log(Jobj);
+        $("#waiting").hide();
         hidedpt('EditOrder');
     }
-    function AddItem() {
-
+    function AddChargeDiscnt(Type,ID,OID) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Orders/DiscntCharges?SeatingId=0&Type=" + Type + "&ID=" + ID + "&OID=" + OID,
+            success: function (data) {
+                makedpt("DiscntCharge", 400, 400);
+                $("#DiscntCharge > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("DiscntCharge");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
     }
 </script>
 <style>

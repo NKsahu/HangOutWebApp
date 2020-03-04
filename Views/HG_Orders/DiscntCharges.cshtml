@@ -3,12 +3,12 @@
     Layout = null;
     string TitleType = "";
     string TaxTitle = "";
-    if (Request.QueryString["Type"] == "1")
+    if (Model.Type==1)
     {
         TitleType = "Discount";
         TaxTitle = " % ";
     }
-    else if (Request.QueryString["Type"] == "2")
+    else if (Model.Type == 2)
     {
         TitleType = "Charge";
         TaxTitle = "Tax %";
@@ -42,7 +42,7 @@
                 @Html.ValidationMessageFor(model => model.Amt, "", new { @class = "text-danger" })
             </div>
 
-            @if (Request.QueryString["Type"] == "2")
+            @if (Model.Type==2)
             {
                 @Html.HiddenFor(model => model.Tax);
             }
