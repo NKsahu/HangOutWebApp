@@ -382,7 +382,7 @@ namespace HangOut.Models.Account
             SqlCommand cmd = null;
             try
             {
-                string Query = "Delete FROM  ACLedger where ID=" + ID;
+                string Query = "Delete FROM  ACLedger where orgId=" + ID;
                 cmd = new SqlCommand(Query, Con);
                 R = cmd.ExecuteNonQuery();
             }
