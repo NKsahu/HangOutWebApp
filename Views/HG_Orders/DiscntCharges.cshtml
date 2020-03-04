@@ -77,6 +77,19 @@
 </div>
 <script>
     function JsonSuccess(Jobj) {
+        console.log("ChargeDiscnt" + Jobj);
+        var jsonObj = Jobj.data;
+        var ID = jsonObj.ID;
+        var Title = jsonObj.Title;
+        var Amt = jsonObj.Amt;
+        var Tax = jsonObj.Tax;
+        if ($("#DiscntChargeTbody").length) {
+            $("#DC" + ID).remove();
+
+@*<td>
+                                    <button class="btn btn-danger btn-sm " onclick="AddChargeDiscnt(0,@DiscntCharge.ID,0)">Edit</button>
+                                </td>*@
+        }
         $("#waiting").hide();
         hidedpt('DiscntCharge');
 

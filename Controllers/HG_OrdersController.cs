@@ -174,7 +174,7 @@ namespace HangOut.Controllers
             {
                 DiscntCharge.ListDiscntChrge.Add(discntCharge);
             }
-            return Json(new { data = AmtToAdded}, JsonRequestBehavior.AllowGet);
+            return Json(new { data = discntCharge }, JsonRequestBehavior.AllowGet);
         }
         public JObject UpdateAmt(int ID,int Cnt,int Pmode)
         {

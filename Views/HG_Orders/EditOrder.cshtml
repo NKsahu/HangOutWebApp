@@ -148,10 +148,10 @@
                             <th>Edit</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="DiscntChargeTbody">
                         @foreach (var DiscntCharge in ListDicntCharge)
                         {
-                            <tr>
+                            <tr id="DC(@DiscntCharge.ID)">
                                 <td>@DiscntCharge.Title</td>
                                 <td>@DiscntCharge.Amt.ToString("0.00")</td>
                                 <td>@DiscntCharge.Tax.ToString("0.00")</td>
