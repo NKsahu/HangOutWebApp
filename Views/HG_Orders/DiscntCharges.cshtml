@@ -85,10 +85,13 @@
         var Tax = jsonObj.Tax;
         if ($("#DiscntChargeTbody").length) {
             $("#DC" + ID).remove();
-
-@*<td>
-                                    <button class="btn btn-danger btn-sm " onclick="AddChargeDiscnt(0,@DiscntCharge.ID,0)">Edit</button>
-                                </td>*@
+            var htmlstr = '<tr id="DC'+ID+'">';
+            htmlstr += '<td>' + Title+'</td>';
+            htmlstr += '<td>' + Amt + '</td>';
+            htmlstr += '<td>' + Tax + '</td>';
+            htmlstr += '<td> <button class="btn btn-danger btn-sm" onclick="AddChargeDiscnt(0,'+ID+',0)">Edit</button>';
+            htmlstr += '</td></tr>';
+            $("#DiscntChargeTbody").append(htmlstr);
         }
         $("#waiting").hide();
         hidedpt('DiscntCharge');
