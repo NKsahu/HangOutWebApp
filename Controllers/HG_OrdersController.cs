@@ -108,7 +108,8 @@ namespace HangOut.Controllers
             var UserInfo = Request.Cookies["UserInfo"];
             var UserType = UserInfo["UserType"];
             HG_Orders ObjOrder = new HG_Orders().GetOne(OID);
-            ObjOrder.PaymentStatus = PMode;
+            
+            
             if (UserType != "SA")
             {
                 if (ObjOrder.Create_Date < DateTime.Now.AddDays(-2).Date)
@@ -119,8 +120,20 @@ namespace HangOut.Controllers
                 {
                     return Json(new { msg = "Can't change Payment mode" });
                 }
+                if (ObjOrder.PaymentStatus != 3 && PMode == 3)
+                {
+                    return Json(new { msg = "Can't change Payment To foodDo" });
+                }
             }
-            
+            ObjOrder.PaymentStatus = PMode;
+            var OrderItems = new HG_OrderItem().GetAll(OID);
+            OrderItems = OrderItems.FindAll(x => x.TickedNo == 0);
+            if (OrderItems.Count > 0)
+            {
+                List<HG_Ticket> list = new HG_Ticket().GetAll(ObjOrder.OrgId,onDate:ObjOrder.Create_Date);
+                HG_Ticket objticket = new HG_Ticket() { OrgId = ObjOrder.OrgId, OID = ObjOrder.OID, TicketNo = list.Count + 1, DeliveryCharge = 0 };
+                int Ticketno = objticket.save();
+            }
             ObjOrder.Save();
             return Json(new { data = OID }, JsonRequestBehavior.AllowGet);
         }
@@ -193,7 +206,7 @@ namespace HangOut.Controllers
                 if (Pmode==3)
                 {
                     result.Add("Status", 400);
-                    result.Add("MSG", "Can't change Payment mode");
+                    result.Add("MSG", "Can't change Order in foodDo mode");
                     return result;
                 }
             }
