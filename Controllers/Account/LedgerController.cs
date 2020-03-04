@@ -22,6 +22,13 @@ namespace HangOut.Controllers.Account
             return View(ledger);
 
         }
+        // GET: AccountsList
+        public ActionResult GetAccountList()
+        {
+            List<Ledger> ledger = Ledger.GetAllTheatersList();
+            return View(ledger);
+        }
+
         public ActionResult CreateEdit(int ID)
         {
             Ledger Obj = new Ledger();

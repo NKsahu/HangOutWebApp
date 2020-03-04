@@ -10,10 +10,17 @@ namespace HangOut.Controllers.Account
     public class AccountsController : Controller
     {
         // GET: Account
-        public ActionResult Index()
+        public ActionResult Index(int OrgId)
         {
-            List<Accounts> accounts = Accounts.GetAll();
+            List<Accounts> accounts = new List<Accounts>();
+            if (OrgId>0)
+            {
+                 accounts = Accounts.GetAllACDetails(OrgId);
+            
+            }
             return View(accounts);
         }
+
+       
     }
 }
