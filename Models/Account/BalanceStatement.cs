@@ -202,7 +202,7 @@ namespace HangOut.Models.Account
           // BalanceStatement OBJBS = new BalanceStatement();
             try
             {
-                string Quary = "Select * from ACBalanceStatement where OrgId=@OrgId";
+                string Quary = "Select * from ACBalanceStatement where OrgId=@OrgId ORDER BY Date ASC";
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@OrgId", OrgId);
                 SDR = cmd.ExecuteReader();
@@ -238,7 +238,7 @@ namespace HangOut.Models.Account
           
             try
             {
-                string Quary = "Select * from ACBalanceStatement";
+                string Quary = "Select * from ACBalanceStatement ORDER BY Date ASC";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
