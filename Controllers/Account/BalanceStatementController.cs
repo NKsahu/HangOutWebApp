@@ -91,7 +91,7 @@ namespace HangOut.Controllers.Account
                 totalAmt += ord.DeliveryCharge;
                 for (int i = 0; i < orderitemlist.Count; i++)
                 {
-                    totalAmt += orderitemlist[i].Count + orderitemlist[i].Price;
+                    totalAmt += orderitemlist[i].Count * orderitemlist[i].Price;
                 }        
                   Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
                                        && x.OrgId == OrgId).FirstOrDefault();
