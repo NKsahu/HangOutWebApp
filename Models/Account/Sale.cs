@@ -70,6 +70,27 @@ namespace HangOut.Models.Account
             finally { cmd.Dispose(); con.Con.Close(); }
             return (SaleList);
         }
+        public static int Dell(int ID)
+        {
+            int R = 0;
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  ACSale where OrgId=" + ID;
+                cmd = new SqlCommand(Query, Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally
+            {
+                Con.Close();
+            }
+            return R;
+        }
     }
 
 }

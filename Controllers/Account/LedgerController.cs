@@ -222,12 +222,51 @@ namespace HangOut.Controllers.Account
 
         public ActionResult Delete(int ID)
         {
-            List<Ledger> GroupList = Ledger.GetAll();
-            GroupList = GroupList.FindAll(x => x.ID == ID);
+            List<Ledger> LedgerList = Ledger.GetAll();
+            LedgerList = LedgerList.FindAll(x => x.OrgId == ID);
 
-            if (GroupList != null)
+            List<BalanceStatement> BList = BalanceStatement.GetByOrgId(ID);
+            BList = BList.FindAll(x => x.OrgId == ID);
+
+            List<Commission> CommissionList = Commission.GetAllCommissions();
+            CommissionList = CommissionList.FindAll(x => x.OrgId == ID);
+
+            List<Sale> SList = Sale.GetAllSales();
+            SList = SList.FindAll(x => x.OrgId == ID);
+
+            List<Accounts> AccountList = Accounts.GetAll();
+            AccountList = AccountList.FindAll(x => x.AOrgId == ID);
+
+            List<Accounts> AccountDetailsList = Accounts.GetAllDetails();
+            AccountList = AccountList.FindAll(x => x.ADOrgId == ID);
+
+            if (LedgerList != null)
             {
                 int i = Ledger.Dell(ID);
+            }
+
+            if (BList != null)
+            {
+                int i = BalanceStatement.Dell(ID);
+            }
+
+            if (CommissionList != null)
+            {
+                int i = Commission.Dell(ID);
+            }
+
+            if (SList != null)
+            {
+                int i = Sale.Dell(ID);
+            }
+
+            if (AccountList != null)
+            {
+                int i = Accounts.Dell(ID);
+            }
+            if (AccountDetailsList != null)
+            {
+                int i = Accounts.DellAccountDetails(ID);
             }
             return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
         }

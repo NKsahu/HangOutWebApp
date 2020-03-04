@@ -16,7 +16,7 @@ namespace HangOut.Models.Account
         public string Narration { get; set; }
         public double Balance { get; set; }
         public int GroupId { get; set; }
-
+        public int AOrgId { get; set; }
 
         //Account Details
         public int ADID { get; set; }
@@ -26,6 +26,7 @@ namespace HangOut.Models.Account
         public int ADGroupId { get; set; }
         public int DRLedgerId { get; set; }
         public int CRLedgerId { get; set; }
+        public int ADOrgId { get; set; }
 
 
 
@@ -40,11 +41,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.AID == 0)
                 {
-                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@GroupId);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@GroupId,@OrgId);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,GroupId=@GroupId where AID=@AID";
+                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,GroupId=@GroupId,OrgId=@OrgId where AID=@AID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@AID", this.AID);
@@ -54,7 +55,9 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@Narration", this.Narration);
                 cmd.Parameters.AddWithValue("@Balance", this.Balance);
                 cmd.Parameters.AddWithValue("@GroupId", this.GroupId);
-              
+                cmd.Parameters.AddWithValue("@OrgId", this.AOrgId);
+
+
                 if (this.AID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -76,7 +79,8 @@ namespace HangOut.Models.Account
                     adObj.ADAmount = item.ADAmount;
                     adObj.CRLedgerId = item.CRLedgerId;
                     adObj.DRLedgerId = item.DRLedgerId;
-                    adObj.ADGroupId = item.ADGroupId;             
+                    adObj.ADGroupId = item.ADGroupId;
+                    adObj.ADOrgId = item.AOrgId;
                     adObj.ADSave();
                 }
 
@@ -97,11 +101,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.ADID == 0)
                 {
-                    Quary = "Insert Into ACAccountDetails Values (@AID,@Date,@Amount,@GroupId,@DRLedgerId,@CRLedgerId);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACAccountDetails Values (@AID,@Date,@Amount,@GroupId,@DRLedgerId,@CRLedgerId,@OrgId);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACAccountDetails Set AID=@AID,Date=@Date,Amount=@Amount,GroupId=@GroupId,DRLedgerId=@DRLedgerId,CRLedgerId=@CRLedgerId where ADID=@ADID";
+                    Quary = "Update ACAccountDetails Set AID=@AID,Date=@Date,Amount=@Amount,GroupId=@GroupId,DRLedgerId=@DRLedgerId,CRLedgerId=@CRLedgerId,OrgId=@OrgId where ADID=@ADID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ADID", this.ADID);
@@ -111,7 +115,8 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@GroupId", this.ADGroupId);
                 cmd.Parameters.AddWithValue("@DRLedgerId", this.DRLedgerId);
                 cmd.Parameters.AddWithValue("@CRLedgerId", this.CRLedgerId);
-          
+                cmd.Parameters.AddWithValue("@OrgId", this.ADOrgId);
+
                 if (this.ADID == 0)
                 {
                     ARow = Convert.ToInt32(cmd.ExecuteScalar());
@@ -140,11 +145,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.AID == 0)
                 {
-                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@GroupId);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@GroupId,@OrgId);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,GroupId=@GroupId where AID=@AID";
+                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,GroupId=@GroupId,OrgId=@OrgId where AID=@AID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@AID", this.AID);
@@ -154,6 +159,7 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@Narration", this.Narration);
                 cmd.Parameters.AddWithValue("@Balance", this.Balance);
                 cmd.Parameters.AddWithValue("@GroupId", this.GroupId);
+                cmd.Parameters.AddWithValue("@OrgId", this.AOrgId);
 
                 if (this.AID == 0)
                 {
@@ -197,12 +203,87 @@ namespace HangOut.Models.Account
                     OBJAC.Narration = SDR.GetString(4);
                     OBJAC.Balance = SDR.GetDouble(5);
                     OBJAC.GroupId = SDR.GetInt32(6);
+                    OBJAC.AOrgId = SDR.GetInt32(7);
                     ACList.Add(OBJAC);
                 }
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
             return (ACList);
+        }
+        public static List<Accounts> GetAllDetails()
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<Accounts> ACList = new List<Accounts>();
+            try
+            {
+                string Quary = "Select * from ACAccountDetails ";
+                cmd = new SqlCommand(Quary, con.Con);
+
+                SDR = cmd.ExecuteReader();
+
+                while (SDR.Read())
+                {
+                    Accounts OBJAC = new Accounts();
+                    OBJAC.ADID = SDR.GetInt32(0);
+                    OBJAC.AID = SDR.GetInt32(1);
+                    OBJAC.ADDate = SDR.GetDateTime(2);
+                    OBJAC.ADAmount = SDR.GetDouble(3);
+                    OBJAC.ADGroupId = SDR.GetInt32(4);
+                    OBJAC.DRLedgerId = SDR.GetInt32(5);
+                    OBJAC.CRLedgerId = SDR.GetInt32(6);
+                    OBJAC.ADOrgId = SDR.GetInt32(7);
+                    ACList.Add(OBJAC);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return (ACList);
+        }
+
+        public static int Dell(int ID)
+        {
+            int R = 0;
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  ACAccount where OrgId=" + ID;
+                cmd = new SqlCommand(Query, Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally
+            {
+                Con.Close();
+            }
+            return R;
+        }
+        public static int DellAccountDetails(int ID)
+        {
+            int R = 0;
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  AcAccountDetails where OrgId=" + ID;
+                cmd = new SqlCommand(Query, Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally
+            {
+                Con.Close();
+            }
+            return R;
         }
     }
 }
