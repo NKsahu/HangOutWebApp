@@ -57,7 +57,7 @@ namespace HangOut.Controllers
         {
             return View();
         }
-        public ActionResult DiscntCharges(Int64 SeatingId,int Type=0,int ID=0)
+        public ActionResult DiscntCharges(Int64 SeatingId,int Type=0,int ID=0,Int64 OID=0)
         {
             OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
             if (SeatingId > 0)
@@ -76,6 +76,12 @@ namespace HangOut.Controllers
             else if (ID > 0)
             {
                 ordDiscntChrge = OrdDiscntChrge.GetOne(ID);
+                Type = ordDiscntChrge.Type;
+            }
+            else if (OID > 0 && Type != 0)
+            {
+                ordDiscntChrge.Type = Type;
+                ordDiscntChrge.OID = OID;
             }
            
           
@@ -138,7 +144,28 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "value cannot be zero" }, JsonRequestBehavior.AllowGet);
             }
-            if (discntCharge.OID > 0)
+            if (discntCharge.ID > 0)// modify discnt charges
+            {
+                discntCharge.Save();
+            }
+            else if (discntCharge.OID > 0 && discntCharge.SeatingId == 0)//edit Order
+            {
+                discntCharge.Save();
+                HG_Orders hG_Orders = new HG_Orders().GetOne(discntCharge.OID);
+                if (hG_Orders.OID > 0)
+                {
+                    if (hG_Orders.DisntChargeIDs != "" && hG_Orders.DisntChargeIDs != "0")
+                    {
+                        hG_Orders.DisntChargeIDs = hG_Orders.DisntChargeIDs + "," + discntCharge.ID;
+                    }
+                    else
+                    {
+                        hG_Orders.DisntChargeIDs = discntCharge.ID.ToString();
+                    }
+                    hG_Orders.Save();
+                }
+            }
+            else if (discntCharge.OID > 0 && discntCharge.SeatingId>0)
             {
                 DiscntCharge.ListDiscntChrge.Add(discntCharge);
                 OrdDiscntChrge.RemoveDiscntCharge(discntCharge.SeatingId, discntCharge.SeatingOtp,discntCharge.OID);

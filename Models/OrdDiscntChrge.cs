@@ -38,16 +38,16 @@ namespace HangOut.Models
                     Quary = "Insert Into OrderDiscntCharge Values (@Title,@OID,@Type,@Amt,@Tax,@Remark,@Datetime);SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Quary, con.Con);
                     cmd.Parameters.AddWithValue("@Datetime", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@OID", this.OID);
+                    cmd.Parameters.AddWithValue("@Type", this.Type);
                 }
                 else
                 {
-                    Quary = "Update OrderDiscntCharge Set Title=@Title,OID=@OID,Type=@Type,Amt=@Amt,Tax=@Tax,Remark=@Remark where ID=@ID";
+                    Quary = "Update OrderDiscntCharge Set Title=@Title,Amt=@Amt,Tax=@Tax,Remark=@Remark where ID=@ID";
                     cmd = new SqlCommand(Quary, con.Con);
                     cmd.Parameters.AddWithValue("@ID", this.ID);
                 }
                 cmd.Parameters.AddWithValue("@Title", this.Title);
-                cmd.Parameters.AddWithValue("@OID", this.OID);
-                cmd.Parameters.AddWithValue("@Type", this.Type);
                 cmd.Parameters.AddWithValue("@Amt", this.Amt);
                 cmd.Parameters.AddWithValue("@Tax", this.Tax);
                 cmd.Parameters.AddWithValue("@Remark", this.Remark);

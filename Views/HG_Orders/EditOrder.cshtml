@@ -124,14 +124,19 @@
             <div class="col-md-12">
                 <h5 class="text-center text-danger"><b><u>Charges And Discount</u></b></h5>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-success form-control">
-                    <span class="glyphicon glyphicon-minus"><i class="fa fa-plus"></i></span>
+                <button type="button" onclick="AddChargeDiscnt(2,0,@HG_Order.OID)" class="btn btn-success ">
+                    Add Charge
                 </button>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-2">
+                <button type="button" onclick="AddChargeDiscnt(1,0,@HG_Order.OID)" class="btn btn-success ">
+                   Add Discount
+                </button>
+            </div>
+            <div class="col-md-4">
             </div>
             <div class="col-md-12">
                 <table style="width:100%">
@@ -151,7 +156,7 @@
                                 <td>@DiscntCharge.Amt.ToString("0.00")</td>
                                 <td>@DiscntCharge.Tax.ToString("0.00")</td>
                                 <td>
-                                    <button class="btn btn-danger btn-sm " onclick="AddChargeDiscnt(@DiscntCharge.ID)">Edit</button>
+                                    <button class="btn btn-danger btn-sm " onclick="AddChargeDiscnt(0,@DiscntCharge.ID,0)">Edit</button>
                                 </td>
                             </tr>
                         }
@@ -271,13 +276,14 @@
         $("#TotalAmount").text(TotalAmount);
     }
     function JsonSuccess(Jobj) {
+        $("#waiting").hide();
         hidedpt('EditOrder');
     }
-    function AddChargeDiscnt(ID) {
+    function AddChargeDiscnt(Type,ID,OID) {
         $("#waiting").show();
         $.ajax({
             type: 'GET',
-            url: "/HG_Orders/DiscntCharges?SeatingId=0&ID="+ID,
+            url: "/HG_Orders/DiscntCharges?SeatingId=0&Type=" + Type + "&ID=" + ID + "&OID=" + OID,
             success: function (data) {
                 makedpt("DiscntCharge", 400, 400);
                 $("#DiscntCharge > .modal-dialog > .modal-content > .modal-body").html(data);
