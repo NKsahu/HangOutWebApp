@@ -285,5 +285,37 @@ namespace HangOut.Models.Account
             }
             return R;
         }
+
+        public static List<Accounts> GetAllACDetails(int OrgId)
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<Accounts> ACList = new List<Accounts>();
+            try
+            {           
+                string Quary = "Select * from ACAccount where OrgId=" + OrgId;
+                cmd = new SqlCommand(Quary, con.Con);
+
+                SDR = cmd.ExecuteReader();
+
+                while (SDR.Read())
+                {
+                    Accounts OBJAC = new Accounts();
+                    OBJAC.AID = SDR.GetInt32(0);
+                    OBJAC.Date = SDR.GetDateTime(1);
+                    OBJAC.DRAmount = SDR.GetDouble(2);
+                    OBJAC.CRAmount = SDR.GetDouble(3);
+                    OBJAC.Narration = SDR.GetString(4);
+                    OBJAC.Balance = SDR.GetDouble(5);
+                    OBJAC.GroupId = SDR.GetInt32(6);
+                    OBJAC.AOrgId = SDR.GetInt32(7);
+                    ACList.Add(OBJAC);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return (ACList);
+        }
     }
 }
