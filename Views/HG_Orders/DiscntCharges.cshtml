@@ -77,6 +77,22 @@
 </div>
 <script>
     function JsonSuccess(Jobj) {
+        console.log("ChargeDiscnt" + Jobj);
+        var jsonObj = Jobj.data;
+        var ID = jsonObj.ID;
+        var Title = jsonObj.Title;
+        var Amt = jsonObj.Amt;
+        var Tax = jsonObj.Tax;
+        if ($("#DiscntChargeTbody").length) {
+            $("#DC" + ID).remove();
+            var htmlstr = '<tr id="DC'+ID+'">';
+            htmlstr += '<td>' + Title+'</td>';
+            htmlstr += '<td>' + Amt + '</td>';
+            htmlstr += '<td>' + Tax + '</td>';
+            htmlstr += '<td> <button class="btn btn-danger btn-sm" onclick="AddChargeDiscnt(0,'+ID+',0)">Edit</button>';
+            htmlstr += '</td></tr>';
+            $("#DiscntChargeTbody").append(htmlstr);
+        }
         $("#waiting").hide();
         hidedpt('DiscntCharge');
 

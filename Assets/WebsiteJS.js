@@ -74,8 +74,8 @@ $(window).on('hashchange', function (event) {
 
         $(".modal:visible:last").remove();
         $('.modal-backdrop').remove();
-        $('body').removeAttr('class');
-        $('body').removeAttr('style');
+        //$('body').removeAttr('class');
+        //$('body').removeAttr('style');
 
     }
     else {
@@ -115,12 +115,16 @@ function showdpt(id) {
 
 }
 function hidedpt(id) {
-    $('#'+id).modal('hide');
+    if ($(".modal:visible").length == 1) {
+        $('body').removeClass('modal-open');
+    }
+    $(".modal:visible:last").remove();
     $("#"+id).hide();
     $("#"+id).remove();
-    $("#" + id).display = "none";
+   // $("#" + id).display = "none";
     $('.modal-backdrop').remove();
-   // $('body').removeClass('modal-open');
+    
+    
    // $('body').removeAttr('class');
    // $('body').removeAttr('style');
    // alert('id' + id);
