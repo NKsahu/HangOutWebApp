@@ -54,15 +54,19 @@ function Onfail(msg) {
                         $("#WarningModel").modal();
 }
 shortcut.add("Esc", function () {
-    if ($(".modal").length > 1) {
+    HideModal();
+});
+function HideModal() {
+    console.log("Cnt Modal=" + $(".modal:visible").length);
+    if ($(".modal:visible").length > 1) {
 
         // $(".modal:visible:last").hide();
         $(".modal:visible:last").remove();
         $('.modal-backdrop').remove();
-        $('body').removeAttr('class');
-        $('body').removeAttr('style');
-    };
-});
+        //$('body').removeAttr('class');
+        //$('body').removeAttr('style');
+    }
+}
 var modaladded = false;
 $(window).on('hashchange', function (event) {
     if ($(".modal:visible").length > 0 && !modaladded) {
@@ -104,7 +108,7 @@ function makedpt(id, h, w) {
 }
 function showdpt(id) {
    modaladded = true;
-    window.location.hash = id;
+   // window.location.hash = id;
     $("#" + id).show();
    // $("#" + id).display = "block";
     $("#"+id).modal();
@@ -117,8 +121,8 @@ function hidedpt(id) {
     $("#" + id).display = "none";
     $('.modal-backdrop').remove();
    // $('body').removeClass('modal-open');
-    $('body').removeAttr('class');
-    $('body').removeAttr('style');
+   // $('body').removeAttr('class');
+   // $('body').removeAttr('style');
    // alert('id' + id);
 
 }
