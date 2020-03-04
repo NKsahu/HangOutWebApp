@@ -291,5 +291,9 @@ namespace HangOut.Controllers
             Listitem = Listitem.OrderByDescending(x => x.ItemAvaibility).ToList();
             return View(Listitem);
         }
+        public ActionResult AddItemToOrder()
+        {
+            return View();
+        }
     }
 }

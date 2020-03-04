@@ -42,7 +42,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="OrderItems">
                 @foreach (var Order in OrderItems)
                 {
                     double ItemPrice = Order.Price * Order.Count;
@@ -105,9 +105,9 @@
                 <tr>
                     <td>Total</td>
                     <td>
-                        @*<button class="btn btn-primary">
-                            <span style="margin:5px;" class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
-                        </button>*@
+                        <button class="btn btn-primary">
+                           <i class="fa fa-plus"></i>
+                        </button>
                     </td>
                     <td>@Qty</td>
                     <td id="Quantity">@Qty</td>
@@ -298,10 +298,6 @@
     }
 </script>
 <style>
-    body {
-        font-family: "Open Sans", helvetica, arial;
-    }
-
     table {
         width: 500px; /* For Responsive design set 100% */
         border-collapse: collapse;
@@ -330,15 +326,5 @@
         /* CSS3 Zebra Striping */
         table tr:nth-of-type(odd) {
             background: #eee;
-        }
-
-    /* Automatic Serial Number Row */
-    .css-serial {
-        counter-reset: serial-number; /* Set the serial number counter to 0 */
-    }
-
-        .css-serial td:first-child:before {
-            counter-increment: serial-number; /* Increment the serial number counter */
-            content: counter(serial-number); /* Display the counter */
         }
 </style>
