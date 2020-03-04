@@ -8,12 +8,12 @@
         ListDicntCharge = OrdDiscntChrge.GetAll(HG_Order.DisntChargeIDs);
     }
     var OrderItems = new HG_OrderItem().GetAll(OrderID);
+    OrderItems = OrderItems.FindAll(x => x.Status != 1 && x.Status != 2);// not placed and proceessing  items
     List<HG_Items> listItem = new HG_Items().GetAll();
     int SNo = 1;
     int Qty = 0;
     double Total = 0.00;
 }
-
 <div class="card">
     <div class="card-header">
         <h5 class="text-center text-danger"><b><u>Order No : @OrderID</u></b></h5>
@@ -45,13 +45,19 @@
             <tbody id="OrderItems">
                 @foreach (var Order in OrderItems)
                 {
-                    double ItemPrice = Order.Price * Order.Count;
-                    <tr class="item">
+                    double ItemPrice = 0.00;
+                    int Cnt= 0;
+                    if (Order.Status != 4)
+                    {
+                        ItemPrice = Order.Price * Order.Count;
+                        Cnt = Order.Count;
+                    }
+                    <tr id="FID@(Order.FID)" class="item">
                         <td>
                             @SNo
                             @{
                                 SNo++;
-                                Qty += Order.Count;
+                                Qty += Cnt;
                                 Total += ItemPrice;
                             }
                         </td>
@@ -67,18 +73,17 @@
                                 <div class="col-md-4">
 
                                 </div>
-                                <div class="Col-md-1">
+                                <div class="col-md-1">
                                     <span class="input-group-btn float-right">
                                         <button type="button" class="btn btn-danger btn-number" data-type="minus" OIID="@Order.OIID" onclick="MinusItemQty(this)">
                                             <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span>
                                         </button>
                                     </span>
                                 </div>
-                                <div class="Col-md-1">
-                                    <input type="text" class="QTY form-control input-number text-center " readonly value="@Order.Count" id="@Order.OIID" min="0" step="5" size="10" />
-
+                                <div class="col-md-2">
+                                    <input type="text" class="QTY form-control input-number text-center " readonly value="@Cnt" id="@Order.OIID" min="0" step="5" size="10" />
                                 </div>
-                                <div class="Col-md-1">
+                                <div class="col-md-1">
                                     <span class="input-group-btn float-left">
                                         <button type="button" class="btn btn-success btn-number" data-type="plus" OIID="@Order.OIID" onclick="PlusItemQty(this)">
                                             <span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span>
@@ -90,7 +95,6 @@
                                 </div>
                             </div>
                         </td>
-
                         <td>
                             @Order.TickedNo
                         </td>
@@ -105,7 +109,7 @@
                 <tr>
                     <td>Total</td>
                     <td>
-                        <button class="btn btn-primary">
+                        <button onclick="ShowItemsToOrder()" class="btn btn-primary">
                            <i class="fa fa-plus"></i>
                         </button>
                     </td>
@@ -165,13 +169,11 @@
             </div>
         </div>
         }
-
-        <hr />
         @using (Ajax.BeginForm("SaveEditOrder", "HG_Orders", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             <div class="row">
                 <div class="col-md-4">
-                    @Html.Hidden("OID", OrderID);
+                    @Html.Hidden("OID", OrderID)
                     @Html.Hidden("PtmMode", HG_Order.PaymentStatus)
                 </div>
                 <div class="col-md-4">
@@ -295,6 +297,80 @@
                 $("#waiting").hide();
             }
         });
+    }
+    function ShowItemsToOrder() {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/AddItemToOrder",
+            success: function (data) {
+                makedpt("ShowItems", 600, 600);
+                $("#ShowItems > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("ShowItems");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    function AddItem(event,ItemId) {
+        if (event.checked) {
+            if ($("#FID" + ItemId).length > 0) {
+                alert('Item Already Exist in Order');
+                //$(event).attr('checked', false);
+                return;
+            }
+            var OID = $("#OID").val();
+            $.ajax({
+                type: 'GET',
+                url: "/HG_OrderItem/AddItemToOrder?OID="+OID+"&ItemId=" + ItemId,
+                success: function (data) {
+                    console.log(data);
+                  //  var Jobj = JSON.parse(data);
+                    AddRowItem(data);
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $("#waiting").hide();
+                }
+            });
+            $(event).attr('checked', true);
+            console.log("checked");
+        }
+        else {
+            $("#"+ItemId).remove();
+            console.log("Unchecked");
+            $(event).prop('checked', false);
+        }
+
+    }
+    function AddRowItem(Jobj) {
+        Jobj = Jobj.msg;
+        console.log("AAYa="+Jobj);
+        var SN = document.getElementsByClassName('item').length + 1;
+        var htmlstr = '<tr id="FID'+ Jobj.FID+'" class="item">';
+        htmlstr += '<td>' + SN+'</td>';
+        htmlstr += '<td>' + Jobj.ItemName+'</td>';             
+        htmlstr += '<td>' + Jobj.Count+'</td>';    
+        htmlstr += '<td>';
+        htmlstr += '<div class="row">';
+        htmlstr += '<div class="col-md-4"></div>';
+        htmlstr+=' <div class="col-md-1">';
+        htmlstr += '<span class="input-group-btn float-right">';                          
+        htmlstr += '<button type="button" class="btn btn-danger btn-number" data-type="minus" OIID="' + Jobj.OIID+'" onclick="MinusItemQty(this)">';
+        htmlstr += ' <span class="glyphicon glyphicon-minus"><i class="fa fa-minus"></i></span></button></span></div>';
+        htmlstr += ' <div class="col-md-2">';
+        htmlstr += ' <input type="text" class="QTY form-control input-number text-center " readonly value="' + Jobj.Count+'" id="' + Jobj.OIID+'" min="0" step="5" size="10" /></div>';
+        htmlstr += '<div class="col-md-1">';
+        htmlstr += '<span class="input-group-btn float-left">';
+        htmlstr += '<button type="button" class="btn btn-success btn-number" data-type="plus" OIID="'+Jobj.OIID+'" onclick="PlusItemQty(this)">';
+        htmlstr += '<span class="glyphicon glyphicon-plus"><i class="fa fa-plus"></i></span></button></span> </div>';
+        htmlstr += '<div class="col-md-4"></div> </div> </td>';
+        htmlstr += '<td>';
+        htmlstr += Jobj.TickedNo+'</td>';
+        htmlstr += '<td class="ItemPrize" id="IntPrice'+Jobj.OIID + '">' + Jobj.Price+' </td>';
+        htmlstr += '</tr>'; 
+        $("#OrderItems").append(htmlstr);
     }
 </script>
 <style>

@@ -28,5 +28,33 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public JsonResult AddItemToOrder(Int64 OID,Int64 ItemId)
+        {
+            var UserInfo = Request.Cookies["UserInfo"];
+            var UserId = int.Parse(UserInfo["UserCode"]);
+            HG_Items ObjItem = new HG_Items().GetOne(ItemID: ItemId);
+            HG_OrderItem OrderItem = new HG_OrderItem()
+            {
+                FID = ObjItem.ItemID,
+                Price = ObjItem.Price,
+                Count = 0,
+                Qty = ObjItem.Qty,
+                OID = OID,
+                Status = 4,
+                TickedNo = 0,
+                OrgId = ObjItem.OrgID,
+                ChefSeenBy = UserId,
+                OrderDate = DateTime.Now,
+                UpdatedBy = 0,
+                UpdationDate = DateTime.Now,
+                OrdById = UserId,
+                TaxInItm = ObjItem.Tax,
+                CostPrice = ObjItem.CostPrice
+            };
+            OrderItem.Save();
+            OrderItem.Price = 0.00;
+            OrderItem.ItemName = ObjItem.Items;
+            return Json(new { msg = OrderItem }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

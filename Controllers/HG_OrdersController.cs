@@ -200,9 +200,12 @@ namespace HangOut.Controllers
             double price = 0.0;
             if (Cnt >= 0)
             {
-                
+                 if(OBJOrderItem.Status==4 &&Cnt>0)
+                {
+                    OBJOrderItem.Status = 3;
+                }
                 OBJOrderItem.Count = Cnt;
-                //OBJOrderItem.Save();
+                OBJOrderItem.Save();
                 price = OBJOrderItem.Count * OBJOrderItem.Price;
                 result.Add("Status", 200);
                 result.Add("MSG", price.ToString("0.00"));
