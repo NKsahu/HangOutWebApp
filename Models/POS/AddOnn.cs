@@ -13,7 +13,7 @@ namespace HangOut.Models.POS
         public int Min { get; set; }
        public int Max { get; set; }
         public int CategoryId { get; set; }
-        List< AddOnItems> AddOnItems { get; set; }
+      public  List< AddOnItems> AddOnItems { get; set; }
         public AddOnn()
         {
             AddOnItems = new List<AddOnItems>();

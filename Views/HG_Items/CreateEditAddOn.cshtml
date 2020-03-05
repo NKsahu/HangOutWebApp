@@ -1,4 +1,4 @@
-﻿@model HangOut.Models.HG_Items
+﻿@model HangOut.Models.POS.AddOnn
 @using HangOut.Models
 @{
     Layout = null;
@@ -7,103 +7,47 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>ADDON-ITEM</b></h3>
+        <h3 style="text-align:center;color:#000000"><b>ADDON</b></h3>
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST",  LoadingElementId = "waiting", OnSuccess = "" }))
+        @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "" }))
         {
-            @Html.HiddenFor(model => model.ItemID)
-            @Html.HiddenFor(model => model.Qty)
-            @Html.HiddenFor(model => model.Type)
-           
-            @Html.HiddenFor(model => model.AddOnCatId)
-            @Html.HiddenFor(model => model.ApplyAddOn)
-            @Html.HiddenFor(model=>model.ItemDiscription)
-            //public int ApplyAddOn { get; set; } //{1 NO ,2 YES}
-            //  public int AddOnCatId { get; set; }// addon category id
-           @Html.HiddenFor(model => model.OrgID)
-            @Html.HiddenFor(model => model.CategoryID)
-            @Html.HiddenFor(Model=>Model.ItemAvaibility)
+            @Html.HiddenFor(model => model.TitleId)
+            @Html.HiddenFor(model => model.CategoryId)
+
         <div class="row">
-
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-            @Html.ValidationMessageFor(model => model.ItemID, "", new { @class = "text-danger" })
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.Items, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.Items, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.Items, "", new { @class = "text-danger" })
+            <div class="col-md-4">
 
             </div>
-            @{
-                List<SelectListItem> AddonType = new List<SelectListItem>()
-                                                                    {
-                                                                        new SelectListItem{Text="BASE",Value="1"},
-                                                                        new SelectListItem{Text="ADDON",Value="2"},
-
-                                                                    };
-            }
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.AddOnType, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.DropDownListFor(model => model.AddOnType, AddonType,  new { @class = "form-control", required = "required" } )
-                @Html.ValidationMessageFor(model => model.AddOnType, "", new { @class = "text-danger" })
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.TemplateName)
+                @Html.EditorFor(model => model.TemplateName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.TemplateName, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
 
             </div>
-            @{
-                List<SelectListItem> FoodType = new List<SelectListItem>()
-                                                                    {
-                                                                        new SelectListItem{Text="VEG",Value="1"},
-                                                                        new SelectListItem{Text="NON-VEG",Value="2"},
-
-                                                                    };
-            }
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.ItemMode, htmlAttributes: new { @class = "control-label  " })
-                <div class="checkbox">
-                    @Html.DropDownListFor(model => model.ItemMode, FoodType, new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.ItemMode, "", new { @class = "text-danger", required = "required" })
-                </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.AddOnTitle)
+                @Html.EditorFor(model => model.AddOnTitle, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.AddOnTitle, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.CostPrice, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.CostPrice, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
-
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Min)
+                @Html.EditorFor(model => model.Min, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Min, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.Max)
+                @Html.EditorFor(model => model.Max, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Max, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label  " })
-
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control autodouble", required = "required", @readonly = "readonly", } })
-                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-            </div>
-            @{
-                List<SelectListItem> AddOnOption = new List<SelectListItem>()
-                                                                    {
-                                                                        new SelectListItem{Text="NO",Value="1"},
-                                                                        new SelectListItem{Text="YES",Value="2"},
-
-                                                                    };
-            }
-            
-           
-            <div class="col-md-1">
-                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-                <div class="col-md-10">
-                    <div class="checkbox">
-                        @Html.EditorFor(model => model.Status)
-                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", required = "required" })
-                    </div>
-                </div>
+            <div class="row">
+                @foreach (var Item in Model.AddOnItems)
+                {
+                @Html.Partial("AddOnItems", Item)
+                }
             </div>
             <div class="col-sm-1">
                 @Html.Label("Save", new { @class = "text-white " })
@@ -115,31 +59,15 @@
     </div>
 </div>
 <script>
-    
         $("#CostPrice,#Tax").change(
             function(){
                 CalculateTax();
             });
-      
         function CalculateTax() {
             var CostPrice = parseFloat($("#CostPrice").val());
             var TaxPercentage = parseFloat($("#Tax").val());
             var taxAmt = (CostPrice * TaxPercentage) / 100;
             $("#Price").val(CostPrice + taxAmt).change();
         }
-        //var AddOnresult = function (data) {
-        //    alert("hii");
-        //    var JsonObj = JSON.parse(data);
-        //    console.log("ObjAddon=" + JsonObj);
-        //    var Htmlstr = '<tr>';
-        //    Htmlstr += Htmlstr + '<td>' + JsonObj.Items + '</td>';
-        //    Htmlstr += Htmlstr + '<td>' + JsonObj.Price + '</td>';
-        //    Htmlstr += Htmlstr + '<td>' + JsonObj.Tax + '</td>';
-        //    Htmlstr += Htmlstr + '<td>' + '<button onclick="CreateAddOnItm(' + JsonObj.ItemID + ',0)" class="btn btn-sm btn-warning"> Edit</button></td>';
-        //    $("#Tbody").append(Htmlstr);
-        //    $('#waiting').hide();
-        //};
-        
-   
 </script>
 
