@@ -58,14 +58,73 @@ namespace HangOut.Controllers.Account
                 {
                     //bObj.SaveCRValue();
                     bObj.isCash = true;
+                BalanceStatement Obj = new BalanceStatement();
+                HG_Orders od = new HG_Orders().GetOne(bObj.OrderId);
+                Ledger LedgerDetail = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                        && x.OrgId == bObj.OrgId).FirstOrDefault();
 
+
+
+                if (od.PaymentStatus == 1 || od.PaymentStatus == 2)
+                {
+                    double amt = (bObj.Amount * LedgerDetails.MarginOnCash) / 100;
+                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
+                    Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
                 }
-                else if (ord.PaymentStatus == 3)
+                else if (od.PaymentStatus == 3)
+                {
+                    double amt = (bObj.Amount * LedgerDetails.MarginOnline) / 100;
+                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+                    Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
+                }
+                Obj.Date = bObj.Date;
+
+                // Obj.Amount = Amount;
+                BalanceStatement TBalance = BalanceStatement.GetAllForBalanceCalculation(bObj.OrgId).Last();
+                Obj.Balance = TBalance.Balance - Obj.CRAmount;
+                Obj.OrgId = bObj.OrgId;
+                Obj.OrderId = bObj.OrderId;
+                Obj.Narration = "Commission of Order No." + bObj.OrderId;
+                Obj.SaveCRValue();
+
+
+            }
+            else if (ord.PaymentStatus == 3)
                 {
                     bObj.Narration = "Online Payment of Order No." + CompletedItems[0].OID;
                     bObj.isCash = false;
+                    bObj.SaveCRValue();
+
+                BalanceStatement Obj = new BalanceStatement();
+                HG_Orders od = new HG_Orders().GetOne(bObj.OrderId);
+                Ledger LedgerDetail = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                        && x.OrgId == bObj.OrgId).FirstOrDefault();
+
+
+
+                if (od.PaymentStatus == 1 || od.PaymentStatus == 2)
+                {
+                    double amt = (bObj.Amount * LedgerDetails.MarginOnCash) / 100;
+                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
+                    Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
                 }
-                bObj.Save();
+                else if (od.PaymentStatus == 3)
+                {
+                    double amt = (bObj.Amount * LedgerDetails.MarginOnline) / 100;
+                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+                    Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
+                }
+                Obj.Date = bObj.Date;
+
+                // Obj.Amount = Amount;
+                BalanceStatement TBalance = BalanceStatement.GetAllForBalanceCalculation(bObj.OrgId).Last();
+                Obj.Balance = TBalance.Balance - Obj.CRAmount;
+                Obj.OrgId = bObj.OrgId;
+                Obj.OrderId = bObj.OrderId;
+                Obj.Narration = "Commission of Order No." + bObj.OrderId;
+                Obj.SaveCRValue();
+            }
+             
                     
             return Json(new { data = bObj }, JsonRequestBehavior.AllowGet);
         }
@@ -109,16 +168,73 @@ namespace HangOut.Controllers.Account
 
                     if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
                     {
-                        //bObj.SaveCRValue();
-                        bObj.isCash = true;
+                        BalanceStatement Obj = new BalanceStatement();
+                        HG_Orders od = new HG_Orders().GetOne(bObj.OrderId);
+                        Ledger LedgerDetail = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                                && x.OrgId == OrgId).FirstOrDefault();
+
+
+
+                        if (od.PaymentStatus == 1 || od.PaymentStatus == 2)
+                        {
+                            double amt = (bObj.Amount * LedgerDetails.MarginOnCash) / 100;
+                            Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
+                            Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
+                        }
+                        else if (od.PaymentStatus == 3)
+                        {
+                            double amt = (bObj.Amount * LedgerDetails.MarginOnline) / 100;
+                            Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+                            Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
+                        }
+                        Obj.Date = bObj.Date;
+
+                        // Obj.Amount = Amount;
+                        BalanceStatement TBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+                        Obj.Balance = TBalance.Balance - Obj.CRAmount;
+                        Obj.OrgId = OrgId;
+                        Obj.OrderId = bObj.OrderId;
+                        Obj.Narration = "Commission of Order No." + bObj.OrderId;
+                        Obj.SaveCRValue();
+
 
                     }
                     else if (ord.PaymentStatus == 3)
                     {
                         bObj.Narration = "Online Payment of Order No." + orderitemlist[0].OID;
                         bObj.isCash = false;
+                        bObj.SaveCRValue();
+
+                        BalanceStatement Obj = new BalanceStatement();
+                        HG_Orders od = new HG_Orders().GetOne(bObj.OrderId);
+                        Ledger LedgerDetail = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                                && x.OrgId == OrgId).FirstOrDefault();
+
+
+
+                        if (od.PaymentStatus == 1 || od.PaymentStatus == 2)
+                        {
+                            double amt = (bObj.Amount * LedgerDetails.MarginOnCash) / 100;
+                            Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
+                            Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
+                        }
+                        else if (od.PaymentStatus == 3)
+                        {
+                            double amt = (bObj.Amount * LedgerDetails.MarginOnline) / 100;
+                            Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+                            Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
+                        }
+                        Obj.Date = bObj.Date;
+
+                        // Obj.Amount = Amount;
+                        BalanceStatement TBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+                        Obj.Balance = TBalance.Balance - Obj.CRAmount;
+                        Obj.OrgId = OrgId;
+                        Obj.OrderId = bObj.OrderId;
+                        Obj.Narration = "Commission of Order No." + bObj.OrderId;
+                        Obj.SaveCRValue();
                     }
-                    bObj.Save();
+                   
 
                 }
                 

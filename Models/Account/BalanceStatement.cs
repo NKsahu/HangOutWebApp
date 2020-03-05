@@ -21,116 +21,116 @@ namespace HangOut.Models.Account
         public double TaxOnOnline { get; set; }
 
 
-        public int Save()
-        {
-            int Row = 0;
-            DBCon con = new DBCon();
-            SqlCommand cmd = null;
-            if (this.isCash == false)
-            {
-                try
-            {
+        //public int Save()
+        //{
+        //    int Row = 0;
+        //    DBCon con = new DBCon();
+        //    SqlCommand cmd = null;
+        //    if (this.isCash == false)
+        //    {
+        //        try
+        //    {
                
-                    string Quary = "";
-                    if (this.BID == 0)
-                    {
-                        Quary = "Insert Into ACBalanceStatement Values (@Date,@Amount,@Narration,@OrderId,@OrgId,@CRAmount,@EntryNo,@Balance,@TaxOnCash,@TaxOnOnline);SELECT SCOPE_IDENTITY();";
-                    }
-                    else
-                    {
-                        Quary = "Update ACBalanceStatement Set Date=@Date,Amount=@Amount,Narration=@Narration,OrderId=@OrderId,OrgId=@OrgId,CRAmount=@CRAmount,EntryNo=@EntryNo,Balance=@Balance,TaxOnCash=@TaxOnCash,TaxOnOnline=@TaxOnOnline where ID=@ID";
-                    }
-                    cmd = new SqlCommand(Quary, con.Con);
-                    cmd.Parameters.AddWithValue("@BID", this.BID);
-                    cmd.Parameters.AddWithValue("@Date", this.Date);
-                    cmd.Parameters.AddWithValue("@Amount", this.Amount);
-                    cmd.Parameters.AddWithValue("@Narration", this.Narration);
-                    cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
-                    cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
-                    cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
-                    cmd.Parameters.AddWithValue("@EntryNo", this.EntryNo);
-                    cmd.Parameters.AddWithValue("@Balance", this.Balance);
-                    cmd.Parameters.AddWithValue("@TaxOnCash", this.TaxOnCash);
-                    cmd.Parameters.AddWithValue("@TaxOnOnline", this.TaxOnOnline);
-                    if (this.BID == 0)
-                    {
-                        Row = Convert.ToInt32(cmd.ExecuteScalar());
-                        this.BID = Row;
-                    }
-                    else
-                    {
-                        Row = cmd.ExecuteNonQuery();
-                        //this.CategoryID = Row;
-                    }
+        //            string Quary = "";
+        //            if (this.BID == 0)
+        //            {
+        //                Quary = "Insert Into ACBalanceStatement Values (@Date,@Amount,@Narration,@OrderId,@OrgId,@CRAmount,@EntryNo,@Balance,@TaxOnCash,@TaxOnOnline);SELECT SCOPE_IDENTITY();";
+        //            }
+        //            else
+        //            {
+        //                Quary = "Update ACBalanceStatement Set Date=@Date,Amount=@Amount,Narration=@Narration,OrderId=@OrderId,OrgId=@OrgId,CRAmount=@CRAmount,EntryNo=@EntryNo,Balance=@Balance,TaxOnCash=@TaxOnCash,TaxOnOnline=@TaxOnOnline where ID=@ID";
+        //            }
+        //            cmd = new SqlCommand(Quary, con.Con);
+        //            cmd.Parameters.AddWithValue("@BID", this.BID);
+        //            cmd.Parameters.AddWithValue("@Date", this.Date);
+        //            cmd.Parameters.AddWithValue("@Amount", this.Amount);
+        //            cmd.Parameters.AddWithValue("@Narration", this.Narration);
+        //            cmd.Parameters.AddWithValue("@OrderId", this.OrderId);
+        //            cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
+        //            cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
+        //            cmd.Parameters.AddWithValue("@EntryNo", this.EntryNo);
+        //            cmd.Parameters.AddWithValue("@Balance", this.Balance);
+        //            cmd.Parameters.AddWithValue("@TaxOnCash", this.TaxOnCash);
+        //            cmd.Parameters.AddWithValue("@TaxOnOnline", this.TaxOnOnline);
+        //            if (this.BID == 0)
+        //            {
+        //                Row = Convert.ToInt32(cmd.ExecuteScalar());
+        //                this.BID = Row;
+        //            }
+        //            else
+        //            {
+        //                Row = cmd.ExecuteNonQuery();
+        //                //this.CategoryID = Row;
+        //            }
+
+        //            BalanceStatement Obj = new BalanceStatement();
+        //            HG_Orders ord = new HG_Orders().GetOne(OrderId);
+        //            Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+        //                    && x.OrgId == OrgId).FirstOrDefault();
 
 
 
-                }
-                catch (Exception e) { e.ToString(); }
-                finally { cmd.Dispose(); con.Con.Close(); }
-                BalanceStatement Obj = new BalanceStatement();
-                HG_Orders ord = new HG_Orders().GetOne(OrderId);
-                Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
-                        && x.OrgId == OrgId).FirstOrDefault();
+        //            if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
+        //            {
+        //                double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
+        //                Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
+        //                Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
+        //            }
+        //            else if (ord.PaymentStatus == 3)
+        //            {
+        //                double amt = (Amount * LedgerDetails.MarginOnline) / 100;
+        //                Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+        //                Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
+        //            }
+        //            Obj.Date = Date;
+
+        //            // Obj.Amount = Amount;
+        //            BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+        //            Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
+        //            Obj.OrgId = OrgId;
+        //            Obj.OrderId = OrderId;
+        //            Obj.Narration = "Commission of Order No." + OrderId;
+        //            Obj.SaveCRValue();
 
 
-
-                if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
-                {
-                    double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
-                    Obj.CRAmount = (amt) +((amt * LedgerDetails.TaxOnAboveMargin) / 100);
-                    Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
-                }
-                else if (ord.PaymentStatus == 3)
-                {
-                    double amt = (Amount * LedgerDetails.MarginOnline) / 100;
-                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
-                    Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
-                }
-                Obj.Date = Date;
-               
-               // Obj.Amount = Amount;
-                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
-                Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
-                Obj.OrgId = OrgId;
-                Obj.OrderId = OrderId;
-                Obj.Narration = "Commission of Order No." + OrderId;
-                Obj.SaveCRValue();
-            }
+        //        }
+        //        catch (Exception e) { e.ToString(); }
+        //        finally { cmd.Dispose(); con.Con.Close(); }
+        //                  }
            
-            else
-            {
-                BalanceStatement Obj = new BalanceStatement();
-                HG_Orders ord = new HG_Orders().GetOne(OrderId);
-                Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
-                        && x.OrgId == OrgId).FirstOrDefault();
+        //    else
+        //    {
+        //        BalanceStatement Obj = new BalanceStatement();
+        //        HG_Orders ord = new HG_Orders().GetOne(OrderId);
+        //        Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+        //                && x.OrgId == OrgId).FirstOrDefault();
 
-                if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
-                {
-                    double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
-                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
-                    Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
-                }
-                else if (ord.PaymentStatus == 3)
-                {
-                    double amt = (Amount * LedgerDetails.MarginOnline) / 100;
-                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
-                    Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
-                }
+        //        if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
+        //        {
+        //            double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
+        //            Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
+        //            Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
+        //        }
+        //        else if (ord.PaymentStatus == 3)
+        //        {
+        //            double amt = (Amount * LedgerDetails.MarginOnline) / 100;
+        //            Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+        //            Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
+        //        }
 
-                Obj.Date = Date;
-                //Obj.Amount = Amount;
-                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
-                Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
-                Obj.OrgId = OrgId;
-                Obj.OrderId = OrderId;
-                Obj.Narration = "Commission of Order No." + OrderId;
-                Obj.SaveCRValue();
-            }
+        //        Obj.Date = Date;
+        //        //Obj.Amount = Amount;
+        //        BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+        //        Obj.Balance = TotalBalance.Balance - Obj.CRAmount;
+        //        Obj.OrgId = OrgId;
+        //        Obj.OrderId = OrderId;
+        //        Obj.Narration = "Commission of Order No." + OrderId;
+        //        Obj.SaveCRValue();
+        //    }
            
-            return Row;
+        //    return Row;
 
-        }
+        //}
 
         public int SaveCRValue()
         {
