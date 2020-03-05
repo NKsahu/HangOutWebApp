@@ -92,9 +92,11 @@ namespace HangOut.Controllers.Account
                 for (int i = 0; i < orderitemlist.Count; i++)
                 {
                     totalAmt += orderitemlist[i].Count * orderitemlist[i].Price;
-                }        
-                  Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
-                                       && x.OrgId == OrgId).FirstOrDefault();
+                }
+                if (orderitemlist.Count > 0)
+                {
+                    Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                                         && x.OrgId == OrgId).FirstOrDefault();
 
                     bObj.Date = ord.Create_Date;
                     bObj.Amount = totalAmt;
@@ -118,7 +120,7 @@ namespace HangOut.Controllers.Account
                     }
                     bObj.Save();
 
-
+                }
                 
             }
             return Json(new { data = bObj }, JsonRequestBehavior.AllowGet);
@@ -203,6 +205,12 @@ namespace HangOut.Controllers.Account
 
             int LastSaleEntry = 0;
 
+            double totalAmount = 0.00;
+
+            double TotalSale = 0.00;
+
+            double TotalTaxOnCommission = 0.00;
+
             List<BalanceStatement> GetRecords = new List<BalanceStatement>();
             BalanceStatement FindLastEntryNo = new BalanceStatement();
 
@@ -262,25 +270,47 @@ namespace HangOut.Controllers.Account
                     }
                 }
 
-                if (GetRecords.Count != 1) // used for eliminating Opening Balance entry when there is no data for next entry
-                {
+                //if (GetRecords.Count != 1) // used for eliminating Opening Balance entry when there is no data for next entry
+               // {
                     int GetLastCalculationRecord = Commission.GetAllCommissions().Where(w => w.OrgId == OrgId).Select(s => s.BalanceStatementId).Max();
 
                     int CommissionId = Commission.GetAllCommissions()
                        .Where(w => w.BalanceStatementId == GetLastCalculationRecord && w.OrgId == OrgId).Select(s => s.CommisionId).FirstOrDefault();
+                    if(GetLastCalculationRecord==0)
+                    {
+                          TotalTaxOnCommission = Commission.GetAllCommissions()
+                           .Where(w => w.CommisionId >= CommissionId && w.OrgId == OrgId).Select(s => s.TaxOnCommission).Sum();
 
-                    double TotalTaxOnCommission = Commission.GetAllCommissions()
-                            .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.TaxOnCommission).Sum();
+                    totalAmount = Commission.GetAllCommissions()
+                                    .Where(w => w.CommisionId >= CommissionId && w.OrgId == OrgId).Select(s => s.CommissionAmount).Sum();
+                    }
+                    else
+                     {
+                         TotalTaxOnCommission = Commission.GetAllCommissions()
+                         .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.TaxOnCommission).Sum();
+
+                             totalAmount = Commission.GetAllCommissions()
+                                    .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.CommissionAmount).Sum();
+                     }
+                   
 
                     int GetMaxBID = Sale.GetAllSales().Where(w => w.OrgId == OrgId).Select(s => s.BalanceStatementId).Max();
 
                     int SaleId = Sale.GetAllSales()
                         .Where(w => w.BalanceStatementId == GetMaxBID && w.OrgId == OrgId).Select(s => s.SaleId).FirstOrDefault();
+                    if(GetMaxBID==0)
+                     {
+                        TotalSale = Sale.GetAllSales().Where(w => w.SaleId >= SaleId 
+                        && w.OrgId == OrgId).Select(s => s.SaleAmount).Sum();
+                     }
+                    else
+                     {
+                         TotalSale = Sale.GetAllSales().Where(w => w.SaleId > SaleId
+                        && w.OrgId == OrgId).Select(s => s.SaleAmount).Sum();
+                    }
+                 
 
-                    double TotalSale = Sale.GetAllSales().Where(w => w.SaleId > SaleId && w.OrgId == OrgId).Select(s => s.SaleAmount).Sum();
-
-                    double totalAmount = Commission.GetAllCommissions()
-                                       .Where(w => w.CommisionId > CommissionId && w.OrgId == OrgId).Select(s => s.CommissionAmount).Sum();
+                 
 
                     try
                     {
@@ -314,7 +344,7 @@ namespace HangOut.Controllers.Account
 
                     mergeAndSendToAcoount(LastRecords.OrgId);
                     EntryToAccount(LastRecords.OrgId);
-                }
+               // }
             }
             return Json(new { data = CObj }, JsonRequestBehavior.AllowGet);
         }

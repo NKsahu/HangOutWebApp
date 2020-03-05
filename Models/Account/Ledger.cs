@@ -122,6 +122,7 @@ namespace HangOut.Models.Account
                                 BSObj.Amount = 0.00;
                                 BSObj.Date = CalculationStartFrom;
                                 BSObj.OrgId = OrgId;
+                                BSObj.Balance = 0.00;
                                 BSObj.SaveOpeningValue();
                                 balanceStatement.InsertIntoBalanceStementAfterRegistration(CalculationStartFrom, OrgId);
                             }

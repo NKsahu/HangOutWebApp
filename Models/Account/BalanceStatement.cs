@@ -74,8 +74,19 @@ namespace HangOut.Models.Account
                         && x.OrgId == OrgId).FirstOrDefault();
 
 
-                double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
-                Obj.CRAmount = amt + ((amt * 5) / 100);
+
+                if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
+                {
+                    double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
+                    Obj.CRAmount = (amt) +((amt * LedgerDetails.TaxOnAboveMargin) / 100);
+                    Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
+                }
+                else if (ord.PaymentStatus == 3)
+                {
+                    double amt = (Amount * LedgerDetails.MarginOnline) / 100;
+                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+                    Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
+                }
                 Obj.Date = Date;
                
                // Obj.Amount = Amount;
@@ -97,16 +108,16 @@ namespace HangOut.Models.Account
                 if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
                 {
                     double amt = (Amount * LedgerDetails.MarginOnCash) / 100;
-                    Obj.CRAmount = amt + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
+                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
                     Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
                 }
                 else if (ord.PaymentStatus == 3)
                 {
                     double amt = (Amount * LedgerDetails.MarginOnline) / 100;
-                    Obj.CRAmount = amt + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
+                    Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
                     Obj.TaxOnOnline = LedgerDetails.TaxOnAboveMarginOnline;
                 }
-                
+
                 Obj.Date = Date;
                 //Obj.Amount = Amount;
                 BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
