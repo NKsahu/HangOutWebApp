@@ -158,16 +158,16 @@ namespace HangOut.Controllers.Account
             Obj.SaveOpeningValue();
 
 
-            BalanceStatement Obj1 = new BalanceStatement();
+            //BalanceStatement Obj1 = new BalanceStatement();
 
 
-            Obj1.Narration = "Opening Balance";
-            Obj1.Amount = 0.00;
-            BalanceStatement TBalances = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
-            Obj1.Balance = TBalances.Balance;
-            Obj1.Date = DateTime.Now;
-            Obj1.OrgId = OrgId;
-            Obj1.SaveOpeningValue();
+            //Obj1.Narration = "Opening Balance";
+            //Obj1.Amount = 0.00;
+            //BalanceStatement TBalances = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
+            //Obj1.Balance = TBalances.Balance;
+            //Obj1.Date = DateTime.Now;
+            //Obj1.OrgId = OrgId;
+            //Obj1.SaveOpeningValue();
 
             return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
         }
@@ -370,19 +370,23 @@ namespace HangOut.Controllers.Account
 
             Sale AllSales = Sale.GetAllSales().Where(w=> w.OrgId == OrgId).Last();
 
-            Obj.Date = FirstRecords.Date;
-            Obj.Narration = "Opening Balance";
-            Obj.AOrgId = OrgId;
-            if (AllSales==null)
-            {
-                Obj.DRAmount = 0.00;
-            }
-            else
-            {
-                Obj.DRAmount = LastRecords.Balance;
-            }
-            Obj.SaveGeneral();
+            Accounts FirstAccountRecords = Accounts.GetAll().Where(w => w.Narration == "Opening Balance").FirstOrDefault();
 
+            if (FirstAccountRecords == null)
+            {
+                Obj.Date = FirstRecords.Date;
+                Obj.Narration = "Opening Balance";
+                Obj.AOrgId = OrgId;
+                if (AllSales == null)
+                {
+                    Obj.DRAmount = 0.00;
+                }
+                else
+                {
+                    Obj.DRAmount = LastRecords.Balance;
+                }
+                Obj.SaveGeneral();
+            }
             AObj.DRAmount = AllSales.SaleAmount;
             AObj.Narration = "Online Payment received Entry No."+ AllSales.EntryNo;
             AObj.Balance = AllSales.SaleAmount;

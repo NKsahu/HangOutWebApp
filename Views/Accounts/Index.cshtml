@@ -27,10 +27,10 @@
                         @Html.DisplayNameFor(model => model.Narration)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.DRAmount)
+                        @Html.DisplayName("DR")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.CRAmount)
+                        @Html.DisplayName("CR")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Balance)
@@ -41,14 +41,21 @@
             <tbody id="Tbody">
                 @foreach (Accounts Obj in Model)
                 {
-                    <tr id="@Obj.AID">
-                        <td>@Obj.Date</td>
-                        <td>@Obj.Narration</td>
-                        <td>@Obj.DRAmount</td>
-                        <td>@Obj.CRAmount</td>
-                        <td>@Obj.Balance</td>
+                <tr id="@Obj.AID">
+                    <td>@Obj.Date</td>
+                    <td>@Obj.Narration</td>
+                    <td>@Obj.DRAmount.ToString("0.00")</td>
+                    <td>@Obj.CRAmount.ToString("0.00")</td>
+                    @if (Obj.CRAmount > Obj.Balance)
+                    {
+                        <td>@Obj.Balance.ToString("0.00") (CR)</td>
+                    }
+                    else
+                    {
+                        <td>@Obj.Balance.ToString("0.00") (DR)</td>
+                    }
 
-                    </tr>
+                </tr>
                 }
 
             </tbody>

@@ -21,15 +21,16 @@
                         @Html.DisplayNameFor(model => model.Narration)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Amount)
+                        @Html.DisplayName("DR")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.CRAmount)
+                        @Html.DisplayName("CR")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Balance)
                     </th>
-                   
+
+
                 </tr>
             </thead>
             <tbody id="Tbody">
@@ -38,10 +39,17 @@
                 <tr id="@Obj.BID">
                     <td>@Obj.Date</td>
                     <td>@Obj.Narration</td>
-                    <td>@Obj.Amount</td>
-                    <td>@Obj.CRAmount</td>
-                    <td>@Obj.Balance</td>
-
+                    <td>@Obj.Amount.ToString("0.00")</td>
+                    <td>@Obj.CRAmount.ToString("0.00")</td>
+                    
+                   @if (Obj.CRAmount>Obj.Balance)
+                   {
+                     <td>@Obj.Balance.ToString("0.00") (CR)</td>
+                   }
+                   else
+                   {
+                     <td>@Obj.Balance.ToString("0.00") (DR)</td>
+                   }
                 </tr>
                 }
 
