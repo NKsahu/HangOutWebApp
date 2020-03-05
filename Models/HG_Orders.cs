@@ -114,9 +114,16 @@ namespace HangOut.Models
                 }
                 if (Status > 0)
                 {
-                    Query += "and Status=" + Status.ToString();
+                    Query += "and Status=" + Status.ToString()+" ";
                 }
-                Query += " ORDER BY OID DESC";
+                if(OrgId==0)
+                {
+                    Query += " ORDER BY OID DESC";
+                } 
+                else
+                {
+                    Query += " ORDER BY Create_Date ASC";
+                }
                 cmd = new SqlCommand(Query, Obj.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -139,6 +146,49 @@ namespace HangOut.Models
                         OrderApprovlSts=SDR.GetInt32(14),
                         DeliveryCharge=SDR.GetDouble(15),
                         ContactId=SDR.GetInt32(16)
+                    };
+                    ListTmp.Add(ObjTmp);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
+            return (ListTmp);
+        }
+
+        public List<HG_Orders> GetAllForBS(int OrgId = 0, int CID = 0, int Status = 0)
+        {
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<HG_Orders> ListTmp = new List<HG_Orders>();
+            HG_Orders ObjTmp = null;
+            DBCon Obj = new DBCon();
+            try
+            {
+                             
+                string Query = "SELECT * FROM HG_ORDERS WHERE OrgId=" + OrgId + "ORDER BY Create_Date ASC";
+                           
+                cmd = new SqlCommand(Query, Obj.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTmp = new HG_Orders
+                    {
+                        OID = SDR.GetInt64(0),
+                        CID = SDR.GetInt64(1),
+                        Status = SDR.GetString(2),
+                        Create_By = SDR.GetInt64(3),
+                        Create_Date = SDR.GetDateTime(4),
+                        Update_By = SDR.GetInt64(5),
+                        Update_Date = SDR.GetDateTime(6),
+                        OrgId = SDR.GetInt32(8),
+                        Table_or_SheatId = SDR.GetInt64(9),
+                        PaymentStatus = SDR.GetInt32(10),
+                        PayReceivedBy = SDR.GetInt32(11),
+                        TableOtp = SDR.GetInt32(12),
+                        DisntChargeIDs = SDR.GetString(13),
+                        OrderApprovlSts = SDR.GetInt32(14),
+                        DeliveryCharge = SDR.GetDouble(15),
+                        ContactId = SDR.GetInt32(16)
                     };
                     ListTmp.Add(ObjTmp);
                 }
