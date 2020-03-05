@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using HangOut.Models.Common;
 using System;
+using HangOut.Models.POS;
 using System.Linq;
 
 namespace HangOut.Controllers
@@ -144,18 +145,8 @@ namespace HangOut.Controllers
 
         public ActionResult CreateEditAddOn(int ID,int CatId=0)
         {
-            HG_Items Objitem = new HG_Items();
-            if (ID > 0)
-            {
-                Objitem = Objitem.GetOne(ID);
-            }
-            else
-            {
-                HG_Category hG_Category = new HG_Category().GetOne(CatId);
-                Objitem.CategoryID = hG_Category.CategoryID;
-                Objitem.OrgID = hG_Category.OrgID;
-            }
-            return View(Objitem);
+            AddOnn addOnn = new AddOnn();
+            return View(addOnn);
         }
 
         [HttpPost]
