@@ -2083,7 +2083,27 @@ namespace HangOut.Controllers
             listSheet = listSheet.FindAll(x => x.OrgId == OrgID);
             return JArray.FromObject(listSheet);
         }
-
+        public JObject GetDeliveryCharge(int OrgId,int AppType)
+        {
+            JObject jObject = new JObject();
+            OrgSetting orgSetting = OrgSetting.Getone(OrgId);
+            if (orgSetting.EnblDeleryChrg == 1 && orgSetting.AcptMinOrd == 1 && OrgType.DeliveryChargeAply(AppType, orgSetting))
+            {
+                if (orgSetting.DeleryChrgType == 1)//fixed charge{
+                {
+                    jObject.Add("MinOrdAmt", orgSetting.MinOrderAmt);
+                    jObject.Add("DeliveryChrge", orgSetting.DeliveryCharge);
+                    jObject.Add("DeliveryType", orgSetting.DeleryChrgType);
+                }
+                else if (orgSetting.DeleryChrgType == 0)
+                {
+                    jObject.Add("MinOrdAmt", orgSetting.MinOrderAmt);
+                    jObject.Add("DeliveryChrge", orgSetting.DeliveryCharge);
+                    jObject.Add("DeliveryType", orgSetting.DeleryChrgType);
+                }
+            }
+            return jObject;
+        }
         public JArray PastOrderMainList(int CID,int status=0)
         {
             JArray Info = new JArray();
