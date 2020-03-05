@@ -133,6 +133,11 @@ namespace HangOut.Controllers
                 List<HG_Ticket> list = new HG_Ticket().GetAll(ObjOrder.OrgId,onDate:ObjOrder.Create_Date);
                 HG_Ticket objticket = new HG_Ticket() { OrgId = ObjOrder.OrgId, OID = ObjOrder.OID, TicketNo = list.Count + 1, DeliveryCharge = 0 };
                 int Ticketno = objticket.save();
+                foreach(var OrdItem in OrderItems)
+                {
+                    OrdItem.TickedNo = Ticketno;
+                    OrdItem.Save();
+                }
             }
             ObjOrder.Save();
             return Json(new { data = OID }, JsonRequestBehavior.AllowGet);
@@ -140,7 +145,7 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult SaveDiscntCharge(OrdDiscntChrge discntCharge)
         {
-            double AmtToAdded = 0.00;
+            
             if (discntCharge.Remark == null)
             {
                 discntCharge.Remark = "";
