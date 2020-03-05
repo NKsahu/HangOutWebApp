@@ -52,6 +52,7 @@ namespace HangOut.Controllers
                 CostPrice = ObjItem.CostPrice
             };
             OrderItem.Save();
+            OrderItem.CostPrice = OrderItem.Price;
             OrderItem.Price = 0.00;
             OrderItem.ItemName = ObjItem.Items;
             return Json(new { msg = OrderItem }, JsonRequestBehavior.AllowGet);
