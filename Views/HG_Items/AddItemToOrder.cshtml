@@ -1,7 +1,37 @@
-﻿
-@{
-    ViewBag.Title = "AddItemToOrder";
+﻿@using HangOut.Models;
+@{ 
+    Layout = null;
+    List<HG_Items> Items = new HG_Items().GetAll();
 }
+<div class="card">
+    <div class="card-header">
+        <h3 class="text-center">Items</h3>
 
-<h2>AddItemToOrder</h2>
+    </div>
+    <div class="card-body">
+        @*<div class="col-md-12">
+            <input type="text" style="float:right" placeholder="search Item" />
+        </div>*@
+<table style="margin-top:15px;">
+    <thead>
+        <tr>
+            <th>Select</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Items)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" onclick="AddItem(this,@item.ItemID)" class="form-control" />
+                </td>
+                <td>@item.Items</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+    </div>
+</div>
 

@@ -108,7 +108,8 @@ namespace HangOut.Controllers
             var UserInfo = Request.Cookies["UserInfo"];
             var UserType = UserInfo["UserType"];
             HG_Orders ObjOrder = new HG_Orders().GetOne(OID);
-            ObjOrder.PaymentStatus = PMode;
+            
+            
             if (UserType != "SA")
             {
                 if (ObjOrder.Create_Date < DateTime.Now.AddDays(-2).Date)
@@ -119,15 +120,32 @@ namespace HangOut.Controllers
                 {
                     return Json(new { msg = "Can't change Payment mode" });
                 }
+                if (ObjOrder.PaymentStatus != 3 && PMode == 3)
+                {
+                    return Json(new { msg = "Can't change Payment To foodDo" });
+                }
             }
-            
+            ObjOrder.PaymentStatus = PMode;
+            var OrderItems = new HG_OrderItem().GetAll(OID);
+            OrderItems = OrderItems.FindAll(x => x.TickedNo == 0);
+            if (OrderItems.Count > 0)
+            {
+                List<HG_Ticket> list = new HG_Ticket().GetAll(ObjOrder.OrgId,onDate:ObjOrder.Create_Date);
+                HG_Ticket objticket = new HG_Ticket() { OrgId = ObjOrder.OrgId, OID = ObjOrder.OID, TicketNo = list.Count + 1, DeliveryCharge = 0,CreationDate=ObjOrder.Create_Date };
+                int Ticketno = objticket.save();
+                foreach(var OrdItem in OrderItems)
+                {
+                    OrdItem.TickedNo = Ticketno;
+                    OrdItem.Save();
+                }
+            }
             ObjOrder.Save();
             return Json(new { data = OID }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult SaveDiscntCharge(OrdDiscntChrge discntCharge)
         {
-            double AmtToAdded = 0.00;
+            
             if (discntCharge.Remark == null)
             {
                 discntCharge.Remark = "";
@@ -176,7 +194,7 @@ namespace HangOut.Controllers
             }
             return Json(new { data = discntCharge }, JsonRequestBehavior.AllowGet);
         }
-        public JObject UpdateAmt(int ID,int Cnt,int Pmode)
+        public JObject UpdateAmt(int ID,int Cnt,int Pmode,double Rate)
         {
             HG_OrderItem OBJOrderItem = new HG_OrderItem().GetOne(ID);
             var UserInfo = Request.Cookies["UserInfo"];
@@ -187,22 +205,28 @@ namespace HangOut.Controllers
                 if (OBJOrderItem.OrderDate < DateTime.Now.AddDays(-2).Date)
                 {
                     result.Add("Status", 400);
+                    result.Add("Rate", OBJOrderItem.Price);
                     result.Add("MSG", "Can't Modify Order After 2 days");
                     return result;
                 }
                 if (Pmode==3)
                 {
                     result.Add("Status", 400);
-                    result.Add("MSG", "Can't change Payment mode");
+                    result.Add("Rate", OBJOrderItem.Price);
+                    result.Add("MSG", "Can't change Order in foodDo mode");
                     return result;
                 }
             }
             double price = 0.0;
             if (Cnt >= 0)
             {
-                
+                 if(OBJOrderItem.Status==4 &&Cnt>0)
+                {
+                    OBJOrderItem.Status = 3;
+                }
                 OBJOrderItem.Count = Cnt;
-                //OBJOrderItem.Save();
+                OBJOrderItem.Price = Rate;
+                OBJOrderItem.Save();
                 price = OBJOrderItem.Count * OBJOrderItem.Price;
                 result.Add("Status", 200);
                 result.Add("MSG", price.ToString("0.00"));
@@ -210,6 +234,7 @@ namespace HangOut.Controllers
             else
             {
                 result.Add("Status", 400);
+                result.Add("Rate", OBJOrderItem.Price);
                 result.Add("MSG", "Quantity Can't be minus");
                 return result;
             }

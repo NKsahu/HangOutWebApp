@@ -94,7 +94,15 @@
 </body>
 </html>
 <script>
+    $('.auto').autoNumeric('init', {
+        vMax: '100000000000000000000', vMin: '-100000000000000000000', aSep: ''
+    });
+    $('.autodouble').each(function () {
+        $(this).autoNumeric('init', {
+            vMax: '100000000000000000000.00', vMin: '-100000000000000000000.00', aSep: ''
+        });
 
+    });
     $("body").on('DOMSubtreeModified', "#DynamicData", function () {
         //=======Date Picker ============
         $(".DateField").datepicker();
@@ -119,15 +127,7 @@
         });
         //========= End Only Char ==============
 
-        $('.auto').autoNumeric('init', {
-            vMax: '100000000000000000000', vMin: '-100000000000000000000', aSep: ''
-        });
-        $('.autodouble').each(function () {
-            $(this).autoNumeric('init', {
-                vMax: '100000000000000000000.00', vMin: '-100000000000000000000.00', aSep: ''
-            });
-
-        });
+        
 
         if (!$.fn.DataTable.isDataTable('#TBLID')) {
             LoadDataTable();
