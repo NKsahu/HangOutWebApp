@@ -127,17 +127,22 @@ namespace HangOut.Controllers
             }
             ObjOrder.PaymentStatus = PMode;
             var OrderItems = new HG_OrderItem().GetAll(OID);
-            OrderItems = OrderItems.FindAll(x => x.TickedNo == 0);
-            if (OrderItems.Count > 0)
+           var OrderItemsWithouTicket = OrderItems.FindAll(x => x.TickedNo == 0);
+            if (OrderItemsWithouTicket.Count > 0)
             {
                 List<HG_Ticket> list = new HG_Ticket().GetAll(ObjOrder.OrgId,onDate:ObjOrder.Create_Date);
                 HG_Ticket objticket = new HG_Ticket() { OrgId = ObjOrder.OrgId, OID = ObjOrder.OID, TicketNo = list.Count + 1, DeliveryCharge = 0,CreationDate=ObjOrder.Create_Date };
                 int Ticketno = objticket.save();
-                foreach(var OrdItem in OrderItems)
+                foreach(var OrdItem in OrderItemsWithouTicket)
                 {
                     OrdItem.TickedNo = Ticketno;
                     OrdItem.Save();
                 }
+            }
+            var CompletedCancelItems = OrderItems.FindAll(x => x.Status == 3 || x.Status == 4);
+            if (ObjOrder.PaymentStatus>0&& OrderItems.Count == CompletedCancelItems.Count)
+            {
+                ObjOrder.Status = "3";// mark completed
             }
             ObjOrder.Save();
             return Json(new { data = OID }, JsonRequestBehavior.AllowGet);

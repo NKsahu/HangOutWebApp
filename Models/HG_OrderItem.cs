@@ -26,7 +26,7 @@ namespace HangOut.Models
         public double TaxInItm { get; set; }//single item Tax*Count  =Tax
         public double CostPrice { get; set; }// single cost price= CostPrice*count without tax
 
-        public string ItemName { get; set; }
+        public string ItemNam { get; set; }
         public HG_OrderItem()
         {
             this.Qty = "0.00";
