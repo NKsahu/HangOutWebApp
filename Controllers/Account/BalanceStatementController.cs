@@ -293,7 +293,7 @@ namespace HangOut.Controllers.Account
         {
           
             List<Ledger> LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1 
-            && x.PaymentDay== Convert.ToInt32(DateTime.Now.DayOfWeek)).ToList();
+            && x.PaymentDay== Convert.ToInt32(DateTime.Now.DayOfWeek) || x.CollectionDay == Convert.ToInt32(DateTime.Now.DayOfWeek)).ToList();
 
             foreach (var org in LedgerDetails)
             { 
