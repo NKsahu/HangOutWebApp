@@ -154,33 +154,10 @@ namespace HangOut.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateEditAddOn(HG_Items Objitem)
+        public ActionResult CreateEditAddOn(AddOns Addons)
         {
-            if (Objitem.Qty == null)
-            {
-                Objitem.Qty = "";
-
-            }
-            if (Objitem.ItemDiscription == null)
-            {
-                Objitem.ItemDiscription = "";
-            }
-            if (Objitem.Type == 0)
-            {
-                Objitem.Type = 2; //addon items
-            }
-            if (Objitem.OrgID == 0)
-            {
-                var OrgObj = Request.Cookies["UserInfo"];
-                Objitem.OrgID = int.Parse(OrgObj["OrgId"]);
-            }
-            if (Objitem.CategoryID == 0)
-            {
-                return Json(new { msg = "Select Item Category Name" });
-            }
-            Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
-            int i = Objitem.Save();
-            return Json(new {Objitem},JsonRequestBehavior.AllowGet);
+            
+            return Json(new {data=""},JsonRequestBehavior.AllowGet);
         }
         public ActionResult NewAddon()
         {

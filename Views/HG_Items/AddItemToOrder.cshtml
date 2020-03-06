@@ -9,10 +9,8 @@
 
     </div>
     <div class="card-body">
-        @*<div class="col-md-12">
-            <input type="text" style="float:right" placeholder="search Item" />
-        </div>*@
-<table style="margin-top:15px;">
+     
+<table id="ItemList" style="margin-top:15px;">
     <thead>
         <tr>
             <th>Select</th>
@@ -34,4 +32,6 @@
 </table>
     </div>
 </div>
-
+<script>
+    setTimeout(function () { LoadDataTable('ItemList') }, 200);
+</script>
