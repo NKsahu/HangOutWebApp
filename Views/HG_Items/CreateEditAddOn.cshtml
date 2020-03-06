@@ -12,18 +12,7 @@
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "" }))
         {
-        <div class="row">
-            <div class="col-md-4">
-
-            </div>
-            <div class="col-md-4">
-                @Html.EditorFor(model => model.TemplateName, new { htmlAttributes = new { @class = "form-control",placeholder="Template Name", required = "required" } })
-                @Html.ValidationMessageFor(model => model.TemplateName, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-4">
-
-            </div>
-        </div>
+      @Html.HiddenFor(model=>model.AddOnCategoryId)
                 foreach (var AddOn in Model.AddonnList)
                 {
                 @Html.Partial("AddOnn", AddOn)
@@ -85,5 +74,9 @@
                 $("#waiting").hide();
             }
         });
+    }
+    function JsonSuccess(Jobj) {
+        $("#waiting").hide();
+        hidedpt("AddOnIndex");
     }
 </script>

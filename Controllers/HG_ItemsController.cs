@@ -146,7 +146,9 @@ namespace HangOut.Controllers
         public ActionResult CreateEditAddOn(int CategryId)
         {
             AddOns addOns = new AddOns();
+            addOns.AddOnCategoryId = CategryId;
             AddOnn addOnn = new AddOnn();
+            addOnn.AddonCatId = CategryId;
             AddOnItems addOnItems = new AddOnItems();
             addOnn.AddOnItems.Add(addOnItems);
             addOns.AddonnList.Add(addOnn);
@@ -156,7 +158,17 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEditAddOn(AddOns Addons)
         {
-            
+            Addons.AddonnList = Addons.AddonnList.FindAll(x => x.AddOnTitle != null && x.AddOnTitle != "");
+            foreach (var AddOn in Addons.AddonnList)
+            {
+                AddOn.AddonCatId = Addons.AddOnCategoryId;
+                AddOn.Save();
+                foreach (var AddOnItem in AddOn.AddOnItems)
+                {
+                    AddOnItem.AddonID = AddOn.TitleId;
+                    AddOnItem.Save();
+                }
+            }
             return Json(new {data=""},JsonRequestBehavior.AllowGet);
         }
         public ActionResult NewAddon()

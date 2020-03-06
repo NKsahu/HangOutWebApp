@@ -102,12 +102,12 @@ namespace HangOut.Models.POS
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    ObjTmp.TitleId = SDR.GetInt32(0);
-                    ObjTmp.TemplateName = SDR.GetString(1);
-                    ObjTmp.AddOnTitle = SDR.GetString(2);
-                    ObjTmp.Min = SDR.GetInt32(3);
-                    ObjTmp.Max = SDR.GetInt32(4);
-                    ObjTmp.AddonCatId = SDR.GetInt32(5);
+                    int Index = 0;
+                    ObjTmp.TitleId = SDR.GetInt32(Index++);
+                    ObjTmp.AddOnTitle = SDR.GetString(Index++);
+                    ObjTmp.Min = SDR.GetInt32(Index++);
+                    ObjTmp.Max = SDR.GetInt32(Index++);
+                    ObjTmp.AddonCatId = SDR.GetInt32(Index++);
                 }
             }
             catch (System.Exception e)
@@ -122,7 +122,7 @@ namespace HangOut.Models.POS
 
 public class AddOns
 {
-    
+    public int AddOnCategoryId { get; set; }
     public List<AddOnn> AddonnList { get; set; }
     public AddOns()
     {

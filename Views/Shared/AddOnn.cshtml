@@ -4,11 +4,10 @@
     Layout = null;
 }
 <div class="AddOnn">
-    @using (Html.BeginCollectionItem("AddOn"))
+    @using (Html.BeginCollectionItem("AddonnList"))
     {
         @Html.HiddenFor(model => model.TitleId)
         @Html.HiddenFor(model=>model.AddonCatId)
-        @Html.HiddenFor(model=>model.TemplateName)
     <div class="row">
         <div class="col-md-6">
             @Html.LabelFor(model => model.AddOnTitle)
