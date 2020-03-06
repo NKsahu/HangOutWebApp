@@ -145,8 +145,12 @@ namespace HangOut.Controllers
 
         public ActionResult CreateEditAddOn(int ID,int CatId=0)
         {
-            AddOns addOnn = new AddOns();
-            return View(addOnn);
+            AddOns addOns = new AddOns();
+            AddOnn addOnn = new AddOnn();
+            AddOnItems addOnItems = new AddOnItems();
+            addOnn.AddOnItems.Add(addOnItems);
+            addOns.AddonnList.Add(addOnn);
+            return View(addOns);
         }
 
         [HttpPost]
