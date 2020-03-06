@@ -143,10 +143,14 @@ namespace HangOut.Controllers
         }
         // Addon Items Create
 
-        public ActionResult CreateEditAddOn(int ID,int CatId=0)
+        public ActionResult CreateEditAddOn(int CategryId)
         {
-            AddOns addOnn = new AddOns();
-            return View(addOnn);
+            AddOns addOns = new AddOns();
+            AddOnn addOnn = new AddOnn();
+            AddOnItems addOnItems = new AddOnItems();
+            addOnn.AddOnItems.Add(addOnItems);
+            addOns.AddonnList.Add(addOnn);
+            return View(addOns);
         }
 
         [HttpPost]
@@ -177,6 +181,24 @@ namespace HangOut.Controllers
             Objitem.EntryBy = System.Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
             int i = Objitem.Save();
             return Json(new {Objitem},JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult NewAddon()
+        {
+            AddOnn addOnn = new AddOnn();
+            AddOnItems addOnItems = new AddOnItems();
+            addOnn.AddOnItems.Add(addOnItems);
+            return View("Addonn", addOnn);
+        }
+        public ActionResult NewAddOnItem(Int64 ItemId)
+        {
+            HG_Items ObjItem = new HG_Items().GetOne(ItemId);
+            AddOnItems addOnItem = new AddOnItems();
+            addOnItem.ItemId = ObjItem.ItemID;
+            addOnItem.Title = ObjItem.Items;
+            addOnItem.CostPrice = ObjItem.CostPrice;
+            addOnItem.Tax = ObjItem.Tax;
+            addOnItem.Price = ObjItem.Price;
+            return View("AddOnItem",addOnItem);
         }
         public ActionResult UplExl()
         {
