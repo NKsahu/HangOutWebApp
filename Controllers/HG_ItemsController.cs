@@ -192,8 +192,13 @@ namespace HangOut.Controllers
         public ActionResult NewAddOnItem(Int64 ItemId)
         {
             HG_Items ObjItem = new HG_Items().GetOne(ItemId);
-
-            return View("AddOnItem");
+            AddOnItems addOnItem = new AddOnItems();
+            addOnItem.ItemId = ObjItem.ItemID;
+            addOnItem.Title = ObjItem.Items;
+            addOnItem.CostPrice = ObjItem.CostPrice;
+            addOnItem.Tax = ObjItem.Tax;
+            addOnItem.Price = ObjItem.Price;
+            return View("AddOnItem",addOnItem);
         }
         public ActionResult UplExl()
         {

@@ -7,7 +7,7 @@ namespace HangOut.Models.POS
 {
     public class AddOnItems
     {
-        public int AdddOnItemId { get; set; }
+        public int AddOnItemId { get; set; }
         public Int64 ItemId { get; set; }
         public double CostPrice {get;set;}
         public double Tax { get; set; }
