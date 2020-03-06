@@ -11,21 +11,34 @@ namespace HangOut.Controllers.Account
     public class BalanceStatementController : Controller
     {
         // GET: BalanceStatement
-        public ActionResult Index(int OrgId=0)
-        {
-            if(OrgId>0)
-            {
-                List<BalanceStatement> balanceStatements = BalanceStatement.GetByOrgId(OrgId);
-                return View(balanceStatements);
-            }
-            else
-            {
-                List<BalanceStatement> balanceStatements = BalanceStatement.GetAllList();
-                return View(balanceStatements);
-            }
+        //public ActionResult Index(int OrgId=0)
+        //{
+        //    if(OrgId>0)
+        //    {
+        //        List<BalanceStatement> balanceStatements = BalanceStatement.GetByOrgId(OrgId);
+        //        return View(balanceStatements);
+        //    }
+        //    else
+        //    {
+        //        List<BalanceStatement> balanceStatements = BalanceStatement.GetAllList();
+        //        return View(balanceStatements);
+        //    }
          
+        //}
+        public ActionResult Index(int OrgId)
+        {
+            DateTime FromDate = DateTime.ParseExact(Request.QueryString["Fdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime Todate = DateTime.ParseExact(Request.QueryString["Tdate"], "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
+            List<BalanceStatement> BS = BalanceStatement.GetDataBYDate(OrgId, FromDate, Todate);
+            return View(BS);
         }
-   
+
+        public ActionResult BalanceStatementFilter(int OrgId)
+        {
+            return View();
+        }
+
 
         public ActionResult GetDetails(List<HG_OrderItem> CompletedItems)
         {
@@ -362,6 +375,10 @@ namespace HangOut.Controllers.Account
             }
             return Json(new { data = LedgerDetails }, JsonRequestBehavior.AllowGet);
         }
+
+       
+
+  
 
 
 

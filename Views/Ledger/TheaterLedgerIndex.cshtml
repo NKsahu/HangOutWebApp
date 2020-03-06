@@ -83,22 +83,20 @@
 
     }
     function Get(OrgId) {
-                
-            $.ajax({
-                type: 'GET',
-                url: "/BalanceStatement/Index?OrgId=" + OrgId,
-                success: function (data) {
-                    makedpt("BalanceStatement");
-                    $("#BalanceStatement > .modal-dialog > .modal-content > .modal-body").html(data);
-                    showdpt("BalanceStatement");
-                    $('#waiting').hide();
-                },
-                error: function (jqXhr, textStatus, errorMessage) { // error callback
-                    $("#waiting").hide();
-                }
-            });
 
-    }
+        $.ajax({
+            type: 'GET',
+            url: "/BalanceStatement/BalanceStatementFilter?OrgId=" + OrgId,
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }        
     function GetACDetails() {
         $.ajax({
             type: 'GET',

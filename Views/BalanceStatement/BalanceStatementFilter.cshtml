@@ -1,0 +1,68 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-header text-center"><b>Filter</b></div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                @Html.Hidden("OrgId", Request.QueryString["OrgId"])
+                <div class="col-md-3">
+                    @Html.Label("From Date")
+                    @Html.TextBox("Fdate", DateTime.Now.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+                </div>
+                <div class="col-md-3" >
+                    @Html.Label("To Date")
+                    @Html.TextBox("Tdate", DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+                </div>
+                <div class="col-sm-2">
+                    <button id="Search" class="btn btn-secondary" style="margin-top:15%"><i class="fa fa-search"></i> Search</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="col" id="List">
+    <table class="table table-hover" id="TBLID">
+        <thead>
+            <tr>           
+                        <td>Date</td>
+                        <td>Narration</td>
+                        <td>Amount</td>
+                        <td>CRAmount</td>
+                        <td>Balance</td>            
+                        <td>Balance</td>                  
+            </tr>
+        </thead>
+        <tbody></tbody>
+
+    </table>
+
+</div>
+<script>
+    function Search() {
+        $("#waiting").show();
+        var Fdate = $("#Fdate").val();
+        var Tdate = $("#Tdate").val();
+        var OrgId = $("#OrgId").val();
+        $.ajax({
+            url: "/BalanceStatement/Index?OrgId=" + OrgId + "&Fdate=" + Fdate + "&Tdate=" + Tdate,
+            type: "GET",
+            success: function (data) {
+                $("#waiting").hide();
+                $("#List").html(data);
+
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+
+        });
+    }
+    $("#Search").click(function () {
+        Search();
+    });
+</script>
