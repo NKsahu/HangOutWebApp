@@ -313,13 +313,34 @@ namespace HangOut.Models.Account
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
+             BalanceStatement OBJBS = new BalanceStatement();
             List<BalanceStatement> BalanceStatementList = new List<BalanceStatement>();
             try
             {
-                var tDate =  new DateTime(ToDate.Year, ToDate.Month, ToDate.Day, 23, 59, 00);
-                var fDate = new DateTime(Fdate.Year, Fdate.Month, ToDate.Day, 00, 00, 00).AddHours(-24);
+                BalanceStatement BAS = BalanceStatement.GetByOrgId(OrgId)
+                    .Where(w => w.Date.Date < Fdate.Date).OrderByDescending(d => d.BID).FirstOrDefault();
 
-                string Quary = "Select * from ACBalanceStatement where OrgId=" + OrgId+ " and Date between '" + fDate.ToString("MM/dd/yyyy") + "' and '" + tDate.ToString("MM/dd/yyyy HH:mm:ss") + "' ORDER BY Date ASC";
+             
+                if(BAS!=null)
+                {
+                OBJBS.Date = BAS.Date;
+                OBJBS.Narration = "Opening Balance";
+                OBJBS.Balance = BAS.Balance;
+                BalanceStatementList.Add(OBJBS);
+                }
+                else
+                {
+                    BalanceStatement BAS1 = BalanceStatement.GetByOrgId(OrgId).FirstOrDefault();
+                    OBJBS.Date = BAS1.Date;
+                    OBJBS.Narration = BAS1.Narration;
+                    OBJBS.Balance = BAS1.Balance;
+                    BalanceStatementList.Add(OBJBS);
+                }
+
+
+                var tDate =  new DateTime(ToDate.Year, ToDate.Month, ToDate.Day, 23, 59, 00);
+  
+                string Quary = "Select * from ACBalanceStatement where OrgId=" + OrgId+ " and Date between '" + Fdate.ToString("MM/dd/yyyy") + "' and '" + tDate.ToString("MM/dd/yyyy HH:mm:ss") + "' ORDER BY Date ASC";
 
                 
                 cmd = new SqlCommand(Quary, con.Con);
@@ -327,7 +348,7 @@ namespace HangOut.Models.Account
 
                 while (SDR.Read())
                 {
-                    BalanceStatement OBJBS = new BalanceStatement();
+                    OBJBS = new BalanceStatement();
                     OBJBS.BID = SDR.GetInt32(0);
                     OBJBS.Date = SDR.GetDateTime(1);
                     OBJBS.Amount = SDR.GetDouble(2);
