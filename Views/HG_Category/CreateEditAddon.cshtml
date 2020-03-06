@@ -11,7 +11,7 @@
     </div>
     <div class="card-body">
 
-        @using (Ajax.BeginForm("CreateEditAddon", "HG_Category", new { ID = Model.CategoryID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEditAddon", "HG_Category", new { ID = Model.CategoryID }, new AjaxOptions { HttpMethod = "POST",  LoadingElementId = "waiting",  }))
         {
             @Html.HiddenFor(model => model.CategoryID)
             @Html.HiddenFor(model => model.CategoryType)
