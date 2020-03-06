@@ -9,7 +9,11 @@
     <div class="card-header">
         <h3 class="text-center">Balance Statement</h3>
     </div>
-  
+    <div class="row">
+        <div class="col-md-1">
+            <a href="/Ledger/TheaterLedgerIndex" style="background-color:white" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control"> Back</a>
+        </div>
+    </div>
     <div class="card-body">
         <table class="table" id="TBLID" style="width:100%">
             <thead>
@@ -36,21 +40,21 @@
             <tbody id="Tbody">
                 @foreach (BalanceStatement Obj in Model)
                 {
-                <tr id="@Obj.BID">
-                    <td>@Obj.Date</td>
-                    <td>@Obj.Narration</td>
-                    <td>@Obj.Amount.ToString("0.00")</td>
-                    <td>@Obj.CRAmount.ToString("0.00")</td>
-                    
-                   @if (Obj.CRAmount>Obj.Balance)
-                   {
-                     <td>@Obj.Balance.ToString("0.00") (CR)</td>
-                   }
-                   else
-                   {
-                     <td>@Obj.Balance.ToString("0.00") (DR)</td>
-                   }
-                </tr>
+                    <tr id="@Obj.BID">
+                        <td>@Obj.Date</td>
+                        <td>@Obj.Narration</td>
+                        <td>@Obj.Amount.ToString("0.00")</td>
+                        <td>@Obj.CRAmount.ToString("0.00")</td>
+
+                        @if (Obj.CRAmount > Obj.Balance)
+                        {
+                            <td>@Obj.Balance.ToString("0.00") (CR)</td>
+                        }
+                        else
+                        {
+                            <td>@Obj.Balance.ToString("0.00") (DR)</td>
+                        }
+                    </tr>
                 }
 
             </tbody>

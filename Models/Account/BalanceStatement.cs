@@ -307,6 +307,46 @@ namespace HangOut.Models.Account
             finally { cmd.Dispose(); con.Con.Close(); }
             return (BalanceStatementList);
         }
+
+        public static List<BalanceStatement> GetDataBYDate(int OrgId ,DateTime Fdate,DateTime ToDate)
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<BalanceStatement> BalanceStatementList = new List<BalanceStatement>();
+            try
+            {
+                var tDate =  new DateTime(ToDate.Year, ToDate.Month, ToDate.Day, 23, 59, 00);
+                var fDate = new DateTime(Fdate.Year, Fdate.Month, ToDate.Day, 00, 00, 00).AddHours(-24);
+
+                string Quary = "Select * from ACBalanceStatement where OrgId=" + OrgId+ " and Date between '" + fDate.ToString("MM/dd/yyyy") + "' and '" + tDate.ToString("MM/dd/yyyy HH:mm:ss") + "' ORDER BY Date ASC";
+
+                
+                cmd = new SqlCommand(Quary, con.Con);
+                SDR = cmd.ExecuteReader();
+
+                while (SDR.Read())
+                {
+                    BalanceStatement OBJBS = new BalanceStatement();
+                    OBJBS.BID = SDR.GetInt32(0);
+                    OBJBS.Date = SDR.GetDateTime(1);
+                    OBJBS.Amount = SDR.GetDouble(2);
+                    OBJBS.Narration = SDR.GetString(3);
+                    OBJBS.OrderId = SDR.GetInt32(4);
+                    OBJBS.OrgId = SDR.GetInt32(5);
+                    OBJBS.CRAmount = SDR.GetDouble(6);
+                    OBJBS.EntryNo = SDR.GetInt32(7);
+                    OBJBS.Balance = SDR.GetDouble(8);
+                    BalanceStatementList.Add(OBJBS);
+                }
+
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); con.Con.Close(); }
+            return (BalanceStatementList);
+        }
+
+
         public static int Dell(int ID)
         {
             int R = 0;
