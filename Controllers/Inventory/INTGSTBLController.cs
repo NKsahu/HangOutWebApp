@@ -60,10 +60,11 @@ namespace HangOut.Controllers.Inventory
         }
         public JsonResult GETID(int ID)
         {
-            
             List<INTUnits> ListUnit = INTUnits.GetAll();
-            ListUnit = ListUnit.FindAll(x => x.ParentId == ID);
-            return Json(new {data= ListUnit });
+            INTUnits ObjUnit = ListUnit.Find(x => x.UnitID == ID);
+            int ParentID = ObjUnit.ParentId;
+            return Json(new { ParentId = ParentID }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }
