@@ -10,7 +10,6 @@ namespace HangOut.Models.POS
     public class AddOnn
     {
         public int TitleId { get; set; }
-        public string TemplateName { get; set; }
         public string AddOnTitle { get; set; }
         public int Min { get; set; }
         public int Max { get; set; }
@@ -30,15 +29,14 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.TitleId == 0)
                 {
-                    Quary = "Insert Into HG_AddOnList Values(@TemplateName,@AddOnTitle,@Min,@Max,@AddonCatId) ";
+                    Quary = "Insert Into HG_AddOnList Values(@AddOnTitle,@Min,@Max,@AddonCatId) ";
                 }
                 else
                 {
-                    Quary = "Update set HG_AddOnList TemplateName=@TemplateName,AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
+                    Quary = "Update set HG_AddOnList AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@TitleId", this.TitleId);
-                cmd.Parameters.AddWithValue("@TemplateName", this.TemplateName);
                 cmd.Parameters.AddWithValue("@AddOnTitle", this.AddOnTitle);
                 cmd.Parameters.AddWithValue("@Min", this.Min);
                 cmd.Parameters.AddWithValue("@Max", this.Max);
@@ -65,7 +63,7 @@ namespace HangOut.Models.POS
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            List<AddOnn> listUnit = new List<AddOnn>();
+            List<AddOnn> listAddon = new List<AddOnn>();
             try
             {
                 string Quary = "Select * from HG_AddOnList ";
@@ -74,19 +72,19 @@ namespace HangOut.Models.POS
 
                 while (SDR.Read())
                 {
+                    int Index = 0;
                     AddOnn OBJINT = new AddOnn();
-                    OBJINT.TitleId = SDR.GetInt32(0);
-                    OBJINT.TemplateName = SDR.GetString(1);
-                    OBJINT.AddOnTitle = SDR.GetString(2);
-                    OBJINT.Min = SDR.GetInt32(3);
-                    OBJINT.Max = SDR.GetInt32(4);
-                    OBJINT.AddonCatId = SDR.GetInt32(5);
-                    listUnit.Add(OBJINT);
+                    OBJINT.TitleId = SDR.GetInt32(Index++);
+                    OBJINT.AddOnTitle = SDR.GetString(Index++);
+                    OBJINT.Min = SDR.GetInt32(Index++);
+                    OBJINT.Max = SDR.GetInt32(Index++);
+                    OBJINT.AddonCatId = SDR.GetInt32(Index++);
+                    listAddon.Add(OBJINT);
                 }
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
-            return (listUnit);
+            return (listAddon);
         }
         public AddOnn GetOne(int ID)
         {
@@ -124,7 +122,7 @@ namespace HangOut.Models.POS
 
 public class AddOns
 {
-    public string TemplateName { get; set; }
+    
     public List<AddOnn> AddonnList { get; set; }
     public AddOns()
     {
