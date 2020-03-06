@@ -34,30 +34,37 @@ namespace HangOut.Controllers.Account
             List<HG_Orders> OrdersDetails = new List<HG_Orders>();
             List<HG_OrganizationDetails> OrgList = new List<HG_OrganizationDetails>();
             List<HG_Orders> OrdrList = new List<HG_Orders>();
+
+            List<PaytmResn> Onlinepayment;
+
             double totalAmount = 0.00;
-           
-            for (int i = 0; i < CompletedItems.Count; i++)
-            {
-                OrdrList = new HG_Orders().GetAll(CompletedItems[i].OrgId, Status: 3);
-                HG_Orders Ord = OrdrList.Find(x => x.OID == CompletedItems[i].OID);
-                totalAmount += Ord.DeliveryCharge;
-                totalAmount += CompletedItems[i].Count * CompletedItems[i].Price;
-            }
-            Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1 
-            && x.OrgId == CompletedItems[0].OrgId).FirstOrDefault();
-          
+        
+            HG_Orders ord = new HG_Orders().GetOne(CompletedItems[0].OID);
+
+
+            if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
+                {
+                for (int i = 0; i < CompletedItems.Count; i++)
+                {
+                    OrdrList = new HG_Orders().GetAll(CompletedItems[i].OrgId, Status: 3);
+                    HG_Orders Ord = OrdrList.Find(x => x.OID == CompletedItems[i].OID);
+
+                    totalAmount += Ord.DeliveryCharge;
+                    totalAmount += CompletedItems[i].Count * CompletedItems[i].Price;
+
+
+                }
+                Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                && x.OrgId == CompletedItems[0].OrgId).FirstOrDefault();
+
                 bObj.Date = DateTime.Now;
                 bObj.Amount = totalAmount;
                 bObj.OrgId = LedgerDetails.OrgId;
                 bObj.OrderId = CompletedItems[0].OID;
                 BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(CompletedItems[0].OrgId).Last();
                 bObj.Balance = TotalBalance.Balance + totalAmount;
-                HG_Orders ord = new HG_Orders().GetOne(CompletedItems[0].OID);
 
-                if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
-                {
-                    //bObj.SaveCRValue();
-                    bObj.isCash = true;
+                bObj.isCash = true;
                 BalanceStatement Obj = new BalanceStatement();
                 HG_Orders od = new HG_Orders().GetOne(bObj.OrderId);
                 Ledger LedgerDetail = Ledger.GetAllList().Where(x => x.DebtorType == 1
@@ -91,7 +98,31 @@ namespace HangOut.Controllers.Account
             }
             else if (ord.PaymentStatus == 3)
                 {
-                    bObj.Narration = "Online Payment of Order No." + CompletedItems[0].OID;
+
+                for (int i = 0; i < CompletedItems.Count; i++)
+                {
+                    OrdrList = new HG_Orders().GetAll(CompletedItems[i].OrgId, Status: 3);
+                    HG_Orders Ord = OrdrList.Find(x => x.OID == CompletedItems[i].OID);
+
+                    PaytmResn.GetAll().Where(w => w.OID == CompletedItems[i].OID);
+                 //   PaytmResn paytmTxn
+
+                    totalAmount += Ord.DeliveryCharge;
+                    totalAmount += CompletedItems[i].Count * CompletedItems[i].Price;
+
+
+                }
+                Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+                && x.OrgId == CompletedItems[0].OrgId).FirstOrDefault();
+
+                bObj.Date = DateTime.Now;
+                bObj.Amount = totalAmount;
+                bObj.OrgId = LedgerDetails.OrgId;
+                bObj.OrderId = CompletedItems[0].OID;
+                BalanceStatement TotalBalance = BalanceStatement.GetAllForBalanceCalculation(CompletedItems[0].OrgId).Last();
+                bObj.Balance = TotalBalance.Balance + totalAmount;
+
+                bObj.Narration = "Online Payment of Order No." + CompletedItems[0].OID;
                     bObj.isCash = false;
                     bObj.SaveCRValue();
 
