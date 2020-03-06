@@ -80,7 +80,7 @@
             type: 'GET',
             url: "/HG_Items/NewAddOnItem?ItemId="+ItemId,
             success: function (data) {
-               
+                $(AddItemEvent).parent('div').parent('div').find('#Items').append(data);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
