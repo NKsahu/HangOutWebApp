@@ -521,6 +521,7 @@
     <Content Include="Views\Ledger\GetAccountList.cshtml" />
     <Content Include="Views\HG_Items\AddItemToOrder.cshtml" />
     <Content Include="Views\Shared\AddOnItem.cshtml" />
+    <Content Include="Views\Shared\AddOnn.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

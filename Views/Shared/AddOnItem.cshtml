@@ -1,7 +1,20 @@
-﻿
+﻿@model HangOut.Models.POS.AddOnItems
+@using HtmlHelpers.BeginCollectionItem
 @{
-    ViewBag.Title = "AddOnItem";
+    Layout = null;
+
 }
-
-<h2>AddOnItem</h2>
-
+<div class="iNTItem">
+    @using (Html.BeginCollectionItem("iNTItems"))
+    {
+        <div class="row aa">
+            @Html.HiddenFor(model => model.SubItemID, new { @class = "SUBITEMID" })
+            <div class="col-md-3" id="btn">
+                <span class="float-right">
+                    <a class="btn btn-success " onclick="DuplicateDiv(this);" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
+                </span>
+            </div>
+        </div>
+        <div id="HeadDiv" style="display:none"></div>
+    }
+</div>

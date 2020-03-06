@@ -145,7 +145,7 @@ namespace HangOut.Controllers
 
         public ActionResult CreateEditAddOn(int ID,int CatId=0)
         {
-            AddOnn addOnn = new AddOnn();
+            AddOns addOnn = new AddOns();
             return View(addOnn);
         }
 
