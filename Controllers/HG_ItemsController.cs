@@ -143,7 +143,7 @@ namespace HangOut.Controllers
         }
         // Addon Items Create
 
-        public ActionResult CreateEditAddOn(int ID,int CatId=0)
+        public ActionResult CreateEditAddOn(int CategryId)
         {
             AddOns addOns = new AddOns();
             AddOnn addOnn = new AddOnn();
