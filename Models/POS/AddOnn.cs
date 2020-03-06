@@ -122,17 +122,6 @@ namespace HangOut.Models.POS
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 public class AddOns
 {
     public string TemplateName { get; set; }
