@@ -13,55 +13,27 @@
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "" }))
         {
-            foreach (var Item in Model.AddonnList)
-            {
-                @Html.Partial("AddOnn", Item)
-            }
+            <div class="col-md-4">
 
-            @Html.HiddenFor(model => model.TitleId)
-            @Html.HiddenFor(model => model.CategoryId)
-            <div class="row">
-                <div class="col-md-4">
-
+            </div>
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.TemplateName)
+                @Html.EditorFor(model => model.TemplateName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.TemplateName, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
                 </div>
-                <div class="col-md-4">
-                    @Html.LabelFor(model => model.TemplateName)
-                    @Html.EditorFor(model => model.TemplateName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.TemplateName, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-4">
-
-                </div>
-                <div class="col-md-6">
-                    @Html.LabelFor(model => model.AddOnTitle)
-                    @Html.EditorFor(model => model.AddOnTitle, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.AddOnTitle, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    @Html.LabelFor(model => model.Min)
-                    @Html.EditorFor(model => model.Min, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Min, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-3">
-                    @Html.LabelFor(model => model.Max)
-                    @Html.EditorFor(model => model.Max, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Max, "", new { @class = "text-danger" })
-                </div>
-                <div class="row">
-                    @foreach (var Item in Model.AddOnItems)
-                    {
-                        @Html.Partial("AddOnItems", Item)
-                    }
-                </div>
+                foreach (var AddOn in Model.AddonnList)
+                {
+                @Html.Partial("AddOnn", AddOn)
+                }
                 <div class="col-sm-1">
                     @Html.Label("Save", new { @class = "text-white " })
                     <input type="submit" value="Save" class="btn btn-success " />
-
                 </div>
+                }
             </div>
-        }
-    </div>
-</div>
+        </div>
 <script>
         $("#CostPrice,#Tax").change(
             function(){
