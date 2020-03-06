@@ -27,10 +27,10 @@
             </div>
             <div class="col-md-2" id="btn">
                 <span>
-                    <a class="btn btn-danger " title="Add Set Of Choices" onclick="Add_AddOnItem(this);" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
+                    <a class="btn btn-danger " title="Add Set Of Choices" onclick="NewAddOn(this);" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
                 </span>
             </div>
-            <div class="row">
+            <div class="col-md-12">
                 @foreach (var AddOnItem in Model.AddOnItems)
                 {
                     @Html.Partial("AddOnItem", AddOnItem)

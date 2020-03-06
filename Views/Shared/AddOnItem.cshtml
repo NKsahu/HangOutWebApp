@@ -8,30 +8,43 @@
     @using (Html.BeginCollectionItem("AddOnItem"))
     {
     <div class="row">
-        @Html.HiddenFor(model => model.AdddOnItemId)
-        @Html.HiddenFor(model => model.Price)
-        @Html.HiddenFor(model => model.ItemId)
-        <div class="col-md-4">
-            @Html.Label("Item")
-            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @readonly = "readonly" })
-            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-3">
-            @Html.Label("Amt")
-            @Html.EditorFor(model => model.CostPrice, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-            @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-3">
-            @Html.Label("Tax")
-            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-            @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2" id="btn">
-            <span>
-                <a title="Add Item" class="btn btn-success " onclick="Add_AddOnItem(this);" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
-            </span>
-        </div>
+        @if (Model.ItemId > 0)
+        {
+            @Html.HiddenFor(model => model.AdddOnItemId)
+            @Html.HiddenFor(model => model.Price)
+            @Html.HiddenFor(model => model.ItemId)
+            <div class="col-md-4">
+                @Html.Label("Item")
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @readonly = "readonly" })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Amt")
+                @Html.EditorFor(model => model.CostPrice, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Tax")
+                @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2" id="btn">
+                <span>
+                    <a title="Add Item" class="btn btn-success " onclick="Add_AddOnItem(this);" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
+                </span>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-5"></div>
+            <div class="col-md-2" id="btn">
+                <span>
+                    <a title="Add Item" class="btn btn-success " onclick="ShowItemlist(this);" > <i class="fa fa-plus"></i></a>
+                </span>
+            </div>
+            <div class="col-md-5"></div>
+        }
     </div>
-        <div id="HeadDiv" style="display:none"></div>
+     
     }
 </div>

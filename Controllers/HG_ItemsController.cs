@@ -182,6 +182,19 @@ namespace HangOut.Controllers
             int i = Objitem.Save();
             return Json(new {Objitem},JsonRequestBehavior.AllowGet);
         }
+        public ActionResult NewAddon()
+        {
+            AddOnn addOnn = new AddOnn();
+            AddOnItems addOnItems = new AddOnItems();
+            addOnn.AddOnItems.Add(addOnItems);
+            return View("Addonn", addOnn);
+        }
+        public ActionResult NewAddOnItem(Int64 ItemId)
+        {
+            HG_Items ObjItem = new HG_Items().GetOne(ItemId);
+
+            return View("AddOnItem");
+        }
         public ActionResult UplExl()
         {
             return View();

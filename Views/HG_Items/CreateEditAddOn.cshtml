@@ -29,6 +29,9 @@
                 {
                 @Html.Partial("AddOnn", AddOn)
                 }
+            <div id="AddNewAddon">
+
+        </div>
                 <div class="col-sm-1" style="float:right">
                     @Html.Label("Save", new { @class = "text-white " })
                     <input type="submit" value="Save" class="btn btn-success " />
@@ -37,4 +40,67 @@
             </div>
         </div>
 
+<script>
+    function NewAddOn(event) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/NewAddon",
+            success: function (data) {
+                $("#AddNewAddon").append(data);
+                $(event).parent('span').parent('div').hide();
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function ShowItemlist(event) {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/AddItemToOrder",
+            success: function (data) {
+                makedpt("ShowItems", 600, 600);
+                $("#ShowItems > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("ShowItems");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+</script>
+<style>
+    table {
+        width: 500px; /* For Responsive design set 100% */
+        border-collapse: collapse;
+        margin: 30px 0px 30px;
+        background-color: #fff;
+        font-size: 14px;
+    }
 
+        table tr {
+            height: 40px;
+        }
+
+        table th {
+            background: #03493e;
+            color: #fff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        table td, th {
+            padding: 6px 6px 6px 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        /* CSS3 Zebra Striping */
+        table tr:nth-of-type(odd) {
+            background: #eee;
+        }
+</style>
