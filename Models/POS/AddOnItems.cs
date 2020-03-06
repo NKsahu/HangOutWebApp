@@ -61,7 +61,7 @@ namespace HangOut.Models.POS
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            List<AddOnItems> listUnit = new List<AddOnItems>();
+            List<AddOnItems> listAddOnItems = new List<AddOnItems>();
             try
             {
                 string Quary = "Select * from HG_AddOnItems ";
@@ -77,12 +77,12 @@ namespace HangOut.Models.POS
                     OBJINT.Tax = SDR.GetDouble(3);
                     OBJINT.Price = SDR.GetDouble(4);
                     OBJINT.AddonID = SDR.GetInt32(5);
-                    listUnit.Add(OBJINT);
+                    listAddOnItems.Add(OBJINT);
                 }
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
-            return (listUnit);
+            return (listAddOnItems);
         }
         public AddOnItems GetOne(int ID)
         {
@@ -96,19 +96,20 @@ namespace HangOut.Models.POS
             {
                 string Query = "SELECT * FROM  HG_AddOnItems where AddOnItemId=" + ID;
                 cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@UnitID", ID);
+                cmd.Parameters.AddWithValue("@AddOnItemId", ID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
-                    ObjTmp.AddOnItemId = SDR.GetInt32(0);
-                    ObjTmp.ItemId = SDR.GetInt64(1);
-                    ObjTmp.CostPrice = SDR.GetDouble(2);
-                    ObjTmp.Tax = SDR.GetDouble(3);
-                    ObjTmp.Price = SDR.GetDouble(4);
-                    ObjTmp.AddonID = SDR.GetInt32(5);
+                    int index = 0;
+                    ObjTmp.AddOnItemId = SDR.GetInt32(index++);
+                    ObjTmp.ItemId = SDR.GetInt64(index++);
+                    ObjTmp.CostPrice = SDR.GetDouble(index++);
+                    ObjTmp.Tax = SDR.GetDouble(index++);
+                    ObjTmp.Price = SDR.GetDouble(index++);
+                    ObjTmp.AddonID = SDR.GetInt32(index++);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             { e.ToString(); }
 
             finally { Con.Close(); }

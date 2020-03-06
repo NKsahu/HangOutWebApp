@@ -1,5 +1,4 @@
 ﻿@model HangOut.Models.POS.AddOns
-@using HangOut.Models
 @{
     Layout = null;
     var CurrentOrg = Request.Cookies["UserInfo"];
@@ -88,34 +87,3 @@
         });
     }
 </script>
-<style>
-    table {
-        width: 500px; /* For Responsive design set 100% */
-        border-collapse: collapse;
-        margin: 30px 0px 30px;
-        background-color: #fff;
-        font-size: 14px;
-    }
-
-        table tr {
-            height: 40px;
-        }
-
-        table th {
-            background: #03493e;
-            color: #fff;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        table td, th {
-            padding: 6px 6px 6px 10px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-
-        /* CSS3 Zebra Striping */
-        table tr:nth-of-type(odd) {
-            background: #eee;
-        }
-</style>
