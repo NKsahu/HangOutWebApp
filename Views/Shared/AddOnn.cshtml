@@ -2,25 +2,14 @@
 @using HtmlHelpers.BeginCollectionItem
 @{
     Layout = null;
-
 }
 <div class="AddOnn">
-    @using (Html.BeginCollectionItem("AddOnn"))
+    @using (Html.BeginCollectionItem("AddOn"))
     {
-        @Html.HiddenFor(model => model.TemplateName)
-       
+        @Html.HiddenFor(model => model.TitleId)
+        @Html.HiddenFor(model=>model.AddonCatId)
+        @Html.HiddenFor(model=>model.TemplateName)
         <div class="row">
-            <div class="col-md-4">
-
-            </div>
-            <div class="col-md-4">
-                @Html.LabelFor(model => model.TemplateName)
-                @Html.EditorFor(model => model.TemplateName, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                @Html.ValidationMessageFor(model => model.TemplateName, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-4">
-
-            </div>
             <div class="col-md-6">
                 @Html.LabelFor(model => model.AddOnTitle)
                 @Html.EditorFor(model => model.AddOnTitle, new { htmlAttributes = new { @class = "form-control", required = "required" } })
@@ -37,9 +26,9 @@
                 @Html.ValidationMessageFor(model => model.Max, "", new { @class = "text-danger" })
             </div>
             <div class="row">
-                @foreach (var Item in Model.AddOnItems)
+                @foreach (var AddOnItem in Model.AddOnItems)
                 {
-                    @Html.Partial("AddOnItems", Item)
+                    @Html.Partial("AddOnItems", AddOnItem)
                 }
             </div>
             </div>

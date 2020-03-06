@@ -21,6 +21,7 @@ namespace HangOut.Models.POS
     }
     public class AddOns
     {
+       public string TemplateName { get; set; }
        public  List<AddOnn> AddonnList { get; set; }
         public AddOns()
         {
