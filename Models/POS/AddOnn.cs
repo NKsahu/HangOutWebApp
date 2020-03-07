@@ -33,7 +33,7 @@ namespace HangOut.Models.POS
                 }
                 else
                 {
-                    Quary = "Update set HG_AddOnList AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
+                    Quary = "Update HG_AddOnList set  AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@TitleId", this.TitleId);
