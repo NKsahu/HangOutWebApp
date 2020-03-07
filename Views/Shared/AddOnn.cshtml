@@ -3,34 +3,34 @@
 @{
     Layout = null;
 }
-<div class="AddOnn">
+<div class="AddOnnCls">
     @using (Html.BeginCollectionItem("AddonnList"))
     {
-        @Html.HiddenFor(model => model.TitleId)
-        @Html.HiddenFor(model=>model.AddonCatId)
+        @Html.HiddenFor(model => model.TitleId,new { @class = "TitleId" })
+        @Html.HiddenFor(model=>model.AddonCatId, new { @class = "AddonCatId" })
     <div class="row">
         <div class="col-md-6">
             @Html.LabelFor(model => model.AddOnTitle)
-            @Html.EditorFor(model => model.AddOnTitle, new { htmlAttributes = new { @class = "form-control", placeholder = "Add on Title", required = "required" } })
+            @Html.EditorFor(model => model.AddOnTitle, new { htmlAttributes = new { @class = "form-control AddOnTitle", required = "required" } })
             @Html.ValidationMessageFor(model => model.AddOnTitle, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
             @Html.LabelFor(model => model.Min)
-            @Html.EditorFor(model => model.Min, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+            @Html.EditorFor(model => model.Min, new { htmlAttributes = new { @class = "form-control Min", required = "required" } })
             @Html.ValidationMessageFor(model => model.Min, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
             @Html.LabelFor(model => model.Max)
-            @Html.EditorFor(model => model.Max, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+            @Html.EditorFor(model => model.Max, new { htmlAttributes = new { @class = "form-control Max", required = "required" } })
             @Html.ValidationMessageFor(model => model.Max, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2" id="btn">
             <span>
-                <a class="btn btn-danger " title="Add Set Of Choices" onclick="NewAddOn(this);" style="margin-top: 29px;border-left-width: 0px;margin-right: 0px;margin-bottom: -1px;border-bottom-width: 0px;"> <i class="fa fa-plus"></i></a>
+                <a class="btn btn-danger " title="Add Set Of Choices" onclick="NewAddOn(this);" > <i class="fa fa-plus"></i></a>
             </span>
         </div>
         <div class="col-md-12" id="Items">
-            @foreach (var AddOnItem in Model.AddOnItems)
+            @foreach (var AddOnItem in Model.AddOnItemList)
             {
                 @Html.Partial("AddOnItem", AddOnItem)
             }

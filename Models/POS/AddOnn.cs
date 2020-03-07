@@ -14,10 +14,10 @@ namespace HangOut.Models.POS
         public int Min { get; set; }
         public int Max { get; set; }
         public int AddonCatId { get; set; }// addon category id
-        public List<AddOnItems> AddOnItems { get; set; }
+        public List<AddOnItems> AddOnItemList { get; set; }
         public AddOnn()
         {
-            AddOnItems = new List<AddOnItems>();
+            AddOnItemList = new List<AddOnItems>();
         }
         public int Save()
         {
@@ -29,11 +29,11 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.TitleId == 0)
                 {
-                    Quary = "Insert Into HG_AddOnList Values(@AddOnTitle,@Min,@Max,@AddonCatId) ";
+                    Quary = "Insert Into HG_AddOn Values(@AddOnTitle,@Min,@Max,@AddonCatId) SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update set HG_AddOnList AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
+                    Quary = "Update set HG_AddOn AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@TitleId", this.TitleId);
@@ -66,7 +66,7 @@ namespace HangOut.Models.POS
             List<AddOnn> listAddon = new List<AddOnn>();
             try
             {
-                string Quary = "Select * from HG_AddOnList ";
+                string Quary = "Select * from HG_AddOn ";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
@@ -124,7 +124,7 @@ public class AddOns
 {
     public int AddOnCategoryId { get; set; }
     public List<AddOnn> AddonnList { get; set; }
-    public AddOns()
+        public AddOns()
     {
         AddonnList = new List<AddOnn>();
     }

@@ -26,7 +26,7 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.AddOnItemId == 0)
                 {
-                    Quary = "Insert Into HG_AddOnItems Values(@ItemId,@CostPrice,@Tax,@Price,@AddonID) ";
+                    Quary = "Insert Into HG_AddOnItems Values(@ItemId,@CostPrice,@Tax,@Price,@AddonID) SELECT SCOPE_IDENTITY(); ";
                 }
                 else
                 {

@@ -145,27 +145,28 @@ namespace HangOut.Controllers
 
         public ActionResult CreateEditAddOn(int CategryId)
         {
+
             AddOns addOns = new AddOns();
             addOns.AddOnCategoryId = CategryId;
             AddOnn addOnn = new AddOnn();
             addOnn.AddonCatId = CategryId;
-            AddOnItems addOnItems = new AddOnItems();
-            addOnn.AddOnItems.Add(addOnItems);
             addOns.AddonnList.Add(addOnn);
             return View(addOns);
         }
 
         [HttpPost]
-        public ActionResult CreateEditAddOn(AddOns Addons)
+        public ActionResult CreateEditAddOn([System.Web.Http.FromBody] AddOns  Addons)
         {
             Addons.AddonnList = Addons.AddonnList.FindAll(x => x.AddOnTitle != null && x.AddOnTitle != "");
             foreach (var AddOn in Addons.AddonnList)
             {
                 AddOn.AddonCatId = Addons.AddOnCategoryId;
                 AddOn.Save();
-                foreach (var AddOnItem in AddOn.AddOnItems)
+                foreach (var AddOnItem in AddOn.AddOnItemList)
                 {
                     AddOnItem.AddonID = AddOn.TitleId;
+                    double taxAmt = (AddOnItem.Price * AddOnItem.Tax) / 100;
+                    AddOnItem.Price = AddOnItem.CostPrice + taxAmt;
                     AddOnItem.Save();
                 }
             }
@@ -174,20 +175,20 @@ namespace HangOut.Controllers
         public ActionResult NewAddon()
         {
             AddOnn addOnn = new AddOnn();
-            AddOnItems addOnItems = new AddOnItems();
-            addOnn.AddOnItems.Add(addOnItems);
+            //AddOnItems addOnItems = new AddOnItems();
+           // addOnn.AddOnItems.Add(addOnItems);
             return View("Addonn", addOnn);
         }
         public ActionResult NewAddOnItem(Int64 ItemId)
         {
             HG_Items ObjItem = new HG_Items().GetOne(ItemId);
-            AddOnItems addOnItem = new AddOnItems();
-            addOnItem.ItemId = ObjItem.ItemID;
-            addOnItem.Title = ObjItem.Items;
-            addOnItem.CostPrice = ObjItem.CostPrice;
-            addOnItem.Tax = ObjItem.Tax;
-            addOnItem.Price = ObjItem.Price;
-            return View("AddOnItem",addOnItem);
+            AddOnItems AddOnItemList = new AddOnItems();
+            AddOnItemList.ItemId = ObjItem.ItemID;
+            AddOnItemList.Title = ObjItem.Items;
+            AddOnItemList.CostPrice = ObjItem.CostPrice;
+            AddOnItemList.Tax = ObjItem.Tax;
+            AddOnItemList.Price = ObjItem.Price;
+            return View("AddOnItem", AddOnItemList);
         }
         public ActionResult UplExl()
         {
