@@ -2,36 +2,30 @@
 @using HtmlHelpers.BeginCollectionItem
 @{
     Layout = null;
-    
 }
-<div class="AddOnItem">
-    @using (Html.BeginCollectionItem("AddOnItems"))
+<div class="AddOnItems">
+
+    @using (Html.BeginCollectionItem("AddOnItemList"))
     {
-    <div class="row">
-        @if (Model.ItemId > 0)
-        {
-            @Html.HiddenFor(model => model.AddOnItemId)
-            @Html.HiddenFor(model => model.Price)
-            @Html.HiddenFor(model => model.ItemId)
+        @Html.HiddenFor(model => model.AddOnItemId,new {@class= "AddOnItemId" })
+        @Html.HiddenFor(model => model.Price , new { @class = "Price" })
+        @Html.HiddenFor(model => model.ItemId, new { @class = "ItemId" })
+        <div class="row">
             <div class="col-md-4">
                 @Html.Label("Item")
-                @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control Title", @required = "required",@readonly= "readonly" })
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
                 @Html.Label("Amt")
-                @Html.EditorFor(model => model.CostPrice, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.CostPrice, new { htmlAttributes = new { @class = "form-control CostPrice", required = "required" } })
                 @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
                 @Html.Label("Tax")
-                @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control Tax", required = "required" } })
                 @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
             </div>
-
-        }
-
-    </div>
-     
+        </div>
     }
 </div>

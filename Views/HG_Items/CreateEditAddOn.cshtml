@@ -22,7 +22,7 @@
         </div>
                 <div class="col-sm-1" style="float:right">
                     @Html.Label("Save", new { @class = "text-white " })
-                    <input type="submit" value="Save" class="btn btn-success " />
+                    <input type="button" onclick="SaveAdon()" value="Save" class="btn btn-success " />
                 </div>
                 }
             </div>
@@ -78,5 +78,54 @@
     function JsonSuccess(Jobj) {
         $("#waiting").hide();
         hidedpt("AddOnIndex");
+    }
+
+    function SaveAdon() {
+        var Addons = {};
+        Addons.AddOnCategoryId = $("#AddOnCategoryId").val();
+        Addons.AddonnList = [];
+        var ListAddOnnCls = document.getElementsByClassName("AddOnnCls");
+        for (var i = 0; i < ListAddOnnCls.length; i++) {
+            var AddonObj = {};
+            var ObjAddJQ = $(ListAddOnnCls[i]);
+            console.log(" " + ObjAddJQ);
+            AddonObj.TitleId = ObjAddJQ.find(".TitleId").val();
+            AddonObj.AddOnTitle = ObjAddJQ.find(".AddOnTitle").val();
+            AddonObj.Min = ObjAddJQ.find(".Min").val();
+            AddonObj.Max = ObjAddJQ.find(".Max").val();
+            AddonObj.AddonCatId = ObjAddJQ.find(".AddonCatId").val();
+            AddonObj.AddOnItemList = [];
+            var AddOnItems = ListAddOnnCls[i].getElementsByClassName("AddOnItems");
+            for (var j = 0; j < AddOnItems.length; j++) {
+                var ObjAddOnItem = $(AddOnItems[j]);
+                console.log("Items");
+                var AddonItemObj = {};
+                AddonItemObj.AddOnItemId = ObjAddOnItem.find(".AddOnItemId").val();
+                AddonItemObj.ItemId = ObjAddOnItem.find(".ItemId").val();
+                AddonItemObj.CostPrice = ObjAddOnItem.find(".CostPrice").val();
+                AddonItemObj.Tax = ObjAddOnItem.find(".Tax").val();
+                AddonItemObj.Price = ObjAddOnItem.find(".Price").val();
+                AddonItemObj.AddonID = ObjAddOnItem.find(".AddonID").val();
+                AddonObj.AddOnItemList.push(AddonItemObj);
+            }
+            Addons.AddonnList.push(AddonObj);
+        }
+            
+            $('#waiting').show();
+            $.ajax({
+                type: 'POST',
+                url: "/HG_Items/CreateEditAddOn",
+                data: JSON.stringify(Addons),
+                contentType: "application/json",
+                success: function (data) {
+                   
+                    hidedpt("AddOnIndex");
+                    $('#waiting').hide();
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $('#waiting').hide();
+                }
+            });
+        
     }
 </script>

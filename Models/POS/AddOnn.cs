@@ -14,10 +14,10 @@ namespace HangOut.Models.POS
         public int Min { get; set; }
         public int Max { get; set; }
         public int AddonCatId { get; set; }// addon category id
-        public List<AddOnItems> AddOnItems { get; set; }
+        public List<AddOnItems> AddOnItemList { get; set; }
         public AddOnn()
         {
-            AddOnItems = new List<AddOnItems>();
+            AddOnItemList = new List<AddOnItems>();
         }
         public int Save()
         {
@@ -29,18 +29,18 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.TitleId == 0)
                 {
-                    Quary = "Insert Into HG_AddOnList Values(@AddOnTitle,@Min,@Max,@AddonCatId) ";
+                    Quary = "Insert Into HG_AddOn Values(@AddOnTitle,@Min,@Max,@CategoryId) SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update set HG_AddOnList AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
+                    Quary = "Update HG_AddOn set  AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,CategoryId=@CategoryId where TitleId=@TitleId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@TitleId", this.TitleId);
                 cmd.Parameters.AddWithValue("@AddOnTitle", this.AddOnTitle);
                 cmd.Parameters.AddWithValue("@Min", this.Min);
                 cmd.Parameters.AddWithValue("@Max", this.Max);
-                cmd.Parameters.AddWithValue("@AddonCatId", this.AddonCatId);
+                cmd.Parameters.AddWithValue("@CategoryId", this.AddonCatId);
                 if (this.TitleId == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -66,7 +66,7 @@ namespace HangOut.Models.POS
             List<AddOnn> listAddon = new List<AddOnn>();
             try
             {
-                string Quary = "Select * from HG_AddOnList ";
+                string Quary = "Select * from HG_AddOn ";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
@@ -124,9 +124,68 @@ public class AddOns
 {
     public int AddOnCategoryId { get; set; }
     public List<AddOnn> AddonnList { get; set; }
-    public AddOns()
+        public AddOns()
     {
         AddonnList = new List<AddOnn>();
     }
+        public static AddOns GetOne(int categoryId)
+        {
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            AddOns ObjTmp = new AddOns();
+            ObjTmp.AddOnCategoryId = categoryId;
+            List<AddOnn> tempAddonn = new List<AddOnn>();
+            List<AddOnItems> AddonItemList = new List<AddOnItems>();
+            try
+            {
+                string Query = "SELECT * FROM  HG_AddOn where CategoryId="+categoryId+ ";SELECT * FROM  HG_AddOnItems where CategoryID=" +categoryId;
+                cmd = new SqlCommand(Query, dBCon.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    AddOnn addOnn = new AddOnn();
+                    int index = 0;
+                    addOnn.TitleId = SDR.GetInt32(index++);
+                    addOnn.AddOnTitle = SDR.GetString(index++);
+                    addOnn.Min= SDR.GetInt32(index++);
+                    addOnn.Max = SDR.GetInt32(index++);
+                    addOnn.AddonCatId = SDR.GetInt32(index++);
+                    tempAddonn.Add(addOnn);
+
+                }
+                ObjTmp.AddonnList = tempAddonn;
+                SDR.NextResult();
+                if (SDR.HasRows)
+                {
+                    List<HG_Items> itemlist = new HG_Items().GetAll();
+                    while (SDR.Read())
+                    {
+                        AddOnItems Addonitem = new AddOnItems();
+                        int index = 0;
+                        Addonitem.AddOnItemId = SDR.GetInt32(index++);
+                        Addonitem.ItemId = SDR.GetInt64(index++);
+                        Addonitem.CostPrice = SDR.GetDouble(index++);
+                        Addonitem.Tax = SDR.GetDouble(index++);
+                        Addonitem.Price = SDR.GetDouble(index++);
+                        Addonitem.AddonID = SDR.GetInt32(index++);
+                        Addonitem.CategoryID = SDR.GetInt32(index++);
+                        Addonitem.Title = itemlist.Find(x => x.ItemID == Addonitem.ItemId).Items;
+                        AddonItemList.Add(Addonitem);
+                    }
+                }
+                
+                foreach(var Addonn in ObjTmp.AddonnList)
+                {
+                    Addonn.AddOnItemList = AddonItemList.FindAll(x => x.AddonID == Addonn.TitleId);
+                }
+            }
+            catch (Exception e)
+            { e.ToString(); }
+
+            finally { dBCon.Con.Close();SDR.Close(); }
+
+            return (ObjTmp);
+        }
 }
 }

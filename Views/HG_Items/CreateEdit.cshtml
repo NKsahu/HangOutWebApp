@@ -98,12 +98,6 @@
                     @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
 
                 </div>
-                @*<div class="col-md-2">
-                    @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control autodouble", required = "required" } })
-                    @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-                </div>*@
                 @{
                         <div class="col-md-2">
                             @Html.Label("Tax %")
