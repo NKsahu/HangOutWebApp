@@ -33,7 +33,7 @@ namespace HangOut.Models.POS
                 }
                 else
                 {
-                    Quary = "Update set HG_AddOnList AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
+                    Quary = "Update set HG_AddOn AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,AddonCatId=@AddonCatId where TitleId=@TitleId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@TitleId", this.TitleId);
@@ -128,5 +128,31 @@ public class AddOns
     {
         AddonnList = new List<AddOnn>();
     }
+        public static AddOns GetOne(int categoryId)
+        {
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            AddOns ObjTmp = new AddOns();
+            ObjTmp.AddOnCategoryId = categoryId;
+            List<AddOnn> tempAddonn = new List<AddOnn>();
+            try
+            {
+                string Query = "SELECT * FROM  GetAddOnByCatID where CategoryId=@CategoryId";
+                cmd = new SqlCommand(Query, dBCon.Con);
+                cmd.Parameters.AddWithValue("@CategoryId", categoryId);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    
+                }
+            }
+            catch (Exception e)
+            { e.ToString(); }
+
+            finally { dBCon.Con.Close(); }
+
+            return (ObjTmp);
+        }
 }
 }

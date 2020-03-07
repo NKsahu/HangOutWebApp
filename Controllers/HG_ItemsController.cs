@@ -167,6 +167,7 @@ namespace HangOut.Controllers
                     AddOnItem.AddonID = AddOn.TitleId;
                     double taxAmt = (AddOnItem.Price * AddOnItem.Tax) / 100;
                     AddOnItem.Price = AddOnItem.CostPrice + taxAmt;
+                    AddOnItem.CategoryID = Addons.AddOnCategoryId;
                     AddOnItem.Save();
                 }
             }
