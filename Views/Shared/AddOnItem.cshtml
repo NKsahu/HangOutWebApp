@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-md-4">
                 @Html.Label("Item")
-                @Html.TextBoxFor(model => model.Title, new { @class = "form-control Title", @required = "required" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control Title", @required = "required",@readonly= "readonly" })
                 @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
