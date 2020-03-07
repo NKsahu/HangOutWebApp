@@ -268,8 +268,61 @@ namespace HangOut.Controllers.Account
                             bObj.Balance = TotalBalance.Balance + totalAmt;
 
                             bObj.Narration = "Online Payment of Order No." + orderitemlist[0].OID;
-                        bObj.isCash = false;
-                        bObj.SaveCRValue();
+                            bObj.isCash = false;
+
+                            bObj.SaveCRValue();
+
+                            Receipt ReceiptEntry = new Receipt();
+
+                            ReceiptEntry.Date = bObj.Date;
+                            ReceiptEntry.Amount =bObj.Amount ;
+                            ReceiptEntry.Particular = "Online Payment of Order No." + orderitemlist[0].OID;
+
+                            int LastEntryNo =  Receipt.GetAllList(0).Select(s=>s.EntryNo).Last();
+                            if(LastEntryNo>0)
+                             {
+                               ReceiptEntry.EntryNo = LastEntryNo + 1;
+                              }
+                            else
+                              {
+                                 ReceiptEntry.EntryNo = 1;
+                              }
+
+                        ReceiptEntry.OrgId = bObj.OrgId;
+                        string Customer = "Customer";
+                        string Paytm = "Paytm";
+                        string Bank = "Bank";
+                        string CurrentLiabilities = "Current Liabilities";
+
+                        Ledger CutomerLedger = Ledger.GetAllList().Where(x => x.Name.ToLower() == Customer.ToLower()
+                                             && x.OrgId == OrgId).FirstOrDefault();
+
+
+                        Ledger Paytmledger = Ledger.GetAllList().Where(x => x.Name.ToLower() == Paytm.ToLower()
+                                             && x.OrgId == OrgId).FirstOrDefault();
+
+                        ReceiptEntry.CRLedgerId = CutomerLedger.ID;
+                        ReceiptEntry.DRLedgerId = Paytmledger.ID;
+
+                        Group BankGroup = Group.GetAll().Where(x => x.Name.ToLower() == Bank.ToLower()).FirstOrDefault();
+
+
+                        Group CurrentLiabilitiesGroup = Group.GetAll().Where(x => x.Name.ToLower() == CurrentLiabilities.ToLower()).FirstOrDefault();
+
+                        ReceiptEntry.CRGroupId = CurrentLiabilitiesGroup.ID;
+                        ReceiptEntry.DRGroupId = BankGroup.ID;
+                        Receipt RBalance = Receipt.GetAllList(OrgId).Last();
+                        if(RBalance!=null)
+                        {
+                            ReceiptEntry.Balance = RBalance.Balance + ReceiptEntry.Amount;
+                        }
+                        else
+                        {
+                            ReceiptEntry.Balance = ReceiptEntry.Amount;
+                        }
+
+                         ReceiptEntry.Save();
+                        //===============================================================================
 
                         BalanceStatement Obj = new BalanceStatement();
                         HG_Orders od = new HG_Orders().GetOne(bObj.OrderId);

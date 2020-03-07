@@ -311,6 +311,7 @@
     <Compile Include="Controllers\Account\CommissionController.cs" />
     <Compile Include="Controllers\Account\GroupController.cs" />
     <Compile Include="Controllers\Account\LedgerController.cs" />
+    <Compile Include="Controllers\Account\ReceiptController.cs" />
     <Compile Include="Controllers\Account\SaleController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CommonApiController.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="Models\Account\Group.cs" />
     <Compile Include="Models\Account\JournalEntry.cs" />
     <Compile Include="Models\Account\Ledger.cs" />
+    <Compile Include="Models\Account\Receipt.cs" />
     <Compile Include="Models\Account\Sale.cs" />
     <Compile Include="Models\Common\ActiveMenu.cs" />
     <Compile Include="Models\Common\Cart.cs" />
@@ -536,6 +538,7 @@
     <Folder Include="QRImgTorR\" />
     <Folder Include="Views\Commission\" />
     <Folder Include="Views\CommonApi\" />
+    <Folder Include="Views\Receipt\" />
     <Folder Include="Views\Sale\" />
   </ItemGroup>
   <ItemGroup>
