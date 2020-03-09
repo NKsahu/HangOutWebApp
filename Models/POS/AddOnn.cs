@@ -150,7 +150,7 @@ public class AddOns
     {
         AddonnList = new List<AddOnn>();
     }
-        public static AddOns GetOne(int categoryId)
+        public static AddOns GetOne(int categoryId,int Sts)
         {
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
@@ -161,8 +161,11 @@ public class AddOns
             List<AddOnItems> AddonItemList = new List<AddOnItems>();
             try
             {
-                string Query = "SELECT * FROM  HG_AddOn where CategoryId="+categoryId+ " and DeletedStatus=0;SELECT * FROM  HG_AddOnItems where CategoryID=" + categoryId+ " and DelStatus=0";
-                cmd = new SqlCommand(Query, dBCon.Con);
+                //string Query = "SELECT * FROM  HG_AddOn where CategoryId="+categoryId+ " and DeletedStatus=0;SELECT * FROM  HG_AddOnItems where CategoryID=" + categoryId+ " and DelStatus=0";
+                cmd = new SqlCommand("PosGetAddon", dBCon.Con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CategoryId", categoryId);
+                cmd.Parameters.AddWithValue("@Status", Sts);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -173,6 +176,7 @@ public class AddOns
                     addOnn.Min= SDR.GetInt32(index++);
                     addOnn.Max = SDR.GetInt32(index++);
                     addOnn.AddonCatId = SDR.GetInt32(index++);
+                    addOnn.DeletedStatus = SDR.GetInt32(index++);
                     tempAddonn.Add(addOnn);
 
                 }
@@ -180,7 +184,6 @@ public class AddOns
                 SDR.NextResult();
                 if (SDR.HasRows)
                 {
-                    List<HG_Items> itemlist = new HG_Items().GetAll();
                     while (SDR.Read())
                     {
                         AddOnItems Addonitem = new AddOnItems();
@@ -192,7 +195,8 @@ public class AddOns
                         Addonitem.Price = SDR.GetDouble(index++);
                         Addonitem.AddonID = SDR.GetInt32(index++);
                         Addonitem.CategoryID = SDR.GetInt32(index++);
-                        Addonitem.Title = itemlist.Find(x => x.ItemID == Addonitem.ItemId).Items;
+                        Addonitem.DelStatus = SDR.GetInt32(index++);
+                        Addonitem.Title= SDR.GetString(index++);
                         AddonItemList.Add(Addonitem);
                     }
                 }

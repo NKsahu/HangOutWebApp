@@ -146,7 +146,7 @@ namespace HangOut.Controllers
         public ActionResult CreateEditAddOn(int CategryId)
         {
 
-            AddOns addOns =  AddOns.GetOne(CategryId);
+            AddOns addOns =  AddOns.GetOne(CategryId,0);
             addOns.AddOnCategoryId = CategryId;
             if (addOns.AddonnList.Count == 0)
             {
