@@ -168,6 +168,10 @@ namespace HangOut.Controllers
                 AddOn.Save();
                 foreach (var AddOnItem in AddOn.AddOnItemList)
                 {
+                    if (AddOn.DeletedStatus == 1)
+                    {
+                        AddOnItem.DelStatus = 1;
+                    }
                     AddOnItem.AddonID = AddOn.TitleId;
                     double taxAmt = (AddOnItem.Price * AddOnItem.Tax) / 100;
                     AddOnItem.Price = AddOnItem.CostPrice + taxAmt;

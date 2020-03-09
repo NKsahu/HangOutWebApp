@@ -45,6 +45,10 @@
             }
         });
     }
+    function RemoveAddon(event) {
+        $(event).parent('div').parent('div').parent('div').find('.DeletedStatus').val(1);
+        $(event).parent('div').parent('div').parent('div').hide();
+    }
     function ShowItemlist(event) {
         AddItemEvent = event;
         $("#waiting").show();
@@ -75,6 +79,10 @@
             }
         });
     }
+    function RemoveItem(event) {
+        $(event).parent('div').parent('div').parent('div').find('.DelStatus').val(1);
+        $(event).parent('div').parent('div').parent('div').hide();
+    }
     function JsonSuccess(Jobj) {
         $("#waiting").hide();
         hidedpt("AddOnIndex");
@@ -94,6 +102,7 @@
             AddonObj.Min = ObjAddJQ.find(".Min").val();
             AddonObj.Max = ObjAddJQ.find(".Max").val();
             AddonObj.AddonCatId = ObjAddJQ.find(".AddonCatId").val();
+            AddonObj.DeletedStatus = ObjAddJQ.find(".DeletedStatus").val();
             AddonObj.AddOnItemList = [];
             var AddOnItems = ListAddOnnCls[i].getElementsByClassName("AddOnItems");
             for (var j = 0; j < AddOnItems.length; j++) {
@@ -106,6 +115,7 @@
                 AddonItemObj.Tax = ObjAddOnItem.find(".Tax").val();
                 AddonItemObj.Price = ObjAddOnItem.find(".Price").val();
                 AddonItemObj.AddonID = ObjAddOnItem.find(".AddonID").val();
+                AddonItemObj.DelStatus = ObjAddOnItem.find(".DelStatus").val();
                 AddonObj.AddOnItemList.push(AddonItemObj);
             }
             Addons.AddonnList.push(AddonObj);

@@ -17,11 +17,11 @@ namespace HangOut.Models.POS
         public int CategoryID { get; set; }
 
         //===
-        public bool DelStatus { get; set; }//  removed addonitem from form
+        public int DelStatus { get; set; }//  removed addonitem from form
         public string Title { get; set; }
         public AddOnItems()
         {
-            DelStatus = false;
+            DelStatus = 0;
         }
         public int Save()
         {
@@ -33,11 +33,11 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.AddOnItemId == 0)
                 {
-                    Quary = "Insert Into HG_AddOnItems Values(@ItemId,@CostPrice,@Tax,@Price,@AddonID,@CategoryID) SELECT SCOPE_IDENTITY(); ";
+                    Quary = "Insert Into HG_AddOnItems Values(@ItemId,@CostPrice,@Tax,@Price,@AddonID,@CategoryID,@DelStatus) SELECT SCOPE_IDENTITY(); ";
                 }
                 else
                 {
-                    Quary = "Update HG_AddOnItems set  ItemId=@ItemId,CostPrice=@CostPrice,Tax=@Tax,Price=@Price,AddonID=@AddonID,CategoryID=@CategoryID where AdddOnItemId=@AdddOnItemId";
+                    Quary = "Update HG_AddOnItems set  ItemId=@ItemId,CostPrice=@CostPrice,Tax=@Tax,Price=@Price,AddonID=@AddonID,CategoryID=@CategoryID,DelStatus=@DelStatus where AdddOnItemId=@AdddOnItemId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@AdddOnItemId", this.AddOnItemId);
@@ -47,6 +47,7 @@ namespace HangOut.Models.POS
                 cmd.Parameters.AddWithValue("@Price", this.Price);
                 cmd.Parameters.AddWithValue("@AddonID", this.AddonID);
                 cmd.Parameters.AddWithValue("@CategoryID", this.CategoryID);
+                cmd.Parameters.AddWithValue("@DelStatus", this.DelStatus);
                 if (this.AddOnItemId == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
