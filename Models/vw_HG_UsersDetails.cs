@@ -95,7 +95,7 @@ namespace HangOut.Models
         public List<vw_HG_UsersDetails> GetAll(string Type="",int OrgId=0)
         {
             var CurrOrgID = HttpContext.Current.Request.Cookies["UserInfo"];
-            SqlConnection Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
              
             List<vw_HG_UsersDetails> listOfuser = new List<vw_HG_UsersDetails>();
