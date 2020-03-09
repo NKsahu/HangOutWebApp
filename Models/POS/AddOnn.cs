@@ -15,8 +15,11 @@ namespace HangOut.Models.POS
         public int Max { get; set; }
         public int AddonCatId { get; set; }// addon category id
         public List<AddOnItems> AddOnItemList { get; set; }
+        //========
+        public int DeletedStatus { get; set; }//  removed addonitem from form
         public AddOnn()
         {
+            DeletedStatus = 0;
             AddOnItemList = new List<AddOnItems>();
         }
         public int Save()
@@ -29,11 +32,11 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.TitleId == 0)
                 {
-                    Quary = "Insert Into HG_AddOn Values(@AddOnTitle,@Min,@Max,@CategoryId) SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into HG_AddOn Values(@AddOnTitle,@Min,@Max,@CategoryId,@DeletedStatus) SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update HG_AddOn set  AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,CategoryId=@CategoryId where TitleId=@TitleId";
+                    Quary = "Update HG_AddOn set  AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,CategoryId=@CategoryId,DeletedStatus=@DeletedStatus where TitleId=@TitleId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@TitleId", this.TitleId);
@@ -41,6 +44,7 @@ namespace HangOut.Models.POS
                 cmd.Parameters.AddWithValue("@Min", this.Min);
                 cmd.Parameters.AddWithValue("@Max", this.Max);
                 cmd.Parameters.AddWithValue("@CategoryId", this.AddonCatId);
+                cmd.Parameters.AddWithValue("@DeletedStatus", this.DeletedStatus);
                 if (this.TitleId == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -49,7 +53,6 @@ namespace HangOut.Models.POS
                 else
                 {
                     Row = cmd.ExecuteNonQuery();
-                    //this.CategoryID = Row;
                 }
 
             }
@@ -110,14 +113,33 @@ namespace HangOut.Models.POS
                     ObjTmp.AddonCatId = SDR.GetInt32(Index++);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             { e.ToString(); }
 
             finally { Con.Close(); }
 
             return (ObjTmp);
         }
+        public static int Delete(int ID)
+        {
+            int R = 0;
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  HG_AddOn where TitleId=" + ID;
+                cmd = new SqlCommand(Query, dBCon.Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            { e.ToString(); }
 
+            finally
+            {
+                cmd.Dispose(); dBCon.Con.Close();
+            }
+            return R;
+        }
     }
 
 public class AddOns
@@ -128,7 +150,7 @@ public class AddOns
     {
         AddonnList = new List<AddOnn>();
     }
-        public static AddOns GetOne(int categoryId)
+        public static AddOns GetOne(int categoryId,int Sts)
         {
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
@@ -139,8 +161,11 @@ public class AddOns
             List<AddOnItems> AddonItemList = new List<AddOnItems>();
             try
             {
-                string Query = "SELECT * FROM  HG_AddOn where CategoryId="+categoryId+ ";SELECT * FROM  HG_AddOnItems where CategoryID=" +categoryId;
-                cmd = new SqlCommand(Query, dBCon.Con);
+                //string Query = "SELECT * FROM  HG_AddOn where CategoryId="+categoryId+ " and DeletedStatus=0;SELECT * FROM  HG_AddOnItems where CategoryID=" + categoryId+ " and DelStatus=0";
+                cmd = new SqlCommand("PosGetAddon", dBCon.Con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CategoryId", categoryId);
+                cmd.Parameters.AddWithValue("@Status", Sts);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -151,6 +176,7 @@ public class AddOns
                     addOnn.Min= SDR.GetInt32(index++);
                     addOnn.Max = SDR.GetInt32(index++);
                     addOnn.AddonCatId = SDR.GetInt32(index++);
+                    addOnn.DeletedStatus = SDR.GetInt32(index++);
                     tempAddonn.Add(addOnn);
 
                 }
@@ -158,7 +184,6 @@ public class AddOns
                 SDR.NextResult();
                 if (SDR.HasRows)
                 {
-                    List<HG_Items> itemlist = new HG_Items().GetAll();
                     while (SDR.Read())
                     {
                         AddOnItems Addonitem = new AddOnItems();
@@ -170,7 +195,8 @@ public class AddOns
                         Addonitem.Price = SDR.GetDouble(index++);
                         Addonitem.AddonID = SDR.GetInt32(index++);
                         Addonitem.CategoryID = SDR.GetInt32(index++);
-                        Addonitem.Title = itemlist.Find(x => x.ItemID == Addonitem.ItemId).Items;
+                        Addonitem.DelStatus = SDR.GetInt32(index++);
+                        Addonitem.Title= SDR.GetString(index++);
                         AddonItemList.Add(Addonitem);
                     }
                 }
@@ -187,5 +213,6 @@ public class AddOns
 
             return (ObjTmp);
         }
-}
+        
+    }
 }

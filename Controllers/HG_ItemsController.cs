@@ -146,7 +146,7 @@ namespace HangOut.Controllers
         public ActionResult CreateEditAddOn(int CategryId)
         {
 
-            AddOns addOns =  AddOns.GetOne(CategryId);
+            AddOns addOns =  AddOns.GetOne(CategryId,0);
             addOns.AddOnCategoryId = CategryId;
             if (addOns.AddonnList.Count == 0)
             {
@@ -168,6 +168,10 @@ namespace HangOut.Controllers
                 AddOn.Save();
                 foreach (var AddOnItem in AddOn.AddOnItemList)
                 {
+                    if (AddOn.DeletedStatus == 1)
+                    {
+                        AddOnItem.DelStatus = 1;
+                    }
                     AddOnItem.AddonID = AddOn.TitleId;
                     double taxAmt = (AddOnItem.Price * AddOnItem.Tax) / 100;
                     AddOnItem.Price = AddOnItem.CostPrice + taxAmt;

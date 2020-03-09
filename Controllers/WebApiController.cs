@@ -8,6 +8,7 @@ using HangOut.Models.DynamicList;
 using System;
 using System.Net;
 using paytm;
+using HangOut.Models.POS;
 using HangOut.Controllers.Account;
 
 namespace HangOut.Controllers
@@ -227,6 +228,7 @@ namespace HangOut.Controllers
                         {
                             Cart cartCurrentItem = cartlist.Find(x => x.ItemId == Items.ItemID);
                             int CurrCount = cartCurrentItem != null ? cartCurrentItem.Count : 0;
+                            
                             JObject objItem = new JObject();
                             objItem.Add("IID", Items.ItemID);
                             objItem.Add("ItemName", Items.Items);
@@ -240,6 +242,11 @@ namespace HangOut.Controllers
                             objItem.Add("Tax", Items.Tax);
                             objItem.Add("ItemMode", Items.ItemMode);
                             objItem.Add("Info", Items.ItemDiscription);
+                            //check addon apply in current item
+                            if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
+                            {
+                                objItem.Add("Addons", JObject.FromObject(AddOns.GetOne(Items.AddOnCatId, 0)));
+                            }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
                         }
