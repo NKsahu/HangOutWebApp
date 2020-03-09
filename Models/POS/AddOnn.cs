@@ -15,8 +15,11 @@ namespace HangOut.Models.POS
         public int Max { get; set; }
         public int AddonCatId { get; set; }// addon category id
         public List<AddOnItems> AddOnItemList { get; set; }
+        //========
+        public bool DelStatus { get; set; }//  removed addonitem from form
         public AddOnn()
         {
+            DelStatus = false;
             AddOnItemList = new List<AddOnItems>();
         }
         public int Save()
@@ -110,14 +113,33 @@ namespace HangOut.Models.POS
                     ObjTmp.AddonCatId = SDR.GetInt32(Index++);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             { e.ToString(); }
 
             finally { Con.Close(); }
 
             return (ObjTmp);
         }
+        public static int Delete(int ID)
+        {
+            int R = 0;
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  HG_AddOn where TitleId=" + ID;
+                cmd = new SqlCommand(Query, dBCon.Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            { e.ToString(); }
 
+            finally
+            {
+                cmd.Dispose(); dBCon.Con.Close();
+            }
+            return R;
+        }
     }
 
 public class AddOns
@@ -187,5 +209,6 @@ public class AddOns
 
             return (ObjTmp);
         }
-}
+        
+    }
 }

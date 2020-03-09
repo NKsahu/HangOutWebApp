@@ -10,13 +10,19 @@ namespace HangOut.Models.POS
     {
         public int AddOnItemId { get; set; }
         public Int64 ItemId { get; set; }
-        public double CostPrice {get;set;}
+        public double CostPrice { get; set; }
         public double Tax { get; set; }
         public double Price { get; set; }
         public int AddonID { get; set; }
         public int CategoryID { get; set; }
+
         //===
+        public bool DelStatus { get; set; }//  removed addonitem from form
         public string Title { get; set; }
+        public AddOnItems()
+        {
+            DelStatus = false;
+        }
         public int Save()
         {
             int Row = 0;
@@ -88,8 +94,7 @@ namespace HangOut.Models.POS
         }
         public AddOnItems GetOne(int ID)
         {
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
-            Con.Open();
+            DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             AddOnItems ObjTmp = new AddOnItems();
@@ -97,7 +102,7 @@ namespace HangOut.Models.POS
             try
             {
                 string Query = "SELECT * FROM  HG_AddOnItems where AddOnItemId=" + ID;
-                cmd = new SqlCommand(Query, Con);
+                cmd = new SqlCommand(Query, dBCon.Con);
                 cmd.Parameters.AddWithValue("@AddOnItemId", ID);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -114,9 +119,29 @@ namespace HangOut.Models.POS
             catch (Exception e)
             { e.ToString(); }
 
-            finally { Con.Close(); }
+            finally { dBCon.Con.Close();SDR.Close(); }
 
             return (ObjTmp);
+        }
+        public static int Delete(int ID)
+        {
+            int R = 0;
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  HG_AddOnItems where AdddOnItemId=" + ID;
+                cmd = new SqlCommand(Query, dBCon.Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            { e.ToString(); }
+
+            finally
+            {
+                cmd.Dispose(); dBCon.Con.Close(); 
+            }
+            return R;
         }
     }
 }
