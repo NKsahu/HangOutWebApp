@@ -525,6 +525,7 @@
     <Content Include="Views\Shared\AddOnItem.cshtml" />
     <Content Include="Views\Shared\AddOnn.cshtml" />
     <Content Include="Views\BalanceStatement\BalanceStatementFilter.cshtml" />
+    <Content Include="Views\Receipt\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -538,7 +539,6 @@
     <Folder Include="QRImgTorR\" />
     <Folder Include="Views\Commission\" />
     <Folder Include="Views\CommonApi\" />
-    <Folder Include="Views\Receipt\" />
     <Folder Include="Views\Sale\" />
   </ItemGroup>
   <ItemGroup>

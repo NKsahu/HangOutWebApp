@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using HangOut.Models.Account;
 
 namespace HangOut.Controllers.Account
 {
     public class ReceiptController : Controller
     {
         // GET: Receipt
-        public ActionResult Index()
+        public ActionResult Index(int OrgId)
         {
-            return View();
+            List<Receipt> REOBJ = Receipt.GetData(OrgId);
+
+            return View(REOBJ);
         }
     }
 }

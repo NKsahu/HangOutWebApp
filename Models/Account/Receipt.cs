@@ -12,6 +12,7 @@ namespace HangOut.Models.Account
         public int ID { get; set; }
         public double Amount { get; set; }
         public string Particular { get; set; }
+        public string ReceiptType { get; set; }
         public int CRGroupId { get; set; }
         public int DRGroupId { get; set; }
         public int CRLedgerId { get; set; }
@@ -21,6 +22,10 @@ namespace HangOut.Models.Account
         public int OrgId { get; set; }
         public int EntryNo { get; set; }
         public double Balance { get; set; }
+
+
+        public double CRAmount { get; set; }
+        public double DrAmount { get; set; }
 
 
 
@@ -87,14 +92,15 @@ namespace HangOut.Models.Account
                     OBJBS.ID = SDR.GetInt32(0);
                     OBJBS.Particular = SDR.GetString(1);
                     OBJBS.Amount = SDR.GetDouble(2);
-                    OBJBS.CRGroupId = SDR.GetInt32(4);
-                    OBJBS.CRLedgerId = SDR.GetInt32(5);
-                    OBJBS.BalanceStatementId = SDR.GetInt32(6);
-                    OBJBS.Date = SDR.GetDateTime(7);
-                    OBJBS.DRLedgerId = SDR.GetInt32(9);
-                    OBJBS.EntryNo = SDR.GetInt32(10);
-                    OBJBS.Balance = SDR.GetDouble(11);
-                    OBJBS.DRGroupId = SDR.GetInt32(12);
+                    OBJBS.CRGroupId = SDR.GetInt32(3);
+                    OBJBS.CRLedgerId = SDR.GetInt32(4);
+                    OBJBS.BalanceStatementId = SDR.GetInt32(5);
+                    OBJBS.Date = SDR.GetDateTime(6);
+                    OBJBS.OrgId = SDR.GetInt32(7);
+                    OBJBS.DRLedgerId = SDR.GetInt32(8);
+                    OBJBS.EntryNo = SDR.GetInt32(9);
+                    OBJBS.Balance = SDR.GetDouble(10);
+                    OBJBS.DRGroupId = SDR.GetInt32(11);
                     ReceiptList.Add(OBJBS);
                 }
 
@@ -104,5 +110,77 @@ namespace HangOut.Models.Account
             return (ReceiptList);
         }
 
-    }
+        public static int Dell(int ID)
+        {
+            int R = 0;
+            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            Con.Open();
+            SqlCommand cmd = null;
+            try
+            {
+                string Query = "Delete FROM  ACReceipt where orgId=" + ID;
+                cmd = new SqlCommand(Query, Con);
+                R = cmd.ExecuteNonQuery();
+            }
+            catch (System.Exception e)
+            { e.ToString(); }
+
+            finally
+            {
+                Con.Close();
+            }
+            return R;
+        }
+
+
+        public static List<Receipt> GetData(int OrgId)
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            Receipt OBJ = new Receipt();
+            List<Receipt> ReceiptList = new List<Receipt>();
+            try
+            {
+                List<Receipt> REList = Receipt.GetAllList(OrgId).ToList();
+
+             
+
+                for(int i =0; i< REList.Count*2;i++)
+                {
+                    if(i%2==0)
+                    {
+                      
+                        string LName1 = Ledger.GetAll().Where(w => w.ID == REList[i].CRLedgerId).Select(s => s.Name).FirstOrDefault();
+
+                        string GName1 = Group.GetAll().Where(w => w.ID == REList[i].CRGroupId).Select(s => s.Name).FirstOrDefault();
+
+                        OBJ.ReceiptType = "CR";
+                        OBJ.Particular = "(L)" + LName1 + " >>" + " (LG) " + GName1;
+                        OBJ.CRAmount = REList[i].Amount;
+                        ReceiptList.Add(OBJ);
+
+                    }
+                    else
+                    {
+                        string LName = Ledger.GetAll().Where(w => w.ID == REList[i].DRLedgerId).Select(s => s.Name).FirstOrDefault();
+
+                        string GName = Group.GetAll().Where(w => w.ID == REList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
+
+                        OBJ.ReceiptType = "DR";
+                        OBJ.Particular = "(L)" + LName + " >>" + " (LG) " + GName;
+                        OBJ.DrAmount = REList[i].Amount;
+                        ReceiptList.Add(OBJ);
+                    }
+                  
+                   
+                }
+            
+            }
+            catch (Exception e) { e.ToString(); }
+           
+            return (ReceiptList);
+        }
+
+     }
 } 

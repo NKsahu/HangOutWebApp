@@ -189,6 +189,8 @@ namespace HangOut.Controllers.Account
             List<HG_Orders> OrdrList = new List<HG_Orders>();
             OrdrList = new HG_Orders().GetAll(OrgId, Status: 3);
             List<PaytmResn> Onlinepayment = new List<PaytmResn>();
+            int LastEntryNo = 0;
+            double LastBalance = 0.00;
 
             foreach (var ord in OrdrList)
             {
@@ -199,54 +201,43 @@ namespace HangOut.Controllers.Account
 
                     if (ord.PaymentStatus == 1 || ord.PaymentStatus == 2)
                     {
-                  
+                    for (int i = 0; i < orderitemlist.Count; i++)
+                    {
+                        OrdrList = new HG_Orders().GetAll(orderitemlist[i].OrgId, Status: 3);
+                        HG_Orders Ord = OrdrList.Find(x => x.OID == orderitemlist[i].OID);
+
+                        totalAmt += Ord.DeliveryCharge;
+                        totalAmt += orderitemlist[i].Count * orderitemlist[i].Price;
+
+
+                    }
                     BalanceStatement Obj = new BalanceStatement();
-                        HG_Orders od = new HG_Orders().GetOne(bObj.OrderId);
+                        HG_Orders od = new HG_Orders().GetOne(ord.OID);
                         Ledger LedgerDetail = Ledger.GetAllList().Where(x => x.DebtorType == 1
                                 && x.OrgId == OrgId).FirstOrDefault();
 
-
-
                         if (od.PaymentStatus == 1 || od.PaymentStatus == 2)
                         {
-                            double amt = (bObj.Amount * LedgerDetail.MarginOnCash) / 100;
+                            double amt = (totalAmt * LedgerDetail.MarginOnCash) / 100;
                             Obj.CRAmount = (amt) + ((amt * LedgerDetail.TaxOnAboveMargin) / 100);
                             Obj.TaxOnCash = LedgerDetail.TaxOnAboveMargin;
                         }
-                        else if (od.PaymentStatus == 3)
-                        {
-                            double amt = (bObj.Amount * LedgerDetail.MarginOnline) / 100;
-                            Obj.CRAmount = (amt) + ((amt * LedgerDetail.TaxOnAboveMarginOnline) / 100);
-                            Obj.TaxOnOnline = LedgerDetail.TaxOnAboveMarginOnline;
-                        }
-                        Obj.Date = bObj.Date;
+                     
+                        Obj.Date = ord.Create_Date; 
 
                         // Obj.Amount = Amount;
                         BalanceStatement TBalance = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
                         Obj.Balance = TBalance.Balance - Obj.CRAmount;
                         Obj.OrgId = OrgId;
-                        Obj.OrderId = bObj.OrderId;
-                        Obj.Narration = "Commission of Order No." + bObj.OrderId;
+                        Obj.OrderId = ord.OID;
+                        Obj.Narration = "Commission of Order No." + ord.OID;
                         Obj.SaveCRValue();
 
 
                     }
                     else if (ord.PaymentStatus == 3)
                     {
-                    double OAmount = 0.00;
-                    for (int i = 0; i < orderitemlist.Count; i++)
-                    {
-                        OrdrList = new HG_Orders().GetAll(orderitemlist[i].OrgId, Status: 3);
-                        HG_Orders Ord = OrdrList.Find(x => x.OID == orderitemlist[i].OID);
-                        
-                        OAmount += Ord.DeliveryCharge;
-                        OAmount += orderitemlist[i].Count * orderitemlist[i].Price;
-
-
-                    }
-
-
-                    totalAmt += ord.DeliveryCharge;
+                
                        Onlinepayment = PaytmResn.GetAll();
                        PaytmResn paytmTxn = Onlinepayment.Find(x => x.OID == ord.OID);
 
@@ -254,7 +245,7 @@ namespace HangOut.Controllers.Account
                         totalAmt += Convert.ToDouble(paytmTxn.PaidAmount);
 
                    
-                        if (orderitemlist.Count > 0)
+                        if (Onlinepayment.Count > 0)
                         {
                             Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
                                                  && x.OrgId == OrgId).FirstOrDefault();
@@ -274,11 +265,18 @@ namespace HangOut.Controllers.Account
 
                             Receipt ReceiptEntry = new Receipt();
 
+                            ReceiptEntry.BalanceStatementId = bObj.BID;
                             ReceiptEntry.Date = bObj.Date;
                             ReceiptEntry.Amount =bObj.Amount ;
-                            ReceiptEntry.Particular = "Online Payment of Order No." + orderitemlist[0].OID;
-
-                            int LastEntryNo =  Receipt.GetAllList(0).Select(s=>s.EntryNo).Last();
+                             ReceiptEntry.Particular = "Online Payment of Order No." + orderitemlist[0].OID;
+                            try
+                           {
+                            LastEntryNo = Receipt.GetAllList(OrgId).Select(s=>s.EntryNo).Last();
+                            }
+                           catch(Exception ex)
+                           {
+                            ex.ToString();
+                           }
                             if(LastEntryNo>0)
                              {
                                ReceiptEntry.EntryNo = LastEntryNo + 1;
@@ -291,15 +289,13 @@ namespace HangOut.Controllers.Account
                         ReceiptEntry.OrgId = bObj.OrgId;
                         string Customer = "Customer";
                         string Paytm = "Paytm";
-                        string Bank = "Bank";
+                        string Bank = "BANK";
                         string CurrentLiabilities = "Current Liabilities";
 
-                        Ledger CutomerLedger = Ledger.GetAllList().Where(x => x.Name.ToLower() == Customer.ToLower()
-                                             && x.OrgId == OrgId).FirstOrDefault();
+                        Ledger CutomerLedger = Ledger.GetAllList().Where(x => x.Name.ToLower() == Customer.ToLower()).FirstOrDefault();
 
 
-                        Ledger Paytmledger = Ledger.GetAllList().Where(x => x.Name.ToLower() == Paytm.ToLower()
-                                             && x.OrgId == OrgId).FirstOrDefault();
+                        Ledger Paytmledger = Ledger.GetAllList().Where(x => x.Name.ToLower() == Paytm.ToLower()).FirstOrDefault();
 
                         ReceiptEntry.CRLedgerId = CutomerLedger.ID;
                         ReceiptEntry.DRLedgerId = Paytmledger.ID;
@@ -311,10 +307,17 @@ namespace HangOut.Controllers.Account
 
                         ReceiptEntry.CRGroupId = CurrentLiabilitiesGroup.ID;
                         ReceiptEntry.DRGroupId = BankGroup.ID;
-                        Receipt RBalance = Receipt.GetAllList(OrgId).Last();
-                        if(RBalance!=null)
+                        try
                         {
-                            ReceiptEntry.Balance = RBalance.Balance + ReceiptEntry.Amount;
+                          LastBalance = Receipt.GetAllList(OrgId).Select(s => s.Balance).Last();
+                        }
+                        catch(Exception ex)
+                        {
+                            ex.ToString();
+                        }
+                        if (LastBalance>0)
+                        {
+                            ReceiptEntry.Balance = LastBalance + ReceiptEntry.Amount;
                         }
                         else
                         {
@@ -329,15 +332,7 @@ namespace HangOut.Controllers.Account
                         Ledger LedgerDetail = Ledger.GetAllList().Where(x => x.DebtorType == 1
                                 && x.OrgId == OrgId).FirstOrDefault();
 
-
-
-                        if (od.PaymentStatus == 1 || od.PaymentStatus == 2)
-                        {
-                            double amt = (bObj.Amount * LedgerDetails.MarginOnCash) / 100;
-                            Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMargin) / 100);
-                            Obj.TaxOnCash = LedgerDetails.TaxOnAboveMargin;
-                        }
-                        else if (od.PaymentStatus == 3)
+                       if (od.PaymentStatus == 3)
                         {
                             double amt = (bObj.Amount * LedgerDetails.MarginOnline) / 100;
                             Obj.CRAmount = (amt) + ((amt * LedgerDetails.TaxOnAboveMarginOnline) / 100);
@@ -345,7 +340,7 @@ namespace HangOut.Controllers.Account
 
                             if (ord.PaymentStatus == 3 && ord.Status == "4")
                             {
-                                double RefundAmt = bObj.Amount - OAmount;
+                                double RefundAmt = bObj.Amount - totalAmt;
                                 double GetRefundAmt = (RefundAmt * 2) / 100;
                                 double GetRefundAmtwithTax = GetRefundAmt + ((GetRefundAmt*LedgerDetails.TaxOnAboveMarginOnline) / 100);
                                 Obj.CRAmount = Obj.CRAmount + GetRefundAmtwithTax;
@@ -399,18 +394,6 @@ namespace HangOut.Controllers.Account
             Obj.OrgId = OrgId;
             Obj.EntryNo = CommissionLastrecord.EntryNo;
             Obj.SaveOpeningValue();
-
-
-            //BalanceStatement Obj1 = new BalanceStatement();
-
-
-            //Obj1.Narration = "Opening Balance";
-            //Obj1.Amount = 0.00;
-            //BalanceStatement TBalances = BalanceStatement.GetAllForBalanceCalculation(OrgId).Last();
-            //Obj1.Balance = TBalances.Balance;
-            //Obj1.Date = DateTime.Now;
-            //Obj1.OrgId = OrgId;
-            //Obj1.SaveOpeningValue();
 
             return Json(new { data = BSObj }, JsonRequestBehavior.AllowGet);
         }

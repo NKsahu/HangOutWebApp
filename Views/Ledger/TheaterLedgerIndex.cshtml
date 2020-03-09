@@ -49,6 +49,7 @@
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
                             <button class="btn btn-success btn-sm " onclick="Get(@Obj.OrgId)"> Balance Statement</button>
+                            <button class="btn btn-info btn-sm " onclick="Receipt(@Obj.OrgId)">Receipt</button>
                             <button class="btn btn-info btn-sm " onclick="Delete(@Obj.OrgId)">Delete</button>
                         </td>
                     </tr>
@@ -96,7 +97,22 @@
             }
         });
 
-    }        
+    } 
+    function Receipt(OrgId) {
+
+        $.ajax({
+            type: 'GET',
+            url: "/Receipt/Index?OrgId=" + OrgId,
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    } 
     function GetACDetails() {
         $.ajax({
             type: 'GET',
