@@ -14,11 +14,13 @@ namespace HangOut.Models.POS
         public int Min { get; set; }
         public int Max { get; set; }
         public int AddonCatId { get; set; }// addon category id
-        public List<AddOnItems> AddOnItemList { get; set; }
-        //========
         public int DeletedStatus { get; set; }//  removed addonitem from form
+        public bool IsServingAddon { get; set; }// true for serving size items
+        //===========
+        public List<AddOnItems> AddOnItemList { get; set; }
         public AddOnn()
         {
+            IsServingAddon = false;
             DeletedStatus = 0;
             AddOnItemList = new List<AddOnItems>();
         }

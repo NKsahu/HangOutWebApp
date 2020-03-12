@@ -92,7 +92,10 @@ namespace HangOut.Controllers
         public ActionResult CreateEdit( int ID)
         {
             vw_HG_UsersDetails Objuser = new vw_HG_UsersDetails();
-            Objuser = Objuser.GetSingleByUserId(ID);
+            if (ID > 0)
+            {
+                Objuser = Objuser.GetSingleByUserId(ID);
+            }
             return View(Objuser);
         }
         [HttpPost]

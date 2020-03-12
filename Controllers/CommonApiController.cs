@@ -319,6 +319,21 @@ namespace HangOut.Controllers
             result.Add("NoOfCopy", ObjOrg.Copy);
             return result;
         }
-        
+        public JObject RatingApplied(int CID)
+        {
+            JObject result = new JObject();
+            vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(CID);
+            if (ObjUser.UserCode > 0)
+            {
+                ObjUser.RateNow = 1;
+                ObjUser.save();
+                result.Add("Status", 200);
+            }
+            else
+            {
+                result.Add("Status", 400);
+            }
+            return result;
+        }
     }
 }
