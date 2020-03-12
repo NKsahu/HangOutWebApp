@@ -161,7 +161,6 @@ public class AddOns
             List<AddOnItems> AddonItemList = new List<AddOnItems>();
             try
             {
-                //string Query = "SELECT * FROM  HG_AddOn where CategoryId="+categoryId+ " and DeletedStatus=0;SELECT * FROM  HG_AddOnItems where CategoryID=" + categoryId+ " and DelStatus=0";
                 cmd = new SqlCommand("PosGetAddon", dBCon.Con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@CategoryId", categoryId);
