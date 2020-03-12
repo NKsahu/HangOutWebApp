@@ -49,7 +49,7 @@ namespace HangOut.Models
                 string Quary = "";
                 if (this.UserCode == 0)
                 {
-                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus,@JoinByOrg,@IsHeadChef,@TickUntick,RateNow=@RateNow);SELECT SCOPE_IDENTITY(); ";
+                    Quary = "Insert into HG_UsersDetails values(@OrgID,@UserType,@UserName,@UserId,@Password,@EMail,@UPhoto,@EntryBy,@EntryDate,@UpdateDate,@status,@CurrentStatus,@JoinByOrg,@IsHeadChef,@TickUntick,@RateNow);SELECT SCOPE_IDENTITY(); ";
                     cmd = new SqlCommand(Quary, dBCon.Con);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
