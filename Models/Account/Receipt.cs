@@ -146,11 +146,19 @@ namespace HangOut.Models.Account
 
              
 
-                for(int i =0; i< REList.Count*2;i++)
+                for(int i =0; i< REList.Count;i++)
                 {
-                    if(i%2==0)
-                    {
-                      
+                    OBJ = new Receipt();
+                    string LName = Ledger.GetAll().Where(w => w.ID == REList[i].DRLedgerId).Select(s => s.Name).FirstOrDefault();
+
+                    string GName = Group.GetAll().Where(w => w.ID == REList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
+
+                    OBJ.ReceiptType = "DR";
+                    OBJ.Particular = "(L)" + LName + " >>" + " (LG) " + GName;
+                    OBJ.DrAmount = REList[i].Amount;
+                    ReceiptList.Add(OBJ);
+
+                    OBJ = new Receipt();
                         string LName1 = Ledger.GetAll().Where(w => w.ID == REList[i].CRLedgerId).Select(s => s.Name).FirstOrDefault();
 
                         string GName1 = Group.GetAll().Where(w => w.ID == REList[i].CRGroupId).Select(s => s.Name).FirstOrDefault();
@@ -160,22 +168,9 @@ namespace HangOut.Models.Account
                         OBJ.CRAmount = REList[i].Amount;
                         ReceiptList.Add(OBJ);
 
+                       
                     }
-                    else
-                    {
-                        string LName = Ledger.GetAll().Where(w => w.ID == REList[i].DRLedgerId).Select(s => s.Name).FirstOrDefault();
-
-                        string GName = Group.GetAll().Where(w => w.ID == REList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
-
-                        OBJ.ReceiptType = "DR";
-                        OBJ.Particular = "(L)" + LName + " >>" + " (LG) " + GName;
-                        OBJ.DrAmount = REList[i].Amount;
-                        ReceiptList.Add(OBJ);
-                    }
-                  
-                   
-                }
-            
+                                                       
             }
             catch (Exception e) { e.ToString(); }
            
