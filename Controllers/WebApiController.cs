@@ -69,18 +69,25 @@ namespace HangOut.Controllers
         }
         public void SendMsgCustomer(Int64 UserId,Int64 OrderNo=0)
         {
-                string[] topics = { UserId.ToString() };
+            vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)UserId);
+            string[] topics = { UserId.ToString() };
+            if (ObjUser.RateNow == 0)
+            {
+                
                 // topics.Add(OrgId.ToString());
-                string Msg = "Your Order number  "+OrderNo+ " is Completed";
-                string Title = "Order Completed";
-            try
-            {
-                PushNotification.SendNotification(topics, Msg, Title,OID:OrderNo);
+                string Msg = "";
+                string Title = "Hey, give us a Hi-five. Click this notification";
+                PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo,UserRating:1);
             }
-            catch(Exception e)
+            else
             {
-
+                // no notifiation only send orderId 
+                string Msg = "";
+                string Title = "";
+                PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo, UserRating: 0);
             }
+              
+            
         }
         public JObject DeliveredToCustomer(string OID,string CustId)
         {
