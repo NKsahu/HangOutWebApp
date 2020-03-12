@@ -211,7 +211,14 @@ namespace HangOut.Models.Account
 
                         OBJ.Date = REList[i].Date;
                         OBJ.EntryNo = REList[i].EntryNo;
-                        OBJ.Particular = REList[i].Particular;
+                        if(i==0)
+                        {
+                            OBJ.Particular = "Opening Balance";
+                        }
+                        else
+                        {
+                           OBJ.Particular = REList[i].Particular;
+                        }                     
                         OBJ.DrAmount = REList[i].Amount;
                         OBJ.Balance = REList[i].Balance;
                         ReceiptList.Add(OBJ);
@@ -225,7 +232,14 @@ namespace HangOut.Models.Account
 
                         OBJ.Date = REList[i].Date;
                         OBJ.EntryNo = REList[i].EntryNo;
-                        OBJ.Particular = REList[i].Particular;
+                        if (i == 0)
+                        {
+                            OBJ.Particular = "Opening Balance";
+                        }
+                        else
+                        {
+                            OBJ.Particular = REList[i].Particular;
+                        }
                         OBJ.CRAmount = REList[i].Amount;
                         OBJ.Balance = REList[i].Balance;                
                         ReceiptList.Add(OBJ);

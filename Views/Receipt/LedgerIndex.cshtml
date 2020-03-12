@@ -23,6 +23,9 @@
                         @Html.DisplayNameFor(model => model.Date)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.EntryNo)
+                    </th>
+                    <th>
                         @Html.DisplayName("Narration")
                     </th>
                     <th>
@@ -43,12 +46,13 @@
                 {
                 <tr id="@Obj.ID">
                     <td>@Obj.Date</td>
+                    <td>@Obj.EntryNo</td>
                     <td>@Obj.Particular</td>
                     <td>@Obj.DrAmount.ToString("0.00")</td>
                     <td>@Obj.CRAmount.ToString("0.00")</td>
-                    @if(@Obj.CRAmount > 0)
+                    @if (@Obj.CRAmount > 0)
                     {
-                        if(Obj.CRAmount > Obj.Balance)
+                        if (Obj.CRAmount > Obj.Balance)
                         {
                             <td>@Obj.Balance.ToString("0.00") </td>
                             <td>(CR)</td>
@@ -61,7 +65,7 @@
                     }
                     else
                     {
-                        if(Obj.DrAmount > Obj.Balance)
+                        if (Obj.DrAmount > Obj.Balance)
                         {
                             <td>@Obj.Balance.ToString("0.00") </td>
                             <td>(DR)</td>
