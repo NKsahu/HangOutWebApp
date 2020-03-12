@@ -84,7 +84,7 @@ namespace HangOut.Controllers
                 // no notifiation only send orderId 
                 string Msg = "";
                 string Title = "";
-                PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo, UserRating: 0);
+                PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo);
             }
               
             
@@ -202,7 +202,7 @@ namespace HangOut.Controllers
                             if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
                             {
                                 objItem.Add("AddonCatId", Items.AddOnCatId);
-                                objItem.Add("Addons", JObject.FromObject(AddOns.GetOne(Items.AddOnCatId, 0)));
+                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0).AddonnList));
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -259,7 +259,7 @@ namespace HangOut.Controllers
                             if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
                             {
                                 objItem.Add("AddonCatId", Items.AddOnCatId);
-                                objItem.Add("Addons", JObject.FromObject(AddOns.GetOne(Items.AddOnCatId, 0)));
+                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0).AddonnList));
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
