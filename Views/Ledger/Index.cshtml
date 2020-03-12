@@ -59,6 +59,7 @@
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
                             @*<button class="btn btn-danger btn-sm " onclick="Delete(@Obj.ID)"> Delete</button>*@
+                            <button class="btn btn-info btn-sm " onclick="Receipt(@Obj.ID)">Receipt</button>
                         </td>
                     </tr>
                 }
@@ -137,5 +138,20 @@
             $("#Tbody").append(HtmlStr);
         }
     }
+    function Receipt(ID) {
+
+        $.ajax({
+            type: 'GET',
+            url: "/Receipt/LedgerIndex?ID=" + ID,
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    } 
 
 </script>

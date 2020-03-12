@@ -1,0 +1,83 @@
+﻿@model IEnumerable<HangOut.Models.Account.Receipt>
+
+@using HangOut.Models.Account;
+@{
+
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="text-center">Receipt</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            <a href="/Ledger/Index" style="background-color:white" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control"> Back</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table" id="TBLID" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Narration")
+                    </th>
+                    <th>
+                        @Html.DisplayName("DR")
+                    </th>
+                    <th>
+                        @Html.DisplayName("CR")
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Balance)
+                    </th>
+
+
+                </tr>
+            </thead>
+            <tbody id="Tbody">
+                @foreach ( Receipt Obj in Model)
+                {
+                <tr id="@Obj.ID">
+                    <td>@Obj.Date</td>
+                    <td>@Obj.Particular</td>
+                    <td>@Obj.DrAmount.ToString("0.00")</td>
+                    <td>@Obj.CRAmount.ToString("0.00")</td>
+                    @if(@Obj.CRAmount > 0)
+                    {
+                        if(Obj.CRAmount > Obj.Balance)
+                        {
+                            <td>@Obj.Balance.ToString("0.00") </td>
+                            <td>(CR)</td>
+                        }
+                        else
+                        {
+                            <td>@Obj.Balance.ToString("0.00") </td>
+                            <td>(DR)</td>
+                        }
+                    }
+                    else
+                    {
+                        if(Obj.DrAmount > Obj.Balance)
+                        {
+                            <td>@Obj.Balance.ToString("0.00") </td>
+                            <td>(DR)</td>
+                        }
+                        else
+                        {
+                            <td>@Obj.Balance.ToString("0.00") </td>
+                            <td>(CR)</td>
+                        }
+                    }
+
+                </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

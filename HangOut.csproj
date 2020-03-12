@@ -526,6 +526,7 @@
     <Content Include="Views\Shared\AddOnn.cshtml" />
     <Content Include="Views\BalanceStatement\BalanceStatementFilter.cshtml" />
     <Content Include="Views\Receipt\Index.cshtml" />
+    <Content Include="Views\Receipt\LedgerIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

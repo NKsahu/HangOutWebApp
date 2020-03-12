@@ -68,7 +68,7 @@ namespace HangOut.Models.Account
             return Row;
 
         }
-        public static List<Receipt> GetAllList(int OrgId)
+        public static List<Receipt> GetAllList(int OrgId,int ID)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -82,6 +82,10 @@ namespace HangOut.Models.Account
                 if(OrgId>0)
                 {
                   Quary = "Select * from ACReceipt where OrgId="+OrgId+" ORDER BY Date ASC";
+                }
+                if (ID > 0)
+                {
+                    Quary = "Select * from ACReceipt where OrgId=" + ID + " ORDER BY Date ASC";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
@@ -142,7 +146,7 @@ namespace HangOut.Models.Account
             List<Receipt> ReceiptList = new List<Receipt>();
             try
             {
-                List<Receipt> REList = Receipt.GetAllList(OrgId).ToList();
+                List<Receipt> REList = Receipt.GetAllList(OrgId,0).ToList();
 
              
 
@@ -176,6 +180,66 @@ namespace HangOut.Models.Account
            
             return (ReceiptList);
         }
+        public static List<Receipt> GetLedgerWiseData(string  Name)
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            Receipt OBJ = new Receipt();
+            List<Receipt> ReceiptList = new List<Receipt>();
+            string PayTm = "PayTm";
+            string Customer = "Customer";
+            try
+            {
+                List<Receipt> REList = Receipt.GetAllList(0,0).ToList();
 
-     }
+
+
+                for (int i = 0; i < REList.Count; i++)
+                {
+
+
+
+                    if (Name.ToLower()== PayTm.ToLower())
+                    {
+                        OBJ = new Receipt();
+                        string LName = Ledger.GetAll().Where(w => w.ID == REList[i].DRLedgerId).Select(s => s.Name).FirstOrDefault();
+
+                        string GName = Group.GetAll().Where(w => w.ID == REList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
+
+
+
+                        OBJ.Date = REList[i].Date;
+                        OBJ.EntryNo = REList[i].EntryNo;
+                        OBJ.Particular = REList[i].Particular;
+                        OBJ.DrAmount = REList[i].Amount;
+                        OBJ.Balance = REList[i].Balance;
+                        ReceiptList.Add(OBJ);
+                    }
+                    if (Name.ToLower() == Customer.ToLower())
+                    {
+                        OBJ = new Receipt();
+                        string LName1 = Ledger.GetAll().Where(w => w.ID == REList[i].CRLedgerId).Select(s => s.Name).FirstOrDefault();
+
+                        string GName1 = Group.GetAll().Where(w => w.ID == REList[i].CRGroupId).Select(s => s.Name).FirstOrDefault();
+
+                        OBJ.Date = REList[i].Date;
+                        OBJ.EntryNo = REList[i].EntryNo;
+                        OBJ.Particular = REList[i].Particular;
+                        OBJ.CRAmount = REList[i].Amount;
+                        OBJ.Balance = REList[i].Balance;                
+                        ReceiptList.Add(OBJ);
+                    }
+
+
+                }
+
+            }
+            catch (Exception e) { e.ToString(); }
+
+            return (ReceiptList);
+        }
+        
+
+    }
 } 

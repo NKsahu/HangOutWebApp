@@ -251,7 +251,7 @@ namespace HangOut.Controllers.Account
             List<Accounts> AccountDetailsList = Accounts.GetAllDetails();
             AccountList = AccountList.FindAll(x => x.ADOrgId == ID);
 
-            List<Receipt> ReceiptList = Receipt.GetAllList(ID);
+            List<Receipt> ReceiptList = Receipt.GetAllList(ID,0);
            
 
             if (LedgerList != null)

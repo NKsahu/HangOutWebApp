@@ -271,7 +271,7 @@ namespace HangOut.Controllers.Account
                              ReceiptEntry.Particular = "Online Payment of Order No." + orderitemlist[0].OID;
                             try
                            {
-                            LastEntryNo = Receipt.GetAllList(OrgId).Select(s=>s.EntryNo).Last();
+                            LastEntryNo = Receipt.GetAllList(OrgId,0).Select(s=>s.EntryNo).Last();
                             }
                            catch(Exception ex)
                            {
@@ -309,7 +309,7 @@ namespace HangOut.Controllers.Account
                         ReceiptEntry.DRGroupId = BankGroup.ID;
                         try
                         {
-                          LastBalance = Receipt.GetAllList(OrgId).Select(s => s.Balance).Last();
+                          LastBalance = Receipt.GetAllList(OrgId,0).Select(s => s.Balance).Last();
                         }
                         catch(Exception ex)
                         {
