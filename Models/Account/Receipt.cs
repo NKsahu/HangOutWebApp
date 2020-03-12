@@ -21,9 +21,9 @@ namespace HangOut.Models.Account
         public DateTime Date { get; set; }
         public int OrgId { get; set; }
         public int EntryNo { get; set; }
+        public string ReceiptNo { get; set; }
+        public string Name { get; set; }
         public double Balance { get; set; }
-
-
         public double CRAmount { get; set; }
         public double DrAmount { get; set; }
 
@@ -210,7 +210,7 @@ namespace HangOut.Models.Account
 
 
                         OBJ.Date = REList[i].Date;
-                        OBJ.EntryNo = REList[i].EntryNo;
+                        OBJ.ReceiptNo = "R"+REList[i].EntryNo.ToString(); 
                         if(i==0)
                         {
                             OBJ.Particular = "Opening Balance";
@@ -231,7 +231,7 @@ namespace HangOut.Models.Account
                         string GName1 = Group.GetAll().Where(w => w.ID == REList[i].CRGroupId).Select(s => s.Name).FirstOrDefault();
 
                         OBJ.Date = REList[i].Date;
-                        OBJ.EntryNo = REList[i].EntryNo;
+                        OBJ.ReceiptNo = "R" + REList[i].EntryNo.ToString(); ;
                         if (i == 0)
                         {
                             OBJ.Particular = "Opening Balance";
@@ -244,9 +244,8 @@ namespace HangOut.Models.Account
                         OBJ.Balance = REList[i].Balance;                
                         ReceiptList.Add(OBJ);
                     }
-
-
                 }
+
 
             }
             catch (Exception e) { e.ToString(); }
