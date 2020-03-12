@@ -26,6 +26,7 @@
             @Html.HiddenFor(model => model.EntryDate)
             @Html.HiddenFor(model => model.EntryBy)
             @Html.HiddenFor(model=>model.TickUntick)
+            @Html.HiddenFor(model=>model.RateNow)
         <div class="row">
             <div class="col-sm-4">
                 @Html.LabelFor(model => model.UserType, htmlAttributes: new { @class = "control-label  " })
@@ -114,6 +115,5 @@
                 $("#IsHeadChef").parent('div').parent('div').hide();
             }
         }
-       
     });
 </script>
