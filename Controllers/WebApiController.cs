@@ -191,6 +191,12 @@ namespace HangOut.Controllers
                             objItem.Add("CostPrice", Items.CostPrice);// without gst
                             objItem.Add("Tax", Items.Tax);
                             objItem.Add("Info", Items.ItemDiscription);
+                            //check addon apply in current item
+                            if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
+                            {
+                                objItem.Add("AddonCatId", Items.AddOnCatId);
+                                objItem.Add("Addons", JObject.FromObject(AddOns.GetOne(Items.AddOnCatId, 0)));
+                            }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
                         }
@@ -245,6 +251,7 @@ namespace HangOut.Controllers
                             //check addon apply in current item
                             if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
                             {
+                                objItem.Add("AddonCatId", Items.AddOnCatId);
                                 objItem.Add("Addons", JObject.FromObject(AddOns.GetOne(Items.AddOnCatId, 0)));
                             }
                             jarrayItem.Add(objItem);
