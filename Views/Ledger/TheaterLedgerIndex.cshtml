@@ -49,8 +49,9 @@
                         <td>
                             <button class="btn btn-warning btn-sm " onclick="CreateEdit(@Obj.ID)"> Edit</button>
                             <button class="btn btn-success btn-sm " onclick="Get(@Obj.OrgId)"> Balance Statement</button>
-                        
+
                             <button class="btn btn-info btn-sm " onclick="Delete(@Obj.OrgId)">Delete</button>
+                            <button class="btn btn-info btn-sm " onclick="GetAllReceipt()">GetAllReceipt</button>
                         </td>
                     </tr>
                 }
@@ -119,6 +120,13 @@
             url: "/BalanceStatement/GetAllorganization",
         });
     }
+    function GetAllReceipt() {
+        $.ajax({
+            type: 'GET',
+            url: "/Receipt/GenerateAllPaymentReceipt",
+        });
+    }
+    
     function JsonSuccess(Jobj) {
 
         var Jitmobj = Jobj.data;

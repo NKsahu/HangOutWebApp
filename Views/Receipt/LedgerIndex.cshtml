@@ -8,7 +8,16 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="text-center">Receipt</h3>
+        @if (Request.QueryString["Name"] == "Customer")
+        {
+            <h3 class="text-center">Customer</h3>
+        }
+        else
+        {
+            <h3 class="text-center">Receipt</h3>
+        }
+
+
     </div>
     <div class="row">
         <div class="col-md-1">
@@ -45,41 +54,24 @@
                 @foreach ( Receipt Obj in Model)
                 {
                 <tr id="@Obj.ID">
-                    <td>@Obj.Date</td>
-                    <td>@Obj.EntryNo</td>
+                    <td>@Obj.Date.ToString("dd/MM/yyyy")</td>
+                    <td>@Obj.ReceiptNo</td>
                     <td>@Obj.Particular</td>
                     <td>@Obj.DrAmount.ToString("0.00")</td>
                     <td>@Obj.CRAmount.ToString("0.00")</td>
-                    @if (@Obj.CRAmount > 0)
+                    @if (Obj.CRAmount > 0)
                     {
-                        if (Obj.CRAmount > Obj.Balance)
-                        {
-                            <td>@Obj.Balance.ToString("0.00") </td>
-                            <td>(CR)</td>
-                        }
-                        else
-                        {
-                            <td>@Obj.Balance.ToString("0.00") </td>
-                            <td>(DR)</td>
-                        }
+                        <td>@Obj.Balance.ToString("0.00")</td>
+                        <td>CR</td>
                     }
                     else
                     {
-                        if (Obj.DrAmount > Obj.Balance)
-                        {
-                            <td>@Obj.Balance.ToString("0.00") </td>
-                            <td>(DR)</td>
-                        }
-                        else
-                        {
-                            <td>@Obj.Balance.ToString("0.00") </td>
-                            <td>(CR)</td>
-                        }
+                        <td>@Obj.Balance.ToString("0.00")</td>
+                        <td>DR</td>
                     }
 
                 </tr>
                 }
-
             </tbody>
         </table>
 
