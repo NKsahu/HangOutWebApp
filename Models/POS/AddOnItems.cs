@@ -14,7 +14,7 @@ namespace HangOut.Models.POS
         public double Tax { get; set; }
         public double Price { get; set; }
         public int AddonID { get; set; }
-        public int CategoryID { get; set; }
+        public int CatOrItmId { get; set; }
         public bool IsServingAddon { get; set; }// true for serving size items
         public int DelStatus { get; set; }//  removed addonitem from form
                                           //===
@@ -34,11 +34,11 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.AddOnItemId == 0)
                 {
-                    Quary = "Insert Into HG_AddOnItems Values(@ItemId,@CostPrice,@Tax,@Price,@AddonID,@CategoryID,@DelStatus,@IsServingAddon) SELECT SCOPE_IDENTITY(); ";
+                    Quary = "Insert Into HG_AddOnItems Values(@ItemId,@CostPrice,@Tax,@Price,@AddonID,@CatOrItmId,@DelStatus,@IsServingAddon) SELECT SCOPE_IDENTITY(); ";
                 }
                 else
                 {
-                    Quary = "Update HG_AddOnItems set  ItemId=@ItemId,CostPrice=@CostPrice,Tax=@Tax,Price=@Price,AddonID=@AddonID,CategoryID=@CategoryID,DelStatus=@DelStatus,IsServingAddon=@IsServingAddon where AdddOnItemId=@AdddOnItemId";
+                    Quary = "Update HG_AddOnItems set  ItemId=@ItemId,CostPrice=@CostPrice,Tax=@Tax,Price=@Price,AddonID=@AddonID,CatOrItmId=@CatOrItmId,DelStatus=@DelStatus,IsServingAddon=@IsServingAddon where AdddOnItemId=@AdddOnItemId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@AdddOnItemId", this.AddOnItemId);
@@ -47,7 +47,7 @@ namespace HangOut.Models.POS
                 cmd.Parameters.AddWithValue("@Tax", this.Tax);
                 cmd.Parameters.AddWithValue("@Price", this.Price);
                 cmd.Parameters.AddWithValue("@AddonID", this.AddonID);
-                cmd.Parameters.AddWithValue("@CategoryID", this.CategoryID);
+                cmd.Parameters.AddWithValue("@CatOrItmId", this.CatOrItmId);
                 cmd.Parameters.AddWithValue("@DelStatus", this.DelStatus);
                 cmd.Parameters.AddWithValue("@IsServingAddon", this.IsServingAddon);
                 if (this.AddOnItemId == 0)

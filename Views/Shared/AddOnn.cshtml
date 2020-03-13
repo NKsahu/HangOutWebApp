@@ -7,7 +7,7 @@
     @using (Html.BeginCollectionItem("AddonnList"))
     {
         @Html.HiddenFor(model => model.TitleId,new { @class = "TitleId" })
-        @Html.HiddenFor(model=>model.AddonCatId, new { @class = "AddonCatId" })
+        @Html.HiddenFor(model=>model.CatOrItmId, new { @class = "AddonCatId" })
         @Html.HiddenFor(model=>model.DeletedStatus,new {@class= "DeletedStatus" })
     <div class="row">
         <div class="col-md-6">

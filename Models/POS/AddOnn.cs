@@ -13,7 +13,7 @@ namespace HangOut.Models.POS
         public string AddOnTitle { get; set; }
         public int Min { get; set; }
         public int Max { get; set; }
-        public int AddonCatId { get; set; }// addon category id
+        public int CatOrItmId { get; set; }// addon category id or Item Id
         public int DeletedStatus { get; set; }//  removed addonitem from form
         public bool IsServingAddon { get; set; }// true for serving size items
         //===========
@@ -34,18 +34,18 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.TitleId == 0)
                 {
-                    Quary = "Insert Into HG_AddOn Values(@AddOnTitle,@Min,@Max,@CategoryId,@DeletedStatus) SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into HG_AddOn Values(@AddOnTitle,@Min,@Max,@CatOrItmId,@DeletedStatus,@IsServingAddon) SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update HG_AddOn set  AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,CategoryId=@CategoryId,DeletedStatus=@DeletedStatus where TitleId=@TitleId";
+                    Quary = "Update HG_AddOn set  AddOnTitle=@AddOnTitle,Min=@Min,Max=@Max,CatOrItmId=@CatOrItmId,DeletedStatus=@DeletedStatus,IsServingAddon=@IsServingAddon where TitleId=@TitleId";
                 }
                 cmd = new SqlCommand(Quary, dBCon.Con);
                 cmd.Parameters.AddWithValue("@TitleId", this.TitleId);
                 cmd.Parameters.AddWithValue("@AddOnTitle", this.AddOnTitle);
                 cmd.Parameters.AddWithValue("@Min", this.Min);
                 cmd.Parameters.AddWithValue("@Max", this.Max);
-                cmd.Parameters.AddWithValue("@CategoryId", this.AddonCatId);
+                cmd.Parameters.AddWithValue("@CatOrItmId", this.CatOrItmId);
                 cmd.Parameters.AddWithValue("@DeletedStatus", this.DeletedStatus);
                 if (this.TitleId == 0)
                 {
@@ -83,7 +83,7 @@ namespace HangOut.Models.POS
                     OBJINT.AddOnTitle = SDR.GetString(Index++);
                     OBJINT.Min = SDR.GetInt32(Index++);
                     OBJINT.Max = SDR.GetInt32(Index++);
-                    OBJINT.AddonCatId = SDR.GetInt32(Index++);
+                    OBJINT.CatOrItmId = SDR.GetInt32(Index++);
                     listAddon.Add(OBJINT);
                 }
             }
@@ -112,7 +112,7 @@ namespace HangOut.Models.POS
                     ObjTmp.AddOnTitle = SDR.GetString(Index++);
                     ObjTmp.Min = SDR.GetInt32(Index++);
                     ObjTmp.Max = SDR.GetInt32(Index++);
-                    ObjTmp.AddonCatId = SDR.GetInt32(Index++);
+                    ObjTmp.CatOrItmId = SDR.GetInt32(Index++);
                 }
             }
             catch (Exception e)
@@ -176,7 +176,7 @@ public class AddOns
                     addOnn.AddOnTitle = SDR.GetString(index++);
                     addOnn.Min= SDR.GetInt32(index++);
                     addOnn.Max = SDR.GetInt32(index++);
-                    addOnn.AddonCatId = SDR.GetInt32(index++);
+                    addOnn.CatOrItmId = SDR.GetInt32(index++);
                     addOnn.DeletedStatus = SDR.GetInt32(index++);
                     tempAddonn.Add(addOnn);
 
@@ -195,7 +195,7 @@ public class AddOns
                         Addonitem.Tax = SDR.GetDouble(index++);
                         Addonitem.Price = SDR.GetDouble(index++);
                         Addonitem.AddonID = SDR.GetInt32(index++);
-                        Addonitem.CategoryID = SDR.GetInt32(index++);
+                        Addonitem.CatOrItmId = SDR.GetInt32(index++);
                         Addonitem.DelStatus = SDR.GetInt32(index++);
                         Addonitem.Title= SDR.GetString(index++);
                         AddonItemList.Add(Addonitem);

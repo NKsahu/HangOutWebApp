@@ -1,7 +1,32 @@
-﻿
+﻿@model HangOut.Models.POS.ServingSize
 @{
-    ViewBag.Title = "CreatEdit";
+    Layout = null;
 }
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:#000000"><b>Serving Size</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+        @using (Ajax.BeginForm("CreatEdit", "ServingSize", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.ServingId)
+            @Html.HiddenFor(model=>model.OrgId)
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label  " })
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
 
-<h2>CreatEdit</h2>
+                </div>
+                <div class="col-sm-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input type="submit" value="Save" class="btn btn-success" />
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
 

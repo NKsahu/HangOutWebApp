@@ -151,7 +151,7 @@ namespace HangOut.Controllers
             if (addOns.AddonnList.Count == 0)
             {
                 AddOnn addOnn = new AddOnn();
-                addOnn.AddonCatId = CategryId;
+                addOnn.CatOrItmId = CategryId;
                 addOns.AddonnList.Add(addOnn);
             }
             
@@ -164,7 +164,7 @@ namespace HangOut.Controllers
             Addons.AddonnList = Addons.AddonnList.FindAll(x => x.AddOnTitle != null && x.AddOnTitle != "");
             foreach (var AddOn in Addons.AddonnList)
             {
-                AddOn.AddonCatId = Addons.AddOnCategoryId;
+                AddOn.CatOrItmId = Addons.AddOnCategoryId;
                 AddOn.Save();
                 foreach (var AddOnItem in AddOn.AddOnItemList)
                 {
@@ -175,7 +175,7 @@ namespace HangOut.Controllers
                     AddOnItem.AddonID = AddOn.TitleId;
                     double taxAmt = (AddOnItem.Price * AddOnItem.Tax) / 100;
                     AddOnItem.Price = AddOnItem.CostPrice + taxAmt;
-                    AddOnItem.CategoryID = Addons.AddOnCategoryId;
+                    AddOnItem.CatOrItmId = Addons.AddOnCategoryId;
                     AddOnItem.Save();
                 }
             }
@@ -198,6 +198,19 @@ namespace HangOut.Controllers
             AddOnItemList.Tax = ObjItem.Tax;
             AddOnItemList.Price = ObjItem.Price;
             return View("AddOnItem", AddOnItemList);
+        }
+        public ActionResult AddMutiserving(int ItemId)
+        {
+            AddOns addOns = AddOns.GetOne(ItemId, 0);
+            addOns.AddOnCategoryId = ItemId;
+            if (addOns.AddonnList.Count == 0)
+            {
+                AddOnn addOnn = new AddOnn();
+                addOnn.CatOrItmId = ItemId;
+                addOns.AddonnList.Add(addOnn);
+            }
+
+            return View("CreateEditAddOn", addOns);
         }
         public ActionResult UplExl()
         {
