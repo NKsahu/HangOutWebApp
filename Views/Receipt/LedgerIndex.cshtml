@@ -8,13 +8,13 @@
 
 <div class="card">
     <div class="card-header">
-        @if (Request.QueryString["Name"] == "Customer")
+        @if (Request.QueryString["ID"] == "43")
         {
             <h3 class="text-center">Customer</h3>
         }
         else
         {
-            <h3 class="text-center">Receipt</h3>
+            <h3 class="text-center">PayTm</h3>
         }
 
 
@@ -30,6 +30,9 @@
                 <tr>
                     <th>
                         @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Type")
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.EntryNo)
@@ -55,6 +58,7 @@
                 {
                 <tr id="@Obj.ID">
                     <td>@Obj.Date.ToString("dd/MM/yyyy")</td>
+                    <td>@Obj.ReceiptType</td>
                     <td>@Obj.ReceiptNo</td>
                     <td>@Obj.Particular</td>
                     <td>@Obj.DrAmount.ToString("0.00")</td>
@@ -62,12 +66,19 @@
                     @if (Obj.CRAmount > 0)
                     {
                         <td>@Obj.Balance.ToString("0.00")</td>
-                        <td>CR</td>
+                        if (Obj.Balance != 0)
+                        {
+                            <td>CR</td>
+                        }
+
                     }
                     else
                     {
                         <td>@Obj.Balance.ToString("0.00")</td>
-                        <td>DR</td>
+                        if (Obj.Balance != 0)
+                        {
+                            <td>DR</td>
+                        }
                     }
 
                 </tr>

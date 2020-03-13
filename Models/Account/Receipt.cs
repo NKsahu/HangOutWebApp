@@ -10,6 +10,7 @@ namespace HangOut.Models.Account
     public class Receipt
     {
         public int ID { get; set; }
+        public int LID { get; set; }
         public double Amount { get; set; }
         public string Particular { get; set; }
         public string ReceiptType { get; set; }
@@ -208,8 +209,10 @@ namespace HangOut.Models.Account
                         string GName = Group.GetAll().Where(w => w.ID == REList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
 
 
-
+                        OBJ.LID = REList[i].DRLedgerId;
+                        OBJ.ReceiptType = "Rece";
                         OBJ.Date = REList[i].Date;
+                        OBJ.Name = Name;
                         OBJ.ReceiptNo = "R"+REList[i].EntryNo.ToString(); 
                         if(i==0)
                         {
@@ -231,6 +234,9 @@ namespace HangOut.Models.Account
                         string GName1 = Group.GetAll().Where(w => w.ID == REList[i].CRGroupId).Select(s => s.Name).FirstOrDefault();
 
                         OBJ.Date = REList[i].Date;
+                        OBJ.LID = REList[i].CRLedgerId;
+                        OBJ.ReceiptType = "Rece";
+                        OBJ.Name = Name;
                         OBJ.ReceiptNo = "R" + REList[i].EntryNo.ToString(); ;
                         if (i == 0)
                         {
