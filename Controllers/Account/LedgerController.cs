@@ -47,15 +47,15 @@ namespace HangOut.Controllers.Account
 
             Ledger LedgerObj = new Ledger();
 
-            LedgerObj = LedgerObj.GetOne(0,Obj.OrgId);
-            if(Obj.OrgId!=0)
+            LedgerObj = LedgerObj.GetOne(0, Obj.OrgId);
+            if (Obj.OrgId != 0)
             {
-                if (Obj.OrgId == LedgerObj.OrgId)
+                if (Obj.ID != LedgerObj.ID)
                 {
                     return Json(new { msg = "Already Created" });
                 }
             }
-           
+
             DateTime isnulldate =  default(DateTime);
           
             if (Obj.CalculationStartFrom.Equals(isnulldate))

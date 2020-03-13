@@ -15,8 +15,12 @@ namespace HangOut.Models.Account
         public double CRAmount { get; set; }
         public string Narration { get; set; }
         public double Balance { get; set; }
-        public int GroupId { get; set; }
+        public int CRGroupId { get; set; }
+        public int DRGroupId { get; set; }
+        public int ADRLedgerId { get; set; }
+        public int ACRLedgerId { get; set; }
         public int AOrgId { get; set; }
+        public string ReceiptType { get; set; }
 
         //Account Details
         public int ADID { get; set; }
@@ -54,8 +58,11 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
                 cmd.Parameters.AddWithValue("@Narration", this.Narration);
                 cmd.Parameters.AddWithValue("@Balance", this.Balance);
-                cmd.Parameters.AddWithValue("@GroupId", this.GroupId);
+                cmd.Parameters.AddWithValue("@CRGroupId", this.CRGroupId);
                 cmd.Parameters.AddWithValue("@OrgId", this.AOrgId);
+                cmd.Parameters.AddWithValue("@DRGroupId", this.DRGroupId);
+                cmd.Parameters.AddWithValue("@CRLedgerId", this.ACRLedgerId);
+                cmd.Parameters.AddWithValue("@DRLedgerId", this.ADRLedgerId);
 
 
                 if (this.AID == 0)
@@ -119,6 +126,7 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@CRLedgerId", this.CRLedgerId);
                 cmd.Parameters.AddWithValue("@OrgId", this.ADOrgId);
 
+
                 if (this.ADID == 0)
                 {
                     ARow = Convert.ToInt32(cmd.ExecuteScalar());
@@ -147,11 +155,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.AID == 0)
                 {
-                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@GroupId,@OrgId);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@CRGroupId,@OrgId,@DRGroupId,@CRLedgerId,@DRLedgerId);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,GroupId=@GroupId,OrgId=@OrgId where AID=@AID";
+                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,CRGroupId=@CRGroupId,OrgId=@OrgId,DRGroupId=@DRGroupId,CRLedgerId=@CRLedgerId,DRLedgerId=@DRLedgerId where AID=@AID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@AID", this.AID);
@@ -160,8 +168,11 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
                 cmd.Parameters.AddWithValue("@Narration", this.Narration);
                 cmd.Parameters.AddWithValue("@Balance", this.Balance);
-                cmd.Parameters.AddWithValue("@GroupId", this.GroupId);
+                cmd.Parameters.AddWithValue("@CRGroupId", this.CRGroupId);
                 cmd.Parameters.AddWithValue("@OrgId", this.AOrgId);
+                cmd.Parameters.AddWithValue("@DRGroupId", this.DRGroupId);
+                cmd.Parameters.AddWithValue("@CRLedgerId", this.ACRLedgerId);
+                cmd.Parameters.AddWithValue("@DRLedgerId", this.ADRLedgerId);
 
                 if (this.AID == 0)
                 {
@@ -204,8 +215,13 @@ namespace HangOut.Models.Account
                     OBJAC.CRAmount = SDR.GetDouble(3);
                     OBJAC.Narration = SDR.GetString(4);
                     OBJAC.Balance = SDR.GetDouble(5);
-                    OBJAC.GroupId = SDR.GetInt32(6);
+                    OBJAC.CRGroupId = SDR.GetInt32(6);
                     OBJAC.AOrgId = SDR.GetInt32(7);
+                    OBJAC.DRGroupId = SDR.GetInt32(8);
+                    OBJAC.CRLedgerId = SDR.GetInt32(9);
+                    OBJAC.DRLedgerId = SDR.GetInt32(10);
+
+
                     ACList.Add(OBJAC);
                 }
             }
@@ -310,8 +326,11 @@ namespace HangOut.Models.Account
                     OBJAC.CRAmount = SDR.GetDouble(3);
                     OBJAC.Narration = SDR.GetString(4);
                     OBJAC.Balance = SDR.GetDouble(5);
-                    OBJAC.GroupId = SDR.GetInt32(6);
+                    OBJAC.CRGroupId = SDR.GetInt32(6);
                     OBJAC.AOrgId = SDR.GetInt32(7);
+                    OBJAC.DRGroupId = SDR.GetInt32(8);
+                    OBJAC.CRLedgerId = SDR.GetInt32(9);
+                    OBJAC.DRLedgerId = SDR.GetInt32(10);
                     ACList.Add(OBJAC);
                 }
             }
@@ -319,5 +338,49 @@ namespace HangOut.Models.Account
             finally { cmd.Dispose(); con.Con.Close(); }
             return (ACList);
         }
+        public static List<Accounts> GetADetails(int OrgId)
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            Accounts OBJ = new Accounts();
+            List<Accounts> AccountList = new List<Accounts>();
+            try
+            {
+                List<Accounts> ACList = Accounts.GetAllACDetails(OrgId).ToList();
+
+
+
+                for (int i = 0; i < ACList.Count; i++)
+                {
+                    OBJ = new Accounts();
+                    string LName = Ledger.GetAllList().Where(w => w.ID == ACList[i].DRLedgerId).Select(s => s.Name).FirstOrDefault();
+
+                    string GName = Group.GetAll().Where(w => w.ID == ACList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
+
+                    OBJ.ReceiptType = "DR";
+                    OBJ.Narration = "(L)" + LName + " >>" + " (LG) " + GName;
+                    OBJ.DRAmount = ACList[i].DRAmount;
+                    AccountList.Add(OBJ);
+
+                    OBJ = new Accounts();
+                    string LName1 = Ledger.GetAllList().Where(w => w.ID == ACList[i].CRLedgerId).Select(s => s.Name).FirstOrDefault();
+
+                    string GName1 = Group.GetAll().Where(w => w.ID == ACList[i].CRGroupId).Select(s => s.Name).FirstOrDefault();
+
+                    OBJ.ReceiptType = "CR";
+                    OBJ.Narration = "(L)" + LName1 + " >>" + " (LG) " + GName1;
+                    OBJ.CRAmount = ACList[i].CRAmount;
+                    AccountList.Add(OBJ);
+
+
+                }
+
+            }
+            catch (Exception e) { e.ToString(); }
+
+            return (AccountList);
+        }
+
     }
 }

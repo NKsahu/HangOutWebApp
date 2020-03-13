@@ -15,7 +15,7 @@ namespace HangOut.Controllers.Account
             List<Accounts> accounts = new List<Accounts>();
             if (OrgId>0)
             {
-                 accounts = Accounts.GetAllACDetails(OrgId);
+                 accounts = Accounts.GetADetails(OrgId);
             
             }
             return View(accounts);
