@@ -82,13 +82,11 @@
             HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ServingId + ')"> Edit</button>';
             var table = $('table').DataTable();
             if (AddTr) {
-                //$("#Tbody").append(HtmlStr);
                 table.row.add($(HtmlStr)).draw();
             }
             else {
                 table.row("#" + Jitmobj.ServingId).remove().draw();
                 table.row.add($(HtmlStr)).draw();
-                //$("#Tbody").append(HtmlStr);
             }
         }
     }
