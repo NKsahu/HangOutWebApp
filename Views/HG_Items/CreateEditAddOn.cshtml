@@ -12,20 +12,21 @@
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "" }))
         {
-      @Html.HiddenFor(model=>model.AddOnCategoryId)
+            @Html.HiddenFor(model => model.AddOnCategoryId)
+            @Html.HiddenFor(model => model.IsServingAddon)
                 foreach (var AddOn in Model.AddonnList)
                 {
-                @Html.Partial("AddOnn", AddOn)
+                    @Html.Partial("AddOnn", AddOn)
                 }
             <div id="AddNewAddon">
 
-        </div>
-                <div class="col-sm-1" style="float:right">
-                    @Html.Label("Save", new { @class = "text-white " })
-                    <input type="button" onclick="SaveAdon()" value="Save" class="btn btn-success " />
-                </div>
-                }
             </div>
+            <div class="col-sm-1" style="float:right">
+                @Html.Label("Save", new { @class = "text-white " })
+                <input type="button" onclick="SaveAdon()" value="Save" class="btn btn-success " />
+            </div>
+        }
+    </div>
         </div>
 
 <script>

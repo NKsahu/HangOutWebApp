@@ -17,22 +17,26 @@
         </div>
         <div class="col-md-2">
             @Html.LabelFor(model => model.Min)
-            @Html.EditorFor(model => model.Min, new { htmlAttributes = new { @class = "form-control Min", required = "required" } })
+            @Html.EditorFor(model => model.Min, new { htmlAttributes = new { @class = "form-control Min", tabindex = "-1", required = "required", style = (Model.IsServingAddon ? "pointer-events:none" : "") } })
             @Html.ValidationMessageFor(model => model.Min, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
             @Html.LabelFor(model => model.Max)
-            @Html.EditorFor(model => model.Max, new { htmlAttributes = new { @class = "form-control Max", required = "required" } })
+            @Html.EditorFor(model => model.Max, new { htmlAttributes = new { @class = "form-control Max",tabindex="-1", required = "required", style = (Model.IsServingAddon ? "pointer-events:none" : "") } })
             @Html.ValidationMessageFor(model => model.Max, "", new { @class = "text-danger" })
         </div>
-        <div class="col-md-1" id="btn">
-            <span>
-                <a class="btn btn-success " title="Add Set Of Choices" onclick="NewAddOn(this);"> <i class="fa fa-plus-circle"></i></a>
-            </span>
-        </div>
-        <div class="col-md-1" >
-            <a title="Remove Add on " class="btn btn-danger " onclick="RemoveAddon(this);"> <i class="fa fa-minus-circle"></i></a>
-        </div>
+        @if (Model.IsServingAddon == false)
+        {
+            <div class="col-md-1" id="btn">
+                <span>
+                    <a class="btn btn-success " title="Add Set Of Choices" onclick="NewAddOn(this);"> <i class="fa fa-plus-circle"></i></a>
+                </span>
+            </div>
+            <div class="col-md-1">
+                <a title="Remove Add on " class="btn btn-danger " onclick="RemoveAddon(this);"> <i class="fa fa-minus-circle"></i></a>
+            </div>
+        }
+
         <div class="col-md-12" id="Items">
             @foreach (var AddOnItem in Model.AddOnItemList)
             {

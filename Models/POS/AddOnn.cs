@@ -147,25 +147,26 @@ namespace HangOut.Models.POS
 public class AddOns
 {
     public int AddOnCategoryId { get; set; }
+        public bool IsServingAddon { get; set; }
     public List<AddOnn> AddonnList { get; set; }
         public AddOns()
     {
         AddonnList = new List<AddOnn>();
     }
-        public static AddOns GetOne(int categoryId,int Sts)
+        public static AddOns GetOne(int CatIntId,int Sts)
         {
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             AddOns ObjTmp = new AddOns();
-            ObjTmp.AddOnCategoryId = categoryId;
+            ObjTmp.AddOnCategoryId = CatIntId;
             List<AddOnn> tempAddonn = new List<AddOnn>();
             List<AddOnItems> AddonItemList = new List<AddOnItems>();
             try
             {
                 cmd = new SqlCommand("PosGetAddon", dBCon.Con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CategoryId", categoryId);
+                cmd.Parameters.AddWithValue("@CategoryId", CatIntId);
                 cmd.Parameters.AddWithValue("@Status", Sts);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

@@ -145,7 +145,7 @@
                     @Html.DropDownListFor(model => model.MultiServing, Multiserving, new { @class = "form-control"})
                     @Html.ValidationMessageFor(model => model.MultiServing, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1" id="MultiservingItm">
                     <label for="servindetails"></label>
                     <button onclick="ShowMultiServing()" type="button" class="btn btn-sm form-control">
                         <i class="fas fa-info-circle" style="color:green"></i>
@@ -245,9 +245,20 @@
                 });
                 
             });
-
+            ShowServingInfoBtn();
+            function ShowServingInfoBtn() {
+                var MultiServing = $("#MultiServing").val();
+                if (MultiServing == "1") {
+                    $("#MultiservingItm").show();
+                }
+                else {
+                    $("#MultiservingItm").hide();
+                }
+                
+            }
             function ApplyMultiServing() {
                 var MultiServing = $("#MultiServing").val();
+                ShowServingInfoBtn();
                 if (MultiServing == "1") {
                     ShowMultiServing();
                 }
@@ -259,7 +270,9 @@
                     url: "/HG_Items/AddMutiserving?ItemId=" + ItemId,
                     type: "GET",
                     success: function (data) {
-
+                        makedpt("Addon");
+                        $("#Addon > .modal-dialog > .modal-content > .modal-body").html(data);
+                        showdpt("Addon");
                         $("#waiting").hide();
                     },
                     error: function (Xr, Status, ErrorMsg) {

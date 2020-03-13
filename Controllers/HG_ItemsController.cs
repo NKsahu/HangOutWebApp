@@ -201,12 +201,20 @@ namespace HangOut.Controllers
         }
         public ActionResult AddMutiserving(int ItemId)
         {
-            AddOns addOns = AddOns.GetOne(ItemId, 0);
+            AddOns addOns = new AddOns();
+            addOns.IsServingAddon = true;
+            if (ItemId > 0)
+            {
+                AddOns.GetOne(ItemId, 0);
+            }
             addOns.AddOnCategoryId = ItemId;
             if (addOns.AddonnList.Count == 0)
             {
                 AddOnn addOnn = new AddOnn();
                 addOnn.CatOrItmId = ItemId;
+                addOnn.Min = 1;
+                addOnn.Max = 1;
+                addOnn.IsServingAddon = true;
                 addOns.AddonnList.Add(addOnn);
             }
 
