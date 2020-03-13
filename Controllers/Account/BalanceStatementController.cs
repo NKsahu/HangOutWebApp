@@ -417,9 +417,47 @@ namespace HangOut.Controllers.Account
             return Json(new { data = LedgerDetails }, JsonRequestBehavior.AllowGet);
         }
 
-       
 
-  
+        public ActionResult PostAllorganization()
+        {
+
+            List<Ledger> LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
+            && x.PaymentDay == Convert.ToInt32(DateTime.Now.DayOfWeek) || x.CollectionDay == Convert.ToInt32(DateTime.Now.DayOfWeek)).ToList();
+
+            foreach (var org in LedgerDetails)
+            {
+                PostToAccount(org.OrgId);
+            }
+            return Json(new { data = LedgerDetails }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PostToAccount(int OrgId)
+        {
+            Accounts AObj = new Accounts();
+
+            Ledger LedgerDetails = Ledger.GetAllList().Where(w => w.OrgId == OrgId).FirstOrDefault();
+
+               Receipt GetReceiptEntry = Receipt.GetAllList(OrgId,0)
+                .Where(w => w.Date >= LedgerDetails.CalculationStartFrom).Last();
+
+            AObj.Date = DateTime.Now;
+            AObj.Narration = "Online payments from customers";
+            AObj.DRAmount = GetReceiptEntry.Balance;
+            AObj.AOrgId = OrgId;
+            AObj.ADRLedgerId = GetReceiptEntry.CRLedgerId;
+            AObj.ACRLedgerId = LedgerDetails.ID;
+
+            AObj.DRGroupId = GetReceiptEntry.CRGroupId;
+            AObj.CRGroupId = 2;
+
+            AObj.SaveGeneral();
+
+            return Json(new { data = AObj }, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+
 
 
 
@@ -478,8 +516,8 @@ namespace HangOut.Controllers.Account
                 Ledger LedgerDetails = Ledger.GetAllList().Where(x => x.DebtorType == 1
                   && x.OrgId == OrgId).FirstOrDefault();
 
-                foreach (var data in GetRecords)
-                {
+               foreach (var data in GetRecords)
+                 {
                     if (data.Narration != "Opening Balance")
                     {
 
