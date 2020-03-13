@@ -191,8 +191,7 @@ namespace HangOut.Models
 
         public vw_HG_UsersDetails GetSingleByUserId(int UserCode=0,string UserLogin= null)
         {
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
-            Con.Open();
+            DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             vw_HG_UsersDetails ObjTmp = new vw_HG_UsersDetails();
@@ -206,7 +205,8 @@ namespace HangOut.Models
                 {
                     Query= "SELECT TOP 1 * FROM HG_UsersDetails where UserId='" + UserLogin + "'";
                 }
-                cmd = new SqlCommand(Query, Con);
+                
+                cmd = new SqlCommand(Query, dBCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -231,7 +231,7 @@ namespace HangOut.Models
                 }
             }
             catch (Exception e) { e.ToString(); }
-            finally { cmd.Dispose(); SDR.Close(); Con.Close(); Con.Dispose(); Con = null; }
+            finally { cmd.Dispose(); SDR.Close(); dBCon.Con.Close(); dBCon.Con.Dispose();  }
             return (ObjTmp);
         }
         

@@ -201,6 +201,10 @@
                 function CalculateTax() {
                     var CostPrice = parseFloat($("#CostPrice").val());
                     var TaxPercentage = parseFloat($("#Tax").val());
+                    console.log("TaxPercentage=" + TaxPercentage);
+                    if (TaxPercentage == "" || TaxPercentage == " " || isNaN(TaxPercentage)) {
+                        TaxPercentage = 0.00;
+                    }
                     var taxAmt = (CostPrice * TaxPercentage) / 100;
                     $("#Price").val(CostPrice + taxAmt).change();
                 }

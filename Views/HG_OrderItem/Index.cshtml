@@ -130,7 +130,11 @@
                     string PrePareBy = "";
                     string OrderPlacedBy = "";
                     var PlacedByObj = new vw_HG_UsersDetails().GetSingleByUserId((int)item.OrdById);
-                    var PrepareByObj = new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
+                    var PrepareByObj = new vw_HG_UsersDetails();
+                    if (item.ChefSeenBy > 0)
+                    {
+                         PrepareByObj = new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
+                    }
                     if (PlacedByObj.UserCode > 0)
                     {
                         OrderPlacedBy = UsertypleList.Find(x => x.UserType == PlacedByObj.UserType).UserTypeName + " (" + PlacedByObj.UserId + " )";

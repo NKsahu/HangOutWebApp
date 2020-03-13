@@ -1368,8 +1368,11 @@ namespace HangOut.Controllers
                                 deliveryCharge = ObjTicket.DeliveryCharge;
                             }
                         }
-                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(order.PayReceivedBy);
-
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails();
+                        if (order.PayReceivedBy > 0)
+                        {
+                            ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(order.PayReceivedBy);
+                        }
                         if (ObjUser != null && ObjUser.UserType != "CA"&&ObjUser.UserType!="ONR")// not captain not OWN
                         {
                             TableScreen.Add("Amt", TotalAmount);
@@ -1387,7 +1390,6 @@ namespace HangOut.Controllers
                     else
                     {
                         TableScreen.Add("Amt", 0);
-                        
                     }
                     TableScreen.Add("PymtMode", order.PaymentStatus);
                     TableScreen.Add("deliveryCharge", deliveryCharge);
@@ -1413,7 +1415,6 @@ namespace HangOut.Controllers
                             Orderitem.UpdationDate = DateTime.Now;
                             Orderitem.Save();
                         }
-
                     }
                 }
            
@@ -1527,9 +1528,12 @@ namespace HangOut.Controllers
                     }
                     if (OrderNotice != null && OrderNotice.OID > 0)
                     {
-                       
-                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(objOrder.PayReceivedBy);
 
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails();
+                        if (objOrder.PayReceivedBy > 0)
+                        {
+                            ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(objOrder.PayReceivedBy);
+                        }
                         if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain not OWN
                         {
                             TableScreen.Add("Amt", TotalAmount);

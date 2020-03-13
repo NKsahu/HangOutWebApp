@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-
 namespace HangOut.Models.POS
 {
     public class ServingSize
@@ -21,11 +18,11 @@ namespace HangOut.Models.POS
                 string Quary = "";
                 if (this.ServingId == 0)
                 {
-                    Quary = "Insert Into ServingSize Values (@Name,@OrgId);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into HG_ServingSize Values (@Name,@OrgId);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ServingSize Set Name=@Name,OrgId=@OrgId where ServingId=@ServingId";
+                    Quary = "Update HG_ServingSize Set Name=@Name,OrgId=@OrgId where ServingId=@ServingId";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@ServingId", this.ServingId);
@@ -39,7 +36,6 @@ namespace HangOut.Models.POS
                 else
                 {
                     Row = cmd.ExecuteNonQuery();
-                    //this.CategoryID = Row;
                 }
 
             }
@@ -48,7 +44,7 @@ namespace HangOut.Models.POS
             return Row;
 
         }
-        public static List<ServingSize> GetAll()
+        public static List<ServingSize> GetAll(int OrgId)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -56,10 +52,9 @@ namespace HangOut.Models.POS
             List<ServingSize> listOrgId = new List<ServingSize>();
             try
             {
-                string Quary = "Select * from ServingSize ORDER BY ServingId DESC";
+                string Quary = "Select * from HG_ServingSize where OrgId=" + OrgId;
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
-
                 while (SDR.Read())
                 {
                     ServingSize OBJINT = new ServingSize();
@@ -83,7 +78,7 @@ namespace HangOut.Models.POS
 
             try
             {
-                string Query = "SELECT * FROM  ServingSize where ServingId=" + ID;
+                string Query = "SELECT * FROM  HG_ServingSize where ServingId=" + ID;
                 cmd = new SqlCommand(Query, Con);
                 cmd.Parameters.AddWithValue("@ServingId", ID);
                 SDR = cmd.ExecuteReader();
@@ -94,7 +89,7 @@ namespace HangOut.Models.POS
                     ObjTmp.OrgId = SDR.GetInt32(2);
                 }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             { e.ToString(); }
 
             finally { Con.Close(); }

@@ -330,6 +330,7 @@
     <Compile Include="Controllers\Inventory\UnitsController.cs" />
     <Compile Include="Controllers\Account\JournalEntryController.cs" />
     <Compile Include="Controllers\OrderMenuController.cs" />
+    <Compile Include="Controllers\POS\ServingSizeController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UsersMenuController.cs" />
@@ -528,6 +529,8 @@
     <Content Include="Views\BalanceStatement\BalanceStatementFilter.cshtml" />
     <Content Include="Views\Receipt\Index.cshtml" />
     <Content Include="Views\Receipt\LedgerIndex.cshtml" />
+    <Content Include="Views\ServingSize\Index.cshtml" />
+    <Content Include="Views\ServingSize\CreatEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
