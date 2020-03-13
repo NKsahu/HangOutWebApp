@@ -15,9 +15,24 @@ namespace HangOut.Controllers.POS
             List<ServingSize> servingSizes = ServingSize.GetAll(OrgId); 
             return View(servingSizes);
         }
-        public ActionResult CreatEdit()
+        public ActionResult CreatEdit(int ID)
         {
-            return View();
+            ServingSize servingSize = new ServingSize();
+            if (ID > 0)
+            {
+                servingSize = ServingSize.GetOne(ID);
+            }
+            return View(servingSize);
+        }
+        [HttpPost]
+        public ActionResult CreatEdit(ServingSize servingSize)
+        {
+            if (servingSize.ServingId == 0)
+            {
+                servingSize.OrgId = OrderType.CurrOrgId();
+            }
+            servingSize.Save();
+            return Json(new { data = servingSize }, JsonRequestBehavior.AllowGet);
         }
     }
 }

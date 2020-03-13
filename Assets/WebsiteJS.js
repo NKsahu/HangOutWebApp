@@ -116,6 +116,7 @@ function showdpt(id) {
 function hidedpt(id) {
     if ($(".modal:visible").length == 1) {
         $('body').removeClass('modal-open');
+        $('body').removeAttr('style');
     }
     $(".modal:visible:last").remove();
     $("#"+id).hide();
