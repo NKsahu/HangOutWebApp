@@ -101,7 +101,7 @@
                 @{
                         <div class="col-md-2">
                             @Html.Label("Tax %")
-                            @Html.DropDownListFor(model => model.Tax, new SelectList(HG_Items.ItemTaxes(), "ID", "Name", Model.Tax), "Select Tax", new { @class = "form-control" })
+                            @Html.DropDownListFor(model => model.Tax, new SelectList(HG_Items.ItemTaxes(), "ID", "Name", Model.Tax), "0%", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
 
                         </div>
