@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+
 
 
 namespace HangOut.Models
@@ -37,7 +36,7 @@ namespace HangOut.Models
         [Display(Name = "Discription")]
         public string ItemDiscription { get; set; }
         public int ItemAvaibility { get; set; }//{ 0:available ,1 unavailable}
-
+        public int MultiServing { get; set; }
         //========
         public string Categoryname { get; set; }
         public HG_Items()
@@ -47,7 +46,7 @@ namespace HangOut.Models
             EntryBy = 0;
             Status = true;
             ApplyAddOn = 1;
-           
+            MultiServing = 0;
         }
         public int Save()
         {
@@ -63,7 +62,7 @@ namespace HangOut.Models
                 string Query = "";
                 if (this.ItemID == 0)
                 {
-                    Query = "Insert into  HG_Items  values(@CategoryID,@OrgID,@Items,@Price,@Plates,@ItemMode,@Discount,@EntryBy,@EntryDate,@UpdateDate,@Status,@Item_Img,@ApplyAddOn,@CostPrice,@AddOnCatId,@Type,@AddOnType,@ItmDiscriptn,@ItemAvaibility); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  HG_Items  values(@CategoryID,@OrgID,@Items,@Price,@Plates,@ItemMode,@Discount,@EntryBy,@EntryDate,@UpdateDate,@Status,@Item_Img,@ApplyAddOn,@CostPrice,@AddOnCatId,@Type,@AddOnType,@ItmDiscriptn,@ItemAvaibility,@MultiServing); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
@@ -71,7 +70,7 @@ namespace HangOut.Models
                 }
                 else
                 {
-                    Query = "update  HG_Items set CategoryID=@CategoryID,OrgID =@OrgID,Items=@Items,Price=@Price,Plates=@Plates,ItemMode=@ItemMode,Discount=@Discount,EntryBy=@EntryBy,UpdateDate=@UpdateDate,Status=@Status,Item_Img=@Item_Img,ApplyAddOn=@ApplyAddOn,CostPrice=@CostPrice,AddOnCatId=@AddOnCatId,Type=@Type,AddOnType=@AddOnType,ItmDiscriptn=@ItmDiscriptn,ItemAvaibility=@ItemAvaibility where ItemID=@ItemID";
+                    Query = "update  HG_Items set CategoryID=@CategoryID,OrgID =@OrgID,Items=@Items,Price=@Price,Plates=@Plates,ItemMode=@ItemMode,Discount=@Discount,EntryBy=@EntryBy,UpdateDate=@UpdateDate,Status=@Status,Item_Img=@Item_Img,ApplyAddOn=@ApplyAddOn,CostPrice=@CostPrice,AddOnCatId=@AddOnCatId,Type=@Type,AddOnType=@AddOnType,ItmDiscriptn=@ItmDiscriptn,ItemAvaibility=@ItemAvaibility,MultiServing=@MultiServing where ItemID=@ItemID";
                     cmd = new SqlCommand(Query, Con);
                     cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
                     cmd.Parameters.AddWithValue("@EntryBy", EntryBy);
@@ -93,6 +92,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@AddOnType", this.AddOnType);
                 cmd.Parameters.AddWithValue("@ItmDiscriptn", this.ItemDiscription);
                 cmd.Parameters.AddWithValue("@ItemAvaibility", this.ItemAvaibility);
+                cmd.Parameters.AddWithValue("@MultiServing", this.MultiServing);
                 if (this.ItemID == 0)
                 {
                     Row = System.Convert.ToInt32(cmd.ExecuteScalar());
@@ -157,10 +157,11 @@ namespace HangOut.Models
                     ObjTmp.AddOnType = SDR.GetInt32(17);
                     ObjTmp.ItemDiscription = SDR.GetString(18);
                     ObjTmp.ItemAvaibility = SDR.GetInt32(19);
+                    ObjTmp.MultiServing = SDR.GetInt32(20);
                     ListTmp.Add(ObjTmp);
                 }
             }
-            catch (System.Exception e) { e.ToString(); }
+            catch (Exception e) { e.ToString(); }
             finally { Con.Close(); }
 
             return (ListTmp);
@@ -197,6 +198,7 @@ namespace HangOut.Models
                     ObjTmp.AddOnType = SDR.GetInt32(17);
                     ObjTmp.ItemDiscription = SDR.GetString(18);
                     ObjTmp.ItemAvaibility = SDR.GetInt32(19);
+                    ObjTmp.MultiServing = SDR.GetInt32(20);
                 }
             }
             catch (Exception e)

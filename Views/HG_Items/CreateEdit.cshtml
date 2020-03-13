@@ -45,7 +45,7 @@
                 @{
                     if (CurrentOrg != null && CurrentOrg["OrgId"] == "0")
                     {
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             @Html.Label("Organization  ")
                             @Html.DropDownListFor(model => model.OrgID, new SelectList(new HG_OrganizationDetails().GetAll(), "OrgID", "Name", Model.OrgID), "Select Organization Name", new { @class = "form-control", required = "required" })
                             @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
@@ -58,7 +58,7 @@
                     }
                 }
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     @Html.Label("Category Name")
                     @Html.DropDownListFor(model => model.CategoryID, new SelectList(new HG_Category().GetAll(), "CategoryID", "Category", Model.CategoryID), "Select Category", new { @class = "form-control", required = "required", val = Model.CategoryID })
                     @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
@@ -73,11 +73,11 @@
                 </div>
                 @{
                     List<SelectListItem> FoodType = new List<SelectListItem>()
-                                                                    {
-                                                                        new SelectListItem{Text="VEG",Value="1"},
-                                                                        new SelectListItem{Text="NON-VEG",Value="2"},
+                                                                        {
+                                                                            new SelectListItem{Text="VEG",Value="1"},
+                                                                            new SelectListItem{Text="NON-VEG",Value="2"},
 
-                                                                    };
+                                                                        };
                 }
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.ItemMode, htmlAttributes: new { @class = "control-label  " })
@@ -99,54 +99,73 @@
 
                 </div>
                 @{
-                        <div class="col-md-2">
-                            @Html.Label("Tax %")
-                            @Html.DropDownListFor(model => model.Tax, new SelectList(HG_Items.ItemTaxes(), "ID", "Name", Model.Tax), "0%", new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                    <div class="col-md-2">
+                        @Html.Label("Tax %")
+                        @Html.DropDownListFor(model => model.Tax, new SelectList(HG_Items.ItemTaxes(), "ID", "Name", Model.Tax), "0%", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
 
-                        </div>
+                    </div>
                 }
-                        <div class="col-md-2">
-                            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label  " })
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label  " })
 
-                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control autodouble", required = "required", @readonly = "readonly", } })
-                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-                        </div>
-                        @{
-                            List<SelectListItem> AddOnOption = new List<SelectListItem>()
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control autodouble", required = "required", @readonly = "readonly", } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
+                @{
+                    List<SelectListItem> AddOnOption = new List<SelectListItem>()
+                                                                            {
+                                                                                new SelectListItem{Text="NO",Value="1"},
+                                                                                new SelectListItem{Text="YES",Value="2"},
+
+                                                                            };
+                }
+                <div class="col-md-1">
+                    @Html.LabelFor(model => model.ApplyAddOn, htmlAttributes: new { @class = "control-label  " })
+                    <div class="checkbox">
+                        @Html.DropDownListFor(model => model.ApplyAddOn, AddOnOption, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ApplyAddOn, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.AddOnCatId)
+                    @Html.DropDownListFor(model => model.AddOnCatId, new SelectList(new HG_Category().GetAll(CategoryType: 2), "CategoryID", "Category", Model.CategoryID), "Select Addon ", new { @class = "form-control", val = Model.CategoryID })
+                    @Html.ValidationMessageFor(model => model.AddOnCatId, "", new { @class = "text-danger" })
+                </div>
+                @{
+                    List<SelectListItem> Multiserving = new List<SelectListItem>()
                                                                         {
-                                                                            new SelectListItem{Text="NO",Value="1"},
-                                                                            new SelectListItem{Text="YES",Value="2"},
+                                                                            new SelectListItem{Text="NO",Value="0"},
+                                                                            new SelectListItem{Text="YES",Value="1"},
 
                                                                         };
-                        }
-                        <div class="col-md-2">
-                            @Html.LabelFor(model => model.ApplyAddOn, htmlAttributes: new { @class = "control-label  " })
-                            <div class="checkbox">
-                                @Html.DropDownListFor(model => model.ApplyAddOn, AddOnOption, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.ApplyAddOn, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            @Html.LabelFor(model => model.AddOnCatId)
-                            @Html.DropDownListFor(model => model.AddOnCatId, new SelectList(new HG_Category().GetAll(CategoryType: 2), "CategoryID", "Category", Model.CategoryID), "Select Addon ", new { @class = "form-control", val = Model.CategoryID })
-                            @Html.ValidationMessageFor(model => model.AddOnCatId, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="col-md-1">
-                            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-                            <div class="col-md-10">
-                                <div class="checkbox">
-                                    @Html.EditorFor(model => model.Status)
-                                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", required = "required" })
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-1">
-                            @Html.Label("Save", new { @class = "text-white" })
-                            <input type="submit" value="Save" class="btn btn-success" />
-
+                }
+                <div class="col-md-1">
+                    @Html.LabelFor(model => model.MultiServing)
+                    @Html.DropDownListFor(model => model.MultiServing, Multiserving, new { @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.MultiServing, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-1">
+                    <label for="servindetails"></label>
+                    <button onclick="ShowMultiServing()" type="button" class="btn btn-sm form-control">
+                        <i class="fas fa-info-circle" style="color:green"></i>
+                    </button>
+                </div>
+                <div class="col-md-1">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.Status)
+                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", required = "required" })
                         </div>
                     </div>
+                </div>
+                <div class="col-sm-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input type="submit" value="Save" class="btn btn-success" />
+
+                </div>
+            </div>
                 }
             </div>
         </div>
@@ -221,9 +240,33 @@
                         $("#AddOnCatId").parent('div').hide();
                     }
                 }
+                $("#MultiServing").change(function () {
+                    ApplyMultiServing();
+                });
+                
             });
 
+            function ApplyMultiServing() {
+                var MultiServing = $("#MultiServing").val();
+                if (MultiServing == "1") {
+                    ShowMultiServing();
+                }
+            }
+            function ShowMultiServing() {
+                var ItemId = $("#ItemID").val();
+                $("#waiting").show();
+                $.ajax({
+                    url: "/HG_Items/AddMutiserving?ItemId=" + ItemId,
+                    type: "GET",
+                    success: function (data) {
 
+                        $("#waiting").hide();
+                    },
+                    error: function (Xr, Status, ErrorMsg) {
+                        $("#waiting").hide();
+                    }
+                });
+            }
 
 
         </script>

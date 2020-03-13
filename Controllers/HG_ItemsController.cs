@@ -199,6 +199,19 @@ namespace HangOut.Controllers
             AddOnItemList.Price = ObjItem.Price;
             return View("AddOnItem", AddOnItemList);
         }
+        public ActionResult AddMutiserving(int ItemId)
+        {
+            AddOns addOns = AddOns.GetOne(ItemId, 0);
+            addOns.AddOnCategoryId = ItemId;
+            if (addOns.AddonnList.Count == 0)
+            {
+                AddOnn addOnn = new AddOnn();
+                addOnn.CatOrItmId = ItemId;
+                addOns.AddonnList.Add(addOnn);
+            }
+
+            return View("CreateEditAddOn", addOns);
+        }
         public ActionResult UplExl()
         {
             return View();
