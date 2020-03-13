@@ -68,7 +68,7 @@ namespace HangOut.Models.POS
             finally { cmd.Dispose(); con.Con.Close(); }
             return (listOrgId);
         }
-        public ServingSize GetOne(int ID)
+        public static ServingSize GetOne(int ID)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();

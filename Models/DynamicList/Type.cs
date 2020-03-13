@@ -43,7 +43,16 @@ namespace HangOut.Models.DynamicList
             list.Add(jobj2);
             return list;
         }
-
+        public static HttpCookie BrwserCookie()
+        {
+            var UserInfo= HttpContext.Current.Request.Cookies["UserInfo"];
+            return UserInfo;
+        }
+        public static int CurrOrgId()
+        {
+            int OrgId =int.Parse(BrwserCookie()["OrgId"]);
+            return OrgId;
+        }
        
     }
    

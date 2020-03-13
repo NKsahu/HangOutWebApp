@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using HangOut.Models.POS;
+using HangOut.Models.DynamicList;
 using System.Web.Mvc;
 
 namespace HangOut.Controllers.POS
@@ -11,7 +11,9 @@ namespace HangOut.Controllers.POS
         // GET: ServingSize
         public ActionResult Index()
         {
-            return View();
+            int OrgId = OrderType.CurrOrgId();
+            List<ServingSize> servingSizes = ServingSize.GetAll(OrgId); 
+            return View(servingSizes);
         }
         public ActionResult CreatEdit()
         {
