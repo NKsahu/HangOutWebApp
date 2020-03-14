@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -15,7 +16,9 @@ namespace HangOut.Models.POS
         public double Price { get; set; }
         public int AddonID { get; set; }
         public int CatOrItmId { get; set; }
+        [JsonIgnore]
         public bool IsServingAddon { get; set; }// true for serving size items
+        [JsonIgnore]
         public int DelStatus { get; set; }//  removed addonitem from form
                                           //===
         public string Title { get; set; }

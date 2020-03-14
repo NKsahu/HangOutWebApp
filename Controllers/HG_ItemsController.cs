@@ -35,6 +35,7 @@ namespace HangOut.Controllers
         [HttpPost]
         public ActionResult CreateEdit(HG_Items Objitem, System.Web.HttpPostedFileBase FoodImg)
         {
+            bool ApplyServingSize = false;
             if (Objitem.Qty == null)
             {
                 Objitem.Qty = "";
@@ -62,7 +63,7 @@ namespace HangOut.Controllers
                 return Json(new { msg = "Select Item Category Name" });
             }
             Objitem.EntryBy = Convert.ToInt32(Request.Cookies["UserInfo"]["UserCode"]);
-
+            
             //check for category change and apply it to OrderMenu Section
             if (Objitem.ItemID > 0)
             {
@@ -92,7 +93,22 @@ namespace HangOut.Controllers
                     }      
                 }
             }
+            else
+            {
+                ApplyServingSize = true;
+            }
             int i = Objitem.Save();
+            if (i>0&&ApplyServingSize)
+            {
+              AddOns Addon=  AddOns.ServingAddonList.Find(x => x.OrgID == Objitem.OrgID);
+                if (Addon!=null&& Addon.AddonnList.Count>0)
+                {
+                    Addon.AddOnCatorItmId = Objitem.ItemID;
+                    CreateEditAddOn(Addon);
+                    AddOns.ServingAddonList.RemoveAll(x => x.OrgID == Objitem.OrgID);
+                }
+                // 
+            }
             if (i > 0 && FoodImg != null)
             {
                 FoodImg.SaveAs(System.IO.Path.Combine(Server.MapPath("~/FoodImg/"), i + ".jpg"));
@@ -218,6 +234,7 @@ namespace HangOut.Controllers
             if (ItemId > 0)
             {
                 addOns= AddOns.GetOne(ItemId, 0,true);
+                addOns.IsServingAddon = true;
             }
             addOns.AddOnCatorItmId = ItemId;
             if (addOns.AddonnList.Count == 0)
