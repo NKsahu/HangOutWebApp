@@ -77,7 +77,8 @@ namespace HangOut.Controllers
             {
 
                 // topics.Add(OrgId.ToString());
-                Title = "Hey, give us a Hi-five. Click this notification";
+                Title = "foodDo";
+                Msg = "Hey, give us a Hi-five. Click this notification";
                 PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo,UserRating:1);
             }
             if (ObjUser.UserType == "CUST" &&ObjOrder!=null)
@@ -85,8 +86,8 @@ namespace HangOut.Controllers
                 HG_Tables_or_Sheat ObjSeating = new HG_Tables_or_Sheat().GetOne(ObjOrder.Table_or_SheatId);
                 if (ObjSeating.FDBKId > 0)
                 {
-                    Msg = "";
-                    Title = "Just few seconds for Outlet feedback. Click here";
+                    Title = "foodDo";
+                    Msg = "Just few seconds for Outlet feedback. Click here";
                     PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo);
                 }
                
