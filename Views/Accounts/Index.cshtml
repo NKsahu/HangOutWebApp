@@ -8,7 +8,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="text-center">Account Statement</h3>
+        <h3 class="text-center">@Request.QueryString["Name"]</h3>
     </div>
     <div class="row">
         <div class="col-md-1">
@@ -16,15 +16,20 @@
         </div>
     </div>
     <div class="card-body">
-
         <table class="table" id="TBLID" style="width:100%">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayName("Journal")
+                        @Html.DisplayNameFor(model => model.Date)
                     </th>
                     <th>
-                        @Html.DisplayName("Particular")
+                        @Html.DisplayName("Type")
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EntryNo)
+                    </th>
+                    <th>
+                        @Html.DisplayName("Narration")
                     </th>
                     <th>
                         @Html.DisplayName("DR")
@@ -32,21 +37,43 @@
                     <th>
                         @Html.DisplayName("CR")
                     </th>
-                
+                    <th>
+                        @Html.DisplayNameFor(model => model.Balance)
+                    </th>
+
+
                 </tr>
             </thead>
             <tbody id="Tbody">
                 @foreach (Accounts Obj in Model)
                 {
-                <tr id="@Obj.AID">
-                    <td>@Obj.ReceiptType</td>
-                    <td>@Obj.Narration</td>
-                    <td>@Obj.DRAmount.ToString("0.00")</td>
-                    <td>@Obj.CRAmount.ToString("0.00")</td>
-   
-                </tr>
-                }
+                    <tr id="@Obj.AID">
+                        <td>@Obj.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@Obj.ReceiptType</td>
+                        <td>@Obj.Type</td>
+                        <td>@Obj.Narration</td>
+                        <td>@Obj.DRAmount.ToString("0.00")</td>
+                        <td>@Obj.CRAmount.ToString("0.00")</td>
+                        @if (Obj.CRAmount > 0)
+                        {
+                            <td>@Obj.Balance.ToString("0.00")</td>
+                            if (Obj.Balance != 0)
+                            {
+                                <td>CR</td>
+                            }
 
+                        }
+                        else
+                        {
+                            <td>@Obj.Balance.ToString("0.00")</td>
+                            if (Obj.Balance != 0)
+                            {
+                                <td>DR</td>
+                            }
+                        }
+
+                    </tr>
+                }
             </tbody>
         </table>
 

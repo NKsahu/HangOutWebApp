@@ -434,31 +434,66 @@ namespace HangOut.Controllers.Account
         public ActionResult PostToAccount(int OrgId)
         {
             Accounts AObj = new Accounts();
+            int LastEntryNo = 0;
 
             Ledger LedgerDetails = Ledger.GetAllList().Where(w => w.OrgId == OrgId).FirstOrDefault();
 
                Receipt GetReceiptEntry = Receipt.GetAllList(OrgId,0)
                 .Where(w => w.Date >= LedgerDetails.CalculationStartFrom).Last();
 
+            double GetAmountSum = Receipt.GetAllList(OrgId, 0)
+              .Where(w => w.Date >= LedgerDetails.CalculationStartFrom).Select(s=>s.Amount).Sum();
+
+
+            Accounts GetACBalance = Accounts.GetAllACDetails(OrgId)
+                       .Where(w => w.AOrgId == OrgId).LastOrDefault();
+           
+              
+
             AObj.Date = DateTime.Now;
             AObj.Narration = "Online payments from customers";
-            AObj.DRAmount = GetReceiptEntry.Balance;
+            AObj.DRAmount = GetAmountSum;
+            if(GetACBalance!=null)
+            {
+                AObj.Balance = GetACBalance.Balance + AObj.DRAmount;
+            }
+            else
+            {
+                AObj.Balance = GetAmountSum;
+            }
+          
             AObj.AOrgId = OrgId;
             AObj.ADRLedgerId = GetReceiptEntry.CRLedgerId;
             AObj.ACRLedgerId = LedgerDetails.ID;
 
             AObj.DRGroupId = GetReceiptEntry.CRGroupId;
             AObj.CRGroupId = 2;
+            AObj.EntryType = "Journal";
+            AObj.ReceiptID = GetReceiptEntry.ID;
+
+            try
+            {
+                LastEntryNo = Accounts.GetAllACDetails(OrgId).Select(s => s.EntryNo).Last();
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            if (LastEntryNo > 0)
+            {
+                LastEntryNo = LastEntryNo + 1;
+            }
+            else
+            {
+                LastEntryNo = 1;
+            }
+            AObj.EntryNo = LastEntryNo;
 
             AObj.SaveGeneral();
 
             return Json(new { data = AObj }, JsonRequestBehavior.AllowGet);
 
         }
-
-
-
-
 
 
         public ActionResult GetAllCommission(int OrgId)
