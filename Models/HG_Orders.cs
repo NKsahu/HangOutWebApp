@@ -273,7 +273,10 @@ namespace HangOut.Models
                 //{
                 // Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("MM/dd/yyyy") + "' and '" + theDate.ToString("MM/dd/yyyy HH:mm:ss") + "' and OrgId="+ CurrOrgID["OrgId"]+ " ORDER BY OID DESC";
                 //}
-                cmd = new SqlCommand(Query, Obj.Con);
+                cmd = new SqlCommand("GetOrderByDates", Obj.Con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@FromDate", Formdate.ToString("MM/dd/yyyy"));
+                cmd.Parameters.AddWithValue("@Todate", theDate.ToString("MM/dd/yyyy HH:mm:ss"));
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -300,7 +303,7 @@ namespace HangOut.Models
                 }
             }
             catch (Exception e) { e.ToString(); }
-            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
+            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); }
             return (ListTmp);
         }
     }
