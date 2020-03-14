@@ -2,11 +2,16 @@
 @{
     Layout = null;
     var CurrentOrg = Request.Cookies["UserInfo"];
+    String title = "ADDON";
+    if (Model.IsServingAddon)
+    {
+        title = "Multi-Serving";
+    }
 }
 
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>ADDON</b></h3>
+        <h3 style="text-align:center;color:#000000"><b>@title</b></h3>
         <hr />
     </div>
     <div class="card-body">

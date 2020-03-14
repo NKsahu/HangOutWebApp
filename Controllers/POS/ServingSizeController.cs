@@ -34,5 +34,11 @@ namespace HangOut.Controllers.POS
             servingSize.Save();
             return Json(new { data = servingSize }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult ShowServingSize()
+        {
+            int OrgId = OrderType.CurrOrgId();
+            List<ServingSize> servingSizes = ServingSize.GetAll(OrgId);
+            return View(servingSizes);
+        }
     }
 }

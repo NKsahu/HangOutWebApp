@@ -531,6 +531,7 @@
     <Content Include="Views\Receipt\LedgerIndex.cshtml" />
     <Content Include="Views\ServingSize\Index.cshtml" />
     <Content Include="Views\ServingSize\CreatEdit.cshtml" />
+    <Content Include="Views\ServingSize\ShowServingSize.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
