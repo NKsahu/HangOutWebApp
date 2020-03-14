@@ -21,6 +21,11 @@ namespace HangOut.Models.Account
         public int ACRLedgerId { get; set; }
         public int AOrgId { get; set; }
         public string ReceiptType { get; set; }
+        public int ReceiptID { get; set; }
+
+        public int EntryNo { get; set; }
+        public string EntryType { get; set; }
+        public string Type { get; set; }
 
         //Account Details
         public int ADID { get; set; }
@@ -155,11 +160,11 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.AID == 0)
                 {
-                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@CRGroupId,@OrgId,@DRGroupId,@CRLedgerId,@DRLedgerId);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACAccount Values (@Date,@DRAmount,@CRAmount,@Narration,@Balance,@CRGroupId,@OrgId,@DRGroupId,@CRLedgerId,@DRLedgerId,@EntryNo,@EntryType,@ReceiptID);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,CRGroupId=@CRGroupId,OrgId=@OrgId,DRGroupId=@DRGroupId,CRLedgerId=@CRLedgerId,DRLedgerId=@DRLedgerId where AID=@AID";
+                    Quary = "Update ACAccount Set Date=@Date,DRAmount=@DRAmount,CRAmount=@CRAmount,Narration=@Narration,Balance=@Balance,CRGroupId=@CRGroupId,OrgId=@OrgId,DRGroupId=@DRGroupId,CRLedgerId=@CRLedgerId,DRLedgerId=@DRLedgerId,EntryNo=@EntryNo,EntryType=@EntryType,ReceiptID=@ReceiptID where AID=@AID";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 cmd.Parameters.AddWithValue("@AID", this.AID);
@@ -173,6 +178,9 @@ namespace HangOut.Models.Account
                 cmd.Parameters.AddWithValue("@DRGroupId", this.DRGroupId);
                 cmd.Parameters.AddWithValue("@CRLedgerId", this.ACRLedgerId);
                 cmd.Parameters.AddWithValue("@DRLedgerId", this.ADRLedgerId);
+                cmd.Parameters.AddWithValue("@EntryNo", this.EntryNo);
+                cmd.Parameters.AddWithValue("@EntryType", this.EntryType);
+                cmd.Parameters.AddWithValue("@ReceiptID", this.ReceiptID);
 
                 if (this.AID == 0)
                 {
@@ -331,6 +339,9 @@ namespace HangOut.Models.Account
                     OBJAC.DRGroupId = SDR.GetInt32(8);
                     OBJAC.CRLedgerId = SDR.GetInt32(9);
                     OBJAC.DRLedgerId = SDR.GetInt32(10);
+                    OBJAC.EntryNo = SDR.GetInt32(11);
+                    OBJAC.EntryType = SDR.GetString(12);
+                    OBJAC.ReceiptID = SDR.GetInt32(13);
                     ACList.Add(OBJAC);
                 }
             }
@@ -338,7 +349,7 @@ namespace HangOut.Models.Account
             finally { cmd.Dispose(); con.Con.Close(); }
             return (ACList);
         }
-        public static List<Accounts> GetADetails(int OrgId)
+        public static List<Accounts> GetADetails(int OrgId,string Name)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -358,22 +369,21 @@ namespace HangOut.Models.Account
 
                     string GName = Group.GetAll().Where(w => w.ID == ACList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
 
-                    OBJ.ReceiptType = "DR";
-                    OBJ.Narration = "(L)" + LName + " >>" + " (LG) " + GName;
-                    OBJ.DRAmount = ACList[i].DRAmount;
+                  
+                    OBJ.ReceiptType = "Jour";
+                    OBJ.Date = ACList[i].Date;
+                    if(ACList[i].EntryType=="Journal")
+                    {
+                        OBJ.Type = "J"+ACList[i].EntryNo.ToString();
+                    }
+                    
+                    OBJ.Narration = "Online payments from customers";
+                    OBJ.CRAmount = ACList[i].DRAmount;
+                    OBJ.Balance = ACList[i].Balance;
+                    OBJ.ReceiptID = ACList[i].ReceiptID;
                     AccountList.Add(OBJ);
 
-                    OBJ = new Accounts();
-                    string LName1 = Ledger.GetAllList().Where(w => w.ID == ACList[i].CRLedgerId).Select(s => s.Name).FirstOrDefault();
-
-                    string GName1 = Group.GetAll().Where(w => w.ID == ACList[i].CRGroupId).Select(s => s.Name).FirstOrDefault();
-
-                    OBJ.ReceiptType = "CR";
-                    OBJ.Narration = "(L)" + LName1 + " >>" + " (LG) " + GName1;
-                    OBJ.CRAmount = ACList[i].CRAmount;
-                    AccountList.Add(OBJ);
-
-
+                   
                 }
 
             }

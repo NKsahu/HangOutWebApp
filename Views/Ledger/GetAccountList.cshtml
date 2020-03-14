@@ -39,7 +39,7 @@
                         <td>@Obj.Name</td>
 
                         <td>
-                            <button class="btn btn-warning btn-sm " onclick="GetAccountDetails(@Obj.OrgId)"> Get Accounts Details</button>
+                            <button class="btn btn-warning btn-sm " onclick="GetAccountDetails(@Obj.OrgId,'@Obj.Name')"> Get Accounts Details</button>
                           
                         </td>
                     </tr>
@@ -51,10 +51,11 @@
     </div>
 </div>
 <script>
-    function GetAccountDetails(OrgId) {
+    function GetAccountDetails(OrgId,Name) {
+       
         $.ajax({
             type: 'GET',
-            url: "/Accounts/Index?OrgId=" + OrgId,
+            url: "/Accounts/Index?OrgId=" + OrgId + "&Name=" + Name,
             success: function (data) {
                 $("#DynamicData").html(data);
                 $('#waiting').hide();
