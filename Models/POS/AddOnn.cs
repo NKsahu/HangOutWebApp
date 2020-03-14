@@ -148,26 +148,36 @@ namespace HangOut.Models.POS
 public class AddOns
 {
     public int AddOnCatorItmId { get; set; }
-        public bool IsServingAddon { get; set; }
+    public bool IsServingAddon { get; set; }
     public List<AddOnn> AddonnList { get; set; }
+        //==========
+        public static List<AddOns> ServingAddonList { get; set; }
+    public int OrgID { get; set; }
         public AddOns()
     {
         AddonnList = new List<AddOnn>();
     }
-        public static AddOns GetOne(int CatIntId,int Sts)
+        public static AddOns GetOne(int CatItmId,int Sts,bool IsSS)
         {
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             AddOns ObjTmp = new AddOns();
-            ObjTmp.AddOnCatorItmId = CatIntId;
+            ObjTmp.AddOnCatorItmId = CatItmId;
             List<AddOnn> tempAddonn = new List<AddOnn>();
             List<AddOnItems> AddonItemList = new List<AddOnItems>();
             try
             {
-                cmd = new SqlCommand("PosGetAddon", dBCon.Con);
+                if (IsSS)
+                {
+                    cmd = new SqlCommand("ServingSizeAddon", dBCon.Con);
+                }
+                else
+                {
+                    cmd = new SqlCommand("PosGetAddon", dBCon.Con);
+                }
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@CategoryId", CatIntId);
+                cmd.Parameters.AddWithValue("@CatOrItmId", CatItmId);
                 cmd.Parameters.AddWithValue("@Status", Sts);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
@@ -180,6 +190,7 @@ public class AddOns
                     addOnn.Max = SDR.GetInt32(index++);
                     addOnn.CatOrItmId = SDR.GetInt32(index++);
                     addOnn.DeletedStatus = SDR.GetInt32(index++);
+                    addOnn.IsServingAddon = SDR.GetBoolean(index++);
                     tempAddonn.Add(addOnn);
 
                 }
@@ -200,6 +211,7 @@ public class AddOns
                         Addonitem.CatOrItmId = SDR.GetInt32(index++);
                         Addonitem.DelStatus = SDR.GetInt32(index++);
                         Addonitem.Title= SDR.GetString(index++);
+                        Addonitem.IsServingAddon = SDR.GetBoolean(index++);
                         AddonItemList.Add(Addonitem);
                     }
                 }

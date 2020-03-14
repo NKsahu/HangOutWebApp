@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using HangOut.Models.Common;
+using HangOut.Models.DynamicList;
 using System;
 using HangOut.Models.POS;
 using System.Linq;
@@ -146,7 +147,7 @@ namespace HangOut.Controllers
         public ActionResult CreateEditAddOn(int CategryId)
         {
 
-            AddOns addOns =  AddOns.GetOne(CategryId,0);
+            AddOns addOns =  AddOns.GetOne(CategryId,0,false);
             addOns.AddOnCatorItmId = CategryId;
             if (addOns.AddonnList.Count == 0)
             {
@@ -162,23 +163,34 @@ namespace HangOut.Controllers
         public ActionResult CreateEditAddOn([System.Web.Http.FromBody] AddOns  Addons)
         {
             Addons.AddonnList = Addons.AddonnList.FindAll(x => x.AddOnTitle != null && x.AddOnTitle != "");
-            foreach (var AddOn in Addons.AddonnList)
+            if (Addons.IsServingAddon && Addons.AddOnCatorItmId == 0)
             {
-                AddOn.CatOrItmId = Addons.AddOnCatorItmId;
-                AddOn.Save();
-                foreach (var AddOnItem in AddOn.AddOnItemList)
+                Addons.OrgID = OrderType.CurrOrgId();
+                //store in global list item not created
+                AddOns.ServingAddonList.RemoveAll(x => x.OrgID == Addons.OrgID);
+                AddOns.ServingAddonList.Add(Addons);
+            }
+            else
+            {
+                foreach (var AddOn in Addons.AddonnList)
                 {
-                    if (AddOn.DeletedStatus == 1)
+                    AddOn.CatOrItmId = Addons.AddOnCatorItmId;
+                    AddOn.Save();
+                    foreach (var AddOnItem in AddOn.AddOnItemList)
                     {
-                        AddOnItem.DelStatus = 1;
+                        if (AddOn.DeletedStatus == 1)
+                        {
+                            AddOnItem.DelStatus = 1;
+                        }
+                        AddOnItem.AddonID = AddOn.TitleId;
+                        double taxAmt = (AddOnItem.Price * AddOnItem.Tax) / 100;
+                        AddOnItem.Price = AddOnItem.CostPrice + taxAmt;
+                        AddOnItem.CatOrItmId = Addons.AddOnCatorItmId;
+                        AddOnItem.Save();
                     }
-                    AddOnItem.AddonID = AddOn.TitleId;
-                    double taxAmt = (AddOnItem.Price * AddOnItem.Tax) / 100;
-                    AddOnItem.Price = AddOnItem.CostPrice + taxAmt;
-                    AddOnItem.CatOrItmId = Addons.AddOnCatorItmId;
-                    AddOnItem.Save();
                 }
             }
+           
             return Json(new {data=""},JsonRequestBehavior.AllowGet);
         }
         public ActionResult NewAddon()
@@ -205,7 +217,7 @@ namespace HangOut.Controllers
             addOns.IsServingAddon = true;
             if (ItemId > 0)
             {
-                AddOns.GetOne(ItemId, 0);
+                addOns= AddOns.GetOne(ItemId, 0,true);
             }
             addOns.AddOnCatorItmId = ItemId;
             if (addOns.AddonnList.Count == 0)

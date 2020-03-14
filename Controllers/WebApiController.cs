@@ -202,7 +202,7 @@ namespace HangOut.Controllers
                             if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
                             {
                                 objItem.Add("AddonCatId", Items.AddOnCatId);
-                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0).AddonnList));
+                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0,false).AddonnList));
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -259,7 +259,7 @@ namespace HangOut.Controllers
                             if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
                             {
                                 objItem.Add("AddonCatId", Items.AddOnCatId);
-                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0).AddonnList));
+                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0,false).AddonnList));
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
