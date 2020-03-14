@@ -3,9 +3,11 @@
     Layout = null;
     var CurrentOrg = Request.Cookies["UserInfo"];
     String title = "ADDON";
+    string ItemUrl = "/HG_Items/AddItemToOrder";
     if (Model.IsServingAddon)
     {
         title = "Multi-Serving";
+        ItemUrl = "/ServingSize/ShowServingSize";
     }
 }
 
@@ -60,7 +62,7 @@
         $("#waiting").show();
         $.ajax({
             type: 'GET',
-            url: "/HG_Items/AddItemToOrder",
+            url: "@(ItemUrl)",
             success: function (data) {
                 makedpt("ShowItems", 600, 600);
                 $("#ShowItems > .modal-dialog > .modal-content > .modal-body").html(data);
