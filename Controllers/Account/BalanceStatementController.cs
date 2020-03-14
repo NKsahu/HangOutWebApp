@@ -434,6 +434,9 @@ namespace HangOut.Controllers.Account
         public ActionResult PostToAccount(int OrgId)
         {
             Accounts AObj = new Accounts();
+            Accounts A1Obj = new Accounts();
+            Accounts A2Obj = new Accounts();
+            Accounts A3Obj = new Accounts();
             int LastEntryNo = 0;
 
             Ledger LedgerDetails = Ledger.GetAllList().Where(w => w.OrgId == OrgId).FirstOrDefault();
@@ -447,33 +450,30 @@ namespace HangOut.Controllers.Account
 
             Accounts GetACBalance = Accounts.GetAllACDetails(OrgId)
                        .Where(w => w.AOrgId == OrgId).LastOrDefault();
-           
-              
+                       
 
             AObj.Date = DateTime.Now;
             AObj.Narration = "Online payments from customers";
-            AObj.DRAmount = GetAmountSum;
+            AObj.CRAmount = GetAmountSum;
             if(GetACBalance!=null)
             {
-                AObj.Balance = GetACBalance.Balance + AObj.DRAmount;
+                AObj.Balance = GetACBalance.Balance + AObj.CRAmount;
             }
             else
             {
                 AObj.Balance = GetAmountSum;
             }
-          
+     
             AObj.AOrgId = OrgId;
             AObj.ADRLedgerId = GetReceiptEntry.CRLedgerId;
             AObj.ACRLedgerId = LedgerDetails.ID;
-
             AObj.DRGroupId = GetReceiptEntry.CRGroupId;
             AObj.CRGroupId = 2;
             AObj.EntryType = "Journal";
             AObj.ReceiptID = GetReceiptEntry.ID;
-
             try
             {
-                LastEntryNo = Accounts.GetAllACDetails(OrgId).Select(s => s.EntryNo).Last();
+                LastEntryNo = Accounts.GetAllACDetails(OrgId).Where(w => w.EntryType == "Journal").Select(s => s.EntryNo).Last();
             }
             catch (Exception ex)
             {
@@ -490,6 +490,193 @@ namespace HangOut.Controllers.Account
             AObj.EntryNo = LastEntryNo;
 
             AObj.SaveGeneral();
+
+            //=============================================================
+            if (AObj.Balance > 0)
+            {
+                Ledger Commission = Ledger.GetAllList().Where(w => w.Name == "Commission").FirstOrDefault();
+                A1Obj.Date = DateTime.Now;
+                A1Obj.Narration = "Commission Invoice";
+                A1Obj.DRAmount = (AObj.Balance * LedgerDetails.MarginOnline)/100;
+             
+                A1Obj.Balance = AObj.Balance - A1Obj.DRAmount;            
+                A1Obj.AOrgId = OrgId;
+                A1Obj.ADRLedgerId = LedgerDetails.ID;
+                A1Obj.ACRLedgerId = Commission.ID;
+
+                A1Obj.DRGroupId = 2;
+                A1Obj.CRGroupId = 9;
+                A1Obj.EntryType = "Sale";
+                A1Obj.ReceiptID = GetReceiptEntry.ID;
+
+                try
+                {
+                    LastEntryNo = Accounts.GetAllACDetails(OrgId).Where(w=>w.EntryType=="Sale").Select(s => s.EntryNo).Last();
+                }
+                catch (Exception ex)
+                {
+                    ex.ToString();
+                }
+                if (LastEntryNo > 0)
+                {
+                    LastEntryNo = LastEntryNo + 1;
+                }
+                else
+                {
+                    LastEntryNo = 1;
+                }
+                A1Obj.EntryNo = LastEntryNo;
+
+                A1Obj.SaveGeneral();
+
+
+
+                //=================================================================================
+                HG_OrganizationDetails Objitem = new HG_OrganizationDetails();
+                HG_OrganizationDetails State = Objitem.GetAll(OrgId).FirstOrDefault();
+                if (State.State == "17")
+                {
+                    if (LedgerDetails.TaxOnAboveMarginOnline == 5)
+                    {
+                        Ledger CGST = Ledger.GetAllList().Where(w => w.Name == "CGST Local Sale 2.5%").FirstOrDefault();
+
+                        Ledger SGST = Ledger.GetAllList().Where(w => w.Name == "SGST Local Sale 2.5%").FirstOrDefault();
+
+                        A2Obj.Narration = "CGST Local Sale @2.5%";
+                        A3Obj.Narration = "SGST Local Sale @2.5%";
+
+                        A2Obj.ADRLedgerId = Commission.ID;
+                        A2Obj.ACRLedgerId = CGST.ID;
+
+                        A3Obj.ADRLedgerId = Commission.ID;
+                        A3Obj.ACRLedgerId = SGST.ID;
+                    }
+                    if (LedgerDetails.TaxOnAboveMarginOnline == 12)
+                    {
+                        Ledger CGST = Ledger.GetAllList().Where(w => w.Name == "CGST Local Sale 6%").FirstOrDefault();
+
+                        Ledger SGST = Ledger.GetAllList().Where(w => w.Name == "SGST Local Sale 6%").FirstOrDefault();
+
+                        A2Obj.Narration = "CGST Local Sale @6%";
+                        A3Obj.Narration = "SGST Local Sale @6%";
+
+                        A2Obj.ADRLedgerId = Commission.ID;
+                        A2Obj.ACRLedgerId = CGST.ID;
+
+                        A3Obj.ADRLedgerId = Commission.ID;
+                        A3Obj.ACRLedgerId = SGST.ID;
+                    }
+                    if (LedgerDetails.TaxOnAboveMarginOnline == 18)
+                    {
+                        Ledger CGST = Ledger.GetAllList().Where(w => w.Name == "CGST Local Sale 9%").FirstOrDefault();
+
+                        Ledger SGST = Ledger.GetAllList().Where(w => w.Name == "SGST Local Sale 9%").FirstOrDefault();
+
+                        A2Obj.Narration = "CGST Local Sale @9%";
+                        A3Obj.Narration = "SGST Local Sale @9%";
+
+                        A2Obj.ADRLedgerId = Commission.ID;
+                        A2Obj.ACRLedgerId = CGST.ID;
+
+                        A3Obj.ADRLedgerId = Commission.ID;
+                        A3Obj.ACRLedgerId = SGST.ID;
+                    }
+                    if (LedgerDetails.TaxOnAboveMarginOnline == 28)
+                    {
+                        Ledger CGST = Ledger.GetAllList().Where(w => w.Name == "CGST Local Sale 14%").FirstOrDefault();
+
+                        Ledger SGST = Ledger.GetAllList().Where(w => w.Name == "SGST Local Sale 14%").FirstOrDefault();
+
+                        A2Obj.Narration = "CGST Local Sale @14%";
+                        A3Obj.Narration = "SGST Local Sale @14%";
+
+                        A2Obj.ADRLedgerId = Commission.ID;
+                        A2Obj.ACRLedgerId = CGST.ID;
+
+                        A3Obj.ADRLedgerId = Commission.ID;
+                        A3Obj.ACRLedgerId = SGST.ID;
+                    }
+
+
+                    A2Obj.Date = DateTime.Now;
+                    A3Obj.Date = DateTime.Now;
+                    A2Obj.CRAmount = ((A1Obj.DRAmount * LedgerDetails.TaxOnAboveMarginOnline) / 100) / 2;
+                    A3Obj.CRAmount = ((A1Obj.DRAmount * LedgerDetails.TaxOnAboveMarginOnline) / 100) / 2;
+
+                    A2Obj.Balance = A1Obj.Balance;
+                    A3Obj.Balance = A1Obj.Balance;
+
+                    A2Obj.AOrgId = OrgId;
+                    A3Obj.AOrgId = OrgId;
+
+
+
+                    A2Obj.DRGroupId = 9;
+                    A2Obj.CRGroupId = 3;
+
+                    A3Obj.DRGroupId = 9;
+                    A3Obj.CRGroupId = 3;
+
+                    A2Obj.EntryType = "sale";
+                    A2Obj.ReceiptID = GetReceiptEntry.ID;
+
+                    A3Obj.EntryType = "sale";
+                    A3Obj.ReceiptID = GetReceiptEntry.ID;
+
+
+                    A2Obj.SaveGeneral();
+                    A3Obj.SaveGeneral();
+                }
+                else
+                {
+                    if (LedgerDetails.TaxOnAboveMarginOnline == 5)
+                    {
+                         Ledger IGST = Ledger.GetAllList().Where(w => w.Name == "IGST Central Sale  5%").FirstOrDefault();                             
+                         A2Obj.Narration = "IGST Central Sale @5%";               
+                         A2Obj.ADRLedgerId = Commission.ID;
+                         A2Obj.ACRLedgerId = IGST.ID;                   
+                    }
+                    if (LedgerDetails.TaxOnAboveMarginOnline == 12)
+                    {
+                        Ledger IGST = Ledger.GetAllList().Where(w => w.Name == "IGST Central Sale  12%").FirstOrDefault();
+                        A2Obj.Narration = "IGST Central Sale @12%";                      
+                        A2Obj.ADRLedgerId = Commission.ID;
+                        A2Obj.ACRLedgerId = IGST.ID;
+                        
+                    }
+                    if (LedgerDetails.TaxOnAboveMarginOnline == 18)
+                    {
+                        Ledger IGST = Ledger.GetAllList().Where(w => w.Name == "IGST Central Sale  18%").FirstOrDefault();            
+                        A2Obj.Narration = "IGST Central Sale @18%";                
+                        A2Obj.ADRLedgerId = Commission.ID;
+                        A2Obj.ACRLedgerId = IGST.ID;
+                       
+                    }
+                    if (LedgerDetails.TaxOnAboveMarginOnline == 28)
+                    {
+                        Ledger IGST = Ledger.GetAllList().Where(w => w.Name == "IGST Central Sale  28%").FirstOrDefault();
+
+                        A2Obj.Narration = "IGST Central Sale @28%";                     
+                        A2Obj.ADRLedgerId = Commission.ID;
+                        A2Obj.ACRLedgerId = IGST.ID;                     
+                    }
+
+                    Ledger Tax = Ledger.GetAllList().Where(w => w.Name == "Commission").FirstOrDefault();
+                    A2Obj.Date = DateTime.Now;          
+                    A2Obj.CRAmount = (A1Obj.DRAmount * LedgerDetails.TaxOnAboveMarginOnline) / 100;
+
+                    A2Obj.Balance = A1Obj.Balance; 
+                    A2Obj.AOrgId = OrgId;                 
+                    A2Obj.DRGroupId = 9;
+                    A2Obj.CRGroupId = 3;
+                    A2Obj.EntryType = "Sale";
+                    A2Obj.ReceiptID = GetReceiptEntry.ID;
+
+              
+
+                    A2Obj.SaveGeneral();
+                }
+            }
 
             return Json(new { data = AObj }, JsonRequestBehavior.AllowGet);
 
