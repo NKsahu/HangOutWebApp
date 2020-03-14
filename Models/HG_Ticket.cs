@@ -42,7 +42,7 @@ namespace HangOut.Models
                     cmd.Parameters.AddWithValue("@TID", this.TicketId);
                 }
                 cmd.Parameters.AddWithValue("@DeliveryCharge", this.DeliveryCharge);
-                this.TicketId = System.Convert.ToInt64(cmd.ExecuteNonQuery());
+                this.TicketId = Convert.ToInt64(cmd.ExecuteNonQuery());
             }
             catch(Exception e)
             {

@@ -1,9 +1,8 @@
 ﻿using HangOut.Models.POS;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace HangOut.Models.POS
 {
@@ -14,7 +13,9 @@ namespace HangOut.Models.POS
         public int Min { get; set; }
         public int Max { get; set; }
         public int CatOrItmId { get; set; }// addon category id or Item Id
+        [JsonIgnore]
         public int DeletedStatus { get; set; }//  removed addonitem from form
+        [JsonIgnore]
         public bool IsServingAddon { get; set; }// true for serving size items
         //===========
         public List<AddOnItems> AddOnItemList { get; set; }
@@ -148,11 +149,15 @@ namespace HangOut.Models.POS
 public class AddOns
 {
     public int AddOnCatorItmId { get; set; }
-    public bool IsServingAddon { get; set; }
-    public List<AddOnn> AddonnList { get; set; }
+        [JsonIgnore]
+        public bool IsServingAddon { get; set; }
+        [JsonIgnore]
+        public List<AddOnn> AddonnList { get; set; }
         //==========
+        [JsonIgnore]
         public static List<AddOns> ServingAddonList { get; set; }
-    public int OrgID { get; set; }
+        [JsonIgnore]
+        public int OrgID { get; set; }
         public AddOns()
     {
         AddonnList = new List<AddOnn>();
@@ -228,6 +233,26 @@ public class AddOns
 
             return (ObjTmp);
         }
-        
+        public static AddOns GetAddonsAndMultiSSize(HG_Items ObjItem)
+        {
+            AddOns addOns = new AddOns();
+            if (ObjItem.MultiServing == 1)
+            {
+                AddOns addOnsTemp = GetOne(ObjItem.ItemID, 0, true);
+                if (addOnsTemp.AddonnList.Count > 0)
+                {
+                    addOns.AddonnList.AddRange(addOnsTemp.AddonnList);
+                }
+            }
+            if (ObjItem.ApplyAddOn == 2 && ObjItem.AddOnCatId > 0)
+            {
+                AddOns addOnsTemp = GetOne(ObjItem.AddOnCatId, 0, false);
+                if (addOnsTemp.AddonnList.Count > 0)
+                {
+                    addOns.AddonnList.AddRange(addOnsTemp.AddonnList);
+                }
+            }
+            return addOns;
+        }
     }
 }
