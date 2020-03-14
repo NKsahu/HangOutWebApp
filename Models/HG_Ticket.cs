@@ -94,6 +94,41 @@ namespace HangOut.Models
 
             return listtemp;
         }
+        public int TicketCnt(int OrgID,DateTime ?  onDate = null)
+        {
+            int TicketOnDate = 0;
+            if (!onDate.HasValue)
+            {
+                onDate = DateTime.Now;
+            }
+            DBCon con = new DBCon();
+            SqlCommand cmd = new SqlCommand();
+            //string query = "select * from HG_Ticket where OrgId =" + OrgId.ToString() + " and CreateDate='" + onDate.Value.Date.ToString("MM/dd/yyyy") + "'";
+            try
+            {
+                cmd = new SqlCommand("TicketCntOnDate", con.Con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@OrgID", OrgID);
+                cmd.Parameters.AddWithValue("@Ondate", onDate.Value.Date.ToString("MM/dd/yyyy"));
+                SqlDataReader sqlDataReader = cmd.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    TicketOnDate = sqlDataReader.GetInt32(0);
+                    break;
+                }
+
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            finally
+            {
+                con.Con.Close(); con.Con.Dispose(); cmd.Dispose();
+            }
+
+            return TicketOnDate;
+        }
         public static List<HG_Ticket> GetByOID(Int64 OID)
         {
             List<HG_Ticket> listtemp = new List<HG_Ticket>();
