@@ -83,7 +83,7 @@ namespace HangOut.Controllers
             {
                 // no notifiation only send orderId 
                 string Msg = "";
-                string Title = "";
+                string Title = "Just few seconds for Outlet feedback. Click here";
                 PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo);
             }
               
