@@ -147,7 +147,7 @@ namespace HangOut.Controllers
         {
 
             AddOns addOns =  AddOns.GetOne(CategryId,0);
-            addOns.AddOnCategoryId = CategryId;
+            addOns.AddOnCatorItmId = CategryId;
             if (addOns.AddonnList.Count == 0)
             {
                 AddOnn addOnn = new AddOnn();
@@ -164,7 +164,7 @@ namespace HangOut.Controllers
             Addons.AddonnList = Addons.AddonnList.FindAll(x => x.AddOnTitle != null && x.AddOnTitle != "");
             foreach (var AddOn in Addons.AddonnList)
             {
-                AddOn.CatOrItmId = Addons.AddOnCategoryId;
+                AddOn.CatOrItmId = Addons.AddOnCatorItmId;
                 AddOn.Save();
                 foreach (var AddOnItem in AddOn.AddOnItemList)
                 {
@@ -175,7 +175,7 @@ namespace HangOut.Controllers
                     AddOnItem.AddonID = AddOn.TitleId;
                     double taxAmt = (AddOnItem.Price * AddOnItem.Tax) / 100;
                     AddOnItem.Price = AddOnItem.CostPrice + taxAmt;
-                    AddOnItem.CatOrItmId = Addons.AddOnCategoryId;
+                    AddOnItem.CatOrItmId = Addons.AddOnCatorItmId;
                     AddOnItem.Save();
                 }
             }
@@ -207,7 +207,7 @@ namespace HangOut.Controllers
             {
                 AddOns.GetOne(ItemId, 0);
             }
-            addOns.AddOnCategoryId = ItemId;
+            addOns.AddOnCatorItmId = ItemId;
             if (addOns.AddonnList.Count == 0)
             {
                 AddOnn addOnn = new AddOnn();

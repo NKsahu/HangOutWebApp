@@ -19,7 +19,7 @@
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "" }))
         {
-            @Html.HiddenFor(model => model.AddOnCategoryId)
+            @Html.HiddenFor(model => model.AddOnCatorItmId)
             @Html.HiddenFor(model => model.IsServingAddon)
                 foreach (var AddOn in Model.AddonnList)
                 {
@@ -98,7 +98,8 @@
 
     function SaveAdon() {
         var Addons = {};
-        Addons.AddOnCategoryId = $("#AddOnCategoryId").val();
+        Addons.AddOnCatorItmId = $("#AddOnCatorItmId").val();
+        Addons.IsServingAddon = $("#IsServingAddon").val();
         Addons.AddonnList = [];
         var ListAddOnnCls = document.getElementsByClassName("AddOnnCls");
         for (var i = 0; i < ListAddOnnCls.length; i++) {
@@ -111,6 +112,7 @@
             AddonObj.Max = ObjAddJQ.find(".Max").val();
             AddonObj.AddonCatId = ObjAddJQ.find(".CatOrItmId").val();
             AddonObj.DeletedStatus = ObjAddJQ.find(".DeletedStatus").val();
+            AddonObj.IsServingAddon = ObjAddJQ.find(".IsServingAddon").val();
             AddonObj.AddOnItemList = [];
             var AddOnItems = ListAddOnnCls[i].getElementsByClassName("AddOnItems");
             for (var j = 0; j < AddOnItems.length; j++) {
@@ -124,6 +126,7 @@
                 AddonItemObj.Price = ObjAddOnItem.find(".Price").val();
                 AddonItemObj.AddonID = ObjAddOnItem.find(".AddonID").val();
                 AddonItemObj.DelStatus = ObjAddOnItem.find(".DelStatus").val();
+                AddonItemObj.IsServingAddon = ObjAddOnItem.find(".IsServingAddon").val();
                 AddonObj.AddOnItemList.push(AddonItemObj);
             }
             Addons.AddonnList.push(AddonObj);

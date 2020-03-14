@@ -47,6 +47,7 @@ namespace HangOut.Models.POS
                 cmd.Parameters.AddWithValue("@Max", this.Max);
                 cmd.Parameters.AddWithValue("@CatOrItmId", this.CatOrItmId);
                 cmd.Parameters.AddWithValue("@DeletedStatus", this.DeletedStatus);
+                cmd.Parameters.AddWithValue("@IsServingAddon", this.IsServingAddon);
                 if (this.TitleId == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -146,7 +147,7 @@ namespace HangOut.Models.POS
 
 public class AddOns
 {
-    public int AddOnCategoryId { get; set; }
+    public int AddOnCatorItmId { get; set; }
         public bool IsServingAddon { get; set; }
     public List<AddOnn> AddonnList { get; set; }
         public AddOns()
@@ -159,7 +160,7 @@ public class AddOns
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             AddOns ObjTmp = new AddOns();
-            ObjTmp.AddOnCategoryId = CatIntId;
+            ObjTmp.AddOnCatorItmId = CatIntId;
             List<AddOnn> tempAddonn = new List<AddOnn>();
             List<AddOnItems> AddonItemList = new List<AddOnItems>();
             try

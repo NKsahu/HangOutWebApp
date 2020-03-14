@@ -49,6 +49,7 @@ namespace HangOut.Controllers.POS
             AddOnItemList.CostPrice = 0.00;
             AddOnItemList.Tax = 0.00;
             AddOnItemList.Price = 0.00;
+            AddOnItemList.IsServingAddon = true;
             return View("AddOnItem", AddOnItemList);
         }
     }
