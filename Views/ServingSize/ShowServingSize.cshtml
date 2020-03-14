@@ -2,7 +2,7 @@
 @{
     Layout = null;
 }
-<table class="table table-hover w-100" id="TBLID">
+<table class="table table-hover w-100" id="ServingItem">
     <thead>
         <tr>
             <th>
@@ -18,7 +18,7 @@
         {
             <tr id="@SSize.ServingId">
                 <td>
-                    @SSize.ServingId
+                    <input type="checkbox" onclick="AddSSize(this,@SSize.ServingId)" class="form-control" />
                 </td>
                 <td>
                     @SSize.Name
@@ -27,4 +27,6 @@
         }
     </tbody>
 </table>
-
+<script>
+    setTimeout(function () { LoadDataTable('ServingItem') }, 200);
+</script>
