@@ -9,6 +9,7 @@
         @Html.HiddenFor(model => model.TitleId,new { @class = "TitleId" })
         @Html.HiddenFor(model=>model.CatOrItmId, new { @class = "AddonCatId" })
         @Html.HiddenFor(model=>model.DeletedStatus,new {@class= "DeletedStatus" })
+        @Html.HiddenFor(model=>model.IsServingAddon,new { @class= "IsServingAddon" })
     <div class="row">
         <div class="col-md-6">
             @Html.LabelFor(model => model.AddOnTitle)

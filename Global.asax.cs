@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using HangOut.Models.DynamicList;
 using HangOut.Models;
+using HangOut.Models.POS;
 
 namespace HangOut
 {
@@ -26,6 +27,7 @@ namespace HangOut
             PymentPageOpen.ListPytmPgOpen = new System.Collections.Generic.List<PymentPageOpen>();
             JoinCls.List = new JoinCls().ListProductType();
             DiscntCharge.ListDiscntChrge = new System.Collections.Generic.List<OrdDiscntChrge>();
+            AddOns.ServingAddonList = new System.Collections.Generic.List<AddOns>();
         }
     }
 }

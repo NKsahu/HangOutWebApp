@@ -2,17 +2,24 @@
 @{
     Layout = null;
     var CurrentOrg = Request.Cookies["UserInfo"];
+    String title = "ADDON";
+    string ItemUrl = "/HG_Items/AddItemToOrder";
+    if (Model.IsServingAddon)
+    {
+        title = "Multi-Serving";
+        ItemUrl = "/ServingSize/ShowServingSize";
+    }
 }
 
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>ADDON</b></h3>
+        <h3 style="text-align:center;color:#000000"><b>@title</b></h3>
         <hr />
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEditAddOn", "HG_Items", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "" }))
         {
-            @Html.HiddenFor(model => model.AddOnCategoryId)
+            @Html.HiddenFor(model => model.AddOnCatorItmId)
             @Html.HiddenFor(model => model.IsServingAddon)
                 foreach (var AddOn in Model.AddonnList)
                 {
@@ -55,7 +62,7 @@
         $("#waiting").show();
         $.ajax({
             type: 'GET',
-            url: "/HG_Items/AddItemToOrder",
+            url: "@(ItemUrl)",
             success: function (data) {
                 makedpt("ShowItems", 600, 600);
                 $("#ShowItems > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -91,7 +98,8 @@
 
     function SaveAdon() {
         var Addons = {};
-        Addons.AddOnCategoryId = $("#AddOnCategoryId").val();
+        Addons.AddOnCatorItmId = $("#AddOnCatorItmId").val();
+        Addons.IsServingAddon = $("#IsServingAddon").val();
         Addons.AddonnList = [];
         var ListAddOnnCls = document.getElementsByClassName("AddOnnCls");
         for (var i = 0; i < ListAddOnnCls.length; i++) {
@@ -104,6 +112,7 @@
             AddonObj.Max = ObjAddJQ.find(".Max").val();
             AddonObj.AddonCatId = ObjAddJQ.find(".CatOrItmId").val();
             AddonObj.DeletedStatus = ObjAddJQ.find(".DeletedStatus").val();
+            AddonObj.IsServingAddon = ObjAddJQ.find(".IsServingAddon").val();
             AddonObj.AddOnItemList = [];
             var AddOnItems = ListAddOnnCls[i].getElementsByClassName("AddOnItems");
             for (var j = 0; j < AddOnItems.length; j++) {
@@ -117,6 +126,7 @@
                 AddonItemObj.Price = ObjAddOnItem.find(".Price").val();
                 AddonItemObj.AddonID = ObjAddOnItem.find(".AddonID").val();
                 AddonItemObj.DelStatus = ObjAddOnItem.find(".DelStatus").val();
+                AddonItemObj.IsServingAddon = ObjAddOnItem.find(".IsServingAddon").val();
                 AddonObj.AddOnItemList.push(AddonItemObj);
             }
             Addons.AddonnList.push(AddonObj);
@@ -138,5 +148,17 @@
                 }
             });
         
+    }
+    function AddSSize(event, SSID) {
+        $.ajax({
+            type: 'GET',
+            url: "/ServingSize/NewAddonSS?SSID=" + SSID,
+            success: function (data) {
+                $(AddItemEvent).parent('div').parent('div').find('#Items').append(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
     }
 </script>

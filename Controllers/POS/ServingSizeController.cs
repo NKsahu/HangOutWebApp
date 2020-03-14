@@ -34,5 +34,23 @@ namespace HangOut.Controllers.POS
             servingSize.Save();
             return Json(new { data = servingSize }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult ShowServingSize()
+        {
+            int OrgId = OrderType.CurrOrgId();
+            List<ServingSize> servingSizes = ServingSize.GetAll(OrgId);
+            return View(servingSizes);
+        }
+        public ActionResult NewAddonSS(int SSID)
+        {
+            ServingSize ObjSS =  ServingSize.GetOne(SSID);
+            AddOnItems AddOnItemList = new AddOnItems();
+            AddOnItemList.ItemId = ObjSS.ServingId;
+            AddOnItemList.Title = ObjSS.Name;
+            AddOnItemList.CostPrice = 0.00;
+            AddOnItemList.Tax = 0.00;
+            AddOnItemList.Price = 0.00;
+            AddOnItemList.IsServingAddon = true;
+            return View("AddOnItem", AddOnItemList);
+        }
     }
 }

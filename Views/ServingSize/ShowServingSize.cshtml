@@ -1,0 +1,32 @@
+﻿@model IEnumerable<HangOut.Models.POS.ServingSize>
+@{
+    Layout = null;
+}
+<table class="table table-hover w-100" id="ServingItem">
+    <thead>
+        <tr>
+            <th>
+                Select
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+        </tr>
+    </thead>
+    <tbody id="Tbody">
+        @foreach (var SSize in Model)
+        {
+            <tr id="@SSize.ServingId">
+                <td>
+                    <input type="checkbox" onclick="AddSSize(this,@SSize.ServingId)" class="form-control" />
+                </td>
+                <td>
+                    @SSize.Name
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    setTimeout(function () { LoadDataTable('ServingItem') }, 200);
+</script>
