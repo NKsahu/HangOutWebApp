@@ -233,7 +233,7 @@ public class AddOns
 
             return (ObjTmp);
         }
-        public static AddOns GetAddonsAndMultiSSize(HG_Items ObjItem)
+        public static List<AddOnn> GetAddonsAndMultiSSize(HG_Items ObjItem)
         {
             AddOns addOns = new AddOns();
             if (ObjItem.MultiServing == 1)
@@ -252,7 +252,7 @@ public class AddOns
                     addOns.AddonnList.AddRange(addOnsTemp.AddonnList);
                 }
             }
-            return addOns;
+            return addOns.AddonnList;
         }
     }
 }
