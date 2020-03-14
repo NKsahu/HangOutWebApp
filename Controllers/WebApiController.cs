@@ -67,25 +67,33 @@ namespace HangOut.Controllers
             return JObject.FromObject(Objuser);
 
         }
-        public void SendMsgCustomer(Int64 UserId,Int64 OrderNo=0)
+        public void SendMsgCustomer(Int64 UserId,Int64 OrderNo=0,HG_Orders ObjOrder=null)
         {
             vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)UserId);
             string[] topics = { UserId.ToString() };
-            if (ObjUser.RateNow == 0)
+            string Msg = "";
+            string Title = "";
+            if (ObjUser.RateNow == 0 &&ObjUser.UserType=="CUST")
             {
-                
+
                 // topics.Add(OrgId.ToString());
-                string Msg = "";
-                string Title = "Hey, give us a Hi-five. Click this notification";
+                Title = "Hey, give us a Hi-five. Click this notification";
                 PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo,UserRating:1);
             }
-            else
+            if (ObjUser.UserType == "CUST" &&ObjOrder!=null)
             {
-                // no notifiation only send orderId 
-                string Msg = "";
-                string Title = "Just few seconds for Outlet feedback. Click here";
-                PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo);
+                HG_Tables_or_Sheat ObjSeating = new HG_Tables_or_Sheat().GetOne(ObjOrder.Table_or_SheatId);
+                if (ObjSeating.FDBKId > 0)
+                {
+                    Msg = "";
+                    Title = "Just few seconds for Outlet feedback. Click here";
+                    PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo);
+                }
+               
             }
+                // no notifiation only send orderId 
+                
+            
               
             
         }
@@ -1078,7 +1086,7 @@ namespace HangOut.Controllers
                         ChangeOtpTbl = 1;
                         if (obj.Type != "3")
                         {
-                            SendMsgCustomer(order.CID, order.OID);
+                            SendMsgCustomer(order.CID, order.OID,order);
                         }
                         
                     }
@@ -1129,7 +1137,7 @@ namespace HangOut.Controllers
                             ///==============
                             if (obj.Type != "3")
                             {
-                                SendMsgCustomer(order.CID, order.OID);
+                                SendMsgCustomer(order.CID, order.OID,order);
                             }
 
                         }
@@ -1743,7 +1751,7 @@ namespace HangOut.Controllers
                         order.Update_By = UpdateBy;
                         if (TorSObj.Type != "3")
                         {
-                            SendMsgCustomer(order.CID, order.OID);
+                            SendMsgCustomer(order.CID, order.OID,order);
                         }
                         
                         OrdNotice.ChangeAlertSts(OID, 0, 1);
@@ -1776,7 +1784,7 @@ namespace HangOut.Controllers
                         //============================================
                         if (TorSObj.Type != "3")
                         {
-                            SendMsgCustomer(order.CID, order.OID);
+                            SendMsgCustomer(order.CID, order.OID,order);
                         }
                         OrdNotice.ChangeAlertSts(OID, 0, 1);
                     }
