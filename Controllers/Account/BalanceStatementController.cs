@@ -434,6 +434,7 @@ namespace HangOut.Controllers.Account
         public ActionResult PostToAccount(int OrgId)
         {
             Accounts AObj = new Accounts();
+            Accounts A0Obj = new Accounts();
             Accounts A1Obj = new Accounts();
             Accounts A2Obj = new Accounts();
             Accounts A3Obj = new Accounts();
@@ -495,11 +496,48 @@ namespace HangOut.Controllers.Account
             if (AObj.Balance > 0)
             {
                 Ledger Commission = Ledger.GetAllList().Where(w => w.Name == "Commission").FirstOrDefault();
+                A0Obj.Date = DateTime.Now;
+                A0Obj.Narration = "Commission Invoice";
+                A0Obj.DRAmount = AObj.Balance ;
+
+                A0Obj.Balance = AObj.Balance - A0Obj.DRAmount;
+                A0Obj.AOrgId = OrgId;
+                A0Obj.ADRLedgerId = LedgerDetails.ID;
+                A0Obj.ACRLedgerId = Commission.ID;
+
+                A0Obj.DRGroupId = 2;
+                A0Obj.CRGroupId = 9;
+                A0Obj.EntryType = "Sale";
+                A0Obj.ReceiptID = GetReceiptEntry.ID;
+
+                try
+                {
+                    LastEntryNo = Accounts.GetAllACDetails(OrgId).Where(w => w.EntryType == "Sale").Select(s => s.EntryNo).Last();
+                }
+                catch (Exception ex)
+                {
+                    ex.ToString();
+                }
+                if (LastEntryNo > 0)
+                {
+                    LastEntryNo = LastEntryNo + 1;
+                }
+                else
+                {
+                    LastEntryNo = 1;
+                }
+                A0Obj.EntryNo = LastEntryNo;
+
+                A0Obj.SaveGeneral();
+
+                //=============================================================
+
+             //   Ledger Commission = Ledger.GetAllList().Where(w => w.Name == "Commission").FirstOrDefault();
                 A1Obj.Date = DateTime.Now;
-                A1Obj.Narration = "Commission Invoice";
-                A1Obj.DRAmount = (AObj.Balance * LedgerDetails.MarginOnline)/100;
+                A1Obj.Narration = "Theater Commission";
+                A1Obj.CRAmount = (AObj.Balance * LedgerDetails.MarginOnline)/100;
              
-                A1Obj.Balance = AObj.Balance - A1Obj.DRAmount;            
+                A1Obj.Balance = AObj.Balance - A1Obj.CRAmount;            
                 A1Obj.AOrgId = OrgId;
                 A1Obj.ADRLedgerId = LedgerDetails.ID;
                 A1Obj.ACRLedgerId = Commission.ID;
