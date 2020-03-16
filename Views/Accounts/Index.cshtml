@@ -54,7 +54,7 @@
                         <td>@Obj.Narration</td>
                         <td>@Obj.DRAmount.ToString("0.00")</td>
                         <td>@Obj.CRAmount.ToString("0.00")</td>
-                        @if (Obj.CRAmount > 0)
+                        @if (Obj.Balance > 0)
                         {
                             <td>@Obj.Balance.ToString("0.00")</td>
                             if (Obj.Balance != 0)

@@ -115,21 +115,24 @@ namespace HangOut.Models.Account
                 string Quary = "";
                 if (this.ADID == 0)
                 {
-                    Quary = "Insert Into ACAccountDetails Values (@AID,@Date,@Amount,@GroupId,@DRLedgerId,@CRLedgerId,@OrgId);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into ACAccountDetails Values (@AID,@Date,@CRAmount,@CRGroupId,@DRLedgerId,@CRLedgerId,@OrgId,@DRGroupId,@Narration,@DRAmount);SELECT SCOPE_IDENTITY();";
                 }
                 else
                 {
-                    Quary = "Update ACAccountDetails Set AID=@AID,Date=@Date,Amount=@Amount,GroupId=@GroupId,DRLedgerId=@DRLedgerId,CRLedgerId=@CRLedgerId,OrgId=@OrgId where ADID=@ADID";
+                    Quary = "Update ACAccountDetails Set AID=@AID,Date=@Date,CRAmount=@CRAmount,CRGroupId=@CRGroupId,DRLedgerId=@DRLedgerId,CRLedgerId=@CRLedgerId,OrgId=@OrgId,DRGroupId=@DRGroupId,Narration=@Narration,DRAmount=@DRAmount where ADID=@ADID";
                 }
                 cmd = new SqlCommand(Quary, con1.Con);
                 cmd.Parameters.AddWithValue("@ADID", this.ADID);
                 cmd.Parameters.AddWithValue("@AID", this.ACID);
-                cmd.Parameters.AddWithValue("@Date", this.ADDate);
-                cmd.Parameters.AddWithValue("@Amount", this.ADAmount);
-                cmd.Parameters.AddWithValue("@GroupId", this.ADGroupId);
-                cmd.Parameters.AddWithValue("@DRLedgerId", this.DRLedgerId);
-                cmd.Parameters.AddWithValue("@CRLedgerId", this.CRLedgerId);
-                cmd.Parameters.AddWithValue("@OrgId", this.ADOrgId);
+                cmd.Parameters.AddWithValue("@Date", this.Date);
+                cmd.Parameters.AddWithValue("@CRAmount", this.CRAmount);
+                cmd.Parameters.AddWithValue("@CRGroupId", this.CRGroupId);
+                cmd.Parameters.AddWithValue("@DRLedgerId", this.ADRLedgerId);
+                cmd.Parameters.AddWithValue("@CRLedgerId", this.ACRLedgerId);
+                cmd.Parameters.AddWithValue("@OrgId", this.AOrgId);
+                cmd.Parameters.AddWithValue("@DRGroupId", this.DRGroupId);
+                cmd.Parameters.AddWithValue("@Narration", this.Narration);
+                cmd.Parameters.AddWithValue("@DRAmount", this.DRAmount);
 
 
                 if (this.ADID == 0)
@@ -370,15 +373,24 @@ namespace HangOut.Models.Account
                     string GName = Group.GetAll().Where(w => w.ID == ACList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
 
                   
-                    OBJ.ReceiptType = "Jour";
+                    OBJ.ReceiptType = ACList[i].EntryType;
                     OBJ.Date = ACList[i].Date;
                     if(ACList[i].EntryType=="Journal")
                     {
                         OBJ.Type = "J"+ACList[i].EntryNo.ToString();
                     }
-                    
-                    OBJ.Narration = "Online payments from customers";
-                    OBJ.CRAmount = ACList[i].DRAmount;
+                    if (ACList[i].EntryType == "Sale")
+                    {
+                        OBJ.Type = "S" + ACList[i].EntryNo.ToString();
+                    }
+                    if (ACList[i].EntryType == "Payment")
+                    {
+                        OBJ.Type = "P" + ACList[i].EntryNo.ToString();
+                    }
+
+                    OBJ.Narration = ACList[i].Narration;
+                    OBJ.CRAmount = ACList[i].CRAmount;
+                    OBJ.DRAmount = ACList[i].DRAmount;
                     OBJ.Balance = ACList[i].Balance;
                     OBJ.ReceiptID = ACList[i].ReceiptID;
                     AccountList.Add(OBJ);
