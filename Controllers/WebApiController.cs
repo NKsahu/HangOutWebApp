@@ -114,7 +114,7 @@ namespace HangOut.Controllers
             return result;
         }
 
-        //=====================DISPALY ITEMS ADCART AND MENU ITEMS============
+        //=====================DISPALY ITEMS ADDCART AND MENU ITEMS============
         [HttpPost]
         public JArray GetItemList(string Obj)
         {
