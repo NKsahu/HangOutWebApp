@@ -251,7 +251,7 @@ namespace HangOut.Controllers.Account
             List<Accounts> AccountDetailsList = Accounts.GetAllDetails();
             AccountList = AccountList.FindAll(x => x.ADOrgId == ID);
 
-            List<Receipt> ReceiptList = Receipt.GetAllList(ID,0);
+         //   List<Receipt> ReceiptList = Receipt.GetAllList(ID,0);
            
 
             if (LedgerList != null)
@@ -282,10 +282,10 @@ namespace HangOut.Controllers.Account
             {
                 int i = Accounts.DellAccountDetails(ID);
             }
-            if(ReceiptList!=null)
-            {
-                int i = Receipt.Dell(ID);
-            }
+            //if(ReceiptList!=null)
+            //{
+            //    int i = Receipt.Dell(ID);
+            //}
             return Json(new { data = "1" }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Error()

@@ -20,7 +20,17 @@ namespace HangOut.Controllers.Account
             }
             return View(accounts);
         }
+        public ActionResult ACIndex(int ID)
+        {
+            List<Accounts> accounts = new List<Accounts>();
 
-       
+            string LedgerName = Ledger.GetAll().Where(w => w.ID == ID).Select(s => s.Name).FirstOrDefault();
+            List<Accounts> REOBJ = Receipt.GetLedgerWiseData(ID, LedgerName);
+
+            return View(REOBJ);
+            
+        }
+
+
     }
 }

@@ -21,7 +21,7 @@ namespace HangOut.Controllers.Account
         {
             
             string LedgerName = Ledger.GetAll().Where(w => w.ID == ID).Select(s => s.Name).FirstOrDefault();
-            List<Receipt> REOBJ = Receipt.GetLedgerWiseData(LedgerName);
+            List<Accounts> REOBJ = Receipt.GetLedgerWiseData(ID,LedgerName);
 
             return View(REOBJ);
         }

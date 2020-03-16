@@ -181,82 +181,53 @@ namespace HangOut.Models.Account
            
             return (ReceiptList);
         }
-        public static List<Receipt> GetLedgerWiseData(string  Name)
+        public static List<Accounts> GetLedgerWiseData(int ID,string  Name)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
-            Receipt OBJ = new Receipt();
-            List<Receipt> ReceiptList = new List<Receipt>();
-            string PayTm = "PayTm";
-            string Customer = "Customer";
+            Accounts OBJ = new Accounts();
+            List<Accounts> AccountList = new List<Accounts>();
+         
             try
             {
-                List<Receipt> REList = Receipt.GetAllList(0,0).ToList();
-
+                List<Accounts> REList = Accounts.GetAll().Where(w=>w.CRLedgerId==ID || w.DRLedgerId==ID).ToList();
 
 
                 for (int i = 0; i < REList.Count; i++)
                 {
 
-
-
-                    if (Name.ToLower()== PayTm.ToLower())
-                    {
-                        OBJ = new Receipt();
-                        string LName = Ledger.GetAll().Where(w => w.ID == REList[i].DRLedgerId).Select(s => s.Name).FirstOrDefault();
-
-                        string GName = Group.GetAll().Where(w => w.ID == REList[i].DRGroupId).Select(s => s.Name).FirstOrDefault();
-
-
-                        OBJ.LID = REList[i].DRLedgerId;
-                        OBJ.ReceiptType = "Rece";
+                        OBJ = new Accounts();
                         OBJ.Date = REList[i].Date;
-                        OBJ.Name = Name;
-                        OBJ.ReceiptNo = "R"+REList[i].EntryNo.ToString(); 
-                        if(i==0)
-                        {
-                            OBJ.Particular = "Opening Balance";
-                        }
-                        else
-                        {
-                           OBJ.Particular = REList[i].Particular;
-                        }                     
-                        OBJ.DrAmount = REList[i].Amount;
+                        OBJ.ReceiptType = REList[i].EntryType;   
+                       if (REList[i].EntryType=="Receipt")
+                       {
+                  
+                        OBJ.Type = "R" + REList[i].EntryNo.ToString();
+                    }
+                      if (REList[i].EntryType == "Sale")
+                      {
+                        OBJ.Type = "S" + REList[i].EntryNo.ToString();
+                      }
+                      if (REList[i].EntryType == "Journal")
+                      {
+                        OBJ.Type = "J" + REList[i].EntryNo.ToString();
+                      }
+                    if (REList[i].EntryType == "Payment")
+                    {
+                        OBJ.Type = "P" + REList[i].EntryNo.ToString();
+                    }
+                    OBJ.Narration = REList[i].Narration;
+                        OBJ.DRAmount = REList[i].CRAmount;
+                        OBJ.CRAmount = REList[i].DRAmount;                                
                         OBJ.Balance = REList[i].Balance;
-                        ReceiptList.Add(OBJ);
+                      AccountList.Add(OBJ);
                     }
-                    if (Name.ToLower() == Customer.ToLower())
-                    {
-                        OBJ = new Receipt();
-                        string LName1 = Ledger.GetAll().Where(w => w.ID == REList[i].CRLedgerId).Select(s => s.Name).FirstOrDefault();
-
-                        string GName1 = Group.GetAll().Where(w => w.ID == REList[i].CRGroupId).Select(s => s.Name).FirstOrDefault();
-
-                        OBJ.Date = REList[i].Date;
-                        OBJ.LID = REList[i].CRLedgerId;
-                        OBJ.ReceiptType = "Rece";
-                        OBJ.Name = Name;
-                        OBJ.ReceiptNo = "R" + REList[i].EntryNo.ToString(); ;
-                        if (i == 0)
-                        {
-                            OBJ.Particular = "Opening Balance";
-                        }
-                        else
-                        {
-                            OBJ.Particular = REList[i].Particular;
-                        }
-                        OBJ.CRAmount = REList[i].Amount;
-                        OBJ.Balance = REList[i].Balance;                
-                        ReceiptList.Add(OBJ);
-                    }
-                }
-
-
+                  
             }
             catch (Exception e) { e.ToString(); }
 
-            return (ReceiptList);
+            return (AccountList);
         }
         
 
