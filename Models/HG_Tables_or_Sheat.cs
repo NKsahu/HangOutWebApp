@@ -23,7 +23,7 @@ namespace HangOut.Models
         public int Otp { get; set; }
         public int OMID { get; set; } //order menu id
         public string QrCode { get; set; } //QrCode
-        public int FDBKId { get; set; }
+        public int FDBKId { get; set; }// feedback form id
         public HG_Tables_or_Sheat()
         {
             Status = 1;
