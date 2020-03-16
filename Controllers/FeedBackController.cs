@@ -100,7 +100,11 @@ namespace HangOut.Controllers
             List<HG_Tables_or_Sheat> TorSlist = new HG_Tables_or_Sheat().GetAll(int.Parse(OrgType));
             var AlreadySelectedList = TorSlist.FindAll(x => x.FDBKId == FID);
             Int64[] items = activeMenu.TorSIDs;
-            HashSet<Int64> hashKeys = new HashSet<Int64>(items);
+            HashSet<Int64> hashKeys = new HashSet<Int64>();
+            if (items!=null&& items.Length > 0)
+            {
+                 hashKeys = new HashSet<Int64>(items);
+            }
             var RemovedTorSList = AlreadySelectedList.FindAll(x => !hashKeys.Contains(x.Table_or_RowID));
             List<HG_Tables_or_Sheat> OnlyApplytoTorS = TorSlist.FindAll(x => hashKeys.Contains(x.Table_or_RowID));
             foreach (var TorSobj in OnlyApplytoTorS)

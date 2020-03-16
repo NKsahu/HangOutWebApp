@@ -81,7 +81,7 @@ namespace HangOut.Controllers
                 Msg = "Hey, give us a Hi-five. Click this notification";
                 PushNotification.SendNotification(topics, Msg, Title, OID: 0,UserRating:1);
             }
-            if (ObjUser.UserType == "CUST" &&ObjOrder!=null)
+            if (ObjUser.UserType == "CUST" && ObjOrder != null)
             {
                 HG_Tables_or_Sheat ObjSeating = new HG_Tables_or_Sheat().GetOne(ObjOrder.Table_or_SheatId);
                 if (ObjSeating.FDBKId > 0)
@@ -90,13 +90,13 @@ namespace HangOut.Controllers
                     Msg = "Just few seconds for Outlet feedback. Click here";
                     PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo);
                 }
-               
+
             }
-                // no notifiation only send orderId 
-                
-            
-              
-            
+            // no notifiation only send orderId 
+
+
+
+
         }
         public JObject DeliveredToCustomer(string OID,string CustId)
         {
@@ -207,11 +207,11 @@ namespace HangOut.Controllers
                             objItem.Add("CostPrice", Items.CostPrice);// without gst
                             objItem.Add("Tax", Items.Tax);
                             objItem.Add("Info", Items.ItemDiscription);
-                            //check addon apply in current item
-                            if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
+                            //check addon or Serving Size or Both apply in current item
+                            List<AddOnn> Addons=  AddOns.GetAddonsAndMultiSSize(Items);
+                            if (Addons.Count > 0)
                             {
-                                objItem.Add("AddonCatId", Items.AddOnCatId);
-                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0,false).AddonnList));
+                                objItem.Add("Addons", JArray.FromObject(Addons));
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -264,11 +264,11 @@ namespace HangOut.Controllers
                             objItem.Add("Tax", Items.Tax);
                             objItem.Add("ItemMode", Items.ItemMode);
                             objItem.Add("Info", Items.ItemDiscription);
-                            //check addon apply in current item
-                            if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
+                            //check addon or Serving Size or Both apply in current item
+                            List<AddOnn> Addons = AddOns.GetAddonsAndMultiSSize(Items);
+                            if (Addons.Count > 0)
                             {
-                                objItem.Add("AddonCatId", Items.AddOnCatId);
-                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0,false).AddonnList));
+                                objItem.Add("Addons", JArray.FromObject(Addons));
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -291,7 +291,7 @@ namespace HangOut.Controllers
         {
             JObject ParaMeters = JObject.Parse(Obj);
             Int64 CustID = Int64.Parse(ParaMeters["CID"].ToString());
-            Int64 ItemId = Convert.ToInt64(ParaMeters["ItemId"].ToString());
+            int ItemId = Convert.ToInt32(ParaMeters["ItemId"].ToString());
             int Cnt = Convert.ToInt32(ParaMeters["Cnt"].ToString());
             int OrgId = Convert.ToInt32(ParaMeters["OrgId"].ToString());
             Int64 OID = Convert.ToInt64(ParaMeters["OID"]);
