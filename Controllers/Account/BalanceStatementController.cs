@@ -1,10 +1,9 @@
-﻿using System;
+﻿using HangOut.Models;
+using HangOut.Models.Account;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using HangOut.Models.Account;
-using HangOut.Models;
 
 namespace HangOut.Controllers.Account
 {
@@ -438,7 +437,10 @@ namespace HangOut.Controllers.Account
             Accounts A1Obj = new Accounts();
             Accounts A2Obj = new Accounts();
             Accounts A3Obj = new Accounts();
+            Accounts A4Obj = new Accounts();
             int LastEntryNo = 0;
+            int JLastEntryNo = 0;
+            int PLastEntryNo = 0;
 
             Ledger LedgerDetails = Ledger.GetAllList().Where(w => w.OrgId == OrgId).FirstOrDefault();
 
@@ -474,21 +476,21 @@ namespace HangOut.Controllers.Account
             AObj.ReceiptID = GetReceiptEntry.ID;
             try
             {
-                LastEntryNo = Accounts.GetAllACDetails(OrgId).Where(w => w.EntryType == "Journal").Select(s => s.EntryNo).Last();
+                JLastEntryNo = Accounts.GetAllACDetails(OrgId).Where(w => w.EntryType == "Journal").Select(s => s.EntryNo).Last();
             }
             catch (Exception ex)
             {
                 ex.ToString();
             }
-            if (LastEntryNo > 0)
+            if (JLastEntryNo > 0)
             {
-                LastEntryNo = LastEntryNo + 1;
+                JLastEntryNo = JLastEntryNo + 1;
             }
             else
             {
-                LastEntryNo = 1;
+                JLastEntryNo = 1;
             }
-            AObj.EntryNo = LastEntryNo;
+            AObj.EntryNo = JLastEntryNo;
 
             AObj.SaveGeneral();
 
@@ -498,7 +500,8 @@ namespace HangOut.Controllers.Account
                 Ledger Commission = Ledger.GetAllList().Where(w => w.Name == "Commission").FirstOrDefault();
                 A0Obj.Date = DateTime.Now;
                 A0Obj.Narration = "Commission Invoice";
-                A0Obj.DRAmount = AObj.Balance ;
+                double cAmount = (AObj.Balance * LedgerDetails.MarginOnline) / 100;
+                A0Obj.DRAmount = cAmount + (cAmount * LedgerDetails.TaxOnAboveMarginOnline) / 100;
 
                 A0Obj.Balance = AObj.Balance - A0Obj.DRAmount;
                 A0Obj.AOrgId = OrgId;
@@ -530,6 +533,10 @@ namespace HangOut.Controllers.Account
 
                 A0Obj.SaveGeneral();
 
+                //A0Obj.ACID = A0Obj.AID;
+
+                //A0Obj.ADSave();
+
                 //=============================================================
 
              //   Ledger Commission = Ledger.GetAllList().Where(w => w.Name == "Commission").FirstOrDefault();
@@ -537,7 +544,7 @@ namespace HangOut.Controllers.Account
                 A1Obj.Narration = "Theater Commission";
                 A1Obj.CRAmount = (AObj.Balance * LedgerDetails.MarginOnline)/100;
              
-                A1Obj.Balance = AObj.Balance - A1Obj.CRAmount;            
+                A1Obj.Balance = A0Obj.Balance;            
                 A1Obj.AOrgId = OrgId;
                 A1Obj.ADRLedgerId = LedgerDetails.ID;
                 A1Obj.ACRLedgerId = Commission.ID;
@@ -547,25 +554,8 @@ namespace HangOut.Controllers.Account
                 A1Obj.EntryType = "Sale";
                 A1Obj.ReceiptID = GetReceiptEntry.ID;
 
-                try
-                {
-                    LastEntryNo = Accounts.GetAllACDetails(OrgId).Where(w=>w.EntryType=="Sale").Select(s => s.EntryNo).Last();
-                }
-                catch (Exception ex)
-                {
-                    ex.ToString();
-                }
-                if (LastEntryNo > 0)
-                {
-                    LastEntryNo = LastEntryNo + 1;
-                }
-                else
-                {
-                    LastEntryNo = 1;
-                }
-                A1Obj.EntryNo = LastEntryNo;
-
-                A1Obj.SaveGeneral();
+                A1Obj.ACID = A0Obj.AID;
+                A1Obj.ADSave();
 
 
 
@@ -701,19 +691,49 @@ namespace HangOut.Controllers.Account
 
                     Ledger Tax = Ledger.GetAllList().Where(w => w.Name == "Commission").FirstOrDefault();
                     A2Obj.Date = DateTime.Now;          
-                    A2Obj.CRAmount = (A1Obj.DRAmount * LedgerDetails.TaxOnAboveMarginOnline) / 100;
+                    A2Obj.CRAmount = (A1Obj.CRAmount * LedgerDetails.TaxOnAboveMarginOnline) / 100;
 
-                    A2Obj.Balance = A1Obj.Balance; 
+                    A2Obj.Balance = A0Obj.Balance;
                     A2Obj.AOrgId = OrgId;                 
                     A2Obj.DRGroupId = 9;
                     A2Obj.CRGroupId = 3;
-                    A2Obj.EntryType = "Sale";
-                    A2Obj.ReceiptID = GetReceiptEntry.ID;
+             
+                    A2Obj.ACID = A0Obj.AID;
 
-              
-
-                    A2Obj.SaveGeneral();
+                    A2Obj.ADSave();
                 }
+
+
+
+                A4Obj.Date = DateTime.Now;
+                A4Obj.Narration = "Balance Amount Transfered";
+                A4Obj.DRAmount = A0Obj.Balance;
+                A4Obj.Balance = A0Obj.Balance- A4Obj.DRAmount;
+                A4Obj.AOrgId = OrgId;
+                A4Obj.ADRLedgerId = LedgerDetails.ID;
+                A4Obj.ACRLedgerId = 67;
+                A4Obj.DRGroupId = 2;
+                A4Obj.CRGroupId = 1;
+                A4Obj.EntryType = "Payment";          
+                try
+                {
+                    PLastEntryNo = Accounts.GetAllACDetails(OrgId).Where(w => w.EntryType == "Payment").Select(s => s.EntryNo).Last();
+                }
+                catch (Exception ex)
+                {
+                    ex.ToString();
+                }
+                if (PLastEntryNo > 0)
+                {
+                    PLastEntryNo = PLastEntryNo + 1;
+                }
+                else
+                {
+                    PLastEntryNo = 1;
+                }
+                A4Obj.EntryNo = PLastEntryNo;
+
+                A4Obj.SaveGeneral();
             }
 
             return Json(new { data = AObj }, JsonRequestBehavior.AllowGet);
