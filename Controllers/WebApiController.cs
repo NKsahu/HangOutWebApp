@@ -79,7 +79,7 @@ namespace HangOut.Controllers
                 // topics.Add(OrgId.ToString());
                 Title = "foodDo";
                 Msg = "Hey, give us a Hi-five. Click this notification";
-                PushNotification.SendNotification(topics, Msg, Title, OID: OrderNo,UserRating:1);
+                PushNotification.SendNotification(topics, Msg, Title, OID: 0,UserRating:1);
             }
             if (ObjUser.UserType == "CUST" &&ObjOrder!=null)
             {
