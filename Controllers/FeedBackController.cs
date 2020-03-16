@@ -101,7 +101,7 @@ namespace HangOut.Controllers
             var AlreadySelectedList = TorSlist.FindAll(x => x.FDBKId == FID);
             Int64[] items = activeMenu.TorSIDs;
             HashSet<Int64> hashKeys = new HashSet<Int64>();
-            if (items.Length > 0)
+            if (items!=null&& items.Length > 0)
             {
                  hashKeys = new HashSet<Int64>(items);
             }
