@@ -253,13 +253,13 @@
     function Apply() {
         console.log("test");
         var lis = document.getElementsByClassName("SelectedMenu");
-        if (lis.length < 1) {
-            $.alert({
-                title: 'Alert!',
-                content: 'Active Feedback Form First',
-            });
-            return;
-        }
+        //if (lis.length < 1) {
+        //    $.alert({
+        //        title: 'Alert!',
+        //        content: 'Active Feedback Form First',
+        //    });
+        //    return;
+        //}
         $("#waiting").show();
         var Menu = $(lis[0]);
         var MenuId = parseInt(Menu.attr('OMID'));
