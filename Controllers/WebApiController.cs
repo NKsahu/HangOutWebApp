@@ -207,11 +207,11 @@ namespace HangOut.Controllers
                             objItem.Add("CostPrice", Items.CostPrice);// without gst
                             objItem.Add("Tax", Items.Tax);
                             objItem.Add("Info", Items.ItemDiscription);
-                            //check addon apply in current item
-                            if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
+                            //check addon or Serving Size or Both apply in current item
+                            List<AddOnn> Addons=  AddOns.GetAddonsAndMultiSSize(Items);
+                            if (Addons.Count > 0)
                             {
-                                objItem.Add("AddonCatId", Items.AddOnCatId);
-                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0,false).AddonnList));
+                                objItem.Add("Addons", JArray.FromObject(Addons));
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -264,11 +264,11 @@ namespace HangOut.Controllers
                             objItem.Add("Tax", Items.Tax);
                             objItem.Add("ItemMode", Items.ItemMode);
                             objItem.Add("Info", Items.ItemDiscription);
-                            //check addon apply in current item
-                            if (Items.ApplyAddOn == 2 && Items.AddOnCatId != 0)
+                            //check addon or Serving Size or Both apply in current item
+                            List<AddOnn> Addons = AddOns.GetAddonsAndMultiSSize(Items);
+                            if (Addons.Count > 0)
                             {
-                                objItem.Add("AddonCatId", Items.AddOnCatId);
-                                objItem.Add("Addons", JArray.FromObject(AddOns.GetOne(Items.AddOnCatId, 0,false).AddonnList));
+                                objItem.Add("Addons", JArray.FromObject(Addons));
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
