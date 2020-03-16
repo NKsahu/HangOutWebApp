@@ -291,7 +291,7 @@ namespace HangOut.Controllers
         {
             JObject ParaMeters = JObject.Parse(Obj);
             Int64 CustID = Int64.Parse(ParaMeters["CID"].ToString());
-            Int64 ItemId = Convert.ToInt64(ParaMeters["ItemId"].ToString());
+            int ItemId = Convert.ToInt32(ParaMeters["ItemId"].ToString());
             int Cnt = Convert.ToInt32(ParaMeters["Cnt"].ToString());
             int OrgId = Convert.ToInt32(ParaMeters["OrgId"].ToString());
             Int64 OID = Convert.ToInt64(ParaMeters["OID"]);
