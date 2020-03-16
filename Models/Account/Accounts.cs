@@ -231,6 +231,11 @@ namespace HangOut.Models.Account
                     OBJAC.DRGroupId = SDR.GetInt32(8);
                     OBJAC.CRLedgerId = SDR.GetInt32(9);
                     OBJAC.DRLedgerId = SDR.GetInt32(10);
+                    OBJAC.EntryNo = SDR.GetInt32(11);
+                    OBJAC.EntryType = SDR.GetString(12);
+                    OBJAC.ReceiptID = SDR.GetInt32(13);
+
+
 
 
                     ACList.Add(OBJAC);

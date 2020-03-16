@@ -445,7 +445,7 @@ namespace HangOut.Controllers.Account
             Ledger LedgerDetails = Ledger.GetAllList().Where(w => w.OrgId == OrgId).FirstOrDefault();
 
                Receipt GetReceiptEntry = Receipt.GetAllList(OrgId,0)
-                .Where(w => w.Date >= LedgerDetails.CalculationStartFrom).Last();
+                .Where(w => w.Date >= LedgerDetails.CalculationStartFrom).LastOrDefault();
 
             double GetAmountSum = Receipt.GetAllList(OrgId, 0)
               .Where(w => w.Date >= LedgerDetails.CalculationStartFrom).Select(s=>s.Amount).Sum();

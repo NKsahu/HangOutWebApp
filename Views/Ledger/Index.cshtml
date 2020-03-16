@@ -142,7 +142,7 @@
 
         $.ajax({
             type: 'GET',
-            url: "/Receipt/LedgerIndex?ID=" + ID,
+            url: "/Accounts/ACIndex?ID=" + ID,
             success: function (data) {
                 $("#DynamicData").html(data);
                 $('#waiting').hide();

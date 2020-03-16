@@ -532,6 +532,7 @@
     <Content Include="Views\ServingSize\Index.cshtml" />
     <Content Include="Views\ServingSize\CreatEdit.cshtml" />
     <Content Include="Views\ServingSize\ShowServingSize.cshtml" />
+    <Content Include="Views\Accounts\ACIndex.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
