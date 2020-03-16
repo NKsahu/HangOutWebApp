@@ -577,7 +577,16 @@
             }
 
         }
-        function AddByItemClick(itemid) {
+     function AddByItemClick(itemid) {
+
+         //check item apply addons
+         var ObjItem = ItemList.find(x => {
+             return x.IID.toString() === ItemId
+         });
+         if ("Addons" in ObjItem) {
+
+
+         }
             if ($("#C" + itemid).length > 0) {
                 var CartValue = parseInt($("#C" + itemid).text());
                 AddToCart(itemid, CartValue + 1);
