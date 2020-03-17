@@ -16,6 +16,14 @@ namespace HangOut.Controllers
             return View(Obj);
         }
 
+        // GET: JournalEntryUI
+        public ActionResult GetUI()
+        {
+            JournalEntry Obj = new JournalEntry();
+            return View(Obj);
+        }
+
+
         // JournalEntry create edit
         [HttpPost]
         public ActionResult CreateEdit(Group Obj)
