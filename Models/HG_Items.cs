@@ -30,7 +30,7 @@ namespace HangOut.Models
         public int ApplyAddOn { get; set; } //{1 NO ,2 YES}
         [Display(Name ="AddOn Category")]
         public int AddOnCatId { get; set; }// addon category id
-        public int Type { get; set; }// {1 : food-items  2 :AddOn items
+        public int Type { get; set; }// {1 : food-items  2 :Serving  items
         [Display(Name ="AddOn Type")]
         public int AddOnType { get; set; }// {0 None, 1 Base 2 Addons}
         [Display(Name = "Discription")]
@@ -51,19 +51,17 @@ namespace HangOut.Models
         public int Save()
         {
             int Row = 0;
-
-
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
+            DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
             try
             {
-                Con.Open();
+                
                 
                 string Query = "";
                 if (this.ItemID == 0)
                 {
                     Query = "Insert into  HG_Items  values(@CategoryID,@OrgID,@Items,@Price,@Plates,@ItemMode,@Discount,@EntryBy,@EntryDate,@UpdateDate,@Status,@Item_Img,@ApplyAddOn,@CostPrice,@AddOnCatId,@Type,@AddOnType,@ItmDiscriptn,@ItemAvaibility,@MultiServing); SELECT SCOPE_IDENTITY();";
-                    cmd = new SqlCommand(Query, Con);
+                    cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@EntryBy", this.EntryBy);
                     cmd.Parameters.AddWithValue("@EntryDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
@@ -71,7 +69,7 @@ namespace HangOut.Models
                 else
                 {
                     Query = "update  HG_Items set CategoryID=@CategoryID,OrgID =@OrgID,Items=@Items,Price=@Price,Plates=@Plates,ItemMode=@ItemMode,Discount=@Discount,EntryBy=@EntryBy,UpdateDate=@UpdateDate,Status=@Status,Item_Img=@Item_Img,ApplyAddOn=@ApplyAddOn,CostPrice=@CostPrice,AddOnCatId=@AddOnCatId,Type=@Type,AddOnType=@AddOnType,ItmDiscriptn=@ItmDiscriptn,ItemAvaibility=@ItemAvaibility,MultiServing=@MultiServing where ItemID=@ItemID";
-                    cmd = new SqlCommand(Query, Con);
+                    cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@ItemID", this.ItemID);
                     cmd.Parameters.AddWithValue("@EntryBy", EntryBy);
                     cmd.Parameters.AddWithValue("@UpdateDate", DateTime.Now);
@@ -108,7 +106,7 @@ namespace HangOut.Models
                 
             }
             catch (Exception e) { e.ToString(); }
-            finally { Con.Close();
+            finally { dBCon.Con.Close();
                 if (cmd != null) cmd.Dispose();
             }
             return Row;

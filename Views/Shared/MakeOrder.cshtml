@@ -581,11 +581,13 @@
 
          //check item apply addons
          var ObjItem = ItemList.find(x => {
-             return x.IID.toString() === ItemId
+             return x.IID.toString() === itemid
          });
          if ("Addons" in ObjItem) {
 
-
+             console.log("adddons" + ObjItem.Addons);
+             OpenAddons(ObjItem.Addons, itemid);
+             return;
          }
             if ($("#C" + itemid).length > 0) {
                 var CartValue = parseInt($("#C" + itemid).text());
@@ -594,7 +596,75 @@
             else {
                 AddToCart(itemid, 1);
             }
-        }
+     }
+     function OpenAddons(AddonList,ItemId) {
+       
+         console.log("AAYA=");
+         var html = "";
+         var strhtml = '<div class="card">';
+         strhtml += '<div class="card-body">';
+         strhtml +='<div class="AddOnnCls row">';
+         for (var i = 0; i < AddonList.length; i++) {
+             // title
+             strhtml +='<div class="row" style="border:1px solid black" >';
+             strhtml += '<div class="col-md-8">';
+             strhtml += '<label></label>';
+             strhtml += '<input type="text" readonly value="'+ AddonList[i].AddOnTitle+'" class="form-control" />';
+             strhtml += '</div>';
+             //min 
+             strhtml += '<div class="col-md-2">';
+             strhtml += '<label>Min</label>';
+             strhtml += ' <input type="text" id="Min' + AddonList[i].TitleId+'" readonly value="'+ AddonList[i].Min+'" class="form-control" />';
+             strhtml += '</div>';
+
+             //max
+             strhtml += '<div class="col-md-2">';
+             strhtml += '<label>Max</label>';
+             strhtml += ' <input type="text" readonly id="Max' + AddonList[i].TitleId +'" value="' + AddonList[i].Max +'" class="form-control" />';
+             strhtml += '</div>';
+             //=====items =====serving size
+             strhtml += '<div class="col-md-12" id="Items" >'
+             for (var j = 0; j < AddonList[i].AddOnItemList.length;j++) {
+                 strhtml += '<div class="row">';
+                 //item 
+                 strhtml += '<div class="col-md-6">';
+                // strhtml += '<label></label>';
+                 strhtml += '<input type="text" readonly value="' + AddonList[i].AddOnItemList[j].Title+'" class="form-control" />';
+                 strhtml += '</div>';
+                 //amt
+                 strhtml += '<div class="col-md-3">';
+               //  strhtml += '  <label></label>';
+                 strhtml += '<input type="text" readonly value="' + AddonList[i].AddOnItemList[j].Price +'" class="form-control" />';
+                 strhtml += '</div>';
+                 //tax
+                 strhtml += '<div class="col-md-3">';
+                // strhtml += '  <label></label>';
+                 strhtml += '<input type="checkbox" TitileId="'+AddonList[i].TitleId +'" id="' + AddonList[i].AddOnItemList[j].AddOnItemId+'" class="form-control" />';
+                 strhtml += '</div>';
+                 strhtml += ' </div>';
+                
+             }
+             strhtml += ' </div>';
+             strhtml += ' </div>';
+         }
+        
+
+         //submit and cancel button
+         strhtml += '<div class="col-md-3"> <button class="btn btn-md btn-danger">Cancel</button> </div>';
+         strhtml+='<div class="col-md-6"></div>'
+         strhtml += '<div class="col-md-3"><button onclick="SubmitAddon()" class="btn btn-md btn-success">Submit</button> </div>';
+
+         strhtml += ' </div>';
+         strhtml += ' </div>';
+         strhtml += ' </div>';
+         makedpt("ShowAddon",300,400);
+         $("#ShowAddon > .modal-dialog > .modal-content > .modal-body").html(strhtml);
+         showdpt("ShowAddon");
+
+     }
+     function SubmitAddon() {
+
+     }
         function AddToCart(ItemId, Cnt) {
             var Obj = {};
             Obj.CID = LoginId;
