@@ -23,6 +23,6 @@ namespace HangOut.Models.Common
     public class ItemAddon{
 
         public int ItemId { get; set; }
-        public List<AddOnn> addOnns { get; set; }
+        public List<int> AddonItemId { get; set; }
     }
 }
