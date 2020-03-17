@@ -634,12 +634,12 @@
                  //amt
                  strhtml += '<div class="col-md-3">';
                //  strhtml += '  <label></label>';
-                 strhtml += '<input type="text" readonly value="' + AddonList[i].AddOnItemList[j].Price +'" class="form-control" />';
+                 strhtml += '<input type="text" id="Price"'+AddonList[i].AddOnItemList[j].AddOnItemId+'" readonly value="' + AddonList[i].AddOnItemList[j].Price.toFixed(2) +'" class="form-control" />';
                  strhtml += '</div>';
                  //tax
                  strhtml += '<div class="col-md-3">';
                 // strhtml += '  <label></label>';
-                 strhtml += '<input type="checkbox" TitileId="'+AddonList[i].TitleId +'" id="' + AddonList[i].AddOnItemList[j].AddOnItemId+'" class="form-control" />';
+                 strhtml += '<input type="checkbox" TitileId="'+AddonList[i].TitleId +'" id="' + AddonList[i].AddOnItemList[j].AddOnItemId+'" class="form-control AddonCheckBox" />';
                  strhtml += '</div>';
                  strhtml += ' </div>';
                 
@@ -652,7 +652,7 @@
          //submit and cancel button
          strhtml += '<div class="col-md-3"> <button class="btn btn-md btn-danger">Cancel</button> </div>';
          strhtml+='<div class="col-md-6"></div>'
-         strhtml += '<div class="col-md-3"><button onclick="SubmitAddon()" class="btn btn-md btn-success">Submit</button> </div>';
+         strhtml += '<div class="col-md-3"><button onclick="SubmitAddon('+ItemId+')" class="btn btn-md btn-success">Submit</button> </div>';
 
          strhtml += ' </div>';
          strhtml += ' </div>';
@@ -662,8 +662,48 @@
          showdpt("ShowAddon");
 
      }
-     function SubmitAddon() {
+     function SubmitAddon(itemid) {
+         $("#waiting").show();
+         var ObjItmAddon = {};
+         var AddonItemSelected = document.getElementsByClassName("AddonCheckBox");
+         var AddonItemIdCsv = "";
+         var sumOfItem = 0.00;
+         var AddonItemId = [];
+         for (var i = 0; i < AddonItemSelected.length; i++) {
+             var ObjCheckBx = $(AddonItemSelected[i]);
+             if (ObjCheckBx.is(':checked')) {
+                 console.log("Aaya=" + AddonItemSelected[i]);
+                 AddonItemIdCsv += ObjCheckBx.attr('id')+",";
+                 AddonItemId.push(ObjCheckBx.attr('id'));
+                 sumOfItem += $("#Price"+ObjCheckBx.attr('id')).val();
+             }
+            
+         }
+         ObjItmAddon.AddonItemIdCsv = AddonItemIdCsv;
+         ObjItmAddon.AddonItemId = AddonItemId;
 
+         //==
+         var ObjCart = {};
+         ObjCart.CID = LoginId;
+         ObjCart.ItemId = itemid;
+         ObjCart.TableorSheatOrTaleAwayId = CurrentOrder;
+         ObjCart.itemAddons = ObjItmAddon;
+         $.ajax({
+             type: 'POST',
+             url: "/WebApi/AddAdonItm",
+             data: JSON.stringify(ObjCart),
+             contentType: "application/json",
+             success: function (data) {
+                 var Object = JSON.parse(data);
+                 var UUID = Object.UUID;
+                 var Cnt = Object.Cnt;
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
+             }
+         });
+
+         $("#waiting").hide();
      }
         function AddToCart(ItemId, Cnt) {
             var Obj = {};

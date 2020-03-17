@@ -9,20 +9,18 @@ namespace HangOut.Models.Common
         public Int64 CID { get; set; }
         public int ItemId { get; set; }
         public int Count { get; set; }
-        public int OrgId { get; set; }
+        //public int OrgId { get; set; }
         public Int64 TableorSheatOrTaleAwayId { get; set; }// SeatingId
         public Int64 OID { get; set; }// order id
-        public int AddonAplied { get; set; }//0 : no ,1 :yes ( addon=serving size + addon)
+        public string ItemUUID { get; set; }
         public static List<Cart> List { get; set; }
-
-        public Cart()
-        {
-            AddonAplied = 0;
-        }
+        public ItemAddon itemAddons { get; set; }
+        
     }
     public class ItemAddon{
-
-        public int ItemId { get; set; }
+        public String AddonItemIdCsv { get; set; }
         public List<int> AddonItemId { get; set; }
+
+
     }
 }
