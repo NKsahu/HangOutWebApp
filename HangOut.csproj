@@ -533,6 +533,7 @@
     <Content Include="Views\ServingSize\CreatEdit.cshtml" />
     <Content Include="Views\ServingSize\ShowServingSize.cshtml" />
     <Content Include="Views\Accounts\ACIndex.cshtml" />
+    <Content Include="Views\JournalEntry\GetUI.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -8,7 +8,7 @@
 }
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>Journal Entry</b></h3>
+        <h3 style="text-align:center;color:#000000"><b>Entry</b></h3>
         <hr />
     </div>
     <div class="card-body">
@@ -37,13 +37,13 @@
                 </div>
             </div>
             <hr />
-            <span style="display:inline-block;height:100%;width:100%;border: 1px solid black;padding:5px;padding-bottom:25px;">
-                <div class="row" id="CreateCopy">
+            <span id="AddNew" style="display:inline-block;height:100%;width:100%;border: 1px solid black;padding:5px;padding-bottom:25px;">
+                <div class="row">
 
                     @{
                         <div class="col-md-1">
                             @Html.Label("Type")
-                            @Html.DropDownListFor(model => model.Type, new SelectList(JournalEntry.JType(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", required = "required", id = "did" })
+                            @Html.DropDownListFor(model => model.Type, new SelectList(JournalEntry.JType(), "ID", "Name", Model.ID), "Select", new { @class = "form-control Type", @onchange = "TypeChange(this)", required = "required", id = "did" })
                             @Html.ValidationMessageFor(model => model.Entrytype, "", new { @class = "text-danger" })
 
                         </div>
@@ -57,24 +57,46 @@
 
                         </div>
                     }
-                    <div class="col-md-2" id="drid">
-                        @Html.LabelFor(model => model.Debit, htmlAttributes: new { @class = "control-label  " })
+                    <div class="col-md-2">
+                        <span class="Debit">
+                            @Html.LabelFor(model => model.Debit, htmlAttributes: new { @class = "control-label  " })
 
-                        @Html.EditorFor(model => model.Debit, new { htmlAttributes = new { @class = "form-control", id = "drid" } })
-                        @Html.ValidationMessageFor(model => model.Debit, "", new { @class = "text-danger" })
-
+                            @Html.EditorFor(model => model.Debit, new { htmlAttributes = new { @class = "form-control Debit", id = "drid" } })
+                            @Html.ValidationMessageFor(model => model.Debit, "", new { @class = "text-danger" })
+                        </span>
                     </div>
-                    <div class="col-md-2" id="cid">
-                        @Html.LabelFor(model => model.Credit, htmlAttributes: new { @class = "control-label  " })
+                    <div class="col-md-2">
+                        <span class="Credit">
+                            @Html.LabelFor(model => model.Credit, htmlAttributes: new { @class = "control-label  " })
 
-                        @Html.EditorFor(model => model.Credit, new { htmlAttributes = new { @class = "form-control",id= "cid" } })
-                        @Html.ValidationMessageFor(model => model.Credit, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.Credit, new { htmlAttributes = new { @class = "form-control Credit", id = "cid" } })
+                            @Html.ValidationMessageFor(model => model.Credit, "", new { @class = "text-danger" })
+                        </span>
+                    </div>
+                    <div class="col-md-1">
+                        @*@Html.Label("Add", new { @class = "text-white" })
+                        <input style="margin-top:25px" onclick="NewAddOn()" value="Add" class="btn btn-success" />*@
+                        <i style="margin-top:35px;font-size:x-large;" class="fa fa-plus-circle" onclick="NewAddOn()"></i>
 
                     </div>
                 </div>
+
                 <div id="HeadDiv" style="display:none"></div>
             </span>
             <hr />
+            <div class="row">
+                <div class="col-md-3">
+
+
+                </div>
+                <div class="col-md-1">
+                    <b>
+                        @Html.Label("Total")
+                    </b>
+                  
+
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-3">
                     @Html.Label("Narration")
@@ -88,41 +110,47 @@
 
                 </div>
             </div>
-            }
+        }
 
 
-        </div>
+    </div>
 </div>
 <script>
-    $(document).on('change', function () {
-        var values = $("#did").val();
+  
+    function TypeChange(event) {
+        console.log("aaya");
+        var values = $(event).val();
         if (values === "1") {
-            $("#cid").show();
-            $("#drid").hide();
+            $(event).parent('div').parent('div').find('.Credit').show();
+            $(event).parent('div').parent('div').find('.Debit').hide();
+            //  $("#cid").show();
+            // $("#drid").hide();
         }
-        else if (values === "0")
-        {
-            $("#drid").show();
-            $("#cid").hide();
+        else if (values === "0") {
+            $(event).parent('div').parent('div').find('.Credit').hide();
+            $(event).parent('div').parent('div').find('.Debit').show();
         }
-    });
-    $("#cid").keypress(function (event) {
-        if (event.keyCode === 13) {
-            var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
-            var clonediv = $('#CreateCopy').clone();
-            clonediv.show();
-            clonediv.attr('OrderNo', MainDivsCnt);
-            clonediv.insertBefore("#HeadDiv");
-        }
-    });
-    $("#drid").keypress(function (event) {
-        if (event.keyCode === 13) {
-            var MainDivsCnt = document.getElementsByClassName('MainDivs').length;
-            var clonediv = $('#CreateCopy').clone();
-            clonediv.show();
-            clonediv.attr('OrderNo', MainDivsCnt);
-            clonediv.insertBefore("#HeadDiv");
-        }
-    });
+    }
+       
+
+   
+
+
+
+    function NewAddOn(event) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/JournalEntry/GetUI",
+            success: function (data) {
+               // $("#HeadDiv").append(data);
+                $("#AddNew").append(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
 
 </script>

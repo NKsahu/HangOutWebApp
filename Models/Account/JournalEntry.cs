@@ -24,7 +24,8 @@ namespace HangOut.Models.Account
         public int CRLedgerId { get; set; }
         public double JEDAmount { get; set; }
         public int OrderId { get; set; }
-        
+        public List<JournalEntry> AddOnList { get; set; }
+
 
 
         public int Save(List<JournalEntry> jdobj)
