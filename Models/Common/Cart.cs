@@ -14,6 +14,7 @@ namespace HangOut.Models.Common
         public Int64 OID { get; set; }// order id
         public string ItemUUID { get; set; }
         public static List<Cart> List { get; set; }
+        public double ItemPrice { get; set; }
         public ItemAddon itemAddons { get; set; }
         
     }

@@ -192,8 +192,8 @@ namespace HangOut.Controllers
                         foreach (var MenuItmObj in OrderMenuItems)
                         {
                             var Items = ListItems.Find(x => x.ItemID == MenuItmObj.ItemId);
-                            Cart cartCurrentItem = cartlist.Find(x => x.ItemId == Items.ItemID);
-                            int CurrCount = cartCurrentItem != null ? cartCurrentItem.Count : 0;
+                            List<Cart> cartCurrentItem = cartlist.FindAll(x => x.ItemId == Items.ItemID);
+                            int CurrCount = 0;
                             JObject objItem = new JObject();
                             objItem.Add("IID", Items.ItemID);
                             objItem.Add("ItemName", Items.Items);
@@ -212,6 +212,20 @@ namespace HangOut.Controllers
                             if (Addons.Count > 0)
                             {
                                 objItem.Add("Addons", JArray.FromObject(Addons));
+                            }
+                            if (cartCurrentItem.Count > 0)
+                            {
+                                JArray ItemUUIDS = new JArray();
+                                foreach (var objcart in cartCurrentItem)
+                                {
+                                    JObject jobj = new JObject();
+                                    jobj.Add("UUID", objcart.ItemUUID);
+                                    jobj.Add("Price", objcart.ItemPrice);
+                                    jobj.Add("Cnt", objcart.Count);
+                                    ItemUUIDS.Add(jobj);
+                                }
+                                objItem["ItemCartValue"]= cartCurrentItem.Count;
+                                objItem.Add("ItemArray", ItemUUIDS);
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -248,9 +262,8 @@ namespace HangOut.Controllers
                         int ItemiIndex = 0;
                         foreach (var Items in ItemListByMenu)
                         {
-                            Cart cartCurrentItem = cartlist.Find(x => x.ItemId == Items.ItemID);
-                            int CurrCount = cartCurrentItem != null ? cartCurrentItem.Count : 0;
-                            
+                          List<Cart> cartCurrentItem = cartlist.FindAll(x => x.ItemId == Items.ItemID);
+                            int CurrCount = 0;
                             JObject objItem = new JObject();
                             objItem.Add("IID", Items.ItemID);
                             objItem.Add("ItemName", Items.Items);
@@ -269,6 +282,20 @@ namespace HangOut.Controllers
                             if (Addons.Count > 0)
                             {
                                 objItem.Add("Addons", JArray.FromObject(Addons));
+                            }
+                            if (cartCurrentItem.Count > 0)
+                            {
+                                JArray ItemUUIDS = new JArray();
+                                foreach (var objcart in cartCurrentItem)
+                                {
+                                    JObject jobj = new JObject();
+                                    jobj.Add("UUID", objcart.ItemUUID);
+                                    jobj.Add("Price", objcart.ItemPrice);
+                                    jobj.Add("Cnt", objcart.Count);
+                                    ItemUUIDS.Add(jobj);
+                                }
+                                objItem["ItemCartValue"] = cartCurrentItem.Count;
+                                objItem.Add("ItemArray", ItemUUIDS);
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -295,6 +322,7 @@ namespace HangOut.Controllers
             int Cnt = Convert.ToInt32(ParaMeters["Cnt"].ToString());
             string ItmUUID = ParaMeters["UUID"] != null ? ParaMeters["UUID"].ToString(): null;
             Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
+            HG_Items ObjSingleItem = new HG_Items().GetOne(ItemId);
             if (ItmUUID != null)
             {
                 Cart cart = Cart.List.Find(x => x.ItemUUID == ItmUUID);
@@ -302,12 +330,12 @@ namespace HangOut.Controllers
                 {
                     Cart.List.RemoveAll(x => x.ItemUUID == ItmUUID);
                     string UUID = Guid.NewGuid().ToString();
-                    Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId,ItemUUID=UUID });
+                    Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId,ItemUUID=UUID,ItemPrice= cart.ItemPrice });
                 }
                 else
                 {
                     string UUID = Guid.NewGuid().ToString();
-                    Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemUUID = UUID });
+                    Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemUUID = UUID , ItemPrice = ObjSingleItem.Price });
                 }
             }
             else
@@ -321,7 +349,7 @@ namespace HangOut.Controllers
                         Cart.List.Add(ObjCart);
                 }
                 else
-                { Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId }); }
+                { Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemPrice = ObjSingleItem.Price }); }
             }
             double TotalFinlAmt = 0;
             double Totaltax = 0.00;
@@ -347,6 +375,7 @@ namespace HangOut.Controllers
         {
             JObject result =new JObject();
             string ItemUUID = "";
+            double ItemPrice = cart.ItemPrice;
             int Cnt = 1;
             List<Cart> cartItems = Cart.List.FindAll(x => x.ItemId == cart.ItemId);
             if (cartItems.Count > 0)
@@ -366,21 +395,22 @@ namespace HangOut.Controllers
                 if (Addnew==false)
                 {
                     Cart.List.RemoveAll(x => x.ItemUUID == ItemUUID);
-                    Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt+1,itemAddons=cart.itemAddons });
+                    Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt+1,itemAddons=cart.itemAddons,ItemPrice=cart.ItemPrice });
                 }
                 else
                 {
                     ItemUUID = Guid.NewGuid().ToString();
-                    Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt, itemAddons = cart.itemAddons });
+                    Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt, itemAddons = cart.itemAddons, ItemPrice = cart.ItemPrice });
                 }
             }
             else
             {
                 ItemUUID = Guid.NewGuid().ToString();
-                Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID,TableorSheatOrTaleAwayId=cart.TableorSheatOrTaleAwayId,ItemUUID= ItemUUID, Count=1, itemAddons = cart.itemAddons });
+                Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID,TableorSheatOrTaleAwayId=cart.TableorSheatOrTaleAwayId,ItemUUID= ItemUUID, Count=1, itemAddons = cart.itemAddons , ItemPrice = cart.ItemPrice });
             }
             result.Add("UUID", ItemUUID);
             result.Add("Cnt", Cnt);
+            result.Add("Price", ItemPrice);
             return result;
         }
         [HttpPost]
