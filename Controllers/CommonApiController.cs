@@ -335,5 +335,11 @@ namespace HangOut.Controllers
             }
             return result;
         }
+        [HttpPost]
+        public JArray GetAddonsItems(string UUID)
+        {
+            Cart cart = Cart.List.Find(x => x.ItemUUID == UUID);
+            return JArray.FromObject(cart.itemAddons.AddonItemId);
+        }
     }
 }
