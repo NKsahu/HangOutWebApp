@@ -86,7 +86,7 @@ namespace HangOut.Models.Account
                 }
                 if (ID > 0)
                 {
-                    Quary = "Select * from ACReceipt where OrgId=" + ID + " ORDER BY Date ASC";
+                    Quary = "Select * from ACReceipt where ID=" + ID + " ORDER BY Date ASC";
                 }
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
@@ -191,39 +191,123 @@ namespace HangOut.Models.Account
          
             try
             {
-                List<Accounts> REList = Accounts.GetAll().Where(w=>w.CRLedgerId==ID || w.DRLedgerId==ID).ToList();
-
-
-                for (int i = 0; i < REList.Count; i++)
+                if(Name=="Customer")
                 {
+                    List<Receipt> GetAllReceipt = Receipt.GetAllList(0, 0).ToList();
+                    for (int i = 0; i < GetAllReceipt.Count; i++)
+                    {
+
+                        OBJ = new Accounts();
+                        if(GetAllReceipt[i].Particular== "Opening Balance")
+                        {
+                            OBJ.Date = GetAllReceipt[i].Date;
+                            OBJ.ReceiptType = "";
+                            OBJ.Type = "";
+                            OBJ.Narration = GetAllReceipt[i].Particular;
+                            OBJ.CRAmount = GetAllReceipt[i].Amount;
+                            if (OBJ.CRAmount > 0)
+                            {
+                                OBJ.Balance = GetAllReceipt[i].Balance + OBJ.CRAmount;
+                            }
+                            AccountList.Add(OBJ);
+                        }
+                        else
+                        {
+                            OBJ.Date = GetAllReceipt[i].Date;
+                            OBJ.ReceiptType = "Receipt";
+                            OBJ.Type = "R" + GetAllReceipt[i].EntryNo.ToString();
+                            OBJ.Narration = GetAllReceipt[i].Particular;
+                            OBJ.CRAmount = GetAllReceipt[i].Amount;
+                            if (OBJ.CRAmount > 0)
+                            {
+                                OBJ.Balance = GetAllReceipt[i].Balance + OBJ.CRAmount;
+                            }
+
+                            AccountList.Add(OBJ);
+                        }
+                      
+                    }
+                }
+               else if (Name == "Paytm")
+                {
+                    List<Receipt> GetAllReceipt = Receipt.GetAllList(0, 0).ToList();
+                    for (int i = 0; i < GetAllReceipt.Count; i++)
+                    {
+
+                        OBJ = new Accounts();
+                        if (GetAllReceipt[i].Particular == "Opening Balance")
+                        {
+                            OBJ.Date = GetAllReceipt[i].Date;
+                            OBJ.ReceiptType = "";
+                            OBJ.Type = "";
+                            OBJ.Narration = GetAllReceipt[i].Particular;
+                            OBJ.DRAmount = GetAllReceipt[i].Amount;
+                            if (OBJ.DRAmount > 0)
+                            {
+                                OBJ.Balance = GetAllReceipt[i].Balance - OBJ.DRAmount;
+                            }
+                            AccountList.Add(OBJ);
+                        }
+                        else
+                        {
+                            OBJ.Date = GetAllReceipt[i].Date;
+                            OBJ.ReceiptType = "Receipt";
+                            OBJ.Type = "R" + GetAllReceipt[i].EntryNo.ToString();
+                            OBJ.Narration = GetAllReceipt[i].Particular;
+                            OBJ.DRAmount = GetAllReceipt[i].Amount;
+                            if (OBJ.DRAmount > 0)
+                            {
+                                OBJ.Balance = GetAllReceipt[i].Balance - OBJ.DRAmount;
+                            }
+
+                            AccountList.Add(OBJ);
+                        }
+
+                    }
+                }
+                else
+                {
+                    List<Accounts> REList = Accounts.GetAll().Where(w => w.CRLedgerId == ID || w.DRLedgerId == ID).OrderBy(o => o.Date).ToList();
+
+
+                    for (int i = 0; i < REList.Count; i++)
+                    {
 
                         OBJ = new Accounts();
                         OBJ.Date = REList[i].Date;
-                        OBJ.ReceiptType = REList[i].EntryType;   
-                       if (REList[i].EntryType=="Receipt")
-                       {
-                  
-                        OBJ.Type = "R" + REList[i].EntryNo.ToString();
-                    }
-                      if (REList[i].EntryType == "Sale")
-                      {
-                        OBJ.Type = "S" + REList[i].EntryNo.ToString();
-                      }
-                      if (REList[i].EntryType == "Journal")
-                      {
-                        OBJ.Type = "J" + REList[i].EntryNo.ToString();
-                      }
-                    if (REList[i].EntryType == "Payment")
-                    {
-                        OBJ.Type = "P" + REList[i].EntryNo.ToString();
-                    }
-                    OBJ.Narration = REList[i].Narration;
+                        OBJ.ReceiptType = REList[i].EntryType;
+                        if (REList[i].EntryType == "Receipt")
+                        {
+
+                            OBJ.Type = "R" + REList[i].EntryNo.ToString();
+                        }
+                        if (REList[i].EntryType == "Sale")
+                        {
+                            OBJ.Type = "S" + REList[i].EntryNo.ToString();
+                        }
+                        if (REList[i].EntryType == "Journal")
+                        {
+                            OBJ.Type = "J" + REList[i].EntryNo.ToString();
+                        }
+                        if (REList[i].EntryType == "Payment")
+                        {
+                            OBJ.Type = "P" + REList[i].EntryNo.ToString();
+                        }
+                        OBJ.Narration = REList[i].Narration;
                         OBJ.DRAmount = REList[i].CRAmount;
-                        OBJ.CRAmount = REList[i].DRAmount;                                
-                        OBJ.Balance = REList[i].Balance;
-                      AccountList.Add(OBJ);
+                        OBJ.CRAmount = REList[i].DRAmount;
+                        if (OBJ.CRAmount > 0)
+                        {
+                            OBJ.Balance = REList[i].Balance + OBJ.CRAmount;
+                        }
+                        else
+                        {
+                            OBJ.Balance = REList[i].Balance - OBJ.CRAmount;
+                        }
+
+                        AccountList.Add(OBJ);
                     }
-                  
+                }              
             }
             catch (Exception e) { e.ToString(); }
 
