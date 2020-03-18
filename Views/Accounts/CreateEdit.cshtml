@@ -1,4 +1,5 @@
-﻿@model HangOut.Models.Account.JournalEntry
+﻿@model HangOut.Models.Account.Accounts
+
 @using HangOut.Models.Common
 @using HangOut.Models.Account;
 
@@ -11,9 +12,9 @@
         <h3 style="text-align:center;color:#000000"><b>Entry</b></h3>
         <hr />
     </div>
-    <div class="card-body ">
+    <div class="card-body GetEntryData">
 
-        @using (Ajax.BeginForm("CreateEdit", "JournalEntry", new { ID = Model.AID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEdit", "Accounts", new { ID = Model.AID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.AID)
 
@@ -26,66 +27,56 @@
                 @{
                     <div class="col-md-3">
                         @Html.Label("EntryType")
-                        @Html.DropDownListFor(model => model.Entrytype, new SelectList(JournalEntry.EType(), "ID", "Name", Model.AID), "Select", new { @class = "form-control Entrytype", required = "required",id = "EID" })
-                        @Html.ValidationMessageFor(model => model.Entrytype, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(model => model.EntryType, new SelectList(JournalEntry.EType(), "ID", "Name", Model.AID), "Select", new { @class = "form-control Entrytype", required = "required" })
+                        @Html.ValidationMessageFor(model => model.EntryType, "", new { @class = "text-danger" })
 
                     </div>
                 }
                 <div class="col-md-3">
                     @Html.Label("Date")
-                    @Html.TextBoxFor(model => model.Date, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField Date", id = "DATEID" })
+                    @Html.TextBoxFor(model => model.Date, DateTime.Now.Date.ToString("dd-MM-yyyy"), new { @class = "form-control DateField Date" })
                 </div>
             </div>
             <hr />
             <span id="AddNew" style="display:inline-block;height:100%;width:100%;border: 1px solid black;padding:5px;padding-bottom:25px;">
-                <div class="row GetEntryData">
+                <div class="row">
 
                     @{
                         <div class="col-md-1">
                             @Html.Label("Type")
                             @Html.DropDownListFor(model => model.Type, new SelectList(JournalEntry.JType(), "ID", "Name", Model.AID), "Select", new { @class = "form-control Type", @onchange = "TypeChange(this)", required = "required", id = "did" })
-                            @Html.ValidationMessageFor(model => model.Entrytype, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
 
                         </div>
                     }
 
                     @{
-                        <div class="col-md-3" id="Credit1">
-                        
-                                @Html.Label("Account")
-                                @Html.DropDownListFor(model => model.CRLedgerId, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control CRAccount", required = "required" })
-                                @Html.ValidationMessageFor(model => model.CRLedgerId, "", new { @class = "text-danger" })
-                   
-                        </div>
-                    }
-                    @{
-                        <div class="col-md-3" id="Debit1">
-                            
-                                @Html.Label("Account")
-                                @Html.DropDownListFor(model => model.DRLedgerId, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control DRAccount", required = "required" })
-                                @Html.ValidationMessageFor(model => model.DRLedgerId, "", new { @class = "text-danger" })
-                           
+                        <div class="col-md-3">
+                            @Html.Label("Account")
+                            @Html.DropDownListFor(model => model.Account, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control Account", required = "required" })
+                            @Html.ValidationMessageFor(model => model.Account, "", new { @class = "text-danger" })
+
                         </div>
                     }
                     <div class="col-md-2">
-                        <span id="Debit2">
-                            @Html.LabelFor(model => model.Debit, htmlAttributes: new { @class = "control-label  " })
+                        <span class="Debit">
+                            @Html.LabelFor(model => model.DRAmount, htmlAttributes: new { @class = "control-label  " })
 
-                            @Html.EditorFor(model => model.Debit, new { htmlAttributes = new { @class = "form-control Debit", id = "drid" } })
-                            @Html.ValidationMessageFor(model => model.Debit, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.DRAmount, new { htmlAttributes = new { @class = "form-control Debit", id = "drid" } })
+                            @Html.ValidationMessageFor(model => model.DRAmount, "", new { @class = "text-danger" })
                         </span>
                     </div>
                     <div class="col-md-2">
-                        <span id="Credit2">
-                            @Html.LabelFor(model => model.Credit, htmlAttributes: new { @class = "control-label  " })
+                        <span class="Credit">
+                            @Html.LabelFor(model => model.CRAmount, htmlAttributes: new { @class = "control-label  " })
 
-                            @Html.EditorFor(model => model.Credit, new { htmlAttributes = new { @class = "form-control Credit", id = "cid" } })
-                            @Html.ValidationMessageFor(model => model.Credit, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.CRAmount, new { htmlAttributes = new { @class = "form-control Credit", id = "cid" } })
+                            @Html.ValidationMessageFor(model => model.CRAmount, "", new { @class = "text-danger" })
                         </span>
                     </div>
                     <div class="col-md-1">
                         @*@Html.Label("Add", new { @class = "text-white" })
-            <input style="margin-top:25px" onclick="NewAddOn()" value="Add" class="btn btn-success" />*@
+                            <input style="margin-top:25px" onclick="NewAddOn()" value="Add" class="btn btn-success" />*@
                         <i style="margin-top:35px;font-size:x-large;" class="fa fa-plus-circle" onclick="NewAddOn()"></i>
 
                     </div>
@@ -103,14 +94,14 @@
                     <b>
                         @Html.Label("Total")
                     </b>
-                  
+
 
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
                     @Html.Label("Narration")
-                    @Html.TextAreaFor(model => model.Narration, new { htmlAttributes = new { @class = "form-control ",id= "Narration" } })
+                    @Html.TextAreaFor(model => model.Narration, new { htmlAttributes = new { @class = "form-control Narration" } })
                     @Html.ValidationMessageFor(model => model.Narration, "", new { @class = "text-danger" })
 
                 </div>
@@ -126,34 +117,29 @@
     </div>
 </div>
 <script>
-    $('#Credit1').hide();
-    $('#Debit1').show();
+
     function TypeChange(event) {
         console.log("aaya");
         var values = $(event).val();
         if (values === "1") {
-            $(event).parent('div').parent('div').find('#Credit2').show();
-            $(event).parent('div').parent('div').find('#Debit2').hide();
-            $(event).parent('div').parent('div').find('#Credit1').show();
-            $(event).parent('div').parent('div').find('#Debit1').hide();
+            $(event).parent('div').parent('div').find('.Credit').show();
+            $(event).parent('div').parent('div').find('.Debit').hide();
             //  $("#cid").show();
             // $("#drid").hide();
         }
         else if (values === "0") {
-            $(event).parent('div').parent('div').find('#Credit2').hide();
-            $(event).parent('div').parent('div').find('#Debit2').show();
-            $(event).parent('div').parent('div').find('#Credit1').show();
-            $(event).parent('div').parent('div').find('#Debit1').hide();
+            $(event).parent('div').parent('div').find('.Credit').hide();
+            $(event).parent('div').parent('div').find('.Debit').show();
         }
     }
-       
+
     function NewAddOn(event) {
         $('#waiting').show();
         $.ajax({
             type: 'GET',
             url: "/JournalEntry/GetUI",
             success: function (data) {
-               // $("#HeadDiv").append(data);
+                // $("#HeadDiv").append(data);
                 $("#AddNew").append(data);
                 $('#waiting').hide();
             },
@@ -165,29 +151,29 @@
     function SaveAdon() {
         var EList = [];
         var GetData = document.getElementsByClassName("GetEntryData");
-        var DATE1 = $("#DATEID").val();
-        var EID1 = $("#EID").val();
-        var Narration = $("#Narration").val();
-        console.log("test");
         for (var i = 0; i < GetData.length; i++) {
             var AddonObj = {};
             var ObjAddJQ = $(GetData[i]);
             console.log(" " + ObjAddJQ);
-            AddonObj.Date = DATE1;
+            AddonObj.Date = ObjAddJQ.find(".Date").val();
             AddonObj.DRAmount = ObjAddJQ.find(".Debit").val();
             AddonObj.CRAmount = ObjAddJQ.find(".Credit").val();
-            AddonObj.Narration = Narration;
-            AddonObj.EntryType = EID1;
-            AddonObj.DRLedgerId = ObjAddJQ.find(".DRAccount").val();
-            AddonObj.CRLedgerId = ObjAddJQ.find(".CRAccount").val();
-        
-                    
+            AddonObj.Narration = ObjAddJQ.find(".Narration").val();
+            AddonObj.EntryType = ObjAddJQ.find(".EntryType").val();
+            if (AddonObj.DRAmount > 0) {
+                AddonObj.DRLedgerId = ObjAddJQ.find(".Account").val();
+            }
+            else {
+                AddonObj.DRLedgerId = ObjAddJQ.find(".Account").val();
+            }
+            AddonObj.EntryType = ObjAddJQ.find(".EntryType").val();
+
             EList.push(AddonObj);
         }
         $('#waiting').show();
         $.ajax({
             type: 'POST',
-            url: "/JournalEntry/CreateEdit",
+            url: "/Accounts/CreateEdit",
             data: JSON.stringify(EList),
             contentType: "application/json",
             success: function (data) {

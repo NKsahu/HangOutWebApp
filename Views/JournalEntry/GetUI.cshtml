@@ -5,27 +5,37 @@
     Layout = null;
 }
 
-<div class="row" id="CreateCopy">
+<div class="row GetEntryData" id="CreateCopy">
 
     @{
         <div class="col-md-1">
             @Html.Label("Type")
-            @Html.DropDownListFor(model => model.Entrytype, new SelectList(JournalEntry.JType(), "ID", "Name", Model.ID), "Select", new { @class = "form-control Type", @onchange = "TypeChange(this)", required = "required" })
+            @Html.DropDownListFor(model => model.Entrytype, new SelectList(JournalEntry.JType(), "ID", "Name", Model.AID), "Select", new { @class = "form-control Type", @onchange = "TypeChange(this)", required = "required" })
             @Html.ValidationMessageFor(model => model.Entrytype, "", new { @class = "text-danger" })
 
         </div>
     }
 
     @{
-        <div class="col-md-3">
+        <div class="col-md-3" id="Credit1">
+
             @Html.Label("Account")
-            @Html.DropDownListFor(model => model.Account, new SelectList(Ledger.GetAll(), "ID", "Name", Model.ID), "Select", new { @class = "form-control", required = "required" })
-            @Html.ValidationMessageFor(model => model.Account, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(model => model.CRLedgerId, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control CRAccount", required = "required" })
+            @Html.ValidationMessageFor(model => model.CRLedgerId, "", new { @class = "text-danger" })
+
+        </div>
+    }
+    @{
+        <div class="col-md-3" id="Debit1">
+
+            @Html.Label("Account")
+            @Html.DropDownListFor(model => model.DRLedgerId, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control DRAccount", required = "required" })
+            @Html.ValidationMessageFor(model => model.DRLedgerId, "", new { @class = "text-danger" })
 
         </div>
     }
     <div class="col-md-2">
-        <span class="Debit">
+        <span id="Debit2">
             @Html.LabelFor(model => model.Debit, htmlAttributes: new { @class = "control-label  " })
 
             @Html.EditorFor(model => model.Debit, new { htmlAttributes = new { @class = "form-control Debit", id = "drid" } })
@@ -33,7 +43,7 @@
         </span>
     </div>
     <div class="col-md-2">
-        <span class="Credit">
+        <span id="Credit2">
             @Html.LabelFor(model => model.Credit, htmlAttributes: new { @class = "control-label  " })
 
             @Html.EditorFor(model => model.Credit, new { htmlAttributes = new { @class = "form-control Credit", id = "cid" } })

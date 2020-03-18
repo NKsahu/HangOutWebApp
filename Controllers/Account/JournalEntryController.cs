@@ -26,11 +26,15 @@ namespace HangOut.Controllers
 
         // JournalEntry create edit
         [HttpPost]
-        public ActionResult CreateEdit(Group Obj)
+        public ActionResult CreateEdit(List<JournalEntry> Obj)
         {
-            int i = Obj.Save();
-            if (i > 0)
-                return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
+            foreach(var item in Obj)
+            {
+                int i = item.SaveGeneral();
+                if (i > 0)
+                    return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
+               
+            }
             return RedirectToAction("Error");
         }
         public ActionResult GetDetails(List<HG_OrderItem> CompletedItems)

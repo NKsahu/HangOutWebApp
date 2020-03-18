@@ -30,6 +30,22 @@ namespace HangOut.Controllers.Account
             return View(REOBJ);
             
         }
+        // GET: JournalEntryUI
+        public ActionResult GetACUI()
+        {
+            Accounts Obj = new Accounts();
+            return View(Obj);
+        }
+
+        // Entry create edit
+        [HttpPost]
+        public ActionResult CreateEdit()
+        {
+           
+            return RedirectToAction("Error");
+        }
+
+
 
 
     }

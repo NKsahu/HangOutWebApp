@@ -10,6 +10,7 @@ namespace HangOut.Models.Account
     {
        // Account
         public int AID { get; set; }
+        public int Account { get; set; }
         public DateTime Date { get; set; }
         public double DRAmount { get; set; }
         public double CRAmount { get; set; }
