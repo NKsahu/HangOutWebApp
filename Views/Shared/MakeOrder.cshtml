@@ -565,13 +565,13 @@
          LoginId = $("#CUC").val();
          OrgType = $("#OrgType").val();
      });
-        function plus(itemid) {
-            var CartValue = parseInt($("#C" + itemid).text());
+        function plus(itemid,ItmUUID) {
+            var CartValue = parseInt($("#C" + ItmUUID).text());
             AddToCart(itemid, CartValue + 1);
             //$("#" + add).text(CartValue+1);
         }
-        function minus(itemid) {
-            var CartValue = parseInt($("#C" + itemid).text());
+     function minus(itemid, ItmUUID) {
+         var CartValue = parseInt($("#C" + ItmUUID).text());
             if (CartValue > 0) {
                 AddToCart(itemid, CartValue - 1);
             }
@@ -634,12 +634,12 @@
                  //amt
                  strhtml += '<div class="col-md-3">';
                //  strhtml += '  <label></label>';
-                 strhtml += '<input type="text" readonly value="' + AddonList[i].AddOnItemList[j].Price +'" class="form-control" />';
+                 strhtml += '<input type="text" id="Price'+AddonList[i].AddOnItemList[j].AddOnItemId+'" readonly value="' + AddonList[i].AddOnItemList[j].Price.toFixed(2) +'" class="form-control" />';
                  strhtml += '</div>';
                  //tax
                  strhtml += '<div class="col-md-3">';
                 // strhtml += '  <label></label>';
-                 strhtml += '<input type="checkbox" TitileId="'+AddonList[i].TitleId +'" id="' + AddonList[i].AddOnItemList[j].AddOnItemId+'" class="form-control" />';
+                 strhtml += '<input type="checkbox" TitileId="'+AddonList[i].TitleId +'" id="' + AddonList[i].AddOnItemList[j].AddOnItemId+'" class="form-control AddonCheckBox" />';
                  strhtml += '</div>';
                  strhtml += ' </div>';
                 
@@ -652,7 +652,7 @@
          //submit and cancel button
          strhtml += '<div class="col-md-3"> <button class="btn btn-md btn-danger">Cancel</button> </div>';
          strhtml+='<div class="col-md-6"></div>'
-         strhtml += '<div class="col-md-3"><button onclick="SubmitAddon()" class="btn btn-md btn-success">Submit</button> </div>';
+         strhtml += '<div class="col-md-3"><button onclick="SubmitAddon('+ItemId+')" class="btn btn-md btn-success">Submit</button> </div>';
 
          strhtml += ' </div>';
          strhtml += ' </div>';
@@ -662,8 +662,53 @@
          showdpt("ShowAddon");
 
      }
-     function SubmitAddon() {
+     function SubmitAddon(itemid) {
+         var ObjItem = ItemList.find(x => {
+             return x.IID=== itemid
+         });
+         $("#waiting").show();
+         var ObjItmAddon = {};
+         var AddonItemSelected = document.getElementsByClassName("AddonCheckBox");
+         var AddonItemIdCsv = "";
+         var sumOfItem =parseFloat(ObjItem.ItemPrice);
+         var AddonItemId = [];
+         for (var i = 0; i < AddonItemSelected.length; i++) {
+             var ObjCheckBx = $(AddonItemSelected[i]);
+             if (ObjCheckBx.is(':checked')) {
+                 console.log("Aaya=" + AddonItemSelected[i]);
+                 AddonItemIdCsv += ObjCheckBx.attr('id')+",";
+                 AddonItemId.push(ObjCheckBx.attr('id'));
+                 sumOfItem += $("#Price"+ObjCheckBx.attr('id')).val();
+             }
+            
+         }
+         ObjItmAddon.AddonItemIdCsv = AddonItemIdCsv;
+         ObjItmAddon.AddonItemId = AddonItemId;
 
+         //==
+         var ObjCart = {};
+         ObjCart.CID = LoginId;
+         ObjCart.ItemId = itemid;
+         ObjCart.TableorSheatOrTaleAwayId = CurrentOrder;
+         ObjCart.itemAddons = ObjItmAddon;
+         ObjCart.ItemPrice = sumOfItem;
+         $.ajax({
+             type: 'POST',
+             url: "/WebApi/AddAdonItm",
+             data: JSON.stringify(ObjCart),
+             contentType: "application/json",
+             success: function (data) {
+                 var Object = JSON.parse(data);
+                 var UUID = Object.UUID;
+                 var Cnt = Object.Cnt;
+                 hidedpt("ShowAddon");
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
+             }
+         });
+
+         $("#waiting").hide();
      }
         function AddToCart(ItemId, Cnt) {
             var Obj = {};
@@ -718,8 +763,15 @@
         function AddItemToQue(ObjItem) {
             if (ObjItem.ItemCartValue != '0') {
                 var Itemid = ObjItem.IID;
-                var ItemPrice = parseFloat(ObjItem.ItemPrice) * parseInt(ObjItem.ItemCartValue);
-                $("#AddItem").append("<tr class='ItemsTr' id='tr" + Itemid + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\")'" + CountHtml + "id='C" + Itemid + "' >" + ObjItem.ItemCartValue + PlusHtml + "onclick='plus(\"" + Itemid + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + Itemid + "'>" + ItemPrice + "</span>" + cartlasthtml);
+                var ItemUUIDS = ObjItem.ItemArray;
+                for (var i = 0; i < ItemUUIDS.length; i++) {
+                    console.log("==" + ItemUUIDS[i]);
+                    var ObjUUID = ItemUUIDS[i];
+                    var ItmUUID = ItemUUIDS[i].UUID;
+                    var ItemPrice = parseFloat(ObjUUID.Price) * parseInt(ObjUUID.Cnt);
+                    $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + ItmUUID + "'>" + ItemPrice + "</span>" + cartlasthtml);
+                }
+                
             }
 
         }
