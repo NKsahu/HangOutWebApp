@@ -432,6 +432,7 @@ namespace HangOut.Controllers.Account
 
         public ActionResult PostToAccount(int OrgId)
         {
+            Accounts Obj = new Accounts();
             Accounts AObj = new Accounts();
             Accounts A0Obj = new Accounts();
             Accounts A1Obj = new Accounts();
@@ -440,6 +441,7 @@ namespace HangOut.Controllers.Account
             Accounts A4Obj = new Accounts();
             int LastEntryNo = 0;
             int JLastEntryNo = 0;
+            int RLastEntryNo = 0;
             int PLastEntryNo = 0;
 
             Ledger LedgerDetails = Ledger.GetAllList().Where(w => w.OrgId == OrgId).FirstOrDefault();
@@ -453,8 +455,47 @@ namespace HangOut.Controllers.Account
 
             Accounts GetACBalance = Accounts.GetAllACDetails(OrgId)
                        .Where(w => w.AOrgId == OrgId).LastOrDefault();
-                       
 
+            Obj.Date = DateTime.Now;
+            Obj.Narration = "Online payments from customers";
+            Obj.DRAmount = GetAmountSum;
+            if (GetACBalance != null)
+            {
+                AObj.Balance = GetACBalance.Balance - AObj.DRAmount;
+            }
+            else
+            {
+                AObj.Balance = GetAmountSum;
+            }
+
+            Obj.AOrgId = OrgId;
+            Obj.ADRLedgerId = GetReceiptEntry.DRLedgerId;
+            Obj.ACRLedgerId = GetReceiptEntry.CRLedgerId;
+            Obj.DRGroupId = GetReceiptEntry.DRGroupId;
+            Obj.CRGroupId = 12;
+            Obj.EntryType = "Receipt";
+            Obj.ReceiptID = GetReceiptEntry.ID;
+            try
+            {
+                RLastEntryNo = Accounts.GetAllACDetails(OrgId).Where(w => w.EntryType == "Receipt").Select(s => s.EntryNo).Last();
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+            }
+            if (RLastEntryNo > 0)
+            {
+                RLastEntryNo = RLastEntryNo + 1;
+            }
+            else
+            {
+                RLastEntryNo = 1;
+            }
+            Obj.EntryNo = RLastEntryNo;
+
+            Obj.SaveGeneral();
+
+            //=====================================================================================================
             AObj.Date = DateTime.Now;
             AObj.Narration = "Online payments from customers";
             AObj.CRAmount = GetAmountSum;

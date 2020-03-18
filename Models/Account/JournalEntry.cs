@@ -104,7 +104,30 @@ namespace HangOut.Models.Account
             }
             Ledger LedgerDetails = Ledger.GetAll().Where(w => w.ID == CRLedgerId
                        || w.ID == DRLedgerId).FirstOrDefault();
-
+             if(this.Entrytype=="1")
+               {
+                this.Entrytype = "Payment";
+               }
+            if (this.Entrytype == "2")
+            {
+                this.Entrytype = "Receipt";
+            }
+            if (this.Entrytype == "3")
+            {
+                this.Entrytype = "Contra Entry";
+            }
+            if (this.Entrytype == "4")
+            {
+                this.Entrytype = "Journal Entry";
+            }
+            if (this.Entrytype == "5")
+            {
+                this.Entrytype = "Sale";
+            }
+            if (this.Entrytype == "6")
+            {
+                this.Entrytype = "Purchase";
+            }
 
             try
             {
@@ -209,12 +232,12 @@ namespace HangOut.Models.Account
         {
 
             List<EntryType> type = new List<EntryType>();
-            type.Add(new EntryType { Name = "Payment" });
-            type.Add(new EntryType { Name = "Receipt" });
-            type.Add(new EntryType { Name = "Contra Entry" });
-            type.Add(new EntryType { Name = "Journal Entry" });
-            type.Add(new EntryType { Name = "Debit Note" });
-            type.Add(new EntryType { Name = "Credit Note" });
+            type.Add(new EntryType { Id = 1, Name = "Payment" });
+            type.Add(new EntryType { Id = 2, Name = "Receipt" });
+            type.Add(new EntryType { Id = 3, Name = "Contra Entry" });
+            type.Add(new EntryType { Id = 4, Name = "Journal Entry" });
+            type.Add(new EntryType { Id = 5, Name = "Sale" });
+            type.Add(new EntryType { Id = 6, Name = "Purchase" });
 
             return type;
         }
