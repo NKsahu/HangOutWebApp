@@ -26,7 +26,7 @@
                 @{
                     <div class="col-md-3">
                         @Html.Label("EntryType")
-                        @Html.DropDownListFor(model => model.Entrytype, new SelectList(JournalEntry.EType(), "ID", "Name", Model.AID), "Select", new { @class = "form-control Entrytype", required = "required",id = "EID" })
+                        @Html.DropDownListFor(model => model.Entrytype, new SelectList(JournalEntry.EType(), "ID","Name", Model.Entrytype), "Select", new { @class = "form-control Entrytype", required = "required",id = "EID" })
                         @Html.ValidationMessageFor(model => model.Entrytype, "", new { @class = "text-danger" })
 
                     </div>
