@@ -3,7 +3,7 @@
 @{
     Layout = null;
 }
-<div class="AddOnnCls">
+<div class="AddOnnCls ">
     @using (Html.BeginCollectionItem("AddonnList"))
     {
         @Html.HiddenFor(model => model.TitleId,new { @class = "TitleId" })
