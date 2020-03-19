@@ -1,5 +1,6 @@
 ﻿@using HangOut.Models;
 @using HangOut.Models.Common;
+@using HangOut.Models.POS;
 @{
     Layout = null;
     var Userinfo = Request.Cookies["UserInfo"];
@@ -147,7 +148,7 @@
 
                 }
                 <button onclick="MarkCompleteTicket(@firstitm.OIID)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
-                <table class="table table-bordered">
+                <table class="table table-bordered table-responsive">
                     <thead>
                         <tr>
                             <td><input style="margin:2px" @TickSts type="checkbox" onclick="TickAll(this,@firstitm.OIID)">Tick</td>
@@ -161,9 +162,37 @@
                         {
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
                             double Amt = items.Price * items.Count;
-                            <tr>
-                                <td><input class=" CkeckorNot" @TickSts type="checkbox"  id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID"></td>
-                                <td>@FoodObj.Items</td>
+                            var OrderAdonItms = new List<OrderAdonItm>();
+                            if (items.IsAddon == "1")
+                            {
+                                OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
+                                double sumofAdddon = OrderAdonItms.Sum(x => x.Price);
+                                Amt += sumofAdddon * items.Count;
+                            }
+                            <tr >
+                                <td>
+                                    <input class=" CkeckorNot" @TickSts type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID">
+                                    
+                                </td>
+                                <td>
+                                    @FoodObj.Items
+                                                                @if (items.IsAddon == "1")
+                                                                {
+                                                                    int count = 1;
+                                                                    
+                                    <div style="border:1px solid black;">
+                                        @foreach (var addonitm in OrderAdonItms)
+                                        {
+                                            
+                                        <table>
+                                            <tr><td>@count ) @addonitm.ItemName</td></tr>
+                                        </table>
+                                            count = count + 1;
+                                        }
+                                    </div>
+                                                                   
+                                                                }
+                                                            </td>
                                 <td>@items.Count</td>
                             </tr>
                         }

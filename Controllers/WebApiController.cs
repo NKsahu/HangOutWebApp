@@ -1007,6 +1007,7 @@ namespace HangOut.Controllers
                             OrdAddonItm.AdddOnItemId = addOnItems.AddOnItemId;
                             OrdAddonItm.ItemId = addOnItems.ItemId;
                             OrdAddonItm.Tax = addOnItems.Tax;
+                            OrdAddonItm.CostPrice = addOnItems.CostPrice;
                             OrdAddonItm.Price = addOnItems.Price;
                             OrdAddonItm.Save();
                         }
