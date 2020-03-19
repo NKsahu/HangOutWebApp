@@ -10,7 +10,7 @@ namespace HangOut.Models.POS
     public class AddOnItems
     {
         public int AddOnItemId { get; set; }
-        public Int64 ItemId { get; set; }
+        public int ItemId { get; set; }
         public double CostPrice { get; set; }
         public double Tax { get; set; }
         public double Price { get; set; }
@@ -86,7 +86,7 @@ namespace HangOut.Models.POS
                 {
                     AddOnItems OBJINT = new AddOnItems();
                     OBJINT.AddOnItemId = SDR.GetInt32(0);
-                    OBJINT.ItemId = SDR.GetInt64(1);
+                    OBJINT.ItemId = SDR.GetInt32(1);
                     OBJINT.CostPrice = SDR.GetDouble(2);
                     OBJINT.Tax = SDR.GetDouble(3);
                     OBJINT.Price = SDR.GetDouble(4);
@@ -115,7 +115,7 @@ namespace HangOut.Models.POS
                 {
                     int index = 0;
                     ObjTmp.AddOnItemId = SDR.GetInt32(index++);
-                    ObjTmp.ItemId = SDR.GetInt64(index++);
+                    ObjTmp.ItemId = SDR.GetInt32(index++);
                     ObjTmp.CostPrice = SDR.GetDouble(index++);
                     ObjTmp.Tax = SDR.GetDouble(index++);
                     ObjTmp.Price = SDR.GetDouble(index++);
