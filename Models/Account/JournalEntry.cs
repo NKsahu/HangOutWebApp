@@ -28,7 +28,8 @@ namespace HangOut.Models.Account
         public int CRLedgerId { get; set; }
         public double JEDAmount { get; set; }
         public int OrderId { get; set; }
-        public List<JournalEntry> AddOnList { get; set; }
+        public double TotalCRAmount { get; set; }
+        public double TotalDRAmount { get; set; }
         public int ReceiptID { get; set; }
 
 
@@ -223,8 +224,8 @@ namespace HangOut.Models.Account
         {
 
             List<JType> type = new List<JType>();
-            type.Add(new JType { Id = 0, Name = "DR" });
-            type.Add(new JType { Id = 1, Name = "CR" });
+            type.Add(new JType { Id = 1, Name = "DR" });
+            type.Add(new JType { Id = 2, Name = "CR" });
 
             return type;
         }

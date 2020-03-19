@@ -103,8 +103,18 @@
                     <b>
                         @Html.Label("Total")
                     </b>
-                  
-
+                </div>
+                <div class="col-md-1" id="TotalDRAmount">
+                    <b>
+                        @Html.EditorFor(model => model.TotalDRAmount, new { htmlAttributes = new { @class = "form-control", } })
+                        @Html.ValidationMessageFor(model => model.TotalDRAmount, "", new { @class = "text-danger" })
+                    </b>
+                </div>
+                <div class="col-md-1" id="TotalCRAmount">
+                    <b>
+                        @Html.EditorFor(model => model.TotalCRAmount, new { htmlAttributes = new { @class = "form-control", } })
+                        @Html.ValidationMessageFor(model => model.TotalCRAmount, "", new { @class = "text-danger" })
+                    </b>
                 </div>
             </div>
             <div class="row">
@@ -131,7 +141,7 @@
     function TypeChange(event) {
         console.log("aaya");
         var values = $(event).val();
-        if (values === "1") {
+        if (values === "2") {
             $(event).parent('div').parent('div').find('#Credit2').show();
             $(event).parent('div').parent('div').find('#Debit2').hide();
             $(event).parent('div').parent('div').find('#Credit1').show();
@@ -139,7 +149,7 @@
             //  $("#cid").show();
             // $("#drid").hide();
         }
-        else if (values === "0") {
+        else if (values === "1") {
             $(event).parent('div').parent('div').find('#Credit2').hide();
             $(event).parent('div').parent('div').find('#Debit2').show();
             $(event).parent('div').parent('div').find('#Credit1').show();
@@ -148,6 +158,7 @@
     }
        
     function NewAddOn(event) {
+
         $('#waiting').show();
         $.ajax({
             type: 'GET',
@@ -160,7 +171,9 @@
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $('#waiting').hide();
             }
+
         });
+
     }
     function SaveAdon() {
         var EList = [];
@@ -168,6 +181,8 @@
         var DATE1 = $("#DATEID").val();
         var EID1 = $("#EID").val();
         var Narration = $("#Narration").val();
+        var TotalCRAmount = 0;
+        var TotalDRAmount = 0;
         console.log("test");
         for (var i = 0; i < GetData.length; i++) {
             var AddonObj = {};
@@ -175,7 +190,9 @@
             console.log(" " + ObjAddJQ);
             AddonObj.Date = DATE1;
             AddonObj.DRAmount = ObjAddJQ.find(".Debit").val();
+            TotalDRAmount = TotalDRAmount + AddonObj.DRAmount;
             AddonObj.CRAmount = ObjAddJQ.find(".Credit").val();
+            TotalCRAmount = TotalCRAmount + AddonObj.CRAmount;
             AddonObj.Narration = Narration;
             AddonObj.EntryType = EID1;
             AddonObj.DRLedgerId = ObjAddJQ.find(".DRAccount").val();
@@ -198,6 +215,6 @@
                 $('#waiting').hide();
             }
         });
-
+        
     }
 </script>
