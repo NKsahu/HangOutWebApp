@@ -1,6 +1,7 @@
 ﻿@{ Layout = null;}
 @using HangOut.Models;
 @using HangOut.Models.DynamicList;
+@using HangOut.Models.POS;
 @{ 
     string Seating = "";
     string OID = Request.QueryString["OID"];
@@ -120,6 +121,11 @@
                 {
                     <!-- //"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"-->
                     double ItemPrice = item.Price * item.Count;
+                    if (item.IsAddon == "1")
+                    {
+                        var AddonItem = OrderAdonItm.GetAll(item.OIID);
+                        ItemPrice+= AddonItem.Sum(x=>x.Price)* item.Count;
+                    }
                     if (item.Status != 4)
                     {
                         QtyTotal += item.Count;
@@ -133,7 +139,7 @@
                     var PrepareByObj = new vw_HG_UsersDetails();
                     if (item.ChefSeenBy > 0)
                     {
-                         PrepareByObj = new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
+                        PrepareByObj = new vw_HG_UsersDetails().GetSingleByUserId(item.ChefSeenBy);
                     }
                     if (PlacedByObj.UserCode > 0)
                     {
@@ -172,6 +178,10 @@
                             @sno
                         </td>
                         <td>
+                            @if (item.IsAddon == "1")
+                            {
+                                <i class='fa fa-info-circle' onclick='AddonInfo(@item.OIID)'  aria-hidden='true'></i>
+                            }
                             @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
                             @ObjOrder.Items
                         </td>
