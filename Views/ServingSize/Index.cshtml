@@ -1,4 +1,5 @@
-﻿@model IEnumerable<HangOut.Models.POS.ServingSize>
+﻿@model IEnumerable<HangOut.Models.HG_Items>
+    @using HangOut.Models;
     @{ 
         Layout = null;
     }
@@ -35,10 +36,10 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.ServingId)
+                        @Html.DisplayName("ID")
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                        @Html.DisplayName("Name")
                     </th>
                     
                     <th class="noExport"> </th>
@@ -47,15 +48,15 @@
             <tbody id="Tbody">
                 @foreach (var SSize in Model)
                 {
-                    <tr id="@SSize.ServingId">
+                    <tr id="@SSize.ItemID">
                         <td>
-                           @SSize.ServingId
+                           @SSize.ItemID
                         </td>
                         <td>
-                            @SSize.Name
+                            @SSize.Items
                         </td>
                         <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.ServingId)">Edit</button>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.ItemID)">Edit</button>
                         </td>
                     </tr>
                 }
@@ -76,16 +77,16 @@
             hidedpt("CreateSS");
             $('#waiting').hide();
             var Jitmobj = Jobj.data;
-            var HtmlStr = "<tr id='" + Jitmobj.ServingId + "'>";
-            HtmlStr += '<td>' + Jitmobj.ServingId + '</td>';
-            HtmlStr += '<td>' + Jitmobj.Name + '</td>';
-            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ServingId + ')"> Edit</button>';
+            var HtmlStr = "<tr id='" + Jitmobj.ItemID + "'>";
+            HtmlStr += '<td>' + Jitmobj.ItemID + '</td>';
+            HtmlStr += '<td>' + Jitmobj.Items + '</td>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ItemID + ')"> Edit</button>';
             var table = $('table').DataTable();
             if (AddTr) {
                 table.row.add($(HtmlStr)).draw();
             }
             else {
-                table.row("#" + Jitmobj.ServingId).remove().draw();
+                table.row("#" + Jitmobj.ItemID).remove().draw();
                 table.row.add($(HtmlStr)).draw();
             }
         }
@@ -99,7 +100,7 @@
         $('#waiting').show();
         $.ajax({
             type: 'GET',
-            url: "/ServingSize/CreatEdit?ID=" + ID,
+            url: "/HG_Items/CreateServingSize?ItemId=" + ID,
             success: function (data) {
                 makedpt("CreateSS",400,400);
                 $("#CreateSS > .modal-dialog > .modal-content > .modal-body").html(data);

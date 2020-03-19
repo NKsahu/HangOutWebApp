@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HangOut.Models.POS.ServingSize>
+﻿@model IEnumerable<HangOut.Models.HG_Items>
 @{
     Layout = null;
 }
@@ -9,19 +9,19 @@
                 Select
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayName("Name")
             </th>
         </tr>
     </thead>
     <tbody id="Tbody">
         @foreach (var SSize in Model)
         {
-            <tr id="@SSize.ServingId">
+            <tr id="@SSize.ItemID">
                 <td>
-                    <input type="checkbox" onclick="AddSSize(this,@SSize.ServingId)" class="form-control" />
+                    <input type="checkbox" onclick="AddSSize(this,@SSize.ItemID)" class="form-control" />
                 </td>
                 <td>
-                    @SSize.Name
+                    @SSize.Items
                 </td>
             </tr>
         }
