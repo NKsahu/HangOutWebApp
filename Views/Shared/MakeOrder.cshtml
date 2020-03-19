@@ -613,7 +613,7 @@
              strhtml +='<div class="row" style="border:1px solid black" >';
              strhtml += '<div class="col-md-8">';
              strhtml += '<label></label>';
-             strhtml += '<input type="text" readonly value="'+ AddonList[i].AddOnTitle+'" class="form-control" />';
+             strhtml += '<input type="text" id="Addon' + AddonList[i].TitleId + '" readonly value="'+ AddonList[i].AddOnTitle+'" class="form-control" />';
              strhtml += '</div>';
              //min 
              strhtml += '<div class="col-md-2">';
@@ -633,7 +633,7 @@
                  //item 
                  strhtml += '<div class="col-md-6">';
                 // strhtml += '<label></label>';
-                 strhtml += '<input type="text" readonly value="' + AddonList[i].AddOnItemList[j].Title+'" class="form-control" />';
+                 strhtml += '<input type="text" readonly  value="' + AddonList[i].AddOnItemList[j].Title+'" class="form-control" />';
                  strhtml += '</div>';
                  //amt
                  strhtml += '<div class="col-md-3">';
@@ -643,7 +643,7 @@
                  //tax
                  strhtml += '<div class="col-md-3">';
                 // strhtml += '  <label></label>';
-                 strhtml += '<input type="checkbox" TitileId="'+AddonList[i].TitleId +'" id="' + AddonList[i].AddOnItemList[j].AddOnItemId+'" class="form-control AddonCheckBox" />';
+                 strhtml += '<input type="checkbox" TitileId="' + AddonList[i].TitleId + '" id="' + AddonList[i].AddOnItemList[j].AddOnItemId + '" class="form-control AddonCheckBox ' + AddonList[i].TitleId+'" />';
                  strhtml += '</div>';
                  strhtml += ' </div>';
                 
@@ -670,26 +670,62 @@
          var ObjItem = ItemList.find(x => {
              return x.IID=== itemid
          });
-         $("#waiting").show();
+         
          console.log("item sum");
          var ObjItmAddon = {};
          var AddonItemSelected = document.getElementsByClassName("AddonCheckBox");
          var AddonItemIdCsv = "";
          var sumOfItem =parseFloat(ObjItem.ItemPrice);
          var AddonItemId = [];
+         var NotSelectedIds = [];
+         var ArrayAddonsId = [];
          for (var i = 0; i < AddonItemSelected.length; i++) {
              var ObjCheckBx = $(AddonItemSelected[i]);
              if (ObjCheckBx.is(':checked')) {
                  console.log("Aaya=" + AddonItemSelected[i]);
-                 AddonItemIdCsv += ObjCheckBx.attr('id')+",";
+                 AddonItemIdCsv += ObjCheckBx.attr('id') + ",";
                  AddonItemId.push(ObjCheckBx.attr('id'));
-                 sumOfItem +=parseFloat($("#Price"+ObjCheckBx.attr('id')).val());
+                 sumOfItem += parseFloat($("#Price" + ObjCheckBx.attr('id')).val());
+                 var titleId = ObjCheckBx.attr('TitileId');
+                 ArrayAddonsId.push(titleId);
+                 var Min = parseInt($("#Min" + titleId).val());
+                 var Max = parseInt($("#Max" + titleId).val());
+                 var AddonAppliedArray = ArrayAddonsId.filter(function (titid) {
+                     return titid == titleId;
+                 });
+                 var Items = document.getElementsByClassName(titleId);
+                 if (Items.length == AddonAppliedArray.length) {
+                     var result = AddonValidation(titleId);
+                     if (result != null) {
+                         return;
+                     }
+                 }
              }
-            
+             else {
+                  var titleId = ObjCheckBx.attr('TitileId');
+                 ArrayAddonsId.push(titleId);
+                var Items = document.getElementsByClassName(titleId);
+                 var AddonAppliedArray = ArrayAddonsId.filter(function (titid) {
+                     return titid == titleId;
+                 });
+                 if (Items.length == AddonAppliedArray.length) {
+                     var result = AddonValidation(titleId);
+                     if (result != null) {
+                         return;
+                     }
+                 }
+                
+             }
+             
+
          }
+
+
+         
+
          ObjItmAddon.AddonItemIdCsv = AddonItemIdCsv;
          ObjItmAddon.AddonItemId = AddonItemId;
-
+         $("#waiting").show();
          //==
          var ObjCart = {};
          ObjCart.CID = LoginId;
@@ -722,6 +758,48 @@
          });
 
          $("#waiting").hide();
+     }
+     function AddonValidation(titileid) {
+         var Items = document.getElementsByClassName(titileid);
+         var checkedcnt = 0;
+         var unchecked = 0;
+         for (var j = 0; j < Items.length; j++) {
+             var obj = $(Items[j]);
+             var titleId = obj.attr('TitileId');
+             var Min = parseInt($("#Min" + titleId).val());
+             var Max = parseInt($("#Max" + titleId).val());
+             var title = $("#Addon" + titleId).val();
+             console.log("aaya");
+             if (obj.is(':checked')) {
+                 checkedcnt += 1;
+             }
+             else {
+                 unchecked += 1;
+             }
+         }
+         if (Items.length == unchecked + checkedcnt) {
+             condition = true;
+         }
+         if (checkedcnt > Min && condition) {
+             alert("Qty can't more than " + Min + " of " + title);
+             return 1;
+         }
+         if (checkedcnt < Min && condition) {
+             alert("Select Minimum " + Min + " Qty of " + title);
+             return 1;
+         }
+         if (checkedcnt > Max && condition) {
+             alert("Qty can't more than " + Max + " of " + title);
+             return 1;
+         }
+         if (unchecked == Items.length && Min > 0) {
+
+             alert('Select atleast ' + Min + ' Item from ' + title);
+             return 1;
+         }
+         else {
+             return null;
+         }
      }
         function AddToCart(ItemId,ItmUUID, Cnt) {
             var Obj = {};

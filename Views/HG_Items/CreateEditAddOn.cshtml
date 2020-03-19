@@ -101,6 +101,7 @@
         Addons.AddOnCatorItmId = $("#AddOnCatorItmId").val();
         Addons.IsServingAddon = $("#IsServingAddon").val();
         Addons.AddonnList = [];
+        console.log("AAYA=");
         var ListAddOnnCls = document.getElementsByClassName("AddOnnCls");
         for (var i = 0; i < ListAddOnnCls.length; i++) {
             var AddonObj = {};
@@ -129,7 +130,11 @@
                 AddonItemObj.IsServingAddon = ObjAddOnItem.find(".IsServingAddon").val();
                 AddonObj.AddOnItemList.push(AddonItemObj);
             }
-            Addons.AddonnList.push(AddonObj);
+
+            if (AddonObj.TitleId != null && AddonObj.TitleId != undefined) {
+                Addons.AddonnList.push(AddonObj);
+            }
+            
         }
             
             $('#waiting').show();

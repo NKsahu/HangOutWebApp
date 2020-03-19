@@ -404,6 +404,7 @@
     <Compile Include="Models\PendingPrints.cs" />
     <Compile Include="Models\POS\AddOnItems.cs" />
     <Compile Include="Models\POS\AddOnn.cs" />
+    <Compile Include="Models\POS\OrderAdonItm.cs" />
     <Compile Include="Models\POS\ServingSize.cs" />
     <Compile Include="Models\vw_HG_UsersDetails.cs" />
     <Compile Include="PosHandler.ashx.cs">
