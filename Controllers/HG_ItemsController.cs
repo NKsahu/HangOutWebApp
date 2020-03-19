@@ -357,5 +357,51 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult CreateServingSize(int ItemId)
+        {
+            HG_Items ObjItem = new HG_Items();
+            if (ItemId > 0)
+            {
+                ObjItem = new HG_Items().GetOne(ItemId);
+            }
+            ObjItem.Type = 2;
+            return View(ObjItem);
+        }
+        [HttpPost]
+        public ActionResult SaveSS(HG_Items Objitem)
+        {
+            if (Objitem.Qty == null)
+            {
+                Objitem.Qty = "";
+
+            }
+            if (Objitem.Items == null)
+            {
+                return Json(new { msg = "Select Item Category Name" });
+            }
+            if (Objitem.ItemDiscription == null)
+            {
+                Objitem.ItemDiscription = "";
+            }
+            if (Objitem.Type == 0)
+            {
+                Objitem.Type = 2;
+            }
+            if (Objitem.OrgID == 0)
+            {
+                var OrgObj = Request.Cookies["UserInfo"];
+                Objitem.OrgID = int.Parse(OrgObj["OrgId"]);
+            }
+            if (Objitem.Image == null)
+            {
+                Objitem.Image = "";
+            }
+            if (Objitem.ItemMode == null)
+            {
+                Objitem.ItemMode = "1";
+            }
+            Objitem.Save();
+            return Json(new { data = Objitem }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

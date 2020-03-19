@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using HangOut.Models.POS;
 using HangOut.Models.DynamicList;
 using System.Web.Mvc;
-
+using HangOut.Models;
 namespace HangOut.Controllers.POS
 {
     public class ServingSizeController : Controller
@@ -12,8 +12,9 @@ namespace HangOut.Controllers.POS
         public ActionResult Index()
         {
             int OrgId = OrderType.CurrOrgId();
-            List<ServingSize> servingSizes = ServingSize.GetAll(OrgId); 
-            return View(servingSizes);
+            //List<ServingSize> servingSizes = ServingSize.GetAll(OrgId); 
+            List<HG_Items> ServingItems = new HG_Items().GetAll(OrgId, 2);
+            return View(ServingItems);
         }
         public ActionResult CreatEdit(int ID)
         {
@@ -37,18 +38,19 @@ namespace HangOut.Controllers.POS
         public ActionResult ShowServingSize()
         {
             int OrgId = OrderType.CurrOrgId();
-            List<ServingSize> servingSizes = ServingSize.GetAll(OrgId);
-            return View(servingSizes);
+            //List<ServingSize> servingSizes = ServingSize.GetAll(OrgId); 
+            List<HG_Items> ServingItems = new HG_Items().GetAll(OrgId, 2);
+            return View(ServingItems);
         }
         public ActionResult NewAddonSS(int SSID)
         {
-            ServingSize ObjSS =  ServingSize.GetOne(SSID);
+            HG_Items ObjItem = new HG_Items().GetOne(SSID);
             AddOnItems AddOnItemList = new AddOnItems();
-            AddOnItemList.ItemId = ObjSS.ServingId;
-            AddOnItemList.Title = ObjSS.Name;
-            AddOnItemList.CostPrice = 0.00;
-            AddOnItemList.Tax = 0.00;
-            AddOnItemList.Price = 0.00;
+            AddOnItemList.ItemId = ObjItem.ItemID;
+            AddOnItemList.Title = ObjItem.Items;
+            AddOnItemList.CostPrice = ObjItem.CostPrice;
+            AddOnItemList.Tax = ObjItem.Tax;
+            AddOnItemList.Price = ObjItem.Price;
             AddOnItemList.IsServingAddon = true;
             return View("AddOnItem", AddOnItemList);
         }
