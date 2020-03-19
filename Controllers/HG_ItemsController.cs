@@ -357,5 +357,10 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        public ActionResult CreateServingSize()
+        {
+
+            return View();
+        }
     }
 }
