@@ -987,27 +987,33 @@ namespace HangOut.Controllers
                         TaxInItm=ObjItem.Tax,
                         CostPrice=ObjItem.CostPrice
                     };
-                    //check addon items exist
-                    if (Item.itemAddons != null && Item.itemAddons.AddonItemId.Count > 0)
+                    if (OrderItem.Save() <= 0)
                     {
-
-                        OrderAdonItm OrdAddonItm = new OrderAdonItm();
-                        OrdAddonItm.OID = NewOID;
-                        OrdAddonItm.OIID = OrderItem.OIID;
-                        OrdAddonItm.AdddOnItemId = 101;
-                        OrdAddonItm.ItemId = 101;
-                        OrdAddonItm.Tax = 100;
-                        OrdAddonItm.Price = 500;
-                       
-                    }
-                        if (OrderItem.Save() <= 0)
-                        {
-                            HG_Orders order = new HG_Orders();
-                            order.DeleteOrderAndOrderItem(NewOID,false);
+                        HG_Orders order = new HG_Orders();
+                        order.DeleteOrderAndOrderItem(NewOID, false);
                         PostResult.Add("Status", 400);
                         PostResult.Add("MSG", "Can't Confirm Order Try After Some Time.");
                         return PostResult;
+                    }
+                    //check addon items exist
+                    if (Item.itemAddons != null && Item.itemAddons.AddonItemId.Count > 0)
+                    {
+                        List<AddOnItems> AddonItems = AddOnItems.GetAll(Item.itemAddons.AddonItemIdCsv);
+                        foreach(AddOnItems addOnItems in AddonItems)
+                        {
+                            OrderAdonItm OrdAddonItm = new OrderAdonItm();
+                            OrdAddonItm.OID = NewOID;
+                            OrdAddonItm.OIID = OrderItem.OIID;
+                            OrdAddonItm.AdddOnItemId = addOnItems.AddOnItemId;
+                            OrdAddonItm.ItemId = addOnItems.ItemId;
+                            OrdAddonItm.Tax = addOnItems.Tax;
+                            OrdAddonItm.Price = addOnItems.Price;
+                            OrdAddonItm.Save();
                         }
+                        
+                       
+                    }
+                       
                     }
                 
                 OrdDiscntChrge.RemoveDiscntCharge(ObjOrders.Table_or_SheatId, ObjOrders.TableOtp,ObjOrders.OID);

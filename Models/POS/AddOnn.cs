@@ -208,7 +208,7 @@ public class AddOns
                         AddOnItems Addonitem = new AddOnItems();
                         int index = 0;
                         Addonitem.AddOnItemId = SDR.GetInt32(index++);
-                        Addonitem.ItemId = SDR.GetInt64(index++);
+                        Addonitem.ItemId = SDR.GetInt32(index++);
                         Addonitem.CostPrice = SDR.GetDouble(index++);
                         Addonitem.Tax = SDR.GetDouble(index++);
                         Addonitem.Price = SDR.GetDouble(index++);
