@@ -17,7 +17,7 @@
     }
 
     @{
-        <div class="col-md-3" id="Credit1">
+        <div class="col-md-3 CRAccount" id="Credit1">
 
             @Html.Label("Account")
             @Html.DropDownListFor(model => model.CRLedgerId, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control CRAccount", required = "required" })
@@ -26,7 +26,7 @@
         </div>
     }
     @{
-        <div class="col-md-3" id="Debit1">
+        <div class="col-md-3 DRAccount" id="Debit1">
 
             @Html.Label("Account")
             @Html.DropDownListFor(model => model.DRLedgerId, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control DRAccount", required = "required" })
@@ -58,6 +58,6 @@
     </div>
 </div>
 <script>
-    $('#Credit1').hide();
-    $('#Debit1').show();
+    $('.CRAccount').hide();
+    $('.DRAccount').show();
 </script>

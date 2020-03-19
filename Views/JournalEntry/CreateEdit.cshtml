@@ -50,7 +50,7 @@
                     }
 
                     @{
-                        <div class="col-md-3" id="Credit1">
+                        <div class="col-md-3 CRAccount" id="Credit1">
                         
                                 @Html.Label("Account")
                                 @Html.DropDownListFor(model => model.CRLedgerId, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control CRAccount", required = "required" })
@@ -59,7 +59,7 @@
                         </div>
                     }
                     @{
-                        <div class="col-md-3" id="Debit1">
+                        <div class="col-md-3 DRAccount" id="Debit1">
                             
                                 @Html.Label("Account")
                                 @Html.DropDownListFor(model => model.DRLedgerId, new SelectList(Ledger.GetAll(), "ID", "Name", Model.AID), "Select", new { @class = "form-control DRAccount", required = "required" })
@@ -136,24 +136,24 @@
     </div>
 </div>
 <script>
-    $('#Credit1').hide();
-    $('#Debit1').show();
+    $('.DRAccount').show();
+    $('.CRAccount').hide();
     function TypeChange(event) {
         console.log("aaya");
         var values = $(event).val();
         if (values === "2") {
             $(event).parent('div').parent('div').find('#Credit2').show();
             $(event).parent('div').parent('div').find('#Debit2').hide();
-            $(event).parent('div').parent('div').find('#Credit1').show();
-            $(event).parent('div').parent('div').find('#Debit1').hide();
+            $(event).parent('div').parent('div').find('.CRAccount').show();
+            $(event).parent('div').parent('div').find('.DRAccount').hide();
             //  $("#cid").show();
             // $("#drid").hide();
         }
         else if (values === "1") {
             $(event).parent('div').parent('div').find('#Credit2').hide();
             $(event).parent('div').parent('div').find('#Debit2').show();
-            $(event).parent('div').parent('div').find('#Credit1').show();
-            $(event).parent('div').parent('div').find('#Debit1').hide();
+            $(event).parent('div').parent('div').find('.CRAccount').show();
+            $(event).parent('div').parent('div').find('.DRAccount').hide();
         }
     }
        
