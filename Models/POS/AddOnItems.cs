@@ -70,7 +70,7 @@ namespace HangOut.Models.POS
             return Row;
 
         }
-        public static List<AddOnItems> GetAll()
+        public static List<AddOnItems> GetAll(string AddOnItemId)
         {
             DBCon con = new DBCon();
             SqlCommand cmd = null;
@@ -78,7 +78,7 @@ namespace HangOut.Models.POS
             List<AddOnItems> listAddOnItems = new List<AddOnItems>();
             try
             {
-                string Quary = "Select * from HG_AddOnItems ";
+                string Quary = "Select * from HG_AddOnItems where AdddOnItemId IN ("+ AddOnItemId + ")";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();
 
