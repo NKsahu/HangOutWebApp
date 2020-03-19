@@ -105,10 +105,21 @@ namespace HangOut.Models.Account
             }
             Ledger LedgerDetails = Ledger.GetAll().Where(w => w.ID == CRLedgerId
                        || w.ID == DRLedgerId).FirstOrDefault();
-             if(this.Entrytype=="1")
-               {
-                this.Entrytype = "Payment";
-               }
+            if(CRAmount>0)
+            {
+                CRLedgerId = CRLedgerId;
+                DRLedgerId = 0;
+            }
+            else
+            {
+                DRLedgerId = CRLedgerId;
+                CRLedgerId = 0;
+            }
+
+            if(this.Entrytype=="1")
+             {
+             this.Entrytype = "Payment";
+             }
             if (this.Entrytype == "2")
             {
                 this.Entrytype = "Receipt";
