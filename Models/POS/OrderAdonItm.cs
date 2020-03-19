@@ -11,8 +11,7 @@ namespace HangOut.Models.POS
       public int AdddOnItemId { get; set; }
       public int ItemId { get; set; }
       public double Tax { get; set; }
-      public double CostPrice { get; set; }
-      public double Price { get; set; }
+      public double Price { get; set; }// price with tax included
     
     public int Save()
     {
@@ -24,7 +23,7 @@ namespace HangOut.Models.POS
             string Quary = "";
             if (this.OrderAddonId == 0)
             {
-                Quary = "Insert Into HG_OrderAddonItm Values(@OID,@OIID,@AdddOnItemId,@ItemId,@Tax,@CostPrice,@Price) SELECT SCOPE_IDENTITY();";
+                Quary = "Insert Into HG_OrderAddonItm Values(@OID,@OIID,@AdddOnItemId,@ItemId,@Tax,@Price) SELECT SCOPE_IDENTITY();";
             }
             //else
             //{
@@ -37,7 +36,6 @@ namespace HangOut.Models.POS
             cmd.Parameters.AddWithValue("@AdddOnItemId", this.AdddOnItemId);
             cmd.Parameters.AddWithValue("@ItemId", this.ItemId);
             cmd.Parameters.AddWithValue("@Tax", this.Tax);
-            cmd.Parameters.AddWithValue("@CostPrice", this.CostPrice);
             cmd.Parameters.AddWithValue("@Price", this.Price);
                 if (this.OrderAddonId == 0)
             {

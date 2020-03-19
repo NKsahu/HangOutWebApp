@@ -38,7 +38,7 @@ namespace HangOut.Controllers
                 FID = ObjItem.ItemID,
                 Price = ObjItem.Price,
                 Count = 0,
-                Qty = ObjItem.Qty,
+                IsAddon = "0",
                 OID = OID,
                 Status = 4,
                 TickedNo = 0,

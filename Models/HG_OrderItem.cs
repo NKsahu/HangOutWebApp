@@ -12,7 +12,7 @@ namespace HangOut.Models
         public Int64 FID { get; set; }//FID mean food ID
         public double Price { get; set; }// single item*count = price TotalWithTax
         public int Count { get; set; }
-        public string Qty { get; set; }
+        public string IsAddon { get; set; } //{ 0: no,1:yes==aplly addons and multiservings } //Qty replace with IsAddon Item
         public Int64 OID { get; set; }
         public bool Deleted { get; set; }
         public int Status { get; set; }//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
@@ -29,7 +29,7 @@ namespace HangOut.Models
         public string ItemNam { get; set; }
         public HG_OrderItem()
         {
-            this.Qty = "0.00";
+            this.IsAddon = "0";
             this.UpdationDate = System.DateTime.Now;
             this.TickedNo = 0;
             this.ChefSeenBy = 0;
@@ -55,7 +55,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@FID", this.FID);
                 cmd.Parameters.AddWithValue("@Price", this.Price);
                 cmd.Parameters.AddWithValue("@Count", this.Count);
-                cmd.Parameters.AddWithValue("@Qty", this.Qty);
+                cmd.Parameters.AddWithValue("@Qty", this.IsAddon);
                 cmd.Parameters.AddWithValue("@OID", this.OID);
                 cmd.Parameters.AddWithValue("@Deleted", this.Deleted);
                 cmd.Parameters.AddWithValue("@Status", this.Status);
@@ -111,7 +111,7 @@ namespace HangOut.Models
                     ObjTmp.FID = SDR.GetInt64(1);
                     ObjTmp.Price = SDR.GetDouble(2);
                     ObjTmp.Count = SDR.GetInt32(3);
-                    ObjTmp.Qty = SDR.GetString(4);
+                    ObjTmp.IsAddon = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
                     ObjTmp.Status = SDR.GetInt32(7);
                     ObjTmp.OrderDate = SDR.GetDateTime(8);
@@ -174,7 +174,7 @@ namespace HangOut.Models
                     ObjTmp.FID = SDR.GetInt64(1);
                     ObjTmp.Price = SDR.GetDouble(2);
                     ObjTmp.Count = SDR.GetInt32(3);
-                    ObjTmp.Qty = SDR.GetString(4);
+                    ObjTmp.IsAddon = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
                     ObjTmp.Status = SDR.GetInt32(7);
                     ObjTmp.OrderDate = SDR.GetDateTime(8);
@@ -189,7 +189,7 @@ namespace HangOut.Models
                     ListTmp.Add(ObjTmp);
                 }
             }
-            catch (System.Exception e) { e.ToString(); }
+            catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ListTmp);
         }
@@ -215,7 +215,7 @@ namespace HangOut.Models
                     ObjTmp.FID = SDR.GetInt64(1);
                     ObjTmp.Price = SDR.GetDouble(2);
                     ObjTmp.Count = SDR.GetInt32(3);
-                    ObjTmp.Qty = SDR.GetString(4);
+                    ObjTmp.IsAddon = SDR.GetString(4);
                     ObjTmp.OID = SDR.GetInt64(5);
                     ObjTmp.Status = SDR.GetInt32(7);
                     ObjTmp.OrderDate = SDR.GetDateTime(8);
@@ -230,7 +230,7 @@ namespace HangOut.Models
 
                 }
             }
-            catch (System.Exception e) { e.ToString(); }
+            catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); Obj.Con = null; }
             return (ObjTmp);
         }
