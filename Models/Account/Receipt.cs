@@ -205,10 +205,7 @@ namespace HangOut.Models.Account
                             OBJ.Type = "";
                             OBJ.Narration = GetAllReceipt[i].Particular;
                             OBJ.CRAmount = GetAllReceipt[i].Amount;
-                            if (OBJ.CRAmount > 0)
-                            {
-                                OBJ.Balance = GetAllReceipt[i].Balance + OBJ.CRAmount;
-                            }
+                            OBJ.Balance = (GetAllReceipt[i].Balance + OBJ.CRAmount) - OBJ.DRAmount;
                             AccountList.Add(OBJ);
                         }
                         else
@@ -217,8 +214,7 @@ namespace HangOut.Models.Account
                             OBJ.ReceiptType = "Receipt";
                             OBJ.Type = "R" + GetAllReceipt[i].EntryNo.ToString();
                             OBJ.Narration = GetAllReceipt[i].Particular;
-                            OBJ.CRAmount = GetAllReceipt[i].Amount;
-                           
+                            OBJ.CRAmount = GetAllReceipt[i].Amount;                           
                             OBJ.Balance = (GetAllReceipt[i-1].Balance + OBJ.CRAmount)-OBJ.DRAmount;
                             
 
@@ -241,10 +237,9 @@ namespace HangOut.Models.Account
                             OBJ.Type = "";
                             OBJ.Narration = GetAllReceipt[i].Particular;
                             OBJ.DRAmount = GetAllReceipt[i].Amount;
-                            if (OBJ.DRAmount > 0)
-                            {
-                                OBJ.Balance = GetAllReceipt[i].Balance - OBJ.DRAmount;
-                            }
+
+                            OBJ.Balance = (GetAllReceipt[i].Balance - OBJ.DRAmount) + OBJ.CRAmount;
+
                             AccountList.Add(OBJ);
                         }
                         else
@@ -254,7 +249,7 @@ namespace HangOut.Models.Account
                             OBJ.Type = "R" + GetAllReceipt[i].EntryNo.ToString();
                             OBJ.Narration = GetAllReceipt[i].Particular;
                             OBJ.DRAmount = GetAllReceipt[i].Amount;                            
-                            OBJ.Balance = (GetAllReceipt[i - 1].Balance + OBJ.CRAmount) - OBJ.DRAmount;
+                            OBJ.Balance = (AccountList[i - 1].Balance - OBJ.DRAmount) + OBJ.CRAmount;
                             
                             AccountList.Add(OBJ);
                         }
