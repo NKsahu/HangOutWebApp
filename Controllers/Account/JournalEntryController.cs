@@ -30,12 +30,9 @@ namespace HangOut.Controllers
         {
             foreach(var item in Obj)
             {
-                int i = item.SaveGeneral();
-                if (i > 0)
-                    return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
-               
+                item.SaveGeneral();             
             }
-            return RedirectToAction("Error");
+            return Json(new { data = Obj }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult GetDetails(List<HG_OrderItem> CompletedItems)
         {
