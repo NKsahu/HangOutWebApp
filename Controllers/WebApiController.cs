@@ -773,25 +773,26 @@ namespace HangOut.Controllers
             try
             {
                 string AppType = jObjectlist.GetValue("AppType").ToString();
-                var Orderlist = jObjectlist["OrderList"].ToArray();
-                Cart carttemp = new Cart();
-                foreach (var tocken in Orderlist)
-                {
-                    carttemp = new Cart()
-                    {
-                        CID = Int64.Parse(tocken["CID"].ToString()),
-                        ItemId = Int64.Parse(tocken["ItemId"].ToString()),
-                        Count = int.Parse(tocken["Count"].ToString()),
-                        TableorSheatOrTaleAwayId = Int64.Parse(tocken["TableorSheatOrTaleAwayId"].ToString())
-                    };
-                    Cart.List.Add(carttemp);
-                }
-                //  List<Cart> cartlist= Newtonsoft.Json.JsonConvert.DeserializeObject<List<Cart>>(jObjectlist["OrderList"].ToString());
-                //   AddRange(localCarts.OrderList);
-                // Cart.List.AddRange(cartlist);
-                Cart cart = carttemp;
+                //var Orderlist = jObjectlist["OrderList"].ToArray();
+                //Cart carttemp = new Cart();
+                //foreach (var tocken in Orderlist)
+                //{
+                //    carttemp = new Cart()
+                //    {
+                //        CID = Int64.Parse(tocken["CID"].ToString()),
+                //        ItemId = Int64.Parse(tocken["ItemId"].ToString()),
+                //        Count = int.Parse(tocken["Count"].ToString()),
+                //        TableorSheatOrTaleAwayId = Int64.Parse(tocken["TableorSheatOrTaleAwayId"].ToString())
+                //    };
+                //    Cart.List.Add(carttemp);
+                //}
+                List<Cart> cartlist = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Cart>>(jObjectlist["OrderList"].ToString());
+               // AddRange(localCarts.OrderList);
+                Cart.List.AddRange(cartlist);
+                Cart cart = cartlist.First();
                 JObject jObject = new JObject();
                 jObject.Add("CID", cart.CID);
+                jObject.Add("OrgID", cart.OrgId);
                 jObject.Add("TORSID", cart.TableorSheatOrTaleAwayId);
                 jObject.Add("AppType", AppType);
                 JObject result = PostOrder(jObject.ToString());
