@@ -322,26 +322,8 @@ namespace HangOut.Controllers
             int CustID = Int32.Parse(ParaMeters["CID"].ToString());
             int ItemId = Convert.ToInt32(ParaMeters["ItemId"].ToString());
             int Cnt = Convert.ToInt32(ParaMeters["Cnt"].ToString());
-            string ItmUUID = ParaMeters["UUID"] != null ? ParaMeters["UUID"].ToString(): null;
             Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
             HG_Items ObjSingleItem = new HG_Items().GetOne(ItemId);
-            string UUID = Guid.NewGuid().ToString();
-            if (ItmUUID != null)
-            {
-                Cart cart = Cart.List.Find(x => x.ItemUUID == ItmUUID);
-                if (cart != null)
-                {
-                    UUID = cart.ItemUUID;
-                    Cart.List.RemoveAll(x => x.ItemUUID == ItmUUID);
-                    Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId,ItemUUID=UUID,ItemPrice= cart.ItemPrice });
-                }
-                else
-                {
-                    Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemUUID = UUID , ItemPrice = ObjSingleItem.Price });
-                }
-            }
-            else
-            {
                 Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
                 if (ObjCart != null)
                 {
@@ -351,8 +333,7 @@ namespace HangOut.Controllers
                         Cart.List.Add(ObjCart);
                 }
                 else
-                { Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemPrice = ObjSingleItem.Price,ItemUUID=UUID }); }
-            }
+                { Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemPrice = ObjSingleItem.Price }); }
             double TotalFinlAmt = 0;
             double Totaltax = 0.00;
             double Subtotal = 0.00;
