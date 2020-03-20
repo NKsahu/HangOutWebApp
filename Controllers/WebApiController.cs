@@ -789,8 +789,11 @@ namespace HangOut.Controllers
             }
             catch(Exception e)
             {
-                e.Message.ToString();
-                return null;
+                JObject PostResult = new JObject();
+                PostResult.Add("Status", 400);
+                PostResult.Add("MSG", e.Message.ToString());
+                
+                return PostResult;
             }
             
         }
