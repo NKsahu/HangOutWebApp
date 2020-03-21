@@ -123,7 +123,11 @@
                         {
                             Amt += orderItems[i].Price * orderItems[i].Count;
                         }
-                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(OrderObj.PayReceivedBy);
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails();
+                        if (OrderObj.PayReceivedBy > 0)
+                        {
+                            ObjUser= new vw_HG_UsersDetails().GetSingleByUserId(OrderObj.PayReceivedBy);
+                        }
                         if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain
                         {
                             <p style="color:red">CASH ON DELIVERY: @Amt.ToString("0.00") Rs/</p>

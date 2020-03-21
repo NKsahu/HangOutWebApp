@@ -21,7 +21,7 @@ namespace HangOut.Models.Common
         public Cart()
         {
             ItemUUID = "";
-
+            IsAddon = 0;
         }
     }
     public class ItemAddon

@@ -198,14 +198,15 @@ namespace HangOut.Models
             string Query = "";
             try
             {
-                if (UserCode > 0)
-                {
-                    Query = "SELECT TOP 1 * FROM HG_UsersDetails where UserCode=" + UserCode.ToString() + "";
-                }else if (UserLogin != null)
+                if (UserLogin != null)
                 {
                     Query= "SELECT TOP 1 * FROM HG_UsersDetails where UserId='" + UserLogin + "'";
                 }
-                
+                else 
+                {
+                    Query = "SELECT TOP 1 * FROM HG_UsersDetails where UserCode=" + UserCode.ToString() + "";
+                }
+
                 cmd = new SqlCommand(Query, dBCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

@@ -219,10 +219,10 @@ namespace HangOut.Controllers
                                 foreach (var objcart in cartCurrentItem)
                                 {
                                     JObject jobj = new JObject();
-                                    //jobj.Add("UUID", objcart.ItemUUID);
-                                    //jobj.Add("Price", objcart.ItemPrice);
+                                    jobj.Add("UUID", objcart.ItemUUID);
+                                    jobj.Add("Price", objcart.ItemPrice);
                                     jobj.Add("Cnt", objcart.Count);
-                                    //jobj.Add("IsAddon", objcart.IsAddon);
+                                    jobj.Add("IsAddon", objcart.IsAddon);
                                     ItemUUIDS.Add(jobj);
                                 }
                                 objItem["ItemCartValue"]= cartCurrentItem.Count;
@@ -290,10 +290,10 @@ namespace HangOut.Controllers
                                 foreach (var objcart in cartCurrentItem)
                                 {
                                     JObject jobj = new JObject();
-                                    //jobj.Add("UUID", objcart.ItemUUID);
-                                   // jobj.Add("Price", objcart.ItemPrice);
+                                    jobj.Add("UUID", objcart.ItemUUID);
+                                   jobj.Add("Price", objcart.ItemPrice);
                                     jobj.Add("Cnt", objcart.Count);
-                                   // jobj.Add("IsAddon", objcart.IsAddon);
+                                   jobj.Add("IsAddon", objcart.IsAddon);
                                     ItemUUIDS.Add(jobj);
                                 }
                                 objItem["ItemCartValue"] = cartCurrentItem.Count;
@@ -960,7 +960,7 @@ namespace HangOut.Controllers
                         FID = ObjItem.ItemID,
                         Price = ObjItem.Price,
                         Count = Item.Count,
-                        IsAddon = "0",
+                        IsAddon = Item.IsAddon.ToString(),
                         OID = NewOID,
                         Status = Status,
                         TickedNo = Ticketno,
