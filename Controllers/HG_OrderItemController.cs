@@ -1,8 +1,7 @@
 ﻿using HangOut.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using HangOut.Models.POS;
 using System.Web.Mvc;
 
 namespace HangOut.Controllers
@@ -56,6 +55,12 @@ namespace HangOut.Controllers
             OrderItem.Price = 0.00;
             OrderItem.ItemNam = ObjItem.Items;
             return Json(new { msg = OrderItem }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetOrderAdonItm(Int64 OIID)
+        {
+            List<OrderAdonItm> OrderAdonItems = OrderAdonItm.GetAll(OIID);
+            return View(OrderAdonItems);
         }
     }
 }
