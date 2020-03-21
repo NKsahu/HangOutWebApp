@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<HangOut.Models.POS.OrderAdonItm>
 @{
     Layout = null;
+    int Cnt =int.Parse( Request.QueryString["Cnt"]);
+    var Total = 0.00;
 }
 <div class="col" id="List">
     <div class="card">
@@ -10,18 +12,29 @@
                 <thead>
                     <tr>
                         <th> Item </th>
-                        <th> Price </th>
+                        <th> Rate </th>
+                        <th>Price</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
+                        var amt = item.Price * Cnt;
+                        Total += amt;
                     <tr id="@item.ItemName">
                         <td>@item.ItemName</td>
                         <td>@item.Price.ToString("0.00")</td>
+                        <td>@amt.ToString("0.00")</td>
                     </tr>
                     }
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th> Total </th>
+                        <th>  </th>
+                        <th>@Total.ToString("0.00")</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

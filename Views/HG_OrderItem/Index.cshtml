@@ -180,7 +180,7 @@
                         <td>
                             @if (item.IsAddon == "1")
                             {
-                                <i class='fa fa-info-circle' onclick='AddonInfo(@item.OIID)'  aria-hidden='true'></i>
+                                <i class='fa fa-info-circle' onclick='AddonInfo(@item.OIID,@item.Count)'  aria-hidden='true'></i>
                             }
                             @{HG_Items ObjOrder = listItem.Find(x => x.ItemID == item.FID); }
                             @ObjOrder.Items
@@ -297,11 +297,11 @@
 <script>
 
     setTimeout(function () { LoadDataTable('OrdItmTbl'); }, 500);
-    function AddonInfo(OIID) {
+    function AddonInfo(OIID,Cnt) {
         $('#waiting').show();
         $.ajax({
             type: 'GET',
-            url: "/HG_OrderItem/GetOrderAdonItm?OIID=" + OIID,
+            url: "/HG_OrderItem/GetOrderAdonItm?OIID=" + OIID +"&Cnt="+Cnt,
             success: function (data) {
                 makedpt("AddonItems");
                 $("#AddonItems > .modal-dialog > .modal-content > .modal-body").html(data);
