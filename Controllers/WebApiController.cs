@@ -353,113 +353,113 @@ namespace HangOut.Controllers
                 return Count + ","+TotalFinlAmt.ToString("0.00") + "," + ItemId+","+"0"+","+ Totaltax.ToString("0.00") + ","+Subtotal.ToString("0.00");
             return Count + "," + TotalFinlAmt.ToString("0.00") + "," + "0" + "," + CurrentItemobj.Count + "," +Totaltax.ToString("0.00") + ","+ Subtotal.ToString("0.00");
         }
-       // [HttpPost]
-        //public JObject AddCart2(string Obj)
-        //{
-        //    JObject ParaMeters = JObject.Parse(Obj);
-        //    int CustID = Int32.Parse(ParaMeters["CID"].ToString());
-        //    int ItemId = Convert.ToInt32(ParaMeters["ItemId"].ToString());
-        //    int Cnt = Convert.ToInt32(ParaMeters["Cnt"].ToString());
-        //    string ItmUUID = ParaMeters["UUID"] != null ? ParaMeters["UUID"].ToString() : null;
-        //    Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
-        //    HG_Items ObjSingleItem = new HG_Items().GetOne(ItemId);
-        //    double ItemPrice = ObjSingleItem.Price;
-        //    string UUID = Guid.NewGuid().ToString();
-        //    int IsAddon = 0;
-        //    if (ItmUUID != null &&ItmUUID!="")
-        //    {
-        //        Cart cart = Cart.List.Find(x => x.ItemUUID == ItmUUID);
-        //        if (cart != null)
-        //        {
-        //            UUID = cart.ItemUUID;
-        //            ItemPrice = cart.ItemPrice;
-        //            IsAddon = cart.IsAddon;
-        //            Cart.List.RemoveAll(x => x.ItemUUID == ItmUUID);
-        //            if (Cnt >0)
-        //            {
-        //                cart.Count = Cnt;
-        //                Cart.List.Add( cart );
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemUUID = UUID, ItemPrice = ObjSingleItem.Price });
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
-        //        if (ObjCart != null)
-        //        {
-        //            ObjCart.Count = Cnt;
-        //            ItemPrice = ObjCart.ItemPrice;
-        //            Cart.List.RemoveAll(x => x.CID == CustID && x.ItemId == ItemId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
-        //            if (ObjCart.Count != 0)
-        //                Cart.List.Add(ObjCart);
-        //        }
-        //        else
-        //        { Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemPrice = ObjSingleItem.Price, ItemUUID = UUID }); }
-        //    }
-        //    var cartitems = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
-        //    double FinalPrice = 0.00;
-        //    foreach(var cart in cartitems)
-        //    {
-        //        FinalPrice += cart.Count * cart.ItemPrice;
-        //    }
-        //    JObject result = new JObject();
-        //    result.Add("UUID", UUID);
-        //    result.Add("Price", ItemPrice);
-        //    result.Add("Cnt", Cnt);
-        //    result.Add("TotalCnt", cartitems.Count);
-        //    result.Add("FinalPrice", FinalPrice);
-        //    result.Add("IsAddon", IsAddon);
-        //    return result;
-        //}
+        [HttpPost]
+        public JObject AddCart2(string Obj)
+        {
+            JObject ParaMeters = JObject.Parse(Obj);
+            int CustID = Int32.Parse(ParaMeters["CID"].ToString());
+            int ItemId = Convert.ToInt32(ParaMeters["ItemId"].ToString());
+            int Cnt = Convert.ToInt32(ParaMeters["Cnt"].ToString());
+            string ItmUUID = ParaMeters["UUID"] != null ? ParaMeters["UUID"].ToString() : null;
+            Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
+            HG_Items ObjSingleItem = new HG_Items().GetOne(ItemId);
+            double ItemPrice = ObjSingleItem.Price;
+            string UUID = Guid.NewGuid().ToString();
+            int IsAddon = 0;
+            if (ItmUUID != null && ItmUUID != "")
+            {
+                Cart cart = Cart.List.Find(x => x.ItemUUID == ItmUUID);
+                if (cart != null)
+                {
+                    UUID = cart.ItemUUID;
+                    ItemPrice = cart.ItemPrice;
+                    IsAddon = cart.IsAddon;
+                    Cart.List.RemoveAll(x => x.ItemUUID == ItmUUID);
+                    if (Cnt > 0)
+                    {
+                        cart.Count = Cnt;
+                        Cart.List.Add(cart);
+                    }
+                }
+                else
+                {
+                    Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemUUID = UUID, ItemPrice = ObjSingleItem.Price });
+                }
+            }
+            else
+            {
+                Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
+                if (ObjCart != null)
+                {
+                    ObjCart.Count = Cnt;
+                    ItemPrice = ObjCart.ItemPrice;
+                    Cart.List.RemoveAll(x => x.CID == CustID && x.ItemId == ItemId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
+                    if (ObjCart.Count != 0)
+                        Cart.List.Add(ObjCart);
+                }
+                else
+                { Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemPrice = ObjSingleItem.Price, ItemUUID = UUID }); }
+            }
+            var cartitems = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
+            double FinalPrice = 0.00;
+            foreach (var cart in cartitems)
+            {
+                FinalPrice += cart.Count * cart.ItemPrice;
+            }
+            JObject result = new JObject();
+            result.Add("UUID", UUID);
+            result.Add("Price", ItemPrice);
+            result.Add("Cnt", Cnt);
+            result.Add("TotalCnt", cartitems.Count);
+            result.Add("FinalPrice", FinalPrice);
+            result.Add("IsAddon", IsAddon);
+            return result;
+        }
 
-        //public JObject AddAdonItm([System.Web.Http.FromBody] Cart cart)
-        //{
-        //    JObject result =new JObject();
-        //    string ItemUUID = "";
-        //    double ItemPrice = cart.ItemPrice;
-        //    int Cnt = 1;
-        //    List<Cart> cartItems = Cart.List.FindAll(x => x.ItemId == cart.ItemId);
-        //    if (cartItems.Count > 0)
-        //    {
-        //        bool Addnew = true;
-                
-        //        foreach(var ObjCart in cartItems)
-        //        {
-        //          if (ObjCart.itemAddons!=null&& ObjCart.itemAddons.AddonItemIdCsv== cart.itemAddons.AddonItemIdCsv)
-        //            {
-        //                Addnew = false;
-        //                ItemUUID = ObjCart.ItemUUID;
-        //                Cnt = ObjCart.Count;
-        //                break;
-        //            }
-        //        }
-        //        if (Addnew==false)
-        //        {
-        //            Cart.List.RemoveAll(x => x.ItemUUID == ItemUUID);
-        //            Cnt++;
-        //            Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt,itemAddons=cart.itemAddons,ItemPrice=cart.ItemPrice,IsAddon=cart.IsAddon });
-        //        }
-        //        else
-        //        {
-        //            ItemUUID = Guid.NewGuid().ToString();
-        //            Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt, itemAddons = cart.itemAddons, ItemPrice = cart.ItemPrice, IsAddon = cart.IsAddon });
-        //        }
-        //    }
-        //    else
-        //    {
-        //        ItemUUID = Guid.NewGuid().ToString();
-        //        Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID,TableorSheatOrTaleAwayId=cart.TableorSheatOrTaleAwayId,ItemUUID= ItemUUID, Count=1, itemAddons = cart.itemAddons , ItemPrice = cart.ItemPrice, IsAddon = cart.IsAddon });
-        //    }
-        //    result.Add("UUID", ItemUUID);
-        //    result.Add("Price", ItemPrice);
-        //    result.Add("Cnt", Cnt);
-        //    result.Add("IsAddon", cart.IsAddon);
-        //    return result;
-        //}
+        public JObject AddAdonItm([System.Web.Http.FromBody] Cart cart)
+        {
+            JObject result = new JObject();
+            string ItemUUID = "";
+            double ItemPrice = cart.ItemPrice;
+            int Cnt = 1;
+            List<Cart> cartItems = Cart.List.FindAll(x => x.ItemId == cart.ItemId);
+            if (cartItems.Count > 0)
+            {
+                bool Addnew = true;
+
+                foreach (var ObjCart in cartItems)
+                {
+                    if (ObjCart.itemAddons != null && ObjCart.itemAddons.AddonItemIdCsv == cart.itemAddons.AddonItemIdCsv)
+                    {
+                        Addnew = false;
+                        ItemUUID = ObjCart.ItemUUID;
+                        Cnt = ObjCart.Count;
+                        break;
+                    }
+                }
+                if (Addnew == false)
+                {
+                    Cart.List.RemoveAll(x => x.ItemUUID == ItemUUID);
+                    Cnt++;
+                    Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt, itemAddons = cart.itemAddons, ItemPrice = cart.ItemPrice, IsAddon = cart.IsAddon });
+                }
+                else
+                {
+                    ItemUUID = Guid.NewGuid().ToString();
+                    Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt, itemAddons = cart.itemAddons, ItemPrice = cart.ItemPrice, IsAddon = cart.IsAddon });
+                }
+            }
+            else
+            {
+                ItemUUID = Guid.NewGuid().ToString();
+                Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = 1, itemAddons = cart.itemAddons, ItemPrice = cart.ItemPrice, IsAddon = cart.IsAddon });
+            }
+            result.Add("UUID", ItemUUID);
+            result.Add("Price", ItemPrice);
+            result.Add("Cnt", Cnt);
+            result.Add("IsAddon", cart.IsAddon);
+            return result;
+        }
 
         [HttpPost]
         public JObject GetCart(string Obj)
@@ -769,23 +769,10 @@ namespace HangOut.Controllers
         }
         public JObject MakeOfflineOrd(string Obj)
         {
-            JObject jObjectlist = JObject.Parse(Obj);
             try
             {
+                JObject jObjectlist = JObject.Parse(Obj);
                 string AppType = jObjectlist.GetValue("AppType").ToString();
-                //var Orderlist = jObjectlist["OrderList"].ToArray();
-                //Cart carttemp = new Cart();
-                //foreach (var tocken in Orderlist)
-                //{
-                //    carttemp = new Cart()
-                //    {
-                //        CID = Int64.Parse(tocken["CID"].ToString()),
-                //        ItemId = Int64.Parse(tocken["ItemId"].ToString()),
-                //        Count = int.Parse(tocken["Count"].ToString()),
-                //        TableorSheatOrTaleAwayId = Int64.Parse(tocken["TableorSheatOrTaleAwayId"].ToString())
-                //    };
-                //    Cart.List.Add(carttemp);
-                //}
                 List<Cart> cartlist = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Cart>>(jObjectlist["OrderList"].ToString());
                // AddRange(localCarts.OrderList);
                 Cart.List.AddRange(cartlist);
