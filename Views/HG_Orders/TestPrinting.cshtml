@@ -1,5 +1,6 @@
 ﻿@using HangOut.Models;
 @using HangOut.Models.DynamicList;
+@using HangOut.Models.POS;
 @{ Layout = null;}
 @{
     double delivercharges = 0.00;
@@ -41,7 +42,6 @@
     string GstNo = "";
     string Licence2 = "";
     string Licence3 = "";
-    //  HashSet<string> OrdesHash = new HashSet<string>(orderlist.Select(x => x.OID.ToString()).ToArray());
     string OrderNo = OID.ToString();
     double AmountTotal = 0.00;
     int Qty = 0;
@@ -52,10 +52,10 @@
     string TicketNos = "";
     string Printremark = "   ";
     string Seating = HG_Tables_or_Sheat.Seating(ObjOrder.Table_or_SheatId);
-    List<HG_Items> ItemList = new HG_Items().GetAll();
+    List<HG_Items> ItemList = new HG_Items().GetAll(ObjOrder.OrgId);
     HashSet<string> hashTicket = new HashSet<string>(OrderItems.Select(x => x.TickedNo.ToString()).ToArray());
     TicketNos = string.Join(",", hashTicket);
-    var GroupByItems = OrderItems.GroupBy(x => x.FID);
+   // var GroupByItems = OrderItems.GroupBy(x => x.FID);
     if (OrgObj.OrgID > 0)
     {
         InvoiceHeading = OrgObj.IvoiceHeading;
@@ -125,19 +125,19 @@
             <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
                 <thead>
                     <tr>
-                        <th style="text-align:center">Item </th>
-                        <th style="text-align:center">Qty</th>
-                        <th style="text-align:center">Rate</th>
-                        <th style="text-align:center">Amt</th>
+                        <th style="text-align:center;font-size:small;">Item </th>
+                        <th style="text-align:center;font-size:small;">Qty</th>
+                        <th style="text-align:center;font-size:small;">Rate</th>
+                        <th style="text-align:center;font-size:small;">Amt</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var items in GroupByItems)
+                    @foreach (var items in OrderItems)
                     {
-                        var ObjSingleItm = items.First();
+                        var ObjSingleItm = items;//First();
                         double Amt = 0.00;
                         string Style = "background-color:#e05c5c";
-                        int Cnt = items.Sum(x => x.Count);
+                        int Cnt = items.Count;
                         Amt = ObjSingleItm.CostPrice * Cnt;
                         AmountTotal += Amt;
                         Qty += Cnt;
@@ -149,11 +149,31 @@
                         // Qty += items.Qty;
                         HG_Items hG_Items = ItemList.Find(x => x.ItemID == ObjSingleItm.FID);
                         <tr style="@(Style)">
-                            <td style="text-align:left;font-size:small;">@hG_Items.Items</td>
+                            <td style="text-align:center;font-size:small;">@hG_Items.Items</td>
                             <td style="text-align:right ;font-size:small;">@Cnt</td>
                             <td style="text-align:right; font-size:small;">@ObjSingleItm.CostPrice.ToString("0.00")</td>
                             <td style="text-align:right;font-size:small;">@Amt.ToString("0.00")</td>
                         </tr>
+                        if (ObjSingleItm.IsAddon == "1")
+                        {
+                            var OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
+                            foreach (var addonitm in OrderAdonItms)
+                            {
+                                var amount = addonitm.CostPrice * Cnt;
+                                AmountTotal += amount;
+                                Qty += Cnt;
+                                RateTotal += addonitm.CostPrice;
+                                GrandTotal += addonitm.Price * Cnt;
+                                TotalTax += OrgType.TotalTax(addonitm.CostPrice, addonitm.Tax, Cnt);
+                                <tr style="@(Style)">
+                                    <td style="text-align:left;font-size:x-small;">-@addonitm.ItemName</td>
+                                    <td style="text-align:right ;font-size:small;">@Cnt</td>
+                                    <td style="text-align:right; font-size:small;">@addonitm.CostPrice.ToString("0.00")</td>
+                                    <td style="text-align:right;font-size:small;">@amount.ToString("0.00")</td>
+                                </tr>
+                            }
+
+                        }
                     }
                 </tbody>
                 <tfoot>

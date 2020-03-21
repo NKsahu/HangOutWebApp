@@ -1,8 +1,7 @@
 ﻿@using HangOut.Models;
 @using HangOut.Models.DynamicList;
+@using HangOut.Models.POS;
 @{
-    /**/
-
     Layout = null;
 
     Int64 OID = 0;// Int64.Parse(Request.QueryString["OID"]);
@@ -60,7 +59,7 @@
             <div id="PrintHeight">
                 <div>
                     <h2 style="text-align:center">KOT</h2>
-                    <h3 style="text-align:center">SEATING:&nbsp;@HG_Tables_or_Sheat.Seating(objorder.Table_or_SheatId)  &thinsp;&nbsp; Ticket No:@TicketNo</h3>
+                    <h4 style="text-align:center">SEATING:&nbsp;@HG_Tables_or_Sheat.Seating(objorder.Table_or_SheatId)  &thinsp;&nbsp; Ticket No:@TicketNo</h4>
                     <h5 style="text-align:center">ORDER NO:&nbsp;@OID</h5>
                     <h5 style="text-align:center">DATE:&nbsp;@objorder.Create_Date.ToString("dd/MM/yyyy hh:mm tt")</h5>
                     <h5 style="text-align:center">@OrgType.PaymentMode(objorder.PaymentStatus)</h5>
@@ -69,9 +68,9 @@
                 <table id="InvoiceItems" style="width:100%" class=" col-sm-12">
                     <thead>
                         <tr>
-                            <th style="text-align:center">S.NO.</th>
-                            <th style="text-align:center">ITEM NAME </th>
-                            <th style="text-align:center">QTY</th>
+                            <th style="text-align:left;font-size:small">S.N.</th>
+                            <th style="text-align:center;font-size:small">ITEM NAME </th>
+                            <th style="text-align:center;font-size:small">QTY</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -82,9 +81,28 @@
                             QtyTotoal += items.Count;
                             <tr>
                                 <td style="text-align:left;font-size:small;">@SN</td>
-                                <td style="text-align:left;font-size:small;">@hG_Items.Items</td>
-                                <td style="text-align:right ;font-size:small;">@items.Count</td>
+                                <td style="text-align:left;font-size:medium;">
+                                    @hG_Items.Items
+                                </td>
+                                <td style="text-align:center;font-size:small;">@items.Count</td>
                             </tr>
+                            
+                            if (items.IsAddon == "1")
+                            {
+                                var OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
+                                foreach (var addonitm in OrderAdonItms)
+                                {
+                                    QtyTotoal += items.Count;
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align:left;font-size:x-small">
+                                        - @addonitm.ItemName
+                                    </td>
+                                    <td style="text-align:center;font-size:small;">@items.Count</td>
+
+                                </tr>
+                                }
+                            }
                         }
                     </tbody>
                     <tfoot>

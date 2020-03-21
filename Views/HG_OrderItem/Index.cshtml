@@ -303,7 +303,7 @@
             type: 'GET',
             url: "/HG_OrderItem/GetOrderAdonItm?OIID=" + OIID +"&Cnt="+Cnt,
             success: function (data) {
-                makedpt("AddonItems");
+                makedpt("AddonItems",300,400);
                 $("#AddonItems > .modal-dialog > .modal-content > .modal-body").html(data);
                 showdpt("AddonItems");
                 $('#waiting').hide();
