@@ -23,10 +23,6 @@ namespace HangOut.Models.Common
             ItemUUID = "";
 
         }
-
-        //
-       
-        
     }
     public class ItemAddon
     {

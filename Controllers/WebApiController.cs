@@ -995,24 +995,24 @@ namespace HangOut.Controllers
                         return PostResult;
                     }
                     //check addon items exist
-                    //if (Item.itemAddons != null && Item.itemAddons.AddonItemId.Count > 0)
-                    //{
-                    //    List<AddOnItems> AddonItems = AddOnItems.GetAll(Item.itemAddons.AddonItemIdCsv);
-                    //    foreach(AddOnItems addOnItems in AddonItems)
-                    //    {
-                    //        OrderAdonItm OrdAddonItm = new OrderAdonItm();
-                    //        OrdAddonItm.OID = NewOID;
-                    //        OrdAddonItm.OIID = OrderItem.OIID;
-                    //        OrdAddonItm.AdddOnItemId = addOnItems.AddOnItemId;
-                    //        OrdAddonItm.ItemId = addOnItems.ItemId;
-                    //        OrdAddonItm.Tax = addOnItems.Tax;
-                    //        OrdAddonItm.CostPrice = addOnItems.CostPrice;
-                    //        OrdAddonItm.Price = addOnItems.Price;
-                    //        OrdAddonItm.Save();
-                    //    }
-                    //}
-                       
+                    if (Item.itemAddons != null && Item.itemAddons.AddonItemId.Count > 0)
+                    {
+                        List<AddOnItems> AddonItems = AddOnItems.GetAll(Item.itemAddons.AddonItemIdCsv);
+                        foreach (AddOnItems addOnItems in AddonItems)
+                        {
+                            OrderAdonItm OrdAddonItm = new OrderAdonItm();
+                            OrdAddonItm.OID = NewOID;
+                            OrdAddonItm.OIID = OrderItem.OIID;
+                            OrdAddonItm.AdddOnItemId = addOnItems.AddOnItemId;
+                            OrdAddonItm.ItemId = addOnItems.ItemId;
+                            OrdAddonItm.Tax = addOnItems.Tax;
+                            OrdAddonItm.CostPrice = addOnItems.CostPrice;
+                            OrdAddonItm.Price = addOnItems.Price;
+                            OrdAddonItm.Save();
+                        }
                     }
+
+                }
                 
                 OrdDiscntChrge.RemoveDiscntCharge(ObjOrders.Table_or_SheatId, ObjOrders.TableOtp,ObjOrders.OID);
                 if (OrderSts == "3")
