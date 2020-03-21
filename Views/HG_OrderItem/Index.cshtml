@@ -298,6 +298,21 @@
 
     setTimeout(function () { LoadDataTable('OrdItmTbl'); }, 500);
     function AddonInfo(OIID) {
-
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_OrderItem/GetOrderAdonItm?OIID=" + OIID,
+            success: function (data) {
+                makedpt("AddonItems");
+                $("#AddonItems > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("AddonItems");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                console.log(errorMessage);
+                //Onfail(errorMessage.MSG);
+                $('#waiting').hide();
+            }
+        });
     }
 </script>
