@@ -764,6 +764,9 @@
      }
      function AddToCartOffline(itemId, ItemUUID, Cnt) {
          if (CartList.length > 0) {
+             var Cart=CartList.find(x => {
+                return x.ItemUUID == ItemUUID;
+             });
 
          }
          else {
@@ -780,10 +783,10 @@
              else {
                  Cart.ItemUUID = ItemUUID;
              }
-       
-       //  ItemPrice { get; set; }
-      //   IsAddon { get; set; } //0: no , 1: yes
-         
+             CartList.push(Cart);
+             //  ItemPrice { get; set; }
+             //   IsAddon { get; set; } //0: no , 1: yes
+         }
 
      }
      function GetUUID() {
