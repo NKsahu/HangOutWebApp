@@ -173,32 +173,28 @@
                                 double sumofAdddon = OrderAdonItms.Sum(x => x.Price);
                                 Amt += sumofAdddon * items.Count;
                             }
-                            <tr >
+                            <tr class="calculate">
                                 <td>
                                     <input class=" CkeckorNot" @TickSts type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID">
-                                    
+
                                 </td>
                                 <td>
                                     @FoodObj.Items
-                                                                @if (items.IsAddon == "1")
-                                                                {
-                                                                    int count = 1;
-                                                                    
-                                    <div style="border:1px solid black;">
-                                        @foreach (var addonitm in OrderAdonItms)
-                                        {
-                                            
-                                        <table>
-                                            <tr><td style="font-size:small;">-  @addonitm.ItemName</td></tr>
-                                        </table>
-                                            count = count + 1;
-                                        }
-                                    </div>
-                                                                   
-                                                                }
-                                                            </td>
+
+                                </td>
                                 <td>@items.Count</td>
+
                             </tr>
+                            if (items.IsAddon == "1")
+                            {
+                                foreach(var addon in OrderAdonItms) { 
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align:left;font-size:smaller">-@addon.ItemName</td>
+                                    <td>@items.Count</td>
+                                </tr>
+                                }
+                            }
                         }
                     </tbody>
                 </table>
@@ -224,6 +220,7 @@
         //JObject ChangeOrderItemStatus(string CheckedID, int TickedNo, int UpdateBy, int OID)
         $("#Tickt" + OIID+" > tr").each(function (index, tr) {
             console.log(index);
+         if ($(tr).hasClass("calculate")) {
             var value = $(tr).find('.CkeckorNot').is(":checked");
             var OIID = $(tr).find('.CkeckorNot').val();
             if (value) {
@@ -236,7 +233,8 @@
             }
             TotalAmt += parseFloat($(tr).find('.CkeckorNot').attr("Amt"));
             OID = $(tr).find('.CkeckorNot').attr("OID");
-            TotalCnt = TotalCnt + 1;
+                TotalCnt = TotalCnt + 1;
+         }
         });
         var  Msg = 'Mark order complete?';
         if (TotalCnt == canceledCount) {

@@ -768,8 +768,22 @@
          }
          else {
 
-
-         }
+             var Cart = {};
+             Cart.CID = LoginId;
+             Cart.ItemId = itemId;
+             Cart.Count = Cnt;
+             Cart.TableorSheatOrTaleAwayId = CurrentOrder;
+             Cart.OrgId = OrgId;
+             if (ItemUUID == null || ItemUUID == "") {
+                 Cart.ItemUUID = GetUUID();
+             }
+             else {
+                 Cart.ItemUUID = ItemUUID;
+             }
+       
+       //  ItemPrice { get; set; }
+      //   IsAddon { get; set; } //0: no , 1: yes
+         
 
      }
      function GetUUID() {
@@ -799,8 +813,8 @@
          if (Items.length == unchecked + checkedcnt) {
              condition = true;
          }
-         if (checkedcnt > Min &&checkedcnt>Max && condition) {
-             alert("Qty can't more than " + Min + " of " + title);
+         if (checkedcnt > Min && condition &&checkedcnt>Max) {
+             alert("Qty can't more than " + Max + " of " + title);
              return 1;
          }
          if (checkedcnt < Min && condition) {
