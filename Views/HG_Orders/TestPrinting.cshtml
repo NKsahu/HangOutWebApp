@@ -181,7 +181,7 @@
                         <td colspan="4" style="text-align:left;border-top: 1px dotted black;"></td>
                     </tr>
                     <tr>
-                        <td style="text-align:left;">Total</td>
+                        <td style="text-align:left;font-size:x-small">Total</td>
                         <td style="text-align:right">@Qty.ToString() </td>
                         <td style="text-align:right"></td>
                         <td style="text-align:right">@AmountTotal.ToString("0.00")</td>
@@ -189,7 +189,7 @@
                     @if (TotalTax > 0)
                     {
                         <tr>
-                            <td style="text-align:left">Total Tax</td>
+                            <td style="text-align:left;font-size:x-small">Total Tax</td>
                             <td style="text-align:right"> </td>
                             <td style="text-align:right"></td>
                             <td style="text-align:right">@TotalTax.ToString("0.00")</td>
@@ -198,7 +198,7 @@
                     @if (delivercharges > 0)
                     {
                         <tr>
-                            <td style="text-align:left">Del Chrg</td>
+                            <td style="text-align:left;font-size:x-small">Del Chrg</td>
                             <td style="text-align:right"> </td>
                             <td style="text-align:right"></td>
                             <td style="text-align:right">@delivercharges.ToString("0.00")</td>
@@ -207,7 +207,7 @@
                     @if (TotalTax > 0 || delivercharges > 0)
                     {
                         <tr>
-                            <td style="text-align:left">GTotal</td>
+                            <td style="text-align:left;font-size:x-small">GTotal</td>
                             <td style="text-align:right"> </td>
                             <td style="text-align:right"></td>
                             <td style="text-align:right">@GrandTotal.ToString("0.00")</td>

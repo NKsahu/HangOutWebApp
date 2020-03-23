@@ -984,7 +984,8 @@ namespace HangOut.Controllers
                     //check addon items exist
                     if (Item.itemAddons != null && Item.itemAddons.AddonItemId.Count > 0)
                     {
-                        List<AddOnItems> AddonItems = AddOnItems.GetAll(Item.itemAddons.AddonItemIdCsv);
+                        string AddonItemId = String.Join(",", Item.itemAddons.AddonItemId.Select(x => x.ToString()).ToArray());
+                        List<AddOnItems> AddonItems = AddOnItems.GetAll(AddonItemId);
                         foreach (AddOnItems addOnItems in AddonItems)
                         {
                             OrderAdonItm OrdAddonItm = new OrderAdonItm();

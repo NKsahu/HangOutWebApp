@@ -167,7 +167,7 @@
                             var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
                             double Amt = items.Price * items.Count;
                             var OrderAdonItms = new List<OrderAdonItm>();
-                            if (items.IsAddon == "NA")
+                            if (items.IsAddon == "1")
                             {
                                 OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
                                 double sumofAdddon = OrderAdonItms.Sum(x => x.Price);
@@ -180,7 +180,7 @@
                                 </td>
                                 <td>
                                     @FoodObj.Items
-                                                                @if (items.IsAddon == "NA")
+                                                                @if (items.IsAddon == "1")
                                                                 {
                                                                     int count = 1;
                                                                     

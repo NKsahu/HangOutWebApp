@@ -78,6 +78,7 @@ namespace HangOut.Models.POS
             List<AddOnItems> listAddOnItems = new List<AddOnItems>();
             try
             {
+               
                 string Quary = "Select * from HG_AddOnItems where AdddOnItemId IN ("+ AddOnItemId + ")";
                 cmd = new SqlCommand(Quary, con.Con);
                 SDR = cmd.ExecuteReader();

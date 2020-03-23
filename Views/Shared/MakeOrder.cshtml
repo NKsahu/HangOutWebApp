@@ -786,7 +786,7 @@
          if (Items.length == unchecked + checkedcnt) {
              condition = true;
          }
-         if (checkedcnt > Min && condition) {
+         if (checkedcnt > Min &&checkedcnt>Max && condition) {
              alert("Qty can't more than " + Min + " of " + title);
              return 1;
          }
