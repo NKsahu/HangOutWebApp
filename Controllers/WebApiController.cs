@@ -782,6 +782,10 @@ namespace HangOut.Controllers
                 jObject.Add("OrgID", cart.OrgId);
                 jObject.Add("TORSID", cart.TableorSheatOrTaleAwayId);
                 jObject.Add("AppType", AppType);
+                int Status = jObjectlist["Status"] != null ? int.Parse(jObjectlist["Status"].ToString()) : 1;//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"
+                int CustomerOrdering = jObjectlist["OrdingSts"] != null ? int.Parse(jObjectlist["OrdingSts"].ToString()) : 0;
+                int PaymtSts = jObjectlist["PaymtType"] != null ? int.Parse(jObjectlist["PaymtType"].ToString()) : 0;//payment mode type
+                int ContactId = jObjectlist["ContactId"] != null ? int.Parse(jObjectlist["ContactId"].ToString()) : 0;// local contact id
                 JObject result = PostOrder(jObject.ToString());
                 if (result.GetValue("Status").ToString() == "400")
                 {

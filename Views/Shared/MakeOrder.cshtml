@@ -669,14 +669,14 @@
      }
      function SubmitAddon(itemid) {
          var ObjItem = ItemList.find(x => {
-             return x.IID=== itemid
+             return x.IID === itemid
          });
-         
+
          console.log("item sum");
          var ObjItmAddon = {};
          var AddonItemSelected = document.getElementsByClassName("AddonCheckBox");
          var AddonItemIdCsv = "";
-         var sumOfItem =parseFloat(ObjItem.ItemPrice);
+         var sumOfItem = parseFloat(ObjItem.ItemPrice);
          var AddonItemId = [];
          var NotSelectedIds = [];
          var ArrayAddonsId = [];
@@ -690,7 +690,7 @@
                  else {
                      AddonItemIdCsv += ObjCheckBx.attr('id') + ",";
                  }
-                 
+
                  AddonItemId.push(ObjCheckBx.attr('id'));
                  sumOfItem += parseFloat($("#Price" + ObjCheckBx.attr('id')).val());
                  var titleId = ObjCheckBx.attr('TitileId');
@@ -709,9 +709,9 @@
                  }
              }
              else {
-                  var titleId = ObjCheckBx.attr('TitileId');
+                 var titleId = ObjCheckBx.attr('TitileId');
                  ArrayAddonsId.push(titleId);
-                var Items = document.getElementsByClassName(titleId);
+                 var Items = document.getElementsByClassName(titleId);
                  var AddonAppliedArray = ArrayAddonsId.filter(function (titid) {
                      return titid == titleId;
                  });
@@ -721,9 +721,9 @@
                          return;
                      }
                  }
-                
+
              }
-             
+
 
          }
          ObjItmAddon.AddonItemIdCsv = AddonItemIdCsv;
@@ -736,30 +736,79 @@
          ObjCart.TableorSheatOrTaleAwayId = CurrentOrder;
          ObjCart.itemAddons = ObjItmAddon;
          ObjCart.ItemPrice = sumOfItem;
+         ObjCart.OrgId = OrgId;
          ObjCart.IsAddon = 1;
-         $.ajax({
-             type: 'POST',
-             url: "/WebApi/AddAdonItm",
-             data: JSON.stringify(ObjCart),
-             contentType: "application/json",
-             success: function (data) {
-                 var Object = JSON.parse(data);
-                 console.log("==========");
-                 if (ItemAlreadyAdded(Object.UUID)) {
-                     $("#tr" + Object.UUID).remove();
-                 }
-                 ObjItem.ItemArray = [];
-                 ObjItem.ItemCartValue = 1;
-                 ObjItem.ItemArray.push(Object);
-                 AddItemToQue(ObjItem);
-                 //ItemArray
-                 hidedpt("ShowAddon");
-             },
-             error: function (jqXhr, textStatus, errorMessage) { // error callback
-                 $("#waiting").hide();
-             }
-         });
+         //$.ajax({
+         //    type: 'POST',
+         //    url: "/WebApi/AddAdonItm",
+         //    data: JSON.stringify(ObjCart),
+         //    contentType: "application/json",
+         //    success: function (data) {
+         //        var Object = JSON.parse(data);
+         //        console.log("==========");
+         //        if (ItemAlreadyAdded(Object.UUID)) {
+         //            $("#tr" + Object.UUID).remove();
+         //        }
+         //        ObjItem.ItemArray = [];
+         //        ObjItem.ItemCartValue = 1;
+         //        ObjItem.ItemArray.push(Object);
+         //        AddItemToQue(ObjItem);
+         //        //ItemArray
+         //        hidedpt("ShowAddon");
+         //    },
+         //    error: function (jqXhr, textStatus, errorMessage) { // error callback
+         //        $("#waiting").hide();
+         //    }
+         //});
 
+
+         var CurrItemIndex = CartList.findIndex(x => {
+             return (x.ItemId == ObjCart.ItemId && x.itemAddons != null && x.itemAddons.AddonItemIdCsv == AddonItemIdCsv)
+         });
+         var ItemUUID = "";
+         var Cnt = 1;
+         var ItemPrice = 0.00;
+         if (CurrItemIndex>=0) {
+             Cnt=CartList[CurrItemIndex].Count + 1
+             CartList[CurrItemIndex].Count = Cnt;
+             ItemUUID = CartList[CurrItemIndex].ItemUUID;
+             ItemPrice = CartList[CurrItemIndex].ItemPrice;
+         }
+         else {
+             ObjCart.Count = Cnt;
+             ObjCart.ItemUUID = GetUUID();
+             ItemUUID = ObjCart.ItemUUID;
+             ItemPrice = ObjCart.ItemPrice;
+             CartList.push(ObjCart);
+         }
+         if (ItemAlreadyAdded(Object.UUID)) {
+             $("#tr" + Object.UUID).remove();
+         }
+         ObjItem.ItemArray = [];
+         ObjItem.ItemCartValue = 1;
+         if (ItemAlreadyAdded(ItemUUID)) {
+              $("#tr" + ItemUUID).remove();
+         }
+         var ObjItmAdd = {};
+             ObjItmAdd.UUID = ItemUUID;
+             ObjItmAdd.IsAddon = 1;
+             ObjItmAdd.Price = ItemPrice;
+             ObjItmAdd.Cnt = Cnt;
+
+         ObjItem.ItemArray.push(ObjItmAdd);
+         AddItemToQue(ObjItem);
+                 //ItemArray
+         hidedpt("ShowAddon");
+         //update final amt
+         var FinlAmt = 0.00;
+         var CurrSeatingItem = CartList.filter(function (x) {
+                 return x.TableorSheatOrTaleAwayId == CurrentOrder;
+         });
+         for (var i = 0; i < CurrSeatingItem.length; i++) {
+          FinlAmt+= CurrSeatingItem[i].ItemPrice*CurrSeatingItem[i].Count;
+         }
+         var finalChargeToShow = ChargeAmt + FinlAmt;
+        $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
          $("#waiting").hide();
      }
      function AddToCartOffline(itemId, ItemUUID, Cnt) {
@@ -822,11 +871,18 @@
          var FinlAmt = 0.00;
          var CurrSeatingItem = CartList.filter(function (x) {
                  return x.TableorSheatOrTaleAwayId == CurrentOrder;
-             });
+         });
+         console.log("Cuuseatingcnt=" + CurrSeatingItem.length +"Finalamt="+FinlAmt);
          for (var i = 0; i < CurrSeatingItem.length; i++) {
-          FinlAmt+= CurrSeatingItem[i].ItemPrice;
+          FinlAmt+= CurrSeatingItem[i].ItemPrice*CurrSeatingItem[i].Count;
          }
          //==============
+         for (i = 0; i < ItemList.length; i++) {
+                        if (ItemList[i].IID.toString() === itemId) {
+                            ItemList[i].UUID = ItemUUID;
+                            break;
+                        }
+          }
          if (!ItemAlreadyAdded(ItemUUID)) {
              $("#tr" + ItemUUID).remove();
              ObjItem.ItemCartValue = 1;
@@ -843,8 +899,9 @@
              }
          }
          else {
-          $("#C" + ItemUUID).text(Cnt);
-          $("#P" + ItemUUID).text(SingleItemPrice * Cnt);
+             $("#C" + ItemUUID).text(Cnt);
+             var newamt = SingleItemPrice * Cnt;
+          $("#P" + ItemUUID).text(newamt.toFixed(2));
          }
          //remove items
          if (Cnt == 0) {
@@ -1231,6 +1288,7 @@
                         ChargeAmt = CategoryList[i].TableAmt;
 
                     }
+                    CartList = [];
                    // ChargeAmt += TotalRs;
                     var Dispalamt = ChargeAmt + TotalRs;
                     console.log('chanrge');
@@ -1311,10 +1369,14 @@
             }
         }
      function PostOrder(Obj) {
+         var CurrSeatingItems = CartList.filter(function (x) {
+                 return x.TableorSheatOrTaleAwayId == CurrentOrder;
+         });
+         Obj.OrderList = CurrSeatingItems;
          $("#waiting").show();
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/PostOrder?Obj=" + JSON.stringify(Obj),
+                url: "/WebApi/MakeOfflineOrd?Obj=" + JSON.stringify(Obj),
                 success: function (data) {
                     var JsonObj = JSON.parse(data);
                     $("#waiting").hide();
