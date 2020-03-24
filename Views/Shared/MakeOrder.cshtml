@@ -763,11 +763,43 @@
          $("#waiting").hide();
      }
      function AddToCartOffline(itemId, ItemUUID, Cnt) {
+
+         var ObjItem=ItemList.find(x => {
+                return x.IID.toString() == itemId;
+         });
+         var SingleItemPrice = 0.00;
          if (CartList.length > 0) {
              var Cart=CartList.find(x => {
                 return x.ItemUUID == ItemUUID;
              });
+             if (Cart != null) {
+                 console.log("Cart Count=" + CartList.length);
+                 for (var i = 0; i < CartList.length; i++) {
+                     if (CartList[i].ItemUUID == ItemUUID) {
+                         CartList[i].Count = Cnt;
+                         SingleItemPrice = CartList[i].ItemPrice;
+                         if (Cnt <= 0) {
+                             CartList.splice(i, 1);
+                         }
+                         break;
+                     }
+                 }
+                 console.log("Update Cart Count=" + CartList.length);
+             }
+             else {
+             var Cart = {};
+             Cart.CID = LoginId;
+             Cart.ItemId = itemId;
+             Cart.Count = Cnt;
+             Cart.TableorSheatOrTaleAwayId = CurrentOrder;
+             Cart.OrgId = OrgId;
+             Cart.ItemPrice = ObjItem.ItemPrice;
+             SingleItemPrice = Cart.ItemPrice;
+             Cart.ItemUUID = GetUUID();
+             ItemUUID = Cart.ItemUUID;
+             CartList.push(Cart);
 
+             }
          }
          else {
 
@@ -780,14 +812,47 @@
              if (ItemUUID == null || ItemUUID == "") {
                  Cart.ItemUUID = GetUUID();
              }
-             else {
-                 Cart.ItemUUID = ItemUUID;
-             }
+             Cart.ItemPrice=ObjItem.ItemPrice;
+             SingleItemPrice = Cart.ItemPrice;
+              ItemUUID = Cart.ItemUUID;
              CartList.push(Cart);
              //  ItemPrice { get; set; }
              //   IsAddon { get; set; } //0: no , 1: yes
          }
-
+         var FinlAmt = 0.00;
+         var CurrSeatingItem = CartList.filter(function (x) {
+                 return x.TableorSheatOrTaleAwayId == CurrentOrder;
+             });
+         for (var i = 0; i < CurrSeatingItem.length; i++) {
+          FinlAmt+= CurrSeatingItem[i].ItemPrice;
+         }
+         //==============
+         if (!ItemAlreadyAdded(ItemUUID)) {
+             $("#tr" + ItemUUID).remove();
+             ObjItem.ItemCartValue = 1;
+             ObjItem.ItemArray = [];
+             var ObjItmAdd = {};
+             ObjItmAdd.UUID = ItemUUID;
+             ObjItmAdd.IsAddon = 0;
+             ObjItmAdd.Price = SingleItemPrice;
+             ObjItmAdd.Cnt = Cnt;
+             ObjItem.ItemArray.push(ObjItmAdd);
+             if (Cnt > 0) {
+                 AddItemToQue(ObjItem);
+                 ResetOrder(CurrentOrder, 3);
+             }
+         }
+         else {
+          $("#C" + ItemUUID).text(Cnt);
+          $("#P" + ItemUUID).text(SingleItemPrice * Cnt);
+         }
+         //remove items
+         if (Cnt == 0) {
+             $("#tr" + ItemUUID).remove();
+         }
+         // show Final Order Price
+         var finalChargeToShow = ChargeAmt + FinlAmt;
+        $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
      }
      function GetUUID() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -837,66 +902,67 @@
              return null;
          }
      }
-        function AddToCart(ItemId,ItmUUID, Cnt) {
-            var Obj = {};
-            Obj.CID = LoginId;
-            Obj.OrgId = OrgId;
-            Obj.ItemId = ItemId;
-            Obj.UUID = ItmUUID;
-            Obj.Cnt = Cnt;
-            Obj.TSTWID = CurrentOrder;
-            Obj.OID = CurrOID;
-            $.ajax({
-                type: 'POST',
-                url: "/WebApi/AddCart2?Obj=" + JSON.stringify(Obj),
-                success: function (data) {
-                    var JResult = JSON.parse(data);
-                    var CurritemCnt = parseInt(JResult.Cnt);
-                    var ItemUUID = JResult.UUID;
-                    var FinlAmt = parseFloat(JResult.FinalPrice);
-                   // $("#FinalAmt").html(FinlAmt);
-                    console.log("Count item" + CurritemCnt);
-                    var ObjItem = {};
-                    for (i = 0; i < ItemList.length; i++) {
-                        if (ItemList[i].IID.toString() === ItemId) {
-                            ItemList[i].UUID = ItemUUID;
-                            ObjItem = ItemList[i];
-                            break;
-                        }
-                    }
-                    if (CurritemCnt >= 1) {
+     function AddToCart(ItemId, ItmUUID, Cnt) {
+         AddToCartOffline(ItemId, ItmUUID, Cnt);
+            //var Obj = {};
+            //Obj.CID = LoginId;
+            //Obj.OrgId = OrgId;
+            //Obj.ItemId = ItemId;
+            //Obj.UUID = ItmUUID;
+            //Obj.Cnt = Cnt;
+            //Obj.TSTWID = CurrentOrder;
+            //Obj.OID = CurrOID;
+            //$.ajax({
+            //    type: 'POST',
+            //    url: "/WebApi/AddCart2?Obj=" + JSON.stringify(Obj),
+            //    success: function (data) {
+            //        var JResult = JSON.parse(data);
+            //        var CurritemCnt = parseInt(JResult.Cnt);
+            //        var ItemUUID = JResult.UUID;
+            //        var FinlAmt = parseFloat(JResult.FinalPrice);
+            //       // $("#FinalAmt").html(FinlAmt);
+            //        console.log("Count item" + CurritemCnt);
+            //        var ObjItem = {};
+            //        for (i = 0; i < ItemList.length; i++) {
+            //            if (ItemList[i].IID.toString() === ItemId) {
+            //                ItemList[i].UUID = ItemUUID;
+            //                ObjItem = ItemList[i];
+            //                break;
+            //            }
+            //        }
+            //        if (CurritemCnt >= 1) {
                        
-                        ObjItem.ItemCartValue = 1;
-                        console.log("aaya");
-                        if (!ItemAlreadyAdded(ItemUUID)) {
+            //            ObjItem.ItemCartValue = 1;
+            //            console.log("aaya");
+            //            if (!ItemAlreadyAdded(ItemUUID)) {
 
-                            $("#tr" + ItemUUID).remove();
-                            ObjItem.ItemArray = [];
-                            ObjItem.ItemArray.push(JResult);
-                            AddItemToQue(ObjItem);
-                            ResetOrder(CurrentOrder, 3);
-                        }
-                        else {
-                            var Cnt = parseInt(JResult.Cnt);
-                            $("#C" + ItemUUID).text(Cnt);
-                            var Price = parseFloat(JResult.Price);
-                            $("#P" + ItemUUID).text(Price * Cnt);
+            //                $("#tr" + ItemUUID).remove();
+            //                ObjItem.ItemArray = [];
+            //                ObjItem.ItemArray.push(JResult);
+            //                AddItemToQue(ObjItem);
+            //                ResetOrder(CurrentOrder, 3);
+            //            }
+            //            else {
+            //                var Cnt = parseInt(JResult.Cnt);
+            //                $("#C" + ItemUUID).text(Cnt);
+            //                var Price = parseFloat(JResult.Price);
+            //                $("#P" + ItemUUID).text(Price * Cnt);
 
-                        }
+            //            }
 
-                    }
-                    else {
-                        ResetOrder(CurrentOrder, 1); //free
-                        $("#tr" + ItemUUID).remove();
-                    }
-                    var finalChargeToShow = ChargeAmt + FinlAmt;
-                    $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
-                    //$("#" + itemid).text(Cnt);
-                },
-                error: function (jqXhr, textStatus, errorMessage) { // error callback
-                    $("#waiting").hide();
-                }
-            });
+            //        }
+            //        else {
+            //            ResetOrder(CurrentOrder, 1); //free
+            //            $("#tr" + ItemUUID).remove();
+            //        }
+            //        var finalChargeToShow = ChargeAmt + FinlAmt;
+            //        $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
+            //        //$("#" + itemid).text(Cnt);
+            //    },
+            //    error: function (jqXhr, textStatus, errorMessage) { // error callback
+            //        $("#waiting").hide();
+            //    }
+            //});
         }
         function AddItemToQue(ObjItem) {
             if (ObjItem.ItemCartValue != '0') {
