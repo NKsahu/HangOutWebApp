@@ -1986,12 +1986,20 @@
          });
      }
      function AddonInfo(ItmUUID, ItemId) {
-         $.ajax({
-             type: 'POST',
-             url: "/CommonApi/GetAddonsItems?UUID=" + ItmUUID,
-             contentType: "application/json",
-             success: function (data) {
-                 var HashAddinIds = JSON.parse(data);
+         //$.ajax({
+         //    type: 'POST',
+         //    url: "/CommonApi/GetAddonsItems?UUID=" + ItmUUID,
+         //    contentType: "application/json",
+         //    success: function (data) {
+         var HashAddinIds = [];
+         var Cart=CartList.find(x => {
+                return x.ItemUUID == ItmUUID;
+         });
+         for (var i = 0; i<Cart.itemAddons.AddonItemId.length; i++) {
+             HashAddinIds.push(Cart.itemAddons.AddonItemId[i]);
+         }
+         console.log("addon info=" + HashAddinIds);
+                 // HashAddinIds = JSON.parse(data);
                  var ObjItem = ItemList.find(x => {
                      return x.IID.toString() === ItemId
                  });
@@ -2001,7 +2009,7 @@
                      AddonItem.push(...addonlist[i].AddOnItemList);
                  }
                  var onlySelectedAddons = AddonItem.filter(function (itm) {
-                     return HashAddinIds.indexOf(itm.AddOnItemId) > -1;
+                     return HashAddinIds.indexOf(itm.AddOnItemId.toString()) > -1;
                  });
                  var strhtml = "";
                  strhtml += "<div class='card'>";
@@ -2026,11 +2034,11 @@
                  makedpt("ShowAddedItem", 200, 300);
                  $("#ShowAddedItem > .modal-dialog > .modal-content > .modal-body").html(strhtml);
                  showdpt("ShowAddedItem");
-             },
-             error: function (jqXhr, textStatus, errorMessage) { // error callback
-                 $("#waiting").hide();
-             }
-         });
+            // },
+         //    error: function (jqXhr, textStatus, errorMessage) { // error callback
+         //        $("#waiting").hide();
+         //    }
+         //});
         
      }
     </script>
