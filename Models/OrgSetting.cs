@@ -28,10 +28,7 @@ namespace HangOut.Models
         public int CrxVerification { get; set; }//customer cross verification { 0:"NO",1:"By-Otp",2: "By-Camera"
         public bool CheckBoxStatus { get; set; }
         //====printer
-        public int InvoicePrinting { get; set; }
-        public int NoOfCopy { get; set; }
-        public int KotPrinting { get; set; }
-        public int NoOfCopyKot { get; set; }
+       
         public OrgSetting()
         {
             CheckBoxStatus = true;
@@ -44,12 +41,12 @@ namespace HangOut.Models
             {
                 if (this.id == 0)
                 {
-                    cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime,@ByCash,@ByOnline,@AcptMinOrd,@EnbDeliChrg,@DeliChrgType,@CustomerApp,@CaptainApp,@AdminPanel,@ContactH1,@Contact1,@ContactH2,@Contact2,@CrxVerification,@CheckBoxStatus,@InvoicePrinting,@NoOfCopy,@KotPrinting,@NoOfCopyKot); SELECT SCOPE_IDENTITY();", con.Con);
+                    cmd = new SqlCommand("insert into OrgSettings values(@OrgId,@MinOrdAmt,@DeleveryCharge,@OrdCanMinTime,@ByCash,@ByOnline,@AcptMinOrd,@EnbDeliChrg,@DeliChrgType,@CustomerApp,@CaptainApp,@AdminPanel,@ContactH1,@Contact1,@ContactH2,@Contact2,@CrxVerification,@CheckBoxStatus); SELECT SCOPE_IDENTITY();", con.Con);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 }
                 else
                 {
-                    cmd = new SqlCommand("update OrgSettings set MinOrdAmt=@MinOrdAmt,DeleveryCharge=@DeleveryCharge,OrdCanMinTime=@OrdCanMinTime,ByCash=@ByCash,ByOnline=@ByOnline,AcptMinOrd=@AcptMinOrd,EnbDeliChrg=@EnbDeliChrg,DeliChrgType=@DeliChrgType,CustomerApp=@CustomerApp,CaptainApp=@CaptainApp,AdminPanel=@AdminPanel,ContactH1=@ContactH1,Contact1=@Contact1,ContactH2=@ContactH2,Contact2=@Contact2,CrxVerification=@CrxVerification,CheckBoxStatus=@CheckBoxStatus,InvoicePrinting=@InvoicePrinting,NoOfCopy=@NoOfCopy,KotPrinting=@KotPrinting,NoOfCopyKot=@NoOfCopyKot where ID=@ID ", con.Con);
+                    cmd = new SqlCommand("update OrgSettings set MinOrdAmt=@MinOrdAmt,DeleveryCharge=@DeleveryCharge,OrdCanMinTime=@OrdCanMinTime,ByCash=@ByCash,ByOnline=@ByOnline,AcptMinOrd=@AcptMinOrd,EnbDeliChrg=@EnbDeliChrg,DeliChrgType=@DeliChrgType,CustomerApp=@CustomerApp,CaptainApp=@CaptainApp,AdminPanel=@AdminPanel,ContactH1=@ContactH1,Contact1=@Contact1,ContactH2=@ContactH2,Contact2=@Contact2,CrxVerification=@CrxVerification,CheckBoxStatus=@CheckBoxStatus where ID=@ID ", con.Con);
                     cmd.Parameters.AddWithValue("@ID", this.id);
                 }
                 cmd.Parameters.AddWithValue("@MinOrdAmt", this.MinOrderAmt);
@@ -69,10 +66,6 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Contact2", this.Contact2);
                 cmd.Parameters.AddWithValue("@CrxVerification", this.CrxVerification);
                 cmd.Parameters.AddWithValue("@CheckBoxStatus", this.CheckBoxStatus);
-                cmd.Parameters.AddWithValue("@InvoicePrinting", this.InvoicePrinting);
-                cmd.Parameters.AddWithValue("@NoOfCopy", this.NoOfCopy);
-                cmd.Parameters.AddWithValue("@KotPrinting", this.KotPrinting);
-                cmd.Parameters.AddWithValue("@NoOfCopyKot", this.NoOfCopyKot);
                 if (this.id == 0)
                 {
                     this.id = Convert.ToInt32(cmd.ExecuteScalar());
@@ -130,10 +123,6 @@ namespace HangOut.Models
                     hG_Ticket.Contact2 = sqlDataReader.GetString(++index);
                     hG_Ticket.CrxVerification = sqlDataReader.GetInt32(++index);
                     hG_Ticket.CheckBoxStatus = sqlDataReader.GetBoolean(++index);
-                    hG_Ticket.InvoicePrinting = sqlDataReader.GetInt32(++index);
-                    hG_Ticket.NoOfCopy = sqlDataReader.GetInt32(++index);
-                    hG_Ticket.KotPrinting = sqlDataReader.GetInt32(++index);
-                    hG_Ticket.NoOfCopyKot = sqlDataReader.GetInt32(++index);
                     Temp = hG_Ticket;
                 }
 
