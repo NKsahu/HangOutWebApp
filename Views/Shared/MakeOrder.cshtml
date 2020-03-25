@@ -360,7 +360,9 @@
                         <span class="badge badge-pill badge-secondary" style="padding:7px" id="FinalAmt">
                             0.00
                         </span>
-                        <small style="float:right; font-size:large">
+
+                        <small style="float:right; font-size:medium">
+                            <i class="fas fa-pen" style="color:red" onclick="EditOrder();"></i>
                             <i class="fas fa-eye" style="color:green" onclick="OrdDetail();"></i>
                         </small>
                     </p>
@@ -374,7 +376,7 @@
                                         <tr>
                                             <th>Item</th>
                                             <th class="sp-quantity-th">Quantity</th>
-                                            <th><span class="sp-padright-10"></span>Price</th>
+                                            <th><span class="sp-padright-10"></span>Amt</th>
 
                                             <!---->
                                             <th></th>
@@ -880,6 +882,8 @@
          for (var i = 0; i < CurrSeatingItem.length; i++) {
           FinlAmt+= CurrSeatingItem[i].ItemPrice*CurrSeatingItem[i].Count;
          }
+
+         $("#FinalAmt").html(FinlAmt.toFixed(2));
          //==============
          for (i = 0; i < ItemList.length; i++) {
                         if (ItemList[i].IID.toString() === itemId) {
@@ -1724,7 +1728,22 @@
              }
          });
      }
-     
+     function EditOrder() {
+         $("#waiting").show();
+         $.ajax({
+             type: 'POST',
+             url: "/HG_OrderItem/index?OID=" + CurrOID,
+             success: function (data) {
+                 makedpt("CurrOrder");
+                 $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);
+                 showdpt("CurrOrder");
+                 $("#waiting").hide();
+             },
+             error: function (jqXhr, textStatus, errorMessage) { // error callback
+                 $("#waiting").hide();
+             }
+         });
+     }
      function FinaliZeOrd() {
          $.confirm({
              title: 'Alert !',
