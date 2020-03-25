@@ -1732,7 +1732,7 @@
          $("#waiting").show();
          $.ajax({
              type: 'POST',
-             url: "/HG_OrderItem/index?OID=" + CurrOID,
+             url: "/HG_Orders/EditOrder?OID=" + CurrOID,
              success: function (data) {
                  makedpt("CurrOrder");
                  $("#CurrOrder > .modal-dialog > .modal-content > .modal-body").html(data);

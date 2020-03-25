@@ -13,7 +13,7 @@
         ListDicntCharge = OrdDiscntChrge.GetAll(HG_Order.DisntChargeIDs);
     }
     var OrderItems = new HG_OrderItem().GetAll(OrderID);
-    OrderItems = OrderItems.FindAll(x => x.Status != 1 && x.Status != 2);// not placed and proceessing  items
+   // OrderItems = OrderItems.FindAll(x => x.Status != 1 && x.Status != 2);// not placed and proceessing  items
     List<HG_Items> listItem = new HG_Items().GetAll();
     int SNo = 1;
     int Qty = 0;
@@ -24,7 +24,7 @@
         <h5 class="text-center text-danger"><b><u>Order No : @OrderID</u></b></h5>
     </div>
     <div class="card-body">
-        <table class="table table-hover w-100 " id="TBLID">
+        <table class="table table-hover w-100 " id="TBLID1">
             <thead>
                 <tr>
                     <th>
@@ -404,7 +404,7 @@
     }
 </script>
 <style>
-    table {
+    table #TBLID1{
         width: 500px; /* For Responsive design set 100% */
         border-collapse: collapse;
         margin: 30px 0px 30px;
@@ -412,18 +412,18 @@
         font-size: 14px;
     }
 
-        table tr {
+        table tr #TBLID1{
             height: 40px;
         }
 
-        table th {
+        table th #TBLID1{
             background: #03493e;
             color: #fff;
             font-weight: bold;
             font-size: 18px;
         }
 
-        table td, th {
+       table td, th  #TBLID1{
             padding: 6px 6px 6px 10px;
             border: 1px solid #ccc;
             text-align: center;
