@@ -27,7 +27,7 @@
         new SelectListItem{Text="YES",Value="1"},new SelectListItem{Text="NO",Value="2"}
         };
             List<SelectListItem> CrosVerification = new List<SelectListItem>()
-                                                                                    {
+                                                                                {
                                                                   new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="By Otp",Value="1"}
                                                                                     };
             <div style="padding:5px;border:2px solid black; border-radius:5px;">
@@ -35,7 +35,7 @@
                     <div class="col-md-2">
                         @{
                             List<SelectListItem> EnableOrdering = new List<SelectListItem>()
-                                                                                                                    {
+                                                                                                                                {
                                                                                                   new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
                                                                                                                     };
                         }
@@ -51,7 +51,7 @@
                     <div class="col-md-2 enableCrg">
                         @{
                             List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
-                                                                                                                    {
+                                                                                                                                {
                                                                                                   new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
                                                                                                                     };
                         }
@@ -62,7 +62,7 @@
                     <div class="col-md-2 enableCrg">
                         @{
                             List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
-                                                                                                                    {
+                                                                                                                                {
                                                                                                   new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
                                                                                                                     };
                         }
@@ -96,6 +96,21 @@
                         @Html.ValidationMessageFor(model => model.ApplyInAdminPanel, "", new { @class = "text-danger" })
                     </div>
 
+                </div>
+            </div>
+            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+                <h5 style="text-align:center;color:black">Parcel Charges</h5>
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.Label("Parcel Amt", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.ParcelAmt, new { @class = "form-control autodouble", required = "required" })
+                        @Html.ValidationMessageFor(model => model.ParcelAmt, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.Label("Parcel Tax", htmlAttributes: new { @class = "control-label  " })
+                        @Html.TextBoxFor(model => model.ParcelTax, new { @class = "form-control autodouble" })
+                        @Html.ValidationMessageFor(model => model.ParcelTax, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
             <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
@@ -149,37 +164,6 @@
 
                 </div>
             </div>
-            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
-                <h5 style="text-align:center;color:black">INVOICE Print Setup</h5>
-                <div class="row">
-                    <div class="col-md-3">
-                        @Html.Label("Invoice Printing", htmlAttributes: new { @class = "control-label  " })
-                        @Html.DropDownListFor(model => model.InvoicePrinting, new SelectList(OrgSetting.GetPtrSetting(), "Id", "Name"), new { @class = "form-control ", required = "required" })
-                        @Html.ValidationMessageFor(model => model.InvoicePrinting, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-3">
-                        @Html.Label("Number Of Copy", htmlAttributes: new { @class = "control-label  " })
-                        @Html.TextBoxFor(model => model.NoOfCopy, new { @class = "form-control OnlyNum"})
-                        @Html.ValidationMessageFor(model => model.NoOfCopy, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;display:none">
-                <h5 style="text-align:center;color:black">KOT Print Setup</h5>
-                <div class="row">
-                    <div class="col-md-3">
-                        @Html.Label("KOT Printing", htmlAttributes: new { @class = "control-label  " })
-                        @Html.DropDownListFor(model => model.KotPrinting, new SelectList(OrgSetting.GetPtrSetting(), "Id", "Name"), new { @class = "form-control ", required = "required" })
-                        @Html.ValidationMessageFor(model => model.KotPrinting, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-3">
-                        @Html.Label("Number Of Copy", htmlAttributes: new { @class = "control-label  " })
-                        @Html.TextBoxFor(model => model.NoOfCopyKot, new { @class = "form-control OnlyNum ",  })
-                        @Html.ValidationMessageFor(model => model.NoOfCopy, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-
             <div class="col-sm-1">
                 @Html.Label("Save", new { @class = "text-white " })
                 <input type="submit" value="Save" class="btn btn-success form-control" />
@@ -220,17 +204,5 @@
     $("#EnblDeleryChrg").change(function () {
             EnableDeliveryChrg();
     });
-    $("#InvoicePrinting").change(function () {
-        InvoiceOption();
-    });
-    InvoiceOption();
-    function InvoiceOption() {
-        var option = $("#InvoicePrinting").val();
-        if (option == "2") {
-            $("#NoOfCopy").parent('div').show();
-        }
-        else {
-            $("#NoOfCopy").parent('div').hide();
-        }
-    }
+    
 </script>
