@@ -858,8 +858,11 @@
              Cart.Count = Cnt;
              Cart.TableorSheatOrTaleAwayId = CurrentOrder;
              Cart.OrgId = OrgId;
-             if (ItemUUID == null || ItemUUID == "") {
+             if (ItemUUID == null || ItemUUID == "" || ItemUUID === 'undefined') {
                  Cart.ItemUUID = GetUUID();
+             }
+             else {
+                 Cart.ItemUUID = ItemUUID;
              }
              Cart.ItemPrice=ObjItem.ItemPrice;
              SingleItemPrice = Cart.ItemPrice;
@@ -868,6 +871,7 @@
              //  ItemPrice { get; set; }
              //   IsAddon { get; set; } //0: no , 1: yes
          }
+         console.log("cnt=" + CartList.length);
          var FinlAmt = 0.00;
          var CurrSeatingItem = CartList.filter(function (x) {
                  return x.TableorSheatOrTaleAwayId == CurrentOrder;
@@ -1026,7 +1030,7 @@
                 var Itemid = ObjItem.IID;
                 var ItemUUIDS = ObjItem.ItemArray;
                 for (var i = 0; i < ItemUUIDS.length; i++) {
-                    console.log("==" + ItemUUIDS[i]);
+                   // console.log("==" + ItemUUIDS[i]);
                     var ObjUUID = ItemUUIDS[i];
                     var ItmUUID = ItemUUIDS[i].UUID;
                     var IsAddon = ItemUUIDS[i].IsAddon;

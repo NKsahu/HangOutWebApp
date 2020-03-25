@@ -2,6 +2,11 @@
 @{ Layout = null;
     Int64 OrderID = Int64.Parse(Request.QueryString["OID"]);
     List<OrdDiscntChrge> ListDicntCharge = new List<OrdDiscntChrge>();
+    if (OrderID <= 0)
+    {
+        <h5 class='text-center text-danger'><b><u>No Order Yet</u></b></h5>
+        return;
+    }
     HG_Orders HG_Order = new HG_Orders().GetOne(OrderID);
     if (HG_Order.DisntChargeIDs != "")
     {
