@@ -36,7 +36,6 @@ namespace HangOut.Models
         {
             string Query = "SELECT CID,OrgId from MyCustomer where CID=" +CID.ToString() + " and OrgId="+OrgId.ToString();
             bool joindSts = false;
-            int Cnt = 0;
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             DBCon Obj = new DBCon();
