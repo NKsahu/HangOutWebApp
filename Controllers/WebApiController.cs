@@ -1158,7 +1158,6 @@ namespace HangOut.Controllers
                 JObject jobj = JObject.FromObject(OrderItm);
                 HG_Items hG_Items = items.Find(x => x.ItemID == OrderItm.FID);
                 jobj.Add("ItemName", hG_Items.Items);
-                jobj.Add("IsAddon", OrderItm.IsAddon);
                 if (OrderItm.IsAddon == "1")
                 {
                     List<OrderAdonItm> listaddonitems = OrderAdonItm.GetAll(OrderItm.OIID);

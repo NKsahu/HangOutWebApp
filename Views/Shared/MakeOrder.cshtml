@@ -593,9 +593,21 @@
              return;
          }
          var UUID = ObjItem.UUID;
-         //if (UUID == null || UUID == "") {
-
-         //}
+         if (UUID != null && UUID != "") {
+              var carts = CartList.filter(function (x) {
+                 return x.ItemId.toString() == itemid;});
+             if (carts.length > 0) {
+                 for (var i = 0; i<carts.length; i++) {
+                     if (carts[i].IsParcel == 0) {
+                         UUID = carts[i].ItemUUID;
+                         break;
+                     }
+                     if (i == (carts.length - 1)) {
+                         UUID = "";
+                     }
+                 }
+             }
+         }
          if ($("#C" + UUID).length > 0) {
              var CartValue = parseInt($("#C" + UUID).text());
              AddToCart(itemid, UUID, CartValue + 1);
@@ -740,28 +752,7 @@
          ObjCart.ItemPrice = sumOfItem;
          ObjCart.OrgId = OrgId;
          ObjCart.IsAddon = 1;
-         //$.ajax({
-         //    type: 'POST',
-         //    url: "/WebApi/AddAdonItm",
-         //    data: JSON.stringify(ObjCart),
-         //    contentType: "application/json",
-         //    success: function (data) {
-         //        var Object = JSON.parse(data);
-         //        console.log("==========");
-         //        if (ItemAlreadyAdded(Object.UUID)) {
-         //            $("#tr" + Object.UUID).remove();
-         //        }
-         //        ObjItem.ItemArray = [];
-         //        ObjItem.ItemCartValue = 1;
-         //        ObjItem.ItemArray.push(Object);
-         //        AddItemToQue(ObjItem);
-         //        //ItemArray
-         //        hidedpt("ShowAddon");
-         //    },
-         //    error: function (jqXhr, textStatus, errorMessage) { // error callback
-         //        $("#waiting").hide();
-         //    }
-         //});
+         
 
 
          var CurrItemIndex = CartList.findIndex(x => {
@@ -771,12 +762,12 @@
          var Cnt = 1;
          var IsParcel = 0;
          var ItemPrice = 0.00;
-         if (CurrItemIndex>=0) {
+         if (CurrItemIndex>=0 &&CartList[CurrItemIndex].IsParcel==0) {
              Cnt=CartList[CurrItemIndex].Count + 1
              CartList[CurrItemIndex].Count = Cnt;
              ItemUUID = CartList[CurrItemIndex].ItemUUID;
              ItemPrice = CartList[CurrItemIndex].ItemPrice;
-             IsParcel=CartList[CurrItemIndex].ItemPrice;
+             IsParcel=CartList[CurrItemIndex].IsParcel;
          }
          else {
              ObjCart.Count = Cnt;
@@ -906,7 +897,7 @@
              ObjItmAdd.UUID = ItemUUID;
              ObjItmAdd.IsAddon = 0;
              ObjItmAdd.Price = SingleItemPrice;
-             objitem.IsParcel = IsParcel;
+             ObjItmAdd.IsParcel = IsParcel;
              ObjItmAdd.Cnt = Cnt;
              ObjItem.ItemArray.push(ObjItmAdd);
              if (Cnt > 0) {
