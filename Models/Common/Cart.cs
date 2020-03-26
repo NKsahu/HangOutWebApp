@@ -16,6 +16,7 @@ namespace HangOut.Models.Common
         public static List<Cart> List { get; set; }
         public double ItemPrice { get; set; }
         public int IsAddon { get; set; } //0: no , 1: yes
+        public int IsParcel { get; set; }//0 :no ,1 yes parcel item
         public ItemAddon itemAddons { get; set; }
 
         public Cart()

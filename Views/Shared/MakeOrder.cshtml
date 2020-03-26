@@ -552,7 +552,7 @@
         var Carthtmfirst = ">+</span></div ></div ></td > <td class='sp-product-price'>";
         Carthtmfirst += "<span class='sp-padright-10'></span>"
         var Carthtmlsecond = "<span class='sp-price'>";
-        var cartlasthtml = "</span ></td ><td><a class='sp-bill-actions'><span class=''></span></a ></td></tr>";
+        var cartlasthtml = "</span ></td >";
         document.getElementById("defaultOpen").click();
         $("#TableClr2").click(function () {
             $("#ItemSearch2").val('');
@@ -1038,12 +1038,17 @@
                     var ObjUUID = ItemUUIDS[i];
                     var ItmUUID = ItemUUIDS[i].UUID;
                     var IsAddon = ItemUUIDS[i].IsAddon;
+                    var IsParcel = ItemUUIDS[i].IsParcel;
                     var info = "";
                     if (IsAddon == 1) {
                         info += " <i class='fa fa-info-circle' " + "onclick='AddonInfo(\"" + ItmUUID + "\",\"" + Itemid+"\")'" + "aria-hidden='true'></i>";
                     }
                     var ItemPrice = parseFloat(ObjUUID.Price) * parseInt(ObjUUID.Cnt);
-                    $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>"+info + cartlasthtml);
+                    var ParcelHtml = "<td><i class='fas fa-shopping-bag'></i></td></tr>";
+                    if (IsParcel == 1) {
+
+                    }
+                    $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>"+info + cartlasthtml+ParcelHtml);
                 }
                 
             }
