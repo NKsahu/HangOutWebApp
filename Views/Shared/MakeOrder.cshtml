@@ -1046,7 +1046,7 @@
                     var ItemPrice = parseFloat(ObjUUID.Price) * parseInt(ObjUUID.Cnt);
                     var ParcelHtml = "<td><i class='fas fa-shopping-bag'></i></td></tr>";
                     if (IsParcel == 1) {
-
+                        ParcelHtml = "<td><i style='color:red' class='fas fa-shopping-bag'></i></td></tr>";
                     }
                     $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>"+info + cartlasthtml+ParcelHtml);
                 }
