@@ -124,7 +124,11 @@
                     if (item.IsAddon == "1")
                     {
                         var AddonItem = OrderAdonItm.GetAll(item.OIID);
-                        ItemPrice+= AddonItem.Sum(x=>x.Price)* item.Count;
+                        foreach(var ADDON in AddonItem)
+                        {
+                            ItemPrice+=ADDON.Price*item.Count;
+                        }
+                        //ItemPrice+= AddonItem.Sum(x=>x.Price)* item.Count;
                     }
                     if (item.Status != 4)
                     {

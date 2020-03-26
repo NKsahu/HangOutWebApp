@@ -769,16 +769,19 @@
          });
          var ItemUUID = "";
          var Cnt = 1;
+         var IsParcel = 0;
          var ItemPrice = 0.00;
          if (CurrItemIndex>=0) {
              Cnt=CartList[CurrItemIndex].Count + 1
              CartList[CurrItemIndex].Count = Cnt;
              ItemUUID = CartList[CurrItemIndex].ItemUUID;
              ItemPrice = CartList[CurrItemIndex].ItemPrice;
+             IsParcel=CartList[CurrItemIndex].ItemPrice;
          }
          else {
              ObjCart.Count = Cnt;
              ObjCart.ItemUUID = GetUUID();
+             ObjCart.IsParcel = IsParcel;
              ItemUUID = ObjCart.ItemUUID;
              ItemPrice = ObjCart.ItemPrice;
              CartList.push(ObjCart);
@@ -796,7 +799,7 @@
              ObjItmAdd.IsAddon = 1;
              ObjItmAdd.Price = ItemPrice;
              ObjItmAdd.Cnt = Cnt;
-
+         ObjItmAdd.IsParcel = IsParcel;
          ObjItem.ItemArray.push(ObjItmAdd);
          AddItemToQue(ObjItem);
                  //ItemArray
@@ -819,6 +822,7 @@
                 return x.IID.toString() == itemId;
          });
          var SingleItemPrice = 0.00;
+         var IsParcel = 0;
          if (CartList.length > 0) {
              var Cart=CartList.find(x => {
                 return x.ItemUUID == ItemUUID;
@@ -829,6 +833,7 @@
                      if (CartList[i].ItemUUID == ItemUUID) {
                          CartList[i].Count = Cnt;
                          SingleItemPrice = CartList[i].ItemPrice;
+                         IsParcel=CartList[i].IsParcel;
                          if (Cnt <= 0) {
                              CartList.splice(i, 1);
                          }
@@ -846,7 +851,8 @@
              Cart.OrgId = OrgId;
              Cart.ItemPrice = ObjItem.ItemPrice;
              SingleItemPrice = Cart.ItemPrice;
-             Cart.ItemUUID = GetUUID();
+                 Cart.ItemUUID = GetUUID();
+                 Cart.IsParcel =IsParcel ;
              ItemUUID = Cart.ItemUUID;
              CartList.push(Cart);
 
@@ -866,6 +872,7 @@
              else {
                  Cart.ItemUUID = ItemUUID;
              }
+             Cart.IsParcel = IsParcel;
              Cart.ItemPrice=ObjItem.ItemPrice;
              SingleItemPrice = Cart.ItemPrice;
               ItemUUID = Cart.ItemUUID;
@@ -899,6 +906,7 @@
              ObjItmAdd.UUID = ItemUUID;
              ObjItmAdd.IsAddon = 0;
              ObjItmAdd.Price = SingleItemPrice;
+             objitem.IsParcel = IsParcel;
              ObjItmAdd.Cnt = Cnt;
              ObjItem.ItemArray.push(ObjItmAdd);
              if (Cnt > 0) {
@@ -1044,9 +1052,9 @@
                         info += " <i class='fa fa-info-circle' " + "onclick='AddonInfo(\"" + ItmUUID + "\",\"" + Itemid+"\")'" + "aria-hidden='true'></i>";
                     }
                     var ItemPrice = parseFloat(ObjUUID.Price) * parseInt(ObjUUID.Cnt);
-                    var ParcelHtml = "<td><i class='fas fa-shopping-bag'></i></td></tr>";
+                    var ParcelHtml = "<td><i UUID="+ItmUUID+" onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
                     if (IsParcel == 1) {
-                        ParcelHtml = "<td><i style='color:red' class='fas fa-shopping-bag'></i></td></tr>";
+                         ParcelHtml = "<td><i style='color:red' UUID="+ItmUUID+" onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
                     }
                     $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>"+info + cartlasthtml+ParcelHtml);
                 }
@@ -1061,7 +1069,25 @@
             else {
                 return false;
             }
-        }
+     }
+     function Makeparcel(event) {
+         var itemuuid = $(event).attr('UUID');
+         for (var i = 0; i < CartList.length; i++) {
+                     if (CartList[i].ItemUUID == itemuuid) {
+                        // SingleItemPrice = CartList[i].ItemPrice;
+                         if (CartList[i].IsParcel == 0) {
+                             $(event).css('color', 'red');
+                             CartList[i].IsParcel = 1;
+                         }
+                         else {
+                             $(event).css('color', 'black');
+                             CartList[i].IsParcel = 0;
+                         }
+                         
+                         break;
+                     }
+         }
+     }
         function SearchItem(SearchItem, hideClsName) {
             var input = document.getElementById(SearchItem);
             var filter = input.value.toLowerCase();

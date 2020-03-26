@@ -1154,9 +1154,22 @@ namespace HangOut.Controllers
                 TotalPrice += (OrderItm.Count * OrderItm.Price);
                 CostPrice += (OrderItm.Count * OrderItm.CostPrice);
                 Totaltax += OrgType.TotalTax(OrderItm.CostPrice, OrderItm.TaxInItm, OrderItm.Count);
+
                 JObject jobj = JObject.FromObject(OrderItm);
                 HG_Items hG_Items = items.Find(x => x.ItemID == OrderItm.FID);
                 jobj.Add("ItemName", hG_Items.Items);
+                jobj.Add("IsAddon", OrderItm.IsAddon);
+                if (OrderItm.IsAddon == "1")
+                {
+                    List<OrderAdonItm> listaddonitems = OrderAdonItm.GetAll(OrderItm.OIID);
+                    foreach (var addonitm in listaddonitems)
+                    {
+                        Totaltax += OrgType.TotalTax(addonitm.CostPrice, addonitm.Tax, OrderItm.Count);
+                        CostPrice += (OrderItm.Count * addonitm.CostPrice);
+                        TotalPrice += (OrderItm.Count * addonitm.Price);
+                    }
+                    jobj.Add("AddonItems", JArray.FromObject(listaddonitems));
+                }
                 jArray.Add(jobj);
             }
             if (listitems.Count == 0)
