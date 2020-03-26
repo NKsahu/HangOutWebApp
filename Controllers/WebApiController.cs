@@ -7,6 +7,7 @@ using System.Linq;
 using HangOut.Models.DynamicList;
 using System;
 using System.Net;
+using HangOut.Models.POS;
 using paytm;
 using HangOut.Models.POS;
 using HangOut.Controllers.Account;
@@ -2409,9 +2410,21 @@ namespace HangOut.Controllers
                     itemobj.Add("ItemName", hG_Items.Items);
                     itemobj.Add("Quantity",OrderItem.Count);
                     itemobj.Add("Status", OrderItem.Status);
+                    itemobj.Add("IsAddon", OrderItem.IsAddon);// is addon item 0 no ,1 yes
                     double taxprice= OrgType.TotalTax(OrderItem.CostPrice, OrderItem.TaxInItm, OrderItem.Count);
                     double CostPriceItm= (OrderItem.Count * OrderItem.CostPrice);
                     double TotlPrice= (OrderItem.Count * OrderItem.Price);
+                    if (OrderItem.IsAddon == "1")
+                    {
+                        List<OrderAdonItm> listaddonitems = OrderAdonItm.GetAll(OrderItem.OIID);
+                        foreach(var addonitm in listaddonitems)
+                        {
+                            taxprice += OrgType.TotalTax(addonitm.CostPrice, addonitm.Tax, OrderItem.Count);
+                            CostPriceItm += (OrderItem.Count * addonitm.CostPrice);
+                            TotlPrice += (OrderItem.Count * addonitm.Price);
+                        }
+                        itemobj.Add("AddonItems", JArray.FromObject(listaddonitems));
+                    }
                     itemobj.Add("Tax", taxprice.ToString("0.00"));
                     itemobj.Add("CostPrice", CostPriceItm.ToString("0.00"));
                     itemobj.Add("Amount", TotlPrice.ToString("0.00"));

@@ -30,6 +30,9 @@
                                                                                 {
                                                                   new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="By Otp",Value="1"}
                                                                                     };
+            List<SelectListItem> TaxinParcelSl = new List<SelectListItem>() { 
+                                                                new SelectListItem{Text="Select",Value="0"},  new SelectListItem{Text="5%",Value="5"},new SelectListItem{Text="18%",Value="18"}
+                                                                                    };
             <div style="padding:5px;border:2px solid black; border-radius:5px;">
                 <div class="row">
                     <div class="col-md-2">
@@ -108,7 +111,7 @@
                     </div>
                     <div class="col-md-2">
                         @Html.Label("Parcel Tax", htmlAttributes: new { @class = "control-label  " })
-                        @Html.TextBoxFor(model => model.ParcelTax, new { @class = "form-control autodouble" })
+                        @Html.DropDownListFor(model => model.ParcelTax,TaxinParcelSl, new { @class = "form-control " })
                         @Html.ValidationMessageFor(model => model.ParcelTax, "", new { @class = "text-danger" })
                     </div>
                 </div>
