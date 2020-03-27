@@ -82,9 +82,18 @@ namespace HangOut.Models.POS
                     OBJINT.Tax = SDR.GetDouble(Index++);
                     OBJINT.CostPrice = SDR.GetDouble(Index++);
                     OBJINT.Price = SDR.GetDouble(Index++);
-                    OBJINT.ItemName = SDR.GetString(Index++);
+                    if(OBJINT.AdddOnItemId==0&& OBJINT.ItemId == 0)
+                    {
+                        OBJINT.ItemName = "[Parcel]";
+                    }
+                    else
+                    {
+                        OBJINT.ItemName = SDR.GetString(Index++);
+                    }
+                    
                     listAddon.Add(OBJINT);
                 }
+
             }
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); con.Con.Close(); }
