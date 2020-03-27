@@ -691,8 +691,9 @@
          var ObjItmAddon = {};
          var AddonItemSelected = document.getElementsByClassName("AddonCheckBox");
          var AddonItemIdCsv = "";
-         var sumOfItem = parseFloat(ObjItem.ItemPrice);
+         var ItemPrice = parseFloat(ObjItem.ItemPrice);
          var AddonItemId = [];
+         var AddonAmts = [];
          var NotSelectedIds = [];
          var ArrayAddonsId = [];
          for (var i = 0; i < AddonItemSelected.length; i++) {
@@ -707,7 +708,9 @@
                  }
 
                  AddonItemId.push(ObjCheckBx.attr('id'));
-                 sumOfItem += parseFloat($("#Price" + ObjCheckBx.attr('id')).val());
+                // sumOfItem += parseFloat($("#Price" + ObjCheckBx.attr('id')).val());
+                var addonamt=parseFloat($("#Price" + ObjCheckBx.attr('id')).val());
+                 AddonAmts.push(addonamt);
                  var titleId = ObjCheckBx.attr('TitileId');
                  ArrayAddonsId.push(titleId);
                  var Min = parseInt($("#Min" + titleId).val());
@@ -743,6 +746,7 @@
          }
          ObjItmAddon.AddonItemIdCsv = AddonItemIdCsv;
          ObjItmAddon.AddonItemId = AddonItemId;
+         ObjItmAddon.AddonAmts = AddonAmts;
          $("#waiting").show();
          //==
          var ObjCart = {};
@@ -750,10 +754,11 @@
          ObjCart.ItemId = itemid;
          ObjCart.TableorSheatOrTaleAwayId = CurrentOrder;
          ObjCart.itemAddons = ObjItmAddon;
-         ObjCart.ItemPrice = sumOfItem;
+         ObjCart.ItemPrice = ItemPrice;
          ObjCart.OrgId = OrgId;
          ObjCart.IsAddon = 1;
-         
+         ObjCart.ParcelCharge = 0.00;
+          ObjCart.AddonAmts = AddonAmts;
 
 
          var CurrItemIndex = CartList.findIndex(x => {
@@ -790,7 +795,9 @@
              ObjItmAdd.UUID = ItemUUID;
              ObjItmAdd.IsAddon = 1;
              ObjItmAdd.Price = ItemPrice;
-             ObjItmAdd.Cnt = Cnt;
+         ObjItmAdd.Cnt = Cnt;
+         ObjItmAdd.ParcelCharge = 0.00;
+         ObjItmAdd.AddonAmts = AddonAmts;
          ObjItmAdd.IsParcel = IsParcel;
          ObjItem.ItemArray.push(ObjItmAdd);
          AddItemToQue(ObjItem);
@@ -802,9 +809,15 @@
                  return x.TableorSheatOrTaleAwayId == CurrentOrder;
          });
          for (var i = 0; i < CurrSeatingItem.length; i++) {
-          FinlAmt+= CurrSeatingItem[i].ItemPrice*CurrSeatingItem[i].Count;
+             FinlAmt += CurrSeatingItem[i].ItemPrice * CurrSeatingItem[i].Count;
+             FinlAmt +=CurrSeatingItem[i].ParcelCharge *CurrSeatingItem[i].Count;
+             if (CurrSeatingItem[i].IsAddon == 1) {
+                 for (var j = 0; j < CurrSeatingItem[i].AddonAmts.length; j++) {
+                     FinlAmt+=CurrSeatingItem[i].AddonAmts[j]*CurrSeatingItem[i].Count;
+                 }
+             }
          }
-         SeatAmt(FinlAmt);
+         ShowSeatingAmt(FinlAmt);
          $("#waiting").hide();
      }
      function AddToCartOffline(itemId, ItemUUID, Cnt) {
@@ -813,7 +826,9 @@
                 return x.IID.toString() == itemId;
          });
          var SingleItemPrice = 0.00;
+         var AddonAmts = 0.00;
          var IsParcel = 0;
+         var ParcelCharge = 0.00;
          if (CartList.length > 0) {
              var Cart=CartList.find(x => {
                 return x.ItemUUID == ItemUUID;
@@ -824,7 +839,13 @@
                      if (CartList[i].ItemUUID == ItemUUID) {
                          CartList[i].Count = Cnt;
                          SingleItemPrice = CartList[i].ItemPrice;
-                         IsParcel=CartList[i].IsParcel;
+                         IsParcel = CartList[i].IsParcel;
+                         ParcelCharge=CartList[i].ParcelCharge;
+                         if (CartList[i].IsAddon == 1) {
+                             for (var j = 0; j < CartList[i].AddonAmts.length; j++) {
+                             AddonAmts+=CartList[i].AddonAmts[j]*CartList[i].Count;
+                           }
+                         }
                          if (Cnt <= 0) {
                              CartList.splice(i, 1);
                          }
@@ -842,8 +863,9 @@
              Cart.OrgId = OrgId;
              Cart.ItemPrice = ObjItem.ItemPrice;
              SingleItemPrice = Cart.ItemPrice;
-                 Cart.ItemUUID = GetUUID();
-                 Cart.IsParcel =IsParcel ;
+             Cart.ItemUUID = GetUUID();
+             Cart.IsParcel = IsParcel;
+             Cart.ParcelCharge = 0;;
              ItemUUID = Cart.ItemUUID;
              CartList.push(Cart);
 
@@ -864,7 +886,8 @@
                  Cart.ItemUUID = ItemUUID;
              }
              Cart.IsParcel = IsParcel;
-             Cart.ItemPrice=ObjItem.ItemPrice;
+             Cart.ItemPrice = ObjItem.ItemPrice;
+             Cart.ParcelCharge = 0;
              SingleItemPrice = Cart.ItemPrice;
               ItemUUID = Cart.ItemUUID;
              CartList.push(Cart);
@@ -878,7 +901,13 @@
          });
          console.log("Cuuseatingcnt=" + CurrSeatingItem.length +"Finalamt="+FinlAmt);
          for (var i = 0; i < CurrSeatingItem.length; i++) {
-          FinlAmt+= CurrSeatingItem[i].ItemPrice*CurrSeatingItem[i].Count;
+             FinlAmt += CurrSeatingItem[i].ItemPrice * CurrSeatingItem[i].Count;
+             FinlAmt +=CurrSeatingItem[i].ParcelCharge *CurrSeatingItem[i].Count;
+             if (CurrSeatingItem[i].IsAddon == 1) {
+                 for (var j = 0; j < CurrSeatingItem[i].AddonAmts.length; j++) {
+                     FinlAmt+=CurrSeatingItem[i].AddonAmts[j]*CurrSeatingItem[i].Count;
+                 }
+             }
          }
          //==============
          for (i = 0; i < ItemList.length; i++) {
@@ -896,6 +925,7 @@
              ObjItmAdd.IsAddon = 0;
              ObjItmAdd.Price = SingleItemPrice;
              ObjItmAdd.IsParcel = IsParcel;
+             ObjItmAdd.ParcelCharge=ParcelCharge;
              ObjItmAdd.Cnt = Cnt;
              ObjItem.ItemArray.push(ObjItmAdd);
              if (Cnt > 0) {
@@ -906,6 +936,8 @@
          else {
              $("#C" + ItemUUID).text(Cnt);
              var newamt = SingleItemPrice * Cnt;
+             newamt += ParcelCharge * Cnt;
+             newamt += AddonAmts;
           $("#P" + ItemUUID).text(newamt.toFixed(2));
          }
          //remove items
@@ -982,10 +1014,14 @@
                     var IsAddon = ItemUUIDS[i].IsAddon;
                     var IsParcel = ItemUUIDS[i].IsParcel;
                     var info = "";
-                    if (IsAddon == 1) {
-                        info += " <i class='fa fa-info-circle' " + "onclick='AddonInfo(\"" + ItmUUID + "\",\"" + Itemid+"\")'" + "aria-hidden='true'></i>";
-                    }
                     var ItemPrice = parseFloat(ObjUUID.Price) * parseInt(ObjUUID.Cnt);
+                    ItemPrice+=ItemUUIDS[i].ParcelCharge*parseInt(ObjUUID.Cnt);
+                    if (IsAddon == 1) {
+                        info += " <i class='fa fa-info-circle' " + "onclick='AddonInfo(\"" + ItmUUID + "\",\"" + Itemid + "\")'" + "aria-hidden='true'></i>";
+                        for (j = 0; j < ItemUUIDS[i].AddonAmts.length; j++) {
+                            ItemPrice+=parseFloat(ItemUUIDS[i].AddonAmts[j]) * parseInt(ObjUUID.Cnt);
+                        }
+                    }
                     var ParcelHtml = "<td><i UUID="+ItmUUID+" title='make parcel' onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
                     if (IsParcel == 1) {
                          ParcelHtml = "<td><i style='color:red'title='remove parcel' UUID="+ItmUUID+" onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
@@ -1006,6 +1042,8 @@
      }
      function Makeparcel(event) {
          var itemuuid = $(event).attr('UUID');
+         console.log("aaya parcel");
+         var CountAmt = 0.00;
          for (var i = 0; i < CartList.length; i++) {
                      if (CartList[i].ItemUUID == itemuuid) {
                         // SingleItemPrice = CartList[i].ItemPrice;
@@ -1013,17 +1051,40 @@
                              $(event).css('color', 'red');
                              $(event).attr('title', 'remove parcel');
                              CartList[i].IsParcel = 1;
+                             CartList[i].ParcelCharge = ParcelCharge;
+                             
                          }
                          else {
                              $(event).css('color', 'black');
                              CartList[i].IsParcel = 0;
                              $(event).attr('title', 'make parcel');
+                             CartList[i].ParcelCharge = 0;
+                         }
+                         CountAmt = CartList[i].ItemPrice * CartList[i].Count;
+                         CountAmt += CartList[i].ParcelCharge * CartList[i].Count;
+                         if (CartList[i].IsAddon == 1) {
+                            for (var j = 0; j < CartList[i].AddonAmts.length; j++) {
+                                CountAmt+=CartList[i].AddonAmts[j]*CartList[i].Count;
+                            }
                          }
                          break;
                      }
          }
-
-
+         var CurrSeatingItem = CartList.filter(function (x) {
+                 return x.TableorSheatOrTaleAwayId == CurrentOrder;
+         });
+         $("#P" + itemuuid).text(CountAmt.toFixed(2));
+         var FinlAmt = 0.00;
+         for (var i = 0; i < CurrSeatingItem.length; i++) {
+             FinlAmt += CurrSeatingItem[i].ItemPrice * CurrSeatingItem[i].Count;
+             FinlAmt+=CurrSeatingItem[i].ParcelCharge*CurrSeatingItem[i].Count;
+             if (CurrSeatingItem[i].IsAddon == 1) {
+                 for (var j = 0; j < CurrSeatingItem[i].AddonAmts.length; j++) {
+                     FinlAmt+=CurrSeatingItem[i].AddonAmts[j]*CurrSeatingItem[i].Count;
+                 }
+             }
+         }
+         ShowSeatingAmt(FinlAmt);
      }
         function SearchItem(SearchItem, hideClsName) {
             var input = document.getElementById(SearchItem);
