@@ -540,6 +540,7 @@
      var OrderDisplay = 1;//default Mobile
      var KotPrintType = 0;
      var KotNoOfCopy = 0;
+     var ParcelCharge = 0.00;
      //=======
         var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
         var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
@@ -756,7 +757,7 @@
 
 
          var CurrItemIndex = CartList.findIndex(x => {
-             return (x.ItemId == ObjCart.ItemId && x.itemAddons != null && x.itemAddons.AddonItemIdCsv == AddonItemIdCsv)
+             return (x.ItemId == ObjCart.ItemId && x.itemAddons != null && x.itemAddons.AddonItemIdCsv == AddonItemIdCsv &&x.IsParcel==0)
          });
          var ItemUUID = "";
          var Cnt = 1;
@@ -803,8 +804,7 @@
          for (var i = 0; i < CurrSeatingItem.length; i++) {
           FinlAmt+= CurrSeatingItem[i].ItemPrice*CurrSeatingItem[i].Count;
          }
-         var finalChargeToShow = ChargeAmt + FinlAmt;
-        $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
+         SeatAmt(FinlAmt);
          $("#waiting").hide();
      }
      function AddToCartOffline(itemId, ItemUUID, Cnt) {
@@ -880,8 +880,6 @@
          for (var i = 0; i < CurrSeatingItem.length; i++) {
           FinlAmt+= CurrSeatingItem[i].ItemPrice*CurrSeatingItem[i].Count;
          }
-
-         $("#FinalAmt").html(FinlAmt.toFixed(2));
          //==============
          for (i = 0; i < ItemList.length; i++) {
                         if (ItemList[i].IID.toString() === itemId) {
@@ -915,7 +913,11 @@
              $("#tr" + ItemUUID).remove();
          }
          // show Final Order Price
-         var finalChargeToShow = ChargeAmt + FinlAmt;
+         ShowSeatingAmt(FinlAmt);
+     }
+     function ShowSeatingAmt(SeatAmt) {
+         $("#FinalAmt").html(SeatAmt.toFixed(2));
+         var finalChargeToShow = ChargeAmt + SeatAmt;
         $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
      }
      function GetUUID() {
@@ -968,66 +970,7 @@
      }
      function AddToCart(ItemId, ItmUUID, Cnt) {
          AddToCartOffline(ItemId, ItmUUID, Cnt);
-            //var Obj = {};
-            //Obj.CID = LoginId;
-            //Obj.OrgId = OrgId;
-            //Obj.ItemId = ItemId;
-            //Obj.UUID = ItmUUID;
-            //Obj.Cnt = Cnt;
-            //Obj.TSTWID = CurrentOrder;
-            //Obj.OID = CurrOID;
-            //$.ajax({
-            //    type: 'POST',
-            //    url: "/WebApi/AddCart2?Obj=" + JSON.stringify(Obj),
-            //    success: function (data) {
-            //        var JResult = JSON.parse(data);
-            //        var CurritemCnt = parseInt(JResult.Cnt);
-            //        var ItemUUID = JResult.UUID;
-            //        var FinlAmt = parseFloat(JResult.FinalPrice);
-            //       // $("#FinalAmt").html(FinlAmt);
-            //        console.log("Count item" + CurritemCnt);
-            //        var ObjItem = {};
-            //        for (i = 0; i < ItemList.length; i++) {
-            //            if (ItemList[i].IID.toString() === ItemId) {
-            //                ItemList[i].UUID = ItemUUID;
-            //                ObjItem = ItemList[i];
-            //                break;
-            //            }
-            //        }
-            //        if (CurritemCnt >= 1) {
-                       
-            //            ObjItem.ItemCartValue = 1;
-            //            console.log("aaya");
-            //            if (!ItemAlreadyAdded(ItemUUID)) {
-
-            //                $("#tr" + ItemUUID).remove();
-            //                ObjItem.ItemArray = [];
-            //                ObjItem.ItemArray.push(JResult);
-            //                AddItemToQue(ObjItem);
-            //                ResetOrder(CurrentOrder, 3);
-            //            }
-            //            else {
-            //                var Cnt = parseInt(JResult.Cnt);
-            //                $("#C" + ItemUUID).text(Cnt);
-            //                var Price = parseFloat(JResult.Price);
-            //                $("#P" + ItemUUID).text(Price * Cnt);
-
-            //            }
-
-            //        }
-            //        else {
-            //            ResetOrder(CurrentOrder, 1); //free
-            //            $("#tr" + ItemUUID).remove();
-            //        }
-            //        var finalChargeToShow = ChargeAmt + FinlAmt;
-            //        $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
-            //        //$("#" + itemid).text(Cnt);
-            //    },
-            //    error: function (jqXhr, textStatus, errorMessage) { // error callback
-            //        $("#waiting").hide();
-            //    }
-            //});
-        }
+     }
         function AddItemToQue(ObjItem) {
             if (ObjItem.ItemCartValue != '0') {
                 var Itemid = ObjItem.IID;
@@ -1043,9 +986,9 @@
                         info += " <i class='fa fa-info-circle' " + "onclick='AddonInfo(\"" + ItmUUID + "\",\"" + Itemid+"\")'" + "aria-hidden='true'></i>";
                     }
                     var ItemPrice = parseFloat(ObjUUID.Price) * parseInt(ObjUUID.Cnt);
-                    var ParcelHtml = "<td><i UUID="+ItmUUID+" onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
+                    var ParcelHtml = "<td><i UUID="+ItmUUID+" title='make parcel' onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
                     if (IsParcel == 1) {
-                         ParcelHtml = "<td><i style='color:red' UUID="+ItmUUID+" onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
+                         ParcelHtml = "<td><i style='color:red'title='remove parcel' UUID="+ItmUUID+" onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
                     }
                     $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>"+info + cartlasthtml+ParcelHtml);
                 }
@@ -1068,16 +1011,19 @@
                         // SingleItemPrice = CartList[i].ItemPrice;
                          if (CartList[i].IsParcel == 0) {
                              $(event).css('color', 'red');
+                             $(event).attr('title', 'remove parcel');
                              CartList[i].IsParcel = 1;
                          }
                          else {
                              $(event).css('color', 'black');
                              CartList[i].IsParcel = 0;
+                             $(event).attr('title', 'make parcel');
                          }
-                         
                          break;
                      }
          }
+
+
      }
         function SearchItem(SearchItem, hideClsName) {
             var input = document.getElementById(SearchItem);
@@ -1319,10 +1265,9 @@
 
                     }
                     CartList = [];
-                   // ChargeAmt += TotalRs;
-                    var Dispalamt = ChargeAmt + TotalRs;
-                    console.log('chanrge');
-                    $("#FinalAmtCharge").text('CHARGE ' + Dispalamt.toFixed(2) + '/RS');
+                    ShowSeatingAmt(TotalRs);
+                   // $("#FinalAmt").text(TotalRs.toFixed(2));
+                   // $("#FinalAmtCharge").text('CHARGE ' + Dispalamt.toFixed(2) + '/RS');
                     if (CategoryList.length == 0) {
 
                         $.alert({
@@ -1331,7 +1276,7 @@
                         });
                         return;
                     }
-                    $("#FinalAmt").text(TotalRs.toFixed(2));
+                    
                     $("#ContactId").val(CategoryList[0].ContactId);
                     var MobileNo = CategoryList[0].Mobile;
                     var Cname = CategoryList[0].CName;
@@ -1421,10 +1366,8 @@
                         var JsonMsg = JsonObj.MSG.split(",");
                         var PaymentSts = JsonMsg[2];
                         if (PaymentSts != "0") {
-                            $("#FinalAmt").html('0.00');
-                            $("#FinalAmtCharge").text('CHARGE 0.00');
                             ChargeAmt = 0.00;
-                           //GenInvoice(0, JsonMsg[0]);
+                            SeatAmt(ChargeAmt);
                         }
                         else {
                             var finalAmt = parseFloat($("#FinalAmt").text());
@@ -1524,8 +1467,6 @@
                                  btnClass: 'btn-info LeftBtn',
                                  columnClass:'col-md-3',
                                  action: function () {
-                                   //  var finalChargeToShow = ChargeAmt + FinlAmt;
-                                    // $("#FinalAmtCharge").text('CHARGE ' + finalChargeToShow.toFixed(2) + ' /RS');
                                      PostOrder(Obj);
                                  }
                              },
@@ -2008,6 +1949,7 @@
                  OrderDisplay = Jobj.OrdDisaply;
                  KotPrintType = Jobj.KotPrint;
                  KotNoOfCopy = Jobj.NoOfCopy;
+                 ParcelCharge =parseFloat(Jobj.ParcelAmt);
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback
                  $("#waiting").hide();

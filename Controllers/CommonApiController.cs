@@ -311,12 +311,16 @@ namespace HangOut.Controllers
             var UserInfo = Request.Cookies["UserInfo"];
             int Orgid = int.Parse(UserInfo["OrgId"]);
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(Orgid);
+            OrgSetting setting = OrgSetting.Getone(Orgid);
             JObject result = new JObject();
+            double taxableAmt = (setting.ParcelAmt * setting.ParcelTax) / 100;
+            double ParcelPrice= setting.ParcelAmt + taxableAmt;
             result.Add("InvoicePrint", ObjOrg.InvoicePrintting);
             result.Add("InvoiceNoOfCopy", ObjOrg.NuOfCopy);
             result.Add("OrdDisaply", ObjOrg.OrderDisplay);
             result.Add("KotPrint", ObjOrg.PrinttingType);
             result.Add("NoOfCopy", ObjOrg.Copy);
+            result.Add("ParcelAmt", ParcelPrice);
             return result;
         }
         public JObject RatingApplied(int CID)
