@@ -960,12 +960,17 @@ namespace HangOut.Controllers
                 foreach (Cart Item in ListCart)
                     {
                     HG_Items ObjItem = ItemList.Find(x => x.ItemID == Item.ItemId);
+                    string IsAdon = "0";
+                    if (Item.IsAddon == 1 || Item.IsParcel == 1)
+                    {
+                        IsAdon = "1";
+                    }
                     HG_OrderItem OrderItem = new HG_OrderItem()
                     {
                         FID = ObjItem.ItemID,
                         Price = ObjItem.Price,
                         Count = Item.Count,
-                        IsAddon = Item.IsAddon.ToString(),
+                        IsAddon = IsAdon,
                         OID = NewOID,
                         Status = Status,
                         TickedNo = Ticketno,
@@ -1003,6 +1008,20 @@ namespace HangOut.Controllers
                             OrdAddonItm.Price = addOnItems.Price;
                             OrdAddonItm.Save();
                         }
+                    }
+                    if (Item.IsParcel == 1)
+                    {//make one parcel entry
+                        double taxableAmt = (orgSetting.ParcelAmt * orgSetting.ParcelTax) / 100;
+                        double ParcelPrice = orgSetting.ParcelAmt + taxableAmt;
+                        OrderAdonItm OrdAddonItm = new OrderAdonItm();
+                        OrdAddonItm.OID = NewOID;
+                        OrdAddonItm.OIID = OrderItem.OIID;
+                        OrdAddonItm.AdddOnItemId = 0;
+                        OrdAddonItm.ItemId = 0;
+                        OrdAddonItm.Tax = orgSetting.ParcelTax;
+                        OrdAddonItm.CostPrice = orgSetting.ParcelAmt;
+                        OrdAddonItm.Price = orgSetting.ParcelAmt+taxableAmt;
+                        OrdAddonItm.Save();
                     }
 
                 }

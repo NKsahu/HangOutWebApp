@@ -86,10 +86,11 @@
                                 </td>
                                 <td style="text-align:center;font-size:small;">@items.Count</td>
                             </tr>
-                            
+
                             if (items.IsAddon == "1")
                             {
                                 var OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
+                                OrderAdonItms = OrderAdonItms.OrderBy(x => x.AdddOnItemId).ToList();
                                 foreach (var addonitm in OrderAdonItms)
                                 {
                                     QtyTotoal += items.Count;

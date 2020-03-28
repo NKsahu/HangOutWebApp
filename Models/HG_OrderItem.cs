@@ -12,7 +12,7 @@ namespace HangOut.Models
         public Int64 FID { get; set; }//FID mean food ID
         public double Price { get; set; }// single item*count = price TotalWithTax
         public int Count { get; set; }
-        public string IsAddon { get; set; } //{ 0: no,1:yes==aplly addons and multiservings } //Qty replace with IsAddon Item
+        public string IsAddon { get; set; } //{ 0: no,1:yes==aplly addons and multiservings Or Parcel Applied } //Qty replace with IsAddon Item
         public Int64 OID { get; set; }
         public bool Deleted { get; set; }
         public int Status { get; set; }//"1":Order Placed,"2":Processing,3:"Completed" ,"4" :"Cancelled"

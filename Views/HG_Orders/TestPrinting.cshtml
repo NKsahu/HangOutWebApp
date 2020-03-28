@@ -157,6 +157,7 @@
                         if (ObjSingleItm.IsAddon == "1")
                         {
                             var OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
+                            OrderAdonItms = OrderAdonItms.OrderBy(x => x.AdddOnItemId).ToList();
                             foreach (var addonitm in OrderAdonItms)
                             {
                                 var amount = addonitm.CostPrice * Cnt;
