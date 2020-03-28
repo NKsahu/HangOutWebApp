@@ -162,16 +162,26 @@
                             {
                                 var amount = addonitm.CostPrice * Cnt;
                                 AmountTotal += amount;
-                                Qty += Cnt;
+                                
                                 RateTotal += addonitm.CostPrice;
                                 GrandTotal += addonitm.Price * Cnt;
                                 TotalTax += OrgType.TotalTax(addonitm.CostPrice, addonitm.Tax, Cnt);
-                                <tr style="@(Style)">
-                                    <td style="text-align:left;font-size:x-small;">-@addonitm.ItemName</td>
-                                    <td style="text-align:right ;font-size:small;">@Cnt</td>
-                                    <td style="text-align:right; font-size:small;">@addonitm.CostPrice.ToString("0.00")</td>
-                                    <td style="text-align:right;font-size:small;">@amount.ToString("0.00")</td>
-                                </tr>
+                <tr style="@(Style)">
+                    @if (addonitm.ItemId == 0)
+                    {
+                        <td style="text-align:left;font-size:x-small;font-style:italic;font-weight:bold">-@addonitm.ItemName</td>
+                        <td style="text-align:right ;font-size:small;"></td>
+                        <td style="text-align:right; font-size:small;"></td>
+                    }
+                    else
+                    {Qty += Cnt;
+                        <td style="text-align:left;font-size:x-small;">-@addonitm.ItemName</td>
+                        <td style="text-align:right ;font-size:small;">@Cnt</td>
+                        <td style="text-align:right; font-size:small;">@addonitm.CostPrice.ToString("0.00")</td>
+                    }
+
+                    <td style="text-align:right;font-size:small;">@amount.ToString("0.00")</td>
+                </tr>
                             }
 
                         }

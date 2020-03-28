@@ -191,12 +191,21 @@
                             </tr>
                             if (items.IsAddon == "1")
                             {
-                                foreach(var addon in OrderAdonItms) { 
-                                <tr>
-                                    <td></td>
-                                    <td style="text-align:left;font-size:smaller">-@addon.ItemName</td>
-                                    <td>@items.Count</td>
-                                </tr>
+                                foreach(var addon in OrderAdonItms) {
+                    <tr>
+                        <td></td>
+                        @if (addon.ItemId == 0)
+                        {
+                            <td style="text-align:left;font-size:smaller;font-weight:bold;font-style:italic;">-@addon.ItemName</td>
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td style="text-align:left;font-size:smaller">-@addon.ItemName</td>
+                            <td>@items.Count</td>
+                        }
+
+                    </tr>
                                 }
                             }
                         }

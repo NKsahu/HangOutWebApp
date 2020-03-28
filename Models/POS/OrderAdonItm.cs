@@ -84,7 +84,7 @@ namespace HangOut.Models.POS
                     OBJINT.Price = SDR.GetDouble(Index++);
                     if(OBJINT.AdddOnItemId==0&& OBJINT.ItemId == 0)
                     {
-                        OBJINT.ItemName = "[Parcel]";
+                        OBJINT.ItemName = "[PARCEL]";
                     }
                     else
                     {

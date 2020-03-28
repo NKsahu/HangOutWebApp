@@ -93,15 +93,26 @@
                                 OrderAdonItms = OrderAdonItms.OrderBy(x => x.AdddOnItemId).ToList();
                                 foreach (var addonitm in OrderAdonItms)
                                 {
-                                    QtyTotoal += items.Count;
-                                <tr>
-                                    <td></td>
-                                    <td style="text-align:left;font-size:x-small">
-                                        - @addonitm.ItemName
-                                    </td>
-                                    <td style="text-align:center;font-size:small;">@items.Count</td>
+                                    
+                    <tr>
+                        <td></td>
+                        @if (addonitm.ItemId == 0)
+                        {
+                            <td style="text-align:left;font-size:x-small;font-weight:bold;font-style:italic">
+                                - @addonitm.ItemName
+                            </td>
+                            <td style="text-align:center;font-size:small;"></td>
+                        }
+                        else
+                        {QtyTotoal += items.Count;
+                            <td style="text-align:left;font-size:x-small">
+                                - @addonitm.ItemName
+                            </td>
+                            <td style="text-align:center;font-size:small;">@items.Count</td>
+                        }
 
-                                </tr>
+
+                    </tr>
                                 }
                             }
                         }

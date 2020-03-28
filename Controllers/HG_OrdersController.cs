@@ -31,6 +31,11 @@ namespace HangOut.Controllers
         {
             return View();
         }
+        //for exe test printing function
+        public ActionResult TestPrinting()
+        {
+            return View();
+        }
         public ActionResult PrintKot(Int64 OID)
         {
             return View();
@@ -94,10 +99,7 @@ namespace HangOut.Controllers
            //listcontact.Distinct();
             return View(listcontact);
         }
-        public ActionResult TestPrinting()
-        {
-            return View();
-        }
+        
         public ActionResult EditOrder(Int64 OID)
         {
             return View();
