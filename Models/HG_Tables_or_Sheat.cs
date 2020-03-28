@@ -258,4 +258,13 @@ namespace HangOut.Models
             return Seating;
         }
     }
+
+
+    public class Seating { 
+    
+
+
+    }
+
+
 }
