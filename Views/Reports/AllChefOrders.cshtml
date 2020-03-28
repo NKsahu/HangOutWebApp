@@ -170,8 +170,12 @@
                             if (items.IsAddon == "1")
                             {
                                 OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
-                                double sumofAdddon = OrderAdonItms.Sum(x => x.Price);
-                                Amt += sumofAdddon * items.Count;
+                                OrderAdonItms = OrderAdonItms.OrderBy(x => x.AdddOnItemId).ToList();
+                                foreach(var addon in OrderAdonItms)
+                                {
+                                  Amt += addon.Price * items.Count;
+                                }
+                                
                             }
                             <tr class="calculate">
                                 <td>
