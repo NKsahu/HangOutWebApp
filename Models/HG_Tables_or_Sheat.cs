@@ -260,9 +260,40 @@ namespace HangOut.Models
     }
 
 
-    public class Seating { 
-    
+    public class Seating {
 
+      public string  SeatName { get; set; }
+        public Int64 SeatId { get; set; }
+        public int Otp { get; set; }
+        public string QrCode { get; set; }
+
+  public static List<Seating> GetSeating(int OrgId)
+        {
+            DBCon con = new DBCon();
+            SqlCommand cmd = null;
+            
+            List<Seating> listTemp = new List<Seating>();
+            try
+            {
+                SqlDataReader SDR = null;
+                cmd = new SqlCommand("GetSeating", con.Con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    Seating ObjTemp = new Seating();
+                    ObjTemp.SeatName = SDR.GetString(0);
+                    ObjTemp.SeatId = SDR.GetInt64(1);
+                    ObjTemp.Otp = SDR.GetInt32(2);
+                    ObjTemp.QrCode = SDR.GetString(3);
+                    listTemp.Add(ObjTemp);
+                }
+                SDR.Close();
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { con.Close(); }
+            return (listTemp);
+        }
 
     }
 

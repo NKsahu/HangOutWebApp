@@ -13,5 +13,12 @@ namespace HangOut.Models
             Con = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
         }
+        public void Close()
+        {
+            if(this.Con.State== System.Data.ConnectionState.Open)
+            {
+                this.Con.Close();
+            }
+        }
     }
 }

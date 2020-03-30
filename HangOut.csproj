@@ -329,6 +329,7 @@
     <Compile Include="Controllers\Inventory\UnitsController.cs" />
     <Compile Include="Controllers\Account\JournalEntryController.cs" />
     <Compile Include="Controllers\OrderMenuController.cs" />
+    <Compile Include="Controllers\POS\AdminApiController.cs" />
     <Compile Include="Controllers\POS\ServingSizeController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -550,7 +551,6 @@
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
     <Folder Include="Views\Commission\" />
-    <Folder Include="Views\CommonApi\" />
     <Folder Include="Views\Sale\" />
   </ItemGroup>
   <ItemGroup>
