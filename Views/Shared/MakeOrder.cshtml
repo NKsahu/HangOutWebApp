@@ -1296,7 +1296,7 @@
             $("#TorTWID").text(ObjOrderName.Table_or_SheetName);
             //assign CurrOid of Perticuar Table Or Sheat or NewTakeAway
             CurrOID = ObjOrderName.CurrOID;
-            $("#waiting").hide();
+            
             ItemList = [];
             $("#CategoryId").html('');
             $("#ItemList").html('');
@@ -1327,6 +1327,9 @@
                                    Jobj.Price= CartalreadyAdded[k].ItemPrice;
                                     Jobj.Cnt = CartalreadyAdded[k].Count;
                                     Jobj.IsAddon = CartalreadyAdded[k].IsAddon;
+                                    if (Jobj.IsAddon == 1) {
+                                        Jobj.AddonAmts = CartalreadyAdded[k].AddonAmts;
+                                    }
                                     Jobj.IsParcel = CartalreadyAdded[k].IsParcel;
                                     Jobj.ParcelCharge = CartalreadyAdded[k].ParcelCharge;
                                     list.push(Jobj);
@@ -1351,10 +1354,9 @@
                      TotalRs+=CurrSeatingItem[c].AddonAmts[j]*CurrSeatingItem[c].Count;
                  }
              }
-         }
+            }
+            $("#waiting").hide();
             ShowSeatingAmt(TotalRs);
-            // $("#FinalAmt").text(TotalRs.toFixed(2));
-            // $("#FinalAmtCharge").text('CHARGE ' + Dispalamt.toFixed(2) + '/RS');
             if (CategoryList.length == 0) {
 
                         $.alert({
