@@ -266,7 +266,8 @@ namespace HangOut.Models
         public Int64 SeatId { get; set; }
         public int Otp { get; set; }
         public string QrCode { get; set; }
-
+        public int FSIS { get; set; }
+        public int OMID { get; set; }
   public static List<Seating> GetSeating(int OrgId)
         {
             DBCon con = new DBCon();
@@ -278,6 +279,7 @@ namespace HangOut.Models
                 SqlDataReader SDR = null;
                 cmd = new SqlCommand("GetSeating", con.Con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@OrgId", OrgId);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -286,6 +288,8 @@ namespace HangOut.Models
                     ObjTemp.SeatId = SDR.GetInt64(1);
                     ObjTemp.Otp = SDR.GetInt32(2);
                     ObjTemp.QrCode = SDR.GetString(3);
+                    ObjTemp.FSIS = SDR.IsDBNull(4) ? 0 : SDR.GetInt32(4);
+                    ObjTemp.OMID = SDR.GetInt32(5);
                     listTemp.Add(ObjTemp);
                 }
                 SDR.Close();

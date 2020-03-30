@@ -417,51 +417,7 @@ namespace HangOut.Controllers
             return result;
         }
 
-        public JObject AddAdonItm([System.Web.Http.FromBody] Cart cart)
-        {
-            JObject result = new JObject();
-            string ItemUUID = "";
-            double ItemPrice = cart.ItemPrice;
-            int Cnt = 1;
-            List<Cart> cartItems = Cart.List.FindAll(x => x.ItemId == cart.ItemId);
-            if (cartItems.Count > 0)
-            {
-                bool Addnew = true;
-
-                foreach (var ObjCart in cartItems)
-                {
-                    if (ObjCart.itemAddons != null && ObjCart.itemAddons.AddonItemIdCsv == cart.itemAddons.AddonItemIdCsv)
-                    {
-                        Addnew = false;
-                        ItemUUID = ObjCart.ItemUUID;
-                        Cnt = ObjCart.Count;
-                        break;
-                    }
-                }
-                if (Addnew == false)
-                {
-                    Cart.List.RemoveAll(x => x.ItemUUID == ItemUUID);
-                    Cnt++;
-                    Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt, itemAddons = cart.itemAddons, ItemPrice = cart.ItemPrice, IsAddon = cart.IsAddon });
-                }
-                else
-                {
-                    ItemUUID = Guid.NewGuid().ToString();
-                    Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = Cnt, itemAddons = cart.itemAddons, ItemPrice = cart.ItemPrice, IsAddon = cart.IsAddon });
-                }
-            }
-            else
-            {
-                ItemUUID = Guid.NewGuid().ToString();
-                Cart.List.Add(new Cart { ItemId = cart.ItemId, CID = cart.CID, TableorSheatOrTaleAwayId = cart.TableorSheatOrTaleAwayId, ItemUUID = ItemUUID, Count = 1, itemAddons = cart.itemAddons, ItemPrice = cart.ItemPrice, IsAddon = cart.IsAddon });
-            }
-            result.Add("UUID", ItemUUID);
-            result.Add("Price", ItemPrice);
-            result.Add("Cnt", Cnt);
-            result.Add("IsAddon", cart.IsAddon);
-            return result;
-        }
-
+        
         [HttpPost]
         public JObject GetCart(string Obj)
         {
@@ -2382,9 +2338,6 @@ namespace HangOut.Controllers
             }
             return Info;
         }
-
-
-
         public JObject PastOrderSubList(int OID, string Status)
         {
             JObject Object = new JObject();

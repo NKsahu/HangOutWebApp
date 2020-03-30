@@ -1122,23 +1122,25 @@
      function GeTablesTakeAwya() {
          $.ajax({
              type: 'POST',
-             url: "/WebApi/TableAndTakeAway?Type=" + OrgType + "&OrderById=" + LoginId,
+             url: "/AdminApi/GetSeating",
              success: function (data) {
-                 TablesList = JSON.parse(data);
-                 if (ReloadSeatingSts == false) {
+                 var Seating = JSON.parse(data);
+                // if (ReloadSeatingSts == false) {
+                 TablesList = Seating.Seating;
+                 console.log("table===" + TablesList);
                      ShowOrders(TablesList);
-                     ReloadSeatingSts = true;
-                     if (timer !== 'undefined' || timer != null) {
-                         clearTimeout(timer);
-                     }
-                     setTimeout(FunctionExist, 50000);//60000
-                 }
-                 else {
-                     ReloadSeatingSts = true;
-                     ReloadSeating();
-                     //clearTimeout(timer);
-                     setTimeout( FunctionExist, 50000);//60000
-                 }
+                   //  ReloadSeatingSts = true;
+                     //if (timer !== 'undefined' || timer != null) {
+                     //    clearTimeout(timer);
+                     //}
+                     //setTimeout(FunctionExist, 50000);//60000
+               //  }
+                 //else {
+                 //    ReloadSeatingSts = true;
+                 //    ReloadSeating();
+                 //    //clearTimeout(timer);
+                 //    setTimeout( FunctionExist, 50000);//60000
+                 //}
 
              },
              error: function (jqXhr, textStatus, errorMessage) { // error callback
@@ -1286,50 +1288,74 @@
             var ObjOrderName = TablesList.find(x => {
                 return x.Table_or_RowID == TableOrMWid;
             });
+            console.log("Item list");
+            var CurrSeatObj = ObjOrderName;
+            var CategoryList = CurrSeatObj.MenuItems;
             $("#C_mobile").val('');
             $("#C_name").val('');
             $("#TorTWID").text(ObjOrderName.Table_or_SheetName);
             //assign CurrOid of Perticuar Table Or Sheat or NewTakeAway
             CurrOID = ObjOrderName.CurrOID;
-            var Obj = {};
-            Obj.CID =LoginId;
-            Obj.OrgId = OrgId;
-            Obj.TSTWID = TableOrMWid;
-            Obj.OID = ObjOrderName.CurrOID;
-            $.ajax({
-                type: 'POST',
-                url: "/WebApi/GetItemList?Obj=" + JSON.stringify(Obj),
-                success: function (data) {
-                    var CategoryList = JSON.parse(data);
-                   // console.log(CategoryList);
-                    $("#waiting").hide();
-                    ItemList = [];
-                    $("#CategoryId").html('');
-                    $("#ItemList").html('');
-                    $("#AddItem").html('');
-                    var funSelected = "SelectedColor(\"card\",this)";
-                    var TotalRs = 0.00;
-                    ChargeAmt = 0.00;
-                    var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + 0 + "\")'><span class='Pspan'>All</span></p>";
-                    $("#CategoryId").append(CategoryHtml);
-                    for (i = 0; i < CategoryList.length; i++) {
+            $("#waiting").hide();
+            ItemList = [];
+            $("#CategoryId").html('');
+            $("#ItemList").html('');
+            $("#AddItem").html('');
+            var funSelected = "SelectedColor(\"card\",this)";
+            var TotalRs = 0.00;
+            ChargeAmt = 0.00;
+            var CurrSeatingItem = CartList.filter(function (x) {
+                 return x.TableorSheatOrTaleAwayId == CurrentOrder;
+         });
+            var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + 0 + "\")'><span class='Pspan'>All</span></p>";
+            $("#CategoryId").append(CategoryHtml);
+            for (i = 0; i < CategoryList.length; i++) {
                         CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + CategoryList[i].MenuId + "\")'><span class='Pspan'>" + CategoryList[i].Name + "</span></p>";
                         $("#CategoryId").append(CategoryHtml);
                         var ItemsList = CategoryList[i].MenuItems;
                         for (j = 0; j < ItemsList.length; j++) {
                             ItemList.push(ItemsList[j]);
                             ShowItems(ItemsList[j]);
-                            AddItemToQue(ItemsList[j]);
+                            var CartalreadyAdded=CurrSeatingItem.filter(function (x) {
+                                return x.ItemId == ItemsList[j].IID.toString();
+                            });
+                            if (CartalreadyAdded.length > 0) {
+                                var list = [];
+                                for (var k = 0; k < CartalreadyAdded.length; k++) {
+                                    var Jobj = {};
+                                    Jobj.UUID= CartalreadyAdded[k].ItemUUID;
+                                   Jobj.Price= CartalreadyAdded[k].ItemPrice;
+                                    Jobj.Cnt = CartalreadyAdded[k].Count;
+                                    Jobj.IsAddon = CartalreadyAdded[k].IsAddon;
+                                    Jobj.IsParcel = CartalreadyAdded[k].IsParcel;
+                                    Jobj.ParcelCharge = CartalreadyAdded[k].ParcelCharge;
+                                    list.push(Jobj);
+                                }
+                                ItemsList[j].ItemCartValue = CartalreadyAdded.length;
+                                ItemsList[j].ItemArray = list;
+                                AddItemToQue(ItemsList[j]);
+                            }
+                            
                         }
                         TotalRs += CategoryList[i].MenuItmPrice;
                         ChargeAmt = CategoryList[i].TableAmt;
 
                     }
-                    CartList = [];
-                    ShowSeatingAmt(TotalRs);
-                   // $("#FinalAmt").text(TotalRs.toFixed(2));
-                   // $("#FinalAmtCharge").text('CHARGE ' + Dispalamt.toFixed(2) + '/RS');
-                    if (CategoryList.length == 0) {
+           // CartList = [];
+            
+         for (var c = 0; c < CurrSeatingItem.length; c++) {
+             TotalRs += CurrSeatingItem[c].ItemPrice * CurrSeatingItem[c].Count;
+             TotalRs+=CurrSeatingItem[c].ParcelCharge*CurrSeatingItem[c].Count;
+             if (CurrSeatingItem[c].IsAddon == 1) {
+                 for (var j = 0; j < CurrSeatingItem[c].AddonAmts.length; j++) {
+                     TotalRs+=CurrSeatingItem[c].AddonAmts[j]*CurrSeatingItem[c].Count;
+                 }
+             }
+         }
+            ShowSeatingAmt(TotalRs);
+            // $("#FinalAmt").text(TotalRs.toFixed(2));
+            // $("#FinalAmtCharge").text('CHARGE ' + Dispalamt.toFixed(2) + '/RS');
+            if (CategoryList.length == 0) {
 
                         $.alert({
                             title: 'Alert!',
@@ -1337,21 +1363,16 @@
                         });
                         return;
                     }
-                    
-                    $("#ContactId").val(CategoryList[0].ContactId);
-                    var MobileNo = CategoryList[0].Mobile;
-                    var Cname = CategoryList[0].CName;
-                    $("#C_mobile").val(MobileNo);
-                    $("#C_name").val(Cname);
-                    if (CategoryList[0].ContactId == -1) {
+            
+            $("#ContactId").val(CategoryList[0].ContactId);
+            var MobileNo = CategoryList[0].Mobile;
+            var Cname = CategoryList[0].CName;
+            $("#C_mobile").val(MobileNo);
+            $("#C_name").val(Cname);
+            if (CategoryList[0].ContactId == -1) {
                         $('#C_mobile,#C_name').prop('readonly', true);
                         $("#C_save").attr('disabled', 'disabled');
                     }
-                },
-                error: function (jqXhr, textStatus, errorMessage) { // error callback
-                    $("#waiting").hide();
-                }
-            });
 
         }
         function FilterItems(list) {
