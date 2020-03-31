@@ -944,7 +944,14 @@
          if (Cnt == 0) {
              $("#tr" + ItemUUID).remove();
          }
-         // show Final Order Price
+         // show Final Order Price Floor_or_ScreenId
+         var ObjSeating=TablesList.find(x => {
+                return x.Table_or_RowID.toString()== CurrentOrder;
+         });
+
+         if (CurrSeatingItem.length == 0 &&ObjSeating.CurrOID!=null&&ObjSeating.CurrOID==0) {
+             ResetOrder(CurrentOrder, 1);
+         }
          ShowSeatingAmt(FinlAmt);
      }
      function ShowSeatingAmt(SeatAmt) {
@@ -1042,7 +1049,7 @@
      }
      function Makeparcel(event) {
          var itemuuid = $(event).attr('UUID');
-         console.log("aaya parcel");
+        // console.log("aaya parcel");
          var CountAmt = 0.00;
          for (var i = 0; i < CartList.length; i++) {
                      if (CartList[i].ItemUUID == itemuuid) {
@@ -1340,12 +1347,10 @@
                             }
                             
                         }
-                        TotalRs += CategoryList[i].MenuItmPrice;
-                        ChargeAmt = CategoryList[i].TableAmt;
+                        
 
-                    }
-           // CartList = [];
-            
+            }
+           ChargeAmt =parseFloat(CurrSeatObj.SeatingAmt);
          for (var c = 0; c < CurrSeatingItem.length; c++) {
              TotalRs += CurrSeatingItem[c].ItemPrice * CurrSeatingItem[c].Count;
              TotalRs+=CurrSeatingItem[c].ParcelCharge*CurrSeatingItem[c].Count;
@@ -1354,7 +1359,7 @@
                      TotalRs+=CurrSeatingItem[c].AddonAmts[j]*CurrSeatingItem[c].Count;
                  }
              }
-            }
+         }
             $("#waiting").hide();
             ShowSeatingAmt(TotalRs);
             if (CategoryList.length == 0) {
@@ -1410,14 +1415,14 @@
             $("#TS" + OrderId).text('');
             if (status == 1) {
                 $("#TC" + OrderId).addClass('sp-grid-cell-contents tableFree');
-                $("#TS" + OrderId).text('Unoccupied');
+               // $("#TS" + OrderId).text('Unoccupied');
             }
             else if (status == 2) {
                 $("#TC" + OrderId).addClass('sp-grid-cell-contents tableBooked');
-                $("#TS" + OrderId).text('Bill demanded');
+               // $("#TS" + OrderId).text('Bill demanded');
             } else {
                 $("#TC" + OrderId).addClass('sp-grid-cell-contents tableProgress');
-                $("#TS" + OrderId).text('Occupied');
+                //$("#TS" + OrderId).text('Occupied');
             }
 
             for (var i = 0; i < TablesList.length; i++) {
@@ -1446,27 +1451,57 @@
                         });
                     }
                     else {
-                        CartList = [];
+                        for (var k = 0; k < CartList.length; k++) {
+                            if (CartList[k].TableorSheatOrTaleAwayId == CurrentOrder) {
+                                CartList.splice(k, 1);
+                            }
+                        }
                         var JsonMsg = JsonObj.MSG.split(",");
                         var PaymentSts = JsonMsg[2];
+                        var OrderSts =parseInt(JsonObj.OrderSts);
                         if (PaymentSts != "0") {
                             ChargeAmt = 0.00;
-                            SeatAmt(ChargeAmt);
+                            ShowSeatingAmt(ChargeAmt);
+                            for (var i = 0; i < TablesList.length; i++) {
+                                if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                                    TablesList[i].SeatingAmt = 0.00;
+                                    break;
+                                }
+                            }
                         }
                         else {
                             var finalAmt = parseFloat($("#FinalAmt").text());
                             finalAmt += parseFloat(JsonObj.DeliveryChrge);
                             ChargeAmt = ChargeAmt + finalAmt;
-                            $("#FinalAmtCharge").text('CHARGE ' + ChargeAmt.toFixed(2) +' /Rs.');
+                            $("#FinalAmtCharge").text('CHARGE ' + ChargeAmt.toFixed(2) + ' /Rs.');
+                            for (var i = 0; i < TablesList.length; i++) {
+                                if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                                    TablesList[i].SeatingAmt = ChargeAmt;
+                                    break;
+                                }
+                            }
                         }
                         $("tr.ItemsTr").remove();
                         CurrOID = JsonMsg[0];
-                        for (var i = 0; i < TablesList.length; i++) {
-                            if (TablesList[i].Table_or_RowID == CurrentOrder) {
-                                TablesList[i].CurrOID = JsonMsg[0];
-                                break;
+                        if (OrderSts == 1) {
+                            for (var i = 0; i < TablesList.length; i++) {
+                                if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                                    TablesList[i].CurrOID = JsonMsg[0];
+                                    break;
+                                }
                             }
                         }
+                        else {
+                            ResetOrder(CurrentOrder, 1);
+                            for (var i = 0; i < TablesList.length; i++) {
+                                if (TablesList[i].Table_or_RowID == CurrentOrder) {
+                                    TablesList[i].CurrOID = 0;
+                                    break;
+                                }
+                            }
+                            
+                        }
+                        
                         if (PrintInvoice == 1 && Obj.PaymtType != 0) {
                             AskNofCopyPrint(1,JsonMsg[0], JsonMsg[1]);
                         }

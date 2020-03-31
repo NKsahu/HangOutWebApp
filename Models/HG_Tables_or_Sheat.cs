@@ -262,12 +262,16 @@ namespace HangOut.Models
 
     public class Seating {
 
-      public string  SeatName { get; set; }
+      public string  Seatting { get; set; }
         public Int64 SeatId { get; set; }
         public int Otp { get; set; }
         public string QrCode { get; set; }
         public int FSIS { get; set; }
         public int OMID { get; set; }
+
+        public string SeatName { get; set; }
+        public string FSName { get; set; }
+        public string RowSideName { get; set; }
   public static List<Seating> GetSeating(int OrgId)
         {
             DBCon con = new DBCon();
@@ -284,12 +288,15 @@ namespace HangOut.Models
                 while (SDR.Read())
                 {
                     Seating ObjTemp = new Seating();
-                    ObjTemp.SeatName = SDR.GetString(0);
+                    ObjTemp.Seatting = SDR.GetString(0);
                     ObjTemp.SeatId = SDR.GetInt64(1);
                     ObjTemp.Otp = SDR.GetInt32(2);
                     ObjTemp.QrCode = SDR.GetString(3);
                     ObjTemp.FSIS = SDR.IsDBNull(4) ? 0 : SDR.GetInt32(4);
                     ObjTemp.OMID = SDR.GetInt32(5);
+                    ObjTemp.SeatName= SDR.GetString(6);
+                    ObjTemp.FSName =SDR.IsDBNull(7)?"": SDR.GetString(7);
+                    ObjTemp.RowSideName = SDR.IsDBNull(8) ? "" : SDR.GetString(8);
                     listTemp.Add(ObjTemp);
                 }
                 SDR.Close();

@@ -36,9 +36,12 @@ namespace HangOut.Controllers.POS
             foreach (var ObjSeating in Listseating)
             {
                 JObject jObject = new JObject();
-                jObject.Add("Table_or_SheetName", ObjSeating.SeatName);
+                jObject.Add("Table_or_SheetName", ObjSeating.Seatting);
                 jObject.Add("Table_or_RowID", ObjSeating.SeatId);
                 jObject.Add("Otp", ObjSeating.Otp);
+                jObject.Add("SeatName", ObjSeating.SeatName);
+                jObject.Add("ScrnFlr", ObjSeating.FSName);
+                jObject.Add("RowSide", ObjSeating.RowSideName);
                 JArray MenuJarray = new JArray();
                 var order = Orderlist.Find(x => x.Table_or_SheatId == ObjSeating.SeatId && x.TableOtp == ObjSeating.Otp);
                 if (order != null && order.OID > 0)
@@ -152,8 +155,8 @@ namespace HangOut.Controllers.POS
                             }
                             JobjMenu.Add("MenuItemCount", OrderMenuItems.Count);
                             JobjMenu.Add("MenuItems", jarrayItem);
-                            JobjMenu.Add("MenuItmPrice", MenuItemPrice);
-                            JobjMenu.Add("TableAmt", CurrentTableAmt);
+                          //  JobjMenu.Add("MenuItmPrice", MenuItemPrice);
+                            //JobjMenu.Add("TableAmt", CurrentTableAmt);
                             JobjMenu.Add("ContactId", ContactId);
                             JobjMenu.Add("Mobile", Cmobile);
                             JobjMenu.Add("CName", Cname);
@@ -207,8 +210,8 @@ namespace HangOut.Controllers.POS
                             }
                             JobjMenu.Add("MenuItemCount", ItemListByMenu.Count);
                             JobjMenu.Add("MenuItems", jarrayItem);
-                            JobjMenu.Add("MenuItmPrice", MenuItemPrice);
-                            JobjMenu.Add("TableAmt", CurrentTableAmt);
+                            //JobjMenu.Add("MenuItmPrice", MenuItemPrice);
+                            //JobjMenu.Add("TableAmt", CurrentTableAmt);
                             JobjMenu.Add("ContactId", ContactId);
                             JobjMenu.Add("Mobile", Cmobile);
                             JobjMenu.Add("CName", Cname);
@@ -220,6 +223,7 @@ namespace HangOut.Controllers.POS
                 }
 
                 jObject.Add("MenuItems", MenuJarray);
+                jObject.Add("SeatingAmt", CurrentTableAmt);
                 SeatingArray.Add(jObject);
             }
             JobjResonse.Add("Seating", SeatingArray);

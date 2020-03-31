@@ -743,6 +743,10 @@ namespace HangOut.Controllers
                 int CustomerOrdering = jObjectlist["OrdingSts"] != null ? int.Parse(jObjectlist["OrdingSts"].ToString()) : 0;
                 int PaymtSts = jObjectlist["PaymtType"] != null ? int.Parse(jObjectlist["PaymtType"].ToString()) : 0;//payment mode type
                 int ContactId = jObjectlist["ContactId"] != null ? int.Parse(jObjectlist["ContactId"].ToString()) : 0;// local contact id
+                jObject.Add("Status", Status);
+                jObject.Add("OrdingSts", CustomerOrdering);
+                jObject.Add("PaymtType", PaymtSts);
+                jObject.Add("ContactId", ContactId);
                 JObject result = PostOrder(jObject.ToString());
                 if (result.GetValue("Status").ToString() == "400")
                 {
@@ -992,6 +996,7 @@ namespace HangOut.Controllers
                 PostResult.Add("Status", 200);
                 PostResult.Add("MSG",NewOID.ToString()+","+Ticketno.ToString()+","+PaymtSts.ToString());
                 PostResult.Add("DeliveryChrge", DeliveryChargeAmt);
+                PostResult.Add("OrderSts", OrderSts);
                 //send firebase massage new ticket assign
                 string[] topics = { OrgId.ToString(), "0" };
                 if (ObjOrg.PaymentType == 2 &&ObjTorS.Type!="3")// postpaid
