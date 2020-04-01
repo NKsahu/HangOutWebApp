@@ -1452,11 +1452,10 @@
                         });
                     }
                     else {
-                        for (var k = 0; k < CartList.length; k++) {
-                            if (CartList[k].TableorSheatOrTaleAwayId == CurrentOrder) {
-                                CartList.splice(k, 1);
-                            }
-                        }
+                        console.log("remove item");
+                        CartList=CartList.filter(function (x) {
+                            return x.TableorSheatOrTaleAwayId != CurrentOrder;
+                        });
                         var JsonMsg = JsonObj.MSG.split(",");
                         var PaymentSts = JsonMsg[2];
                         var OrderSts =parseInt(JsonObj.OrderSts);

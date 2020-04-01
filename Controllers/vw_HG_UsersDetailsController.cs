@@ -29,7 +29,7 @@ namespace HangOut.Controllers
         {
 
             Obj = Obj.Checkvw_HG_UsersDetails();
-             if (Obj != null && Obj.UserType!="CUST"&&Obj.UserType!="CA")
+             if (Obj != null && Obj.UserType!="CUST"&&Obj.UserType!="CA"&& Obj.UserType!="CH")
             {
                 HttpCookie cookie = new HttpCookie("UserInfo");
                 cookie.Values.Add("UserCode", Obj.UserCode.ToString());
