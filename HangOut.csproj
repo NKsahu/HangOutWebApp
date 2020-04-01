@@ -136,6 +136,7 @@
     <Content Include="Assets\Datepicker\datepicker.js" />
     <Content Include="Assets\foodicon.jpg" />
     <Content Include="Assets\fork.png" />
+    <Content Include="Assets\IndexDb.js" />
     <Content Include="Assets\jQuery\animate.css" />
     <Content Include="Assets\jQuery\jquery-3.4.1.min.js" />
     <Content Include="Assets\Login Assets\css\main.css" />
