@@ -759,10 +759,10 @@
          ObjCart.IsAddon = 1;
          ObjCart.ParcelCharge = 0.00;
           ObjCart.AddonAmts = AddonAmts;
-
+         ResetOrder(CurrentOrder, 3);
 
          var CurrItemIndex = CartList.findIndex(x => {
-             return (x.ItemId == ObjCart.ItemId && x.itemAddons != null && x.itemAddons.AddonItemIdCsv == AddonItemIdCsv &&x.IsParcel==0)
+             return (x.ItemId == ObjCart.ItemId && x.itemAddons != null && x.itemAddons.AddonItemIdCsv == AddonItemIdCsv &&x.IsParcel==0 &&x.TableorSheatOrTaleAwayId==CurrentOrder)
          });
          var ItemUUID = "";
          var Cnt = 1;
@@ -1264,7 +1264,7 @@
             }
      }
      function ReloadSeating() {
-         console.log("Reloading.....");
+        
          for (i = 0; i < TablesList.length; i++) {
              var TableID = TablesList[i].Table_or_RowID.toString();
              var Status = TablesList[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
@@ -1306,6 +1306,7 @@
             
             ItemList = [];
             $("#CategoryId").html('');
+            $("#ItemSearch2").val('');
             $("#ItemList").html('');
             $("#AddItem").html('');
             var funSelected = "SelectedColor(\"card\",this)";
