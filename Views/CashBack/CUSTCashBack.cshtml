@@ -1,6 +1,98 @@
-﻿
+﻿@model HangOut.Models.MyCustomer.Cashback
 @{
     Layout = null;
 }
 
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:#000000"><b>CashBack</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+        @using (Ajax.BeginForm("CreatEdit", "ServingSize", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.CashBkId)
+            @Html.HiddenFor(model => model.OrgID)
+           List<SelectListItem> SL = new List<SelectListItem>() {
+        new SelectListItem{Text="UN-SPECIFIED",Value="1"},new SelectListItem{Text="SPECIFIED",Value="2"}
+        };
+            List<SelectListItem> CashBkType = new List<SelectListItem>() {
+        new SelectListItem{Text="Percentage",Value="1"}
+        };
+            List<SelectListItem> BillAmtType = new List<SelectListItem>() {
+        new SelectListItem{Text="Dynamic",Value="1"},new SelectListItem{Text="Manual",Value="2"}
+        };
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Start From")
+                @Html.TextBoxFor(model => model.StartDate, DateTime.Now.ToString("dd-MM-yyyy") ,new { @class = "form-control DateField" })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Valid Till")
+                @Html.DropDownListFor(model => model.ValidTill, SL,  new { @class = "form-control " } )
+                @Html.ValidationMessageFor(model => model.ValidTill, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Date")
+                @Html.TextBoxFor(model => model.ValidTillDate,DateTime.Now.ToString("dd-MM-yyyy"),  new { @class = "form-control DateField"  })
+                @Html.ValidationMessageFor(model => model.ValidTillDate, "", new { @class = "text-danger" })
+            </div>
 
+            <div class="col-md-3">
+                @Html.Label("CashBackType")
+                @Html.DropDownListFor(model => model.CashBkType, CashBkType,  new { @class = "form-control "  })
+                @Html.ValidationMessageFor(model => model.CashBkType, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("CashBack Amt")
+                @Html.TextBoxFor(model => model.MaxAmt, new { @class = "form-control autodouble"  })
+                @Html.ValidationMessageFor(model => model.MaxAmt, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Bill Amt Type")
+                @Html.DropDownListFor(model => model.MinBilAmtType, BillAmtType,  new { @class = "form-control "  })
+                @Html.ValidationMessageFor(model => model.MinBilAmtType, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Amt")
+                @Html.TextBoxFor(model => model.BilAmt,  new { @class = "form-control autodouble"  })
+                @Html.ValidationMessageFor(model => model.BilAmt, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-1" style="margin-top:5px;">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+        }
+    </div>
+</div>
+<script>
+    CBValidTill();
+    BillAmtType();
+    $("#ValidTill").change(function () {
+        CBValidTill();
+    });
+    $("#MinBilAmtType").change(function () {
+        BillAmtType();
+    });
+    function BillAmtType() {
+        var MinBilAmtType = $("#MinBilAmtType").val();
+        if (MinBilAmtType == "1") {
+            $("#BilAmt").parent('div').hide();
+        }
+        else {
+            $("#BilAmt").parent('div').show();
+        }
+    }
+
+    function CBValidTill() {
+        var ValidTill = $("#ValidTill").val();
+        if (ValidTill == "1") {
+            $("#ValidTillDate").parent('div').hide();
+        }
+        else {
+            $("#ValidTillDate").parent('div').show();
+        }
+    }
+</script>

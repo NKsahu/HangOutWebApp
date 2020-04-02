@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using HangOut.Models.MyCustomer;
 using System.Web.Mvc;
 
 namespace HangOut.Controllers.MyCustomer
@@ -9,9 +8,10 @@ namespace HangOut.Controllers.MyCustomer
     public class CashBackController : Controller
     {
         // GET: CashBack
-        public ActionResult CUSTCashBack()
+        public ActionResult CUSTCashBack(int CBID)
         {
-            return View();
+            Cashback cashback = new Cashback();
+            return View(cashback);
         }
     }
 }
