@@ -30,15 +30,25 @@ namespace HangOut.Controllers.MyCustomer
         public ActionResult PostCasbBack(Cashback cashback)
         {
             int OrgId = OrderType.CurrOrgId();
-            if (cashback.StartDate.Date < DateTime.Now.Date)
+            try
             {
-                return Json(new { msg = "Start Date Can't less than Today's Date" });
+                cashback.StartDate = DateTime.ParseExact(cashback.StartDate.ToString(), "dd-MM-yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                cashback.ValidTillDate = DateTime.ParseExact(cashback.ValidTillDate.ToString(), "dd-MM-yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                if (cashback.StartDate.Date < DateTime.Now.Date)
+                {
+                    return Json(new { msg = "Start Date Can't less than Today's Date" });
+                }
+                cashback.Save();
+                JObject response = new JObject();
+                response.Add("CashBkId", cashback.CashBkId);
+                response.Add("StartDate", cashback.StartDate.ToString("dd/MM/yyyy"));
+                return Json(new { data = response.ToString() }, JsonRequestBehavior.AllowGet);
             }
-            cashback.Save();
-            JObject response = new JObject();
-            response.Add("CashBkId", cashback.CashBkId);
-            response.Add("StartDate", cashback.StartDate.ToString("dd/MM/yyyy"));
-            return Json(new { data = response }, JsonRequestBehavior.AllowGet);
+            catch(Exception e)
+            {
+                return Json(new { msg = e.Message });
+            }
+            
         }
     }
     
