@@ -543,6 +543,7 @@
     <Content Include="Views\HG_OrderItem\GetOrderAdonItm.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\CashBack.cshtml" />
     <Content Include="Views\vw_HG_UsersDetails\Pos.cshtml" />
+    <Content Include="Views\CashBack\CUSTCashBack.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -554,7 +555,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
-    <Folder Include="Views\CashBack\" />
     <Folder Include="Views\Commission\" />
     <Folder Include="Views\Sale\" />
   </ItemGroup>

@@ -9,7 +9,7 @@ namespace HangOut.Controllers.Customer
     public class CashBackController : Controller
     {
         // GET: CashBack
-        public ActionResult Index()
+        public ActionResult CUSTCashBack()
         {
             return View();
         }
