@@ -38,20 +38,22 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.CashBkId == 0)
                 {
-                    Query = "Insert into  HG_Items  values(@StartDate,@ValidTill,@ValidTillDate,@CashBkType,@MaxAmt,@MinBilAmtType,@BilAmt); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  CashBack  values(@OrgID,@StartDate,@ValidTill,@ValidTillDate,@CashBkType,@Percentage,@MaxAmt,@MinBilAmtType,@BilAmt); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                 }
                 else
                 {
-                    Query = "update  HG_Items set StartDate=@StartDate,ValidTill=@ValidTill,ValidTillDate=@ValidTillDate,CashBkType=@CashBkType,MaxAmt=@MaxAmt,MinBilAmtType=@MinBilAmtType,BilAmt=@BilAmt where CashBkId=@CashBkId";
+                    Query = "update  CashBack set StartDate=@StartDate,ValidTill=@ValidTill,ValidTillDate=@ValidTillDate,Percentage=@Percentage,CashBkType=@CashBkType,MaxAmt=@MaxAmt,MinBilAmtType=@MinBilAmtType,BilAmt=@BilAmt where CashBkId=@CashBkId";
                     cmd = new SqlCommand(Query, dBCon.Con);
+                    cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
                 }
-                cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
+                
                 cmd.Parameters.AddWithValue("@StartDate", this.StartDate);
                 cmd.Parameters.AddWithValue("@ValidTill", this.ValidTill);
                 cmd.Parameters.AddWithValue("@ValidTillDate", this.ValidTillDate);
                 cmd.Parameters.AddWithValue("@CashBkType", this.CashBkType);
+                cmd.Parameters.AddWithValue("@Percentage", this.Percentage);
                 cmd.Parameters.AddWithValue("@MaxAmt ", this.MaxAmt);
                 cmd.Parameters.AddWithValue("@MinBilAmtType ", this.MinBilAmtType);
                 cmd.Parameters.AddWithValue("@BilAmt", this.BilAmt);
@@ -102,7 +104,6 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.Percentage = SDR.GetDouble(index++);
                     ObjTmp.MaxAmt = SDR.GetDouble(index++);
                     ObjTmp.MinBilAmtType = SDR.GetInt32(index++);
-                    ObjTmp.MinBilAmtType = SDR.GetInt32(index++);
                     ObjTmp.BilAmt = SDR.GetDouble(index++);
                     ListTmp.Add(ObjTmp);
                 }
@@ -135,7 +136,6 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.CashBkType = SDR.GetInt32(index++);
                     ObjTmp.Percentage = SDR.GetDouble(index++);
                     ObjTmp.MaxAmt = SDR.GetDouble(index++);
-                    ObjTmp.MinBilAmtType = SDR.GetInt32(index++);
                     ObjTmp.MinBilAmtType = SDR.GetInt32(index++);
                     ObjTmp.BilAmt = SDR.GetDouble(index++);
                     Tmp = ObjTmp;

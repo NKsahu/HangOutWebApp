@@ -9,7 +9,7 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("CreatEdit", "ServingSize", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("PostCasbBack", "CashBack", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.CashBkId)
             @Html.HiddenFor(model => model.OrgID)
@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-md-2">
                 @Html.Label("Start From")
-                @Html.TextBoxFor(model => model.StartDate, DateTime.Now.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+                @Html.TextBoxFor(model => model.StartDate,"{0:dd/MM/yyyy}", new { @class = "form-control datefield" })
                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
@@ -35,7 +35,7 @@
             </div>
             <div class="col-md-2">
                 @Html.Label("Date")
-                @Html.TextBoxFor(model => model.ValidTillDate, DateTime.Now.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
+                @Html.TextBoxFor(model => model.ValidTillDate, "{0:dd/MM/yyyy}", new { @class = "form-control datefield" })
                 @Html.ValidationMessageFor(model => model.ValidTillDate, "", new { @class = "text-danger" })
             </div>
 
@@ -100,4 +100,9 @@
             $("#ValidTillDate").parent('div').show();
         }
     }
+    //function ApplyDate(event) {
+    //    console.log("aaya date");
+    //    $(event).datepicker();
+    //}
+    
 </script>

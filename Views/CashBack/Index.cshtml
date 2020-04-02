@@ -1,6 +1,103 @@
-﻿
+﻿@model IEnumerable<HangOut.Models.MyCustomer.Cashback>
+@using HangOut.Models;
 @{
     Layout = null;
 }
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center"><b>CASHBACK</b> </h3>
+        <hr />
+    </div>
+   
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <button onclick="CreateEdit('0')" class="btn btn-info form-control">New </button>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
+        <table class="table table-hover w-100" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("ID")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Start From")
+                    </th>
 
+                    <th class="noExport"> </th>
+                </tr>
+            </thead>
+            <tbody id="Tbody">
+                @foreach (var SSize in Model)
+                {
+                    <tr id="@SSize.CashBkId">
+                        <td>
+                            @SSize.CashBkId
+                        </td>
+                        <td>
+                            @SSize.StartDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.CashBkId)">Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    var AddTr = false;
+    function JsonSuccess(Jobj) {
+        if (Jobj.data != undefined && Jobj.data == '1') {
+            $('#waiting').hide();
+            alert('Uploaded');
+        }
+        else {
+            hidedpt("CreateSS");
+            $('#waiting').hide();
+            var Jitmobj =JSON.parse(Jobj.data);
+            var HtmlStr = "<tr id='" + Jitmobj.CashBkId + "'>";
+            HtmlStr += '<td>' + Jitmobj.CashBkId + '</td>';
+            HtmlStr += '<td>' + Jitmobj.StartDate + '</td>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CashBkId + ')"> Edit</button>';
+            var table = $('table').DataTable();
+            if (AddTr) {
+                table.row.add($(HtmlStr)).draw();
+            }
+            else {
+                table.row("#" + Jitmobj.CashBkId).remove().draw();
+                table.row.add($(HtmlStr)).draw();
+            }
+        }
+    }
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/CashBack/CUSTCashBack?CBID=" + ID,
+            success: function (data) {
+                makedpt("CreateSS");
+                $("#CreateSS > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSS");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+
+</script>
 

@@ -130,8 +130,10 @@
     <Content Include="Assets\bootstrap-4.3.1-dist\css\bootstrap-reboot.min.css" />
     <Content Include="Assets\bootstrap-4.3.1-dist\css\bootstrap.min.css" />
     <Content Include="Assets\bootstrap-4.3.1-dist\js\Boostrapjquery.min.js" />
+    <Content Include="Assets\bootstrap-4.3.1-dist\js\bootstrap-datepicker.js" />
     <Content Include="Assets\bootstrap-4.3.1-dist\js\bootstrap.bundle.min.js" />
     <Content Include="Assets\bootstrap-4.3.1-dist\js\bootstrap.min.js" />
+    <Content Include="Assets\bootstrap-4.3.1-dist\js\DatePickerReady.js" />
     <Content Include="Assets\Datepicker\datepicker.css" />
     <Content Include="Assets\Datepicker\datepicker.js" />
     <Content Include="Assets\foodicon.jpg" />
