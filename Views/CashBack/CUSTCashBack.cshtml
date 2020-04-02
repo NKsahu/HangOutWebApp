@@ -25,38 +25,43 @@
         <div class="row">
             <div class="col-md-2">
                 @Html.Label("Start From")
-                @Html.TextBoxFor(model => model.StartDate, DateTime.Now.ToString("dd-MM-yyyy") ,new { @class = "form-control DateField" })
+                @Html.TextBoxFor(model => model.StartDate, DateTime.Now.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
                 @Html.Label("Valid Till")
-                @Html.DropDownListFor(model => model.ValidTill, SL,  new { @class = "form-control " } )
+                @Html.DropDownListFor(model => model.ValidTill, SL, new { @class = "form-control " })
                 @Html.ValidationMessageFor(model => model.ValidTill, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
                 @Html.Label("Date")
-                @Html.TextBoxFor(model => model.ValidTillDate,DateTime.Now.ToString("dd-MM-yyyy"),  new { @class = "form-control DateField"  })
+                @Html.TextBoxFor(model => model.ValidTillDate, DateTime.Now.ToString("dd-MM-yyyy"), new { @class = "form-control DateField" })
                 @Html.ValidationMessageFor(model => model.ValidTillDate, "", new { @class = "text-danger" })
             </div>
 
             <div class="col-md-3">
                 @Html.Label("CashBackType")
-                @Html.DropDownListFor(model => model.CashBkType, CashBkType,  new { @class = "form-control "  })
+                @Html.DropDownListFor(model => model.CashBkType, CashBkType, new { @class = "form-control " })
                 @Html.ValidationMessageFor(model => model.CashBkType, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
+                @Html.Label("Percentage")
+                @Html.TextBoxFor(model => model.Percentage, new { @class = "form-control autodouble" })
+                @Html.ValidationMessageFor(model => model.Percentage, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
                 @Html.Label("CashBack Amt")
-                @Html.TextBoxFor(model => model.MaxAmt, new { @class = "form-control autodouble"  })
+                @Html.TextBoxFor(model => model.MaxAmt, new { @class = "form-control autodouble" })
                 @Html.ValidationMessageFor(model => model.MaxAmt, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-3">
-                @Html.Label("Bill Amt Type")
-                @Html.DropDownListFor(model => model.MinBilAmtType, BillAmtType,  new { @class = "form-control "  })
+                @Html.Label("Min Bill Amt Type")
+                @Html.DropDownListFor(model => model.MinBilAmtType, BillAmtType, new { @class = "form-control " })
                 @Html.ValidationMessageFor(model => model.MinBilAmtType, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
                 @Html.Label("Amt")
-                @Html.TextBoxFor(model => model.BilAmt,  new { @class = "form-control autodouble"  })
+                @Html.TextBoxFor(model => model.BilAmt, new { @class = "form-control autodouble" })
                 @Html.ValidationMessageFor(model => model.BilAmt, "", new { @class = "text-danger" })
             </div>
             <div class="col-sm-1" style="margin-top:5px;">
