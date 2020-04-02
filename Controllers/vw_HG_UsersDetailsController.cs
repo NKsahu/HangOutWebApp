@@ -153,6 +153,10 @@ namespace HangOut.Controllers
 
             return View();
         }
+        public ActionResult Pos()
+        {
+            return View();
+        }
         
     }
 }
