@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace HangOut.Controllers.Customer
+namespace HangOut.Controllers.MyCustomer
 {
     public class CashBackController : Controller
     {
