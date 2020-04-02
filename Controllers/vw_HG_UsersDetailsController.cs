@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI.WebControls;
+using HangOut.Models.Common;
 
 namespace HangOut.Controllers
 {
@@ -144,6 +145,12 @@ namespace HangOut.Controllers
 
         public  ActionResult privacyPolicy()
         {
+            return View();
+        }
+        [LoginFilter]
+        public ActionResult CashBack()
+        {
+
             return View();
         }
         

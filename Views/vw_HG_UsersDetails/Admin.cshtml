@@ -106,6 +106,7 @@
         {
             <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Inventry"><i class="fas fa-truck-moving"></i></a>
             <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Account"><i class="fas fa-rupee-sign"></i></a>
+            <button class="btn btn-lg text-white" onclick="CashBack();"><i class="fas fa-chart-line"></i></button>
         }
 
         <div class="btn-group mt-0">
@@ -126,7 +127,7 @@
     </div>
 </header>
 
-<div class="row">
+<div class="row" id="PanelMaster">
 
     <!-- admin side menus -->
     <div id="admin-side-menu" class="col-md-2 col-12  ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
@@ -285,6 +286,7 @@
         });
 
     });
+    MakeOrder();
     function SetCustmrOrd(event) {
       //  var Status = $(event).val();
         var OrdSts = false;
@@ -336,7 +338,21 @@
             }
         });
     }
-    MakeOrder();
+    function CashBack() {
+        $("#waiting").show();
+        $.ajax({
+            url: "/vw_HG_UsersDetails/CashBack",
+            type: "GET",
+            success: function (data) {
+                $("#PanelMaster").html(data);
+                $("#waiting").hide();
+            },
+            error: function (Xr, Status, ErrorMsg) {
+                $("#waiting").hide();
+            }
+        });
+    }
+    
     $("#offItemHome").change(function () {
         var val1 =parseInt($("#offItemHome").text());
         $("#TotalCntHome").text(val1);

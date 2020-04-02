@@ -619,7 +619,7 @@
      }
      function OpenAddons(AddonList,ItemId) {
        
-         console.log("AAYA=");
+        
          var html = "";
          var strhtml = '<div class="card">';
          strhtml += '<div class="card-body">';
@@ -670,7 +670,7 @@
         
 
          //submit and cancel button
-         strhtml += '<div class="col-md-3"> <button class="btn btn-md btn-danger">Cancel</button> </div>';
+         strhtml += '<div class="col-md-3"> <button onclick="CancelAddon()" class="btn btn-md btn-danger">Cancel</button> </div>';
          strhtml+='<div class="col-md-6"></div>'
          strhtml += '<div class="col-md-3"><button onclick="SubmitAddon('+ItemId+')" class="btn btn-md btn-success">Submit</button> </div>';
 
@@ -681,6 +681,9 @@
          $("#ShowAddon > .modal-dialog > .modal-content > .modal-body").html(strhtml);
          showdpt("ShowAddon");
 
+     }
+     function CancelAddon() {
+         hidedpt("ShowAddon");
      }
      function SubmitAddon(itemid) {
          var ObjItem = ItemList.find(x => {
