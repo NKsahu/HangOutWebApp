@@ -315,6 +315,7 @@
     <Compile Include="Controllers\Account\SaleController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CommonApiController.cs" />
+    <Compile Include="Controllers\Customer\CashBackController.cs" />
     <Compile Include="Controllers\FeedBackController.cs" />
     <Compile Include="Controllers\HG_CategoryController.cs" />
     <Compile Include="Controllers\HG_FloorSide_or_RowNameController.cs" />
@@ -553,6 +554,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="FoodImg\" />
     <Folder Include="QRImgTorR\" />
+    <Folder Include="Views\CashBack\" />
     <Folder Include="Views\Commission\" />
     <Folder Include="Views\Sale\" />
   </ItemGroup>
