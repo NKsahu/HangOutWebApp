@@ -5,7 +5,17 @@
 
 <div id="admin-side-menu" class="col-md-2 col-12  ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
     <ul id="myaccordion" class="list-unstyled mb-0 ">
-        
+
+        <li class="nav-item">
+            <a class="nav-link have-sub-menu collapsed" href="#" data-target="#qkaccess" data-toggle="collapse">
+                <i class="fa fa-desktop-alt"></i>Quick Access <b id="TotalCntHome" class="w3-badge">@offitem</b><span class="fa fa-plus"></span>
+            </a>
+            <ul id="qkaccess" class="collapse list-unstyled" data-parent="#myaccordion">
+                <li class="nav-item" data-parent="#myaccordion">
+                    <a class="nav-link" href="/HG_Items/ItemAvaiBility" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-star"></i>Item availability <b id="offItemHome" class="w3-badge"> @offitem</b></a>
+                </li>
+            </ul>
+        </li>
         <li class="nav-item" data-parent="#myaccordion">
             <a class="nav-link" href="/HG_OrganizationDetails/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-school"></i>Campaign</a>
         </li>
