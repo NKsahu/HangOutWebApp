@@ -10,18 +10,14 @@
         <table class="table table-bordered table-hover" id="TBLID">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.SettingId)
-                    </th>
+                    
                     <th>
                         @Html.DisplayNameFor(model => model.KeyName)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.KeyValue)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.KeyDiscription)
-                    </th>
+                    
                     <th></th>
                 </tr>
             </thead>
@@ -29,18 +25,14 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SettingId)
-                        </td>
+                        
                         <td>
                             @Html.DisplayFor(modelItem => item.KeyName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.KeyValue)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.KeyDiscription)
-                        </td>
+                        
                         <td class="text-center">
                             <a href="/Settings/Create?SettingId=@item.SettingId" class="btn btn-warning btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> <i class="fa fa-edit"></i></a>
                         </td>

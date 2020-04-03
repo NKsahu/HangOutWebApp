@@ -119,6 +119,7 @@ namespace HangOut.Models.Common
             {
                 string Query = "SELECT * FROM  Settings where SettingId=@SettingId" ;
                 cmd = new SqlCommand(Query, Con);
+                cmd.Parameters.AddWithValue("@SettingId", SettingId);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {

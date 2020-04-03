@@ -22,6 +22,9 @@
             List<SelectListItem> BillAmtType = new List<SelectListItem>() {
         new SelectListItem{Text="Dynamic",Value="1"},new SelectListItem{Text="Manual",Value="2"}
         };
+            List<SelectListItem> SeatingOption = new List<SelectListItem>() {
+        new SelectListItem{Text="All",Value="1"},new SelectListItem{Text="Selected",Value="2"}
+        };
         <div class="row">
             <div class="col-md-2">
                 @Html.Label("Start From")
@@ -64,6 +67,17 @@
                 @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble" })
                 @Html.ValidationMessageFor(model => model.RaiseDynamic, "", new { @class = "text-danger" })
             </div>
+            <div class="col-md-2">
+                @Html.Label("Seating ")
+                @Html.DropDownListFor(model => model.Seating, SeatingOption, new { @class = "form-control ",@onchange="SeatingChange()" })
+                @Html.ValidationMessageFor(model => model.Seating, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-1" id="SeatingInfo">
+                <label for="SeatingInfo"></label>
+                <button onclick="SeatingInfo()" type="button" class="btn btn-sm form-control">
+                    <i class="fas fa-info-circle" style="color:green"></i>
+                </button>
+            </div>
             <div class="col-sm-1" style="margin-top:5px;">
                 @Html.Label("Save", new { @class = "text-white" })
                 <input type="submit" value="Save" class="btn btn-success" />
@@ -77,7 +91,7 @@
     $("#ValidTill").change(function () {
         CBValidTill();
     });
-    
+    SeatingChange();
     function CBValidTill() {
         var ValidTill = $("#ValidTill").val();
         if (ValidTill == "1") {
@@ -87,9 +101,18 @@
             $("#ValidTillDate").parent('div').show();
         }
     }
-    //function ApplyDate(event) {
-    //    console.log("aaya date");
-    //    $(event).datepicker();
-    //}
-    
+    function SeatingChange() {
+        var Seating = $("#Seating").val();
+        if (Seating == "1") {
+            $("#SeatingInfo").hide();
+        }
+        else {
+            $("#SeatingInfo").show();
+        }
+    }
+    function SeatingInfo() {
+        var CashBkId = $("#CashBkId").val();
+
+
+    }
 </script>
