@@ -1,13 +1,24 @@
 ﻿
 @{
     Layout = null;
+    var UserType = Request.Cookies["UserInfo"]["UserType"];
 }
 
 <div id="admin-side-menu" class="col-md-2 col-12  ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
     <ul id="myaccordion" class="list-unstyled mb-0 ">
 
+        @if (UserType != null && UserType == "SA")
+        {
+            <li class="nav-item" data-parent="#myaccordion">
+                <a class="nav-link" href="/Settings/Index?Disc=CASHBACK" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-wrench"></i> Setting</a>
+            </li>
+        }
+    <li class="nav-item" data-parent="#myaccordion">
+        <a class="nav-link" href="#"   ><i class="fas fa-wallet"></i> My Wallet <b  class="w3-badge">250</b></a>
+    </li>
         <li class="nav-item">
-            <a class="nav-link have-sub-menu collapsed" href="#" data-target="#qkaccess" data-toggle="collapse">My Customer<span class="fa fa-plus"></span>
+            <a class="nav-link have-sub-menu collapsed" href="#" data-target="#qkaccess" data-toggle="collapse">
+                My Customer<span class="fa fa-plus"></span>
             </a>
             <ul id="qkaccess" class="collapse list-unstyled" data-parent="#myaccordion">
                 <li class="nav-item" data-parent="#myaccordion">
@@ -15,11 +26,11 @@
                 </li>
             </ul>
         </li>
-        
+
     </ul>
 </div>
 <!-- End admin side menus -->
-@*mt-0 p-0*@
+
 <div class="col-md-10 col-12 " id="DynamicData">
 
 </div>

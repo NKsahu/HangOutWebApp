@@ -13,8 +13,12 @@ namespace HangOut.Controllers
         // GET: Settings
         public ActionResult Index()
         {
-
-            return View(new Settings().GetAll());
+            List<Settings> settings = new Settings().GetAll();
+            if (Request.QueryString["Disc"] != null)
+            {
+                settings = settings.FindAll(x => x.KeyDiscription.Contains(Request.QueryString["Disc"]));
+            }
+            return View(settings);
         }
         public ActionResult Create(int SettingId = 0)
         {

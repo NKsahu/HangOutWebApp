@@ -25,7 +25,7 @@ $(document).on("focusin", ".datefield", function () {
 //var d= $(this).val().split("/");
 //M.Datepicker.getInstance($(this)).setDate(new Date(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])), true);
     $(this).datepicker({
-               format: "dd/mm/yyyy",
+               format: "dd-MM-yyyy",
         todayHighlight: true,
         "autoclose": true
     });

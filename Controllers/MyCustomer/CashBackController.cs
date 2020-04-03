@@ -32,8 +32,10 @@ namespace HangOut.Controllers.MyCustomer
             int OrgId = OrderType.CurrOrgId();
             try
             {
-                cashback.StartDate = DateTime.ParseExact(cashback.StartDate.ToString(), "dd-MM-yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                cashback.ValidTillDate = DateTime.ParseExact(cashback.ValidTillDate.ToString(), "dd-MM-yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+              //  string startdate = cashback.StartDate.ToString();
+               // string ValidTillDate= cashback.ValidTillDate.ToString();
+                cashback.StartDate = DateTime.ParseExact(cashback.StartDate.ToString("dd-MM-yyyy"), "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                cashback.ValidTillDate = DateTime.ParseExact(cashback.ValidTillDate.ToString("dd-MM-yyyy"), "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                 if (cashback.StartDate.Date < DateTime.Now.Date)
                 {
                     return Json(new { msg = "Start Date Can't less than Today's Date" });
