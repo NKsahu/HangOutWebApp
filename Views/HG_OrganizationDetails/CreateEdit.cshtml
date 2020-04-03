@@ -115,12 +115,12 @@
                 @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                 @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 @Html.LabelFor(model => model.PANNO, htmlAttributes: new { @class = "control-label  " })
                 @Html.EditorFor(model => model.PANNO, new { htmlAttributes = new { @class = "form-control", } })
                 @Html.ValidationMessageFor(model => model.PANNO, "", new { @class = "text-danger" })
@@ -130,7 +130,7 @@
                 @Html.EditorFor(model => model.BankName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.BankName, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md6">
+            <div class="col-md-2">
                 @Html.LabelFor(model => model.ACNO, htmlAttributes: new { @class = "control-label  " })
                 @Html.EditorFor(model => model.ACNO, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ACNO, "", new { @class = "text-danger" })
