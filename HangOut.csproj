@@ -548,6 +548,7 @@
     <Content Include="Views\vw_HG_UsersDetails\Pos.cshtml" />
     <Content Include="Views\CashBack\CUSTCashBack.cshtml" />
     <Content Include="Views\CashBack\Index.cshtml" />
+    <Content Include="Views\OrderMenu\CashBackSeating.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

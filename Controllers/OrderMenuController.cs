@@ -19,5 +19,11 @@ namespace HangOut.Controllers
 
             return View();
         }
+
+        public ActionResult CashBackSeating()
+        {
+
+            return View();
+        }
     }
 }
