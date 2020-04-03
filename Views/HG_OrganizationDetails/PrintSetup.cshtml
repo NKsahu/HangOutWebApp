@@ -36,6 +36,7 @@
             @Html.HiddenFor(model => model.Name)
             @Html.HiddenFor(model => model.Phone)
             @Html.HiddenFor(model => model.DistrictId)
+            @Html.HiddenFor(model => model.WalletAmt)
 
             <div class="row">
                 <div class="col-md-3">
@@ -113,16 +114,16 @@
                     <div class="row">
                         <div class="col-md-4">
                             @Html.Label("Invoice Printting")
-                            
+
                             @{
                                 List<SelectListItem> PrinttingType = new List<SelectListItem>()
-                                                                                   {
+                                                                                                   {
                                                                  new SelectListItem{Text="NO",Value="0"},
                                                                  new SelectListItem{Text="Auto",Value="2"}
                                                                                    };
                                 //new SelectListItem{Text="Ask",Value="1"},
                             }
-                            @Html.DropDownListFor(model => model.InvoicePrintting, PrinttingType, new { @class = "form-control ", required = "required",   })
+                            @Html.DropDownListFor(model => model.InvoicePrintting, PrinttingType, new { @class = "form-control ", required = "required", })
 
                         </div>
                         <div class="Col-md-4">
@@ -141,19 +142,19 @@
                             @Html.Label("Order Display")
                             @{
                                 List<SelectListItem> OrderType = new List<SelectListItem>()
-                                                                   {
+                                                                                   {
                                                  new SelectListItem{Text="Mobile",Value="1"},
                                                  new SelectListItem{Text="KOT",Value="2"}
                                                                    };
                             }
-                            @Html.DropDownListFor(model => model.OrderDisplay, OrderType, new { @class = "form-control ", required = "required"   })
+                            @Html.DropDownListFor(model => model.OrderDisplay, OrderType, new { @class = "form-control ", required = "required" })
 
                         </div>
                         <div class="col-md-4">
                             @Html.Label("Printting Type")
                             @{
                                 List<SelectListItem> printType = new List<SelectListItem>()
-                                                   {
+                                                                   {
                                  new SelectListItem{Text="Auto",Value="2"}
                                                    };
                                 //new SelectListItem{Text="ASK",Value="1"},

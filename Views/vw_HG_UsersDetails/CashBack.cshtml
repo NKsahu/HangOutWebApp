@@ -1,7 +1,16 @@
-﻿
+﻿@using HangOut.Models.DynamicList;
+@using HangOut.Models;
 @{
     Layout = null;
     var UserType = Request.Cookies["UserInfo"]["UserType"];
+    double MyWallet = 0.00;
+    int OrgID = OrderType.CurrOrgId();
+    if (OrgID > 0)
+    {
+        HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgID);
+        MyWallet = ObjOrg.WalletAmt;
+    }
+
 }
 
 <div id="admin-side-menu" class="col-md-2 col-12  ml-sm-auto m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
@@ -14,7 +23,7 @@
             </li>
         }
     <li class="nav-item" data-parent="#myaccordion">
-        <a class="nav-link" href="#"   ><i class="fas fa-wallet"></i> My Wallet <b  class="w3-badge">250</b></a>
+        <a class="nav-link" href="#"   ><i class="fas fa-wallet"></i> My Wallet <b  class="w3-badge">@MyWallet.ToString("0.00")</b></a>
     </li>
         <li class="nav-item">
             <a class="nav-link have-sub-menu collapsed" href="#" data-target="#qkaccess" data-toggle="collapse">

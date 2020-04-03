@@ -135,6 +135,18 @@
                 @Html.EditorFor(model => model.ACNO, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ACNO, "", new { @class = "text-danger" })
             </div>
+            @if (UserType != null && UserType == "SA")
+            {
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.WalletAmt, htmlAttributes: new { @class = "control-label  " })
+                    @Html.TextBoxFor(model => model.WalletAmt,new { @class = "form-control autodouble" })
+                    @Html.ValidationMessageFor(model => model.WalletAmt, "", new { @class = "text-danger" })
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.WalletAmt);
+            }
             <div class="col-md-1">
                 @Html.Label("Save", new { @class = "text-white" })
                 <input type="submit" value="Save" class="btn btn-success" />

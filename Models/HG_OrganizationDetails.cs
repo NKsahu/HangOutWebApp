@@ -194,7 +194,7 @@ namespace HangOut.Models
                     ObjTmp.OrderDisplay = SDR.GetInt32(37);
                     ObjTmp.PrinttingType = SDR.GetInt32(38);
                     ObjTmp.Copy = SDR.GetInt32(39);
-                    ObjTmp.WalletAmt = SDR.GetFloat(40);
+                    ObjTmp.WalletAmt = SDR.GetDouble(40);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -255,7 +255,7 @@ namespace HangOut.Models
                     ObjTmp.OrderDisplay = SDR.GetInt32(37);
                     ObjTmp.PrinttingType = SDR.GetInt32(38);
                     ObjTmp.Copy = SDR.GetInt32(39);
-                    ObjTmp.WalletAmt = SDR.GetFloat(40);
+                    ObjTmp.WalletAmt = SDR.GetDouble(40);
                 }
             }
             catch (Exception e)
