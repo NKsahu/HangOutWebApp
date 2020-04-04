@@ -20,14 +20,18 @@ namespace HangOut.Models.MyCustomer
         public double MaxAmt { get; set; }
         public double BilAmt { get; set; }
         public bool RaiseDynamic { get; set; }
-
-        public int Seating { get; set; } // 1 :all SEATINGS ,2: SELECTED ONLY
+        //========
+        public int CashBkStatus { get; set; } // 1 :running ,2: pause 
+        public string SeatingIds { get; set; }// comma seprated applied seating ids
+        public int TerminateSts { get; set; }// 1 activate , 2 terminated;
         public Cashback()
         {
             StartDate = DateTime.Now;
             ValidTillDate= DateTime.Now;
             RaiseDynamic = true;
-            Seating = 1;
+            CashBkStatus = 1;
+            SeatingIds = "";
+            TerminateSts = 1;
         }
 
         public int Save()
@@ -40,13 +44,13 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.CashBkId == 0)
                 {
-                    Query = "Insert into  CashBack  values(@OrgID,@StartDate,@ValidTill,@ValidTillDate,@CashBkType,@Percentage,@MaxAmt,@BilAmt,@RaiseDynamic,@Seating); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  CashBack  values(@OrgID,@StartDate,@ValidTill,@ValidTillDate,@CashBkType,@Percentage,@MaxAmt,@BilAmt,@RaiseDynamic,@CashBkStatus,@SeatingIds,@TerminateSts); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                 }
                 else
                 {
-                    Query = "update  CashBack set StartDate=@StartDate,ValidTill=@ValidTill,ValidTillDate=@ValidTillDate,Percentage=@Percentage,CashBkType=@CashBkType,MaxAmt=@MaxAmt,BilAmt=@BilAmt,RaiseDynamic=@RaiseDynamic,Seating=@Seating where CashBkId=@CashBkId";
+                    Query = "update  CashBack set StartDate=@StartDate,ValidTill=@ValidTill,ValidTillDate=@ValidTillDate,Percentage=@Percentage,CashBkType=@CashBkType,MaxAmt=@MaxAmt,BilAmt=@BilAmt,RaiseDynamic=@RaiseDynamic,CashBkStatus=@CashBkStatus,SeatingIds=@SeatingIds,TerminateSts=@TerminateSts where CashBkId=@CashBkId";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
                 }
@@ -59,7 +63,9 @@ namespace HangOut.Models.MyCustomer
                 cmd.Parameters.AddWithValue("@MaxAmt ", this.MaxAmt);
                 cmd.Parameters.AddWithValue("@BilAmt", this.BilAmt);
                 cmd.Parameters.AddWithValue("@RaiseDynamic", this.RaiseDynamic);
-                cmd.Parameters.AddWithValue("@Seating", this.Seating);
+                cmd.Parameters.AddWithValue("@CashBkStatus", this.CashBkStatus);
+                cmd.Parameters.AddWithValue("@SeatingIds", this.SeatingIds);
+                cmd.Parameters.AddWithValue("@TerminateSts", this.TerminateSts);
                 if (this.CashBkId == 0)
                 {
                     R = Convert.ToInt32(cmd.ExecuteScalar());
@@ -108,7 +114,9 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.MaxAmt = SDR.GetDouble(index++);
                     ObjTmp.BilAmt = SDR.GetDouble(index++);
                     ObjTmp.RaiseDynamic = SDR.GetBoolean(index++);
-                    ObjTmp.Seating = SDR.GetInt32(index++);
+                    ObjTmp.CashBkStatus = SDR.GetInt32(index++);
+                    ObjTmp.SeatingIds = SDR.GetString(index++);
+                    ObjTmp.TerminateSts = SDR.GetInt32(index++);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -142,7 +150,9 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.MaxAmt = SDR.GetDouble(index++);
                     ObjTmp.BilAmt = SDR.GetDouble(index++);
                     ObjTmp.RaiseDynamic = SDR.GetBoolean(index++);
-                    ObjTmp.Seating = SDR.GetInt32(index++);
+                    ObjTmp.CashBkStatus = SDR.GetInt32(index++);
+                    ObjTmp.SeatingIds = SDR.GetString(index++);
+                    ObjTmp.TerminateSts = SDR.GetInt32(index++);
                     Tmp = ObjTmp;
                 }
             }

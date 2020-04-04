@@ -20,7 +20,7 @@ namespace HangOut.Controllers
             return View();
         }
 
-        public ActionResult CashBackSeating()
+        public ActionResult CashBackSeating(int CBID)
         {
 
             return View();
