@@ -161,6 +161,16 @@ namespace HangOut.Models.MyCustomer
 
             return (Tmp);
         }
+
+        
     }
     
+    public class CashBkSeating
+    {
+        public int CashBkId { get; set; }
+
+        public int[] Seatings { get; set; }
+
+    }
 }
+

@@ -7,10 +7,12 @@
             background-color: #a9bf1a;
         }
 
-        .SelectedTable {
+        .YellowTable {
             background-color: #a9bf1a;
         }
-
+        .RedTable {
+            background-color: #f00;
+        }
         div.scrollmenu {
             background-color: #333;
             overflow-x: auto;
@@ -50,27 +52,12 @@
             color: green;
         }
     </style>
+@Html.Hidden("CBID",Request.QueryString["CBID"])
     <div class="card-header " style="width:100%">
         <h3 style="text-align:center; background-color:#5de79a"><b>Seating</b> </h3>
         <hr />
     </div>
 <div class=" scrollTables" id="Floor" style="margin-top:50px;">
-
-    @*<blockTable>
-        <div class="row">
-            <div class="col-md-6">
-                <h4 style="text-align:right">Floor1</h4>
-            </div>
-            <div class="col-md-2">
-                <input type="checkbox" class=" form-control" style="border: 2px dotted #00f; display: block; background: #ff0000" />
-            </div>
-        </div>
-        <div class="row" id="AddSeat">
-
-        </div>
-    </blockTable>*@
-
-
 
 </div>
 <div class="row">
@@ -86,12 +73,14 @@
 </div>
 <script>
         var TblShetList = [];
-        var FlrScrList = [];
+    var FlrScrList = [];
+    var ExistingSeatings = [];
     function LoadOrderMenus() {
+        var CBID = $("#CBID").val();
         $("#waiting").show();
             $.ajax({
                 type: 'POST',
-                url: "/OrderMenu/SeatingList?OrgId=0",
+                url: "/OrderMenu/SeatingList?CBID="+CBID+"&OrgId=0",
                 success: function (data) {
                     $("#waiting").hide();
                     var OrderMenuList = JSON.parse(data);
@@ -109,6 +98,7 @@
         function ShowOrderMenus(list) {
             $("#Floor").html('');
             FlrScrList = list.FloorList;
+            ExistingSeatings = list.ExistingSeatings;
             for (var i = 0; i < FlrScrList.length; i++) {
                 var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
                 FloorHtml += '<h4 style="text-align:right">' + FlrScrList[i].Name + '</h4> </div><div class="col-md-6">';
@@ -118,8 +108,13 @@
                 for (var j = 0; j < TableSHaetList.length; j++) {
                     TblShetList.push(TableSHaetList[j]);
                     var Tablecls = "";
+                    if (ExistingSeatings.length > 0) {
+
+                       
+                 });
+                    }
                     //if (TableSHaetList[j].OMID == SelectedMenu) {
-                    //    // Tablecls = "SelectedTable";
+                    //    // Tablecls = "YellowTable";
                     //    TotalSelectedTble += 1;
                     //}
                     TablesOrSheat += '<div class="col-md-3 card ' + Tablecls + '"  onclick="ActiveTable(this)" TSID="' + TableSHaetList[j].Table_or_RowID + '" id="TS' + TableSHaetList[j].Table_or_RowID + '" childs="' + FlrScrList[i].Floor_or_ScreenID + '" ><p>' + TableSHaetList[j].Table_or_SheetName + '</p></div>';
@@ -141,105 +136,69 @@
             $("#Floor").append(AddNew);
         }
         
-        function ActiveMenu(event) {
-            console.log("h");
-            for (var i = 0; i < TblShetList.length; i++) {
-                $("#TS" + TblShetList[i].Table_or_RowID).removeClass('SelectedTable');
-            }
-            var lis = document.getElementsByClassName("ShowMenu");
-            for (var i = 0; i < lis.length; i++) {
-                var li = $(lis[i]);
-                li.removeClass('SelectedMenu');
-            }
-            var MenuId = parseInt($(event).attr("OMID"));
-            var SelectedTables = TblShetList.filter(function (x) {
-                return x.OMID == MenuId;
-            });
-            for (var i = 0; i < SelectedTables.length; i++) {
-                $("#TS" + SelectedTables[i].Table_or_RowID).addClass('SelectedTable');
-            }
-            // var TotalSelectedCount = SelectedTables.length;
-
-            // console.log('aaya3');
-            $(event).addClass('SelectedMenu');
-        }
+        
         function ActiveScrn(event) {
             var Idname = $(event).attr('FSID');
             var ListTables = document.querySelectorAll("[childs='" + Idname + "']");
             if ($(event).is(':checked')) {
                 for (var i = 0; i < ListTables.length; i++) {
                     var table = $(ListTables[i]);
-                    table.addClass('SelectedTable');
+                    table.addClass('YellowTable');
                 }
 
             }
             else {
                 for (var i = 0; i < ListTables.length; i++) {
                     var table = $(ListTables[i]);
-                    table.removeClass('SelectedTable');
+                    table.removeClass('YellowTable');
 
                 }
             }
         }
         function ActiveTable(event) {
 
-            if ($(event).hasClass('SelectedTable')) {
-                $(event).removeClass('SelectedTable');
+            if ($(event).hasClass('YellowTable')) {
+                $(event).removeClass('YellowTable');
             }
             else {
-                $(event).addClass('SelectedTable');
+                $(event).addClass('YellowTable');
             }
         }
         function Apply() {
-            var lis = document.getElementsByClassName("SelectedMenu");
-            if (lis.length < 1) {
-                $.alert({
-                    title: 'Alert!',
-                    content: 'Active Menu First',
-                });
-                return;
-            }
+           
             $("#waiting").show();
-            var Menu = $(lis[0]);
-            var MenuId = parseInt(Menu.attr('OMID'));
-            var menuName = Menu.text();
-            var TableList = [];
-            var SelectedTables = document.getElementsByClassName("SelectedTable");
-            for (var i = 0; i < SelectedTables.length; i++) {
-                for (var j = 0; j < TblShetList.length; j++) {
-                    if (TblShetList[j].Table_or_RowID == $(SelectedTables[i]).attr('TSID')) {
-                        TblShetList[j].OMID = MenuId;
-                        break;
-                    }
-
-                }
-
-                TableList.push($(SelectedTables[i]).attr('TSID'));
-            }
             var Jobj = {};
-            Jobj.OMID = MenuId;
-            Jobj.TorSIDs = TableList;
-            Jobj.OrgId = OrgId;
+            var CBID =parseInt( $("#CBID").val());
+            Jobj.CashBkId = CBID;
+            var SeatingsDom = document.getElementsByClassName('YellowTable');
+            var Seatings = [];
+            for (var i = 0; i < SeatingsDom.length; i++) {
+                var JqDom = $(SeatingsDom[i]);
+                console.log("aatya");
+                Seatings.push(parseInt(JqDom.attr('TSID')));
+            }
+            Jobj.Seatings = Seatings;
             $.ajax({
                 type: 'POST',
-                url: "/WebApi/ActiveMenu",
+                url: "/OrderMenu/SaveCashBkSeating",
                 data: JSON.stringify(Jobj),
                 contentType: "application/json",
                 success: function (data) {
-                    var status = parseInt(data);
-                   // if (status > 0) {
+                  
+                     $("#waiting").hide();
                         $.alert({
                             title: 'Alert',
-                            content: '' + menuName + ' is Active',
+                            content: 'Active',
                         });
                     //}
-                    $("#waiting").hide();
+                   
+                    hidedpt("OpenSeating");
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                     $('#waiting').hide();
                 }
             });
-
+            $('#waiting').hide();
         }
 
         setTimeout(function () { LoadOrderMenus(); }, 100);

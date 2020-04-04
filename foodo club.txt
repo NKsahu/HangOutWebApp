@@ -1,0 +1,32 @@
+https://winpro2.server-site.com:8443/login_up.php
+
+--------------------------------------------------------------
+
+fooddoclub
+
+--------------------------------------------------------------
+
+User       : fooddoclub 
+
+Password : cc12@dQ1 
+
+--------------------------------------------------------------
+
+FTP Login
+
+--------------------------------------------------------------
+
+IP Addresses : 88.99.212.48
+
+Username    : fooddoclubres
+
+Password     : Ra5?ce70
+
+---------------------------------
+
+
+marketing=====
+
+database :fooddoclub_Marketing
+database user : fooddoclub_fooddoclub
+password : cc12@dQ1
