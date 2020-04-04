@@ -9,14 +9,13 @@ using System;
 using System.Net;
 using HangOut.Models.POS;
 using paytm;
-using HangOut.Models.POS;
 using HangOut.Controllers.Account;
 
 namespace HangOut.Controllers
 {
     public class WebApiController : Controller
     {
-        [HttpPost]
+        
         public JObject GetLogin(string Obj)
         {
 

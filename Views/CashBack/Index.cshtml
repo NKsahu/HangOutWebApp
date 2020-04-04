@@ -109,7 +109,19 @@
         });
     }
     function Seating(CBID) {
-
+        $.ajax({
+            type: 'GET',
+            url: "/OrderMenu/CashBackSeating?CBID=" + CBID,
+            success: function (data) {
+                makedpt("OpenSeating");
+                $("#OpenSeating > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("OpenSeating");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
     }
     function JsonSuccess(Jobj) {
         

@@ -40,6 +40,7 @@ namespace HangOut.Controllers.MyCustomer
                 }
                 if (cashback.CashBkId == 0)
                 {
+                    cashback.OrgID = OrgId;
                     cashback.CashBkStatus = 1;
                     cashback.TerminateSts = 1;
                     cashback.SeatingIds = "";

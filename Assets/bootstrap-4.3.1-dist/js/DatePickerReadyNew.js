@@ -18,14 +18,15 @@ $(document).on("focusin", ".timepiker24", function () {
 //        "autoclose": true
 //    });
 //})
-$(document).on("focusin", ".datefield", function () {
+$(document).on("focusin", ".datefield,.DateField", function () {
     //$(this).datepicker();
     //alert("hi");
 //$(this).datepicker();
 //var d= $(this).val().split("/");
 //M.Datepicker.getInstance($(this)).setDate(new Date(parseInt(d[2]),parseInt(d[1])-1,parseInt(d[0])), true);
+   // console.log("AAYAdate");
     $(this).datepicker({
-               format: "dd-MM-yyyy",
+        format: "dd-mm-yyyy",
         todayHighlight: true,
         "autoclose": true
     });
@@ -151,7 +152,7 @@ $(document).on("focusin", ".datefield1", function () {
 
 $(document).on("focusin", ".bootstrap-datepicker", function () {
     //$(this).datepicker();
-    //alert("hi");
+    alert("hi");
     $(this).datepicker({
         //changeMonth: true,
         //changeYear: true,

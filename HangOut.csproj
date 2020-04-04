@@ -133,7 +133,7 @@
     <Content Include="Assets\bootstrap-4.3.1-dist\js\bootstrap-datepicker.js" />
     <Content Include="Assets\bootstrap-4.3.1-dist\js\bootstrap.bundle.min.js" />
     <Content Include="Assets\bootstrap-4.3.1-dist\js\bootstrap.min.js" />
-    <Content Include="Assets\bootstrap-4.3.1-dist\js\DatePickerReady.js" />
+    <Content Include="Assets\bootstrap-4.3.1-dist\js\DatePickerReadyNew.js" />
     <Content Include="Assets\Datepicker\datepicker.css" />
     <Content Include="Assets\Datepicker\datepicker.js" />
     <Content Include="Assets\foodicon.jpg" />
