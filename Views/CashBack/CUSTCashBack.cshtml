@@ -16,6 +16,7 @@
             @Html.HiddenFor(model => model.CashBkStatus)
             @Html.HiddenFor(model => model.SeatingIds)
             @Html.HiddenFor(model => model.TerminateSts)
+            @Html.HiddenFor(model => model.CBUniqId)
             List<SelectListItem> SL = new List<SelectListItem>() {
         new SelectListItem{Text="UN-SPECIFIED",Value="1"},new SelectListItem{Text="SPECIFIED",Value="2"}
         };

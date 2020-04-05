@@ -75,6 +75,7 @@
         var TblShetList = [];
     var FlrScrList = [];
     var ExistingSeatings = [];
+    var RedSeatings = [];
     function LoadOrderMenus() {
         var CBID = $("#CBID").val();
         $("#waiting").show();
@@ -98,6 +99,7 @@
         function ShowOrderMenus(list) {
             $("#Floor").html('');
             FlrScrList = list.FloorList;
+            RedSeatings = list.RedSeatings;
             ExistingSeatings = list.ExistingSeatings;
             for (var i = 0; i < FlrScrList.length; i++) {
                 var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
@@ -108,15 +110,26 @@
                 for (var j = 0; j < TableSHaetList.length; j++) {
                     TblShetList.push(TableSHaetList[j]);
                     var Tablecls = "";
-                    if (ExistingSeatings.length > 0) {
-
-                       
-                 });
+                    console.log("aayaaaa");
+                    if (RedSeatings.length > 0) {
+                        var RedSeatingId = RedSeatings.find(x => {
+                     return x === TableSHaetList[j].Table_or_RowID
+                        });
+                        if (RedSeatingId!='undefined'&&RedSeatingId != null) {
+                            Tablecls = "RedTable";
+                        }
                     }
-                    //if (TableSHaetList[j].OMID == SelectedMenu) {
-                    //    // Tablecls = "YellowTable";
-                    //    TotalSelectedTble += 1;
-                    //}
+                     if (ExistingSeatings.length > 0) {
+
+                       var SeatingId = ExistingSeatings.find(x => {
+                     return x === TableSHaetList[j].Table_or_RowID
+                        });
+                        if (SeatingId!="undefined"&&SeatingId != null) {
+                            Tablecls = "YellowTable";
+                            TotalSelectedTble += 1;
+                        }
+                    }
+                   
                     TablesOrSheat += '<div class="col-md-3 card ' + Tablecls + '"  onclick="ActiveTable(this)" TSID="' + TableSHaetList[j].Table_or_RowID + '" id="TS' + TableSHaetList[j].Table_or_RowID + '" childs="' + FlrScrList[i].Floor_or_ScreenID + '" ><p>' + TableSHaetList[j].Table_or_SheetName + '</p></div>';
                 }
 
@@ -124,7 +137,7 @@
                 TablesOrSheat += "</div>";
                 var CheckBoxCls = "";
                 if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
-                    // CheckBoxCls = "checked";
+                     CheckBoxCls = "checked";
                 }
                 FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="' + FlrScrList[i].Floor_or_ScreenID + '" id="FS' + FlrScrList[i].Floor_or_ScreenID + '" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
                 FloorHtml += TablesOrSheat;
@@ -143,20 +156,26 @@
             if ($(event).is(':checked')) {
                 for (var i = 0; i < ListTables.length; i++) {
                     var table = $(ListTables[i]);
-                    table.addClass('YellowTable');
+                    if (! table.hasClass("RedTable")) {
+                        table.addClass('YellowTable');
+                    }
                 }
 
             }
             else {
                 for (var i = 0; i < ListTables.length; i++) {
                     var table = $(ListTables[i]);
-                    table.removeClass('YellowTable');
+                    if (! table.hasClass("RedTable")) {
+                        table.removeClass('YellowTable');
+                    }
 
                 }
             }
         }
         function ActiveTable(event) {
-
+            if ($(event).hasClass("RedTable")) {
+                return;
+            }
             if ($(event).hasClass('YellowTable')) {
                 $(event).removeClass('YellowTable');
             }

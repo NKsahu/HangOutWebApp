@@ -9,6 +9,7 @@ namespace HangOut.Models.MyCustomer
     public class Cashback
     {
         public int CashBkId { get; set; }
+        public Int64 CBUniqId { get; set; }// unique dateitme id
         public int OrgID { get; set; }
         public DateTime StartDate { get; set; }
         public int ValidTill { get; set; }// 1 unspecify , 2 specify ValidTillDate 
@@ -44,9 +45,10 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.CashBkId == 0)
                 {
-                    Query = "Insert into  CashBack  values(@OrgID,@StartDate,@ValidTill,@ValidTillDate,@CashBkType,@Percentage,@MaxAmt,@BilAmt,@RaiseDynamic,@CashBkStatus,@SeatingIds,@TerminateSts); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  CashBack  values(@OrgID,@StartDate,@ValidTill,@ValidTillDate,@CashBkType,@Percentage,@MaxAmt,@BilAmt,@RaiseDynamic,@CashBkStatus,@SeatingIds,@TerminateSts,@CBUniqId); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
+                    cmd.Parameters.AddWithValue("@CBUniqId", this.CBUniqId);
                 }
                 else
                 {
@@ -89,13 +91,17 @@ namespace HangOut.Models.MyCustomer
             return R;
         }
 
-        public static List<Cashback> GetAll(int OrgId)
+        public static List<Cashback> GetAll(int OrgId,int TerminateSts=0)
         {
             DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<Cashback> ListTmp = new List<Cashback>();
             string Query = "SELECT * FROM  CashBack where OrgID=" + OrgId.ToString();
+            if (TerminateSts > 0)
+            {
+                Query+= "and TerminateSts = "+TerminateSts;
+            }
             try
             {
                 cmd = new SqlCommand(Query, dBCon.Con);
@@ -117,6 +123,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.CashBkStatus = SDR.GetInt32(index++);
                     ObjTmp.SeatingIds = SDR.GetString(index++);
                     ObjTmp.TerminateSts = SDR.GetInt32(index++);
+                    ObjTmp.CBUniqId = SDR.GetInt64(index++);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -153,6 +160,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.CashBkStatus = SDR.GetInt32(index++);
                     ObjTmp.SeatingIds = SDR.GetString(index++);
                     ObjTmp.TerminateSts = SDR.GetInt32(index++);
+                    ObjTmp.CBUniqId = SDR.GetInt64(index++);
                     Tmp = ObjTmp;
                 }
             }
