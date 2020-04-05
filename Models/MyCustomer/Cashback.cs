@@ -25,6 +25,9 @@ namespace HangOut.Models.MyCustomer
         public int CashBkStatus { get; set; } // 1 :running ,2: pause 
         public string SeatingIds { get; set; }// comma seprated applied seating ids
         public int TerminateSts { get; set; }// 1 activate , 2 terminated;
+
+        public string StrStartDate { get; set; }
+        public string ValidTillStr { get; set; }
         public Cashback()
         {
             StartDate = DateTime.Now;
@@ -33,6 +36,8 @@ namespace HangOut.Models.MyCustomer
             CashBkStatus = 1;
             SeatingIds = "";
             TerminateSts = 1;
+            StrStartDate = StartDate.ToString("dd-MM-yyyy");
+            ValidTillStr= ValidTillDate.ToString("dd-MM-yyyy");
         }
 
         public int Save()
@@ -161,6 +166,8 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.SeatingIds = SDR.GetString(index++);
                     ObjTmp.TerminateSts = SDR.GetInt32(index++);
                     ObjTmp.CBUniqId = SDR.GetInt64(index++);
+                    ObjTmp.StrStartDate = ObjTmp.StartDate.ToString("dd-MM-yyyy");
+                    ObjTmp.ValidTillStr = ObjTmp.ValidTillDate.ToString("dd-MM-yyyy");
                     Tmp = ObjTmp;
                 }
             }

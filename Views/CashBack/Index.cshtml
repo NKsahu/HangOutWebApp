@@ -41,7 +41,7 @@
                         @SSize.CBUniqId
                     </td>
                     <td>
-                        @SSize.StartDate.ToString("dd/MM/yyyy")
+                        @SSize.StartDate.ToString("dd-MM-yyyy")
                     </td>
                     <td id="T@(SSize.CashBkId)">
                         <button class="btn btn-warning btn-sm "  onclick="Terminate(@SSize.CashBkId,@SSize.TerminateSts)">@CashBackController.TerminatSts(SSize.TerminateSts)</button>

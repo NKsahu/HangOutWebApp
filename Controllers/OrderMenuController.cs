@@ -47,11 +47,11 @@ namespace HangOut.Controllers
             List<int> RedSeatings = new List<int>();
             foreach (var Cashbk in cashbacks)
             {
-                if (Cashbk.StartDate.Date >= cashback.StartDate.Date && cashback.ValidTill == 1)
+                if (Cashbk.ValidTill == 1)
                 {
                     RedSeatings.AddRange(Cashbk.SeatingIds.Split(',').Select(int.Parse).ToList());
                 }
-                else if (Cashbk.StartDate.Date >= cashback.StartDate.Date && Cashbk.StartDate.Date <= cashback.ValidTillDate.Date)
+                else if (Cashbk.StartDate.Date >= cashback.ValidTillDate.Date)
                 {
                     RedSeatings.AddRange(Cashbk.SeatingIds.Split(',').Select(int.Parse).ToList());
                 }

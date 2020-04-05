@@ -88,7 +88,7 @@ namespace HangOut.Models.Common
             Settings ObjTemp = new Settings();
             try
             {
-                string Query = "SELECT * FROM  Settings where KeyName="+keyname;
+                string Query = "SELECT * FROM  Settings where KeyName='"+keyname+"'";
                 cmd = new SqlCommand(Query, Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())

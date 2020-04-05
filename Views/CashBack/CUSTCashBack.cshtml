@@ -1,8 +1,16 @@
 ﻿@model HangOut.Models.MyCustomer.Cashback
+@using HangOut.Models.Common
 @{
     Layout = null;
 }
-
+@{ 
+    Settings setting = new Settings().GetOne("CBCHARGE");
+    double ChargeAmt = 0.00;
+    if (setting.SettingId > 0)
+    {
+        ChargeAmt =double.Parse(setting.KeyValue);
+    }
+}
 <div class="card">
     <div class="card-header">
         <h3 style="text-align:center;color:#000000"><b>CashBack</b></h3>
@@ -23,13 +31,14 @@
             List<SelectListItem> CashBkType = new List<SelectListItem>() {
         new SelectListItem{Text="Percentage",Value="1"}
         };
-
+    @Html.HiddenFor(model => model.StartDate)
+    @Html.HiddenFor(model => model.ValidTillDate)
 
     <div class="row">
         <div class="col-md-2">
             @Html.Label("Start From")
-            @Html.TextBoxFor(model => model.StartDate, "{0:dd-MM-yyyy}", new { @class = "form-control datefield" })
-            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
+            @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
             @Html.Label("Valid Till")
@@ -38,8 +47,8 @@
         </div>
         <div class="col-md-2">
             @Html.Label("Date")
-            @Html.TextBoxFor(model => model.ValidTillDate, "{0:dd-MM-yyyy}", new { @class = "form-control datefield" })
-            @Html.ValidationMessageFor(model => model.ValidTillDate, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
+            @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
         </div>
 
         <div class="col-md-3">
@@ -64,7 +73,7 @@
         </div>
         <div class="col-md-1">
             @Html.Label("Raise Dynamically")
-            @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble" })
+            @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble" ,@onchange="RaiseDynamicFun()"})
             @Html.ValidationMessageFor(model => model.RaiseDynamic, "", new { @class = "text-danger" })
         </div>
 
@@ -75,22 +84,45 @@
     </div>
 }
     </div>
+    <div class="card-footer">
+        <div class="col-md-12">
+            <h5 style="text-align:center;color:forestgreen">Per Unit Pricing @ChargeAmt.ToString("0.00")</h5>
+        </div>
+        <div class="col-md-12" style="margin-top:50px;">
+            <h5 style="color:blueviolet">TIP: Keep the campaign running for longer time .it will allow Algorithm to train itself and improve each day
+            RECOMMENDED TIME : 2 MONTHS
+            </h5>
+        </div>
+        <div class="col-md-12">
+            <h5 style="color:blueviolet">NOTE: customer will be able to use this offer on their NEXT VISIT</h5>
+        </div>
+    </div>
 </div>
 <script>
     CBValidTill();
     $("#ValidTill").change(function () {
         CBValidTill();
     });
-    
+    RaiseDynamicFun();
     function CBValidTill() {
         var ValidTill = $("#ValidTill").val();
         if (ValidTill == "1") {
-            $("#ValidTillDate").parent('div').hide();
+            $("#ValidTillStr").parent('div').hide();
         }
         else {
-            $("#ValidTillDate").parent('div').show();
+            $("#ValidTillStr").parent('div').show();
         }
     }
-    
+    function RaiseDynamicFun() {
+        console.log("aaya");
+        if (document.getElementById("RaiseDynamic").checked) {
+            document.getElementById("RaiseDynamic").checked = true;
+            $("#MaxAmt").parent('div').hide();
+        }
+        else {
+            document.getElementById("RaiseDynamic").checked = false;
+             $("#MaxAmt").parent('div').show();
+        }
+    }
     
 </script>

@@ -34,8 +34,8 @@ namespace HangOut.Controllers.MyCustomer
             Cashback OldCashBk = new Cashback();
             try
             {
-                cashback.StartDate = DateTime.ParseExact(cashback.StartDate.ToString("dd-MM-yyyy"), "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                cashback.ValidTillDate = DateTime.ParseExact(cashback.ValidTillDate.ToString("dd-MM-yyyy"), "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                cashback.StartDate = DateTime.ParseExact(cashback.StrStartDate, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+               cashback.ValidTillDate = DateTime.ParseExact(cashback.ValidTillStr, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                 if (cashback.ValidTill == 1)
                 {
                     cashback.ValidTillDate = cashback.StartDate;
@@ -47,7 +47,8 @@ namespace HangOut.Controllers.MyCustomer
                 else if (cashback.CashBkId > 0)
                 {
                     OldCashBk = Cashback.Getone(cashback.CashBkId);
-                    if(OldCashBk.StartDate.Date!= cashback.StartDate.Date)
+                   // OldCashBk.StartDate= DateTime.ParseExact(cashback.StartDate.ToString("dd-MM-yyyy"), "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                    if (OldCashBk.StartDate.Date!= cashback.StartDate.Date && cashback.StartDate.Date<=DateTime.Now.Date)
                     {
                         return Json(new { msg = "Can't Modify Start Date" });
                     }
@@ -91,11 +92,11 @@ namespace HangOut.Controllers.MyCustomer
                 Cashbakcs = Cashbakcs.FindAll(x => x.CashBkId != CBID && x.CashBkStatus == 1);// all running cashback not Current cashbk
                 foreach(var cashbak in Cashbakcs)
                 {
-                    if(cashbak.StartDate.Date>= cashback.StartDate.Date && cashback.ValidTill == 1)
+                    if (cashbak.ValidTill == 1)
                     {
                         RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
                     }
-                    else if(cashbak.StartDate.Date >= cashback.StartDate.Date && cashbak.StartDate.Date <= cashback.ValidTillDate.Date)
+                    else if (cashbak.StartDate.Date <= cashback.ValidTillDate.Date)
                     {
                         RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
                     }
