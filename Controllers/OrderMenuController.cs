@@ -41,21 +41,8 @@ namespace HangOut.Controllers
             List<HG_Tables_or_Sheat> tableOrSheatlist = new HG_Tables_or_Sheat().GetAll(OrgType);
             JObject OrderMenus = new JObject();
             List<int> Seatings = new List<int>();
-            List<Cashback> cashbacks = Cashback.GetAll(Orgid,1);
-            cashbacks = cashbacks.FindAll(x => x.CashBkId != cashback.CashBkId && x.CashBkStatus == 1);
-            cashbacks = cashbacks.FindAll(x => x.SeatingIds != "");
             List<int> RedSeatings = new List<int>();
-            foreach (var Cashbk in cashbacks)
-            {
-                if (Cashbk.ValidTill == 1)
-                {
-                    RedSeatings.AddRange(Cashbk.SeatingIds.Split(',').Select(int.Parse).ToList());
-                }
-                else if (Cashbk.StartDate.Date >= cashback.ValidTillDate.Date)
-                {
-                    RedSeatings.AddRange(Cashbk.SeatingIds.Split(',').Select(int.Parse).ToList());
-                }
-            }
+            RedSeatings = Cashback.GetRedSeatings(cashback);
             if (cashback.SeatingIds!="")
             {
                 Seatings = cashback.SeatingIds.Split(',').Select(int.Parse).ToList();

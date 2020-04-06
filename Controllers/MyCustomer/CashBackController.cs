@@ -44,11 +44,14 @@ namespace HangOut.Controllers.MyCustomer
                 {
                     return Json(new { msg = "Start Date Can't less than Today's Date" });
                 }
+                if(cashback.StartDate.Date> cashback.ValidTillDate.Date)
+                {
+                    return Json(new { msg = "Start Date Can't Greater than Today's Date" });
+                }
                 else if (cashback.CashBkId > 0)
                 {
                     OldCashBk = Cashback.Getone(cashback.CashBkId);
-                   // OldCashBk.StartDate= DateTime.ParseExact(cashback.StartDate.ToString("dd-MM-yyyy"), "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
-                    if (OldCashBk.StartDate.Date!= cashback.StartDate.Date && cashback.StartDate.Date<=DateTime.Now.Date)
+                    if (OldCashBk.StartDate.Date!= cashback.StartDate.Date && cashback.StartDate.Date>DateTime.Now.Date)
                     {
                         return Json(new { msg = "Can't Modify Start Date" });
                     }
@@ -61,6 +64,24 @@ namespace HangOut.Controllers.MyCustomer
                     cashback.SeatingIds = "";
                     var value = DateTime.Now.ToString("ddMMyyHHmmss");
                     cashback.CBUniqId = Int64.Parse(value);
+                }
+                if (OldCashBk.CashBkId > 0 && OldCashBk.CashBkStatus==1 &&OldCashBk.SeatingIds!="")
+                {
+                    List<int> Seatings = cashback.SeatingIds.Split(',').Select(int.Parse).ToList();
+                    List<int> RedSeatings = Cashback.GetRedSeatings(cashback);
+                    int Cnt = 0;
+                    foreach (var SeatingId in Seatings)
+                    {
+                        var seating = RedSeatings.Find(x => x == SeatingId);
+                        if (seating > 0)
+                        {
+                            Cnt += 1;
+                        }
+                    }
+                    if (Cnt > 0)
+                    {
+                        return Json(new { msg = "Another mutual campaign applied on specified table(s)" });
+                    }
                 }
                 cashback.Save();
                 JObject response = new JObject();
@@ -85,22 +106,8 @@ namespace HangOut.Controllers.MyCustomer
             if (Sts == 1 && cashback.SeatingIds!="")
             {
                 List<int> Seatings = cashback.SeatingIds.Split(',').Select(int.Parse).ToList();
-                List<Cashback> Cashbakcs = Cashback.GetAll(OrderType.CurrOrgId(), 1);// all active cashbk of current outlet
                 List<int> RedSeatings = new List<int>();
-                //List<Cashback> CashbakMutualy = new List<Cashback>();
-                Cashbakcs = Cashbakcs.FindAll(x => x.SeatingIds != "");
-                Cashbakcs = Cashbakcs.FindAll(x => x.CashBkId != CBID && x.CashBkStatus == 1);// all running cashback not Current cashbk
-                foreach(var cashbak in Cashbakcs)
-                {
-                    if (cashbak.ValidTill == 1)
-                    {
-                        RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
-                    }
-                    else if (cashbak.StartDate.Date <= cashback.ValidTillDate.Date)
-                    {
-                        RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
-                    }
-                }
+                RedSeatings = Cashback.GetRedSeatings(cashback);
                 int Cnt = 0;
                 foreach(var SeatingId in Seatings)
                 {

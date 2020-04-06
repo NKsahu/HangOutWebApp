@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HangOut.Models.DynamicList;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -177,6 +178,26 @@ namespace HangOut.Models.MyCustomer
             return (Tmp);
         }
 
+        public static List<int> GetRedSeatings(Cashback Current)
+        {
+            List<Cashback> Cashbakcs = Cashback.GetAll(OrderType.CurrOrgId(), 1);// all active cashbk of current outlet
+            List<int> RedSeatings = new List<int>();
+            Cashbakcs = Cashbakcs.FindAll(x => x.SeatingIds != "");
+            Cashbakcs = Cashbakcs.FindAll(x => x.CashBkId != Current.CashBkId && x.CashBkStatus == 1);// all running cashback not Current cashbk
+            foreach (var cashbak in Cashbakcs)
+            {
+                if (cashbak.ValidTill == 1)
+                {
+                    RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
+                }
+                else if (cashbak.StartDate.Date > Current.ValidTillDate.Date)
+                {
+                    RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
+                }
+            }
+
+            return RedSeatings;
+        }
         
     }
     
