@@ -22,6 +22,11 @@ namespace HangOut.Controllers.MyCustomer
             if (CBID > 0)
             {
                 cashback = Cashback.Getone(CBID);
+                if (cashback.ValidTill == 1)
+                {
+                    cashback.ValidTillDate = DateTime.Now;
+                    cashback.ValidTillStr = cashback.ValidTillDate.ToString("dd-MM-yyyy");
+                }
             }
 
             return View(cashback);
@@ -38,7 +43,7 @@ namespace HangOut.Controllers.MyCustomer
                cashback.ValidTillDate = DateTime.ParseExact(cashback.ValidTillStr, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
                 if (cashback.ValidTill == 1)
                 {
-                    cashback.ValidTillDate = cashback.StartDate;
+                    cashback.ValidTillDate = cashback.StartDate.AddYears(20);
                 }
                 if (cashback.CashBkId==0&& cashback.StartDate.Date < DateTime.Now.Date)
                 {
@@ -46,14 +51,32 @@ namespace HangOut.Controllers.MyCustomer
                 }
                 if(cashback.StartDate.Date> cashback.ValidTillDate.Date)
                 {
-                    return Json(new { msg = "Start Date Can't Greater than Today's Date" });
+                    return Json(new { msg = "Start Date Can't Greater than ValidTillDate Date" });
                 }
                 else if (cashback.CashBkId > 0)
                 {
                     OldCashBk = Cashback.Getone(cashback.CashBkId);
-                    if (OldCashBk.StartDate.Date!= cashback.StartDate.Date && cashback.StartDate.Date>DateTime.Now.Date)
+                   if (OldCashBk.StartDate.Date<=DateTime.Now.Date &&OldCashBk.StartDate.Date!= cashback.StartDate.Date)
+                    {
+
+                        return Json(new { msg = "Can't Modify Start Date" });
+                    }
+                    if (OldCashBk.StartDate.Date <= DateTime.Now.Date && OldCashBk.StartDate.Date>=cashback.StartDate.Date && OldCashBk.StartDate.Date != cashback.StartDate.Date)
+                    {
+
+                        return Json(new { msg = "Can't Modify Start Date" });
+                    }
+                    if(OldCashBk.StartDate.Date > DateTime.Now.Date && cashback.StartDate.Date < DateTime.Now.Date)
                     {
                         return Json(new { msg = "Can't Modify Start Date" });
+                    }
+                }
+                if (cashback.RaiseDynamic == false && cashback.BilAmt > 0)
+                {
+                    double MaxCbAmt = (cashback.Percentage * cashback.BilAmt * 2)/100;
+                    if(cashback.MaxAmt< MaxCbAmt)
+                    {
+                        return Json(new { msg = "Max CashBack Amt should be more than rs "+MaxCbAmt.ToString("0.00") });
                     }
                 }
                 if (cashback.CashBkId == 0)
@@ -62,7 +85,7 @@ namespace HangOut.Controllers.MyCustomer
                     cashback.CashBkStatus = 1;
                     cashback.TerminateSts = 1;
                     cashback.SeatingIds = "";
-                    var value = DateTime.Now.ToString("ddMMyyHHmmss");
+                    var value = DateTime.Now.ToString("ddMMyyyyHHmmss");
                     cashback.CBUniqId = Int64.Parse(value);
                 }
                 if (OldCashBk.CashBkId > 0 && OldCashBk.CashBkStatus==1 &&OldCashBk.SeatingIds!="")

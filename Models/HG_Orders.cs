@@ -200,16 +200,14 @@ namespace HangOut.Models
 
         public  HG_Orders  GetOne(Int64 OID)
         {
-            SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
-            Con.Open();
+            DBCon dBCon = new DBCon();
             SqlCommand cmd = null;
             SqlDataReader SDR= null;
             HG_Orders ObjTemp = new HG_Orders();
             try
             {
                 string Query = "SELECT * FROM HG_Orders Where OID="+OID.ToString();
-                cmd = new SqlCommand(Query, Con);
-                //cmd.Parameters.AddWithValue("@OID",this.OID);
+                cmd = new SqlCommand(Query, dBCon.Con);
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
@@ -233,7 +231,7 @@ namespace HangOut.Models
             }
             catch (Exception e){ e.ToString(); }
 
-            finally { Con.Close(); }
+            finally { dBCon.Close();cmd.Dispose(); }
             return (ObjTemp);
         }
 
@@ -262,17 +260,12 @@ namespace HangOut.Models
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             List<HG_Orders> ListTmp = new List<HG_Orders>();
-            //Formdate= new DateTime(Formdate.Year, Formdate.Month, Formdate.Day, 0, 0, 00);
             var theDate = new DateTime(Todate.Year, Todate.Month, Todate.Day, 23, 59, 00);
             HG_Orders ObjTmp = null;
             DBCon Obj = new DBCon();
             try
             {
                 string Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("MM/dd/yyyy")+"' and '"+ theDate.ToString("MM/dd/yyyy HH:mm:ss")+"' ORDER BY OID DESC";
-                //if(CurrOrgID!=null && CurrOrgID["OrgId"] != "0")
-                //{
-                // Query = "SELECT * FROM HG_ORDERS WHERE Create_Date between '" + Formdate.ToString("MM/dd/yyyy") + "' and '" + theDate.ToString("MM/dd/yyyy HH:mm:ss") + "' and OrgId="+ CurrOrgID["OrgId"]+ " ORDER BY OID DESC";
-                //}
                 cmd = new SqlCommand("GetOrderByDates", Obj.Con);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@FromDate", Formdate.ToString("MM/dd/yyyy"));
@@ -305,6 +298,65 @@ namespace HangOut.Models
             catch (Exception e) { e.ToString(); }
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); }
             return (ListTmp);
+        }
+    }
+
+    public class Last3WeekOrder
+    {
+       public int OrgId { get; set; }
+        public double OrderAmt { get; set; }
+        public int NumOfOrder { get; set; }
+        public List<Last3WeekOrder> GetOrderAmt()
+        {
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<Last3WeekOrder> ListTmp = new List<Last3WeekOrder>();
+            Last3WeekOrder ObjTmp = null;
+            DBCon Obj = new DBCon();
+            GetOrder.Ondate = DateTime.Now;
+            try
+            {
+                cmd = new SqlCommand("OrderAmt", Obj.Con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@FromDate", DateTime.Now.AddDays(-21).Date.ToString("MM/dd/yyyy"));
+                cmd.Parameters.AddWithValue("@Todate", DateTime.Now.AddDays(-1).Date.ToString("MM/dd/yyyy"));
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    ObjTmp = new Last3WeekOrder();
+                    ObjTmp.OrgId = SDR.GetInt32(0);
+                    ObjTmp.OrderAmt = SDR.GetDouble(1);
+                    ObjTmp.NumOfOrder= SDR.GetInt32(2);
+                    ListTmp.Add(ObjTmp);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); }
+            return (ListTmp);
+        }
+    }
+
+    public class GetOrder
+    {
+        public static List<Last3WeekOrder> List { get; set; }
+        public static DateTime Ondate { get; set; }
+
+        public static double GetTotalAmt(int Orgid)
+        {
+            if (Ondate == null || Ondate.Date < DateTime.Now.Date ||List==null)
+            {
+                List =new Last3WeekOrder().GetOrderAmt();
+            }
+            try
+            {
+                var Obj = List.Find(x => x.OrgId == Orgid);
+                return Obj.OrderAmt/ Obj.NumOfOrder;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            
         }
     }
 }

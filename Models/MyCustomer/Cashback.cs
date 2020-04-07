@@ -184,16 +184,18 @@ namespace HangOut.Models.MyCustomer
             List<int> RedSeatings = new List<int>();
             Cashbakcs = Cashbakcs.FindAll(x => x.SeatingIds != "");
             Cashbakcs = Cashbakcs.FindAll(x => x.CashBkId != Current.CashBkId && x.CashBkStatus == 1);// all running cashback not Current cashbk
+            if (Current.StartDate.Date > DateTime.Now.Date)
+            {
+                Cashbakcs = Cashbakcs.FindAll(x => x.StartDate.Date >= Current.StartDate.Date && x.ValidTillDate <= Current.ValidTillDate.Date).ToList();
+            }
+            else
+            {
+                Cashbakcs = Cashbakcs.FindAll(x => x.StartDate.Date <= Current.StartDate.Date && x.ValidTillDate >= Current.StartDate.Date).ToList();
+            }
             foreach (var cashbak in Cashbakcs)
             {
-                if (cashbak.ValidTill == 1)
-                {
-                    RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
-                }
-                else if (cashbak.StartDate.Date > Current.ValidTillDate.Date)
-                {
-                    RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
-                }
+               
+                RedSeatings.AddRange(cashbak.SeatingIds.Split(',').Select(int.Parse).ToList());
             }
 
             return RedSeatings;

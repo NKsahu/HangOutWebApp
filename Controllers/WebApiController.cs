@@ -9,6 +9,7 @@ using System;
 using System.Net;
 using HangOut.Models.POS;
 using paytm;
+using HangOut.Models.MyCustomer;
 using HangOut.Controllers.Account;
 
 namespace HangOut.Controllers
@@ -2209,24 +2210,25 @@ namespace HangOut.Controllers
             {
                 TableRowObj = new HG_Tables_or_Sheat();
             }
-            List<HG_Orders> CustOrdrList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
             JObject jObject = JObject.FromObject(TableRowObj);
-            HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status != "3");
-            if (orders == null)
-            {
-                jObject.Add("OID", 0);
-            }
-            else
-            {
-                jObject.Add("OID", orders.OID);
-            }
+            //List<HG_Orders> CustOrdrList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            //HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status != "3");
+            //if (orders == null)
+            //{
+            //    jObject.Add("OID", 0);
+            //}
+            //else
+            //{
+            //    jObject.Add("OID", orders.OID);
+            //}
             HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
             
             jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
             jObject.Add("OrderingStatus", objOrg.CustomerOrdering);
             jObject.Add("PaymentType", objOrg.PaymentType);
+            jObject.Add("OID", 0);
             vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(CID);
-            if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.JoinByOrg == 0)
+            if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.JoinByOrg == 0 && objOrg.OrgID>0)
             {
                 if (objOrg.OrgID > 0)
                 {
@@ -2255,6 +2257,37 @@ namespace HangOut.Controllers
                 }
             }
             jObject.Add("VerifyBy", orgSetting.CrxVerification);
+            if (objOrg.OrgID > 0)
+            {
+                List<Cashback> Cashbacks = Cashback.GetAll(objOrg.OrgID, 1);// only actives
+                Cashbacks = Cashbacks.FindAll(x => x.CashBkStatus == 1);// only running
+                Cashbacks = Cashbacks.FindAll(x => x.SeatingIds != "");
+                Cashbacks = Cashbacks.FindAll(x => x.StartDate.Date >= DateTime.Now.Date && x.ValidTillDate.Date<= DateTime.Now.Date).ToList();
+                for(int i = 0; i < Cashbacks.Count; i ++)
+                {
+                        List<int> seats  = Cashbacks[i].SeatingIds.Split(',').Select(int.Parse).ToList();
+                        int seat = seats.Find(x => x == TableRowObj.Table_or_RowID);
+                        if (seat > 0)
+                        {
+                        JObject Jobj = new JObject();
+                        Jobj.Add("CBPercentage", Cashbacks[i].Percentage.ToString("0.00"));
+                        Jobj.Add("MaxCB", Cashbacks[i].MaxAmt.ToString("0.00"));
+                        if (Cashbacks[i].RaiseDynamic)
+                        {
+                            var AggStudy = GetOrder.GetTotalAmt(objOrg.OrgID);
+                            double DynamicValue = AggStudy+(AggStudy- Cashbacks[i].BilAmt)*(Cashbacks[i].Percentage*2/100);
+                            Jobj.Add("MinBillAmt", DynamicValue > Cashbacks[i].BilAmt? DynamicValue.ToString("0.00"): Cashbacks[i].BilAmt.ToString("0.00"));
+                        }
+                        else
+                        {
+                            Jobj.Add("MinBillAmt", Cashbacks[i].BilAmt.ToString("0.00"));
+                        }
+                        jObject.Add("CashBk", Jobj);
+                            break;
+                        }
+                }
+
+            }
             return jObject;
         }
         [HttpPost]
