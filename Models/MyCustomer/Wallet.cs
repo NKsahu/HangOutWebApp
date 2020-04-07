@@ -11,7 +11,7 @@ namespace HangOut.Models.MyCustomer
         public int  WalletId { get; set; }
         public int CID { get; set; }
        public Int64 OID { get; set; }
-        public Int64 CampaiegnId { get; set; }
+        public int CashBkId { get; set; }
       public double CashBkAmt { get; set; }
         public DateTime AmtActiveOn { get; set; }
       public bool IsUsed { get; set; }
@@ -26,11 +26,11 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.WalletId == 0)
                 {
-                    Query = "Insert into  CustWallet  values(@CID,@OID,@CampaiegnId,@CashBkAmt,@AmtActiveOn,@IsUsed,@OrgId); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  CustWallet  values(@CID,@OID,@CashBkId,@CashBkAmt,@AmtActiveOn,@IsUsed,@OrgId); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@CID", this.CID);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
-                   cmd.Parameters.AddWithValue("@CampaiegnId", this.CampaiegnId);
+                   cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
                     cmd.Parameters.AddWithValue("@AmtActiveOn", DateTime.Now);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 }
@@ -84,7 +84,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.WalletId = SDR.GetInt32(index++);
                     ObjTmp.CID = SDR.GetInt32(index++);
                     ObjTmp.OID = SDR.GetInt64(index++);
-                    ObjTmp.CampaiegnId = SDR.GetInt64(index++);
+                    ObjTmp.CashBkId = SDR.GetInt32(index++);
                     ObjTmp.CashBkAmt = SDR.GetDouble(index++);
                     ObjTmp.AmtActiveOn = SDR.GetDateTime(index++);
                     ObjTmp.IsUsed = SDR.GetBoolean(index++);

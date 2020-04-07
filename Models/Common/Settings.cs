@@ -13,6 +13,10 @@ namespace HangOut.Models.Common
         public string KeyName { get; set; }
         public string KeyValue { get; set; }
         public string KeyDiscription { get; set; }
+        public Settings()
+        {
+            KeyValue = "0";
+        }
         public System.Int64 Save()
         {
             Int64 Row = 0;

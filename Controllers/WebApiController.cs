@@ -743,10 +743,12 @@ namespace HangOut.Controllers
                 int CustomerOrdering = jObjectlist["OrdingSts"] != null ? int.Parse(jObjectlist["OrdingSts"].ToString()) : 0;
                 int PaymtSts = jObjectlist["PaymtType"] != null ? int.Parse(jObjectlist["PaymtType"].ToString()) : 0;//payment mode type
                 int ContactId = jObjectlist["ContactId"] != null ? int.Parse(jObjectlist["ContactId"].ToString()) : 0;// local contact id
+                int CashBKid= jObjectlist["CashBKid"] != null ? int.Parse(jObjectlist["CashBKid"].ToString()) : 0;// CashBack id
                 jObject.Add("Status", Status);
                 jObject.Add("OrdingSts", CustomerOrdering);
                 jObject.Add("PaymtType", PaymtSts);
                 jObject.Add("ContactId", ContactId);
+                jObject.Add("CashBKid", CashBKid);
                 JObject result = PostOrder(jObject.ToString());
                 if (result.GetValue("Status").ToString() == "400")
                 {
@@ -777,6 +779,7 @@ namespace HangOut.Controllers
             int AppType = Params["AppType"] != null ? int.Parse(Params["AppType"].ToString()) : 1;//1 customer ,2 captain , 3 admin panel
             int PaymtSts=Params["PaymtType"]!=null? int.Parse(Params["PaymtType"].ToString()) :0;//payment mode type
             int ContactId=Params["ContactId"]!=null? int.Parse(Params["ContactId"].ToString()) : 0;// local contact id
+            int CashBKid = Params["CashBKid"] != null ? int.Parse(Params["CashBKid"].ToString()) : 0;// CashBack id
             double DeliveryChargeAmt = 0.00;
             int ItemPrepaireBy = 0;
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
@@ -911,6 +914,7 @@ namespace HangOut.Controllers
                    ContactId = ContactId <= 0 ? 0 : ContactId// -1 contact id for Customer Order foodo app
             };
                 NewOID= ObjOrders.Save();
+                ChampeignCharge.ChargeCamp(NewOID, CashBKid, OrgId);
             }
                 if (NewOID > 0)
                 {
@@ -2272,6 +2276,7 @@ namespace HangOut.Controllers
                         JObject Jobj = new JObject();
                         Jobj.Add("CBPercentage", Cashbacks[i].Percentage.ToString("0.00"));
                         Jobj.Add("MaxCB", Cashbacks[i].MaxAmt.ToString("0.00"));
+                        Jobj.Add("CashBKid", Cashbacks[i].CashBkId);
                         if (Cashbacks[i].RaiseDynamic)
                         {
                             var AggStudy = GetOrder.GetTotalAmt(objOrg.OrgID);

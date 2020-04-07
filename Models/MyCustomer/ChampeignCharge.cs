@@ -1,8 +1,7 @@
-﻿using System;
+﻿using HangOut.Models.Common;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace HangOut.Models.MyCustomer
 {
@@ -12,7 +11,7 @@ namespace HangOut.Models.MyCustomer
         public int ChargeId { get; set; }
         public double  ChargeAmt { get; set; }
      public Int64  OID { get; set; }
-     public Int64 CampeignId { get; set; }
+     public int CashBkId { get; set; }
       public DateTime  CreateDate {get;set;}
      public int  OrgId {get;set;}
 
@@ -27,11 +26,11 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.ChargeId == 0)
                 {
-                    Query = "Insert into  ChampeignCharge  values(@ChargeAmt,@OID,@CampeignId,@CreateDate,@OrgId); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  ChampeignCharge  values(@ChargeAmt,@OID,@CashBkId,@CreateDate,@OrgId); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@ChargeAmt", this.ChargeAmt);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
-                    cmd.Parameters.AddWithValue("@CampeignId", this.CampeignId);
+                    cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
                     cmd.Parameters.AddWithValue("@CreateDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
                 }
@@ -67,7 +66,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.ChargeId = SDR.GetInt32(index++);
                     ObjTmp.ChargeAmt = SDR.GetDouble(index++);
                     ObjTmp.OID = SDR.GetInt64(index++);
-                    ObjTmp.CampeignId = SDR.GetInt64(index++);
+                    ObjTmp.CashBkId = SDR.GetInt32(index++);
                     ObjTmp.CreateDate = SDR.GetDateTime(index++);
                     ObjTmp.OrgId = SDR.GetInt32(index++);
                     ListTmp.Add(ObjTmp);
@@ -77,6 +76,24 @@ namespace HangOut.Models.MyCustomer
             finally { dBCon.Close(); }
 
             return (ListTmp);
+        }
+
+        public static int ChargeCamp(Int64 OID,int CBID,int OrgId)
+        {
+            if (CBID > 0)
+            {
+                var chargeAmt = new Settings().GetOne("CBCHARGE");
+                ChampeignCharge champeignCharge = new ChampeignCharge();
+                champeignCharge.ChargeAmt = double.Parse(chargeAmt.KeyValue);
+                champeignCharge.CashBkId = CBID;
+                champeignCharge.OID = OID;
+                champeignCharge.OrgId = OrgId;
+                champeignCharge.CreateDate = DateTime.Now;
+                champeignCharge.Save();
+                return champeignCharge.ChargeId;
+            }
+            return 0;
+            
         }
     }
 }
