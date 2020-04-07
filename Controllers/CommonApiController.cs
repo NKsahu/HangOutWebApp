@@ -394,5 +394,11 @@ namespace HangOut.Controllers
         {
             return JArray.FromObject(MyWallet.GetWalletAmt(CID));
         }
+
+        public ActionResult Test()
+        {
+            HG_Orders.OrderAmt(55, 50);
+            return Content("0");
+        }
     }
 }

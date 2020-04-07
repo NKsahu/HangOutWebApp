@@ -13,6 +13,7 @@ namespace HangOut.Models.MyCustomer
      public Int64  OID { get; set; }
      public int CashBkId { get; set; }
       public DateTime  CreateDate {get;set;}
+        public double BalanceAmt { get; set; }
      public int  OrgId {get;set;}
 
 
@@ -26,13 +27,14 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.ChargeId == 0)
                 {
-                    Query = "Insert into  ChampeignCharge  values(@ChargeAmt,@OID,@CashBkId,@CreateDate,@OrgId); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  ChampeignCharge  values(@ChargeAmt,@OID,@CashBkId,@CreateDate,@OrgId,@BalanceAmt); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@ChargeAmt", this.ChargeAmt);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
                     cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
                     cmd.Parameters.AddWithValue("@CreateDate", DateTime.Now);
                     cmd.Parameters.AddWithValue("@OrgId", this.OrgId);
+                    cmd.Parameters.AddWithValue("@BalanceAmt", this.BalanceAmt);
                 }
                 
                 
@@ -82,14 +84,21 @@ namespace HangOut.Models.MyCustomer
         {
             if (CBID > 0)
             {
+                HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
+                
                 var chargeAmt = new Settings().GetOne("CBCHARGE");
                 ChampeignCharge champeignCharge = new ChampeignCharge();
+                
                 champeignCharge.ChargeAmt = double.Parse(chargeAmt.KeyValue);
                 champeignCharge.CashBkId = CBID;
                 champeignCharge.OID = OID;
                 champeignCharge.OrgId = OrgId;
                 champeignCharge.CreateDate = DateTime.Now;
+                double AvailableAmt = ObjOrg.WalletAmt - champeignCharge.ChargeAmt;
+                champeignCharge.BalanceAmt = AvailableAmt;
                 champeignCharge.Save();
+                ObjOrg.WalletAmt = AvailableAmt;
+                ObjOrg.Save();
                 return champeignCharge.ChargeId;
             }
             return 0;

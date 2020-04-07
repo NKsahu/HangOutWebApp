@@ -29,6 +29,7 @@ namespace HangOut.Models
         public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken Orde  or Not
         public double DeliveryCharge { get; set; }// delivery charge amount
         public int ContactId { get; set; }// customer local Contact Id;
+        
         public HG_Orders()
         {
             this.OID = 0;
@@ -299,8 +300,25 @@ namespace HangOut.Models
             finally { cmd.Dispose(); SDR.Close(); Obj.Con.Close(); Obj.Con.Dispose(); }
             return (ListTmp);
         }
-    }
 
+        public static double OrderAmt(Int64 OID,double deliverycharge)
+        {
+            double Amt = 0;
+            SqlCommand cmd = null;
+            DBCon Obj = new DBCon();
+            try
+            {
+                cmd = new SqlCommand("select [dbo].GetOrderAmt(@OID,@DeliveryCharge) as totalAmt", Obj.Con);
+                cmd.Parameters.AddWithValue("@OID", OID);
+                cmd.Parameters.AddWithValue("@DeliveryCharge", deliverycharge);
+                Amt = Convert.ToDouble(cmd.ExecuteScalar());
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose();  Obj.Con.Close(); Obj.Con.Dispose(); }
+            return (Amt);
+        }
+    }
+    
     public class Last3WeekOrder
     {
        public int OrgId { get; set; }

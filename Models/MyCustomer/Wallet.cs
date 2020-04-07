@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HangOut.Models.Common;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -68,8 +69,72 @@ namespace HangOut.Models.MyCustomer
 
         public static void AddToWallet(HG_Orders ObjOrder,int AppType=0)
         {
+            if (AppType == 1)
+            {
+                
+            }
+            else if (ObjOrder.Status == "3")
+            {
+                vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)ObjOrder.CID);
+                if (ObjUser.UserType != "CUST")
+                {
+                    return;
+                }
+            }
+            Cashback cashbk = Cashback.GetAppliedCashBk(ObjOrder.OrgId, ObjOrder.Table_or_SheatId);
+            if (cashbk != null)
+            {
+                double cashBkAmt = 0.00;
+                if (cashbk.Percentage > 0 && cashbk.BilAmt <= 0 && cashbk.MaxAmt <= 0)
+                {
+                    double OrdAmt = HG_Orders.OrderAmt(ObjOrder.OID, ObjOrder.DeliveryCharge);
+                    cashBkAmt = OrdAmt * cashbk.Percentage / 100;
+                }
+                else if(cashbk.Percentage>0&&cashbk.BilAmt>0 && cashbk.RaiseDynamic)
+                {
+                    double OrdAmt = HG_Orders.OrderAmt(ObjOrder.OID, ObjOrder.DeliveryCharge);
+                    var AggStudy = GetOrder.GetTotalAmt(ObjOrder.OrgId);
+                    double DynamicValue = AggStudy + (AggStudy - cashbk.BilAmt) * (cashbk.Percentage * 2 / 100);
+                    if(DynamicValue> cashbk.BilAmt && OrdAmt>DynamicValue)
+                    {
+                        cashBkAmt = OrdAmt * cashbk.Percentage / 100;
+                    }
+                    else if(OrdAmt > cashbk.BilAmt)
+                    {
+                        cashBkAmt = OrdAmt * cashbk.Percentage / 100;
+                    }
+                }
+                else if(cashbk.Percentage > 0 &&cashbk.RaiseDynamic==false &&cashbk.BilAmt>0){
 
+                    double OrdAmt = HG_Orders.OrderAmt(ObjOrder.OID, ObjOrder.DeliveryCharge);
+                    if(OrdAmt> cashbk.BilAmt)
+                    {
+                        cashBkAmt = OrdAmt * cashbk.Percentage / 100;
+                        if (cashBkAmt > cashbk.MaxAmt)
+                        {
+                            cashBkAmt = cashbk.MaxAmt;
+                        }
+                    }
+                   
+                }
 
+                if (cashBkAmt > 0)
+                {
+                    Wallet wallet = new Wallet();
+                    wallet.AmtActiveOn = DateTime.Now.AddDays(1);
+                    wallet.CID = (int)ObjOrder.CID;
+                    wallet.OID = ObjOrder.OID;
+                    wallet.OrgId = ObjOrder.OrgId;
+                    wallet.DeductedAmt = 0;
+                    wallet.CashBkAmt = cashBkAmt;
+                    wallet.CashBkId = cashbk.CashBkId;
+                    wallet.Save();
+                   string[] topics= { ObjOrder.CID.ToString() };
+                    string Title = "foodDo";
+                   string Msg = "You Got "+cashBkAmt.ToString("0.00")+" Rs/- Cashback ";
+                    PushNotification.SendNotification(topics, Msg, Title, OID: ObjOrder.OID,UserRating:400);//user-Rating 400 for cashbk notification
+                }
+            }
         }
         public static List<Wallet> GetAll(int CID,int OrgId)
         {
