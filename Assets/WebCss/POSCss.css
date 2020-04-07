@@ -1,0 +1,25 @@
+﻿
+/* Style for "Dynamic Body" */
+
+#DynamicData {
+    /* Style for "Rectangle" */
+    max-width: 100%;
+    border: 1px solid #e6ebef;
+    background-color: #e6ebef;
+}
+/* Style for "Rectangle" */
+.PosSelect {
+    width: 100%;
+    height: 50px;
+    box-shadow: 0 2px 1px 1px #d7dde1, 0 2px 1px 1px #d7dde1;
+    border-radius: 4px;
+    background-color: #ffffff;
+    
+}
+.PosSelItem {
+    height: 23px;
+    color: #4a4a4a;
+    font-family: Helvetica;
+    font-size: 23px;
+}
+

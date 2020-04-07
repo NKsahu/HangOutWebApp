@@ -202,10 +202,12 @@
     <Content Include="Assets\Select2\js\select2.full.min.js" />
     <Content Include="Assets\Select2\js\select2.min.js" />
     <Content Include="Assets\shortcut.js" />
+    <Content Include="Assets\WebCss\POSCss.css" />
     <Content Include="Assets\WebsiteJS.js" />
     <Content Include="firebase-messaging-sw.js" />
     <Content Include="Global.asax" />
     <Content Include="Image\app_icon.png" />
+    <Content Include="Image\icons8-expand_arrow%403x.png" />
     <Content Include="Image\login.png" />
     <Content Include="Image\noticefict.mpeg" />
     <Content Include="Scripts\bootstrap.js" />
@@ -334,6 +336,7 @@
     <Compile Include="Controllers\Account\JournalEntryController.cs" />
     <Compile Include="Controllers\OrderMenuController.cs" />
     <Compile Include="Controllers\POS\AdminApiController.cs" />
+    <Compile Include="Controllers\POS\POSController.cs" />
     <Compile Include="Controllers\POS\ServingSizeController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -551,6 +554,7 @@
     <Content Include="Views\CashBack\CUSTCashBack.cshtml" />
     <Content Include="Views\CashBack\Index.cshtml" />
     <Content Include="Views\OrderMenu\CashBackSeating.cshtml" />
+    <Content Include="Views\POS\SeatView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

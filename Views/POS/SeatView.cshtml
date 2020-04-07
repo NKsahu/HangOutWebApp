@@ -1,0 +1,46 @@
+﻿
+@{
+    Layout = null;
+}
+    <style>
+        select{
+            background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="16" viewBox="0 0 29 16"><g><g ><image width="33" height="32" transform="translate(-2 -8)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAgCAYAAACcuBHKAAACZElEQVRYR+2VT2sTURTFz41RCZOu271fQKh2o4uiEHiThSBM0YULLXXT2iKKpaCkcaEVEUVSEYq4KVgZdNXOm1QXWehGGr+BXyDdNjP4J+/IK63E2mTSNkIXebvhce8793fuvSM4BEcOgQb0RGy70CPRI7FzIg9XTyilzojIaxEZXVlZ+QSA/2GHSD6fP0vyFcmrWuvP9o0/JHK5nJNOp9+SPG2MUeVy+Wu3RbiuexJASLLaaDRGVldX63+JsB+e52WiKCqRzJMc01ovd4mIJeBaAgACx3HGfd+PW06H53nH6vX6G5LnjTG5crn85aBEXNc9BeADyQqAS1rr7805d21MpdTxVCo1Z4y5QvJGGIZL+yQiSqkRAPMiskhyeqeAf+xoVrdF5CWACyQvDw0NfSwWi6ZTKoVCIbW2tnYOwJIxZjmbzV73ff/HbvFtR3RwcPDowMDAPZJTAG4FQWA97WRqbA9cI/mEZKlWqxWr1erPVgUk7oktInMArDUTcRy/q1Qqv1ol9DzvSBRFF0m+ILmYzWanWxHY09q2iTc2Nm6LSAHATBAEz1sQsQQmSD4yxtzv6+t77Pt+I8nCRBLbCaw1/f390wAmjTGz6+vrC82It+5HARRJztdqtYftLEicjjbKbbePi8gzY8zdMAytTZtHKXVHRB6QvKm1LnXYO5uxHZPYfmx4eDidyWTGAMwCKMVx/NRxnCljzCTJ4k5CSVbsS0RT5WMiMg/gG4ATJMe11gudPNq1v2jTFFhLZqIoet9uatqJ27Md+6k0KaYnYk/LKgnnQe97dvTs6NqyOmgzNsf/BjugJDAaATakAAAAAElFTkSuQmCC"/></g></g></svg>')
+            no-repeat right;
+            background-repeat:no-repeat;
+            background-position-x:95%;
+            -webkit-appearance: none;
+        }
+    </style>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="PosSelect ">
+                <select class="form-control PosSelItem" style="height:100%;">
+                    <option class="PosSelItem" selected value="1">Seat View</option>
+                    <option class="PosSelItem" value="2">Order View</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="PosSelect">
+                <select class="form-control PosSelItem" style="height:100%;">
+                    <option class="PosSelItem" selected value="1">Floor</option>
+                    <option class="PosSelItem" value="2">First Floor</option>
+                    <option class="PosSelItem" value="3">Second Floor</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="PosSelect">
+                <div class="row">
+                    <div class="col-md-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="80%" viewBox="0 0 23 24"><g><g><image width="100%" height="80%" transform="translate(-2 -1)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAADAElEQVRIS73VS0hVQRgH8P93ZuLmjR5oRW9qEWFED0SDoBDE85j0goItatcm6LFq2cOkyEURrSKS2kRtjStnpnsQonWIi4iioOgBaaiRkV7vPedMDFylh96jF2u288385uObb4bwnwYlObZtb7Msq5aIVluWFWuthwE8l1IOJa39dX4uiIQQDVrr60S0A8AbAGNaa4uI1gDYTkT9AC76vv9yPuBfUGNjI6+qqrpCRMcBXKivr+/p6uqKf93M87wUEZ0HcBLAOSnl7STsN6ijo4NNTEzcjeO4QSm1M2lxJpPZEIbhgNb6llLqcrn43yAhxFEAV6WUW5OQ6Xnbttdyzt+HYbgvCIJXc62bgZqammpSqdQQEa31ff/rfCET19LS0hDHcSClXJUImWy01qeVUgcWgphYU9d0Ov2DMbaxr69vZLb1MxkJIRSA+1LKhwuFTLzneV2mBaSUp8pCnueNRFG0MwiCL5VAzc3NeznnfUqpzUkZFYeHh9MDAwPFSqD29vb1+Xz+nZRyaRL0KQzDg0EQvKsEchznIGPsjpSyNgl6oLV+ppS6WQnkum4PEX2Yq59mLoPjOIcZY6aH9iwUam1tTUdR9DUMw+ogCH6Uzci27WWc8zdEdMz3/ScLwYQQJ7TWZ5RSuxL7yAQIIQ4BeMQ5r81ms+aVThyu69ZblvWUMbZlrh4ym/z1qHqedxbAJSKqk1K+LiNZQogmAI8BjKZSqdre3t7ReWU0HeS6bgcR3SOiBwC6wzAcCYJgsrOzE4ODg8vy+fxGxtgNAHVEZA5rvo5xzvmmbDb7vWyNZpsUQvQAOAKgCgAvxZg+MwW/JqXsbmtrq5mamnoLYAWAUGtdo5Qa/3O/xB82sUgAMpnM8mKxOEpESwzGOa/+M7NFgUpvnclopISNR1G0LZfLjU0fdNEgs2Eps49EtBLAF8757unbu6iQwRzHqWaMvQCwTmv9MY7j/blc7vOiQwYr/brPALwvFAqt/f393/4JVGr+dYVCYdIgszbsfG5ZJTE/AfcdKiqjDvtGAAAAAElFTkSuQmCC" /></g></g></svg>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="PosSelItem" style="width: 100%;">Search</div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>

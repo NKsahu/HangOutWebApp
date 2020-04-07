@@ -232,9 +232,10 @@
         });
     }
     function MakeOrder() {
+        ///HG_OrderItem/MakeOrder
         $("#waiting").show();
         $.ajax({
-            url: "/HG_OrderItem/MakeOrder",
+            url: "/Pos/SeatView",
             type: "GET",
             success: function (data) {
                 $("#DynamicData").html(data);

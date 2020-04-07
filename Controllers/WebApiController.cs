@@ -2262,7 +2262,7 @@ namespace HangOut.Controllers
                 }
             }
             jObject.Add("VerifyBy", orgSetting.CrxVerification);
-            if (objOrg.OrgID > 0)
+            if (objOrg.OrgID > 0 &&objOrg.WalletAmt>0)
             {
                 Cashback cashback = Cashback.GetAppliedCashBk(objOrg.OrgID, TableRowObj.Table_or_RowID);
                 if (cashback != null)
