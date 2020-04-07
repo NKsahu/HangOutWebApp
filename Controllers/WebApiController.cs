@@ -1224,6 +1224,7 @@ namespace HangOut.Controllers
                         obj.save();
                         order.Status = "3";//completed
                         order.Save();
+                        Wallet.AddToWallet(order,AppType);
                         //=======Journal Entry======
                         try
                         {
@@ -1233,8 +1234,6 @@ namespace HangOut.Controllers
                         {
 
                         }
-
-
                         ///==============
                         ChangeOtpTbl = 1;
                         if (obj.Type != "3")
@@ -1278,6 +1277,7 @@ namespace HangOut.Controllers
                             order.Status = "3";//3 order completed
 
                             order.Save();
+                            Wallet.AddToWallet(order, AppType);
                             //=======Journal Entry======
                             try
                             {
@@ -1944,6 +1944,7 @@ namespace HangOut.Controllers
                     order.Update_By = UpdateBy;
                 }
                 order.Save();
+                Wallet.AddToWallet(order);
                 PostResult.Add("Status", 200);
             }
             else
@@ -2263,35 +2264,25 @@ namespace HangOut.Controllers
             jObject.Add("VerifyBy", orgSetting.CrxVerification);
             if (objOrg.OrgID > 0)
             {
-                List<Cashback> Cashbacks = Cashback.GetAll(objOrg.OrgID, 1);// only actives
-                Cashbacks = Cashbacks.FindAll(x => x.CashBkStatus == 1);// only running
-                Cashbacks = Cashbacks.FindAll(x => x.SeatingIds != "");
-                Cashbacks = Cashbacks.FindAll(x => x.StartDate.Date >= DateTime.Now.Date && x.ValidTillDate.Date<= DateTime.Now.Date).ToList();
-                for(int i = 0; i < Cashbacks.Count; i ++)
+                Cashback cashback = Cashback.GetAppliedCashBk(objOrg.OrgID, TableRowObj.Table_or_RowID);
+                if (cashback != null)
                 {
-                        List<int> seats  = Cashbacks[i].SeatingIds.Split(',').Select(int.Parse).ToList();
-                        int seat = seats.Find(x => x == TableRowObj.Table_or_RowID);
-                        if (seat > 0)
-                        {
-                        JObject Jobj = new JObject();
-                        Jobj.Add("CBPercentage", Cashbacks[i].Percentage.ToString("0.00"));
-                        Jobj.Add("MaxCB", Cashbacks[i].MaxAmt.ToString("0.00"));
-                        Jobj.Add("CashBKid", Cashbacks[i].CashBkId);
-                        if (Cashbacks[i].RaiseDynamic)
-                        {
-                            var AggStudy = GetOrder.GetTotalAmt(objOrg.OrgID);
-                            double DynamicValue = AggStudy+(AggStudy- Cashbacks[i].BilAmt)*(Cashbacks[i].Percentage*2/100);
-                            Jobj.Add("MinBillAmt", DynamicValue > Cashbacks[i].BilAmt? DynamicValue.ToString("0.00"): Cashbacks[i].BilAmt.ToString("0.00"));
-                        }
-                        else
-                        {
-                            Jobj.Add("MinBillAmt", Cashbacks[i].BilAmt.ToString("0.00"));
-                        }
-                        jObject.Add("CashBk", Jobj);
-                            break;
-                        }
+                    JObject Jobj = new JObject();
+                    Jobj.Add("CBPercentage", cashback.Percentage.ToString("0.00"));
+                    Jobj.Add("MaxCB", cashback.MaxAmt.ToString("0.00"));
+                    Jobj.Add("CashBKid", cashback.CashBkId);
+                    if (cashback.RaiseDynamic)
+                    {
+                        var AggStudy = GetOrder.GetTotalAmt(objOrg.OrgID);
+                        double DynamicValue = AggStudy + (AggStudy - cashback.BilAmt) * (cashback.Percentage * 2 / 100);
+                        Jobj.Add("MinBillAmt", DynamicValue > cashback.BilAmt ? DynamicValue.ToString("0.00") : cashback.BilAmt.ToString("0.00"));
+                    }
+                    else
+                    {
+                        Jobj.Add("MinBillAmt", cashback.BilAmt.ToString("0.00"));
+                    }
+                    jObject.Add("CashBk", Jobj);
                 }
-
             }
             return jObject;
         }
@@ -2385,6 +2376,7 @@ namespace HangOut.Controllers
             JObject Object = new JObject();
             JArray Info = new JArray();
             HG_Orders orders = new HG_Orders().GetOne(OID);
+            
             if (orders != null && orders.Status == Status)
             {
                 HG_OrganizationDetails hG_OrganizationDetails = new HG_OrganizationDetails().GetOne(orders.OrgId);
@@ -2395,6 +2387,8 @@ namespace HangOut.Controllers
                 double price = orders.DeliveryCharge;
                 double tax = 0.00;
                 double CostPrice = 0.00;
+                
+
                 HashSet<int> Token = new HashSet<int>();
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
@@ -2462,11 +2456,26 @@ namespace HangOut.Controllers
                     }
                     Info.Add(itemobj);
                 }
+                if(orders.DisntChargeIDs!="0"&& orders.DisntChargeIDs != "0")
+                {
+                    List<OrdDiscntChrge> Discnt = OrdDiscntChrge.GetAll(orders.DisntChargeIDs);
+
+
+                }
                 Object.Add("TicketNo", string.Join(",", Token));
                 Object.Add("CostPrice", CostPrice.ToString("0.00"));
                 Object.Add("Tax", tax.ToString("0.00"));
                 Object.Add("TotalAmount", price.ToString("0.00"));
                 Object.Add("DeliveryChrge", orders.DeliveryCharge);
+                if (Status == "1")
+                {
+                    WalletAmt walletAmt = WalletAmt.GetUnusedWalletAmt((int)orders.CID, orders.OrgId);
+                    double MyCashBk = walletAmt.CashBkAmt - walletAmt.DeductedAmt;
+                    if (MyCashBk > 0)
+                    {
+                        Object.Add("MyCashBkAmt", MyCashBk.ToString("0.00"));
+                    }
+                }
             }
             Object.Add("OrderDetails", Info);
             return Object;
@@ -2657,7 +2666,7 @@ namespace HangOut.Controllers
             if (paytmResnObj.save() > 0 )
             {
                 //BY  FOODDO PAYMENT
-                CompleteOrder(3, (int)paytmResnObj.CID,paytmResnObj.OID);
+                CompleteOrder(3, (int)paytmResnObj.CID,paytmResnObj.OID,AppType:1);
                 result.Add("Status",200);
             }
             else
@@ -2730,7 +2739,7 @@ namespace HangOut.Controllers
             if (ordNotice.save() > 0)
             {
                 result.Add("Status", 200);
-                CompleteOrder(1, CID, OID);
+                CompleteOrder(1, CID, OID,AppType:1);
             }
             else
             {

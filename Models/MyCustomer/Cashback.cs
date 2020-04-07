@@ -201,6 +201,25 @@ namespace HangOut.Models.MyCustomer
             return RedSeatings;
         }
         
+        public static Cashback GetAppliedCashBk(int OrgId,Int64 SeatinId)
+        {
+
+            List<Cashback> Cashbacks = Cashback.GetAll(OrgId, 1);// only actives
+            Cashbacks = Cashbacks.FindAll(x => x.CashBkStatus == 1);// only running
+            Cashbacks = Cashbacks.FindAll(x => x.SeatingIds != "");
+            Cashbacks = Cashbacks.FindAll(x => x.StartDate.Date >= DateTime.Now.Date && x.ValidTillDate.Date <= DateTime.Now.Date).ToList();
+            for (int i = 0; i < Cashbacks.Count; i++)
+            {
+                List<int> seats = Cashbacks[i].SeatingIds.Split(',').Select(int.Parse).ToList();
+                int seat = seats.Find(x => x == SeatinId);
+                if (seat > 0)
+                {
+                    return Cashbacks[i];
+                    
+                }
+            }
+            return null;
+        }
     }
     
     public class CashBkSeating

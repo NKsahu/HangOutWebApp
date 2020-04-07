@@ -7,6 +7,7 @@ using HangOut.Models.Feedbk;
 using System.Web.Mvc;
 using System;
 using Newtonsoft.Json;
+using HangOut.Models.MyCustomer;
 
 namespace HangOut.Controllers
 {
@@ -339,11 +340,59 @@ namespace HangOut.Controllers
             }
             return result;
         }
-        [HttpPost]
-        public JArray GetAddonsItems(string UUID)
+       
+        public JObject ApplyWallet(string Jobj)
         {
-            Cart cart = Cart.List.Find(x => x.ItemUUID == UUID);
-            return JArray.FromObject(cart.itemAddons.AddonItemId);
+            JObject obj = JObject.Parse(Jobj);
+            Wallet wallet = new Wallet();
+            wallet.WalletId = 0;
+            wallet.CID = int.Parse(obj["CID"].ToString());
+            wallet.OID = int.Parse(obj["OID"].ToString());
+            wallet.CashBkId = 0;
+            wallet.CashBkAmt = 0;
+            wallet.DeductedAmt = double.Parse(obj["DeductedAmt"].ToString()); ;
+            wallet.AmtActiveOn = DateTime.Now;
+            wallet.OrgId= int.Parse(obj["OrgId"].ToString());
+            wallet.Save();
+            JObject result = new JObject();
+
+            
+            if (wallet.WalletId > 0)
+            {
+                OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
+                ordDiscntChrge.ID = 0;
+                ordDiscntChrge.Title = "Customer CashBack";
+                ordDiscntChrge.OID = wallet.OID;
+                ordDiscntChrge.Type = 1;
+                ordDiscntChrge.Amt = wallet.DeductedAmt;
+                ordDiscntChrge.Tax = 0;
+                ordDiscntChrge.Remark = "";
+                ordDiscntChrge.Save();
+                HG_Orders hG_Orders = new HG_Orders().GetOne(wallet.OID);
+                if (hG_Orders.OID > 0)
+                {
+                    if (hG_Orders.DisntChargeIDs != "" && hG_Orders.DisntChargeIDs != "0")
+                    {
+                        hG_Orders.DisntChargeIDs = hG_Orders.DisntChargeIDs + "," + ordDiscntChrge.ID;
+                    }
+                    else
+                    {
+                        hG_Orders.DisntChargeIDs = ordDiscntChrge.ID.ToString();
+                    }
+                    hG_Orders.Save();
+
+                }
+                result.Add("Status", 200);
+            }
+            else
+            {
+                result.Add("Status", 400);
+            }
+            return result;
+        }
+        public JArray GetWalletAmt(int CID)
+        {
+            return JArray.FromObject(MyWallet.GetWalletAmt(CID));
         }
     }
 }
