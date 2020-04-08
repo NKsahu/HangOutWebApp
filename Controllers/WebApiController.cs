@@ -2456,7 +2456,7 @@ namespace HangOut.Controllers
                     }
                     Info.Add(itemobj);
                 }
-                if(orders.DisntChargeIDs!="0"&& orders.DisntChargeIDs != "0")
+                if(orders.DisntChargeIDs!=""&& orders.DisntChargeIDs != "0")
                 {
                     List<OrdDiscntChrge> Discnt = OrdDiscntChrge.GetAll(orders.DisntChargeIDs);
                     JArray DiscntArray = new JArray();

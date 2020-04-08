@@ -33,8 +33,12 @@ namespace HangOut.Controllers.MyCustomer
         }
         public ActionResult EditItems(int CBID)
         {
-
-            return View();
+            List<ItemOffer> ItemOffers = new List<ItemOffer>();
+            if (CBID > 0)
+            {
+               ItemOffers = ItemOffer.GetAll(CBID);
+            }
+            return View(ItemOffers);
         }
         
     }

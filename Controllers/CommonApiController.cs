@@ -401,6 +401,7 @@ namespace HangOut.Controllers
                 jObject.Add("Used", wallet.deductedAmt.ToString("0.00"));
                 jObject.Add("LeftAmt", leftamt.ToString("0.00"));
                 jObject.Add("OutLetName", wallet.OutLetName);
+                jObject.Add("IsActive", wallet.isActive);
                 jArray.Add(jObject);
             }
             return jArray;
@@ -417,7 +418,8 @@ namespace HangOut.Controllers
         }
         public ActionResult Test()
         {
-            HG_Orders.OrderAmt(55, 50);
+            HG_Orders.OrderAmt(42, 0);
+            WalletAmt walletAmt = WalletAmt.GetUnusedWalletAmt(42, 6);
             return Content("0");
         }
     }

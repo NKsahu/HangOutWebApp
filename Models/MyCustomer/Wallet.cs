@@ -69,6 +69,10 @@ namespace HangOut.Models.MyCustomer
 
         public static void AddToWallet(HG_Orders ObjOrder,int AppType=0)
         {
+            if (ObjOrder.Status != "3")
+            {
+                return;
+            }
             if (AppType == 1)
             {
                 
@@ -209,6 +213,7 @@ namespace HangOut.Models.MyCustomer
         public double CashBkAmt { get; set; }
         public double deductedAmt { get; set; }
         public string OutLetName { get; set; }
+        public bool isActive { get; set; }
         public static List<MyWallet> GetWalletAmt(int CID)
         {
             DBCon dBCon = new DBCon();
@@ -229,7 +234,24 @@ namespace HangOut.Models.MyCustomer
                     Tmp.CashBkAmt = SDR.GetDouble(index++);
                     Tmp.deductedAmt = SDR.GetDouble(index++);
                     Tmp.OutLetName = SDR.GetString(index++);
+                    Tmp.isActive = true;
                     ListTmp.Add(Tmp);
+                }
+                SDR.NextResult();
+                if (SDR.HasRows)
+                {
+
+                    while (SDR.Read())
+                    {
+                        int index = 0;
+                        MyWallet Tmp = new MyWallet();
+                        Tmp.OrgId = SDR.GetInt32(index++);
+                        Tmp.CashBkAmt = SDR.GetDouble(index++);
+                        Tmp.deductedAmt = SDR.GetDouble(index++);
+                        Tmp.OutLetName = SDR.GetString(index++);
+                        Tmp.isActive = false;
+                        ListTmp.Add(Tmp);
+                    }
                 }
             }
             catch (Exception e) { e.ToString(); }
