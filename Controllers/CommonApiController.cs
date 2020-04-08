@@ -392,9 +392,29 @@ namespace HangOut.Controllers
         }
         public JArray GetWalletAmt(int CID)
         {
-            return JArray.FromObject(MyWallet.GetWalletAmt(CID));
+           var walletamt= MyWallet.GetWalletAmt(CID);
+            JArray jArray = new JArray();
+            foreach(var wallet in walletamt)
+            {
+                var leftamt = wallet.CashBkAmt - wallet.deductedAmt;
+                JObject jObject = new JObject();
+                jObject.Add("Used", wallet.deductedAmt.ToString("0.00"));
+                jObject.Add("LeftAmt", leftamt.ToString("0.00"));
+                jObject.Add("OutLetName", wallet.OutLetName);
+                jArray.Add(jObject);
+            }
+            return jArray;
         }
-
+        public JObject MyWalletAmt(int CID)
+        {
+            JObject jObject = new JObject();
+            var wallet = MyWallet.GetWalletAmt(CID);
+            var used = wallet.Sum(x => x.deductedAmt);
+            var leftamt = wallet.Sum(x => x.CashBkAmt) - used;
+            jObject.Add("Used", used.ToString("0.00"));
+            jObject.Add("LeftAmt", leftamt.ToString("0.00"));
+            return jObject;
+        }
         public ActionResult Test()
         {
             HG_Orders.OrderAmt(55, 50);

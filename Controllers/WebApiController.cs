@@ -2459,8 +2459,15 @@ namespace HangOut.Controllers
                 if(orders.DisntChargeIDs!="0"&& orders.DisntChargeIDs != "0")
                 {
                     List<OrdDiscntChrge> Discnt = OrdDiscntChrge.GetAll(orders.DisntChargeIDs);
-
-
+                    JArray DiscntArray = new JArray();
+                    for(int j = 0; j < Discnt.Count; j++)
+                    {
+                        JObject discnJoj = new JObject();
+                        discnJoj.Add("DiscntTitle", Discnt[j].Title);
+                        discnJoj.Add("DiscntAmt", Discnt[j].Amt.ToString("0.00"));
+                        DiscntArray.Add(discnJoj);
+                    }
+                    Object.Add("DiscntList", DiscntArray);
                 }
                 Object.Add("TicketNo", string.Join(",", Token));
                 Object.Add("CostPrice", CostPrice.ToString("0.00"));

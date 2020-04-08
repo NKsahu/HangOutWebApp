@@ -208,7 +208,7 @@ namespace HangOut.Models.MyCustomer
 
         public double CashBkAmt { get; set; }
         public double deductedAmt { get; set; }
-        public string OutLetNamr { get; set; }
+        public string OutLetName { get; set; }
         public static List<MyWallet> GetWalletAmt(int CID)
         {
             DBCon dBCon = new DBCon();
@@ -228,7 +228,7 @@ namespace HangOut.Models.MyCustomer
                     Tmp.OrgId = SDR.GetInt32(index++);
                     Tmp.CashBkAmt = SDR.GetDouble(index++);
                     Tmp.deductedAmt = SDR.GetDouble(index++);
-                    Tmp.OutLetNamr = SDR.GetString(index++);
+                    Tmp.OutLetName = SDR.GetString(index++);
                     ListTmp.Add(Tmp);
                 }
             }
