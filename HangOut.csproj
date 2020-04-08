@@ -334,6 +334,7 @@
     <Compile Include="Controllers\Inventory\INTGSTBLController.cs" />
     <Compile Include="Controllers\Inventory\UnitsController.cs" />
     <Compile Include="Controllers\Account\JournalEntryController.cs" />
+    <Compile Include="Controllers\MyCustomer\ComplemetryOfferController.cs" />
     <Compile Include="Controllers\OrderMenuController.cs" />
     <Compile Include="Controllers\POS\AdminApiController.cs" />
     <Compile Include="Controllers\POS\POSController.cs" />
@@ -555,6 +556,8 @@
     <Content Include="Views\CashBack\Index.cshtml" />
     <Content Include="Views\OrderMenu\CashBackSeating.cshtml" />
     <Content Include="Views\POS\SeatView.cshtml" />
+    <Content Include="Views\ComplemetryOffer\CreateEdit.cshtml" />
+    <Content Include="Views\ComplemetryOffer\index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

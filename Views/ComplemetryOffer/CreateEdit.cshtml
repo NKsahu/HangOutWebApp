@@ -1,0 +1,100 @@
+﻿@model HangOut.Models.MyCustomer.Cashback
+@using HangOut.Models.Common
+@{
+    Layout = null;
+}
+@{
+    Settings setting = new Settings().GetOne("CBCHARGE");
+    double ChargeAmt = 0.00;
+    if (setting.SettingId > 0)
+    {
+        ChargeAmt = double.Parse(setting.KeyValue);
+    }
+}
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center;color:#000000"><b>Comlementry Dish</b></h3>
+        <hr />
+    </div>
+    <div class="card-body">
+        @using (Ajax.BeginForm("PostCasbBack", "CashBack", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        {
+            @Html.HiddenFor(model => model.CashBkId)
+            @Html.HiddenFor(model => model.OrgID)
+            @Html.HiddenFor(model => model.CashBkStatus)
+            @Html.HiddenFor(model => model.SeatingIds)
+            @Html.HiddenFor(model => model.TerminateSts)
+            @Html.HiddenFor(model => model.CBUniqId)
+            @Html.HiddenFor(model => model.CashBkType)
+            @Html.HiddenFor(model => model.Percentage)
+            @Html.HiddenFor(model => model.MaxAmt)
+            @Html.HiddenFor(model=>model.RaiseDynamic)
+            List<SelectListItem> SL = new List<SelectListItem>() {
+        new SelectListItem{Text="UN-SPECIFIED",Value="1"},new SelectListItem{Text="SPECIFIED",Value="2"}
+        };
+
+    @Html.HiddenFor(model => model.StartDate)
+    @Html.HiddenFor(model => model.ValidTillDate)
+
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Start From")
+            @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
+            @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Valid Till")
+            @Html.DropDownListFor(model => model.ValidTill, SL, new { @class = "form-control " })
+            @Html.ValidationMessageFor(model => model.ValidTill, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Date")
+            @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
+            @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
+        </div>
+        
+        <div class="col-md-2">
+            @Html.Label("Min Bill Amt")
+            @Html.TextBoxFor(model => model.BilAmt, new { @class = "form-control autodouble" })
+            @Html.ValidationMessageFor(model => model.BilAmt, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-sm-1" style="margin-top:5px;">
+            @Html.Label("Save", new { @class = "text-white" })
+            <input type="submit" value="Next" class="btn btn-success" />
+        </div>
+    </div>
+}
+    </div>
+    <div class="card-footer">
+        <div class="col-md-12">
+            <h5 style="text-align:center;color:forestgreen">Per Unit Pricing @ChargeAmt.ToString("0.00")</h5>
+        </div>
+        <div class="col-md-12" style="margin-top:50px;">
+            <h5 style="color:blueviolet">
+                TIP: Keep the campaign running for longer time .it will allow Algorithm to train itself and improve each day
+                RECOMMENDED TIME : 2 MONTHS
+            </h5>
+        </div>
+        <div class="col-md-12">
+            <h5 style="color:blueviolet">NOTE: customer will be able to use this offer on their NEXT VISIT</h5>
+        </div>
+    </div>
+</div>
+<script>
+    CBValidTill();
+    $("#ValidTill").change(function () {
+        CBValidTill();
+    });
+    function CBValidTill() {
+        var ValidTill = $("#ValidTill").val();
+        if (ValidTill == "1") {
+            $("#ValidTillStr").parent('div').hide();
+        }
+        else {
+            $("#ValidTillStr").parent('div').show();
+        }
+    }
+    
+
+</script>
+

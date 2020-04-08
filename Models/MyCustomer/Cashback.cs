@@ -207,7 +207,7 @@ namespace HangOut.Models.MyCustomer
             List<Cashback> Cashbacks = Cashback.GetAll(OrgId, 1);// only actives
             Cashbacks = Cashbacks.FindAll(x => x.CashBkStatus == 1);// only running
             Cashbacks = Cashbacks.FindAll(x => x.SeatingIds != "");
-            Cashbacks = Cashbacks.FindAll(x => x.StartDate.Date >= DateTime.Now.Date && x.ValidTillDate.Date <= DateTime.Now.Date).ToList();
+            Cashbacks = Cashbacks.FindAll(x => x.StartDate.Date <= DateTime.Now.Date && x.ValidTillDate.Date >= DateTime.Now.Date).ToList();
             for (int i = 0; i < Cashbacks.Count; i++)
             {
                 List<int> seats = Cashbacks[i].SeatingIds.Split(',').Select(int.Parse).ToList();
