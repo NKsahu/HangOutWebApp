@@ -13,12 +13,14 @@ namespace HangOut.Controllers.MyCustomer
         public ActionResult Index()
         {
             List<Cashback> Cashbks = Cashback.GetAll(OrderType.CurrOrgId(),1);
+            Cashbks = Cashbks.FindAll(x => x.CampeignType == 1);
             return View(Cashbks);
         }
         // GET: CashBack
         public ActionResult CUSTCashBack(int CBID)
         {
             Cashback cashback = new Cashback();
+            cashback.CampeignType = 1;
             if (CBID > 0)
             {
                 cashback = Cashback.Getone(CBID);

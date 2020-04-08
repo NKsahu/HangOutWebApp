@@ -7,7 +7,7 @@
 }
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center"><b>CASHBACK</b> </h3>
+        <h3 style="text-align:center"><b>Comlementry Dish</b> </h3>
         <hr />
     </div>
 
@@ -31,32 +31,36 @@
                     <th class="noExport">Terminate</th>
                     <th class="noExport">Status</th>
                     <th class="noExport">Seating</th>
+                    <th class="noExport">Items</th>
                     <th class="noExport"> </th>
                 </tr>
             </thead>
             <tbody id="Tbody">
                 @foreach (var SSize in Model)
                 {
-                    <tr id="@SSize.CashBkId">
-                        <td>
-                            @SSize.CBUniqId
-                        </td>
-                        <td>
-                            @SSize.StartDate.ToString("dd-MM-yyyy")
-                        </td>
-                        <td id="T@(SSize.CashBkId)">
-                            <button class="btn btn-warning btn-sm " onclick="Terminate(@SSize.CashBkId,@SSize.TerminateSts)">@CashBackController.TerminatSts(SSize.TerminateSts)</button>
-                        </td>
-                        <td id="S@(SSize.CashBkId)">
-                            <button class="btn btn-info btn-sm " onclick="Status(@SSize.CashBkId,@SSize.CashBkStatus)">@CashBackController.CBSts(SSize.CashBkStatus)</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-success btn-sm " onclick="Seating(@SSize.CashBkId)">Edit Seating</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.CashBkId)">Edit</button>
-                        </td>
-                    </tr>
+                <tr id="@SSize.CashBkId">
+                    <td>
+                        @SSize.CBUniqId
+                    </td>
+                    <td>
+                        @SSize.StartDate.ToString("dd-MM-yyyy")
+                    </td>
+                    <td id="T@(SSize.CashBkId)">
+                        <button class="btn btn-warning btn-sm " onclick="Terminate(@SSize.CashBkId,@SSize.TerminateSts)">@CashBackController.TerminatSts(SSize.TerminateSts)</button>
+                    </td>
+                    <td id="S@(SSize.CashBkId)">
+                        <button class="btn btn-info btn-sm " onclick="Status(@SSize.CashBkId,@SSize.CashBkStatus)">@CashBackController.CBSts(SSize.CashBkStatus)</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-success btn-sm " onclick="Seating(@SSize.CashBkId)">Edit Seating</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-success btn-sm " onclick="EditItem(@SSize.CashBkId)">Edit Items</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.CashBkId)">Edit</button>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -91,9 +95,6 @@
             }
         });
         }
-
-
-
     }
     function Status(CBID, Sts) {
         var stringrsl = "";
@@ -141,17 +142,17 @@
         });
     }
     function JsonSuccess(Jobj) {
-
-            hidedpt("CreateSS");
-            $('#waiting').hide();
-            var Jitmobj =JSON.parse(Jobj.data);
+       hidedpt("CreateSS");
+       $('#waiting').hide();
+       var Jitmobj =JSON.parse(Jobj.data);
         Seating(Jitmobj.CashBkId);
         var HtmlStr = "<tr id='" + Jitmobj.CashBkId + "'>";
         HtmlStr += '<td>' + Jitmobj.UID + '</td>';
         HtmlStr += '<td>' + Jitmobj.StartDate + '</td>';
         HtmlStr += '<td id="T'+Jitmobj.CashBkId+'"><button class="btn btn-warning btn-sm "  onclick="Terminate(' + Jitmobj.CashBkId + ','+Jitmobj.TerminateStsID+')">' + Jitmobj.TStatus + '</button></td>';
         HtmlStr += '<td id="S'+Jitmobj.CashBkId +'"><button class="btn btn-info btn-sm "  onclick="Status(' + Jitmobj.CashBkId + ','+Jitmobj.CBStsID+')">'+Jitmobj.CBSts+'</button></td>';
-        HtmlStr += '<td><button class="btn btn-success btn-sm " onclick="Seating('+Jitmobj.CashBkId+')">Edit Seating</button></td>';
+        HtmlStr += '<td><button class="btn btn-success btn-sm " onclick="Seating(' + Jitmobj.CashBkId + ')">Edit Seating</button></td>';
+         HtmlStr += '<td><button class="btn btn-success btn-sm " onclick="EditItem(' + Jitmobj.CashBkId + ')">Edit Items</button></td>';
             HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CashBkId + ')"> Edit</button>';
             var table = $('table').DataTable();
             if (AddTr) {
@@ -172,7 +173,7 @@
         $('#waiting').show();
         $.ajax({
             type: 'GET',
-            url: "/CashBack/CUSTCashBack?CBID=" + ID,
+            url: "/ComplemetryOffer/CreateEdit?CBID=" + ID,
             success: function (data) {
                 makedpt("CreateSS");
                 $("#CreateSS > .modal-dialog > .modal-content > .modal-body").html(data);
@@ -185,7 +186,20 @@
         });
 
     }
-
+    function EditItem(CBID) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/ComplemetryOffer/EditItems?CBID="+CBID,
+            success: function (data) {
+                
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
 </script>
 
 

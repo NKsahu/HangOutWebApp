@@ -25,6 +25,7 @@
             @Html.HiddenFor(model => model.SeatingIds)
             @Html.HiddenFor(model => model.TerminateSts)
             @Html.HiddenFor(model => model.CBUniqId)
+            @Html.HiddenFor(model => model.CampeignType)
             List<SelectListItem> SL = new List<SelectListItem>() {
         new SelectListItem{Text="UN-SPECIFIED",Value="1"},new SelectListItem{Text="SPECIFIED",Value="2"}
         };
@@ -73,7 +74,7 @@
         </div>
         <div class="col-md-1">
             @Html.Label("Raise Dynamically")
-            @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble" ,@onchange="RaiseDynamicFun()"})
+            @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble", @onchange = "RaiseDynamicFun()" })
             @Html.ValidationMessageFor(model => model.RaiseDynamic, "", new { @class = "text-danger" })
         </div>
 
