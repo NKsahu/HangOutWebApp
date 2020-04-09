@@ -3,9 +3,10 @@
 
 #DynamicData {
     /* Style for "Rectangle" */
-    max-width: 100%;
     border: 1px solid #e6ebef;
     background-color: #e6ebef;
+    margin-top: 0px;
+    min-height: 150vh;
 }
 /* Style for "Rectangle" */
 .PosSelect {
