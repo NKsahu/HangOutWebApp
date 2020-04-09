@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using HangOut.Models.MyCustomer;
 using HangOut.Models.DynamicList;
 using System.Web.Mvc;
+using HangOut.Models;
+using Newtonsoft.Json.Linq;
+
 namespace HangOut.Controllers.MyCustomer
 {
     public class ComplemetryOfferController : Controller
@@ -33,13 +36,43 @@ namespace HangOut.Controllers.MyCustomer
         }
         public ActionResult EditItems(int CBID)
         {
-            List<ItemOffer> ItemOffers = new List<ItemOffer>();
+            OfferObj offerobj = new OfferObj();
             if (CBID > 0)
             {
-               ItemOffers = ItemOffer.GetAll(CBID);
+                offerobj = OfferObj.GetAll(CBID);
             }
-            return View(ItemOffers);
+            return View(offerobj);
         }
-        
+        public ActionResult SaveOfferItem(OfferObj offerObj)
+        {
+            if (offerObj.itemOffers==null|| offerObj.itemOffers.Count == 0)
+            {
+                return Json(new { msg = "Add Atleast one Item" });
+            }
+            if (offerObj.Min == 0 || offerObj.Max == 0)
+            {
+                return Json(new { msg = "Qty cannot be zero" });
+            }
+            foreach(var offeritem in offerObj.itemOffers)
+            {
+                offeritem.CashBkId = offerObj.CBID;
+                offeritem.Min = offerObj.Min;
+                offeritem.Max = offerObj.Max;
+                offeritem.Save();
+            }
+
+            JObject response = new JObject();
+            response.Add("Status", 1);
+            return Json(new { data = response.ToString() }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AddOfrItem(int Itemid)
+        {
+            HG_Items objitem = new HG_Items().GetOne(Itemid);
+            ItemOffer itemOffers = new ItemOffer();
+            itemOffers.ItemId = objitem.ItemID;
+            itemOffers.ItemName = objitem.Items;
+            return View("OfferItm", itemOffers);
+        }
+
     }
 }

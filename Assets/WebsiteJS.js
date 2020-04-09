@@ -60,17 +60,19 @@ function HideModal() {
     if ($(".modal:visible").length > 1) {
 
         // $(".modal:visible:last").hide();
-        $(".modal:visible:last").remove();
-        $('.modal-backdrop').remove();
+       // $(".modal:visible:last").remove();
+       // $('.modal-backdrop').remove();
         //$('body').removeAttr('class');
         //$('body').removeAttr('style');
+        $('.modal-backdrop').remove();
+        $(".modal:visible:last").remove();
+        
     }
+    
 }
 var modaladded = false;
 $(window).on('hashchange', function (event) {
     if ($(".modal:visible").length > 0 && !modaladded) {
-
-
         $(".modal:visible:last").remove();
         $('.modal-backdrop').remove();
         //$('body').removeAttr('class');
