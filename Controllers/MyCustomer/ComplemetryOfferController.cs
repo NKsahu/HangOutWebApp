@@ -49,9 +49,13 @@ namespace HangOut.Controllers.MyCustomer
             {
                 return Json(new { msg = "Add Atleast one Item" });
             }
-            if (offerObj.Min == 0 || offerObj.Max == 0)
+            if (offerObj.Min == 0 || offerObj.Max == 0 )
             {
                 return Json(new { msg = "Qty cannot be zero" });
+            }
+            if (offerObj.Min > offerObj.Max)
+            {
+                return Json(new { msg = "Min Qty cannot be Greater than Max Qty" });
             }
             foreach(var offeritem in offerObj.itemOffers)
             {
@@ -63,6 +67,7 @@ namespace HangOut.Controllers.MyCustomer
 
             JObject response = new JObject();
             response.Add("Status", 1);
+            response.Add("CashBkId", offerObj.CBID);
             return Json(new { data = response.ToString() }, JsonRequestBehavior.AllowGet);
         }
         public ActionResult AddOfrItem(int Itemid)

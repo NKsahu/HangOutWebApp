@@ -52,7 +52,7 @@
             color: green;
         }
     </style>
-@Html.Hidden("CBID",Request.QueryString["CBID"])
+@Html.Hidden("CBIDHidden",Request.QueryString["CBID"])
     <div class="card-header " style="width:100%">
         <h3 style="text-align:center; background-color:#5de79a"><b>Seating</b> </h3>
         <hr />
@@ -101,7 +101,7 @@
     var ExistingSeatings = [];
     var RedSeatings = [];
     function LoadOrderMenus() {
-        var CBID = $("#CBID").val();
+        var CBID = $("#CBIDHidden").val();
         $("#waiting").show();
             $.ajax({
                 type: 'POST',
@@ -211,13 +211,12 @@
            
             $("#waiting").show();
             var Jobj = {};
-            var CBID =parseInt( $("#CBID").val());
+            var CBID =parseInt($("#CBIDHidden").val());
             Jobj.CashBkId = CBID;
             var SeatingsDom = document.getElementsByClassName('YellowTable');
             var Seatings = [];
             for (var i = 0; i < SeatingsDom.length; i++) {
                 var JqDom = $(SeatingsDom[i]);
-                console.log("aatya");
                 Seatings.push(parseInt(JqDom.attr('TSID')));
             }
             Jobj.Seatings = Seatings;
@@ -244,6 +243,6 @@
             $('#waiting').hide();
         }
 
-        setTimeout(function () { LoadOrderMenus(); }, 100);
+        setTimeout(function () { LoadOrderMenus(); }, 200);
 
 </script>

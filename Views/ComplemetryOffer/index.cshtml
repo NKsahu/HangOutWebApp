@@ -146,11 +146,11 @@
         var Jitmobj = JSON.parse(Jobj.data);
         if (Jitmobj.Status != null && Jitmobj.Status == 1) {
             hidedpt("OpenOffer");
+            Seating(Jitmobj.CashBkId);
         }
         else {
+            EditItem(Jitmobj.CashBkId);
             hidedpt("CreateSS");
-       
-            Seating(Jitmobj.CashBkId);
         var HtmlStr = "<tr id='" + Jitmobj.CashBkId + "'>";
         HtmlStr += '<td>' + Jitmobj.UID + '</td>';
         HtmlStr += '<td>' + Jitmobj.StartDate + '</td>';

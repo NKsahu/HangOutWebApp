@@ -47,9 +47,9 @@
                     <div class="col-md-5">
                     </div>
                 </div>
-                <div class="col-sm-1" style="margin-top:5px;">
+                <div class="col-md-1" style="margin-top:5px;">
                     @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="Next" class="btn btn-success" />
+                    <input type="submit" value="Next" class="btn btn-success form-control" />
                 </div>
             }
         </div>
@@ -73,9 +73,20 @@
             }
         });
     }
-       function AddItem(event,ItemId) {
-        if (event.checked) {
-            $.ajax({
+       function AddItem(event, ItemId) {
+           
+       if (event.checked) {
+            var ItemsAlreadyAdded = document.getElementsByClassName('ItemId');
+           for (var i = 0; i < ItemsAlreadyAdded.length; i++) {
+               var ObjItem = $(ItemsAlreadyAdded[i]);
+               if (ObjItem.val() == ItemId) {
+                   alert('Item Already Added');
+                   $(event).click();
+                   return;
+                   
+               }
+           }
+       $.ajax({
             type: 'GET',
             url: "/ComplemetryOffer/AddOfrItem?Itemid="+ItemId,
             success: function (data) {

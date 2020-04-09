@@ -8,14 +8,14 @@
 {
     <div class="row">
         @Html.HiddenFor(model => model.ItemOfferId)
-        @Html.HiddenFor(model => model.ItemId)
+        @Html.HiddenFor(model => model.ItemId,new { @class = "ItemId" })
         @Html.HiddenFor(model => model.IsDeleted,new { @class = "IsDeleted" })
         <div class="col-md-2">
 
         </div>
             <div class="col-md-2">
                 @Html.Label("Item")
-                @Html.TextBoxFor(model => model.ItemName, new { @class = "form-control " })
+                @Html.TextBoxFor(model => model.ItemName, new { @class = "form-control ",@readonly="readoly" })
                 @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-1">
