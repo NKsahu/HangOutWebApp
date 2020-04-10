@@ -142,10 +142,15 @@
         });
     }
     function JsonSuccess(Jobj) {
-       hidedpt("CreateSS");
        $('#waiting').hide();
-       var Jitmobj =JSON.parse(Jobj.data);
-        Seating(Jitmobj.CashBkId);
+        var Jitmobj = JSON.parse(Jobj.data);
+        if (Jitmobj.Status != null && Jitmobj.Status == 1) {
+            hidedpt("OpenOffer");
+            Seating(Jitmobj.CashBkId);
+        }
+        else {
+            EditItem(Jitmobj.CashBkId);
+            hidedpt("CreateSS");
         var HtmlStr = "<tr id='" + Jitmobj.CashBkId + "'>";
         HtmlStr += '<td>' + Jitmobj.UID + '</td>';
         HtmlStr += '<td>' + Jitmobj.StartDate + '</td>';
@@ -162,6 +167,8 @@
                 table.row("#" + Jitmobj.CashBkId).remove().draw();
                 table.row.add($(HtmlStr)).draw();
             }
+        }
+        
 
     }
     function CreateEdit(ID) {
@@ -192,7 +199,9 @@
             type: 'GET',
             url: "/ComplemetryOffer/EditItems?CBID="+CBID,
             success: function (data) {
-                
+                 makedpt("OpenOffer");
+                $("#OpenOffer > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("OpenOffer");
                 $('#waiting').hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback

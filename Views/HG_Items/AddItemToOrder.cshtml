@@ -18,13 +18,13 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Items)
+        @for(int i=0;i<Items.Count;i++)
         {
             <tr>
                 <td>
-                    <input type="checkbox" onclick="AddItem(this,@item.ItemID)" class="form-control" />
+                    <input type="checkbox" onclick="AddItem(this,@Items[i].ItemID)" class="form-control" />
                 </td>
-                <td>@item.Items</td>
+                <td>@Items[i].Items</td>
             </tr>
         }
 
@@ -33,5 +33,5 @@
     </div>
 </div>
 <script>
-    setTimeout(function () { LoadDataTable('ItemList') }, 200);
+    setTimeout(function () { LoadDataTable('ItemList') }, 100);
 </script>
