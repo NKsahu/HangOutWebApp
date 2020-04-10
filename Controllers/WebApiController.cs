@@ -2280,6 +2280,7 @@ namespace HangOut.Controllers
                     else
                     {
                         Jobj.Add("MinBillAmt", cashback.BilAmt.ToString("0.00"));
+                        Jobj.Add("MaxCbLimit", cashback.MaxCBLimit);
                     }
                     jObject.Add("CashBk", Jobj);
                 }

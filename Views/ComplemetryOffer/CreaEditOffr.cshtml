@@ -27,16 +27,19 @@
             @Html.HiddenFor(model => model.CBUniqId)
             @Html.HiddenFor(model => model.CashBkType)
             @Html.HiddenFor(model => model.Percentage)
+            @Html.HiddenFor(model => model.StartDate)
+            @Html.HiddenFor(model => model.ValidTill)
+            @Html.HiddenFor(model => model.ValidTillDate)
             @Html.HiddenFor(model => model.MaxAmt)
             @Html.HiddenFor(model => model.RaiseDynamic)
             @Html.HiddenFor(model => model.CampeignType)
             @Html.HiddenFor(model => model.MaxCBLimit)
+            @Html.HiddenFor(model => model.BilAmt)
             List<SelectListItem> SL = new List<SelectListItem>() {
         new SelectListItem{Text="UN-SPECIFIED",Value="1"},new SelectListItem{Text="SPECIFIED",Value="2"}
         };
 
-    @Html.HiddenFor(model => model.StartDate)
-    @Html.HiddenFor(model => model.ValidTillDate)
+
 
     <div class="row">
         <div class="col-md-2">
@@ -44,22 +47,13 @@
             @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
             @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
         </div>
+
         <div class="col-md-2">
-            @Html.Label("Valid Till")
-            @Html.DropDownListFor(model => model.ValidTill, SL, new { @class = "form-control " })
-            @Html.ValidationMessageFor(model => model.ValidTill, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Date")
+            @Html.Label("End Date")
             @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
             @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
         </div>
 
-        <div class="col-md-2">
-            @Html.Label("Min Bill Amt")
-            @Html.TextBoxFor(model => model.BilAmt, new { @class = "form-control autodouble" })
-            @Html.ValidationMessageFor(model => model.BilAmt, "", new { @class = "text-danger" })
-        </div>
         <div class="col-sm-1" style="margin-top:5px;">
             @Html.Label("Save", new { @class = "text-white" })
             <input type="submit" value="Next" class="btn btn-success" />
@@ -82,21 +76,5 @@
         </div>
     </div>
 </div>
-<script>
-    CBValidTill();
-    $("#ValidTill").change(function () {
-        CBValidTill();
-    });
-    function CBValidTill() {
-        var ValidTill = $("#ValidTill").val();
-        if (ValidTill == "1") {
-            $("#ValidTillStr").parent('div').hide();
-        }
-        else {
-            $("#ValidTillStr").parent('div').show();
-        }
-    }
-    
 
-</script>
 

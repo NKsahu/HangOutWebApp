@@ -32,57 +32,66 @@
             List<SelectListItem> CashBkType = new List<SelectListItem>() {
         new SelectListItem{Text="Percentage",Value="1"}
         };
+            List<SelectListItem> CashBkLimit = new List<SelectListItem>() {
+        new SelectListItem{Text="No Limit",Value="1"},new SelectListItem{ Text="Limited",Value="2"}
+        };
     @Html.HiddenFor(model => model.StartDate)
     @Html.HiddenFor(model => model.ValidTillDate)
 
-    <div class="row">
-        <div class="col-md-2">
-            @Html.Label("Start From")
-            @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
-            @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Valid Till")
-            @Html.DropDownListFor(model => model.ValidTill, SL, new { @class = "form-control " })
-            @Html.ValidationMessageFor(model => model.ValidTill, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Date")
-            @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
-            @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
-        </div>
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Start From")
+                @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
+                @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Valid Till")
+                @Html.DropDownListFor(model => model.ValidTill, SL, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.ValidTill, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Date")
+                @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
+                @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
+            </div>
 
-        <div class="col-md-3">
-            @Html.Label("CashBackType")
-            @Html.DropDownListFor(model => model.CashBkType, CashBkType, new { @class = "form-control " })
-            @Html.ValidationMessageFor(model => model.CashBkType, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Percentage")
-            @Html.TextBoxFor(model => model.Percentage, new { @class = "form-control autodouble" })
-            @Html.ValidationMessageFor(model => model.Percentage, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Max CashBack Amt")
-            @Html.TextBoxFor(model => model.MaxAmt, new { @class = "form-control autodouble" })
-            @Html.ValidationMessageFor(model => model.MaxAmt, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Min Bill Amt")
-            @Html.TextBoxFor(model => model.BilAmt, new { @class = "form-control autodouble" })
-            @Html.ValidationMessageFor(model => model.BilAmt, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-1">
-            @Html.Label("Raise Dynamically")
-            @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble", @onchange = "RaiseDynamicFun()" })
-            @Html.ValidationMessageFor(model => model.RaiseDynamic, "", new { @class = "text-danger" })
-        </div>
+            <div class="col-md-2">
+                @Html.Label("CashBackType")
+                @Html.DropDownListFor(model => model.CashBkType, CashBkType, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.CashBkType, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-1">
+                @Html.Label("Percentage")
+                @Html.TextBoxFor(model => model.Percentage, new { @class = "form-control autodouble" })
+                @Html.ValidationMessageFor(model => model.Percentage, "", new { @class = "text-danger" })
+            </div>
 
-        <div class="col-sm-1" style="margin-top:5px;">
-            @Html.Label("Save", new { @class = "text-white" })
-            <input type="submit" value="Next" class="btn btn-success" />
+            <div class="col-md-1">
+                @Html.Label("Min Bill Amt")
+                @Html.TextBoxFor(model => model.BilAmt, new { @class = "form-control autodouble" })
+                @Html.ValidationMessageFor(model => model.BilAmt, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Max CashBack Limit")
+                @Html.DropDownListFor(model => model.MaxCBLimit, CashBkLimit, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.MaxCBLimit, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Max CashBack Amt")
+                @Html.TextBoxFor(model => model.MaxAmt, new { @class = "form-control autodouble" })
+                @Html.ValidationMessageFor(model => model.MaxAmt, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-1">
+                @Html.Label("Raise Dynamically")
+                @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble", @onchange = "RaiseDynamicFun()" })
+                @Html.ValidationMessageFor(model => model.RaiseDynamic, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-sm-1" style="margin-top:5px;">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input type="submit" value="Next" class="btn btn-success" />
+            </div>
         </div>
-    </div>
 }
     </div>
     <div class="card-footer">
@@ -115,15 +124,29 @@
         }
     }
     function RaiseDynamicFun() {
-        console.log("aaya");
         if (document.getElementById("RaiseDynamic").checked) {
             document.getElementById("RaiseDynamic").checked = true;
+            $("#MaxCBLimit").val('1');
             $("#MaxAmt").parent('div').hide();
+            $("#MaxCBLimit").parent('div').hide();
         }
         else {
             document.getElementById("RaiseDynamic").checked = false;
-             $("#MaxAmt").parent('div').show();
+             $("#MaxCBLimit").parent('div').show();
         }
     }
-    
+
+    $("#MaxCBLimit").change(function () {
+        MaxCBLimit();
+    });
+    function MaxCBLimit() {
+
+        if ($("#MaxCBLimit").val() == "1") {
+
+            $("#MaxAmt").parent('div').hide();
+        }
+        else {
+            $("#MaxAmt").parent('div').show();
+        }
+    }
 </script>

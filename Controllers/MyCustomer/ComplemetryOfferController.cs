@@ -79,5 +79,27 @@ namespace HangOut.Controllers.MyCustomer
             return View("OfferItm", itemOffers);
         }
 
+       /////=============offer=====
+       ///
+       public ActionResult OfferIndex()
+        {
+            List<Cashback> Cashbks = Cashback.GetAll(OrderType.CurrOrgId(), 1);
+            Cashbks = Cashbks.FindAll(x => x.CampeignType == 3);// only offer types
+            return View(Cashbks);
+        }
+        public ActionResult CreaEditOffr(int CBID)
+        {
+            Cashback cashback = new Cashback();
+            
+            if (CBID > 0)
+            {
+                cashback = Cashback.Getone(CBID);
+                
+            }
+            cashback.CampeignType = 3;
+            cashback.ValidTill = 2;
+            return View(cashback);
+
+        }
     }
 }

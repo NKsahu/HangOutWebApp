@@ -561,6 +561,8 @@
     <Content Include="Views\ComplemetryOffer\index.cshtml" />
     <Content Include="Views\ComplemetryOffer\EditItems.cshtml" />
     <Content Include="Views\Shared\OfferItm.cshtml" />
+    <Content Include="Views\ComplemetryOffer\OfferIndex.cshtml" />
+    <Content Include="Views\ComplemetryOffer\CreaEditOffr.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

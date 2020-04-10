@@ -19,14 +19,15 @@ namespace HangOut.Models.MyCustomer
         public int CashBkType { get; set; }  // 1 :Percentage
 
         public double Percentage { get; set; }
-        public double MaxAmt { get; set; }
+        public int MaxCBLimit { get; set; }// 0:no limit (Unlimited):1 limited CashbkAmt
+        public double MaxAmt { get; set; }// maximum cashback amount
         public double BilAmt { get; set; }
         public bool RaiseDynamic { get; set; }
         //========
         public int CashBkStatus { get; set; } // 1 :running ,2: pause 
         public string SeatingIds { get; set; }// comma seprated applied seating ids
         public int TerminateSts { get; set; }// 1 activate , 2 terminated;
-        public int CampeignType { get; set; }// 1 : CashBack, 2 : Complementry dish
+        public int CampeignType { get; set; }// 1 : CashBack, 2 : Complementry dish,3:offers
 
         public string StrStartDate { get; set; }
         public string ValidTillStr { get; set; }
@@ -52,7 +53,7 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.CashBkId == 0)
                 {
-                    Query = "Insert into  CashBack  values(@OrgID,@StartDate,@ValidTill,@ValidTillDate,@CashBkType,@Percentage,@MaxAmt,@BilAmt,@RaiseDynamic,@CashBkStatus,@SeatingIds,@TerminateSts,@CBUniqId,@CampeignType); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  CashBack  values(@OrgID,@StartDate,@ValidTill,@ValidTillDate,@CashBkType,@Percentage,@MaxAmt,@BilAmt,@RaiseDynamic,@CashBkStatus,@SeatingIds,@TerminateSts,@CBUniqId,@CampeignType,@MaxCBLimit); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@OrgID", this.OrgID);
                     cmd.Parameters.AddWithValue("@CBUniqId", this.CBUniqId);
@@ -60,7 +61,7 @@ namespace HangOut.Models.MyCustomer
                 }
                 else
                 {
-                    Query = "update  CashBack set StartDate=@StartDate,ValidTill=@ValidTill,ValidTillDate=@ValidTillDate,Percentage=@Percentage,CashBkType=@CashBkType,MaxAmt=@MaxAmt,BilAmt=@BilAmt,RaiseDynamic=@RaiseDynamic,CashBkStatus=@CashBkStatus,SeatingIds=@SeatingIds,TerminateSts=@TerminateSts where CashBkId=@CashBkId";
+                    Query = "update  CashBack set StartDate=@StartDate,ValidTill=@ValidTill,ValidTillDate=@ValidTillDate,Percentage=@Percentage,CashBkType=@CashBkType,MaxAmt=@MaxAmt,BilAmt=@BilAmt,RaiseDynamic=@RaiseDynamic,CashBkStatus=@CashBkStatus,SeatingIds=@SeatingIds,TerminateSts=@TerminateSts,MaxCBLimit=@MaxCBLimit where CashBkId=@CashBkId";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
                 }
@@ -76,7 +77,7 @@ namespace HangOut.Models.MyCustomer
                 cmd.Parameters.AddWithValue("@CashBkStatus", this.CashBkStatus);
                 cmd.Parameters.AddWithValue("@SeatingIds", this.SeatingIds);
                 cmd.Parameters.AddWithValue("@TerminateSts", this.TerminateSts);
-                
+                cmd.Parameters.AddWithValue("@MaxCBLimit", this.MaxCBLimit);
                 if (this.CashBkId == 0)
                 {
                     R = Convert.ToInt32(cmd.ExecuteScalar());
@@ -134,6 +135,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.TerminateSts = SDR.GetInt32(index++);
                     ObjTmp.CBUniqId = SDR.GetInt64(index++);
                     ObjTmp.CampeignType= SDR.GetInt32(index++);
+                    ObjTmp.MaxCBLimit = SDR.GetInt32(index++);
                     ListTmp.Add(ObjTmp);
                 }
             }
@@ -172,6 +174,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.TerminateSts = SDR.GetInt32(index++);
                     ObjTmp.CBUniqId = SDR.GetInt64(index++);
                     ObjTmp.CampeignType = SDR.GetInt32(index++);
+                    ObjTmp.MaxCBLimit = SDR.GetInt32(index++);
                     ObjTmp.StrStartDate = ObjTmp.StartDate.ToString("dd-MM-yyyy");
                     ObjTmp.ValidTillStr = ObjTmp.ValidTillDate.ToString("dd-MM-yyyy");
                     Tmp = ObjTmp;

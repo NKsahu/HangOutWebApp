@@ -89,29 +89,30 @@ namespace HangOut.Models.MyCustomer
             if (cashbk != null)
             {
                 double cashBkAmt = 0.00;
-                if (cashbk.Percentage > 0 && cashbk.BilAmt <= 0 && cashbk.MaxAmt <= 0)
-                {
-                    double OrdAmt = HG_Orders.OrderAmt(ObjOrder.OID, ObjOrder.DeliveryCharge);
-                    cashBkAmt = OrdAmt * cashbk.Percentage / 100;
-                }
-                else if(cashbk.Percentage>0&&cashbk.BilAmt>0 && cashbk.RaiseDynamic)
+                
+                if (cashbk.Percentage > 0 &&cashbk.RaiseDynamic)
                 {
                     double OrdAmt = HG_Orders.OrderAmt(ObjOrder.OID, ObjOrder.DeliveryCharge);
                     var AggStudy = GetOrder.GetTotalAmt(ObjOrder.OrgId);
                     double DynamicValue = AggStudy + (AggStudy - cashbk.BilAmt) * (cashbk.Percentage * 2 / 100);
-                    if(DynamicValue> cashbk.BilAmt && OrdAmt>DynamicValue)
+                    if (DynamicValue > cashbk.BilAmt && OrdAmt > DynamicValue)
                     {
                         cashBkAmt = OrdAmt * cashbk.Percentage / 100;
                     }
-                    else if(OrdAmt > cashbk.BilAmt)
+                    else if (OrdAmt > cashbk.BilAmt)
                     {
                         cashBkAmt = OrdAmt * cashbk.Percentage / 100;
                     }
                 }
-                else if(cashbk.Percentage > 0 &&cashbk.RaiseDynamic==false &&cashbk.BilAmt>0){
-
+                else if (cashbk.Percentage > 0   && cashbk.RaiseDynamic==false)
+                {
                     double OrdAmt = HG_Orders.OrderAmt(ObjOrder.OID, ObjOrder.DeliveryCharge);
-                    if(OrdAmt> cashbk.BilAmt)
+                   // cashBkAmt = OrdAmt * cashbk.Percentage / 100;
+                   if(OrdAmt>cashbk.BilAmt &&cashbk.MaxCBLimit==0)//unlimited;
+                    {
+                        cashBkAmt = OrdAmt * cashbk.Percentage / 100;
+                    }
+                   else if(OrdAmt > cashbk.BilAmt && cashbk.MaxCBLimit == 1)// limited
                     {
                         cashBkAmt = OrdAmt * cashbk.Percentage / 100;
                         if (cashBkAmt > cashbk.MaxAmt)
@@ -119,8 +120,8 @@ namespace HangOut.Models.MyCustomer
                             cashBkAmt = cashbk.MaxAmt;
                         }
                     }
-                   
                 }
+                
 
                 if (cashBkAmt > 0)
                 {

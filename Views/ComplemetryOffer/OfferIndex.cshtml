@@ -1,0 +1,210 @@
+﻿
+@model IEnumerable<HangOut.Models.MyCustomer.Cashback>
+@using HangOut.Models;
+@using HangOut.Controllers.MyCustomer;
+@{
+    Layout = null;
+}
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center"><b>Offers</b> </h3>
+        <hr />
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <button onclick="CreateEdit('0')" class="btn btn-info form-control">New </button>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
+        <table class="table table-hover w-100" id="TBLID">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayName("ID")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Start From")
+                    </th>
+                    <th class="noExport">Terminate</th>
+                    <th class="noExport">Status</th>
+                    <th class="noExport">Seating</th>
+                    <th class="noExport"> </th>
+                </tr>
+            </thead>
+            <tbody id="Tbody">
+                @foreach (var SSize in Model)
+                {
+                    <tr id="@SSize.CashBkId">
+                        <td>
+                            @SSize.CBUniqId
+                        </td>
+                        <td>
+                            @SSize.StartDate.ToString("dd-MM-yyyy")
+                        </td>
+                        <td id="T@(SSize.CashBkId)">
+                            <button class="btn btn-warning btn-sm " onclick="Terminate(@SSize.CashBkId,@SSize.TerminateSts)">@CashBackController.TerminatSts(SSize.TerminateSts)</button>
+                        </td>
+                        <td id="S@(SSize.CashBkId)">
+                            <button class="btn btn-info btn-sm " onclick="Status(@SSize.CashBkId,@SSize.CashBkStatus)">@CashBackController.CBSts(SSize.CashBkStatus)</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-success btn-sm " onclick="Seating(@SSize.CashBkId)">Edit Seating</button>
+                        </td>
+                        
+                        <td>
+                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.CashBkId)">Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    var AddTr = false;
+    function Terminate(CBID, Sts) {
+
+        if (confirm('Are you sure to want to TERMINATE campaign permanently ?')) {
+            var stringrsl = "";
+        if (Sts == 2) {
+            Sts = 1;//activate
+            stringrsl = "Activated";
+        }
+        else {
+            Sts = 2;//terminated
+            stringrsl = "Terminated";
+        }
+        $.ajax({
+            type: 'GET',
+            url: "/CashBack/ChangeTermSts?CBID="+CBID+"&Sts="+Sts,
+            success: function (data) {
+                var table = $('table').DataTable();
+                table.row("#" + CBID).remove().draw();
+                $("#T" + CBID).html(stringrsl);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+        }
+    }
+    function Status(CBID, Sts) {
+        var stringrsl = "";
+        if (Sts == 1) {
+            stringrsl = "Pause";
+            Sts = 2;//pause
+        }
+        else {
+            Sts = 1;//running
+            stringrsl = "Resume";
+        }
+        if (confirm(stringrsl+' Campaign?')) {
+            $.ajax({
+            type: 'GET',
+            url: "/CashBack/ChangeSts?CBID="+CBID+"&Sts="+Sts,
+            success: function (data) {
+                var value = parseInt(data);
+                if (value == 0) {
+                    alert('Cannot RESUME this campaign.Another mutual campaign applied on specified table(s)');
+                    return;
+                }
+                $("#S" + CBID).html(stringrsl);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+
+            }
+          });
+        }
+
+    }
+    function Seating(CBID) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/OrderMenu/CashBackSeating?CBID=" + CBID,
+            success: function (data) {
+                makedpt("OpenSeating");
+                $("#OpenSeating > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("OpenSeating");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function JsonSuccess(Jobj) {
+       $('#waiting').hide();
+        var Jitmobj = JSON.parse(Jobj.data);
+        if (Jitmobj.Status != null && Jitmobj.Status == 1) {
+            hidedpt("OpenOffer");
+            Seating(Jitmobj.CashBkId);
+        }
+        else {
+            EditItem(Jitmobj.CashBkId);
+            hidedpt("CreateSS");
+        var HtmlStr = "<tr id='" + Jitmobj.CashBkId + "'>";
+        HtmlStr += '<td>' + Jitmobj.UID + '</td>';
+        HtmlStr += '<td>' + Jitmobj.StartDate + '</td>';
+        HtmlStr += '<td id="T'+Jitmobj.CashBkId+'"><button class="btn btn-warning btn-sm "  onclick="Terminate(' + Jitmobj.CashBkId + ','+Jitmobj.TerminateStsID+')">' + Jitmobj.TStatus + '</button></td>';
+        HtmlStr += '<td id="S'+Jitmobj.CashBkId +'"><button class="btn btn-info btn-sm "  onclick="Status(' + Jitmobj.CashBkId + ','+Jitmobj.CBStsID+')">'+Jitmobj.CBSts+'</button></td>';
+        HtmlStr += '<td><button class="btn btn-success btn-sm " onclick="Seating(' + Jitmobj.CashBkId + ')">Edit Seating</button></td>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CashBkId + ')"> Edit</button>';
+            var table = $('table').DataTable();
+            if (AddTr) {
+                table.row.add($(HtmlStr)).draw();
+            }
+            else {
+                table.row("#" + Jitmobj.CashBkId).remove().draw();
+                table.row.add($(HtmlStr)).draw();
+            }
+        }
+
+
+    }
+    function CreateEdit(ID) {
+        if (ID != "0") {
+            AddTr = false;
+        } else {
+            AddTr = true;
+        }
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/ComplemetryOffer/CreateEdit?CBID=" + ID,
+            success: function (data) {
+                makedpt("CreateSS");
+                $("#CreateSS > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("CreateSS");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+
+    }
+    function EditItem(CBID) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/ComplemetryOffer/EditItems?CBID="+CBID,
+            success: function (data) {
+                 makedpt("OpenOffer");
+                $("#OpenOffer > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("OpenOffer");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+</script>
+
+
