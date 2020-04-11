@@ -35,30 +35,31 @@
             @Html.HiddenFor(model => model.CampeignType)
             @Html.HiddenFor(model => model.MaxCBLimit)
             @Html.HiddenFor(model => model.BilAmt)
-            List<SelectListItem> SL = new List<SelectListItem>() {
-        new SelectListItem{Text="UN-SPECIFIED",Value="1"},new SelectListItem{Text="SPECIFIED",Value="2"}
+            List<SelectListItem> OfferType = new List<SelectListItem>() {
+        new SelectListItem{Text="Choice Based",Value="1"},new SelectListItem{Text="Fixed Item",Value="2"}
         };
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Label("Start From")
+                @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
+                @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
+            </div>
 
-
-
-    <div class="row">
-        <div class="col-md-2">
-            @Html.Label("Start From")
-            @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
-            @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
+            <div class="col-md-2">
+                @Html.Label("End Date")
+                @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
+                @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                @Html.Label("Offer Mode")
+                @Html.DropDownListFor(model => model.OfferType, OfferType, new { @class = "form-control " })
+                @Html.ValidationMessageFor(model => model.OfferType, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-1" style="margin-top:5px;">
+                @Html.Label("Save", new { @class = "text-white" })
+                <input type="submit" value="Next" class="btn btn-success" />
+            </div>
         </div>
-
-        <div class="col-md-2">
-            @Html.Label("End Date")
-            @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
-            @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="col-sm-1" style="margin-top:5px;">
-            @Html.Label("Save", new { @class = "text-white" })
-            <input type="submit" value="Next" class="btn btn-success" />
-        </div>
-    </div>
 }
     </div>
     <div class="card-footer">
@@ -78,3 +79,12 @@
 </div>
 
 
+<script>
+    OfferType();
+    function OfferType() {
+        if ($("#CashBkId").val() != "0") {
+            $('#OfferType').css('pointer-events','none');
+        }
+        
+    }
+</script>

@@ -31,7 +31,15 @@ height: 250px;
 border-radius: 5px;
 background-color: #44cd4a;
 }
-
+.GreenClr{
+   background-color: #44cd4a;
+}
+.BlackClr{
+   background-color: #000000;
+}
+.WhiteClr{
+    background-color: #ffffff;
+}
 .TextOrdCuurent{
     width: 25px;
 color: #ffffff;
@@ -66,6 +74,20 @@ height: 45px;
 color: #4ac959;
 font-family: "Avenir Medium";
 font-size: 33px;
+font-weight: 500;
+}
+.ContactInfo{
+    /* Style for "Rectangle" */
+width: 100%;
+box-shadow: 0 2px 1px 1px #d7dde1, 0 2px 1px 1px #d7dde1;
+border-radius: 4px;
+border: 1px solid #9b9b9b;
+background-color: #ffffff;
+}
+.SeatingNameDisplay{
+color: #44cd4a;
+font-family: Futura;
+font-size: 24px;
 font-weight: 500;
 }
     </style>
@@ -258,47 +280,48 @@ font-weight: 500;
                 </div>
             </div>
         </div>
-        <div class="col-md-4" style="display:none" id="CartItemsMenu">
+        <div class="col-md-4" style="display:none;background-color: #ffffff;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);" id="CartItemsMenu" >
                 <div class="row">
                     <input type="hidden" id="ContactId" value="0" />
                     <div class="col-md-5">
-                        <input id="C_mobile" type="text" maxlength="10" onkeyup="ChangeContactList(this)" class="OnlyNum form-control" placeholder="Mobile No" />
+                        <input id="C_mobile" type="text" maxlength="10" onkeyup="ChangeContactList(this)" class="OnlyNum form-control ContactInfo" placeholder="Mobile No" />
                     </div>
                     <div class="col-md-5">
-                        <input id="C_name" onkeyup="ChangeContactList(this)" type="text" class=" form-control" placeholder="Customer Name" />
+                        <input id="C_name" onkeyup="ChangeContactList(this)" type="text" class=" form-control ContactInfo" placeholder="Customer Name" />
                     </div>
                     <div class="col-md-2">
-                        <button id="C_save" onclick="SaveLocalContact()" class="btn btn-success">save</button>
+                        <button id="C_save" onclick="SaveLocalContact()" style="color:black;" class="btn GreenClr">Save</button>
                     </div>
                 </div>
-                <div class="sp-bill">
-                    <p class="sp-panel-header">
-                        <span class="sp-hide-if-sm-screen" id="TorTWID">
+                <div class="row" style="margin-top:12px;">
+                    <div class="col-md-6">
+                        <span class="SeatingNameDisplay" id="TorTWID">
                             <!--Table name or take-away name-->
+                            First Floor Table 2
                         </span>
-                        <span>
-                            &nbsp; :&nbsp;
-                        </span>
-                        <span class="badge badge-pill badge-secondary" style="padding:7px" id="FinalAmt">
+                    </div>
+                    <div class="col-md-4">
+                        <span style="float:left" class="SeatingNameDisplay"> Rs. </span>
+                        <span  class="SeatingNameDisplay" style="float:left;" id="FinalAmt">
                             0.00
                         </span>
-
-                        <small style="float:right; font-size:medium">
+                    </div>
+                    <div class="col-md-2">
+                        <small style="font-size:medium">
                             <i class="fas fa-pen" style="color:red" onclick="EditOrder();"></i>
                             <i class="fas fa-eye" style="color:green" onclick="OrdDetail();"></i>
                         </small>
-                    </p>
-                    <!---->
-                    <!----><div>
+                    </div>
+                <div>
 
-                        <div>
-                            <div class="sp-sold-items-scroll-with-noticebar">
+                <div class="row">
+                            <div class="col-md-12">
                                 <table class="table table-hover sp-product-list">
                                     <thead>
                                         <tr>
                                             <th>Item</th>
                                             <th class="sp-quantity-th">Quantity</th>
-                                            <th><span class="sp-padright-10"></span>Amt</th>
+                                            <th><span class="sp-padright-10"></span>Amt(Rs)</th>
 
                                             <!---->
                                             <th></th>
@@ -312,12 +335,12 @@ font-weight: 500;
                                 <!---->
                                 <div class="row" style="width:100%">
                                     <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
-                                        <button type="button" class="form-control btn btn-success sp-f2-hotkey" onclick="SUBMIT();">
+                                        <button type="button" class="form-control btn BlackClr" style="color:#ffffff;border-radius:5px;" onclick="SUBMIT();">
                                             Send to CHEF
                                         </button>
                                     </div>
                                     <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
-                                        <button type="button" class="form-control btn btn-success sp-f2-hotkey">
+                                        <button type="button" style="color:#ffffff;border-radius:5px;" class="form-control btn BlackClr">
                                             Direct ADD-To BILL
                                         </button>
                                     </div>
@@ -325,25 +348,25 @@ font-weight: 500;
                                 <!--discount and charge-->
                                 <div class="row" style="width:100%">
                                     <div id="AddCharge" class="col-md-6" style="width:50% ;padding:10px ;">
-                                        <button type="button" class=" btn-sm btn-success sp-f2-hotkey" style="float:right" onclick="AddChargeDiscnt(2);">
+                                        <button type="button" style="color:#ffffff;border-radius:5px;" class=" btn-sm BlackClr form-control"  onclick="AddChargeDiscnt(2);">
                                             Add Charge
                                         </button>
                                     </div>
                                     <div id="Discnt" class="col-md-6" style="width:50%; padding:10px;">
-                                        <button type="button" class="  btn-sm btn-success sp-f2-hotkey" onclick="AddChargeDiscnt(1);">
+                                        <button type="button" style="color:#ffffff;border-radius:5px;" class=" btn-sm BlackClr form-control" onclick="AddChargeDiscnt(1);">
                                             Discount
                                         </button>
                                     </div>
                                 </div>
 
                                 <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px" onclick="Charge()">
-                                    <button type="button" class="form-control btn btn-success sp-f2-hotkey" id="FinalAmtCharge">
+                                    <button type="button" class="form-control btn GreenClr" style="border-radius:5px;" id="FinalAmtCharge">
                                         CHARGE
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+        </div>
 
                 </div>
             </div>
@@ -358,7 +381,7 @@ font-weight: 500;
         $("#Seating").addClass('col-md-7');
         $("#CartItemsMenu").show();
         $('.SeatingNum').removeClass('col-md-2');
-        $('.SeatingNum').addClass('col-md-4');
+        $('.SeatingNum').addClass('col-md-3');
     }
 
 </script>

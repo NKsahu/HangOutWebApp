@@ -146,7 +146,7 @@
             Seating(Jitmobj.CashBkId);
         }
         else {
-            EditItem(Jitmobj.CashBkId);
+            Seating(Jitmobj.CashBkId);
             hidedpt("CreateSS");
         var HtmlStr = "<tr id='" + Jitmobj.CashBkId + "'>";
         HtmlStr += '<td>' + Jitmobj.UID + '</td>';
@@ -176,7 +176,7 @@
         $('#waiting').show();
         $.ajax({
             type: 'GET',
-            url: "/ComplemetryOffer/CreateEdit?CBID=" + ID,
+            url: "/ComplemetryOffer/CreaEditOffr?CBID=" + ID,
             success: function (data) {
                 makedpt("CreateSS");
                 $("#CreateSS > .modal-dialog > .modal-content > .modal-body").html(data);

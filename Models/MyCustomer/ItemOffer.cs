@@ -15,7 +15,7 @@ namespace HangOut.Models.MyCustomer
         public int CashBkId { get; set; }
         public int IsDeleted { get; set; }
         public string ItemName { get; set; }
-
+        public int MenuId { get; set; }// 0: item Offers //1 : Offers campaeign  Type=3 Menu Id
         public ItemOffer()
         {
             IsDeleted = 0;
@@ -30,10 +30,11 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.ItemOfferId == 0)
                 {
-                    Query = "Insert into  ItemOffer  values(@ItemId,@Min,@Max,@CashBkId,@IsDeleted); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  ItemOffer  values(@ItemId,@Min,@Max,@CashBkId,@IsDeleted,@MenuId); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@ItemId", this.ItemId);
                     cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
+                    cmd.Parameters.AddWithValue("@MenuId", this.MenuId);
                 }
                 else
                 {
@@ -70,7 +71,36 @@ namespace HangOut.Models.MyCustomer
             return R;
         }
 
+        //public List<ItemOffer> GetAll(string Query)
+        //{
+        //    DBCon dBCon = new DBCon();
+        //    SqlCommand cmd = null;
+        //    SqlDataReader SDR = null;
+        //    List<ItemOffer> ListTmp = new List<ItemOffer>();
+        //    try
+        //    {
+        //        cmd = new SqlCommand(Query, dBCon.Con);
+        //        SDR = cmd.ExecuteReader();
+        //        while (SDR.Read())
+        //        {
+        //            int index = 0;
+        //            ItemOffer ObjTmp = new ItemOffer();
+        //            ObjTmp.ItemOfferId = SDR.GetInt32(index++);
+        //            ObjTmp.ItemId = SDR.GetInt32(index++);
+        //            ObjTmp.Min = SDR.GetInt32(index++);
+        //            ObjTmp.Max = SDR.GetInt32(index++);
+        //            ObjTmp.CashBkId = SDR.GetInt32(index++);
+        //            ObjTmp.MenuId = SDR.GetInt32(index++);
+        //            ObjTmp.ItemName = SDR.GetString(index++);
+        //            ListTmp.Add(ObjTmp);
+        //        }
+        //        offerObj.itemOffers = ListTmp;
+        //    }
+        //    catch (Exception e) { e.ToString(); }
+        //    finally { dBCon.Close(); }
 
+        //    return (offerObj);
+        //}
         
     }
 

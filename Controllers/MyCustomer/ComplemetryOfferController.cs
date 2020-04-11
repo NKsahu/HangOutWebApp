@@ -101,5 +101,11 @@ namespace HangOut.Controllers.MyCustomer
             return View(cashback);
 
         }
+
+        public ActionResult ChoiceBasedCreate(int CBID)
+        {
+            OfferTitle offerTitle = new OfferTitle();
+            return View(offerTitle);
+        }
     }
 }

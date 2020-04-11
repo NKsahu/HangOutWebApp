@@ -406,6 +406,8 @@
     <Compile Include="Models\MyCustomer\Cashback.cs" />
     <Compile Include="Models\MyCustomer\ChampeignCharge.cs" />
     <Compile Include="Models\MyCustomer\ItemOffer.cs" />
+    <Compile Include="Models\MyCustomer\OfferMenu.cs" />
+    <Compile Include="Models\MyCustomer\OfferTitle.cs" />
     <Compile Include="Models\MyCustomer\Wallet.cs" />
     <Compile Include="Models\OrdDiscntChrge.cs" />
     <Compile Include="Models\OrderMenu.cs" />
@@ -563,6 +565,7 @@
     <Content Include="Views\Shared\OfferItm.cshtml" />
     <Content Include="Views\ComplemetryOffer\OfferIndex.cshtml" />
     <Content Include="Views\ComplemetryOffer\CreaEditOffr.cshtml" />
+    <Content Include="Views\ComplemetryOffer\ChoiceBasedCreate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
