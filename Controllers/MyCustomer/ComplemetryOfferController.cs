@@ -104,8 +104,76 @@ namespace HangOut.Controllers.MyCustomer
 
         public ActionResult ChoiceBasedCreate(int CBID)
         {
-            OfferTitle offerTitle = new OfferTitle();
+            OfferTitle offerTitle = OfferTitle.GetOne(CBID,1);
+            if (offerTitle.OfferMenus.Count == 0)
+            {
+                var Menu = new OfferMenu();
+               // Menu.itemOffers.Add(new ItemOffer());
+                offerTitle.OfferMenus.Add(Menu);
+            }
             return View(offerTitle);
         }
+
+        [HttpPost]
+        public JObject SaveChoiceBased([System.Web.Http.FromBody] OfferTitle offerTitle)
+        {
+            JObject response = new JObject();
+            if(offerTitle.Name==null|| offerTitle.Name == "")
+            {
+                response.Add("Status", 400);
+                response.Add("MSG", "Display Name Required");
+                return response;
+            }
+            if (offerTitle.Discription == null || offerTitle.Discription == "")
+            {
+                response.Add("Status", 400);
+                response.Add("MSG", "Discription Is Required");
+                return response;
+            }
+            foreach (var offermenu in offerTitle.OfferMenus)
+            {
+                if(offermenu.Name==null|| offermenu.Name == "")
+                {
+                    response.Add("Status", 400);
+                    response.Add("MSG", "Name Is Required");
+                    return response;
+                }
+                if (offermenu.Min <= 0 || offermenu.Min > offermenu.Max)
+                {
+                    response.Add("Status", 400);
+                    response.Add("MSG","Invalid Qty");
+                    return response;
+                }
+                if(offermenu.itemOffers == null|| offermenu.itemOffers.Count == 0)
+                {
+                    response.Add("Status", 400);
+                    response.Add("MSG", "Add Atleast on Item");
+                    return response;
+                }
+            }
+            offerTitle.Save();
+            foreach (var offermenu in offerTitle.OfferMenus)
+            {
+                offermenu.CBID = offerTitle.CBID;
+                offermenu.OfferTitleId = offerTitle.TitleId;
+                offermenu.Save();
+                foreach(var items in offermenu.itemOffers)
+                {
+                    items.CashBkId = offermenu.CBID;
+                    items.MenuId = offermenu.MenuId;
+                    items.Save();
+                }
+            }
+            response.Add("Status", 200);
+            return response;
+        }
+        public ActionResult AddMenu()
+        {
+            OfferMenu OfferMenus = new OfferMenu();
+            OfferMenus.Min = 1;
+            OfferMenus.Max = 1;
+            return View("OfferMenu",OfferMenus);
+        }
+       
     }
 }

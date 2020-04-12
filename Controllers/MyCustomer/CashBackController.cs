@@ -117,6 +117,7 @@ namespace HangOut.Controllers.MyCustomer
                 response.Add("CBSts", CBSts(cashback.CashBkStatus));
                 response.Add("CBStsID", cashback.TerminateSts);
                 response.Add("UID", cashback.CBUniqId);
+                response.Add("OfferType", cashback.OfferType);
                 return Json(new { data = response.ToString() }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)

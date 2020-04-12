@@ -29,10 +29,12 @@ namespace HangOut.Controllers.POS
                 ListItems = ListItems.FindAll(x => x.ItemAvaibility == 0);// only available items
                 MenuList = new HG_Category().GetAll(OrgId: OrgId);
             }
+            HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             List<Seating> Listseating = Seating.GetSeating(OrgId);
             JObject JobjResonse = new JObject();
             JArray SeatingArray = new JArray();
             JArray TakeAwayItem = new JArray();
+            List<HG_Floor_or_ScreenMaster> FlrScr = new HG_Floor_or_ScreenMaster().GetAll(int.Parse(ObjOrg.OrgTypes), OrgId);
             foreach (var ObjSeating in Listseating)
             {
                 JObject jObject = new JObject();
@@ -227,6 +229,7 @@ namespace HangOut.Controllers.POS
                 SeatingArray.Add(jObject);
             }
             JobjResonse.Add("Seating", SeatingArray);
+            JobjResonse.Add("FlrScrList", JArray.FromObject(FlrScr));
             return JobjResonse;
         }
     }

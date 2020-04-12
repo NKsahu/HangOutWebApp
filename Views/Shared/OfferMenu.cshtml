@@ -4,24 +4,54 @@
     Layout = null;
 }
 
-@using (Html.BeginCollectionItem("offermenu"))
+@using (Html.BeginCollectionItem("OfferMenus"))
 {
-    <div class="row">
-      
-        @Html.HiddenFor(model => model.ItemId, new { @class = "ItemId" })
-        @Html.HiddenFor(model => model.IsDeleted, new { @class = "IsDeleted" })
+    <div class="row OfferMenus">
+        @Html.HiddenFor(model => model.MenuId, new { @class = "MenuId" })
+        @Html.HiddenFor(model => model.CBID, new { @class = "CBID" })
+        @Html.HiddenFor(model => model.OfferTitleId, new { @class = "OfferTitleId" })
+        <div class="col-md-1"></div>
         <div class="col-md-2">
+            @Html.Label("Is Complementry")
+            @Html.CheckBoxFor(model => model.IsComplementry, new { @class = "form-control IsComplementry", })
+            @Html.ValidationMessageFor(model => model.IsComplementry, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-4">
+            @Html.Label("Name")
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control Name ", @placeholder = "Enter Category Name", @Required = "Required" })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Min")
+            @Html.TextBoxFor(model => model.Min, new { @class = "form-control Min", })
+            @Html.ValidationMessageFor(model => model.Min, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Max")
+            @Html.TextBoxFor(model => model.Max, new { @class = "form-control Max", })
+            @Html.ValidationMessageFor(model => model.Max, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-12 AddItems">
+            @for (int i = 0; i < Model.itemOffers.Count; i++)
+            {
+                @Html.Partial("OfferItm", Model.itemOffers[i])
+            }
+        </div>
+        <div class="row " style="width:100%">
+            <div class="col-md-5">
 
-        </div>
-        <div class="col-md-2">
-            @Html.Label("Item")
-            @Html.TextBoxFor(model => model.ItemName, new { @class = "form-control ", @readonly = "readoly" })
-            @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-1">
-            <a title="Add Item" class="btn btn-danger " onclick="RemoveItem(@Model.ItemId,this);"> <i class="fa fa-minus"></i></a>
+            </div>
+            <div class="col-md-2">
+                <a title="Add Item" class="btn btn-danger form-control" onclick="ShowItemsToOrder(this);"> Add Item </a>
+            </div>
+            <div class="col-md-5">
+
+            </div>
         </div>
     </div>
+    
+   
 
 }
 

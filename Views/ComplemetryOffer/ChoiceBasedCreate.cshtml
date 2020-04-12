@@ -10,41 +10,182 @@
         <hr />
     </div>
     <div class="card-body">
-        @using (Ajax.BeginForm("SaveOfferItem", "ComplemetryOffer", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("SaveChoiceBased", "ComplemetryOffer", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.CBID)
+            @Html.HiddenFor(model=>model.TitleId)
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-4">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     @Html.Label("Display Name")
-                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control " })
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control " ,@Required="Required"})
                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                 </div>
             </div>
             for (int i = 0; i < Model.OfferMenus.Count; i++)
             {
                 @Html.Partial("OfferMenu", Model.OfferMenus[i])
             }
-            <div id="AppendItem">
+            <div id="AppendMenu">
 
             </div>
             <div class="row">
                 <div class="col-md-5">
                 </div>
                 <div class="col-md-2" id="btn">
-                    <a title="Add Item" class="btn btn-success form-control" onclick="ShowItemsToOrder();"> <i class="fa fa-plus"></i></a>
+                    <a title="Add Item" class="btn btn-success form-control" onclick="AddNewMenu();"> <i class="fa fa-plus"></i></a>
                 </div>
                 <div class="col-md-5">
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.Label("Discription")
+                    @Html.TextBoxFor(model => model.Discription, new { @class = "form-control ", @Required = "Required" })
+                    @Html.ValidationMessageFor(model => model.Discription, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Max Order Qty")
+                    @Html.TextBoxFor(model => model.MaxOrdQty, new { @class = "form-control ", @Required = "Required" })
+                    @Html.ValidationMessageFor(model => model.MaxOrdQty, "", new { @class = "text-danger" })
+                </div>
+            </div>
             <div class="col-md-1" style="margin-top:5px;">
                 @Html.Label("Save", new { @class = "text-white" })
-                <input type="submit" value="Next" class="btn btn-success form-control" />
+                <input type="button" onclick="SaveForm()" value="Next" class="btn btn-success form-control" />
             </div>
         }
     </div>
 
-</div> 
+</div>
+<script>
+    var CurritemAdd = null;
+    function AddNewMenu() {
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/ComplemetryOffer/AddMenu",
+            success: function (data) {
+                $("#AppendMenu").append(data);
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+    function ShowItemsToOrder(event) {
+        CurritemAdd = event;
+        $("#waiting").show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Items/AddItemToOrder",
+            success: function (data) {
+                makedpt("ShowItems", 600, 600);
+                $("#ShowItems > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("ShowItems");
+                $("#waiting").hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+    }
+       function AddItem(event, ItemId) {
+           
+           if (event.checked) {
+           
+           //var ItemsAlreadyAdded = document.get
+           //for (var i = 0; i < ItemsAlreadyAdded.length; i++) {
+           //    var ObjItem = $(ItemsAlreadyAdded[i]);
+           //    if (ObjItem.val() == ItemId) {
+           //        alert('Item Already Added');
+           //        $(event).click();
+           //        return;
+                   
+           //    }
+           //}
+       $.ajax({
+            type: 'GET',
+            url: "/ComplemetryOffer/AddOfrItem?Itemid="+ItemId,
+            success: function (data) {
+                $(CurritemAdd).parent('div').parent('div').parent('div').find('.AddItems').append(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
+            }
+        });
+        }
+
+       }
+       function RemoveItem(itemid,event) {
+           $(event).parent('div').parent('div').find('.IsDeleted').val('1');
+           $(event).parent('div').parent('div').hide();
+    }
+    function SaveForm() {
+        var OfferTitle = {};
+        OfferTitle.TitleId = $("#TitleId").val();
+        OfferTitle.CBID = $("#CBID").val();
+        OfferTitle.Name = $("#Name").val();
+        OfferTitle.Discription = $("#Discription").val();
+        OfferTitle.MaxOrdQty = $("#MaxOrdQty").val();
+        OfferTitle.Type = 1;//offer items
+        OfferTitle.OfferMenus = [];
+        var ListOfferMenus = document.getElementsByClassName("OfferMenus");
+        for (var i = 0; i < ListOfferMenus.length; i++) {
+            var OfferMenu = {};
+            var ObjAddJQ = $(ListOfferMenus[i]);
+            OfferMenu.MenuId = ObjAddJQ.find(".MenuId").val();
+            OfferMenu.Name = ObjAddJQ.find(".Name").val();
+            OfferMenu.IsComplementry = ObjAddJQ.find(".IsComplementry").is(':checked');
+            OfferMenu.Min = ObjAddJQ.find(".Min").val();
+            OfferMenu.Max = ObjAddJQ.find(".Max").val();
+            OfferMenu.itemOffers = [];
+            var AddOnItems = ListOfferMenus[i].getElementsByClassName("itemOffers");
+            for (var j = 0; j < AddOnItems.length; j++) {
+                var ObjAddOnItem = $(AddOnItems[j]);
+                console.log("Items");
+                var AddonItemObj = {};
+                AddonItemObj.ItemOfferId = ObjAddOnItem.find(".ItemOfferId").val();
+                AddonItemObj.ItemId = ObjAddOnItem.find(".ItemId").val();
+                AddonItemObj.Min = ObjAddOnItem.find(".Min").val();
+                AddonItemObj.Max = ObjAddOnItem.find(".Max").val();
+                AddonItemObj.CashBkId = ObjAddOnItem.find(".CashBkId").val();
+                AddonItemObj.IsDeleted = ObjAddOnItem.find(".IsDeleted").val();
+                AddonItemObj.MenuId = ObjAddOnItem.find(".MenuId").val();
+                OfferMenu.itemOffers.push(AddonItemObj);
+            }
+
+            OfferTitle.OfferMenus.push(OfferMenu);
+        }
+            
+            $('#waiting').show();
+            $.ajax({
+                type: 'POST',
+                url: "/ComplemetryOffer/SaveChoiceBased",
+                data: JSON.stringify(OfferTitle),
+                contentType: "application/json",
+                success: function (data) {
+                    $('#waiting').hide();
+                    var jsonobj = JSON.parse(data);
+                    if (jsonobj.Status == 200) {
+                        hidedpt("ChoiceBasedCreate");
+                    }
+                    else {
+                        alert(jsonobj.MSG);
+                    }
+                    
+                    
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    $('#waiting').hide();
+                }
+            });
+        
+    }
+    
+</script>

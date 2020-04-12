@@ -13,10 +13,17 @@ namespace HangOut.Models.MyCustomer
      public string Name { get; set; }
     public string  Discription { get; set; }
     public int  MaxOrdQty { get; set; }
-    public float FinalPrice { get; set; }
-    public float Tax { get; set; }
-     
-    public List<OfferMenu> OfferMenus { get; set; }
+    public double FinalPrice { get; set; }
+    public double Tax { get; set; }
+     public int Type { get; set; }// 1: choice based, 2 fixed items
+
+
+        public List<OfferMenu> OfferMenus { get; set; }
+        public OfferTitle()
+        {
+            OfferMenus = new List<OfferMenu>();
+        }
+   
     public int Save(){
             int R = 0;
             DBCon dBCon = new DBCon();
@@ -26,9 +33,10 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.TitleId == 0)
                 {
-                    Query = "Insert into  OfferTitle  values(@CBID,@Name,@Discription,@MaxOrdQty,@FinalPrice,@Tax); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  OfferTitle  values(@CBID,@Name,@Discription,@MaxOrdQty,@FinalPrice,@Tax,@Type); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@CBID", this.CBID);
+                    cmd.Parameters.AddWithValue("@Type", this.Type);
                 }
                 else
                 {
@@ -64,6 +72,40 @@ namespace HangOut.Models.MyCustomer
                 if (cmd != null) cmd.Dispose();
             }
             return R;
+        }
+
+
+        public static OfferTitle GetOne(int CBID,int Type)
+        {
+
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            OfferTitle Tmp = new OfferTitle();
+            string Query = "SELECT * FROM  OfferTitle where CBID=" + CBID.ToString()+" and Type="+ Type;
+            try
+            {
+                cmd = new SqlCommand(Query, dBCon.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    int index = 0;
+                    OfferTitle ObjTmp = new OfferTitle();
+                    ObjTmp.TitleId = SDR.GetInt32(index++);
+                    ObjTmp.CBID = SDR.GetInt32(index++);
+                    ObjTmp.Name = SDR.GetString(index++);
+                    ObjTmp.Discription = SDR.GetString(index++);
+                    ObjTmp.MaxOrdQty = SDR.GetInt32(index++);
+                    ObjTmp.FinalPrice = SDR.GetDouble(index++);
+                    ObjTmp.Tax = SDR.GetDouble(index++);
+                    ObjTmp.OfferMenus = OfferMenu.GetAll(ObjTmp.TitleId);
+                    Tmp = ObjTmp;
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { dBCon.Close(); }
+
+            return (Tmp);
         }
     }
 

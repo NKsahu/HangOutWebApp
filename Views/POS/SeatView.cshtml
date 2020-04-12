@@ -22,7 +22,8 @@
 height: 36px;
 color: #ffffff;
 font-family: Futura;
-font-size: 27px;
+font-size: 20px;
+overflow:hidden;
 font-weight: 500;
         }
 .BtnOrderCurrent{
@@ -33,6 +34,9 @@ background-color: #44cd4a;
 }
 .GreenClr{
    background-color: #44cd4a;
+}
+.GreenTxt{
+    color: #44cd4a;
 }
 .BlackClr{
    background-color: #000000;
@@ -56,6 +60,13 @@ height: 200px;
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 border: 1px solid #e6ebef;
 background-color: #ffffff;
+}
+.MenuBox{
+width: 100%;
+height: 40px;
+border-radius: 5px;
+background-color: #44cd4a;
+
 }
 
 .SeatingLine{
@@ -87,18 +98,39 @@ background-color: #ffffff;
 .SeatingNameDisplay{
 color: #44cd4a;
 font-family: Futura;
-font-size: 24px;
+font-size: 20px;
 font-weight: 500;
+}
+.ItemCard{
+   
+width: 100%;
+height: 176px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+border: 1px solid #e6ebef;
+background-color: #ffffff;
+
+}
+.ItemName{
+    font-size: 20px;
+    min-height:115px;
+    font-weight: 500;
+    font-family:'Avenir Medium';
+    font-weight:bold;
+    margin-top:15px;
+    text-align:center;
 }
     </style>
     <div class="row">
-        <div class="col-md-4">
-            <div class="PosSelect ">
-                <select class="form-control PosSelItem" style="height:100%;">
-                    <option class="PosSelItem" selected value="1">Seat View</option>
-                    <option class="PosSelItem" value="2">Order View</option>
-                </select>
-
+        <div class="col-md-8">
+            <div class="PosSelect">
+                <div class="row">
+                    <div class="col-md-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="45%" viewBox="0 0 23 24"><g><g><image width="100%" height="80%" transform="translate(-2 -1)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAADAElEQVRIS73VS0hVQRgH8P93ZuLmjR5oRW9qEWFED0SDoBDE85j0goItatcm6LFq2cOkyEURrSKS2kRtjStnpnsQonWIi4iioOgBaaiRkV7vPedMDFylh96jF2u288385uObb4bwnwYlObZtb7Msq5aIVluWFWuthwE8l1IOJa39dX4uiIQQDVrr60S0A8AbAGNaa4uI1gDYTkT9AC76vv9yPuBfUGNjI6+qqrpCRMcBXKivr+/p6uqKf93M87wUEZ0HcBLAOSnl7STsN6ijo4NNTEzcjeO4QSm1M2lxJpPZEIbhgNb6llLqcrn43yAhxFEAV6WUW5OQ6Xnbttdyzt+HYbgvCIJXc62bgZqammpSqdQQEa31ff/rfCET19LS0hDHcSClXJUImWy01qeVUgcWgphYU9d0Ov2DMbaxr69vZLb1MxkJIRSA+1LKhwuFTLzneV2mBaSUp8pCnueNRFG0MwiCL5VAzc3NeznnfUqpzUkZFYeHh9MDAwPFSqD29vb1+Xz+nZRyaRL0KQzDg0EQvKsEchznIGPsjpSyNgl6oLV+ppS6WQnkum4PEX2Yq59mLoPjOIcZY6aH9iwUam1tTUdR9DUMw+ogCH6Uzci27WWc8zdEdMz3/ScLwYQQJ7TWZ5RSuxL7yAQIIQ4BeMQ5r81ms+aVThyu69ZblvWUMbZlrh4ym/z1qHqedxbAJSKqk1K+LiNZQogmAI8BjKZSqdre3t7ReWU0HeS6bgcR3SOiBwC6wzAcCYJgsrOzE4ODg8vy+fxGxtgNAHVEZA5rvo5xzvmmbDb7vWyNZpsUQvQAOAKgCgAvxZg+MwW/JqXsbmtrq5mamnoLYAWAUGtdo5Qa/3O/xB82sUgAMpnM8mKxOEpESwzGOa/+M7NFgUpvnclopISNR1G0LZfLjU0fdNEgs2Eps49EtBLAF8757unbu6iQwRzHqWaMvQCwTmv9MY7j/blc7vOiQwYr/brPALwvFAqt/f393/4JVGr+dYVCYdIgszbsfG5ZJTE/AfcdKiqjDvtGAAAAAElFTkSuQmCC" /></g></g></svg>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="PosSelItem" style="width: 100%;">Search</div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -110,21 +142,8 @@ font-weight: 500;
                 </select>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="PosSelect">
-                <div class="row">
-                    <div class="col-md-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="80%" viewBox="0 0 23 24"><g><g><image width="100%" height="80%" transform="translate(-2 -1)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAADAElEQVRIS73VS0hVQRgH8P93ZuLmjR5oRW9qEWFED0SDoBDE85j0goItatcm6LFq2cOkyEURrSKS2kRtjStnpnsQonWIi4iioOgBaaiRkV7vPedMDFylh96jF2u288385uObb4bwnwYlObZtb7Msq5aIVluWFWuthwE8l1IOJa39dX4uiIQQDVrr60S0A8AbAGNaa4uI1gDYTkT9AC76vv9yPuBfUGNjI6+qqrpCRMcBXKivr+/p6uqKf93M87wUEZ0HcBLAOSnl7STsN6ijo4NNTEzcjeO4QSm1M2lxJpPZEIbhgNb6llLqcrn43yAhxFEAV6WUW5OQ6Xnbttdyzt+HYbgvCIJXc62bgZqammpSqdQQEa31ff/rfCET19LS0hDHcSClXJUImWy01qeVUgcWgphYU9d0Ov2DMbaxr69vZLb1MxkJIRSA+1LKhwuFTLzneV2mBaSUp8pCnueNRFG0MwiCL5VAzc3NeznnfUqpzUkZFYeHh9MDAwPFSqD29vb1+Xz+nZRyaRL0KQzDg0EQvKsEchznIGPsjpSyNgl6oLV+ppS6WQnkum4PEX2Yq59mLoPjOIcZY6aH9iwUam1tTUdR9DUMw+ogCH6Uzci27WWc8zdEdMz3/ScLwYQQJ7TWZ5RSuxL7yAQIIQ4BeMQ5r81ms+aVThyu69ZblvWUMbZlrh4ym/z1qHqedxbAJSKqk1K+LiNZQogmAI8BjKZSqdre3t7ReWU0HeS6bgcR3SOiBwC6wzAcCYJgsrOzE4ODg8vy+fxGxtgNAHVEZA5rvo5xzvmmbDb7vWyNZpsUQvQAOAKgCgAvxZg+MwW/JqXsbmtrq5mamnoLYAWAUGtdo5Qa/3O/xB82sUgAMpnM8mKxOEpESwzGOa/+M7NFgUpvnclopISNR1G0LZfLjU0fdNEgs2Eps49EtBLAF8757unbu6iQwRzHqWaMvQCwTmv9MY7j/blc7vOiQwYr/brPALwvFAqt/f393/4JVGr+dYVCYdIgszbsfG5ZJTE/AfcdKiqjDvtGAAAAAElFTkSuQmCC" /></g></g></svg>
-                    </div>
-                    <div class="col-md-10">
-                        <div class="PosSelItem" style="width: 100%;">Search</div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
     </div>
-    <div class="row" style="margin-top:20px">
+    <div class="row" style="margin-top:20px" id="SeatingFilter">
         <div class="col-md-2">
             <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">All</span></button>
         </div>
@@ -142,6 +161,35 @@ font-weight: 500;
         </div>
         <div class="col-md-2">
             <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Call For Bill</span></button>
+        </div>
+    </div>
+    <div class="row" style="margin-top:20px;display:none;" id="MenuFilter">
+        <div class="col-md-2">
+            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">All</span></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Top Selling</span></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Papad</span></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Special Veg</span></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Special Veg</span></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Special Veg</span></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Papad</span></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Papad</span></button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Papad</span></button>
         </div>
     </div>
     <div class="row" style="margin-top:20px">
@@ -169,8 +217,8 @@ font-weight: 500;
             </div>
         </div>
         <div class="col-md-11" style="height:500px;overflow:auto;" id="Seating">
-            <div class="row" style="width:100%;height:100%">
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
+            <div class="row" style="width:100%;">
+                <div class="col-md-2 SeatingNum" onclick="SeatingClick();" ondblclick="SeatingDBClick();">
                     <div class="SeatingBox">
                         <div class="text-center" style="margin-top:15px;">
                             <h3>Floor 1</h3>
@@ -280,8 +328,57 @@ font-weight: 500;
                 </div>
             </div>
         </div>
-        <div class="col-md-4" style="display:none;background-color: #ffffff;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);" id="CartItemsMenu" >
-                <div class="row">
+        <!--Menu Items-->
+        <div class="col-md-7" style="height:500px;overflow:auto;display:none;" id="MenuItems">
+            <div class="row" style="width:100%;">
+                <div class="col-md-3">
+                    <div class="ItemCard">
+                        <h4 class="ItemName" style="">Kamtu Item 2 With Extraa Kamtu</h4>
+                        <div class="SeatingLine"  >
+
+                        </div>
+                        <div>
+                            <h4 class="GreenTxt text-center">Rs. 50</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ItemCard">
+                        <h4 class="ItemName">Kamtu Item 2 </h4>
+                        <div class="SeatingLine" >
+
+                        </div>
+                        <div>
+                            <h4 class="GreenTxt text-center">Rs. 50</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ItemCard">
+                        <h4 class="ItemName">Kamtu  </h4>
+                        <div class="SeatingLine" >
+
+                        </div>
+                        <div>
+                            <h4 class="GreenTxt text-center">Rs. 50</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ItemCard">
+                        <h4 class="ItemName">Kamtu Popcorn </h4>
+                        <div class="SeatingLine" >
+
+                        </div>
+                        <div>
+                            <h4 class="GreenTxt text-center">Rs. 50</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-md-4" style="display:none;background-color: #ffffff;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);" id="CartItemsMenu">
+                <div class="row" style="margin-top:8px;">
                     <input type="hidden" id="ContactId" value="0" />
                     <div class="col-md-5">
                         <input id="C_mobile" type="text" maxlength="10" onkeyup="ChangeContactList(this)" class="OnlyNum form-control ContactInfo" placeholder="Mobile No" />
@@ -293,85 +390,90 @@ font-weight: 500;
                         <button id="C_save" onclick="SaveLocalContact()" style="color:black;" class="btn GreenClr">Save</button>
                     </div>
                 </div>
-                <div class="row" style="margin-top:12px;">
-                    <div class="col-md-6">
+                <div class="row" style="margin-top:8px;">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-5">
                         <span class="SeatingNameDisplay" id="TorTWID">
                             <!--Table name or take-away name-->
-                            First Floor Table 2
+                            First Floor Table 2 :
                         </span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <span style="float:left" class="SeatingNameDisplay"> Rs. </span>
-                        <span  class="SeatingNameDisplay" style="float:left;" id="FinalAmt">
+                        <span class="SeatingNameDisplay" style="float:left;" id="FinalAmt">
                             0.00
                         </span>
                     </div>
-                    <div class="col-md-2">
-                        <small style="font-size:medium">
-                            <i class="fas fa-pen" style="color:red" onclick="EditOrder();"></i>
-                            <i class="fas fa-eye" style="color:green" onclick="OrdDetail();"></i>
-                        </small>
+                    <div class="col-md-1">
                     </div>
+                    <div class="col-md-1">
+                        <i class="fas fa-pen" style="color:red" onclick="EditOrder();"></i>
+                    </div>
+                    <div class="col-md-1">
+                        <i class="fas fa-eye" style="color:green" onclick="OrdDetail();"></i>
+                    </div>
+                </div>
                 <div>
 
-                <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-hover sp-product-list">
-                                    <thead>
-                                        <tr>
-                                            <th>Item</th>
-                                            <th class="sp-quantity-th">Quantity</th>
-                                            <th><span class="sp-padright-10"></span>Amt(Rs)</th>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-hover sp-product-list">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th class="sp-quantity-th">Quantity</th>
+                                        <th><span class="sp-padright-10"></span>Amt(Rs)</th>
 
-                                            <!---->
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="AddItem"></tbody>
-                                </table>
-                            </div>
+                                        <!---->
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="AddItem"></tbody>
+                            </table>
+                        </div>
 
-                            <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn">
-                                <!---->
-                                <div class="row" style="width:100%">
-                                    <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
-                                        <button type="button" class="form-control btn BlackClr" style="color:#ffffff;border-radius:5px;" onclick="SUBMIT();">
-                                            Send to CHEF
-                                        </button>
-                                    </div>
-                                    <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
-                                        <button type="button" style="color:#ffffff;border-radius:5px;" class="form-control btn BlackClr">
-                                            Direct ADD-To BILL
-                                        </button>
-                                    </div>
+                        <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn">
+                            <!---->
+                            <div class="row" style="width:100%">
+                                <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;padding:10px ;">
+                                    <button type="button" class="form-control btn BlackClr" style="color:#ffffff;border-radius:5px;" onclick="SUBMIT();">
+                                        Send to CHEF
+                                    </button>
                                 </div>
-                                <!--discount and charge-->
-                                <div class="row" style="width:100%">
-                                    <div id="AddCharge" class="col-md-6" style="width:50% ;padding:10px ;">
-                                        <button type="button" style="color:#ffffff;border-radius:5px;" class=" btn-sm BlackClr form-control"  onclick="AddChargeDiscnt(2);">
-                                            Add Charge
-                                        </button>
-                                    </div>
-                                    <div id="Discnt" class="col-md-6" style="width:50%; padding:10px;">
-                                        <button type="button" style="color:#ffffff;border-radius:5px;" class=" btn-sm BlackClr form-control" onclick="AddChargeDiscnt(1);">
-                                            Discount
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px" onclick="Charge()">
-                                    <button type="button" class="form-control btn GreenClr" style="border-radius:5px;" id="FinalAmtCharge">
-                                        CHARGE
+                                <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%; padding:10px" onclick="INSTANTCLR()">
+                                    <button type="button" style="color:#ffffff;border-radius:5px;" class="form-control btn BlackClr">
+                                        Direct ADD-To BILL
                                     </button>
                                 </div>
                             </div>
-                        </div>
-        </div>
+                            <!--discount and charge-->
+                            <div class="row" style="width:100%">
+                                <div id="AddCharge" class="col-md-6" style="width:50% ;padding:10px ;">
+                                    <button type="button" style="color:#ffffff;border-radius:5px;" class=" btn BlackClr form-control" onclick="AddChargeDiscnt(2);">
+                                        Add Charge
+                                    </button>
+                                </div>
+                                <div id="Discnt" class="col-md-6" style="width:50%; padding:10px;">
+                                    <button type="button" style="color:#ffffff;border-radius:5px;" class=" btn BlackClr form-control" onclick="AddChargeDiscnt(1);">
+                                        Discount
+                                    </button>
+                                </div>
+                            </div>
 
+                            <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px" onclick="Charge()">
+                                <button type="button" style="color:#ffffff;border-radius:5px;" class="form-control btn GreenClr" style="border-radius:5px;" id="FinalAmtCharge">
+                                    CHARGE
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-       
     </div>
+       
+    
 
 
 <script>
@@ -383,5 +485,12 @@ font-weight: 500;
         $('.SeatingNum').removeClass('col-md-2');
         $('.SeatingNum').addClass('col-md-3');
     }
-
+    function SeatingDBClick() {
+        $("#Seating").hide();
+        $("#SeatingFilter").hide();
+        $("#MenuItems").show();
+        $("#MenuFilter").show();
+        $("#CartItemsMenu").show();
+        
+    }
 </script>

@@ -71,37 +71,38 @@ namespace HangOut.Models.MyCustomer
             return R;
         }
 
-        //public List<ItemOffer> GetAll(string Query)
-        //{
-        //    DBCon dBCon = new DBCon();
-        //    SqlCommand cmd = null;
-        //    SqlDataReader SDR = null;
-        //    List<ItemOffer> ListTmp = new List<ItemOffer>();
-        //    try
-        //    {
-        //        cmd = new SqlCommand(Query, dBCon.Con);
-        //        SDR = cmd.ExecuteReader();
-        //        while (SDR.Read())
-        //        {
-        //            int index = 0;
-        //            ItemOffer ObjTmp = new ItemOffer();
-        //            ObjTmp.ItemOfferId = SDR.GetInt32(index++);
-        //            ObjTmp.ItemId = SDR.GetInt32(index++);
-        //            ObjTmp.Min = SDR.GetInt32(index++);
-        //            ObjTmp.Max = SDR.GetInt32(index++);
-        //            ObjTmp.CashBkId = SDR.GetInt32(index++);
-        //            ObjTmp.MenuId = SDR.GetInt32(index++);
-        //            ObjTmp.ItemName = SDR.GetString(index++);
-        //            ListTmp.Add(ObjTmp);
-        //        }
-        //        offerObj.itemOffers = ListTmp;
-        //    }
-        //    catch (Exception e) { e.ToString(); }
-        //    finally { dBCon.Close(); }
+        public static List<ItemOffer> GetAll(string Query)
+        {
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            List<ItemOffer> ListTmp = new List<ItemOffer>();
+            try
+            {
+                cmd = new SqlCommand(Query, dBCon.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    int index = 0;
+                    ItemOffer ObjTmp = new ItemOffer();
+                    ObjTmp.ItemOfferId = SDR.GetInt32(index++);
+                    ObjTmp.ItemId = SDR.GetInt32(index++);
+                    ObjTmp.Min = SDR.GetInt32(index++);
+                    ObjTmp.Max = SDR.GetInt32(index++);
+                    ObjTmp.CashBkId = SDR.GetInt32(index++);
+                    ObjTmp.MenuId = SDR.GetInt32(index++);
+                    ObjTmp.MenuId= SDR.GetInt32(index++);
+                    ObjTmp.ItemName = SDR.GetString(index++);
 
-        //    return (offerObj);
-        //}
-        
+                    ListTmp.Add(ObjTmp);
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { dBCon.Close(); }
+
+            return (ListTmp);
+        }
+
     }
 
     public class OfferObj
