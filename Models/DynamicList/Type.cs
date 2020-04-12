@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace HangOut.Models.DynamicList
 {
@@ -53,7 +54,18 @@ namespace HangOut.Models.DynamicList
             int OrgId =int.Parse(BrwserCookie()["OrgId"]);
             return OrgId;
         }
-       
+        public static int UserCode()
+        {
+            int UserCode = 0;
+            try
+            {
+                UserCode=  int.Parse(BrwserCookie()["UserCode"]);
+            }
+            catch (Exception e) { 
+            }
+            return UserCode;
+        }
+
     }
    
 

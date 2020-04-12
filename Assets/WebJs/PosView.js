@@ -30,16 +30,7 @@ var Carthtmfirst = ">+</span></div ></div ></td > <td class='sp-product-price'>"
 Carthtmfirst += "<span class='sp-padright-10'></span>"
 var Carthtmlsecond = "<span class='sp-price'>";
 var cartlasthtml = "</span ></td >";
-document.getElementById("defaultOpen").click();
-$("#TableClr2").click(function () {
-    $("#ItemSearch2").val('');
-    SearchItem('ItemSearch2', 'ItemsClass');
-});
-$("#TableClr").click(function () {
-    $("#TableSearch").val('');
-    SearchItem('TableSearch', 'TabAndTakeW');
 
-});
 $(document).ready(function () {
     OrgId = $("#COID").val();
     LoginId = $("#CUC").val();
