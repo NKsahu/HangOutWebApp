@@ -232,6 +232,7 @@ namespace HangOut.Controllers.POS
             JobjResonse.Add("FlrScrList", JArray.FromObject(FlrScr));
             JobjResonse.Add("UserCode", OrderType.UserCode());
             JobjResonse.Add("OrgType", ObjOrg.OrgTypes);// restuarant / theataer
+            JobjResonse.Add("OrgId", OrgId);
             return JobjResonse;
         }
     }

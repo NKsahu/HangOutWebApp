@@ -30,12 +30,6 @@ var Carthtmfirst = ">+</span></div ></div ></td > <td class='sp-product-price'>"
 Carthtmfirst += "<span class='sp-padright-10'></span>"
 var Carthtmlsecond = "<span class='sp-price'>";
 var cartlasthtml = "</span ></td >";
-
-$(document).ready(function () {
-    OrgId = $("#COID").val();
-    LoginId = $("#CUC").val();
-    OrgType = $("#OrgType").val();
-});
 function plus(itemid, ItmUUID) {
     var CartValue = parseInt($("#C" + ItmUUID).text());
     AddToCart(itemid, ItmUUID, CartValue + 1);
@@ -576,61 +570,25 @@ function SearchItem(SearchItem, hideClsName) {
         }
     }
 }
-function openPage(pageName, elmnt, color) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent2");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].style.backgroundColor = "";
-    }
-    document.getElementById(pageName).style.display = 'flex';
-    elmnt.style.backgroundColor = color;
-    $("#PaymnetAndReceipt").hide();
-}
-function SelectedColor(classname, event) {
-    var tablinks = document.getElementsByClassName(classname);
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].style.backgroundColor = "";
-    }
-    event.style.backgroundColor = '#e2dbdb';
-}
+
 function GeTablesTakeAwya() {
     $.ajax({
         type: 'POST',
         url: "/AdminApi/GetSeating",
         success: function (data) {
             var Seating = JSON.parse(data);
-            // if (ReloadSeatingSts == false) {
             TablesList = Seating.Seating;
             console.log("table===" + TablesList);
             ShowOrders(TablesList);
-            //  ReloadSeatingSts = true;
-            //if (timer !== 'undefined' || timer != null) {
-            //    clearTimeout(timer);
-            //}
-            //setTimeout(FunctionExist, 50000);//60000
-            //  }
-            //else {
-            //    ReloadSeatingSts = true;
-            //    ReloadSeating();
-            //    //clearTimeout(timer);
-            //    setTimeout( FunctionExist, 50000);//60000
-            //}
-
+            OrgId =parseInt(Seating.OrgId);
+            LoginId = parseInt(Seating.UserCode);
+            OrgType = parseInt(Seating.OrgType);
         },
         error: function (jqXhr, textStatus, errorMessage) { // error callback
             $("#waiting").hide();
         }
     });
 
-}
-function FunctionExist() {
-    if ($("#Home").length > 0 && typeof GeTablesTakeAwya === 'function') {
-        GeTablesTakeAwya();
-    }
 }
 function FilterTables(event) {
     var ForSid = $(event).val();
@@ -681,18 +639,25 @@ function FilterOrder(Status) {
 
 }
 function ShowOrders(list) {
-    $("#OrderStatus").html('');
-    var html = "<div class='col-xs-6 col-sm-4 col-md-3  sp-grid-cell TabAndTakeW'>";
-    html += "<div class='sp-grid-cell-contents  ";//here table color with >
-    //html += "<span class='sp-grid-cell-text'>";
-    var Second = "<hr class='sp-grid-text-break'>";
-    Second += " <small  class='text-muted'";// with Status Name
-    var Third = "</small> </span ></div > <p style='text-align:center;font-size:small'";
+    var html = '<div class="col-md-2 SeatingNum" onclick="SeatingClick();" ondblclick="SeatingDBClick();">';
+            
+                
+                
+                
+                
+                
+    //            <span class="OtpBox">5896</span>
+    //        </div>
+    //    </div>
+    //</div>
     for (i = 0; i < list.length; i++) {
         var Name = list[i].Table_or_SheetName;
         var TableID = list[i].Table_or_RowID.toString();
         var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
         var Otp = list[i].Otp;
+        var FlrScrName = list[i].ScrnFlr;
+        var SeatName = list[i].SeatName;
+        var RowSide = list[i].RowSide;
         var clasName = "";
         var ShowStatus = list[i].SeatingUser == null ? "" : list[i].SeatingUser;
         if (Status == 1) {
@@ -706,7 +671,10 @@ function ShowOrders(list) {
             clasName = "tableProgress";
             // ShowStatus = "Occupied";
         }
-        $("#OrderStatus").append(html + clasName + "' id='TC" + TableID + "'><span class='sp-grid-cell-text' onclick='GetItemList(\"" + TableID + "\")'>" + Name + Second + " id='TS" + TableID + "'>" + ShowStatus + Third + 'id=Otp' + TableID + ">" + Otp + "</p></div>");
+        html += '<div class="SeatingBox"><div class="text-center" style="margin-top:15px;">';
+        html += '<h3>' + FlrScrName + '</h3>';
+        html += '<h2 style="font-weight:bold">' + SeatName + '</h2>';
+        html += '<h4>' + RowSide +'</h4><div class="SeatingLine"></div>';
     }
 }
 function FreeOrOccupied(Status) {

@@ -48,6 +48,25 @@ namespace HangOut.Models.Common
             finally { cmd.Dispose(); Con.Con.Close(); }
             return Row;
         }
+        public int UpdateOrderNo()
+        {
+            int Row = 0;
+            DBCon Con = new DBCon();
+            SqlCommand cmd = null;
+            try
+            {
+                string Quary = "Update VideoCategory Set OrderNo=@OrderNo Where Id=" + this.Id;
+                cmd = new SqlCommand(Quary, Con.Con);
+                cmd.Parameters.AddWithValue("@OrderNo", this.OrderNo);
+                Row = cmd.ExecuteNonQuery();
+                //this.CategoryID = Row;
+
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { cmd.Dispose(); Con.Con.Close(); }
+            return Row;
+
+        }
         public static List<VideoCategory>GetAll()
         {
             DBCon con = new DBCon();
