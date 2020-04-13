@@ -165,6 +165,7 @@ namespace HangOut.Controllers.MyCustomer
                 }
             }
             response.Add("Status", 200);
+            response.Add("CBID", offerTitle.CBID);
             return response;
         }
         public ActionResult AddMenu()
@@ -174,6 +175,59 @@ namespace HangOut.Controllers.MyCustomer
             OfferMenus.Max = 1;
             return View("OfferMenu",OfferMenus);
         }
-       
+       //========ITEM BASED OFFER === 
+
+        public ActionResult ItemBasedCreate(int CBID)
+        {
+            OfferTitle offerTitle = OfferTitle.GetOneByItems(CBID);
+            offerTitle.CBID = CBID;
+            return View(offerTitle);
+        }
+        public ActionResult AddOfrItemBased(int Itemid)
+        {
+            HG_Items objitem = new HG_Items().GetOne(Itemid);
+            ItemOffer itemOffers = new ItemOffer();
+            itemOffers.ItemId = objitem.ItemID;
+            itemOffers.ItemName = objitem.Items;
+            itemOffers.Min = 1;
+            return View("OfferItemBased", itemOffers);
+        }
+        [HttpPost]
+
+        public ActionResult SaveItemBased(OfferTitle offerTitle)
+        {
+            if(offerTitle.itemOffers==null|| offerTitle.itemOffers.Count == 0)
+            {
+                return Json(new { msg = "Add Atleast One Item" });
+            }
+            if (offerTitle.MaxOrdQty == 0)
+            {
+                return Json(new { msg = "Min Order Qty cannot be zero" });
+            }
+            if (offerTitle.FinalPrice <= 0)
+            {
+                return Json(new { msg = "Fianl Price  cannot be zero" });
+            }
+            foreach (var item in offerTitle.itemOffers)
+            {
+                if (item.Min <= 0)
+                {
+                    return Json(new { msg = "Min Item Qty cannot be zero" });
+                }
+            }
+            offerTitle.Type = 2;// item based
+            offerTitle.Save();
+            
+            foreach (var item in offerTitle.itemOffers)
+            {
+                item.CashBkId = offerTitle.CBID;
+                item.Max = item.Min;
+                item.Save();
+            }
+            JObject response = new JObject();
+            response.Add("OpenSeating", 2);
+            response.Add("CashBkId", offerTitle.CBID);
+            return Json(new { data = response.ToString() }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

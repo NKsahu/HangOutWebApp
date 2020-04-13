@@ -140,12 +140,11 @@
     }
     function JsonSuccess(Jobj) {
         $('#waiting').hide();
-
-
         var Jitmobj = JSON.parse(Jobj.data);
-        if (Jitmobj.Status != null && Jitmobj.Status == 1) {
-            hidedpt("ChoiceBasedCreate");
-            Seating(Jitmobj.CBID);
+        if (Jitmobj.OpenSeating != null && Jitmobj.OpenSeating != 'undefined') {
+            Seating(Jitmobj.OpenSeating);
+            hidedpt("ItemBasedCreate");
+            return;
         }
         var HtmlStr = "<tr id='" + Jitmobj.CashBkId + "'>";
         HtmlStr += '<td>' + Jitmobj.UID + '</td>';
@@ -169,7 +168,10 @@
             hidedpt("CreateSS");
         }
 
-
+         if (Jitmobj.OfferType != null && Jitmobj.OfferType == 2) {
+            OpenItemBased(Jitmobj.CashBkId);
+            hidedpt("CreateSS");
+        }
     }
     function CreateEdit(ID) {
         if (ID != "0") {
@@ -202,6 +204,23 @@
                  makedpt("ChoiceBasedCreate");
                 $("#ChoiceBasedCreate > .modal-dialog > .modal-content > .modal-body").html(data);
                 showdpt("ChoiceBasedCreate");
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+
+    function OpenItemBased(CBID) {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/ComplemetryOffer/ItemBasedCreate?CBID="+CBID,
+            success: function (data) {
+                 makedpt("ItemBasedCreate");
+                $("#ItemBasedCreate > .modal-dialog > .modal-content > .modal-body").html(data);
+                showdpt("ItemBasedCreate");
                 $('#waiting').hide();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback

@@ -19,6 +19,7 @@ namespace HangOut.Models.MyCustomer
         public ItemOffer()
         {
             IsDeleted = 0;
+            
         }
         public int Save()
         {
@@ -35,6 +36,7 @@ namespace HangOut.Models.MyCustomer
                     cmd.Parameters.AddWithValue("@ItemId", this.ItemId);
                     cmd.Parameters.AddWithValue("@CashBkId", this.CashBkId);
                     cmd.Parameters.AddWithValue("@MenuId", this.MenuId);
+                   
                 }
                 else
                 {

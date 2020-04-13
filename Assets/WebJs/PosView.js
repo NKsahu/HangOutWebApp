@@ -22,11 +22,11 @@
     var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
         var ItemHtmlSecond = " <span><small class='text-muted'>";
         var ItemHtmlLast = "</small> </span> </span></div></div>";
-var first = "</td ><td><div><div>";
-var Minushtml = "<span class='sp-quantity-adjust sp-no-user-select'";
-var CountHtml = ">−</span ><div class='sp-item-quantity text-center'><span ";
-var PlusHtml = "</span></div><span class='sp-quantity-adjust sp-no-user-select'";
-var Carthtmfirst = ">+</span></div ></div ></td > <td class='sp-product-price'>";
+var first = "</td ><td><div style='width:100%'><div class='row' style='border: 1px solid;border-radius: 5px;'>";
+var Minushtml = "<span class='col-md-4' style='color:green;font-size:larger;'";
+var CountHtml = ">−</span><span class='col-md-4' style=' font-size:larger;'";
+var PlusHtml = "</span><span class='col-md-4' style='color:green;font-size:larger;'";
+var Carthtmfirst = ">+</span></div ></div ></td > <td style='font-size:larger;' class='sp-product-price'>";
 Carthtmfirst += "<span class='sp-padright-10'></span>"
 var Carthtmlsecond = "<span class='sp-price'>";
 var cartlasthtml = "</span ></td >";
@@ -46,7 +46,7 @@ function AddByItemClick(itemid) {
 
     //check item apply addons
     var ObjItem = ItemList.find(x => {
-        return x.IID.toString() === itemid
+        return x.IID=== itemid
     });
     if ("Addons" in ObjItem) {
 
@@ -489,16 +489,16 @@ function AddItemToQue(ObjItem) {
             var ItemPrice = parseFloat(ObjUUID.Price) * parseInt(ObjUUID.Cnt);
             ItemPrice += ItemUUIDS[i].ParcelCharge * parseInt(ObjUUID.Cnt);
             if (IsAddon == 1) {
-                info += " <i class='fa fa-info-circle' " + "onclick='AddonInfo(\"" + ItmUUID + "\",\"" + Itemid + "\")'" + "aria-hidden='true'></i>";
+                info += " <i class='fa fa-info-circle' " + "onclick='AddonInfo(\"" + ItmUUID + "\",\"" + Itemid + "\")' style='font-size:larg;'" + "aria-hidden='true'></i>";
                 for (j = 0; j < ItemUUIDS[i].AddonAmts.length; j++) {
                     ItemPrice += parseFloat(ItemUUIDS[i].AddonAmts[j]) * parseInt(ObjUUID.Cnt);
                 }
             }
-            var ParcelHtml = "<td><i UUID=" + ItmUUID + " title='make parcel' onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
+            var ParcelHtml = "<td><i UUID=" + ItmUUID + " title='make parcel' onclick='Makeparcel(this)' style='font-size:large;' class='fas fa-shopping-bag'></i></td></tr>";
             if (IsParcel == 1) {
-                ParcelHtml = "<td><i style='color:red'title='remove parcel' UUID=" + ItmUUID + " onclick='Makeparcel(this)' class='fas fa-shopping-bag'></i></td></tr>";
+                ParcelHtml = "<td><i style='color:red;font-size:large;'title='remove parcel' UUID=" + ItmUUID + " onclick='Makeparcel(this)'  class='fas fa-shopping-bag'></i></td></tr>";
             }
-            $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>" + info + cartlasthtml + ParcelHtml);
+            $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td style='font-size:larger;'>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "₹" + "<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>" + info + cartlasthtml + ParcelHtml);
         }
 
     }
@@ -580,6 +580,7 @@ function GeTablesTakeAwya() {
             TablesList = Seating.Seating;
             console.log("table===" + TablesList);
             ShowOrders(TablesList);
+            AddFlrScrFilter(Seating.FlrScrList);
             OrgId =parseInt(Seating.OrgId);
             LoginId = parseInt(Seating.UserCode);
             OrgType = parseInt(Seating.OrgType);
@@ -590,9 +591,16 @@ function GeTablesTakeAwya() {
     });
 
 }
+function AddFlrScrFilter(FlrScrList) {
+    //FlrScrSrc
+    for (var i = 0; i < FlrScrList.length; i++) {
+        var option = '<option class="PosSelItem" value="' + FlrScrList[i].Floor_or_ScreenID + '"> ' + FlrScrList[i].Name + '</option>';
+        $("#FlrScrSrc").append(option);
+    }
+}
 function FilterTables(event) {
     var ForSid = $(event).val();
-    if (ForSid != null && ForSid != "" && ForSid != " ") {
+    if (ForSid != null && ForSid != "" && ForSid != "0") {
         var ForSidInt = parseInt(ForSid);
         var TakeAwayList = TablesList.filter(function (itm) {
             return itm.Floor_or_ScreenId == ForSidInt;
@@ -603,8 +611,10 @@ function FilterTables(event) {
         ShowOrders(TablesList);
     }
 }
-function FilterOrder(Status) {
+function FilterOrder(Status,event) {
     //all
+    $(".posTbleBtn").css('background-color', '#000000');
+    $(event).css('background-color', '#44cd4a');
     if (Status == '0') {
         ShowOrders(TablesList);
     }
@@ -639,26 +649,19 @@ function FilterOrder(Status) {
 
 }
 function ShowOrders(list) {
-    var html = '<div class="col-md-2 SeatingNum" onclick="SeatingClick();" ondblclick="SeatingDBClick();">';
-            
-                
-                
-                
-                
-                
-    //            <span class="OtpBox">5896</span>
-    //        </div>
-    //    </div>
-    //</div>
+    $("#SeatingTbl").html('');
+    var ColSize = 2;
+    console.log("dis=" + $('#MenuItems').css('display'));
+    if ($('#CartItemsMenu').css('display') == 'block') {
+        ColSize = 3;
+    }
     for (i = 0; i < list.length; i++) {
-        var Name = list[i].Table_or_SheetName;
         var TableID = list[i].Table_or_RowID.toString();
         var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
         var Otp = list[i].Otp;
         var FlrScrName = list[i].ScrnFlr;
         var SeatName = list[i].SeatName;
         var RowSide = list[i].RowSide;
-        var clasName = "";
         var ShowStatus = list[i].SeatingUser == null ? "" : list[i].SeatingUser;
         if (Status == 1) {
             clasName = "tableFree";
@@ -671,14 +674,20 @@ function ShowOrders(list) {
             clasName = "tableProgress";
             // ShowStatus = "Occupied";
         }
+        var html = '<div class="col-md-' + ColSize + ' SeatingNum" onclick="SeatingClick(' + TableID + ');" ondblclick="SeatingDBClick(' + TableID+');">';
         html += '<div class="SeatingBox"><div class="text-center" style="margin-top:15px;">';
+        html += '<div style="height:120px;overflow:hidden">';
         html += '<h3>' + FlrScrName + '</h3>';
         html += '<h2 style="font-weight:bold">' + SeatName + '</h2>';
-        html += '<h4>' + RowSide +'</h4><div class="SeatingLine"></div>';
+        html += '<h4>' + RowSide + '</h4></div><div class="SeatingLine"></div>';
+        html += ' <span class="OtpBox">' + Otp + '</span></div></div>';
+        html += "</div>";
+        $("#SeatingTbl").append(html);
     }
 }
-function FreeOrOccupied(Status) {
-
+function FreeOrOccupied(Status,event) {
+    $(".posTbleBtn").css('background-color', '#000000');
+    $(event).css('background-color', '#44cd4a');
     if (Status == '1') {
         var FreeList = TablesList.filter(function (x) {
             return x.Status == 1;
@@ -739,26 +748,23 @@ function GetItemListByCategory(TableOrMWid) {
     var CategoryList = CurrSeatObj.MenuItems;
     $("#C_mobile").val('');
     $("#C_name").val('');
-    $("#TorTWID").text(ObjOrderName.Table_or_SheetName);
+    $("#TorTWID").text(ObjOrderName.ScrnFlr + " " + ObjOrderName.SeatName + " " + ObjOrderName.RowSide);
     //assign CurrOid of Perticuar Table Or Sheat or NewTakeAway
     CurrOID = ObjOrderName.CurrOID;
 
     ItemList = [];
-    $("#CategoryId").html('');
-    $("#ItemSearch2").val('');
-    $("#ItemList").html('');
-    $("#AddItem").html('');
-    var funSelected = "SelectedColor(\"card\",this)";
+    $("#MenuFilter").html('');
+    $("#SubMenuItems").html('');
     var TotalRs = 0.00;
     ChargeAmt = 0.00;
     var CurrSeatingItem = CartList.filter(function (x) {
         return x.TableorSheatOrTaleAwayId == CurrentOrder;
     });
-    var CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + 0 + "\")'><span class='Pspan'>All</span></p>";
-    $("#CategoryId").append(CategoryHtml);
+    var HtmlMenuFilter = '<div class="col-md-2">';
+    HtmlMenuFilter += '<button class="btn btn-sm MenuBox form-control " onclick="filterItemByCat(this, 0)" style="background-color:#44cd4a" > <span class="TblBtnText">All</span></button ></div>';
     for (i = 0; i < CategoryList.length; i++) {
-        CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + CategoryList[i].MenuId + "\")'><span class='Pspan'>" + CategoryList[i].Name + "</span></p>";
-        $("#CategoryId").append(CategoryHtml);
+       // CategoryHtml = "<p class='card' onclick='" + funSelected + ";filterItemByCat(\"" + CategoryList[i].MenuId + "\")'><span class='Pspan'>" + CategoryList[i].Name + "</span></p>";
+        HtmlMenuFilter += '<div class="col-md-2"  ><button class="btn btn-sm MenuBox form-control" onclick="filterItemByCat(this,' + CategoryList[i].MenuId +')" > <span class="TblBtnText">' + CategoryList[i].Name+'</span></button ></div>';
         var ItemsList = CategoryList[i].MenuItems;
         for (j = 0; j < ItemsList.length; j++) {
             ItemList.push(ItemsList[j]);
@@ -788,8 +794,9 @@ function GetItemListByCategory(TableOrMWid) {
 
         }
 
-
     }
+    
+    $("#MenuFilter").html(HtmlMenuFilter);
     ChargeAmt = parseFloat(CurrSeatObj.SeatingAmt);
     for (var c = 0; c < CurrSeatingItem.length; c++) {
         TotalRs += CurrSeatingItem[c].ItemPrice * CurrSeatingItem[c].Count;
@@ -823,23 +830,33 @@ function GetItemListByCategory(TableOrMWid) {
 
 }
 function FilterItems(list) {
-    $("#ItemList").html('');
+    $("#SubMenuItems").html('');
     for (j = 0; j < list.length; j++) {
         ShowItems(list[j]);
     }
 }
 function ShowItems(objitem) {
-    console.log("AAYA");
-    var PrefixItemHtmlSecond = "";
+   // $("#MenuItems").html('');
+    //onclick='AddByItemClick(\"" + objitem.IID + "\")'"
+    //objitem.ItemPrice
+    // objitem.ItemName
+    //var htmlstr = '<div class="row" style="width: 100 %;">';
+    var htmlstr = '<div class="col-md-3" onclick="AddByItemClick('+ objitem.IID +')">';
+    htmlstr += '<div class="ItemCard">';
+    htmlstr += '<h4 class="ItemName">' + objitem.ItemName + '</h4>';
     if (objitem.ItemMode === "1") {
-        PrefixItemHtmlSecond = "<hr class='sp-grid-text-break' style='background:green'>";
+        htmlstr += '<div class="SeatingLine" style="background-color:red;"></div>';
     }
     else {
-        PrefixItemHtmlSecond = "<hr class='sp-grid-text-break' style='background:red'>";
+        htmlstr += '<div class="SeatingLine" style="background-color:red;"></div>';
     }
-    $("#ItemList").append(ItemHtmlFirst + "onclick='AddByItemClick(\"" + objitem.IID + "\")'" + ItemHtmlFirstPrefix + objitem.ItemName + PrefixItemHtmlSecond + ItemHtmlSecond + "₹" + objitem.ItemPrice + ItemHtmlLast);
+    htmlstr += '<div>';
+    htmlstr += '<h4 class="GreenTxt text-center">Rs. ' + objitem.ItemPrice +'</h4></div></div></div>';
+    $("#SubMenuItems").append(htmlstr);
 }
-function filterItemByCat(MenuId) {
+function filterItemByCat(event, MenuId) {
+    $('.MenuBox').css('background-color', '#000000');
+    $(event).css('background-color', '#44cd4a');
     if (MenuId != "0") {
         var FilteredItemList = ItemList.filter(function (x) {
             return x.MenuId == MenuId;
@@ -1290,37 +1307,7 @@ function FinaliZeOrd() {
         }
     });
 }
-DashBoard();
-function DashBoard() {
-    var value = $("#DashBoard").val();
-    if (value == '1') {
-        $("#OrderView").hide();
-        $("#SeatView").show();
-        //GeTablesTakeAwya();
-        setTimeout(function () { GeTablesTakeAwya() }, 500);
-    } else {
-        $("#OrderView").html('');
-        $("#OrderView").show();
-        $("#SeatView").hide();
-        $('#waiting').show();
-        $.ajax({
-            type: 'GET',
-            url: "/HG_Orders/DashBoardOrders",
-            success: function (data) {
-                $('#waiting').hide();
-                $("#OrderView").html(data);
-                setTimeout(function () { GetOrders(OrgId) }, 500);
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $("#waiting").hide();
-            }
-        });
 
-    }
-}
-$("#DashBoard").change(function () {
-    DashBoard();
-});
 function ChangeContactList(event) {
     var ContctID = $("#ContactId").val();
     console.log("value=" + ContctID);

@@ -19,9 +19,12 @@ namespace HangOut.Models.MyCustomer
 
 
         public List<OfferMenu> OfferMenus { get; set; }
+
+        public List<ItemOffer> itemOffers { get; set; }
         public OfferTitle()
         {
             OfferMenus = new List<OfferMenu>();
+            itemOffers = new List<ItemOffer>();
         }
    
     public int Save(){
@@ -99,6 +102,38 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.FinalPrice = SDR.GetDouble(index++);
                     ObjTmp.Tax = SDR.GetDouble(index++);
                     ObjTmp.OfferMenus = OfferMenu.GetAll(ObjTmp.TitleId);
+                    Tmp = ObjTmp;
+                }
+            }
+            catch (Exception e) { e.ToString(); }
+            finally { dBCon.Close(); }
+
+            return (Tmp);
+        }
+
+        public static OfferTitle GetOneByItems(int CBID)
+        {
+            DBCon dBCon = new DBCon();
+            SqlCommand cmd = null;
+            SqlDataReader SDR = null;
+            OfferTitle Tmp = new OfferTitle();
+            string Query = "SELECT * FROM  OfferTitle where CBID=" + CBID.ToString();
+            try
+            {
+                cmd = new SqlCommand(Query, dBCon.Con);
+                SDR = cmd.ExecuteReader();
+                while (SDR.Read())
+                {
+                    int index = 0;
+                    OfferTitle ObjTmp = new OfferTitle();
+                    ObjTmp.TitleId = SDR.GetInt32(index++);
+                    ObjTmp.CBID = SDR.GetInt32(index++);
+                    ObjTmp.Name = SDR.GetString(index++);
+                    ObjTmp.Discription = SDR.GetString(index++);
+                    ObjTmp.MaxOrdQty = SDR.GetInt32(index++);
+                    ObjTmp.FinalPrice = SDR.GetDouble(index++);
+                    ObjTmp.Tax = SDR.GetDouble(index++);
+                    ObjTmp.itemOffers = ItemOffer.GetAll("Select *, dbo.GetItemName(ItemId)  FROM  ItemOffer where CashBkId=" + ObjTmp.CBID + " and IsDeleted=0");
                     Tmp = ObjTmp;
                 }
             }

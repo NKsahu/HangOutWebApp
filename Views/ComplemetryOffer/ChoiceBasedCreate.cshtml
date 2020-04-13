@@ -98,17 +98,6 @@
        function AddItem(event, ItemId) {
            
            if (event.checked) {
-           
-           //var ItemsAlreadyAdded = document.get
-           //for (var i = 0; i < ItemsAlreadyAdded.length; i++) {
-           //    var ObjItem = $(ItemsAlreadyAdded[i]);
-           //    if (ObjItem.val() == ItemId) {
-           //        alert('Item Already Added');
-           //        $(event).click();
-           //        return;
-                   
-           //    }
-           //}
        $.ajax({
             type: 'GET',
             url: "/ComplemetryOffer/AddOfrItem?Itemid="+ItemId,
@@ -173,6 +162,7 @@
                     $('#waiting').hide();
                     var jsonobj = JSON.parse(data);
                     if (jsonobj.Status == 200) {
+                        Seating(jsonobj.CBID);
                         hidedpt("ChoiceBasedCreate");
                     }
                     else {

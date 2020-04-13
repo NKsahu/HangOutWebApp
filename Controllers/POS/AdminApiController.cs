@@ -44,6 +44,7 @@ namespace HangOut.Controllers.POS
                 jObject.Add("SeatName", ObjSeating.SeatName);
                 jObject.Add("ScrnFlr", ObjSeating.FSName);
                 jObject.Add("RowSide", ObjSeating.RowSideName);
+                jObject.Add("Floor_or_ScreenId", ObjSeating.FSIS);
                 JArray MenuJarray = new JArray();
                 var order = Orderlist.Find(x => x.Table_or_SheatId == ObjSeating.SeatId && x.TableOtp == ObjSeating.Otp);
                 if (order != null && order.OID > 0)

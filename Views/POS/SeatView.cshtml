@@ -28,10 +28,10 @@ overflow:hidden;
 font-weight: 500;
         }
 .BtnOrderCurrent{
-width:80%;
+width:75%;
 height: 250px;
 border-radius: 5px;
-background-color: #44cd4a;
+background-color: #000000;
 }
 .GreenClr{
    background-color: #44cd4a;
@@ -66,7 +66,7 @@ background-color: #ffffff;
 width: 100%;
 height: 40px;
 border-radius: 5px;
-background-color: #44cd4a;
+background-color: #000000;
 
 }
 
@@ -113,15 +113,16 @@ background-color: #ffffff;
 }
 .ItemName{
     font-size: 20px;
-    min-height:115px;
+    min-height:85px;
     font-weight: 500;
     font-family:'Avenir Medium';
     font-weight:bold;
-    margin-top:15px;
+    margin-top:35px;
+    overflow:hidden;
     text-align:center;
 }
     </style>
-    <div class="row">
+    <div class="row" id="SearchFilter">
         <div class="col-md-8">
             <div class="PosSelect">
                 <div class="row">
@@ -136,59 +137,40 @@ background-color: #ffffff;
         </div>
         <div class="col-md-4">
             <div class="PosSelect">
-                <select class="form-control PosSelItem" style="height:100%;">
-                    <option class="PosSelItem" selected value="1">Floor</option>
-                    <option class="PosSelItem" value="2">First Floor</option>
-                    <option class="PosSelItem" value="3">Second Floor</option>
+                <select class="form-control PosSelItem" style="height:100%;" id="FlrScrSrc" onchange="FilterTables(this)">
+                    <option class="PosSelItem" selected value="0"> All</option>
                 </select>
             </div>
         </div>
     </div>
     <div class="row" style="margin-top:20px" id="SeatingFilter">
         <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">All</span></button>
+            <button class="btn btn-sm posTbleBtn form-control" id="AllSeating" onclick="FilterOrder(0,this);"><span class="TblBtnText">All</span></button>
         </div>
         <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Take Away</span></button>
+            <button class="btn btn-sm posTbleBtn form-control"  onclick="FilterOrder(3,this);"><span class="TblBtnText">Take Away</span></button>
         </div>
         <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Tables</span></button>
+            <button class="btn btn-sm posTbleBtn form-control" onclick="FilterOrder(1,this);"><span class="TblBtnText">Tables</span></button>
         </div>
         <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Unoccupied</span></button>
+            <button class="btn btn-sm posTbleBtn form-control" onclick="FreeOrOccupied('1',this);"><span class="TblBtnText">Unoccupied</span></button>
         </div>
         <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Occupied</span></button>
+            <button class="btn btn-sm posTbleBtn form-control" onclick="FreeOrOccupied('3',this);"><span class="TblBtnText">Occupied</span></button>
         </div>
         <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Call For Bill</span></button>
+            <button class="btn btn-sm posTbleBtn form-control" onclick="FreeOrOccupied('3',this);"><span class="TblBtnText">Call For Bill</span></button>
         </div>
     </div>
     <div class="row" style="margin-top:20px;display:none;" id="MenuFilter">
         <div class="col-md-2">
-            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">All</span></button>
+            <button class="btn btn-sm MenuBox form-control" onclick="filterItemByCat(this, 0)"><span class="TblBtnText">All</span></button>
         </div>
         <div class="col-md-2">
             <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Top Selling</span></button>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Papad</span></button>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Special Veg</span></button>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Special Veg</span></button>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-sm posTbleBtn form-control"><span class="TblBtnText">Special Veg</span></button>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Papad</span></button>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Papad</span></button>
-        </div>
+       
         <div class="col-md-2">
             <button class="btn btn-sm MenuBox form-control"><span class="TblBtnText">Papad</span></button>
         </div>
@@ -196,7 +178,7 @@ background-color: #ffffff;
     <div class="row" style="margin-top:20px">
         <div style="width:65px;margin-left:10px;">
             <div style="width:100%">
-                <div class="btn  BtnOrderCurrent ">
+                <div class="btn  BtnOrderCurrent " id="Order">
                     <div style="height:200px; margin-top:10px;" >
                         <h2 class="TextOrdCuurent">O</h2>
                         <h2 class="TextOrdCuurent">R</h2>
@@ -205,7 +187,7 @@ background-color: #ffffff;
                         <h2 class="TextOrdCuurent">R</h2>
                     </div>
                 </div>
-                <div class="btn BtnOrderCurrent  " style="margin-top:10px;">
+                <div class="btn BtnOrderCurrent  " style="margin-top:10px;" id="Current">
                     <div style="height:240px; ">
                         <h2 class="TextOrdCuurent">C</h2>
                         <h2 class="TextOrdCuurent">U</h2>
@@ -218,120 +200,13 @@ background-color: #ffffff;
             </div>
         </div>
         <div class="col-md-11" style="height:500px;overflow:auto;" id="Seating">
-            <div class="row" style="width:100%;">
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();" ondblclick="SeatingDBClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2 SeatingNum" onclick="SeatingClick();">
-                    <div class="SeatingBox">
-                        <div class="text-center" style="margin-top:15px;">
-                            <h3>Floor 1</h3>
-                            <h2 style="font-weight:bold">Table 10</h2>
-                            <h4>Side Window</h4>
-                            <div class="SeatingLine">
-                            </div>
-                            <span class="OtpBox">5896</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="row" style="width:100%;" id="SeatingTbl">
+                
             </div>
         </div>
         <!--Menu Items-->
         <div class="col-md-7" style="height:500px;overflow:auto;display:none;" id="MenuItems">
-            <div class="row" style="width:100%;">
+            <div class="row" style="width:100%;" id="SubMenuItems">
                 <div class="col-md-3">
                     <div class="ItemCard">
                         <h4 class="ItemName" style="">Kamtu Item 2 With Extraa Kamtu</h4>
@@ -478,20 +353,40 @@ background-color: #ffffff;
 
 
 <script>
-
-    function SeatingClick() {
+    $("#Order").css('background-color', '#44cd4a');
+    $("#AllSeating").css('background-color', '#44cd4a');
+    GeTablesTakeAwya();
+    function SeatingClick(SeatingId) {
         $("#Seating").removeClass();
         $("#Seating").addClass('col-md-7');
         $("#CartItemsMenu").show();
         $('.SeatingNum').removeClass('col-md-2');
         $('.SeatingNum').addClass('col-md-3');
     }
-    function SeatingDBClick() {
+    function SeatingDBClick(SeatingId) {
+        GetItemList(SeatingId);
         $("#Seating").hide();
         $("#SeatingFilter").hide();
         $("#MenuItems").show();
         $("#MenuFilter").show();
         $("#CartItemsMenu").show();
+        $("#Order").css('background-color', '#000000');
+        $("#Current").css('background-color', '#44cd4a');
+        $("#SearchFilter").hide();
         
     }
+    $("#Order").click(function () {
+        $("#Order").css('background-color', '#44cd4a');
+        $("#Current").css('background-color', '#000000');
+        $("#Seating").removeClass();
+        $("#Seating").addClass('col-md-11');
+        $("#Seating").show();
+        $("#SeatingFilter").show();
+        $("#CartItemsMenu").hide();
+        $("#MenuItems").hide();
+        $("#SearchFilter").show();
+        $("#MenuFilter").hide();
+        $('.SeatingNum').removeClass('col-md-3');
+        $('.SeatingNum').addClass('col-md-2');
+    });
 </script>
