@@ -73,13 +73,13 @@ namespace HangOut.Controllers.MyCustomer
                         return Json(new { msg = "Can't Modify Start Date" });
                     }
                 }
-                if (cashback.RaiseDynamic == false && cashback.BilAmt > 0 &&cashback.MaxCBLimit==1)//limited amt conditions
+                if (cashback.RaiseDynamic == false && cashback.BilAmt > 0 &&cashback.MaxCBLimit==2)//limited amt conditions
                 {
-                    double MaxCbAmt = (cashback.Percentage * cashback.BilAmt * 2)/100;
-                    if(cashback.MaxAmt< MaxCbAmt)
+                    double MaxCashBackAmt = (cashback.Percentage * cashback.BilAmt*2)/100;
+                    if(cashback.MaxAmt< MaxCashBackAmt)
                     {
-                        return Json(new { msg = "Max CashBack Amt should be more than rs "+MaxCbAmt.ToString("0.00") });
-                    }
+                        return Json(new { msg = "Max CashBack Amt should be "+ MaxCashBackAmt.ToString("0.00") + " greather than Minimun Bill Amt Of "+cashback.Percentage+" %"});
+                        }
                 }
                 if (cashback.CashBkId == 0)
                 {

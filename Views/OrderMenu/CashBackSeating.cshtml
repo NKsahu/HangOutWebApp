@@ -53,9 +53,15 @@
         }
     </style>
 @Html.Hidden("CBIDHidden",Request.QueryString["CBID"])
-    <div class="card-header " style="width:100%">
-        <h3 style="text-align:center; background-color:#5de79a"><b>Seating</b> </h3>
-        <hr />
+    <div class="card-header " style="width:100%;padding:0px;">
+        <div class="row">
+            <div class="col-md-1">
+                <button class="btn btn-sm btn-danger form-control" onclick="BackSeating(@Request.QueryString["CBID"])">&laquo;  Back</button>
+            </div>
+            <div class="col-md-11">
+                <h3 style="text-align:center; background-color:#5de79a"><b>Seating</b> </h3>
+            </div>
+        </div>
     </div>
 <div class=" scrollTables" id="Floor" style="margin-top:50px;">
 

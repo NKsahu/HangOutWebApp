@@ -46,7 +46,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
+        background-color: #000000;
         -webkit-transition: .4s;
         transition: .4s;
     }
@@ -64,7 +64,7 @@
         }
 
     input:checked + .slider {
-        background-color: #2196F3;
+        background-color:  #44cd4a;
     }
 
     input:focus + .slider {
@@ -88,31 +88,31 @@
 </style>
 <!-- header -->
 @Html.Hidden("OrgIdHead", Orgid)
-<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-image: linear-gradient(to right top, #33bb6f, #30bb66, #30bb5b, #31bb50, #33bb44);z-index:1;">
-    <div class="col-md-3 col-12 text-md-left text-center mt-0">
+<header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-color:#ffffff">
+    <div class="col-md-3  text-md-left text-center mt-0">
         <a class="text-white navbar-brand pl-3" style="font-size:15px;">foodDo</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
         <a href="#" onclick="showvideo();" class="text-white ml-md-4"><i class="fas fa-chalkboard-teacher border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
     </div>
-    <div class="col-md-6 col-12  text-center mt-0" style="overflow:hidden">
-        <a class="text-white text-center navbar-brand pl-3" style="font-size:32px;font-weight:bold;">@OrgName</a>
+    <div class="col-md-6   text-center mt-0" style="overflow:hidden">
+        <h3 class=" text-center navbar-brand pl-3 GreenTxt" style="font-size:32px;font-weight:bold;">@OrgName</h3>
     </div>
-    <div class="col-md-3 col-12  text-md-right text-center p-md-2 p-2  mt-0">
+    <div class="col-md-3   text-md-right text-center p-md-2 p-2  mt-0">
         <label class="switch" data-toggle="tooltip" title="Allow Customer Ordering">
             <input type="checkbox" @CustomerOrdrn onchange="SetCustmrOrd(this)">
             <span class="slider round"></span>
         </label>
         @if (UserType == "SA")
         {
-            <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Inventry"><i class="fas fa-truck-moving"></i></a>
-            <a class="btn btn-lg text-white " href="/vw_HG_UsersDetails/Account"><i class="fas fa-rupee-sign"></i></a>
+            @*<a class="btn btn-lg  " href="/vw_HG_UsersDetails/Inventry"><i class="fas fa-truck-moving"></i></a>
+            <a class="btn btn-lg  " href="/vw_HG_UsersDetails/Account"><i class="fas fa-rupee-sign"></i></a>*@
 
         }
-        <button class="btn btn-lg text-white " onclick="GetPos()"><i class="fas fa-laptop"></i></button>
-        <button class="btn btn-lg text-white" onclick="CashBack();"><i class="fas fa-chart-line"></i></button>
+        <button class="btn btn-lg  " onclick="GetPos()"><i class="fas fa-laptop"></i></button>
+        <button class="btn btn-lg " onclick="CashBack();"><i class="fas fa-chart-line"></i></button>
         <div class="btn-group mt-0">
-            <a href="#" class="text-white m-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
-            <div class="dropdown-menu dropdown-menu-right text-center pb-0">
+            <button  data-toggle="dropdown" style="background-color:#ffffff;box-shadow:none;border:none;" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></button>
+            <div class="dropdown-menu dropdown-menu-right  pb-0">
                 <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
                 <button id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
                 <style>

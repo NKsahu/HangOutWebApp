@@ -19,7 +19,7 @@ namespace HangOut.Models.MyCustomer
         public int CashBkType { get; set; }  // 1 :Percentage
 
         public double Percentage { get; set; }
-        public int MaxCBLimit { get; set; }// 0:no limit (Unlimited):1 limited CashbkAmt
+        public int MaxCBLimit { get; set; }// 1:no limit (Unlimited):2 limited CashbkAmt
         public double MaxAmt { get; set; }// maximum cashback amount
         public double BilAmt { get; set; }
         public bool RaiseDynamic { get; set; }
