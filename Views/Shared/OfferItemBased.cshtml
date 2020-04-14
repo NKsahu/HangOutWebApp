@@ -10,17 +10,18 @@
         @Html.HiddenFor(model => model.ItemId, new { @class = "ItemId" })
         @Html.HiddenFor(model => model.IsDeleted, new { @class = "IsDeleted" })
         @Html.HiddenFor(model => model.CashBkId, new { @class = "CashBkId" })
+        @Html.HiddenFor(model=>model.TotalItemPrice,new { @class = "TotalItemPrice" })
         <div class="col-md-4">
 
         </div>
         <div class="col-md-4">
             @Html.Label("Item")
-            @Html.TextBoxFor(model => model.ItemName, new { @class = "form-control ItemName", @readonly = "readoly" })
+            @Html.TextBoxFor(model => model.ItemName, new { @class = "form-control ", @readonly = "readoly" })
             @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-2">
             @Html.Label("Qty")
-            @Html.TextBoxFor(model => model.Min, new { @class = "form-control ItemName" })
+            @Html.TextBoxFor(model => model.Min, new { @class = "form-control " })
             @Html.ValidationMessageFor(model => model.Min, "", new { @class = "text-danger" })
         </div>
         <div class="col-md-1">

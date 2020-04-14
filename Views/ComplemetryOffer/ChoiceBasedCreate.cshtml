@@ -13,13 +13,13 @@
         @using (Ajax.BeginForm("SaveChoiceBased", "ComplemetryOffer", new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
             @Html.HiddenFor(model => model.CBID)
-            @Html.HiddenFor(model=>model.TitleId)
+            @Html.HiddenFor(model => model.TitleId)
             <div class="row">
                 <div class="col-md-4">
                 </div>
                 <div class="col-md-4">
                     @Html.Label("Display Name")
-                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control " ,@Required="Required"})
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control ", @Required = "Required" })
                     @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-4">
@@ -41,18 +41,45 @@
                 <div class="col-md-5">
                 </div>
             </div>
-
-            <div class="row">
+            <div class="row" style="margin-top:20px;">
                 <div class="col-md-4">
-                    @Html.Label("Discription")
-                    @Html.TextBoxFor(model => model.Discription, new { @class = "form-control ", @Required = "Required" })
-                    @Html.ValidationMessageFor(model => model.Discription, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Final Price")
+                    @Html.TextBoxFor(model => model.FinalPrice, new { @class = "form-control ", @Required = "Required" })
+                    @Html.ValidationMessageFor(model => model.FinalPrice, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Total Item Price")
+                    @Html.TextBoxFor(model => model.TotalItemPrice, new { @class = "form-control ", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.TotalItemPrice, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-4">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+
                 </div>
                 <div class="col-md-2">
                     @Html.Label("Max Order Qty")
                     @Html.TextBoxFor(model => model.MaxOrdQty, new { @class = "form-control ", @Required = "Required" })
                     @Html.ValidationMessageFor(model => model.MaxOrdQty, "", new { @class = "text-danger" })
                 </div>
+                <div class="col-md-5">
+
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("Discription")
+                    @Html.TextAreaFor(model => model.Discription, new { @class = "form-control ", @Required = "Required" })
+                    @Html.ValidationMessageFor(model => model.Discription, "", new { @class = "text-danger" })
+                </div>
+
             </div>
             <div class="col-md-1" style="margin-top:5px;">
                 @Html.Label("Save", new { @class = "text-white" })
@@ -95,6 +122,9 @@
             }
         });
     }
+    function Hideme() {
+           hidedpt("ShowItems");
+       }
        function AddItem(event, ItemId) {
            
            if (event.checked) {
@@ -103,6 +133,7 @@
             url: "/ComplemetryOffer/AddOfrItem?Itemid="+ItemId,
             success: function (data) {
                 $(CurritemAdd).parent('div').parent('div').parent('div').find('.AddItems').append(data);
+                FunTotalItemPrice();
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
@@ -114,14 +145,18 @@
        function RemoveItem(itemid,event) {
            $(event).parent('div').parent('div').find('.IsDeleted').val('1');
            $(event).parent('div').parent('div').hide();
+           $(event).parent('div').parent('div').find('.TotalItemPrice').removeClass();
+           FunTotalItemPrice();
     }
     function SaveForm() {
+        console.log("aaya");
         var OfferTitle = {};
         OfferTitle.TitleId = $("#TitleId").val();
         OfferTitle.CBID = $("#CBID").val();
         OfferTitle.Name = $("#Name").val();
         OfferTitle.Discription = $("#Discription").val();
         OfferTitle.MaxOrdQty = $("#MaxOrdQty").val();
+        OfferTitle.FinalPrice=$("#FinalPrice").val();
         OfferTitle.Type = 1;//offer items
         OfferTitle.OfferMenus = [];
         var ListOfferMenus = document.getElementsByClassName("OfferMenus");
@@ -177,5 +212,12 @@
             });
         
     }
-    
+    function FunTotalItemPrice() {
+        var itemprice = 0.00;
+        var TotalItemPrice = document.getElementsByClassName('TotalItemPrice');
+        for (var i = 0; i < TotalItemPrice.length; i++) {
+            itemprice +=parseFloat(TotalItemPrice[i].value);
+        }
+        $("#TotalItemPrice").val(itemprice.toFixed(2));
+    }
 </script>

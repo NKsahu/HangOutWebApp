@@ -17,7 +17,10 @@ namespace HangOut.Models.MyCustomer
     public double Tax { get; set; }
      public int Type { get; set; }// 1: choice based, 2 fixed items
 
-
+        /// <summary>
+        /// not table keys
+        /// </summary>
+        public double TotalItemPrice { get; set; }
         public List<OfferMenu> OfferMenus { get; set; }
 
         public List<ItemOffer> itemOffers { get; set; }
@@ -102,6 +105,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.FinalPrice = SDR.GetDouble(index++);
                     ObjTmp.Tax = SDR.GetDouble(index++);
                     ObjTmp.OfferMenus = OfferMenu.GetAll(ObjTmp.TitleId);
+                    ObjTmp.TotalItemPrice = ObjTmp.OfferMenus.Sum(x => x.TotalItmPrice);
                     Tmp = ObjTmp;
                 }
             }
@@ -117,6 +121,7 @@ namespace HangOut.Models.MyCustomer
             SqlCommand cmd = null;
             SqlDataReader SDR = null;
             OfferTitle Tmp = new OfferTitle();
+            Tmp.TotalItemPrice = 0.00;
             string Query = "SELECT * FROM  OfferTitle where CBID=" + CBID.ToString();
             try
             {
@@ -133,7 +138,8 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.MaxOrdQty = SDR.GetInt32(index++);
                     ObjTmp.FinalPrice = SDR.GetDouble(index++);
                     ObjTmp.Tax = SDR.GetDouble(index++);
-                    ObjTmp.itemOffers = ItemOffer.GetAll("Select *, dbo.GetItemName(ItemId)  FROM  ItemOffer where CashBkId=" + ObjTmp.CBID + " and IsDeleted=0");
+                    ObjTmp.itemOffers = ItemOffer.GetAll("Select *, dbo.GetItemName(ItemId),dbo.GetItemPrice(ItemId)  FROM  ItemOffer where CashBkId=" + ObjTmp.CBID + " and IsDeleted=0");
+                    ObjTmp.TotalItemPrice = ObjTmp.itemOffers.Sum(x => x.TotalItemPrice);
                     Tmp = ObjTmp;
                 }
             }

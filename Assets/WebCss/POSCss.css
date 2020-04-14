@@ -23,4 +23,138 @@
     font-family: Helvetica;
     font-size: 23px;
 }
+.posTbleBtn {
+    height: 51px;
+    border-radius: 5px;
+    background-color: #000000;
+}
 
+.TblBtnText {
+    height: 36px;
+    color: #ffffff;
+    font-family: Futura;
+    font-size: 20px;
+    overflow: hidden;
+    font-weight: 500;
+}
+
+.BtnOrderCurrent {
+    width: 75%;
+    height: 250px;
+    border-radius: 5px;
+    background-color: #000000;
+}
+
+.GreenClr {
+    background-color: #44cd4a;
+}
+
+.GreenTxt {
+    color: #44cd4a;
+}
+
+.BlackClr {
+    background-color: #000000;
+}
+
+.WhiteClr {
+    background-color: #ffffff;
+}
+
+.TextOrdCuurent {
+    width: 25px;
+    color: #ffffff;
+    font-family: Futura;
+    font-size: 27px;
+    font-weight: 500;
+    margin-top: auto;
+}
+
+.SeatingBox {
+    width: 100%;
+    height: 200px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border: 1px solid #e6ebef;
+    background-color: #ffffff;
+}
+
+.MenuBox {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #000000;
+}
+
+.SeatingLine {
+    width: 80%;
+    height: 6px;
+    margin-left: 10%;
+    margin-right: 10%;
+    background-color: #44cd4a;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.OtpBox {
+    width: 77px;
+    height: 45px;
+    color: #4ac959;
+    font-family: "Avenir Medium";
+    font-size: 33px;
+    font-weight: 500;
+}
+
+.ContactInfo {
+    /* Style for "Rectangle" */
+    width: 100%;
+    box-shadow: 0 2px 1px 1px #d7dde1, 0 2px 1px 1px #d7dde1;
+    border-radius: 4px;
+    border: 1px solid #9b9b9b;
+    background-color: #ffffff;
+}
+
+.SeatingNameDisplay {
+    color: #44cd4a;
+    font-family: Futura;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.ItemCard {
+    width: 100%;
+    height: 176px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border: 1px solid #e6ebef;
+    background-color: #ffffff;
+}
+
+.ItemName {
+    font-size: 20px;
+    min-height: 85px;
+    font-weight: 500;
+    font-family: 'Avenir Medium';
+    font-weight: bold;
+    margin-top: 35px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.LeftBtn {
+    float: left;
+}
+
+.RightBtn {
+    float: right;
+}
+
+.PrintBtnWidth {
+    width: 20%;
+}
+
+input#SearChTbl {
+    width: 100%;
+    font-size: 20px;
+    border: none;
+    box-shadow: none;
+    background-color: white;
+}

@@ -52,37 +52,21 @@ function Onfail(msg) {
                          $("#WarningModel .modal-body").html(msg);
                         $("#WarningModel").modal();
 }
-shortcut.add("Esc", function () {
-    HideModal();
-});
-function HideModal() {
-    console.log("Cnt Modal=" + $(".modal:visible").length);
-    if ($(".modal:visible").length > 1) {
-
-        // $(".modal:visible:last").hide();
-       // $(".modal:visible:last").remove();
-       // $('.modal-backdrop').remove();
-        //$('body').removeAttr('class');
-        //$('body').removeAttr('style');
+//shortcut.add("Esc", function () {
+//    e.preventDefault();
+//    return;
+//});
+function HideModal(event) {
+    $(event).parent('div').parent('div').parent('div').parent('div').hide();
+    $(event).parent('div').parent('div').parent('div').parent('div').remove();
+    console.log("AAYA" + $(".modal:visible").length);
+    if ($(".modal:visible").length == 0) {
+        $('body').removeClass('modal-open');
+        $('body').removeAttr('style');
         $('.modal-backdrop').remove();
-        $(".modal:visible:last").remove();
-        
     }
     
 }
-var modaladded = false;
-$(window).on('hashchange', function (event) {
-    if ($(".modal:visible").length > 0 && !modaladded) {
-        $(".modal:visible:last").remove();
-        $('.modal-backdrop').remove();
-        //$('body').removeAttr('class');
-        //$('body').removeAttr('style');
-
-    }
-    else {
-        modaladded = false;
-    }
-});
 
 function makedpt(id, h, w) {
     cloned = $('#myModal');
@@ -112,7 +96,7 @@ function showdpt(id) {
    // window.location.hash = id;
     $("#" + id).show();
    // $("#" + id).display = "block";
-    $("#"+id).modal();
+    $("#" + id).modal({ backdrop: 'static', keyboard: false });
 
 }
 function hidedpt(id) {
@@ -120,7 +104,7 @@ function hidedpt(id) {
         $('body').removeClass('modal-open');
         $('body').removeAttr('style');
     }
-    $(".modal:visible:last").remove();
+    //$(".modal:visible:last").remove();
     $("#"+id).hide();
     $("#"+id).remove();
    // $("#" + id).display = "none";

@@ -204,7 +204,7 @@
     <Content Include="Assets\shortcut.js" />
     <Content Include="Assets\WebCss\POSCss.css" />
     <Content Include="Assets\WebJs\PosView.js" />
-    <Content Include="Assets\WebsiteJS.js" />
+    <Content Include="Assets\Website.js" />
     <Content Include="firebase-messaging-sw.js" />
     <Content Include="Global.asax" />
     <Content Include="Image\app_icon.png" />

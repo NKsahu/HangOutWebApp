@@ -2431,6 +2431,7 @@ namespace HangOut.Controllers
                     itemobj.Add("ItemName", hG_Items.Items);
                     itemobj.Add("Quantity",OrderItem.Count);
                     itemobj.Add("Status", OrderItem.Status);
+                    itemobj.Add("VegNonVeg", hG_Items.ItemMode);
                     itemobj.Add("IsAddon", OrderItem.IsAddon);// is addon item 0 no ,1 yes
                     double taxprice= OrgType.TotalTax(OrderItem.CostPrice, OrderItem.TaxInItm, OrderItem.Count);
                     double CostPriceItm= (OrderItem.Count * OrderItem.CostPrice);

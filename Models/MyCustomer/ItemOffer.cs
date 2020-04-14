@@ -16,6 +16,9 @@ namespace HangOut.Models.MyCustomer
         public int IsDeleted { get; set; }
         public string ItemName { get; set; }
         public int MenuId { get; set; }// 0: item Offers //1 : Offers campaeign  Type=3 Menu Id
+
+        // non table fields
+         public double TotalItemPrice { get; set; }
         public ItemOffer()
         {
             IsDeleted = 0;
@@ -95,7 +98,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.MenuId = SDR.GetInt32(index++);
                     ObjTmp.MenuId= SDR.GetInt32(index++);
                     ObjTmp.ItemName = SDR.GetString(index++);
-
+                    ObjTmp.TotalItemPrice = SDR.GetDouble(index++);
                     ListTmp.Add(ObjTmp);
                 }
             }

@@ -15,6 +15,9 @@ namespace HangOut.Models.MyCustomer
       public int OfferTitleId { get; set; }
         public int Min { get; set; }
         public int Max { get; set; }
+
+        // non table keys
+        public double TotalItmPrice { get; set; }
         public List<ItemOffer> itemOffers { get; set; }
 
         public OfferMenu()
@@ -97,7 +100,8 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.OfferTitleId = SDR.GetInt32(index++);
                     ObjTmp.Min = SDR.GetInt32(index++);
                     ObjTmp.Max = SDR.GetInt32(index++);
-                    ObjTmp.itemOffers = ItemOffer.GetAll("Select *, dbo.GetItemName(ItemId)  FROM  ItemOffer where MenuId=" + ObjTmp.MenuId+ " and IsDeleted=0");
+                    ObjTmp.itemOffers = ItemOffer.GetAll("Select *, dbo.GetItemName(ItemId),dbo.GetItemPrice(ItemId)  FROM  ItemOffer where MenuId=" + ObjTmp.MenuId+ " and IsDeleted=0");
+                    ObjTmp.TotalItmPrice = ObjTmp.itemOffers.Sum(x => x.TotalItemPrice);
                     TmpList.Add(ObjTmp);
                 }
             }

@@ -112,6 +112,7 @@ namespace HangOut.Controllers.MyCustomer
                 JObject response = new JObject();
                 response.Add("CashBkId", cashback.CashBkId);
                 response.Add("StartDate", cashback.StartDate.ToString("dd-MM-yyyy"));
+                response.Add("EndDate", cashback.ValidTillDate.ToString("dd-MM-yyyy"));
                 response.Add("TerminateStsID", cashback.TerminateSts);
                 response.Add("TStatus", TerminatSts(cashback.TerminateSts));
                 response.Add("CBSts", CBSts(cashback.CashBkStatus));

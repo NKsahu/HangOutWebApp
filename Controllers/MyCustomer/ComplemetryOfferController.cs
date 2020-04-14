@@ -76,6 +76,7 @@ namespace HangOut.Controllers.MyCustomer
             ItemOffer itemOffers = new ItemOffer();
             itemOffers.ItemId = objitem.ItemID;
             itemOffers.ItemName = objitem.Items;
+            itemOffers.TotalItemPrice = objitem.Price;
             return View("OfferItm", itemOffers);
         }
 
@@ -128,6 +129,26 @@ namespace HangOut.Controllers.MyCustomer
             {
                 response.Add("Status", 400);
                 response.Add("MSG", "Discription Is Required");
+                return response;
+            }
+            if (offerTitle.MaxOrdQty <= 0)
+            {
+                response.Add("Status", 400);
+                response.Add("MSG", "Qty Can't Zero");
+                return response;
+            }
+            var Offers = offerTitle.OfferMenus.FindAll(x => x.IsComplementry==false);
+            var Complementry = offerTitle.OfferMenus.FindAll(x => x.IsComplementry);
+            if (Offers.Count > 0 && offerTitle.FinalPrice == 0) 
+            {
+                response.Add("Status", 400);
+                response.Add("MSG", "Final Price Cannot be Zero");
+                return response;
+            }
+            if(Complementry.Count== offerTitle.OfferMenus.Count && offerTitle.FinalPrice > 0)
+            {
+                response.Add("Status", 400);
+                response.Add("MSG", "Final Price must be Zero for Complemetry Items");
                 return response;
             }
             foreach (var offermenu in offerTitle.OfferMenus)
@@ -189,6 +210,7 @@ namespace HangOut.Controllers.MyCustomer
             ItemOffer itemOffers = new ItemOffer();
             itemOffers.ItemId = objitem.ItemID;
             itemOffers.ItemName = objitem.Items;
+            itemOffers.TotalItemPrice = objitem.Price;
             itemOffers.Min = 1;
             return View("OfferItemBased", itemOffers);
         }

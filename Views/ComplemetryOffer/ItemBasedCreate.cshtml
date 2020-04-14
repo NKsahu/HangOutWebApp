@@ -45,18 +45,18 @@
                 <div class="col-md-4">
 
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     @Html.Label("Final Price")
                     @Html.TextBoxFor(model => model.FinalPrice, new { @class = "form-control ", @Required = "Required" })
                     @Html.ValidationMessageFor(model => model.FinalPrice, "", new { @class = "text-danger" })
                 </div>
+                <div class="col-md-2">
+                    @Html.Label("Total Item Price")
+                    @Html.TextBoxFor(model => model.TotalItemPrice, new { @class = "form-control  ", @Required = "Required", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.TotalItemPrice, "", new { @class = "text-danger" })
+                </div>
                 <div class="col-md-4">
 
-                </div>
-                <div class="col-md-12">
-                    @Html.Label("Discription")
-                    @Html.TextBoxFor(model => model.Discription, new { @class = "form-control ", @Required = "Required" })
-                    @Html.ValidationMessageFor(model => model.Discription, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-5">
 
@@ -69,6 +69,12 @@
                 <div class="col-md-5">
 
                 </div>
+                <div class="col-md-12">
+                    @Html.Label("Discription")
+                    @Html.TextAreaFor(model => model.Discription, new { @class = "form-control ", @Required = "Required" })
+                    @Html.ValidationMessageFor(model => model.Discription, "", new { @class = "text-danger" })
+                </div>
+
             </div>
             <div class="col-md-1" style="margin-top:5px;">
                 @Html.Label("Save", new { @class = "text-white" })
@@ -96,6 +102,9 @@
             }
         });
     }
+    function Hideme() {
+           hidedpt("ShowItems");
+       }
     function AddItem(event, ItemId) {
         if (event.checked) {
             var ItemsAlreadyAdded = document.getElementsByClassName('ItemId');
@@ -112,6 +121,7 @@
                 url: "/ComplemetryOffer/AddOfrItemBased?Itemid=" + ItemId,
                 success: function (data) {
                     $("#AppendItem").append(data);
+                     FunTotalItemPrice();
                 },
                 error: function (jqXhr, textStatus, errorMessage) { // error callback
                     $("#waiting").hide();
@@ -123,5 +133,15 @@
     function RemoveItem(itemid, event) {
         $(event).parent('div').parent('div').find('.IsDeleted').val('1');
         $(event).parent('div').parent('div').hide();
+        $(event).parent('div').parent('div').find('.TotalItemPrice').removeClass();
+        FunTotalItemPrice();
+    }
+    function FunTotalItemPrice() {
+        var itemprice = 0.00;
+        var TotalItemPrice = document.getElementsByClassName('TotalItemPrice');
+        for (var i = 0; i < TotalItemPrice.length; i++) {
+            itemprice +=parseFloat(TotalItemPrice[i].value);
+        }
+        $("#TotalItemPrice").val(itemprice.toFixed(2));
     }
 </script>

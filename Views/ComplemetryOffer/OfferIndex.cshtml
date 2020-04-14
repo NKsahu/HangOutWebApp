@@ -23,10 +23,10 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayName("ID")
+                        @Html.DisplayName("Start From")
                     </th>
                     <th>
-                        @Html.DisplayName("Start From")
+                        @Html.DisplayName("End Date")
                     </th>
                     <th class="noExport">Terminate</th>
                     <th class="noExport">Status</th>
@@ -37,27 +37,27 @@
             <tbody id="Tbody">
                 @foreach (var SSize in Model)
                 {
-                    <tr id="@SSize.CashBkId">
-                        <td>
-                            @SSize.CBUniqId
-                        </td>
-                        <td>
-                            @SSize.StartDate.ToString("dd-MM-yyyy")
-                        </td>
-                        <td id="T@(SSize.CashBkId)">
-                            <button class="btn btn-warning btn-sm " onclick="Terminate(@SSize.CashBkId,@SSize.TerminateSts)">@CashBackController.TerminatSts(SSize.TerminateSts)</button>
-                        </td>
-                        <td id="S@(SSize.CashBkId)">
-                            <button class="btn btn-info btn-sm " onclick="Status(@SSize.CashBkId,@SSize.CashBkStatus)">@CashBackController.CBSts(SSize.CashBkStatus)</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-success btn-sm " onclick="Seating(@SSize.CashBkId)">Edit Seating</button>
-                        </td>
-                        
-                        <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.CashBkId)">Edit</button>
-                        </td>
-                    </tr>
+                <tr id="@SSize.CashBkId">
+                    <td>
+                        @SSize.StartDate.ToString("dd-MM-yyyy")
+                    </td>
+                    <td>
+                        @SSize.ValidTillDate.ToString("dd-MM-yyyy")
+                    </td>
+                    <td id="T@(SSize.CashBkId)">
+                        <button class="btn btn-warning btn-sm " onclick="Terminate(@SSize.CashBkId,@SSize.TerminateSts)">@CashBackController.TerminatSts(SSize.TerminateSts)</button>
+                    </td>
+                    <td id="S@(SSize.CashBkId)">
+                        <button class="btn btn-info btn-sm " onclick="Status(@SSize.CashBkId,@SSize.CashBkStatus)">@CashBackController.CBSts(SSize.CashBkStatus)</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-success btn-sm " onclick="Seating(@SSize.CashBkId)">Edit Seating</button>
+                    </td>
+
+                    <td>
+                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.CashBkId)">Edit</button>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
@@ -147,8 +147,8 @@
             return;
         }
         var HtmlStr = "<tr id='" + Jitmobj.CashBkId + "'>";
-        HtmlStr += '<td>' + Jitmobj.UID + '</td>';
         HtmlStr += '<td>' + Jitmobj.StartDate + '</td>';
+         HtmlStr += '<td>' + Jitmobj.EndDate + '</td>';
         HtmlStr += '<td id="T'+Jitmobj.CashBkId+'"><button class="btn btn-warning btn-sm "  onclick="Terminate(' + Jitmobj.CashBkId + ','+Jitmobj.TerminateStsID+')">' + Jitmobj.TStatus + '</button></td>';
         HtmlStr += '<td id="S'+Jitmobj.CashBkId +'"><button class="btn btn-info btn-sm "  onclick="Status(' + Jitmobj.CashBkId + ','+Jitmobj.CBStsID+')">'+Jitmobj.CBSts+'</button></td>';
         HtmlStr += '<td><button class="btn btn-success btn-sm " onclick="Seating(' + Jitmobj.CashBkId + ')">Edit Seating</button></td>';
