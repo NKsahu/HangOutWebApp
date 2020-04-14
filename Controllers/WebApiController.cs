@@ -125,51 +125,76 @@ namespace HangOut.Controllers
             Int32 OrgId = Int32.Parse(objParams.GetValue("OrgId").ToString());
             List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
             ListItems = ListItems.FindAll(x => x.ItemAvaibility == 0);// only available items
-            Int64 TableSheatTakeWayId =Int64.Parse(objParams.GetValue("TSTWID").ToString());
-            List<Cart> cartlist = Cart.List.FindAll(x => x.CID == CID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
-            HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableSheatTakeWayId);
-            List<HG_Orders> TodaysOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-            HG_Orders ObjOrder = TodaysOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId && x.TableOtp == ObjTorS.Otp);
+            Int64 SeatingId =Int64.Parse(objParams.GetValue("TSTWID").ToString());
+            HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(SeatingId);
+            List<Cashback> Cashbacks = Cashback.GetAll(OrgId, 1);// only actives
+            Cashbacks = Cashbacks.FindAll(x => x.CashBkStatus == 1);// only running
+            Cashbacks = Cashbacks.FindAll(x => x.CampeignType == 3);//offer cashback only
+            Cashbacks = Cashbacks.FindAll(x => x.SeatingIds != "");
+            Cashbacks = Cashbacks.FindAll(x => x.StartDate.Date <= DateTime.Now.Date && x.ValidTillDate.Date >= DateTime.Now.Date).ToList();
+            for (int i = 0; i < Cashbacks.Count; i++)
+            {
+                List<int> seats = Cashbacks[i].SeatingIds.Split(',').Select(int.Parse).ToList();
+                int seat = seats.Find(x => x == SeatingId);
+                if (seat > 0)
+                {
+                    if (Cashbacks[i].OfferType == 1)
+                    {
+                        JObject offerItems = new JObject();
+                        offerItems.Add("ComplementryOffer",JObject.FromObject(OfferTitle.GetOne(Cashbacks[i].CashBkId, 1)));
+                        JMenuArray.Add(offerItems);
+                    }
+                    if (Cashbacks[i].OfferType == 2)
+                    {
+                        JObject offerItems = new JObject();
+                        offerItems.Add("Offer",JObject.FromObject(OfferTitle.GetOneByItems(Cashbacks[i].CashBkId)));
+                        JMenuArray.Add(offerItems);
+                    }
+                    break;
+                }
+            }
+
+            //  List<HG_Orders> TodaysOrder = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+            //HG_Orders ObjOrder = TodaysOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId && x.TableOtp == ObjTorS.Otp);
             double CurrentTableAmt = 0.00;
             string Cmobile = "";
             string Cname = "";
             int ContactId = 0;
-            if (ObjOrder != null)
-            {
-                if (ObjOrder.ContactId > 0)
-                {
-                    LocalContacts localContacts = LocalContacts.GetOne(ObjOrder.ContactId);
-                    Cmobile = localContacts.MobileNo;
-                    Cname = localContacts.Cust_Name;
-                    ContactId = localContacts.ContctID;
-                }
-                else
-                {
-                    vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)ObjOrder.CID);
-                    if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
-                    {
-                        Cmobile = ObjUser.UserId;
-                        Cname = ObjUser.UserName;
-                        ContactId = -1;// minus show dont edit this. Order Palced By Customer
-                    }
-                }
-                if (ObjOrder.PaymentStatus == 0)
-                {
-                    var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
-                    OrderItems = OrderItems.FindAll(x => x.Status != 4);// not ccanceled items
-                    CurrentTableAmt = ObjOrder.DeliveryCharge;
-                    for (var i = 0; i < OrderItems.Count; i++)
-                    {
-                        CurrentTableAmt += OrderItems[i].Count * OrderItems[i].Price;
-                    }
-                }
+            //if (ObjOrder != null)
+            //{
+            //    if (ObjOrder.ContactId > 0)
+            //    {
+            //        LocalContacts localContacts = LocalContacts.GetOne(ObjOrder.ContactId);
+            //        Cmobile = localContacts.MobileNo;
+            //        Cname = localContacts.Cust_Name;
+            //        ContactId = localContacts.ContctID;
+            //    }
+            //    else
+            //    {
+            //        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)ObjOrder.CID);
+            //        if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
+            //        {
+            //            Cmobile = ObjUser.UserId;
+            //            Cname = ObjUser.UserName;
+            //            ContactId = -1;// minus show dont edit this. Order Palced By Customer
+            //        }
+            //    }
+            //    if (ObjOrder.PaymentStatus == 0)
+            //    {
+            //        var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
+            //        OrderItems = OrderItems.FindAll(x => x.Status != 4);// not ccanceled items
+            //        CurrentTableAmt = ObjOrder.DeliveryCharge;
+            //        for (var i = 0; i < OrderItems.Count; i++)
+            //        {
+            //            CurrentTableAmt += OrderItems[i].Count * OrderItems[i].Price;
+            //        }
+            //    }
                 
-            }
+            //}
             if (ObjTorS.Type !="3")// not takeaway
             {
                 OrderMenu ObjMenu = OrderMenu.Getone(ObjTorS.OMID);
                 List<OrderMenuCategory> ListCategry = OrderMenuCategory.GetAll(ObjMenu.id);
-                
                 List<OrdMenuCtgItems> ListMenuItems = OrdMenuCtgItems.GetAll(ObjMenu.id);
                 ListCategry = ListCategry.FindAll(x => x.Status == true);
                 ListCategry = ListCategry.OrderBy(x => x.OrderNo).ToList();
@@ -193,7 +218,6 @@ namespace HangOut.Controllers
                         foreach (var MenuItmObj in OrderMenuItems)
                         {
                             var Items = ListItems.Find(x => x.ItemID == MenuItmObj.ItemId);
-                            List<Cart> cartCurrentItem = cartlist.FindAll(x => x.ItemId == Items.ItemID);
                             int CurrCount = 0;
                             JObject objItem = new JObject();
                             objItem.Add("IID", Items.ItemID);
@@ -214,21 +238,6 @@ namespace HangOut.Controllers
                             {
                                 objItem.Add("Addons", JArray.FromObject(Addons));
                             }
-                            if (cartCurrentItem.Count > 0)
-                            {
-                                JArray ItemUUIDS = new JArray();
-                                foreach (var objcart in cartCurrentItem)
-                                {
-                                    JObject jobj = new JObject();
-                                    jobj.Add("UUID", objcart.ItemUUID);
-                                    jobj.Add("Price", objcart.ItemPrice);
-                                    jobj.Add("Cnt", objcart.Count);
-                                    jobj.Add("IsAddon", objcart.IsAddon);
-                                    ItemUUIDS.Add(jobj);
-                                }
-                                objItem["ItemCartValue"]= cartCurrentItem.Count;
-                                objItem.Add("ItemArray", ItemUUIDS);
-                            }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
                         }
@@ -248,7 +257,6 @@ namespace HangOut.Controllers
             else
             {
                 List<HG_Category> MenuList = new HG_Category().GetAll(OrgId: OrgId);
-                 
                 int count = 0;
                 foreach (HG_Category menu in MenuList)
                 {
@@ -264,7 +272,6 @@ namespace HangOut.Controllers
                         int ItemiIndex = 0;
                         foreach (var Items in ItemListByMenu)
                         {
-                          List<Cart> cartCurrentItem = cartlist.FindAll(x => x.ItemId == Items.ItemID);
                             int CurrCount = 0;
                             JObject objItem = new JObject();
                             objItem.Add("IID", Items.ItemID);
@@ -284,21 +291,6 @@ namespace HangOut.Controllers
                             if (Addons.Count > 0)
                             {
                                 objItem.Add("Addons", JArray.FromObject(Addons));
-                            }
-                            if (cartCurrentItem.Count > 0)
-                            {
-                                JArray ItemUUIDS = new JArray();
-                                foreach (var objcart in cartCurrentItem)
-                                {
-                                    JObject jobj = new JObject();
-                                    jobj.Add("UUID", objcart.ItemUUID);
-                                   jobj.Add("Price", objcart.ItemPrice);
-                                    jobj.Add("Cnt", objcart.Count);
-                                   jobj.Add("IsAddon", objcart.IsAddon);
-                                    ItemUUIDS.Add(jobj);
-                                }
-                                objItem["ItemCartValue"] = cartCurrentItem.Count;
-                                objItem.Add("ItemArray", ItemUUIDS);
                             }
                             jarrayItem.Add(objItem);
                             MenuItemPrice += Items.Price * CurrCount;
@@ -354,142 +346,11 @@ namespace HangOut.Controllers
                 return Count + ","+TotalFinlAmt.ToString("0.00") + "," + ItemId+","+"0"+","+ Totaltax.ToString("0.00") + ","+Subtotal.ToString("0.00");
             return Count + "," + TotalFinlAmt.ToString("0.00") + "," + "0" + "," + CurrentItemobj.Count + "," +Totaltax.ToString("0.00") + ","+ Subtotal.ToString("0.00");
         }
-        [HttpPost]
-        public JObject AddCart2(string Obj)
-        {
-            JObject ParaMeters = JObject.Parse(Obj);
-            int CustID = Int32.Parse(ParaMeters["CID"].ToString());
-            int ItemId = Convert.ToInt32(ParaMeters["ItemId"].ToString());
-            int Cnt = Convert.ToInt32(ParaMeters["Cnt"].ToString());
-            string ItmUUID = ParaMeters["UUID"] != null ? ParaMeters["UUID"].ToString() : null;
-            Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
-            HG_Items ObjSingleItem = new HG_Items().GetOne(ItemId);
-            double ItemPrice = ObjSingleItem.Price;
-            string UUID = Guid.NewGuid().ToString();
-            int IsAddon = 0;
-            if (ItmUUID != null && ItmUUID != "")
-            {
-                Cart cart = Cart.List.Find(x => x.ItemUUID == ItmUUID);
-                if (cart != null)
-                {
-                    UUID = cart.ItemUUID;
-                    ItemPrice = cart.ItemPrice;
-                    IsAddon = cart.IsAddon;
-                    Cart.List.RemoveAll(x => x.ItemUUID == ItmUUID);
-                    if (Cnt > 0)
-                    {
-                        cart.Count = Cnt;
-                        Cart.List.Add(cart);
-                    }
-                }
-                else
-                {
-                    Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemUUID = UUID, ItemPrice = ObjSingleItem.Price });
-                }
-            }
-            else
-            {
-                Cart ObjCart = Cart.List.Find(x => x.CID == CustID && x.ItemId == ItemId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
-                if (ObjCart != null)
-                {
-                    ObjCart.Count = Cnt;
-                    ItemPrice = ObjCart.ItemPrice;
-                    Cart.List.RemoveAll(x => x.CID == CustID && x.ItemId == ItemId && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
-                    if (ObjCart.Count != 0)
-                        Cart.List.Add(ObjCart);
-                }
-                else
-                { Cart.List.Add(new Cart() { CID = CustID, ItemId = ItemId, Count = Cnt, TableorSheatOrTaleAwayId = TableSheatTakeWayId, ItemPrice = ObjSingleItem.Price, ItemUUID = UUID }); }
-            }
-            var cartitems = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId == TableSheatTakeWayId);
-            double FinalPrice = 0.00;
-            foreach (var cart in cartitems)
-            {
-                FinalPrice += cart.Count * cart.ItemPrice;
-            }
-            JObject result = new JObject();
-            result.Add("UUID", UUID);
-            result.Add("Price", ItemPrice);
-            result.Add("Cnt", Cnt);
-            result.Add("TotalCnt", cartitems.Count);
-            result.Add("FinalPrice", FinalPrice);
-            result.Add("IsAddon", IsAddon);
-            return result;
-        }
-
         
-        [HttpPost]
-        public JObject GetCart(string Obj)
-        {
-            JObject ParaMeters = JObject.Parse(Obj);
-            Int64 CustID =Int64.Parse(ParaMeters["CID"].ToString());
-            Int32 OrgId = Convert.ToInt32(ParaMeters["OrgId"].ToString());
-            Int64 TableSheatTakeWayId = Int64.Parse(ParaMeters.GetValue("TSTWID").ToString());
-            int AppType= ParaMeters["AppType"] != null ? int.Parse(ParaMeters["AppType"].ToString()) : 1;//1 customer ,2 captain , 3 admin panel
-            HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(OrgId);
-            double TotalPrice = 0.00;
-            List<Cart> CartItems = Cart.List.FindAll(x => x.CID == CustID && x.TableorSheatOrTaleAwayId==TableSheatTakeWayId);
-            List<HG_Items> ListItems = new HG_Items().GetAll(OrgId);
-            JArray jArray = new JArray();
-            double TotalTax = 0.00;
-            double TotalCostPrice = 0.00;
-            foreach (Cart Mycart in CartItems)
-            {
-                HG_Items item = ListItems.Find(x => x.ItemID == Mycart.ItemId);
-                JObject ObjItem = new JObject();
-                    ObjItem.Add("IID", item.ItemID);
-                    ObjItem.Add("ItemName", item.Items);
-                    ObjItem.Add("ItemPrice", item.Price);
-                    ObjItem.Add("CostPrice", item.CostPrice);
-                    ObjItem.Add("ItemQuntity", item.Qty);
-                    ObjItem.Add("ItemImage", item.Image);
-                    ObjItem.Add("ItemCartValue", Mycart.Count);
-                    ObjItem.Add("ItemMode", item.ItemMode);
-                    TotalPrice += Mycart.Count * item.Price;
-                    TotalCostPrice+= Mycart.Count * item.CostPrice;
-                TotalTax += OrgType.TotalTax(item.CostPrice, item.Tax, Mycart.Count); //ObjItem.Tax* CartObj.Count;
-               // TotalTax += item.Tax * Mycart.Count;
-                    jArray.Add(ObjItem);
-
-            }
-            JObject ViewCartItem = new JObject();
-            ViewCartItem.Add("TotalCostPrice",TotalCostPrice.ToString("0.00"));// without gst
-            ViewCartItem.Add("TotalTax", TotalTax.ToString("0.00"));
-            ViewCartItem.Add("TotalPrice", TotalPrice.ToString("0.00"));
-            ViewCartItem.Add("ListGetCart", jArray);
-            ViewCartItem.Add("OrderingStatus", objOrg.CustomerOrdering);
-            OrgSetting orgSetting = OrgSetting.Getone(objOrg.OrgID);
-            if (orgSetting.EnblDeleryChrg == 1&& orgSetting.AcptMinOrd==1 &&OrgType.DeliveryChargeAply(AppType, orgSetting))
-            {
-                 if (orgSetting.DeleryChrgType == 1)//fixed charge{
-                {
-                    ViewCartItem.Add("MinOrdAmt", orgSetting.MinOrderAmt);
-                    ViewCartItem.Add("DeliveryChrge", orgSetting.DeliveryCharge);
-                    ViewCartItem.Add("DeliveryType", orgSetting.DeleryChrgType);
-                }
-               else if (orgSetting.DeleryChrgType==0)
-                {
-                    ViewCartItem.Add("MinOrdAmt", orgSetting.MinOrderAmt);
-                    ViewCartItem.Add("DeliveryChrge", orgSetting.DeliveryCharge);
-                    ViewCartItem.Add("DeliveryType", orgSetting.DeleryChrgType);
-                }
-            }
-            if (orgSetting.OrgId > 0 && orgSetting.CrxVerification > 0)
-            {
-                List<HG_Orders> ListCurrOrder = new HG_Orders().GetAll(CID:(int)CustID, Status: 1);
-                var CurrSeatingOrder = ListCurrOrder.Find(x => x.Table_or_SheatId == TableSheatTakeWayId &&x.Create_Date.Date==DateTime.Now.Date);
-                if (CurrSeatingOrder == null || CurrSeatingOrder.OID == 0)
-                {
-                    ViewCartItem.Add("VerifyBy", orgSetting.CrxVerification);
-                }
-            }
-            return ViewCartItem;
-        }
-
         public JArray GetMenulist(string Obj)
         {    
             JObject ParaMeters = JObject.Parse(Obj);
-            int OrgId = System.Convert.ToInt32(ParaMeters["OID"].ToString());
+            int OrgId = Convert.ToInt32(ParaMeters["OID"].ToString());
             List<HG_Category> listcategory = new HG_Category().GetAll(OrgId:OrgId);
             return  JArray.FromObject(listcategory);
         }
@@ -2216,18 +2077,7 @@ namespace HangOut.Controllers
                 TableRowObj = new HG_Tables_or_Sheat();
             }
             JObject jObject = JObject.FromObject(TableRowObj);
-            //List<HG_Orders> CustOrdrList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-            //HG_Orders orders = CustOrdrList.Find(x => x.Table_or_SheatId == TableRowObj.Table_or_RowID && x.Status != "3");
-            //if (orders == null)
-            //{
-            //    jObject.Add("OID", 0);
-            //}
-            //else
-            //{
-            //    jObject.Add("OID", orders.OID);
-            //}
             HG_OrganizationDetails objOrg = new HG_OrganizationDetails().GetOne(TableRowObj.OrgId);
-            
             jObject.Add("OrgName", objOrg != null ? objOrg.Name : " ");
             jObject.Add("OrderingStatus", objOrg.CustomerOrdering);
             jObject.Add("PaymentType", objOrg.PaymentType);
@@ -2684,10 +2534,7 @@ namespace HangOut.Controllers
             }
             return result;
         }
-        public JArray CartList(string CID)
-        {
-            return JArray.FromObject(Cart.List.FindAll(x => x.CID == int.Parse(CID)));
-        }
+       
         public JArray StateList()
         {
             List<State> StateList = new State().GetAll();
