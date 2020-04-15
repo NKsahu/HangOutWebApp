@@ -89,15 +89,16 @@
 <!-- header -->
 @Html.Hidden("OrgIdHead", Orgid)
 <header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-color:#ffffff">
-    <div class="col-md-3  text-md-left text-center mt-0">
-        <a class="text-white navbar-brand pl-3" style="font-size:15px;">foodDo</a>
+    <div class="col-md-1   text-center" style="border-right:2px solid #e6ebef">
+        <img src="~/Image/logoAdminMobile.png" style="height:80px;"  />
+        @*<a class="text-white navbar-brand pl-3" style="font-size:15px;">foodDo</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
-        <a href="#" onclick="showvideo();" class="text-white ml-md-4"><i class="fas fa-chalkboard-teacher border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
+        <a href="#" onclick="showvideo();" class="text-white ml-md-4"><i class="fas fa-chalkboard-teacher border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>*@
     </div>
-    <div class="col-md-6   text-center mt-0" style="overflow:hidden">
+    <div class="col-md-9   text-center mt-0" style="overflow:hidden">
         <h3 class=" text-center navbar-brand pl-3 GreenTxt" style="font-size:32px;font-weight:bold;">@OrgName</h3>
     </div>
-    <div class="col-md-3   text-md-right text-center p-md-2 p-2  mt-0">
+    <div class="col-md-2    text-center p-md-2 p-2  ">
         <label class="switch" data-toggle="tooltip" title="Allow Customer Ordering">
             <input type="checkbox" @CustomerOrdrn onchange="SetCustmrOrd(this)">
             <span class="slider round"></span>
@@ -114,7 +115,7 @@
             <button  data-toggle="dropdown" style="background-color:#ffffff;box-shadow:none;border:none;" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out-alt border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></button>
             <div class="dropdown-menu dropdown-menu-right  pb-0">
                 <h6 class="mt-2 mb-2">@Request.Cookies["UserInfo"]["UserName"]</h6>
-                <button id="logoutbtn" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
+                <button id="logoutbtn" onclick="LogOut()" class="btn btn-sm btn-block btn-dark mt-1 nav-item"><i class="fa fa-lock"> Sign Out</i> </button>
                 <style>
                     #logoutbtn > i:hover {
                         border: none !important;
@@ -132,67 +133,7 @@
     
 </div>
 <script>
-    $(document).ready(function () {
-
-        // loading time set size
-        if ($(window).width() <= 700) {
-            $("#admin-side-menu").addClass("d-none");
-            $("#DynamicData").removeAttr("class");
-            $("#DynamicData").addClass("col-md-12 col-12 mt-0 p-0");
-        }
-        else {
-            $("#admin-side-menu").removeClass("d-none");
-            $("#DynamicData").removeAttr("class");
-            $("#DynamicData").addClass("col-md-10 col-12 mt-0 p-0");
-        }
-
-
-        // onclick admin toggle menu btn
-        $("#toggle-admin-menu").click(function () {
-            if ($("#admin-side-menu").hasClass("d-none")) {
-                    $("#admin-side-menu").removeClass("d-none");
-                    $("#DynamicData").removeAttr("class");
-                    $("#DynamicData").addClass("col-md-10 mt-0 p-0");
-                }
-                else {
-                    $("#admin-side-menu").addClass("d-none");
-                    $("#DynamicData").removeAttr("class");
-                    $("#DynamicData").addClass("col-md-12 mt-0 p-0");
-                }
-            });
-
-        // accordian toggle
-            $("#admin-side-menu > ul > li > a").click(function () {
-                $("#admin-side-menu > ul > li").removeClass("activeted");
-                $(this).parent("li").addClass("activeted");
-
-                if ($(this).hasClass("have-sub-menu")) {
-                        $("#admin-side-menu > ul > li").find("span").removeClass("fa-minus");
-                        $("#admin-side-menu > ul > li").find("span").addClass("fa-plus");
-                    if ($(this).hasClass("collapsed")) {
-                        $(this).find("span").removeClass("fa-plus");
-                        $(this).find("span").addClass("fa-minus");
-                    }
-                }
-        });
-        
-
-        $("#logoutbtn").click(function () {
-            $.ajax({
-                url: "/vw_HG_UsersDetails/LogOut",
-                type: "GET",
-                success: function (data) {
-                   // alert("AAYA");
-                    window.location = "/vw_HG_UsersDetails/vw_HG_UsersDetails";
-                },
-                error: function (Xr, Status, ErrorMsg) {
-                  
-                }
-            });
-
-        });
-
-    });
+    
     GetPos();
     function SetCustmrOrd(event) {
       //  var Status = $(event).val();
@@ -290,6 +231,19 @@
                 $("#waiting").hide();
             }
         });
+    }
+    function LogOut() {
+        $.ajax({
+                url: "/vw_HG_UsersDetails/LogOut",
+                type: "GET",
+                success: function (data) {
+                   // alert("AAYA");
+                    window.location = "/vw_HG_UsersDetails/vw_HG_UsersDetails";
+                },
+                error: function (Xr, Status, ErrorMsg) {
+                  
+                }
+            });
     }
 </script>
 <script src="~/Assets/PushNotication.js"></script>

@@ -89,14 +89,18 @@ function makedpt(id, h, w) {
     }
     if (w != null) {
         $("#" + id + " > .modal-dialog").css('max-width', w);
+        $("#" + id + " > .modal-dialog").css('margin', "");
     }
+    
 }
 function showdpt(id) {
    modaladded = true;
    // window.location.hash = id;
     $("#" + id).show();
+    
    // $("#" + id).display = "block";
     $("#" + id).modal({ backdrop: 'static', keyboard: false });
+    $("#" + id).css('padding-right', '0px');
 
 }
 function hidedpt(id) {
