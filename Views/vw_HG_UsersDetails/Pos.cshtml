@@ -13,8 +13,8 @@
 }
 
 <!-- admin side menus -->
-<div id="admin-side-menu" class="col-md-1    m-0 p-0 " style="background-color:#ffffff;border-right:2px solid #e6ebef">
-    <ul id="myaccordion" class="list-unstyled mb-0 ">
+    <div id="admin-side-menu" class="col-md-1    m-0 p-0 " style="background-color:#ffffff;border-right:2px solid #e6ebef">
+
         @{
             List<UsersMenu> List = new UsersMenu().GetAll();
             List = List.FindAll(x => x.MenuOrderNo != 400);
@@ -41,58 +41,45 @@
             {
                 if (ObjMenuLi.MenuLink != null && ObjMenuLi.MenuLink != "")
                 {
-                    <li class="nav-item" data-parent="#myaccordion">
-                        <a class="nav-link" href="@ObjMenuLi.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@ObjMenuLi.Menu_Icon"></i>@ObjMenuLi.MenuDisplayName</a>
-                    </li>
+
+                    <div class="col-md-12 MouseOverMe">
+                        <a class="nav-link text-center" href="@ObjMenuLi.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@ObjMenuLi.Menu_Icon AnchorIcon"></i></a>
+                        <h4 class="text-center">@ObjMenuLi.MenuDisplayName</h4>
+                    </div>
                 }
                 else
                 {
-                    <li class="nav-item">
-                        <a class="nav-link have-sub-menu collapsed" href="#" data-target="#ID@(ObjMenuLi.Menu_Id)" data-toggle="collapse">
-                            <i class="fa fa-desktop-alt"></i>@ObjMenuLi.MenuDisplayName<span class="fa fa-plus"></span>
-                        </a>
-                        <ul id="ID@(ObjMenuLi.Menu_Id)" class="collapse list-unstyled" data-parent="#myaccordion">
+                    <div class="col-md-12 MouseOverMe dropdown">
+                        <div class="dropdown-content">
                             @{
                                 List<UsersMenu> ChileMenus = AdminSubMenuList.FindAll(x => x.ParentMenuId == ObjMenuLi.Menu_Id);
                                 ChileMenus = ChileMenus.OrderBy(x => x.MenuOrderNo).ToList();
                                 foreach (var SubMenu in ChileMenus)
                                 {
-                                    <li class="nav-item" data-parent="#myaccordion">
-                                        <a class="nav-link" href="@SubMenu.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@SubMenu.Menu_Icon"></i>@SubMenu.MenuDisplayName</a>
-                                    </li>
+                                    <a class="nav-link" href="@SubMenu.MenuLink" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="@SubMenu.Menu_Icon"></i>@SubMenu.MenuDisplayName</a>
                                 }
                             }
-                        </ul>
-                    </li>
-
+                        </div>
+                        <a class="nav-link text-center" href="#"><i class="@ObjMenuLi.Menu_Icon AnchorIcon"></i></a>
+                        <h4 class="text-center">@ObjMenuLi.MenuDisplayName</h4>
+                    </div>
                 }
 
             }
 
         }
         <!--customize menu here-->
-        
-    </ul>
-
-    <div class="row">
         @if (UserType != null && UserType != "SA")
         {
             List<HG_Items> listItem = new HG_Items().GetAll();
             var offitem = listItem.FindAll(x => x.ItemAvaibility == 1).Count;
-        <div class="col-md-12 MouseOverMe dropdown">
-            <a class="nav-link text-center" href="#"><i class="fas fa-bookmark AnchorIcon"></i></a>
-            <h4 class="text-center">Quick Access <b id="TotalCntHome" style="font-size:medium;" class="w3-badge">@offitem</b></h4>
-            <div class="dropdown-content">
-                <a class="nav-link" href="/HG_Items/ItemAvaiBility" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-star"></i>Item availability <b id="offItemHome" class="w3-badge"> @offitem</b></a>
-                <a class="nav-link" href="/HG_Items/ItemAvaiBility" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-star"></i>Item availability <b id="offItemHome" class="w3-badge"> @offitem</b></a>
+            <div class="col-md-12 MouseOverMe dropdown">
+                <div class="dropdown-content">
+                    <a class="nav-link" href="/HG_Items/ItemAvaiBility" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-star"></i>Item availability <b id="offItemHome" class="w3-badge"> @offitem</b></a>
+                </div>
+                <a class="nav-link text-center" href="#"><i class="fas fa-bookmark AnchorIcon"></i></a>
+                <h4 class="text-center">Quick Access <b id="TotalCntHome" style="font-size:medium;" class="w3-badge">@offitem</b></h4>
             </div>
-        </div>
-            
-            @*<ul id="qkaccess" class="collapse list-unstyled" data-parent="#myaccordion">
-                <li class="nav-item" data-parent="#myaccordion">
-                </li>
-            </ul>*@
-
 
         }
 
@@ -100,13 +87,13 @@
             <a class="nav-link text-center" href="/HG_OrganizationDetails/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-school AnchorIcon"></i></a>
             <h4 class="text-center">Setup</h4>
         </div>
+        @if (UserType != null && UserType != "SA")
+        {
+            var CustomerCount = Customer.MyCustomerCnt(Orgid);
+            <div style="padding:2px;z-index:100; position:fixed;left:0px;bottom:0px;color:black;font-weight:bold;font-size:small;"><i class="fas fa-users"></i>&nbsp;My Customer:@CustomerCount</div>
+        }
+        <a style="display:none" class="nav-link" href="/UsersMenu/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-star"></i>UserList</a>
     </div>
-    @if (UserType != null && UserType != "SA")
-    {
-        var CustomerCount = Customer.MyCustomerCnt(Orgid);
-        <div style="padding:2px;z-index:100; position:fixed;left:0px;bottom:0px;color:black;font-weight:bold;margin-left:5px;"><i class="fas fa-users"></i>&nbsp;My Customer:@CustomerCount</div>
-    }
-</div>
 <!-- End admin side menus -->
 @*mt-0 p-0*@
 <div class="col-md-11  " id="DynamicData" >

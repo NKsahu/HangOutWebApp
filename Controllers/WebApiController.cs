@@ -141,14 +141,123 @@ namespace HangOut.Controllers
                     if (Cashbacks[i].OfferType == 1)
                     {
                         JObject offerItems = new JObject();
-                        offerItems.Add("ComplementryOffer",JObject.FromObject(OfferTitle.GetOne(Cashbacks[i].CashBkId, 1)));
-                        JMenuArray.Add(offerItems);
+                        OfferTitle offerTitle = OfferTitle.GetOne(Cashbacks[i].CashBkId,1);
+                        JObject JobjMenu = new JObject();
+                        JArray jarrayItem = new JArray();
+                        JobjMenu.Add("MenuId", offerTitle.TitleId);
+                        JobjMenu.Add("OfferType", 1);
+                        JobjMenu.Add("Name", "Offer");
+                        JobjMenu.Add("CBID", Cashbacks[i].CashBkId);
+                        JobjMenu.Add("MenuIndex", 0);
+                        int ItemiIndex = 0;
+                        int menucnt = 0;
+                        int CurrCount = 0;
+                        double Price = offerTitle.FinalPrice;
+                        if (offerTitle.KeepFixPrice==false)
+                        {
+                            Price = offerTitle.TotalItemPrice;
+                        }
+                        JObject objItem = new JObject();
+                        objItem.Add("IID", offerTitle.TitleId);
+                        objItem.Add("ItemName", offerTitle.Name);
+                        objItem.Add("ItemPrice", Price);
+                        objItem.Add("ItemQuntity", 0);
+                        objItem.Add("ItemImage", "");
+                        objItem.Add("ItemCartValue", CurrCount);
+                        objItem.Add("MenuId", 0);
+                        objItem.Add("ItemIndex", ItemiIndex++);
+                        objItem.Add("ItemMode", 0);
+                        objItem.Add("CostPrice", Price);// without gst
+                        objItem.Add("Tax", 0);
+                        objItem.Add("Info", "");
+                        objItem.Add("MaxOrdQty", offerTitle.MaxOrdQty);
+                        objItem.Add("Offer", "Offer");
+                        menucnt++;
+                        
+                       
+                        JArray Addons = new JArray();
+                        foreach (var Menuobj in offerTitle.OfferMenus)
+                        {
+                            JObject jObject = new JObject();
+                            jObject.Add("TitleId", Menuobj.MenuId);
+                            jObject.Add("AddOnTitle", Menuobj.Name);
+                            jObject.Add("Min", Menuobj.Min);
+                            jObject.Add("Max", Menuobj.Max);
+                            jObject.Add("CatOrItmId", offerTitle.TitleId);
+                            jObject.Add("IsComplementry", Menuobj.IsComplementry);
+                            JArray ItemAddon = new JArray();
+                            foreach(var Addonitm in Menuobj.itemOffers)
+                            {
+                                JObject jObjectItm = new JObject();
+                                jObjectItm.Add("AddOnItemId", Addonitm.ItemOfferId);
+                                jObjectItm.Add("ItemId", Addonitm.ItemId);
+                                jObjectItm.Add("CostPrice", Addonitm.TotalItemPrice);
+                                jObjectItm.Add("Tax", 0);
+                                jObjectItm.Add("Price", Addonitm.TotalItemPrice);
+                                jObjectItm.Add("AddonID", offerTitle.TitleId);
+                                jObjectItm.Add("DelStatus", false);
+                                jObjectItm.Add("Title", Addonitm.ItemName);
+                                jObjectItm.Add("Min", 0);
+                                jObjectItm.Add("Max", 0);
+                                ItemAddon.Add(jObjectItm);
+                            }
+                            jObject.Add("AddOnItemList", ItemAddon);
+                            Addons.Add(jObject);
+                        }
+                        objItem.Add("Addons", Addons);
+                        jarrayItem.Add(objItem);
+                        JobjMenu.Add("MenuItemCount", menucnt);
+                        JobjMenu.Add("MenuItems", jarrayItem);
+                        JobjMenu.Add("MenuItmPrice", 0);
+                        JMenuArray.Add(JobjMenu);
                     }
                     if (Cashbacks[i].OfferType == 2)
                     {
                         JObject offerItems = new JObject();
-                        offerItems.Add("Offer",JObject.FromObject(OfferTitle.GetOneByItems(Cashbacks[i].CashBkId)));
-                        JMenuArray.Add(offerItems);
+                        OfferTitle offerTitle = OfferTitle.GetOneByItems(Cashbacks[i].CashBkId);
+                         JObject JobjMenu = new JObject();
+                        JArray jarrayItem = new JArray();
+                        JobjMenu.Add("MenuId", offerTitle.TitleId);
+                        JobjMenu.Add("OfferType", 2);
+                        JobjMenu.Add("Name", "Offer");
+                        JobjMenu.Add("MaxOrdQty", offerTitle.MaxOrdQty);
+                        JobjMenu.Add("Offer", "Offer");
+                        JobjMenu.Add("CBID", Cashbacks[i].CashBkId);
+                        JobjMenu.Add("MenuIndex", 0);
+                        int ItemiIndex = 0;
+                        int menucnt = 0;
+                        int CurrCount = 0;
+                        JObject objItem = new JObject();
+                        objItem.Add("IID", offerTitle.TitleId);
+                        objItem.Add("ItemName", offerTitle.Name);
+                        objItem.Add("ItemPrice", offerTitle.FinalPrice);
+                        objItem.Add("ItemQuntity", 0);
+                        objItem.Add("ItemImage", "");
+                        objItem.Add("ItemCartValue", CurrCount);
+                        objItem.Add("MenuId", 0);
+                        objItem.Add("ItemIndex", ItemiIndex++);
+                        objItem.Add("ItemMode", 0);
+                        objItem.Add("CostPrice", offerTitle.FinalPrice);// without gst
+                        objItem.Add("Tax", 0);
+                        objItem.Add("Info","");
+                        objItem.Add("MaxOrdQty", offerTitle.MaxOrdQty);
+                        objItem.Add("Offer", "Offer");
+                        menucnt++;
+                        jarrayItem.Add(objItem);
+                        JobjMenu.Add("MenuItemCount", menucnt);
+                        JobjMenu.Add("MenuItems", jarrayItem);
+                        JobjMenu.Add("MenuItmPrice", 0);
+                        JArray ItemArra = new JArray();
+                        foreach(var itemobj in offerTitle.itemOffers)
+                        {
+                            JObject jObject = new JObject();
+                            jObject.Add("ItmeId", itemobj.ItemId);
+                            jObject.Add("Name", itemobj.ItemName);
+                            jObject.Add("Count", itemobj.Min);
+                            ItemArra.Add(jObject);
+                        }
+                        JobjMenu.Add("InfoItemList", ItemArra);
+                        JMenuArray.Add(JobjMenu);
                     }
                     break;
                 }
@@ -160,37 +269,6 @@ namespace HangOut.Controllers
             string Cmobile = "";
             string Cname = "";
             int ContactId = 0;
-            //if (ObjOrder != null)
-            //{
-            //    if (ObjOrder.ContactId > 0)
-            //    {
-            //        LocalContacts localContacts = LocalContacts.GetOne(ObjOrder.ContactId);
-            //        Cmobile = localContacts.MobileNo;
-            //        Cname = localContacts.Cust_Name;
-            //        ContactId = localContacts.ContctID;
-            //    }
-            //    else
-            //    {
-            //        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)ObjOrder.CID);
-            //        if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
-            //        {
-            //            Cmobile = ObjUser.UserId;
-            //            Cname = ObjUser.UserName;
-            //            ContactId = -1;// minus show dont edit this. Order Palced By Customer
-            //        }
-            //    }
-            //    if (ObjOrder.PaymentStatus == 0)
-            //    {
-            //        var OrderItems = new HG_OrderItem().GetAll(ObjOrder.OID);
-            //        OrderItems = OrderItems.FindAll(x => x.Status != 4);// not ccanceled items
-            //        CurrentTableAmt = ObjOrder.DeliveryCharge;
-            //        for (var i = 0; i < OrderItems.Count; i++)
-            //        {
-            //            CurrentTableAmt += OrderItems[i].Count * OrderItems[i].Price;
-            //        }
-            //    }
-                
-            //}
             if (ObjTorS.Type !="3")// not takeaway
             {
                 OrderMenu ObjMenu = OrderMenu.Getone(ObjTorS.OMID);
@@ -2114,26 +2192,53 @@ namespace HangOut.Controllers
             jObject.Add("VerifyBy", orgSetting.CrxVerification);
             if (objOrg.OrgID > 0 &&objOrg.WalletAmt>0)
             {
-                Cashback cashback = Cashback.GetAppliedCashBk(objOrg.OrgID, TableRowObj.Table_or_RowID);
-                if (cashback != null)
+                //===========CASHBACK========================================================
+                JArray CashBks = new JArray();
+                List<Cashback> Cashbacks = Cashback.GetAll(objOrg.OrgID, 1);// only actives
+                Cashbacks = Cashbacks.FindAll(x => x.CashBkStatus == 1);// only running
+                Cashbacks = Cashbacks.FindAll(x => x.SeatingIds != "");
+                Cashbacks = Cashbacks.FindAll(x => x.StartDate.Date <= DateTime.Now.Date && x.ValidTillDate.Date >= DateTime.Now.Date).ToList();
+                Cashbacks = Cashbacks.FindAll(x => x.CampeignType != 3);// not offers item based ,fixed choice
+                foreach(var cashback in Cashbacks)
                 {
-                    JObject Jobj = new JObject();
-                    Jobj.Add("CBPercentage", cashback.Percentage.ToString("0.00"));
-                    Jobj.Add("MaxCB", cashback.MaxAmt.ToString("0.00"));
-                    Jobj.Add("CashBKid", cashback.CashBkId);
-                    if (cashback.RaiseDynamic)
+                    List<int> seats = cashback.SeatingIds.Split(',').Select(int.Parse).ToList();
+                    int seat = seats.Find(x => x == TableRowObj.Table_or_RowID);
+                    if (seat>0 && cashback.CampeignType==1)
                     {
-                        var AggStudy = GetOrder.GetTotalAmt(objOrg.OrgID);
-                        double DynamicValue = AggStudy + (AggStudy - cashback.BilAmt) * (cashback.Percentage * 2 / 100);
-                        Jobj.Add("MinBillAmt", DynamicValue > cashback.BilAmt ? DynamicValue.ToString("0.00") : cashback.BilAmt.ToString("0.00"));
-                    }
-                    else
-                    {
-                        Jobj.Add("MinBillAmt", cashback.BilAmt.ToString("0.00"));
+                        JObject Jobj = new JObject();
+                        Jobj.Add("CBPercentage", cashback.Percentage.ToString("0.00"));
+                        Jobj.Add("MaxCB", cashback.MaxAmt.ToString("0.00"));
+                        Jobj.Add("CashBKid", cashback.CashBkId);
                         Jobj.Add("MaxCbLimit", cashback.MaxCBLimit);
+                        Jobj.Add("CashBkType", cashback.CampeignType);
+                        string MinBillAmt = "";
+                        if (cashback.RaiseDynamic)
+                        {
+                            var AggStudy = GetOrder.GetTotalAmt(objOrg.OrgID);
+                            double DynamicValue = AggStudy + (AggStudy - cashback.BilAmt) * (cashback.Percentage * 2 / 100);
+                            MinBillAmt= DynamicValue > cashback.BilAmt ? DynamicValue.ToString("0.00") : cashback.BilAmt.ToString("0.00");
+                        }
+                        else
+                        {
+                            MinBillAmt= cashback.BilAmt.ToString("0.00");
+                        }
+                        Jobj.Add("MinBillAmt", MinBillAmt);
+                        JObject JojCashbk = new JObject();
+                        JojCashbk.Add("Title", "CashBack Offer");
+                        JojCashbk.Add("Description", "Get "+ cashback.Percentage.ToString("0.00") +"% on Min Bill Amount "+ MinBillAmt);
+                        jObject.Add("CashBk", Jobj);
+                        CashBks.Add(JojCashbk);
+
                     }
-                    jObject.Add("CashBk", Jobj);
+                    else if(seat>0 && cashback.CampeignType == 2)// item offers
+                    {
+                        JObject JojCashbk = new JObject();
+                        JojCashbk.Add("Title", "Complementry Dish Offer");
+                        JojCashbk.Add("Description", "Get A Complementry Dish on a Bill Amt Of Rs " + cashback.BilAmt.ToString("0.00") +" or more");
+                        CashBks.Add(JojCashbk);
+                    }
                 }
+                jObject.Add("CashBkList", CashBks);
             }
             return jObject;
         }
@@ -2238,8 +2343,6 @@ namespace HangOut.Controllers
                 double price = orders.DeliveryCharge;
                 double tax = 0.00;
                 double CostPrice = 0.00;
-                
-
                 HashSet<int> Token = new HashSet<int>();
                 Object.Add("Date", orders.Create_Date.ToString("ddd, MMM-dd-yyyy"));
                 Object.Add("OrganizationName", hG_OrganizationDetails.Name);
@@ -2308,11 +2411,16 @@ namespace HangOut.Controllers
                     }
                     Info.Add(itemobj);
                 }
-                if(orders.DisntChargeIDs!=""&& orders.DisntChargeIDs != "0")
+                Object.Add("TicketNo", string.Join(",", Token));
+                Object.Add("CostPrice", CostPrice.ToString("0.00"));
+                Object.Add("Tax", tax.ToString("0.00"));
+                Object.Add("TotalAmount", price.ToString("0.00"));
+                Object.Add("DeliveryChrge", orders.DeliveryCharge);
+                if (orders.DisntChargeIDs != "" && orders.DisntChargeIDs != "0")
                 {
                     List<OrdDiscntChrge> Discnt = OrdDiscntChrge.GetAll(orders.DisntChargeIDs);
                     JArray DiscntArray = new JArray();
-                    for(int j = 0; j < Discnt.Count; j++)
+                    for (int j = 0; j < Discnt.Count; j++)
                     {
                         JObject discnJoj = new JObject();
                         discnJoj.Add("DiscntTitle", Discnt[j].Title);
@@ -2321,18 +2429,18 @@ namespace HangOut.Controllers
                     }
                     Object.Add("DiscntList", DiscntArray);
                 }
-                Object.Add("TicketNo", string.Join(",", Token));
-                Object.Add("CostPrice", CostPrice.ToString("0.00"));
-                Object.Add("Tax", tax.ToString("0.00"));
-                Object.Add("TotalAmount", price.ToString("0.00"));
-                Object.Add("DeliveryChrge", orders.DeliveryCharge);
-                if (Status == "1")
+                if (Status == "1" &&orders.PaymentStatus==0)
                 {
                     WalletAmt walletAmt = WalletAmt.GetUnusedWalletAmt((int)orders.CID, orders.OrgId);
                     double MyCashBk = walletAmt.CashBkAmt - walletAmt.DeductedAmt;
                     if (MyCashBk > 0)
                     {
                         Object.Add("MyCashBkAmt", MyCashBk.ToString("0.00"));
+                    }
+                    Cashback cashback = Cashback.GetAppliedCashBk(orders.OrgId, orders.Table_or_SheatId, 2);// complementry offers
+                    if (cashback != null && price> cashback.BilAmt)
+                    {
+                        Object.Add("ComplimentryDish",JObject.FromObject(OfferObj.GetAll(cashback.CashBkId)));
                     }
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,9 +11,12 @@ namespace HangOut.Models.MyCustomer
     {
        public int ItemOfferId { get; set; }
         public int ItemId { get; set; }
+        [JsonIgnore]
         public int Min { get; set; }
+        [JsonIgnore]
         public int Max { get; set; }
         public int CashBkId { get; set; }
+        [JsonIgnore]
         public int IsDeleted { get; set; }
         public string ItemName { get; set; }
         public int MenuId { get; set; }// 0: item Offers //1 : Offers campaeign  Type=3 Menu Id

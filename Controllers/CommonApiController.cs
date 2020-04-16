@@ -361,12 +361,12 @@ namespace HangOut.Controllers
             {
                 OrdDiscntChrge ordDiscntChrge = new OrdDiscntChrge();
                 ordDiscntChrge.ID = 0;
-                ordDiscntChrge.Title = "Customer CashBack";
+                ordDiscntChrge.Title = "CashBack";
                 ordDiscntChrge.OID = wallet.OID;
                 ordDiscntChrge.Type = 1;
                 ordDiscntChrge.Amt = wallet.DeductedAmt;
                 ordDiscntChrge.Tax = 0;
-                ordDiscntChrge.Remark = "";
+                ordDiscntChrge.Remark = "CashBack Amount";
                 ordDiscntChrge.Save();
                 HG_Orders hG_Orders = new HG_Orders().GetOne(wallet.OID);
                 if (hG_Orders.OID > 0)

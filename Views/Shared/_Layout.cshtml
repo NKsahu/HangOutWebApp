@@ -162,7 +162,7 @@
             "sScrollX": "100%",
             "bScrollCollapse": true,
             "dom": 'Bfrtip',
-            "buttons": [{ extend: 'excel',title:null, exportOptions: {title:null, columns: "thead th:not(.noExport)" } }, 'pdf', { extend: 'print', exportOptions: { columns: ':visible' } },]
+            "buttons": [{ extend: 'excel', className: 'DataTbl', title: null, exportOptions: { title: null, columns: "thead th:not(.noExport)" } }, { extend: 'pdf', className: 'DataTbl'}, { extend: 'print', className: 'DataTbl', exportOptions: { columns: ':visible' } },]
         });
         table.buttons.exportData({
             stripHtml: true

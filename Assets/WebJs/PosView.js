@@ -578,6 +578,9 @@ function GeTablesTakeAwya() {
             var Seating = JSON.parse(data);
             TablesList = Seating.Seating;
             ShowOrders(TablesList);
+            if (TablesList.length > 0) {
+                SeatingClick(TablesList[0].Table_or_RowID);
+            }
             AddFlrScrFilter(Seating.FlrScrList);
             OrgId =parseInt(Seating.OrgId);
             LoginId = parseInt(Seating.UserCode);
@@ -648,11 +651,11 @@ function FilterOrder(Status,event) {
 }
 function ShowOrders(list) {
     $("#SeatingTbl").html('');
-    var ColSize = 2;
+    var ColSize = 3;
     console.log("dis=" + $('#MenuItems').css('display'));
-    if ($('#CartItemsMenu').css('display') == 'block') {
-        ColSize = 3;
-    }
+    //if ($('#CartItemsMenu').css('display') == 'block') {
+    //    ColSize = 3;
+    //}
     for (i = 0; i < list.length; i++) {
         var TableID = list[i].Table_or_RowID.toString();
         var Status = list[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
@@ -662,8 +665,8 @@ function ShowOrders(list) {
         var RowSide = list[i].RowSide;
        // var ShowStatus = list[i].SeatingUser == null ? "" : list[i].SeatingUser;
         var html = '<div id="SeatingId'+TableID+'" class="col-md-' + ColSize + ' SeatingNum" onclick="SeatingClick(' + TableID + ');" ondblclick="SeatingDBClick(' + TableID+');">';
-        html += '<div class="SeatingBox"><div class="text-center" style="margin-top:15px;">';
-        html += '<div style="height:120px;overflow:hidden">';
+        html += '<div class="SeatingBox"><div class="text-center" style="margin-top:12px;">';
+        html += '<div style="height:110px;overflow:hidden">';
         html += '<h3>' + FlrScrName + '</h3>';
         html += '<h2 style="font-weight:bold">' + SeatName + '</h2>';
         html += '<h4>' + RowSide + '</h4></div>';
@@ -679,6 +682,7 @@ function ShowOrders(list) {
         html += "</div>";
         $("#SeatingTbl").append(html);
     }
+    
 }
 function FreeOrOccupied(Status,event) {
     $(".posTbleBtn").css('background-color', '#000000');
@@ -799,7 +803,7 @@ function GetItemListByCategory(TableOrMWid) {
         $('#C_mobile,#C_name').prop('readonly', true);
         $("#C_save").attr('disabled', 'disabled');
     }
-
+    
 }
 
 function GetOnlyItemsList(SeatingId) {
@@ -813,9 +817,28 @@ function GetOnlyItemsList(SeatingId) {
     var CurrSeatObj = ObjOrderName;
     var CategoryList = CurrSeatObj.MenuItems;
     var HtmlMenuFilter = '<div class="col-md-2">';
+    var categoryCnt = CategoryList.length;
     HtmlMenuFilter += '<button class="btn btn-sm MenuBox form-control " onclick="filterItemByCat(this, 0)" style="background-color:#44cd4a" > <span class="TblBtnText">All</span></button ></div>';
-    for (i = 0; i < CategoryList.length; i++) {
-        HtmlMenuFilter += '<div class="col-md-2"  ><button class="btn btn-sm MenuBox form-control" onclick="filterItemByCat(this,' + CategoryList[i].MenuId + ')" > <span class="TblBtnText">' + CategoryList[i].Name + '</span></button ></div>';
+    for (i = 0; i < categoryCnt; i++) {
+        var addagain = false;
+        if (i < 10) {
+            HtmlMenuFilter += '<div class="col-md-2"><button class="btn btn-sm  MenuBox form-control " onclick="filterItemByCat(this,' + CategoryList[i].MenuId + ')" > <span class="TblBtnText">' + CategoryList[i].Name + '</span></button ></div>';
+        }
+        else if (i == 10 && categoryCnt > 10) {
+            HtmlMenuFilter += '<div class="col-md-2" ><button class="btn btn-sm MenuBox form-control" onclick="ShowHidden(this)" > <span class="TblBtnText"  >' + CategoryList[i].Name + '&darr;</span></button ></div>';
+            addagain = true;
+        }
+        else if (i == 10 && categoryCnt == 10) {
+            HtmlMenuFilter += '<div class="col-md-2"><button class="btn btn-sm  MenuBox form-control " onclick="filterItemByCat(this,' + CategoryList[i].MenuId + ')" > <span class="TblBtnText" >' + CategoryList[i].Name + '</span></button ></div>';
+        }
+        else {
+            HtmlMenuFilter += '<div class="col-md-2 hiddenmenus" style="display:none;"  ><button class="btn btn-sm  MenuBox form-control " onclick="filterItemByCat(this,' + CategoryList[i].MenuId + ')" > <span class="TblBtnText">' + CategoryList[i].Name + '</span></button ></div>';
+        }
+
+        if (addagain) {
+            HtmlMenuFilter += '<div class="col-md-2 hiddenmenus" style="display:none;"  ><button class="btn btn-sm  MenuBox form-control " onclick="filterItemByCat(this,' + CategoryList[i].MenuId + ')" > <span class="TblBtnText">' + CategoryList[i].Name + '</span></button ></div>';
+
+        }
         var ItemsList = CategoryList[i].MenuItems;
         for (j = 0; j < ItemsList.length; j++) {
             ItemList.push(ItemsList[j]);

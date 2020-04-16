@@ -13,39 +13,28 @@
 
 }
 
-<div id="admin-side-menu" class="col-md-2    m-0 p-0 " style="background-image: linear-gradient(to right top, #5de79a, #5de79a, #5de79a, #5de79a, #5de79a);">
-    <ul id="myaccordion" class="list-unstyled mb-0 ">
+    <div id="admin-side-menu" class="col-md-1    m-0 p-0 " style="background-color:#ffffff;border-right:2px solid #e6ebef">
 
         @if (UserType != null && UserType == "SA")
         {
-            <li class="nav-item" data-parent="#myaccordion">
-                <a class="nav-link" href="/Settings/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-wrench"></i> Setting</a>
-            </li>
+            <div class="col-md-12 MouseOverMe dropdown">
+                <a class="nav-link text-center" href="/Settings/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-user-o AnchorIcon"></i></a>
+                <h4 class="text-center">Setting </h4>
+            </div>
         }
-    <li class="nav-item" data-parent="#myaccordion">
-        <a class="nav-link" href="#"><i class="fas fa-credit-card"></i>CREDITS <b class="w3-badge">@MyWallet.ToString("0.00")</b></a>
-    </li>
-        <li class="nav-item">
-            <a class="nav-link have-sub-menu collapsed" href="#" data-target="#qkaccess" data-toggle="collapse">
-                My Customer<span class="fa fa-plus"></span>
-            </a>
-            <ul id="qkaccess" class="collapse list-unstyled" data-parent="#myaccordion">
-                <li class="nav-item" data-parent="#myaccordion">
-                    <a class="nav-link" href="/CashBack/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-book"></i>CashBack</a>
-                </li>
-                <li class="nav-item" data-parent="#myaccordion">
-                    <a class="nav-link" href="/ComplemetryOffer/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-book"></i>Complementry Offer</a>
-                </li>
-                <li class="nav-item" data-parent="#myaccordion">
-                    <a class="nav-link" href="/ComplemetryOffer/OfferIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-book"></i>Offers</a>
-                </li>
-            </ul>
-        </li>
-
-    </ul>
-</div>
+        <div class="col-md-12 MouseOverMe dropdown">
+            <div class="dropdown-content">
+                <a class="nav-link" href="/CashBack/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-book"></i>CashBack</a>
+                <a class="nav-link" href="/ComplemetryOffer/index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-book"></i>Complementry Offer</a>
+                <a class="nav-link" href="/ComplemetryOffer/OfferIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fas fa-book"></i>Offers</a>
+            </div>
+            <a class="nav-link text-center" href="#"><i class="fas fa-user AnchorIcon"></i></a>
+            <h4 class="text-center">My Customer </h4>
+        </div>
+        <div style="padding:2px;z-index:100; position:fixed;left:0px;bottom:0px;color:black;font-weight:bold;margin-left:5px;"><i class="fas fa-credit-card"></i>&nbsp;CREDITS @MyWallet.ToString("0.00")</div>
+    </div>
 <!-- End admin side menus -->
 
-<div class="col-md-10  " id="DynamicData">
+<div class="col-md-11" id="DynamicData">
 
 </div>

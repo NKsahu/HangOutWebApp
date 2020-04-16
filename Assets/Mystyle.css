@@ -112,7 +112,7 @@ header .btn-group a i:hover {
         background-color: #121111;
     }
 #admin-side-menu {
-    height: 150vh;
+    /*height: 100vh;*/
     overflow-y:auto;
 }
 @media only screen and (max-width: 540px) {
@@ -159,10 +159,9 @@ header .btn-group a i:hover {
 
 .dropdown-content {
     display: none;
-    position: absolute;
-    top: 0;
+    position: fixed;
     background-color: #f9f9f9;
-    min-width: 160px;
+    margin-left:8%;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
@@ -187,4 +186,18 @@ header .btn-group a i:hover {
 .AnchorIcon {
     font-size: xx-large;
     color:black;
+}
+.DataTbl {
+    background-color: black;
+    color: white;
+    width: 15%;
+    font-size:larger;
+    padding-top:8px;
+    padding-bottom:8px;
+    border-radius:5px;
+    border:none;
+}
+#TBLID_filter label {
+    font-weight: bold;
+    font-size: 15px;
 }

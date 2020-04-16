@@ -42,12 +42,17 @@
                 </div>
             </div>
             <div class="row" style="margin-top:20px;">
-                <div class="col-md-4">
+                <div class="col-md-2">
 
                 </div>
                 <div class="col-md-2">
+                        @Html.Label("Keep Fixed Price")
+                        @Html.CheckBoxFor(model => model.KeepFixPrice, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(model => model.KeepFixPrice, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-2">
                     @Html.Label("Final Price")
-                    @Html.TextBoxFor(model => model.FinalPrice, new { @class = "form-control ", @Required = "Required" })
+                    @Html.TextBoxFor(model => model.FinalPrice, new { @class = "form-control " })
                     @Html.ValidationMessageFor(model => model.FinalPrice, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-2">
@@ -91,6 +96,7 @@
 </div>
 <script>
     var CurritemAdd = null;
+    KeepFixedPrice();
     function AddNewMenu() {
         $("#waiting").show();
         $.ajax({
@@ -125,7 +131,7 @@
     function Hideme() {
            hidedpt("ShowItems");
        }
-       function AddItem(event, ItemId) {
+    function AddItem(event, ItemId) {
            
            if (event.checked) {
        $.ajax({
@@ -142,7 +148,7 @@
         }
 
        }
-       function RemoveItem(itemid,event) {
+    function RemoveItem(itemid,event) {
            $(event).parent('div').parent('div').find('.IsDeleted').val('1');
            $(event).parent('div').parent('div').hide();
            $(event).parent('div').parent('div').find('.TotalItemPrice').removeClass();
@@ -158,6 +164,7 @@
         OfferTitle.MaxOrdQty = $("#MaxOrdQty").val();
         OfferTitle.FinalPrice=$("#FinalPrice").val();
         OfferTitle.Type = 1;//offer items
+        OfferTitle.KeepFixPrice = $("#KeepFixPrice").is(':checked');
         OfferTitle.OfferMenus = [];
         var ListOfferMenus = document.getElementsByClassName("OfferMenus");
         for (var i = 0; i < ListOfferMenus.length; i++) {
@@ -219,5 +226,16 @@
             itemprice +=parseFloat(TotalItemPrice[i].value);
         }
         $("#TotalItemPrice").val(itemprice.toFixed(2));
+    }
+    $("#KeepFixPrice").change(function () {
+        KeepFixedPrice();
+    });
+    function KeepFixedPrice() {
+        if ($("#KeepFixPrice").is(":checked")) {
+            $("#FinalPrice").parent('div').show();
+        }
+        else {
+            $("#FinalPrice").parent('div').hide();
+        }
     }
 </script>

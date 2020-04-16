@@ -85,7 +85,7 @@ namespace HangOut.Models.MyCustomer
                     return;
                 }
             }
-            Cashback cashbk = Cashback.GetAppliedCashBk(ObjOrder.OrgId, ObjOrder.Table_or_SheatId);
+            Cashback cashbk = Cashback.GetAppliedCashBk(ObjOrder.OrgId, ObjOrder.Table_or_SheatId,1);
             if (cashbk != null)
             {
                 double cashBkAmt = 0.00;

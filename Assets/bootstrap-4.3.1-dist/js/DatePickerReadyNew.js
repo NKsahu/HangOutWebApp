@@ -1,6 +1,4 @@
-﻿//if (!Modernizr.inputtypes.date) {
-//$(".datefield").live("focusin", function () {
-$(document).on("focusin", ".timepiker", function () {
+﻿$(document).on("focusin", ".timepiker", function () {
     $(this).timepicker({ showMeridian: false });
 
 });

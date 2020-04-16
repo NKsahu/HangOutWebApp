@@ -16,6 +16,7 @@ namespace HangOut.Models.MyCustomer
     public double FinalPrice { get; set; }
     public double Tax { get; set; }
      public int Type { get; set; }// 1: choice based, 2 fixed items
+        public bool KeepFixPrice { get; set; }
 
         /// <summary>
         /// not table keys
@@ -28,6 +29,7 @@ namespace HangOut.Models.MyCustomer
         {
             OfferMenus = new List<OfferMenu>();
             itemOffers = new List<ItemOffer>();
+            KeepFixPrice = false;
         }
    
     public int Save(){
@@ -39,14 +41,14 @@ namespace HangOut.Models.MyCustomer
                 string Query = "";
                 if (this.TitleId == 0)
                 {
-                    Query = "Insert into  OfferTitle  values(@CBID,@Name,@Discription,@MaxOrdQty,@FinalPrice,@Tax,@Type); SELECT SCOPE_IDENTITY();";
+                    Query = "Insert into  OfferTitle  values(@CBID,@Name,@Discription,@MaxOrdQty,@FinalPrice,@Tax,@Type,@KeepFixPrice); SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@CBID", this.CBID);
                     cmd.Parameters.AddWithValue("@Type", this.Type);
                 }
                 else
                 {
-                    Query = "update  OfferTitle set Name=@Name,Discription=@Discription,MaxOrdQty=@MaxOrdQty,FinalPrice=@FinalPrice,Tax=@Tax where TitleId=@TitleId";
+                    Query = "update  OfferTitle set Name=@Name,Discription=@Discription,MaxOrdQty=@MaxOrdQty,FinalPrice=@FinalPrice,Tax=@Tax,KeepFixPrice=@KeepFixPrice where TitleId=@TitleId";
                     cmd = new SqlCommand(Query, dBCon.Con);
                     cmd.Parameters.AddWithValue("@TitleId", this.TitleId);
                 }
@@ -55,6 +57,7 @@ namespace HangOut.Models.MyCustomer
                 cmd.Parameters.AddWithValue("@MaxOrdQty", this.MaxOrdQty);
                 cmd.Parameters.AddWithValue("@FinalPrice", this.FinalPrice);
                 cmd.Parameters.AddWithValue("@Tax", this.Tax);
+                cmd.Parameters.AddWithValue("@KeepFixPrice", this.KeepFixPrice);
                 if (this.TitleId == 0)
                 {
                     R = Convert.ToInt32(cmd.ExecuteScalar());
@@ -104,6 +107,8 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.MaxOrdQty = SDR.GetInt32(index++);
                     ObjTmp.FinalPrice = SDR.GetDouble(index++);
                     ObjTmp.Tax = SDR.GetDouble(index++);
+                    ObjTmp.Type = SDR.GetInt32(index++);
+                    ObjTmp.KeepFixPrice = SDR.GetBoolean(index++);
                     ObjTmp.OfferMenus = OfferMenu.GetAll(ObjTmp.TitleId);
                     ObjTmp.TotalItemPrice = ObjTmp.OfferMenus.Sum(x => x.TotalItmPrice);
                     Tmp = ObjTmp;

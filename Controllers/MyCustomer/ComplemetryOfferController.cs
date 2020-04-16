@@ -139,16 +139,16 @@ namespace HangOut.Controllers.MyCustomer
             }
             var Offers = offerTitle.OfferMenus.FindAll(x => x.IsComplementry==false);
             var Complementry = offerTitle.OfferMenus.FindAll(x => x.IsComplementry);
-            if (Offers.Count > 0 && offerTitle.FinalPrice == 0) 
+            if (Offers.Count > 0 && offerTitle.FinalPrice == 0 &&offerTitle.KeepFixPrice) 
             {
                 response.Add("Status", 400);
                 response.Add("MSG", "Final Price Cannot be Zero");
                 return response;
             }
-            if(Complementry.Count== offerTitle.OfferMenus.Count && offerTitle.FinalPrice > 0)
+            if(Complementry.Count== offerTitle.OfferMenus.Count && offerTitle.FinalPrice > 0 && offerTitle.KeepFixPrice)
             {
                 response.Add("Status", 400);
-                response.Add("MSG", "Final Price must be Zero for Complemetry Items");
+                response.Add("MSG", "Final Price must be Zero for Complementry Items");
                 return response;
             }
             foreach (var offermenu in offerTitle.OfferMenus)

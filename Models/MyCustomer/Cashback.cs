@@ -201,13 +201,21 @@ namespace HangOut.Models.MyCustomer
             {
                 Cashbakcs = Cashbakcs.FindAll(x => x.CampeignType == 3);
             }
+            else if (Current.CampeignType == 1 || Current.CampeignType == 2)
+            {
+                Cashbakcs = Cashbakcs.FindAll(x => x.CampeignType != 3);
+            }
             if (Current.StartDate.Date > DateTime.Now.Date)
             {
-                Cashbakcs = Cashbakcs.FindAll(x => x.StartDate.Date >= Current.StartDate.Date && x.ValidTillDate <= Current.ValidTillDate.Date).ToList();
+                Cashbakcs = Cashbakcs.FindAll(x => Current.StartDate.Date>=x.StartDate.Date&& x.ValidTillDate <= Current.ValidTillDate.Date).ToList();
             }
             else
             {
-                Cashbakcs = Cashbakcs.FindAll(x => x.StartDate.Date <= Current.StartDate.Date && x.ValidTillDate >= Current.StartDate.Date).ToList();
+                if (Current.ValidTillDate < DateTime.Now.Date)
+                {
+                    return RedSeatings;
+                }
+                Cashbakcs = Cashbakcs.FindAll(x => Current.StartDate.Date<=x.ValidTillDate.Date).ToList();
             }
             foreach (var cashbak in Cashbakcs)
             {
@@ -218,11 +226,12 @@ namespace HangOut.Models.MyCustomer
             return RedSeatings;
         }
         
-        public static Cashback GetAppliedCashBk(int OrgId,Int64 SeatinId)
+        public static Cashback GetAppliedCashBk(int OrgId,Int64 SeatinId,int CampType)
         {
 
             List<Cashback> Cashbacks = Cashback.GetAll(OrgId, 1);// only actives
             Cashbacks = Cashbacks.FindAll(x => x.CashBkStatus == 1);// only running
+            Cashbacks = Cashbacks.FindAll(x => x.CampeignType == CampType);
             Cashbacks = Cashbacks.FindAll(x => x.SeatingIds != "");
             Cashbacks = Cashbacks.FindAll(x => x.StartDate.Date <= DateTime.Now.Date && x.ValidTillDate.Date >= DateTime.Now.Date).ToList();
             for (int i = 0; i < Cashbacks.Count; i++)

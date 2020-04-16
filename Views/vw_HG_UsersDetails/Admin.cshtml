@@ -24,7 +24,11 @@
     {
         OrgName = "POSTPAID-SUPER-ADMIN";
     }
+    OrgName = OrgName.Trim();
+    var FirstChar = OrgName[0];
+   OrgName= OrgName.Remove(0,1);
 }
+
 <style>
     .switch {
         position: relative;
@@ -90,13 +94,13 @@
 @Html.Hidden("OrgIdHead", Orgid)
 <header class="navbar navbar-expand-sm text-white w-100 p-0" style="background-color:#ffffff">
     <div class="col-md-1   text-center" style="border-right:2px solid #e6ebef">
-        <img src="~/Image/logoAdminMobile.png" style="height:80px;"  />
+        <img src="~/Image/logoAdminMobile.png" style="height:65px;"  />
         @*<a class="text-white navbar-brand pl-3" style="font-size:15px;">foodDo</a>
         <a href="#" id="toggle-admin-menu" class="text-white ml-md-4"><i class="fa fa-bars border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>
         <a href="#" onclick="showvideo();" class="text-white ml-md-4"><i class="fas fa-chalkboard-teacher border border-secondary rounded" style="font-size:17px;padding:4px 6px;"></i></a>*@
     </div>
     <div class="col-md-9   text-center mt-0" style="overflow:hidden">
-        <h3 class=" text-center navbar-brand pl-3 GreenTxt" style="font-size:32px;font-weight:bold;">@OrgName</h3>
+        <h3 class=" text-center navbar-brand pl-3 " style="font-size:32px;font-weight:bold;"><span style="color:black">@FirstChar</span><span class="GreenTxt">@OrgName</span></h3>
     </div>
     <div class="col-md-2    text-center p-md-2 p-2  ">
         <label class="switch" data-toggle="tooltip" title="Allow Customer Ordering">

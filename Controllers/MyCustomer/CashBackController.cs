@@ -108,6 +108,10 @@ namespace HangOut.Controllers.MyCustomer
                         return Json(new { msg = "Another mutual campaign applied on specified table(s)" });
                     }
                 }
+                if (cashback.SeatingIds == null)
+                {
+                    cashback.SeatingIds = "";
+                }
                 cashback.Save();
                 JObject response = new JObject();
                 response.Add("CashBkId", cashback.CashBkId);

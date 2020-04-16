@@ -16,13 +16,15 @@ namespace HangOut.Models
       public double Tax { get; set; }
       public string Remark { get; set; }
       public DateTime Datetime { get; set; }
-     public Int64 SeatingId { get; set; }
+        public int CBID { get; set; }//CashBkId
+        public Int64 SeatingId { get; set; }
         public int SeatingOtp { get; set; }
 
     public OrdDiscntChrge()
         {
             Amt = 0.00;
             Tax = 0.00;
+            CBID = 0;
         }
 
         public int Save()
@@ -35,7 +37,7 @@ namespace HangOut.Models
                 string Quary = "";
                 if (this.ID == 0)
                 {
-                    Quary = "Insert Into OrderDiscntCharge Values (@Title,@OID,@Type,@Amt,@Tax,@Remark,@Datetime);SELECT SCOPE_IDENTITY();";
+                    Quary = "Insert Into OrderDiscntCharge Values (@Title,@OID,@Type,@Amt,@Tax,@Remark,@Datetime,@CBID);SELECT SCOPE_IDENTITY();";
                     cmd = new SqlCommand(Quary, con.Con);
                     cmd.Parameters.AddWithValue("@Datetime", DateTime.Now);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
@@ -43,7 +45,7 @@ namespace HangOut.Models
                 }
                 else
                 {
-                    Quary = "Update OrderDiscntCharge Set Title=@Title,Amt=@Amt,Tax=@Tax,Remark=@Remark where ID=@ID";
+                    Quary = "Update OrderDiscntCharge Set Title=@Title,Amt=@Amt,Tax=@Tax,Remark=@Remark,CBID=@CBID where ID=@ID";
                     cmd = new SqlCommand(Quary, con.Con);
                     cmd.Parameters.AddWithValue("@ID", this.ID);
                 }
@@ -51,6 +53,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@Amt", this.Amt);
                 cmd.Parameters.AddWithValue("@Tax", this.Tax);
                 cmd.Parameters.AddWithValue("@Remark", this.Remark);
+                cmd.Parameters.AddWithValue("@CBID", this.CBID);
                 if (this.ID == 0)
                 {
                     Row = Convert.ToInt32(cmd.ExecuteScalar());
@@ -93,6 +96,7 @@ namespace HangOut.Models
                     ObjTmp.Tax = SDR.GetDouble(Index++);
                     ObjTmp.Remark = SDR.GetString(Index++);
                     ObjTmp.Datetime = SDR.GetDateTime(Index++);
+                    ObjTmp.CBID = SDR.GetInt32(Index++);
                     TmpList.Add(ObjTmp);
                 }
             }

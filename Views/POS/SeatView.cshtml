@@ -88,13 +88,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-11" style="height:600px;overflow:auto;" id="Seating">
+        <div class="col-md-7" style="height:500px;overflow:auto;" id="Seating">
             <div class="row" style="width:100%;" id="SeatingTbl">
                 
             </div>
         </div>
         <!--Menu Items-->
-        <div class="col-md-7" style="height:600px;overflow:auto;display:none;" id="MenuItems">
+        <div class="col-md-7" style="height:500px;overflow:auto;display:none;" id="MenuItems">
             <div class="row" style="width:100%;" id="SubMenuItems">
                 <div class="col-md-3">
                     <div class="ItemCard">
@@ -109,7 +109,7 @@
                 
             </div>
         </div>
-            <div class="col-md-4" style="display:none;background-color: #ffffff;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);height:600px;overflow:auto;" id="CartItemsMenu">
+            <div class="col-md-4" style="display:none;background-color: #ffffff;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);height:500px;overflow:auto;" id="CartItemsMenu">
                 <div class="row" style="margin-top:8px;">
                     <input type="hidden" id="ContactId" value="0" />
                     <div class="col-md-5">
@@ -218,11 +218,7 @@
     GeTablesTakeAwya();
     function SeatingClick(SeatingId) {
         GetItemList(SeatingId);
-        $("#Seating").removeClass();
-        $("#Seating").addClass('col-md-7');
         $("#CartItemsMenu").show();
-        $('.SeatingNum').removeClass('col-md-2');
-        $('.SeatingNum').addClass('col-md-3');
         $("#AddMoreItems").show();
         
     }
@@ -255,16 +251,13 @@
     function OrderClick() {
          $("#Order").css('background-color', '#44cd4a');
         $("#Current").css('background-color', '#000000');
-        $("#Seating").removeClass();
-        $("#Seating").addClass('col-md-11');
         $("#Seating").show();
         $("#SeatingFilter").show();
-        $("#CartItemsMenu").hide();
+        $("#CartItemsMenu").show();
         $("#MenuItems").hide();
         $("#SearchFilter").show();
         $("#MenuFilter").hide();
-        $('.SeatingNum').removeClass('col-md-3');
-        $('.SeatingNum').addClass('col-md-2');
+        
     }
     function ShowSearch() {
         $("#SearchIcon").hide();
@@ -284,5 +277,12 @@
          $("#SearchLabel").show();
         $("#SearChTbl").val('').keyup();
         
+    }
+    function ShowHidden(event) {
+        $(event).parent('div').hide();
+        var hiddenmenuslist = document.getElementsByClassName('hiddenmenus');
+        for (var i = 0; i < hiddenmenuslist.length; i++) {
+            hiddenmenuslist[i].style.display = 'block';
+        }
     }
 </script>
