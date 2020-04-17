@@ -146,6 +146,7 @@ namespace HangOut.Controllers
                         JArray jarrayItem = new JArray();
                         JobjMenu.Add("MenuId", offerTitle.TitleId);
                         JobjMenu.Add("OfferType", 1);
+                        JobjMenu.Add("MaxOrdQty", offerTitle.MaxOrdQty);
                         JobjMenu.Add("Name", "Offer");
                         JobjMenu.Add("CBID", Cashbacks[i].CashBkId);
                         JobjMenu.Add("MenuIndex", 0);
@@ -683,11 +684,13 @@ namespace HangOut.Controllers
                 int PaymtSts = jObjectlist["PaymtType"] != null ? int.Parse(jObjectlist["PaymtType"].ToString()) : 0;//payment mode type
                 int ContactId = jObjectlist["ContactId"] != null ? int.Parse(jObjectlist["ContactId"].ToString()) : 0;// local contact id
                 int CashBKid= jObjectlist["CashBKid"] != null ? int.Parse(jObjectlist["CashBKid"].ToString()) : 0;// CashBack id
+                int OfferDishCBID = jObjectlist["OfferDishCBID"] != null ? int.Parse(jObjectlist["OfferDishCBID"].ToString()) : 0;// CashBack id
                 jObject.Add("Status", Status);
                 jObject.Add("OrdingSts", CustomerOrdering);
                 jObject.Add("PaymtType", PaymtSts);
                 jObject.Add("ContactId", ContactId);
                 jObject.Add("CashBKid", CashBKid);
+                jObject.Add("OfferDishCBID", OfferDishCBID);
                 JObject result = PostOrder(jObject.ToString());
                 if (result.GetValue("Status").ToString() == "400")
                 {
@@ -719,6 +722,7 @@ namespace HangOut.Controllers
             int PaymtSts=Params["PaymtType"]!=null? int.Parse(Params["PaymtType"].ToString()) :0;//payment mode type
             int ContactId=Params["ContactId"]!=null? int.Parse(Params["ContactId"].ToString()) : 0;// local contact id
             int CashBKid = Params["CashBKid"] != null ? int.Parse(Params["CashBKid"].ToString()) : 0;// CashBack id
+            int OfferDishCBID = Params["OfferDishCBID"] != null ? int.Parse(Params["OfferDishCBID"].ToString()) : 0;// CashBack id
             double DeliveryChargeAmt = 0.00;
             int ItemPrepaireBy = 0;
             HG_Tables_or_Sheat ObjTorS = new HG_Tables_or_Sheat().GetOne(TableorSheatId);
@@ -831,6 +835,7 @@ namespace HangOut.Controllers
                 ObjOrders.PaymentStatus = PaymtSts;
                 ObjOrders.PayReceivedBy = (int)CID;
                 ObjOrders.ContactId = ContactId<=0?0:ContactId;// -1 contact id for Customer Order foodo app
+                ObjOrders.OfferDishCBID = OfferDishCBID > 0 ? OfferDishCBID : ObjOrders.OfferDishCBID;
                 ObjOrders.Save();
             }
             else
@@ -867,6 +872,12 @@ namespace HangOut.Controllers
                     if (Item.IsAddon == 1 || Item.IsParcel == 1)
                     {
                         IsAdon = "1";
+                    }
+                    if (OfferDishCBID > 0)
+                    {
+                        ObjItem.Price = 0;
+                        ObjItem.CostPrice = 0;
+                        ObjItem.Tax = 0;
                     }
                     HG_OrderItem OrderItem = new HG_OrderItem()
                     {
@@ -2438,7 +2449,7 @@ namespace HangOut.Controllers
                         Object.Add("MyCashBkAmt", MyCashBk.ToString("0.00"));
                     }
                     Cashback cashback = Cashback.GetAppliedCashBk(orders.OrgId, orders.Table_or_SheatId, 2);// complementry offers
-                    if (cashback != null && price> cashback.BilAmt)
+                    if (cashback != null && price> cashback.BilAmt &&orders.OfferDishCBID==0)
                     {
                         Object.Add("ComplimentryDish",JObject.FromObject(OfferObj.GetAll(cashback.CashBkId)));
                     }

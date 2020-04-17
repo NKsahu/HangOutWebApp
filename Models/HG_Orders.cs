@@ -29,7 +29,7 @@ namespace HangOut.Models
         public int OrderApprovlSts { get; set; }// {0:'not-approved': 1:approved by customer} customer is taken Orde  or Not
         public double DeliveryCharge { get; set; }// delivery charge amount
         public int ContactId { get; set; }// customer local Contact Id;
-        
+        public int OfferDishCBID { get; set; }
         public HG_Orders()
         {
             this.OID = 0;
@@ -41,20 +41,21 @@ namespace HangOut.Models
             this.PayReceivedBy = 0;
             this.ContactId = 0;
             this.DisntChargeIDs="";
+            this.OfferDishCBID = 0;
         }
 
         public Int64 Save()
         {
-            System.Data.SqlClient.SqlCommand cmd = null;
+            SqlCommand cmd = null;
             DBCon Obj = new DBCon();
             Int64 R = 0;
             try
             {
                 if (this.OID == 0)
-                    cmd = new System.Data.SqlClient.SqlCommand("INSERT INTO HG_ORDERS  VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp,@OrderByIds,@OrdAprovalSts,@DeliveryCharge,@ContactId);select SCOPE_IDENTITY();", Obj.Con);
+                    cmd = new SqlCommand("INSERT INTO HG_ORDERS  VALUES (@CID,@Status,@Create_By,@Create_Date,@Update_By,@Update_Date,@Deleted,@OrgId,@Table_or_SheatId,@PaymentStatus,@PayReceivedBy,@TableOtp,@OrderByIds,@OrdAprovalSts,@DeliveryCharge,@ContactId,@OfferDishCBID);select SCOPE_IDENTITY();", Obj.Con);
                 else
                 {
-                    cmd = new System.Data.SqlClient.SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp,OrderByIds=@OrderByIds,OrdAprovalSts=@OrdAprovalSts,DeliveryCharge=@DeliveryCharge,ContactId=@ContactId where OID=@OID", Obj.Con);
+                    cmd = new SqlCommand("UPDATE HG_ORDERS SET CID=@CID,Status=@Status,Create_By=@Create_By,Update_By=@Update_By,Update_Date=@Update_Date,Deleted=@Deleted,@OrgId=@OrgId,Table_or_SheatId=@Table_or_SheatId,PaymentStatus=@PaymentStatus,PayReceivedBy=@PayReceivedBy,TableOtp=@TableOtp,OrderByIds=@OrderByIds,OrdAprovalSts=@OrdAprovalSts,DeliveryCharge=@DeliveryCharge,ContactId=@ContactId,OfferDishCBID=@OfferDishCBID where OID=@OID", Obj.Con);
                     cmd.Parameters.AddWithValue("@OID", this.OID);
                 }
                 cmd.Parameters.AddWithValue("@CID", this.CID);
@@ -73,6 +74,7 @@ namespace HangOut.Models
                 cmd.Parameters.AddWithValue("@OrdAprovalSts", this.OrderApprovlSts);
                 cmd.Parameters.AddWithValue("@DeliveryCharge", this.DeliveryCharge);
                 cmd.Parameters.AddWithValue("@ContactId", this.ContactId);
+                cmd.Parameters.AddWithValue("@OfferDishCBID", this.OfferDishCBID);
                 if (this.OID == 0)
                 {
                     R = Convert.ToInt64(cmd.ExecuteScalar());
@@ -146,7 +148,8 @@ namespace HangOut.Models
                         DisntChargeIDs= SDR.GetString(13),
                         OrderApprovlSts=SDR.GetInt32(14),
                         DeliveryCharge=SDR.GetDouble(15),
-                        ContactId=SDR.GetInt32(16)
+                        ContactId=SDR.GetInt32(16),
+                        OfferDishCBID = SDR.GetInt32(17)
                     };
                     ListTmp.Add(ObjTmp);
                 }
@@ -189,7 +192,8 @@ namespace HangOut.Models
                         DisntChargeIDs = SDR.GetString(13),
                         OrderApprovlSts = SDR.GetInt32(14),
                         DeliveryCharge = SDR.GetDouble(15),
-                        ContactId = SDR.GetInt32(16)
+                        ContactId = SDR.GetInt32(16),
+                        OfferDishCBID = SDR.GetInt32(17)
                     };
                     ListTmp.Add(ObjTmp);
                 }
@@ -228,6 +232,7 @@ namespace HangOut.Models
                 ObjTemp.OrderApprovlSts = SDR.GetInt32(14);
                 ObjTemp.DeliveryCharge= SDR.GetDouble(15);
                 ObjTemp.ContactId = SDR.GetInt32(16);
+                    ObjTemp.OfferDishCBID = SDR.GetInt32(17);
                 }
             }
             catch (Exception e){ e.ToString(); }
@@ -291,7 +296,8 @@ namespace HangOut.Models
                         DisntChargeIDs = SDR.GetString(13),
                         OrderApprovlSts=SDR.GetInt32(14),
                         DeliveryCharge = SDR.GetDouble(15),
-                       ContactId = SDR.GetInt32(16)
+                       ContactId = SDR.GetInt32(16),
+                        OfferDishCBID = SDR.GetInt32(17)
                 };
                     ListTmp.Add(ObjTmp);
                 }

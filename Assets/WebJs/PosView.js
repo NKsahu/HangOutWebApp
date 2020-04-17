@@ -710,46 +710,56 @@ function FreeOrOccupied(Status,event) {
         console.log("Call For Bill" + OccupiedList.length);
     }
 }
+
 function ReloadSeating() {
+    console.log("aaya reload");
     var RunningOrd = [];
-    $.ajax({
-        type: 'POST',
-        url: "/AdminApi/ReloadSeating",
-        success: function (data) {
-            var Jobj = JSON.parse(data);
-            RunningOrd = Jobj.RunningOrds;
-            if (RunningOrd.length > 0) {
-                for (var i = 0; i < TablesList.length; i++) {
-                    var ObjOrd = RunningOrd.find(x => {
-                        return x.Table_or_SheatId == TablesList[i].Table_or_RowID && x.TableOtp == TablesList[i].Otp;
-                    });
-                    if (ObjOrd != null) {
-                        TablesList[i].CurrOID = ObjOrd.OID;
-                        TablesList[i].Status = 3;//SeatingAmt
-                        if (ObjOrd.PaymentStatus > 0) {
-                            TablesList[i].SeatingAmt = 0;
-                        }
-                        else {
-                            TablesList[i].SeatingAmt = parseFloat(ObjOrd.OrdAmt);
-                        }
-                    }
-                    else if (TablesList[i].CurrOID>0) {
-                        var CurrSeatingItem = CartList.filter(function (x) {
-                            return x.TableorSheatOrTaleAwayId == TablesList[i].Table_or_RowID;
+    if ($("#TblSearch").length > 0) {
+        $.ajax({
+            type: 'GET',
+            url: "/AdminApi/ReloadSeating",
+            success: function (data) {
+                var Jobj = JSON.parse(data);
+                RunningOrd = Jobj.RunningOrds;
+                if (RunningOrd.length > 0) {
+                    for (var i = 0; i < TablesList.length; i++) {
+                        var ObjOrd = RunningOrd.find(x => {
+                            return x.Table_or_SheatId == TablesList[i].Table_or_RowID && x.TableOtp == TablesList[i].Otp;
                         });
-                        if (CurrSeatingItem.Count == 0) {
-                            TablesList[i].CurrOID = 0;
-                            TablesList[i].Status = 1;
-                            TablesList[i].SeatingAmt = 00;
+                        if (ObjOrd != null) {
+                            TablesList[i].CurrOID = ObjOrd.OID;
+                            TablesList[i].Status = 3;//SeatingAmt
+                            $("#SeatingLine" + TablesList[i].Table_or_RowID).css('background-color', 'red');
+                            $("#OtpBox" + TablesList[i].Table_or_RowID).css('color', 'red');
+                            if (ObjOrd.PaymentStatus > 0) {
+                                TablesList[i].SeatingAmt = 0;
+                            }
+                            else {
+                                TablesList[i].SeatingAmt = parseFloat(ObjOrd.OrdAmt);
+                            }
+                        }
+                        else if (TablesList[i].CurrOID > 0) {
+                            var CurrSeatingItem = CartList.filter(function (x) {
+                                return x.TableorSheatOrTaleAwayId == TablesList[i].Table_or_RowID;
+                            });
+                            if (CurrSeatingItem.length == 0) {
+                                TablesList[i].CurrOID = 0;
+                                TablesList[i].Status = 1;
+                                TablesList[i].SeatingAmt = 00;
+                                $("#SeatingLine" + TablesList[i].Table_or_RowID).css('background-color', '#4ac959');
+                                $("#OtpBox" + TablesList[i].Table_or_RowID).css('color', '#4ac959');
+                            }
                         }
                     }
                 }
+                myVar = setTimeout(function () { ReloadSeating(); }, 30000);
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $("#waiting").hide();
             }
-        },
-        error: function (jqXhr, textStatus, errorMessage) { // error callback
-            $("#waiting").hide();
-        }
-    });
+        });
+    }
+   
     
 }
 function GetItemList(TableOrMWid) {
@@ -1268,9 +1278,11 @@ function CompleteOrder(PaymentType) {
                         TablesList[i].CurrOID = 0;
                         OldOtp = TablesList[i].Otp;
                         TablesList[i].Otp = Jobj.MSG;
+                        TablesList[i].SeatingAmt = 0.00;
                         break;
                     }
                 }
+                $("#FinalAmtCharge").text('00.00 /RS')
                 $("#OtpBox" + CurrentOrder).text(Jobj.MSG);
                // OtpBox18
                 if (Jobj.ChangeOtp > 0) {

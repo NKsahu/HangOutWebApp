@@ -25,7 +25,7 @@ namespace HangOut.Models.Common
                 }
                 else if (FType == typeof(Int64))
                 {
-                    return SDR.GetInt32(Position);
+                    return SDR.GetInt64(Position);
                 }
                 else if (FType == typeof(Double))
                 {
@@ -45,7 +45,7 @@ namespace HangOut.Models.Common
                 }
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 if (FType == typeof(String))
