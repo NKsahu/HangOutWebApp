@@ -201,3 +201,9 @@ header .btn-group a i:hover {
     font-weight: bold;
     font-size: 15px;
 }
+.dataTable thead {
+    background-color: #def6e1;
+}
+.card-header-color{
+    background-color:black;
+}

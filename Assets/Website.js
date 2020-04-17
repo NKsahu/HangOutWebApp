@@ -52,14 +52,9 @@ function Onfail(msg) {
                          $("#WarningModel .modal-body").html(msg);
                         $("#WarningModel").modal();
 }
-//shortcut.add("Esc", function () {
-//    e.preventDefault();
-//    return;
-//});
 function HideModal(event) {
     $(event).parent('div').parent('div').parent('div').parent('div').hide();
     $(event).parent('div').parent('div').parent('div').parent('div').remove();
-    console.log("AAYA" + $(".modal:visible").length);
     if ($(".modal:visible").length == 0) {
         $('body').removeClass('modal-open');
         $('body').removeAttr('style');
@@ -108,15 +103,11 @@ function hidedpt(id) {
         $('body').removeClass('modal-open');
         $('body').removeAttr('style');
     }
-    //$(".modal:visible:last").remove();
     $("#"+id).hide();
     $("#"+id).remove();
    // $("#" + id).display = "none";
     $('.modal-backdrop').remove();
-    
-    
-   // $('body').removeAttr('class');
-   // $('body').removeAttr('style');
-   // alert('id' + id);
-
+}
+function AddBtn(HtmlStr) {
+    $(".dt-buttons").append(HtmlStr);
 }

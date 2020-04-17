@@ -99,7 +99,7 @@ namespace HangOut.Models
 
             return (ListTmp);
         }
-        public HG_UserTypes GetOne(int UTID)
+        public HG_UserTypes GetOne(int UTID=0,string UserType=null)
         {
             SqlConnection Con = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Con"].ToString());
             Con.Open();
@@ -109,16 +109,25 @@ namespace HangOut.Models
 
             try
             {
-                string Query = "SELECT * FROM  HG_UserTypes where UTID=@UTID";
-                cmd = new SqlCommand(Query, Con);
-                cmd.Parameters.AddWithValue("@UTID", UTID);
+                if (UTID > 0)
+                {
+                    string Query = "SELECT * FROM  HG_UserTypes where UTID=@UTID";
+                    cmd = new SqlCommand(Query, Con);
+                    cmd.Parameters.AddWithValue("@UTID", UTID);
+                }
+                else if (UserType != null)
+                {
+                    string Query = "SELECT * FROM  HG_UserTypes where UserType=@UserType";
+                    cmd = new SqlCommand(Query, Con);
+                    cmd.Parameters.AddWithValue("@UserType", UserType);
+                }
                 SDR = cmd.ExecuteReader();
                 while (SDR.Read())
                 {
                     ObjTmp.UTID = SDR.GetInt32(0);
                     ObjTmp.UserType = SDR.GetString(1);
                     ObjTmp.UserTypeName = SDR.GetString(2);
-                    ObjTmp.Status = SDR.GetBoolean(3);
+                    ObjTmp.Status = SDR.GetBoolean(6);
                 }
             }
             catch (System.Exception e)

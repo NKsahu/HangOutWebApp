@@ -118,11 +118,12 @@ namespace HangOut.Controllers
             {
                 return Json(new { msg = "User Id Already Taken" });
             }
+            HG_UserTypes objUserType = new HG_UserTypes().GetOne(0, Objuser.UserType);
             int i = Objuser.save();
-                if(i>0)
-            
-                return RedirectToAction("GetUserList");
-                return RedirectToAction("Error");
+            Objuser.UserType = objUserType.UserTypeName;
+            if (i>0)
+                 return Json(new { data = Objuser }, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Error");
              
              
         }

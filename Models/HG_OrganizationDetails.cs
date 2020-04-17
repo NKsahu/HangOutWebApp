@@ -61,6 +61,7 @@ namespace HangOut.Models
             EntryDate = DateTime.Now;
             UpdateDate = DateTime.Now;
             EntryBy = 0;
+            OrgTypes = "1";
             PaymentType = 1;
             IvoiceHeading = "";
             Address= "";
