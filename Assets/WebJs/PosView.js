@@ -711,26 +711,46 @@ function FreeOrOccupied(Status,event) {
     }
 }
 function ReloadSeating() {
-
-    for (i = 0; i < TablesList.length; i++) {
-        var TableID = TablesList[i].Table_or_RowID.toString();
-        var Status = TablesList[i].Status;//{"1":free,"2":"BOOKED",3:"PROGRESS"}
-        var Otp = TablesList[i].Otp;
-        var clasName = "";
-        var ShowStatus = TablesList[i].SeatingUser == null ? "" : TablesList[i].SeatingUser;
-        if (Status == 1) {
-            clasName = "tableFree";
-        } else if (Status == 2) {
-            clasName = "tableBooked";
+    var RunningOrd = [];
+    $.ajax({
+        type: 'POST',
+        url: "/AdminApi/ReloadSeating",
+        success: function (data) {
+            var Jobj = JSON.parse(data);
+            RunningOrd = Jobj.RunningOrds;
+            if (RunningOrd.length > 0) {
+                for (var i = 0; i < TablesList.length; i++) {
+                    var ObjOrd = RunningOrd.find(x => {
+                        return x.Table_or_SheatId == TablesList[i].Table_or_RowID && x.TableOtp == TablesList[i].Otp;
+                    });
+                    if (ObjOrd != null) {
+                        TablesList[i].CurrOID = ObjOrd.OID;
+                        TablesList[i].Status = 3;//SeatingAmt
+                        if (ObjOrd.PaymentStatus > 0) {
+                            TablesList[i].SeatingAmt = 0;
+                        }
+                        else {
+                            TablesList[i].SeatingAmt = parseFloat(ObjOrd.OrdAmt);
+                        }
+                    }
+                    else if (TablesList[i].CurrOID>0) {
+                        var CurrSeatingItem = CartList.filter(function (x) {
+                            return x.TableorSheatOrTaleAwayId == TablesList[i].Table_or_RowID;
+                        });
+                        if (CurrSeatingItem.Count == 0) {
+                            TablesList[i].CurrOID = 0;
+                            TablesList[i].Status = 1;
+                            TablesList[i].SeatingAmt = 00;
+                        }
+                    }
+                }
+            }
+        },
+        error: function (jqXhr, textStatus, errorMessage) { // error callback
+            $("#waiting").hide();
         }
-        else {
-            clasName = "tableProgress";
-        }
-        $("#TC" + TableID).removeClass();
-        $("#TC" + TableID).addClass("sp-grid-cell-contents " + clasName);
-        $("#TS" + TableID).text(ShowStatus);
-        $("#Otp" + TableID).text(Otp);
-    }
+    });
+    
 }
 function GetItemList(TableOrMWid) {
     CurrentOrder = TableOrMWid;

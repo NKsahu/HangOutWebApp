@@ -202,6 +202,7 @@
     <Content Include="Assets\Select2\js\select2.full.min.js" />
     <Content Include="Assets\Select2\js\select2.min.js" />
     <Content Include="Assets\shortcut.js" />
+    <Content Include="Assets\WebCss\InputTypes.css" />
     <Content Include="Assets\WebCss\POSCss.css" />
     <Content Include="Assets\WebJs\PosView.js" />
     <Content Include="Assets\Website.js" />
@@ -376,6 +377,7 @@
     <Compile Include="Models\Common\Select2Result.cs" />
     <Compile Include="Models\Common\Settings.cs" />
     <Compile Include="Models\Common\State.cs" />
+    <Compile Include="Models\Common\TblData.cs" />
     <Compile Include="Models\Common\UsersMenu.cs" />
     <Compile Include="Models\Common\Video.cs" />
     <Compile Include="Models\Common\VideoCategory.cs" />

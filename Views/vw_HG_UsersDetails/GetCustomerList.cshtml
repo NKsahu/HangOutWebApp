@@ -3,9 +3,8 @@
 @using HangOut.Models
 @{ List<HG_OrganizationDetails> listorgo = new HG_OrganizationDetails().GetAll();}
 <div class="card">
-    <div class="card-header">
-        <h1 style="text-align:center"><b> CUSTOMER </b> </h1>
-        <hr />
+    <div class="card-header card-header-color">
+        <h1 style="text-align:center;color:white"> CUSTOMER  </h1>
     </div>
     <div class="card-body">
         <table class="table table-bordered table-hover w-100" id="TBLID">
@@ -30,7 +29,6 @@
                     <th>
                         Join By Outlet
                     </th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -62,9 +60,7 @@
                                 }
                             }
                         </td>
-                        <td>
-                            <a href="/vw_HG_UsersDetails/CreateEdit?ID=@item.UserCode" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
-                        </td>
+                        
                     </tr>
                 }
             </tbody>

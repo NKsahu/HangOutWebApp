@@ -6,6 +6,7 @@ using HangOut.Models;
 using HangOut.Models.POS;
 using HangOut.Models.DynamicList;
 using System.Linq;
+using HangOut.Models.Common;
 
 namespace HangOut.Controllers.POS
 {
@@ -108,7 +109,7 @@ namespace HangOut.Controllers.POS
                 }
                 if (ObjSeating.FSIS>0)// not takeaway
                 {
-                    jObject.Add("Type", 1);//Seat or table;
+                    jObject.Add("Type", 1);//Seat and table;
                     List<OrderMenuCategory> ListCategry = OrderMenuCategory.GetAll(ObjSeating.OMID);
                     List<OrdMenuCtgItems> ListMenuItems = OrdMenuCtgItems.GetAll(ObjSeating.OMID);
                     ListCategry = ListCategry.FindAll(x => x.Status == true);
@@ -235,6 +236,25 @@ namespace HangOut.Controllers.POS
             JobjResonse.Add("OrgType", ObjOrg.OrgTypes);// restuarant / theataer
             JobjResonse.Add("OrgId", OrgId);
             return JobjResonse;
+        }
+
+        public JObject ReloadSeating(int OrgId = 0)
+        {
+            if (OrgId <= 0)
+            {
+                OrgId = OrderType.CurrOrgId();
+            }
+            JObject ProcedureParm = new JObject();
+            var CurrDate = DateTime.Now;
+            var Todate = new DateTime(CurrDate.Year, CurrDate.Month, CurrDate.Day, 23, 59, 00);
+            ProcedureParm.Add("FromDate", CurrDate.ToString("MM/dd/yyyy"));
+            ProcedureParm.Add("Todate", Todate.ToString("MM/dd/yyyy HH:mm:ss"));
+            ProcedureParm.Add("Orgid", OrgId);
+            List<TblData> RunningOrds = TblData.GetAll("GetRunningOrder", ProcedureParm);
+
+            JObject Result = new JObject();
+            Result.Add("RunningOrds",JArray.FromObject(RunningOrds.Select(x => x.Jobj)));
+            return Result;
         }
     }
 }
