@@ -1,11 +1,17 @@
-﻿.checkbox {
+﻿.container {
+    margin-top: 50px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.checkbox2 {
     width: 100%;
-    margin: 15px auto;
+    margin: 10px auto;
     position: relative;
     display: block;
 }
 
-     input[type="checkbox"] {
+    .checkbox2 input[type="checkbox"] {
         width: auto;
         opacity: 0.00000001;
         position: absolute;
@@ -13,11 +19,11 @@
         margin-left: -20px;
     }
 
-    .checkbox label {
+    .checkbox2 label {
         position: relative;
     }
 
-        .checkbox label:before {
+        .checkbox2 label:before {
             content: '';
             position: absolute;
             left: 0;
@@ -30,7 +36,7 @@
             border: 2px solid #7bbe72;
         }
 
-        .checkbox label:after {
+        .checkbox2 label:after {
             content: '';
             display: block;
             width: 10px;
@@ -46,16 +52,16 @@
             left: 10px;
         }
 
-     input[type="checkbox"]:checked ~ label::before {
+    .checkbox2 input[type="checkbox"]:checked ~ label::before {
         color: #7bbe72;
     }
 
-    input[type="checkbox"]:checked ~ label::after {
+    .checkbox2 input[type="checkbox"]:checked ~ label::after {
         -webkit-transform: rotate(-45deg) scale(1);
         transform: rotate(-45deg) scale(1);
     }
 
-    .checkbox label {
+    .checkbox2 label {
         min-height: 34px;
         display: block;
         padding-left: 40px;
@@ -65,6 +71,13 @@
         vertical-align: sub;
     }
 
-     input[type="checkbox"]:focus + label::before {
+        .checkbox2 label span {
+            position: absolute;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+    .checkbox2 input[type="checkbox"]:focus + label::before {
         outline: 0;
     }

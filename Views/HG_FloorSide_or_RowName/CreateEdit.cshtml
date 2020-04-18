@@ -5,9 +5,8 @@
 @{ Layout = null;}
 @{List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll(); }
 <div class="card">
-    <div class="card-header">
-        <h4 style="text-align:center;color:#000000"><b>FLOOR SIDE  </b></h4>
-        <hr />
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white">FLOOR SIDE </h3>
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEdit", "HG_FloorSide_or_RowName", new { ID = Model.ID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
@@ -47,11 +46,18 @@
                     @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-sm-1">
-                    @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="SaVe" class="btn btn-success" />
-                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
 
+                </div>
+                <div class="col-md-2 ">
+                    @Html.Label("SAVE", new { @class = "text-white" })
+                    <input type="submit" value="SAVE" class="form-control SaveBtn" />
+                </div>
+                <div class="col-md-5">
+
+                </div>
             </div>
         }
     </div>

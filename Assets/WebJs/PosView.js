@@ -16,7 +16,9 @@
     var OrderDisplay = 1;//default Mobile
     var KotPrintType = 0;
     var KotNoOfCopy = 0;
-    var ParcelCharge = 0.00;
+var ParcelCharge = 0.00;
+console.log("aaya");
+CartList =GetCartList();
     //=======
         var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
     var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
@@ -248,6 +250,7 @@ function SubmitAddon(itemid) {
         ItemPrice = ObjCart.ItemPrice;
         CartList.push(ObjCart);
     }
+    AddDbCart(ObjCart);
     if (ItemAlreadyAdded(Object.UUID)) {
         $("#tr" + Object.UUID).remove();
     }
@@ -287,6 +290,16 @@ function SubmitAddon(itemid) {
 }
 function AddToCartOffline(itemId, ItemUUID, Cnt) {
 
+    if (ItemList==null) {
+        var ObjOrderName = TablesList.find(x => {
+            return x.Table_or_RowID == CurrentOrder;
+        });
+        ItemList = [];
+        var CategoryList = ObjOrderName.MenuItems;
+        for (i = 0; i < CategoryList.length; i++) {
+            ItemList.push(...CategoryList[i].MenuItems);
+        }
+    }
     var ObjItem = ItemList.find(x => {
         return x.IID.toString() == itemId;
     });
@@ -294,6 +307,7 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
     var AddonAmts = 0.00;
     var IsParcel = 0;
     var ParcelCharge = 0.00;
+    var MyCart = {};
     if (CartList.length > 0) {
         var Cart = CartList.find(x => {
             return x.ItemUUID == ItemUUID;
@@ -302,6 +316,7 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
             for (var i = 0; i < CartList.length; i++) {
                 if (CartList[i].ItemUUID == ItemUUID) {
                     CartList[i].Count = Cnt;
+                    MyCart = CartList[i];
                     SingleItemPrice = CartList[i].ItemPrice;
                     IsParcel = CartList[i].IsParcel;
                     ParcelCharge = CartList[i].ParcelCharge;
@@ -331,6 +346,7 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
             Cart.IsParcel = IsParcel;
             Cart.ParcelCharge = 0;;
             ItemUUID = Cart.ItemUUID;
+            MyCart = Cart;
             CartList.push(Cart);
 
         }
@@ -354,11 +370,10 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
         Cart.ParcelCharge = 0;
         SingleItemPrice = Cart.ItemPrice;
         ItemUUID = Cart.ItemUUID;
+        MyCart = Cart;
         CartList.push(Cart);
-        //  ItemPrice { get; set; }
-        //   IsAddon { get; set; } //0: no , 1: yes
     }
-    
+    AddDbCart(MyCart);
     var FinlAmt = 0.00;
     var CurrSeatingItem = CartList.filter(function (x) {
         return x.TableorSheatOrTaleAwayId == CurrentOrder;
@@ -538,6 +553,7 @@ function Makeparcel(event) {
                     CountAmt += CartList[i].AddonAmts[j] * CartList[i].Count;
                 }
             }
+            AddDbCart(CartList[i]);
             break;
         }
     }
@@ -663,6 +679,9 @@ function ShowOrders(list) {
         var FlrScrName = list[i].ScrnFlr;
         var SeatName = list[i].SeatName;
         var RowSide = list[i].RowSide;
+        var CurrSeatingItem = CartList.filter(function (x) {
+            return x.TableorSheatOrTaleAwayId == TableID;
+        });
        // var ShowStatus = list[i].SeatingUser == null ? "" : list[i].SeatingUser;
         var html = '<div id="SeatingId'+TableID+'" class="col-md-' + ColSize + ' SeatingNum" onclick="SeatingClick(' + TableID + ');" ondblclick="SeatingDBClick(' + TableID+');">';
         html += '<div class="SeatingBox"><div class="text-center" style="margin-top:12px;">';
@@ -671,7 +690,7 @@ function ShowOrders(list) {
         html += '<h2 style="font-weight:bold">' + SeatName + '</h2>';
         html += '<h4>' + RowSide + '</h4></div>';
         console.log("Status=" + Status);
-        if (Status == 3) {
+        if (Status == 3 || CurrSeatingItem.length>0) {
             html += '<div id="SeatingLine' + TableID+'" class="SeatingLine" style="background-color:red" ></div > ';
             html += ' <span id="OtpBox'+TableID+'" class="OtpBox" style="color:red">' + Otp + '</span></div></div>';
         }
@@ -721,7 +740,6 @@ function ReloadSeating() {
             success: function (data) {
                 var Jobj = JSON.parse(data);
                 RunningOrd = Jobj.RunningOrds;
-                if (RunningOrd.length > 0) {
                     for (var i = 0; i < TablesList.length; i++) {
                         var ObjOrd = RunningOrd.find(x => {
                             return x.Table_or_SheatId == TablesList[i].Table_or_RowID && x.TableOtp == TablesList[i].Otp;
@@ -751,11 +769,11 @@ function ReloadSeating() {
                             }
                         }
                     }
-                }
                 myVar = setTimeout(function () { ReloadSeating(); }, 30000);
             },
             error: function (jqXhr, textStatus, errorMessage) { // error callback
                 $("#waiting").hide();
+                myVar = setTimeout(function () { ReloadSeating(); }, 50000);
             }
         });
     }
@@ -957,7 +975,14 @@ function PostOrder(Obj) {
                 });
             }
             else {
-                
+
+                var CuuCartItems = CartList.filter(function (x) {
+                    return x.TableorSheatOrTaleAwayId == CurrentOrder;
+                });
+                for (var i = 0; i < CuuCartItems.length; i++) {
+                    CuuCartItems[i].Count = 0;
+                    AddDbCart(CuuCartItems[i]);
+                }
                 CartList = CartList.filter(function (x) {
                     return x.TableorSheatOrTaleAwayId != CurrentOrder;
                 });
@@ -1573,11 +1598,6 @@ function AddChargeDiscnt(Type) {
     });
 }
 function AddonInfo(ItmUUID, ItemId) {
-    //$.ajax({
-    //    type: 'POST',
-    //    url: "/CommonApi/GetAddonsItems?UUID=" + ItmUUID,
-    //    contentType: "application/json",
-    //    success: function (data) {
     var HashAddinIds = [];
     var Cart = CartList.find(x => {
         return x.ItemUUID == ItmUUID;
@@ -1586,7 +1606,6 @@ function AddonInfo(ItmUUID, ItemId) {
         HashAddinIds.push(Cart.itemAddons.AddonItemId[i]);
     }
     console.log("addon info=" + HashAddinIds);
-    // HashAddinIds = JSON.parse(data);
     var ObjItem = ItemList.find(x => {
         return x.IID.toString() === ItemId
     });

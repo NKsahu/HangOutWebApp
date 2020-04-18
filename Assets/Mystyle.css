@@ -148,7 +148,7 @@ header .btn-group a i:hover {
     border:1px solid green;
 }
 .blackBackground{
-    background-color:#666;
+    background-color:black;
 }
 
 
@@ -206,4 +206,10 @@ header .btn-group a i:hover {
 }
 .card-header-color{
     background-color:black;
+}
+.SaveBtn {
+    border-radius: 5px;
+    background-color: #44cd4a;
+    height: 51px;
+    color: white
 }

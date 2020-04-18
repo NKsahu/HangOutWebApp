@@ -173,10 +173,7 @@
                 }
             });
         }
-        $('body').on('click', '.nav-list_item', function () {
-            $(this).find('ul').toggle();
-            $(this).siblings('li').find('ul').hide();
-        });
+
         function ChangeIcon(event) {
             console.log("aaya");
             if ($(event).find('a').find('i').hasClass('fa-plus')) {
@@ -189,11 +186,9 @@
             }
         }
         function RowUp(event) {
-            // var li = $(this).closest('li');
             var li = $(event).parent('div').parent('div').parent('li');
             var prev = li.prev();
             if (prev.length) {
-
                 var OrderNoCur = parseInt(li.attr('OrderNo'));
                 var OrderNoPre = parseInt(prev.attr('OrderNo'));
                 console.log(OrderNoCur);
@@ -216,7 +211,6 @@
             }
         }
         function ActiveMenu(event) {
-            console.log("h");
             for (var i = 0; i < TblShetList.length; i++) {
                 $("#TS" + TblShetList[i].Table_or_RowID).removeClass('SelectedTable');
             }

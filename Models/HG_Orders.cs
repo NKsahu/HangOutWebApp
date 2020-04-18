@@ -232,7 +232,7 @@ namespace HangOut.Models
                 ObjTemp.OrderApprovlSts = SDR.GetInt32(14);
                 ObjTemp.DeliveryCharge= SDR.GetDouble(15);
                 ObjTemp.ContactId = SDR.GetInt32(16);
-                    ObjTemp.OfferDishCBID = SDR.GetInt32(17);
+                ObjTemp.OfferDishCBID = SDR.GetInt32(17);
                 }
             }
             catch (Exception e){ e.ToString(); }

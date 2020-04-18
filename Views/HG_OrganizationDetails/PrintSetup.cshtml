@@ -5,9 +5,8 @@
 }
 
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center;color:black"><b>Print Setup</b></h3>
-        <hr />
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white">Print Setup</h3>
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEdit", "HG_OrganizationDetails", new { OrgID = Model.OrgID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "DynamicData", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
@@ -51,9 +50,8 @@
                     @Html.ValidationMessageFor(model => model.InvoiceTitle, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-12">
-                    <div class="card-header">
-                        <h3 style="text-align:center;color:black"><b>Document Setup </b></h3>
-                        <hr />
+                    <div class="card-header card-header-color">
+                        <h5 style="text-align:center;color:white">Document Setup </h5>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -109,7 +107,7 @@
                     @Html.ValidationMessageFor(model => model.License3, "", new { @class = "text-danger" })
 
                 </div>
-                <div class="col-12" style="padding:4px;border:2px solid black; border-radius:5px; margin-top:10px;">
+                <div class="col-12" style="padding:4px;border:2px solid #44cd4a; border-radius:5px; margin-top:10px;">
                     <h5 class="text-center"><b><u>Invoice Printting</u></b></h5>
                     <div class="row">
                         <div class="col-md-4">
@@ -117,7 +115,7 @@
 
                             @{
                                 List<SelectListItem> PrinttingType = new List<SelectListItem>()
-                                                                                                   {
+                                                                                                                   {
                                                                  new SelectListItem{Text="NO",Value="0"},
                                                                  new SelectListItem{Text="Auto",Value="2"}
                                                                                    };
@@ -135,14 +133,14 @@
 
                     </div>
                 </div>
-                <div class="col-12" style="padding:4px;border:2px solid black; border-radius:5px; margin-top:10px;">
+                <div class="col-12" style="padding:4px;border:2px solid #44cd4a; border-radius:5px; margin-top:10px;">
                     <h5 class="text-center"><b><u>KOT Printting</u></b></h5>
                     <div class="row">
                         <div class="col-md-4">
                             @Html.Label("Order Display")
                             @{
                                 List<SelectListItem> OrderType = new List<SelectListItem>()
-                                                                                   {
+                                                                                                   {
                                                  new SelectListItem{Text="Mobile",Value="1"},
                                                  new SelectListItem{Text="KOT",Value="2"}
                                                                    };
@@ -154,7 +152,7 @@
                             @Html.Label("Printting Type")
                             @{
                                 List<SelectListItem> printType = new List<SelectListItem>()
-                                                                   {
+                                                                                   {
                                  new SelectListItem{Text="Auto",Value="2"}
                                                    };
                                 //new SelectListItem{Text="ASK",Value="1"},
@@ -170,9 +168,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-1">
-                    @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+
+                </div>
+                <div class="col-md-2 ">
+                    @Html.Label("SAVE", new { @class = "text-white" })
+                    <input type="submit" value="SAVE" class="form-control SaveBtn" />
+                </div>
+                <div class="col-md-5">
 
                 </div>
             </div>

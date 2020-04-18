@@ -666,6 +666,7 @@ namespace HangOut.Controllers
         }
         public JObject MakeOfflineOrd(string Obj)
         {
+            Int64 CID = 0;
             try
             {
                 JObject jObjectlist = JObject.Parse(Obj);
@@ -675,6 +676,7 @@ namespace HangOut.Controllers
                 Cart.List.AddRange(cartlist);
                 Cart cart = cartlist.First();
                 JObject jObject = new JObject();
+                CID = cart.CID;
                 jObject.Add("CID", cart.CID);
                 jObject.Add("OrgID", cart.OrgId);
                 jObject.Add("TORSID", cart.TableorSheatOrTaleAwayId);
@@ -700,6 +702,7 @@ namespace HangOut.Controllers
             }
             catch(Exception e)
             {
+                Cart.List.RemoveAll(x => x.CID == CID);
                 JObject PostResult = new JObject();
                 PostResult.Add("Status", 400);
                 PostResult.Add("MSG", e.Message.ToString());

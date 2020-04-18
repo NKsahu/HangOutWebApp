@@ -5,13 +5,22 @@
     
 }
 <div class=" card">
-    <div class="card-header">
-        <h3 style="text-align:center"><b>Details</b> </h3>
-        <hr />
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white;">Details </h3>
     </div>
     @if (new OrderType().IsAccess())
     {
-        <a href="/HG_OrganizationDetails/CreateEdit?ID=0" class="btn btn-success" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+<div class="row">
+    <div class="col-md-5">
+
+    </div>
+    <div class="col-md-2">
+        <a href="/HG_OrganizationDetails/CreateEdit?ID=0" style="width:100%" class="btn DataTbl  text-white blackBackground" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"><i class="fa fa-plus">ADD</i></a>
+    </div>
+    <div class="col-md-5">
+
+    </div>
+</div>
     }
     <div class="card-body">
 
@@ -78,11 +87,11 @@
                             @Html.DisplayFor(modelItem => item.BankName)
                         </td>
                         <td>
-                            <a href=" /HG_OrganizationDetails/PrintSetup?Id=@item.OrgID" class="btn btn-success btn-sm" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting">Print</a>
-                            <button class="btn  btn-info btn-sm" onclick="CreateEditSetting(@item.OrgID)">Order </button>
+                            <a href=" /HG_OrganizationDetails/PrintSetup?Id=@item.OrgID" class="btn blackBackground btn-sm text-white" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting">Print</a>
+                            <button class="btn  blackBackground btn-sm text-white" onclick="CreateEditSetting(@item.OrgID)">Order </button>
                         </td>
                         <td>
-                            <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn btn-warning btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
+                            <a href=" /HG_OrganizationDetails/CreateEdit?ID=@item.OrgID" class="btn blackBackground text-white btn-sm " data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting"> Edit</a>
                         </td>
                     </tr>
                 }
@@ -90,7 +99,6 @@
         </table>
     </div>
 </div>
-
 <script>
     function CreateEditSetting(ID) {
         $('#waiting').show();

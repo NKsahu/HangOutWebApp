@@ -8,93 +8,109 @@
 @{ List<HG_Floor_or_ScreenMaster> listscreen = new HG_Floor_or_ScreenMaster().GetAll(1);}
 
 <div class="card">
-    <div class="card-header">
-        <h1 style="text-align:center"><b>SEATING</b> </h1>
-        <button style="float:left;" onclick="BULKEXCELUPL()" class="btn btn-lg btn-info ">BULK UPLOAD</button>
-        <button style="float:right !important;" onclick="DownloadExl()" class="btn btn-lg btn-info ">DOWNLOAD EXCEL</button>
-
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white;">SEATING</h3>
     </div>
     <div class="row">
-        <div class="col-md-4">
-            <a a href="/HG_Tables_or_Sheat/Index?Type=1" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest  form-control">TABLE</a>
-        </div>
-        <div class="col-md-4">
-            <a href="/HG_Floor_or_ScreenMaster/Index?Type=1" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default  blackTest form-control">FLOOR</a>
-        </div>
-        <div class="col-md-4">
-            <a href="/HG_FloorSide_or_RowName/Index?Type=1" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default  blackTest form-control">SIDE</a>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-5"></div>
-            <div class="col-md-2">
-                <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
+        <div class="col-md-1">
+            <div style="width:65px;margin-left:10px;">
+                <div style="width:100%">
+                    <div class="btn GreenClr  " onclick="Seating();" style="margin-top:10px;border-radius:5px;" id="Current">
+                        <div style="height:200px; ">
+                            <h2 class="TextOrdCuurent">T</h2>
+                            <h2 class="TextOrdCuurent">A</h2>
+                            <h2 class="TextOrdCuurent">B</h2>
+                            <h2 class="TextOrdCuurent">L</h2>
+                            <h2 class="TextOrdCuurent">E</h2>
+                        </div>
+                    </div>
+                    <div class="btn blackBackground " onclick="FLrScr();" style="margin-top:10px;border-radius:5px;" id="Current">
+                        <div style="height:200px; ">
+                            <h2 class="TextOrdCuurent">F</h2>
+                            <h2 class="TextOrdCuurent">L</h2>
+                            <h2 class="TextOrdCuurent">O</h2>
+                            <h2 class="TextOrdCuurent">O</h2>
+                            <h2 class="TextOrdCuurent">R</h2>
+                        </div>
+                    </div>
+                    <div class="btn  blackBackground " onclick="SideRow();" id="Order" style="margin-top:10px;border-radius:5px;">
+                        <div style="height:180px; margin-top:10px;">
+                            <h2 class="TextOrdCuurent">S</h2>
+                            <h2 class="TextOrdCuurent">I</h2>
+                            <h2 class="TextOrdCuurent">D</h2>
+                            <h2 class="TextOrdCuurent">E</h2>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-5"></div>
         </div>
-       
-        <table class=" table table-bordered table-hover w-100" id="TBLID">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayName("Table")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Floor")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Floor Side")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Qr Number")
-                    </th>
-                    <th class="noExport">
-                        @Html.DisplayName("Otp")
-                    </th>
-                    <th class="noExport"></th>
-                </tr>
-            </thead>
-            <tbody id="Tbody">
-                @foreach (var item in Model)
-                {
-
-                    <tr id="@item.Table_or_RowID">
-
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Table_or_SheetName)
-                        </td>
-                        <td>
-                            @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);}
-                            @if (ObjScreen != null)
-                            {
-                                @ObjScreen.Name
-                            }
-
-                        </td>
-                        <td>
-                            @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x.ID == item.FloorSide_or_RowNoID);}
-                            @Objfloor.FloorSide_or_RowName
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.QrCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Otp)
-                        </td>
-                        <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.Table_or_RowID)"> Edit</button>
-                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.Table_or_RowID)"> Delete</button>
-                        </td>
+        <div class="col-md-11">
+            <table class=" table table-bordered table-hover w-100" id="TBLID">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayName("Table")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Floor")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Floor Side")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Qr Number")
+                        </th>
+                        <th class="noExport">
+                            @Html.DisplayName("Otp")
+                        </th>
+                        <th class="noExport"></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="Tbody">
+                    @foreach (var item in Model)
+                    {
+
+                        <tr id="@item.Table_or_RowID">
+
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Table_or_SheetName)
+                            </td>
+                            <td>
+                                @{ HG_Floor_or_ScreenMaster ObjScreen = listscreen.Find(x => x.Floor_or_ScreenID == item.Floor_or_ScreenId);}
+                                @if (ObjScreen != null)
+                                {
+                                    @ObjScreen.Name
+                                }
+
+                            </td>
+                            <td>
+                                @{ HG_FloorSide_or_RowName Objfloor = listfloor.Find(x => x.ID == item.FloorSide_or_RowNoID);}
+                                @Objfloor.FloorSide_or_RowName
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.QrCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Otp)
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.Table_or_RowID)"> Edit</button>
+                                <button class="btn btn-danger btn-sm " onclick="Delete(@item.Table_or_RowID)"> Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <script>
     var AddTr = false;
+    var AddNewBtn = '<button type="button" onclick="CreateEdit(0)" class="dt-button DataTbl "><i class="fa fa-plus" aria-hidden="true"></i>Add New</button>';
+    var BulkUplad = ' <button  onclick="BULKEXCELUPL()" class="dt-button DataTbl">BULK UPLOAD</button>';
+    AddBtn(AddNewBtn);
+    AddBtn(BulkUplad);
     function JsonSuccess(Jobj) {
         if (Jobj.data != undefined && Jobj.data == '1') {
             $('#waiting').hide();
@@ -113,13 +129,14 @@
                 HtmlStr += '<td>' + Jitmobj.Otp + '</td>';
                 HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button>';
                 HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID + ')"> Delete</button></td ></tr > ';
-                if (AddTr) {
-                    $("#Tbody").append(HtmlStr);
-                }
-                else {
-                    $('#' + Jitmobj.Table_or_RowID).remove();
-                    $("#Tbody").append(HtmlStr);
-                }
+                var table = $('table').DataTable();
+            if (AddTr) {
+                table.row.add($(HtmlStr)).draw();
+            }
+            else {
+                table.row("#" + Jitmobj.Table_or_RowID).remove().draw();
+                table.row.add($(HtmlStr)).draw();
+            }
             }
         //$('#waiting').hide();
         }
@@ -190,11 +207,47 @@
             }
         });
     }
-    function DownloadExl() {
-        if (confirm('Are You Sure')) {
-            $('.buttons-excel').click();
-        }
-
+    function Seating() {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Tables_or_Sheat/Index?Type=1",
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function FLrScr() {
+        $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_Floor_or_ScreenMaster/Index?Type=1",
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
+    }
+    function SideRow() {
+       $('#waiting').show();
+        $.ajax({
+            type: 'GET',
+            url: "/HG_FloorSide_or_RowName/Index?Type=1",
+            success: function (data) {
+                $("#DynamicData").html(data);
+                $('#waiting').hide();
+            },
+            error: function (jqXhr, textStatus, errorMessage) { // error callback
+                $('#waiting').hide();
+            }
+        });
     }
     
 

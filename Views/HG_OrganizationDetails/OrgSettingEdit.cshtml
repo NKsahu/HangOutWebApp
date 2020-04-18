@@ -4,8 +4,8 @@
     Layout = null;
 }
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center;color:black"><b>Order Settings</b></h3>
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white">Order Settings</h3>
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("SaveSetting", "HG_OrganizationDetails", new { OrgID = Model.OrgId }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", }))
@@ -27,16 +27,16 @@
         new SelectListItem{Text="YES",Value="1"},new SelectListItem{Text="NO",Value="2"}
         };
             List<SelectListItem> CrosVerification = new List<SelectListItem>()
-                                                                                {
+                                                                            {
                                                                   new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="By Otp",Value="1"}
                                                                                     };
-            
-            <div style="padding:5px;border:2px solid black; border-radius:5px;">
+
+            <div style="padding:5px;border:2px solid #44cd4a; border-radius:5px;">
                 <div class="row">
                     <div class="col-md-2">
                         @{
                             List<SelectListItem> EnableOrdering = new List<SelectListItem>()
-                                                                                                                                {
+                                                                                                                                            {
                                                                                                   new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
                                                                                                                     };
                         }
@@ -52,7 +52,7 @@
                     <div class="col-md-2 enableCrg">
                         @{
                             List<SelectListItem> AlwMinOrd = new List<SelectListItem>()
-                                                                                                                                {
+                                                                                                                                            {
                                                                                                   new SelectListItem{Text="NO",Value="0"},new SelectListItem{Text="YES",Value="1"}
                                                                                                                     };
                         }
@@ -63,7 +63,7 @@
                     <div class="col-md-2 enableCrg">
                         @{
                             List<SelectListItem> DeliveryChrType = new List<SelectListItem>()
-                                                                                                                                {
+                                                                                                                                            {
                                                                                                   new SelectListItem{Text="MINIMUM THRESOLD",Value="0"},new SelectListItem{Text="FIXED",Value="1"}
                                                                                                                     };
                         }
@@ -99,7 +99,7 @@
 
                 </div>
             </div>
-            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+            <div style="padding:5px;border:2px solid #44cd4a; border-radius:5px; margin-top:15px;">
                 <h5 style="text-align:center;color:black">Parcel Charges</h5>
                 <div class="row">
                     <div class="col-md-2">
@@ -109,12 +109,12 @@
                     </div>
                     <div class="col-md-2">
                         @Html.Label("Parcel Tax", htmlAttributes: new { @class = "control-label  " })
-                        @Html.DropDownListFor(model => model.ParcelTax,new SelectList(HG_Items.ItemTaxes(), "ID", "Name", Model.ParcelTax), "0%", new { @class = "form-control " })
+                        @Html.DropDownListFor(model => model.ParcelTax, new SelectList(HG_Items.ItemTaxes(), "ID", "Name", Model.ParcelTax), "0%", new { @class = "form-control " })
                         @Html.ValidationMessageFor(model => model.ParcelTax, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>
-            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+            <div style="padding:5px;border:2px solid #44cd4a; border-radius:5px; margin-top:15px;">
                 <h5 style="padding-top:8px; text-align:center">Canteen Contact</h5>
                 <div class="row">
                     <div class="col-md-6">
@@ -139,7 +139,7 @@
                     </div>
                 </div>
             </div>
-            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+            <div style="padding:5px;border:2px solid #44cd4a; border-radius:5px; margin-top:15px;">
                 <h5 style="text-align:center;color:black">Payment Modes</h5>
                 <div class="row">
                     <div class="col-md-3">
@@ -154,7 +154,7 @@
                     </div>
                 </div>
             </div>
-            <div style="padding:5px;border:2px solid black; border-radius:5px; margin-top:15px;">
+            <div style="padding:5px;border:2px solid #44cd4a; border-radius:5px; margin-top:15px;">
                 <h5 style="text-align:center;color:black">Customer App</h5>
                 <div class="row">
                     <div class="col-md-3">
@@ -165,15 +165,22 @@
 
                 </div>
             </div>
-            <div class="col-sm-1">
-                @Html.Label("Save", new { @class = "text-white " })
-                <input type="submit" value="Save" class="btn btn-success form-control" />
+            <div class="row">
+                <div class="col-md-5">
+
+                </div>
+                <div class="col-md-2 ">
+                    @Html.Label("SAVE", new { @class = "text-white" })
+                    <input type="submit" value="SAVE" class="form-control SaveBtn" />
+                </div>
+                <div class="col-md-5">
+
+                </div>
             </div>
         }
     </div>
         </div>
 <script>
-    setTimeout(function () {$(window).trigger('resize'); },500);
     AlowMinOrdAcpt();
         EnableDeliveryChrg();
         function AlowMinOrdAcpt() {

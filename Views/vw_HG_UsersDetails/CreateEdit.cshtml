@@ -65,24 +65,33 @@
 
             </div>
             <div class="col-md-2">
-                @Html.LabelFor(model => model.IsHeadChef, htmlAttributes: new { @class = "control-label  " })
-                <div class="checkbox">
-                    @Html.CheckBoxFor(model => model.IsHeadChef,new { @class = "form-control" })
+                <div class="checkbox2 container">
+                    @Html.CheckBoxFor(model => model.IsHeadChef, new { @class = "form-control" })
+                    @Html.LabelFor(model => model.IsHeadChef, htmlAttributes: new { @class = "control-label  " })
                     @Html.ValidationMessageFor(model => model.IsHeadChef, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="col-md-2">
-                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-                <div class="checkbox">
+                <div class="checkbox2 container">
                     @Html.CheckBoxFor(model => model.Status, new { @class = "form-control" })
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
                     @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="col-md-1 ">
-                @Html.Label("SAVE", new { @class = "text-white" })
-                <input type="submit" value="SaVe" class="btn btn-success" />
-            </div>
+           
 
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+
+            </div>
+            <div class="col-md-2 ">
+                @Html.Label("SAVE", new { @class = "text-white" })
+                <input type="submit" value="SAVE" class="form-control SaveBtn" />
+            </div>
+            <div class="col-md-5">
+
+            </div>
         </div>
         }
 
