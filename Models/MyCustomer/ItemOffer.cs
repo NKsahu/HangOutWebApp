@@ -133,7 +133,7 @@ namespace HangOut.Models.MyCustomer
             OfferObj offerObj = new OfferObj();
             offerObj.CBID = CBID;
             List<ItemOffer> ListTmp = new List<ItemOffer>();
-            string Query = "SELECT ItemOfferId,ItemId,Min,Max,CashBkId,dbo.GetItemName(ItemId) FROM  ItemOffer where CashBkId=" + CBID.ToString() + " and IsDeleted=0";
+            string Query = "SELECT ItemOfferId,ItemId,Min,Max,CashBkId,dbo.GetItemName(ItemId),dbo.GetItemPrice(ItemId) FROM  ItemOffer where CashBkId=" + CBID.ToString() + " and IsDeleted=0";
             try
             {
                 cmd = new SqlCommand(Query, dBCon.Con);
@@ -148,6 +148,7 @@ namespace HangOut.Models.MyCustomer
                     ObjTmp.Max = SDR.GetInt32(index++);
                     ObjTmp.CashBkId = SDR.GetInt32(index++);
                     ObjTmp.ItemName = SDR.GetString(index++);
+                    ObjTmp.TotalItemPrice = SDR.GetDouble(index++);
                     offerObj.Min = ObjTmp.Min;
                     offerObj.Max = ObjTmp.Max;
                     ListTmp.Add(ObjTmp);

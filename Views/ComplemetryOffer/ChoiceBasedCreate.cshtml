@@ -56,9 +56,7 @@
                     @Html.ValidationMessageFor(model => model.FinalPrice, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-2">
-                    @Html.Label("Total Item Price")
-                    @Html.TextBoxFor(model => model.TotalItemPrice, new { @class = "form-control ", @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.TotalItemPrice, "", new { @class = "text-danger" })
+                   
                 </div>
                 <div class="col-md-4">
 
@@ -238,4 +236,21 @@
             $("#FinalPrice").parent('div').hide();
         }
     }
+    $(".IsComplementry").change(function () {
+        var complemetryList = document.getElementsByClassName("IsComplementry");
+        var AllCategoryCnt = complemetryList.length;
+        var checkCnt = 0;
+        for (var i = 0; i < complemetryList.length; i++) {
+            if (complemetryList[i].checked) {
+                checkCnt++;
+            }
+        }
+        if (AllCategoryCnt == checkCnt) {
+            $("#KeepFixPrice").parent('div').hide();
+           
+        }
+        else {
+            $("#KeepFixPrice").parent('div').show();
+        }
+    });
 </script>

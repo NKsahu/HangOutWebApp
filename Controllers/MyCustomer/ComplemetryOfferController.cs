@@ -151,6 +151,11 @@ namespace HangOut.Controllers.MyCustomer
                 response.Add("MSG", "Final Price must be Zero for Complementry Items");
                 return response;
             }
+            if(Complementry.Count== offerTitle.OfferMenus.Count)
+            {
+                offerTitle.KeepFixPrice = true;
+                offerTitle.FinalPrice = 0.00;
+            }
             foreach (var offermenu in offerTitle.OfferMenus)
             {
                 if(offermenu.Name==null|| offermenu.Name == "")
