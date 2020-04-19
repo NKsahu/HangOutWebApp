@@ -172,7 +172,7 @@ namespace HangOut.Controllers
                         objItem.Add("Tax", 0);
                         objItem.Add("Info", "");
                         objItem.Add("MaxOrdQty", offerTitle.MaxOrdQty);
-                        objItem.Add("KeepFixPrice", offerTitle.KeepFixPrice);
+                        objItem.Add("KeepFixPrice", offerTitle.KeepFixPrice?1:0);
                         objItem.Add("Offer", "Offer");
                         menucnt++;
                         

@@ -38,184 +38,190 @@
 }
 @Html.Hidden("UserCode", Usercode)
 <style>
-    input[type="checkbox"] {
+     input[type="checkbox"] {
         width: 25px; /*Desired width*/
         height: 25px; /*Desired height*/
     }
 </style>
 <div class="card">
-    <div class="card-header">
-        <h3 class="text-center" style="color:blue">Head Chef Panel</h3>
-        <input type="checkbox" @TickSts OrgId="@orgId" onchange="DefaultTickSts(this)"> Default Action
+    <div class="card-header card-header-color">
+        <h3 class="text-center" style="color:white">Head Chef Panel</h3>
     </div>
-    <div class="card-body">
-        <div class="row">
-            @foreach(var TicketObj in GroupByTickets)
-            {
-                Count++;
-                string Seating = Count.ToString()+". ";
-                var orderItems = TicketObj.ToList();
-                var firstitm = orderItems.First();
-                var ChefId = firstitm.ChefSeenBy;
-                Int64 PlacedBy = firstitm.OrdById;
-                HG_Orders objOrder = new HG_Orders().GetOne(firstitm.OID);
-                var ObjTorS = ListTorS.Find(x => x.Table_or_RowID == objOrder.Table_or_SheatId);
-                string UserPlcedBy = "";
-                if (PlacedBy > 0)
+    <div class="col-md-12">
+        <div class="checkbox2 container">
+            <input type="checkbox" @TickSts OrgId="@orgId" id="OrgCheckBoxSts" onchange="DefaultTickSts(this)"> Default Action
+            <label class="control-label" for="OrgCheckBoxSts"></label>
+        </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @foreach (var TicketObj in GroupByTickets)
                 {
-                    var ObjPlacedBy = new vw_HG_UsersDetails().GetSingleByUserId((int)PlacedBy);
-                    var UserType = ListUserType.Find(x => x.UserType == ObjPlacedBy.UserType);
-                    if (UserType != null)
+                    Count++;
+                    string Seating = Count.ToString() + ". ";
+                    var orderItems = TicketObj.ToList();
+                    var firstitm = orderItems.First();
+                    var ChefId = firstitm.ChefSeenBy;
+                    Int64 PlacedBy = firstitm.OrdById;
+                    HG_Orders objOrder = new HG_Orders().GetOne(firstitm.OID);
+                    var ObjTorS = ListTorS.Find(x => x.Table_or_RowID == objOrder.Table_or_SheatId);
+                    string UserPlcedBy = "";
+                    if (PlacedBy > 0)
                     {
-                        UserPlcedBy = UserType.UserTypeName + "( " + ObjPlacedBy.UserName + "-" + ObjPlacedBy.UserId + " )";
+                        var ObjPlacedBy = new vw_HG_UsersDetails().GetSingleByUserId((int)PlacedBy);
+                        var UserType = ListUserType.Find(x => x.UserType == ObjPlacedBy.UserType);
+                        if (UserType != null)
+                        {
+                            UserPlcedBy = UserType.UserTypeName + "( " + ObjPlacedBy.UserName + "-" + ObjPlacedBy.UserId + " )";
+                        }
+
                     }
 
-                }
-
-                string ChefName = "";
-                if (ChefId > 0)
-                {
-                    var Objchef = ListUsers.Find(x => x.UserCode == ChefId);
-                    if (Objchef != null)
+                    string ChefName = "";
+                    if (ChefId > 0)
                     {
-                        ChefName ="Chef :  " +Objchef.UserName;
-                    }
-                }
-                if (ObjTorS != null)
-                {
-                    var ObjFlrOrScr = ListFrorScr.Find(x => x.Floor_or_ScreenID == ObjTorS.Floor_or_ScreenId);
-                    if (ObjFlrOrScr != null)
-                    {
-                        Seating += ObjFlrOrScr.Name;
-                    }
-                    var ObjFsideOrRowName = ListFsorRowNa.Find(x => x.ID == ObjTorS.FloorSide_or_RowNoID);
-                    if (ObjFsideOrRowName != null)
-                    {
-                        Seating +=" " + ObjFsideOrRowName.FloorSide_or_RowName;
-                    }
-                    Seating +=" " + ObjTorS.Table_or_SheetName;
-                }
-                // Seating += "  Order No:" + firstitm.OID+ "   Ticket No: " + TicketObj.Key;
-            <div class="col-md-12" id="@(firstitm.TickedNo)" style="border:1px solid">
-                <pre style="margin:0px !important;"><h6>@Seating &nbsp;&nbsp; Order No:@firstitm.OID &nbsp;&nbsp;Ticket No:@firstitm.TickedNo &nbsp;&nbsp; Time:@firstitm.OrderDate.ToString("dd-MM hh:mm tt") &nbsp;&nbsp;By:@UserPlcedBy <div style="float:right"><i class="fas fa-eye" style="color:green" onclick="Details(@objOrder.OID);"></i></div></h6></pre>
-                @if (ChefName != "")
-                {
-                    <h6 style="color:blue"> @ChefName</h6>
-                }
-                @{
-                    var OrderObj = PendingOrders.Find(x => x.OID == firstitm.OID);
-                    OrdNotice ObjNotice = OrdNotice.GetOne(OrderObj.OID);
-                    double DeliveryCharge = 0.00;
-                    if (OrderObj.DeliveryCharge > 0)
-                    {
-                        List<HG_Ticket> ListTickets = HG_Ticket.GetByOID(OrderObj.OID);
-                        HG_Ticket ObjTicket = ListTickets.Find(x => x.TicketNo == firstitm.TickedNo);
-                        if (ObjTicket != null && ObjTicket.TicketNo > 0)
+                        var Objchef = ListUsers.Find(x => x.UserCode == ChefId);
+                        if (Objchef != null)
                         {
-                            DeliveryCharge = ObjTicket.DeliveryCharge;
+                            ChefName = "Chef :  " + Objchef.UserName;
                         }
                     }
-
-                    if (OrderObj.PaymentStatus == 1 && ObjNotice != null && ObjNotice.OID > 0)
+                    if (ObjTorS != null)
                     {
-                        double Amt = DeliveryCharge;
-                        for (int i = 0; i < orderItems.Count; i++)
+                        var ObjFlrOrScr = ListFrorScr.Find(x => x.Floor_or_ScreenID == ObjTorS.Floor_or_ScreenId);
+                        if (ObjFlrOrScr != null)
                         {
-                            Amt += orderItems[i].Price * orderItems[i].Count;
+                            Seating += ObjFlrOrScr.Name;
                         }
-                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails();
-                        if (OrderObj.PayReceivedBy > 0)
+                        var ObjFsideOrRowName = ListFsorRowNa.Find(x => x.ID == ObjTorS.FloorSide_or_RowNoID);
+                        if (ObjFsideOrRowName != null)
                         {
-                            ObjUser= new vw_HG_UsersDetails().GetSingleByUserId(OrderObj.PayReceivedBy);
+                            Seating += " " + ObjFsideOrRowName.FloorSide_or_RowName;
                         }
-                        if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain
+                        Seating += " " + ObjTorS.Table_or_SheetName;
+                    }
+                    // Seating += "  Order No:" + firstitm.OID+ "   Ticket No: " + TicketObj.Key;
+                    <div class="col-md-12" id="@(firstitm.TickedNo)" style="border:1px solid #44cd4a">
+                        <pre style="margin:0px !important;"><h6>@Seating &nbsp;&nbsp; Order No:@firstitm.OID &nbsp;&nbsp;Ticket No:@firstitm.TickedNo &nbsp;&nbsp; Time:@firstitm.OrderDate.ToString("dd-MM hh:mm tt") &nbsp;&nbsp;By:@UserPlcedBy <div style="float:right"><i class="fas fa-eye" style="color:green" onclick="Details(@objOrder.OID);"></i></div></h6></pre>
+                        @if (ChefName != "")
                         {
-                            <p style="color:red">CASH ON DELIVERY: @Amt.ToString("0.00") Rs/</p>
+                            <h6 style="color:blue"> @ChefName</h6>
                         }
-                        else if (ObjUser == null || ObjUser.UserCode <= 0)
-                        {
-                            <p style="color:red">CASH ON DELIVERY: @Amt.ToString("0.00") Rs/</p>
-                        }
-                    }
-                    else if (OrderObj.PaymentStatus == 3)
-                    {
-                        <p style="color:green">PAID ONLINE</p>
-                    }
-                    else if (OrderObj.PaymentStatus == 2)
-                    {
-                        <p style="color:green">PAID BANK / WALLET</p>
-                    }
-                    else if (objOrder.PaymentStatus == 1)
-                    {
-                        <p style="color:green">PAID CASH</p>
-                    }
-
-                }
-                <button onclick="MarkCompleteTicket(@firstitm.OIID)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
-                <table class="table table-bordered table-responsive">
-                    <thead>
-                        <tr>
-                            <td><input style="margin:2px" @TickSts type="checkbox" onclick="TickAll(this,@firstitm.OIID)">Tick</td>
-                            <td>Item Name</td>
-                            <td>Qty</td>
-
-                        </tr>
-                    </thead>
-                    <tbody id="Tickt@(firstitm.OIID)" TicketNo="@firstitm.TickedNo" DeliveryAmt="@DeliveryCharge">
-                        @foreach (var items in orderItems)
-                        {
-                            var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
-                            double Amt = items.Price * items.Count;
-                            var OrderAdonItms = new List<OrderAdonItm>();
-                            if (items.IsAddon == "1")
+                        @{
+                            var OrderObj = PendingOrders.Find(x => x.OID == firstitm.OID);
+                            OrdNotice ObjNotice = OrdNotice.GetOne(OrderObj.OID);
+                            double DeliveryCharge = 0.00;
+                            if (OrderObj.DeliveryCharge > 0)
                             {
-                                OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
-                                OrderAdonItms = OrderAdonItms.OrderBy(x => x.AdddOnItemId).ToList();
-                                foreach(var addon in OrderAdonItms)
+                                List<HG_Ticket> ListTickets = HG_Ticket.GetByOID(OrderObj.OID);
+                                HG_Ticket ObjTicket = ListTickets.Find(x => x.TicketNo == firstitm.TickedNo);
+                                if (ObjTicket != null && ObjTicket.TicketNo > 0)
                                 {
-                                  Amt += addon.Price * items.Count;
+                                    DeliveryCharge = ObjTicket.DeliveryCharge;
                                 }
-                                
                             }
-                            <tr class="calculate">
-                                <td>
-                                    <input class=" CkeckorNot" @TickSts type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID">
 
-                                </td>
-                                <td>
-                                    @FoodObj.Items
-
-                                </td>
-                                <td>@items.Count</td>
-
-                            </tr>
-                            if (items.IsAddon == "1")
+                            if (OrderObj.PaymentStatus == 1 && ObjNotice != null && ObjNotice.OID > 0)
                             {
-                                foreach(var addon in OrderAdonItms) {
-                    <tr>
-                        <td></td>
-                        @if (addon.ItemId == 0)
-                        {
-                            <td style="text-align:left;font-size:smaller;font-weight:bold;font-style:italic;">-@addon.ItemName</td>
-                            <td></td>
-                        }
-                        else
-                        {
-                            <td style="text-align:left;font-size:smaller">-@addon.ItemName</td>
-                            <td>@items.Count</td>
-                        }
-
-                    </tr>
+                                double Amt = DeliveryCharge;
+                                for (int i = 0; i < orderItems.Count; i++)
+                                {
+                                    Amt += orderItems[i].Price * orderItems[i].Count;
+                                }
+                                vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails();
+                                if (OrderObj.PayReceivedBy > 0)
+                                {
+                                    ObjUser = new vw_HG_UsersDetails().GetSingleByUserId(OrderObj.PayReceivedBy);
+                                }
+                                if (ObjUser != null && ObjUser.UserType != "CA" && ObjUser.UserType != "ONR")// not captain
+                                {
+                                    <p style="color:red">CASH ON DELIVERY: @Amt.ToString("0.00") Rs/</p>
+                                }
+                                else if (ObjUser == null || ObjUser.UserCode <= 0)
+                                {
+                                    <p style="color:red">CASH ON DELIVERY: @Amt.ToString("0.00") Rs/</p>
                                 }
                             }
+                            else if (OrderObj.PaymentStatus == 3)
+                            {
+                                <p style="color:green">PAID ONLINE</p>
+                            }
+                            else if (OrderObj.PaymentStatus == 2)
+                            {
+                                <p style="color:green">PAID BANK / WALLET</p>
+                            }
+                            else if (objOrder.PaymentStatus == 1)
+                            {
+                                <p style="color:green">PAID CASH</p>
+                            }
+
                         }
-                    </tbody>
-                </table>
+                        <button onclick="MarkCompleteTicket(@firstitm.OIID)" style="border-radius:5px;padding:5px;" class="btn btn-sm btn-success">Complete</button>
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <td><input style="margin:2px" @TickSts type="checkbox" onclick="TickAll(this,@firstitm.OIID)">Tick</td>
+                                    <td>Item Name</td>
+                                    <td>Qty</td>
+
+                                </tr>
+                            </thead>
+                            <tbody id="Tickt@(firstitm.OIID)" TicketNo="@firstitm.TickedNo" DeliveryAmt="@DeliveryCharge">
+                                @foreach (var items in orderItems)
+                                {
+                                    var FoodObj = ItemsList.Find(x => x.ItemID == items.FID);
+                                    double Amt = items.Price * items.Count;
+                                    var OrderAdonItms = new List<OrderAdonItm>();
+                                    if (items.IsAddon == "1")
+                                    {
+                                        OrderAdonItms = OrderAdonItm.GetAll(items.OIID);
+                                        OrderAdonItms = OrderAdonItms.OrderBy(x => x.AdddOnItemId).ToList();
+                                        foreach (var addon in OrderAdonItms)
+                                        {
+                                            Amt += addon.Price * items.Count;
+                                        }
+
+                                    }
+                                    <tr class="calculate">
+                                        <td>
+                                            <input class=" CkeckorNot" @TickSts type="checkbox" id="@items.OIID" OID="@items.OID" Amt="@Amt" value="@items.OIID">
+
+                                        </td>
+                                        <td>
+                                            @FoodObj.Items
+
+                                        </td>
+                                        <td>@items.Count</td>
+
+                                    </tr>
+                                    if (items.IsAddon == "1")
+                                    {
+                                        foreach (var addon in OrderAdonItms)
+                                        {
+                                            <tr>
+                                                <td></td>
+                                                @if (addon.ItemId == 0)
+                                                {
+                                                    <td style="text-align:left;font-size:smaller;font-weight:bold;font-style:italic;">-@addon.ItemName</td>
+                                                    <td></td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="text-align:left;font-size:smaller">-@addon.ItemName</td>
+                                                    <td>@items.Count</td>
+                                                }
+
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
             </div>
-            }
         </div>
     </div>
-</div>
 
 <script>
     function MarkCompleteTicket(OIID) {

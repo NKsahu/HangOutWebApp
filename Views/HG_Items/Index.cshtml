@@ -6,33 +6,27 @@
 }
 @{ List<HG_Category> listitems = new HG_Category().GetAll();}
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center"><b>ITEM</b> </h3>
-        <hr />
-        <button style="float:left;" onclick="BULKEXCELUPL()" class="btn btn-lg btn-info ">BULK UPLOAD</button>
-        <button style="float:right !important;" onclick="DownloadExl()" class="btn btn-lg btn-info ">DOWNLOAD EXCEL</button>
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white;">ITEM </h3>
+        
     </div>
     <div class="row">
         <div class="col-md-3">
-            <a href="/HG_Items/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">ITEM</a>
+            <a href="/HG_Items/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default GreenClr text-white form-control">ITEM</a>
         </div>
         <div class="col-md-3">
-            <a href="/HG_Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">CATEGORY</a>
+            <a href="/HG_Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground text-white  form-control">CATEGORY</a>
         </div>
         <div class="col-md-3">
-            <a href="/HG_Category/AddonsIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">ADD ON</a>
+            <a href="/HG_Category/AddonsIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn blackBackground text-white  form-control">ADD ON</a>
         </div>
         <div class="col-md-3">
-            <a href="/ServingSize/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default  blackTest form-control">Serving Size</a>
+            <a href="/ServingSize/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn blackBackground  text-white  form-control">Serving Size</a>
         </div>
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-md-5"></div>
-            <div class="col-md-2">
-                <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
-            </div>
-            <div class="col-md-5"></div>
+           
         </div>
         <table class="table table-hover w-100" id="TBLID">
             <thead>
@@ -82,8 +76,8 @@
                             @Html.DisplayFor(modelItem => item.Tax)
                         </td>
                         <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.ItemID)"> Edit</button>
-                            <button class="btn btn-danger btn-sm " onclick="Delete(@item.ItemID)"> Delete</button>
+                            <button class="btn GreenClr text-white btn-sm " onclick="CreateEdit(@item.ItemID)"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger text-white btn-sm " onclick="Delete(@item.ItemID)"> <i class="fas fa-archive"></i></button>
                         </td>
                     </tr>
                 }
@@ -93,6 +87,11 @@
 </div>
 
 <script>
+    var AddTr = false;
+    var AddBtnhtml = '<button class="DataTbl" onclick="CreateEdit(0)" >Add </button>';
+    var AddBtnUpld = '<button style="margin-left:5px;" onclick="BULKEXCELUPL()" class="DataTbl">Bulk Upload</button>';
+    AddBtn(AddBtnhtml);
+     AddBtn(AddBtnUpld);
     function Delete(ID) {
         if (confirm('Are You Sure')) {
             $('#waiting').show();
@@ -120,7 +119,6 @@
         }
 
     }
-    var AddTr = false;
     function JsonSuccess(Jobj) {
         if (Jobj.data != undefined && Jobj.data == '1') {
             $('#waiting').hide();
@@ -138,8 +136,8 @@
                 HtmlStr += '<td>' + Jitmobj.ItemDiscription + '</td>';
                 HtmlStr += '<td>' + Jitmobj.CostPrice + '</td>';
                 HtmlStr += '<td>' + Jitmobj.Tax + '</td>';
-                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit('+Jitmobj.ItemID+')"> Edit</button>';
-                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete('+Jitmobj.ItemID+')"> Delete</button></td></tr>';
+                HtmlStr += '<td><button class=" btn GreenClr text-white btn-sm " onclick="CreateEdit('+Jitmobj.ItemID+')"> <i class="fas fa-edit"></i></button>';
+                HtmlStr += '<button class="btn btn-danger text-white btn-sm" onclick="Delete('+Jitmobj.ItemID+')"> <i class="fas fa-archive"></i></button></td></tr>';
                 if (AddTr) {
                     $("#Tbody").append(HtmlStr);
                 }
@@ -203,12 +201,6 @@
                 $('#waiting').hide();
             }
         });
-    }
-    function DownloadExl() {
-        if (confirm('Are You Sure')) {
-            $('.buttons-excel').click();
-        }
-
     }
     function ItemMode(mode) {
         if (mode == "1") {

@@ -3,67 +3,60 @@
     Layout = null;
 }
 
-<div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center"><b>ITEM</b> </h3>
-        <hr />
-        <button style="float:left;" onclick="BULKEXCELUPL()" class="btn btn-lg btn-info ">BULK UPLOAD</button>
-        <button style="float:right !important;" onclick="DownloadExl()" class="btn btn-lg btn-info ">DOWNLOAD EXCEL</button>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <a href="/HG_Items/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">ITEM</a>
+    <div class="card">
+        <div class="card-header card-header-color">
+            <h3 style="text-align:center;color:white;">Add On</h3>
         </div>
-        <div class="col-md-3">
-            <a href="/HG_Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">CATEGORY</a>
-        </div>
-        <div class="col-md-3">
-            <a href="/HG_Category/AddonsIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground form-control">ADD ON</a>
-        </div>
-        <div class="col-md-3">
-            <a href="/ServingSize/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default  blackTest form-control">Serving Size</a>
-        </div>
-    </div>
-    <div class="card-body">
         <div class="row">
-            <div class="col-md-5"></div>
-            <div class="col-md-2">
-                <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
+            <div class="col-md-3">
+                <a href="/HG_Items/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground  text-white form-control">ITEM</a>
             </div>
-            <div class="col-md-5"></div>
+            <div class="col-md-3">
+                <a href="/HG_Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default  text-white blackBackground form-control">CATEGORY</a>
+            </div>
+            <div class="col-md-3">
+                <a href="/HG_Category/AddonsIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn  GreenClr text-white  form-control">ADD ON</a>
+            </div>
+            <div class="col-md-3">
+                <a href="/ServingSize/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn blackBackground  text-white  form-control">Serving Size</a>
+            </div>
         </div>
-        <table class="table table-hover w-100 " id="TBLID">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayName("Add On Category")
-                    </th>
-                    <th>
-                        @Html.DisplayName("AddOn Items")
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="Tbody">
-                @foreach (var item in Model)
-                {
-                <tr id="@item.CategoryID">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Category)
-                    </td>
-                    <td>
-                        <button title="Add Onn Items"  onclick="AddOnIndex(@item.CategoryID)" class="btn btn-info btn-sm "> <i class="fas fa-sitemap"></i> </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.CategoryID)"> Edit</button>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
+        <div class="card-body">
+            <table class="table table-hover w-100 " id="TBLID">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayName("Add On Category")
+                        </th>
+                        <th>
+                            @Html.DisplayName("AddOn Items")
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="Tbody">
+                    @foreach (var item in Model)
+                    {
+                        <tr id="@item.CategoryID">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category)
+                            </td>
+                            <td>
+                                <button title="Add Onn Items" onclick="AddOnIndex(@item.CategoryID)" class="btn btn-success btn-sm "> <i class="fas fa-sitemap"></i> </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.CategoryID)"> <i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 <script>
+    AddTr = false;
+    var AddBtnhtml = '<button class="DataTbl" onclick="CreateEdit(0)" >Add </button>';
+    AddBtn(AddBtnhtml);
     function CreateEdit(ID) {
         if (ID != "0") {
             AddTr = false;
@@ -98,8 +91,8 @@
             $('#waiting').hide();
             var HtmlStr = "<tr id='" + Jitmobj.CategoryID + "'>";
             HtmlStr += '<td>' + Jitmobj.Category + '</td>';
-            HtmlStr += '<td><button title="Add Onn Items" onclick="AddOnIndex(' + Jitmobj.CategoryID +')" class="btn btn-info btn-sm "><i class="fas fa-sitemap"></i></button></td>';
-            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CategoryID + ')"> Edit</button></td ></tr >';
+            HtmlStr += '<td><button title="Add Onn Items" onclick="AddOnIndex(' + Jitmobj.CategoryID +')" class="btn btn-success btn-sm "><i class="fas fa-sitemap"></i></button></td>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CategoryID + ')"><i class="fas fa-edit"></i></button></td ></tr >';
             if (AddTr) {
                 $("#Tbody").append(HtmlStr);
             }

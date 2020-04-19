@@ -5,24 +5,24 @@
     }
 @using HangOut.Models
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>Item Category</b></h3>
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white">Item Category</h3>
         <hr />
     </div>
     <div class="card-body">
 
-        @using (Ajax.BeginForm("CreateEdit", "HG_Category", new {ID = Model.CategoryID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
+        @using (Ajax.BeginForm("CreateEdit", "HG_Category", new { ID = Model.CategoryID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
         {
-                @Html.HiddenFor(model => model.CategoryID)
-            @Html.HiddenFor(model=>model.CategoryType)
-           
-                <div class="row">
+            @Html.HiddenFor(model => model.CategoryID)
+            @Html.HiddenFor(model => model.CategoryType)
 
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
-                    
-                    @if (ObjOrg["OrgId"] == "0" || ObjOrg["OrgId"]==null)
-                    {
+            <div class="row">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+
+                @if (ObjOrg["OrgId"] == "0" || ObjOrg["OrgId"] == null)
+                {
                     <div class="col-sm-4">
                         @Html.LabelFor(model => model.OrgID, htmlAttributes: new { @class = "control-label  " })
                         @{
@@ -34,35 +34,41 @@
                         @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
 
                     </div>
-                            }
-                            else
-                            {
-                                @Html.HiddenFor(model=>model.OrgID)
-                            }
+                }
+                else
+                {
+                    @Html.HiddenFor(model => model.OrgID)
+                }
 
-                    <div class="col-sm-4">
-                        @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label  " })
+                <div class="col-sm-4">
+                    @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label  " })
 
-                        @Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control", required = "required" } })
-                        @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
 
-                    </div>
+                </div>
 
-                    <div class="col-sm-4">
+                <div class="col-sm-4">
+                    <div class="checkbox2 container">
+                        @Html.CheckBoxFor(model => model.Status, new { @class = "form-control" })
                         @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.Status)
-                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="col-sm-1">
-                        @Html.Label("Save", new { @class = "text-white" })
-                        <input type="submit" value="Save" class="btn btn-success" />
-
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+
+                </div>
+                <div class="col-md-2 ">
+                    @Html.Label("SAVE", new { @class = "text-white" })
+                    <input type="submit" value="SAVE" class="form-control SaveBtn" />
+                </div>
+                <div class="col-md-5">
+
+                </div>
+            </div>
+        }
+    </div>
 </div>
  

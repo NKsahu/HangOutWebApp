@@ -5,9 +5,8 @@
     var CurrentOrg = Request.Cookies["UserInfo"];
 }
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>ITEM</b></h3>
-        <hr />
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white">ITEM</h3>
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("CreateEdit", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
@@ -17,9 +16,6 @@
             @Html.HiddenFor(model => model.Type)
             @Html.HiddenFor(model => model.AddOnType)
             @Html.HiddenFor(Model => Model.ItemAvaibility)
-            //public int ApplyAddOn { get; set; } //{1 NO ,2 YES}
-            //  public int AddOnCatId { get; set; }// addon category id
-
             <div class="row">
                 <div class="col text-center">
                     @if (Model.ItemID > 0)
@@ -73,7 +69,7 @@
                 </div>
                 @{
                     List<SelectListItem> FoodType = new List<SelectListItem>()
-                                                                        {
+                                                                            {
                                                                             new SelectListItem{Text="VEG",Value="1"},
                                                                             new SelectListItem{Text="NON-VEG",Value="2"},
 
@@ -114,7 +110,7 @@
                 </div>
                 @{
                     List<SelectListItem> AddOnOption = new List<SelectListItem>()
-                                                                            {
+                                                                                {
                                                                                 new SelectListItem{Text="NO",Value="1"},
                                                                                 new SelectListItem{Text="YES",Value="2"},
 
@@ -134,7 +130,7 @@
                 </div>
                 @{
                     List<SelectListItem> Multiserving = new List<SelectListItem>()
-                                                                        {
+                                                                            {
                                                                             new SelectListItem{Text="NO",Value="0"},
                                                                             new SelectListItem{Text="YES",Value="1"},
 
@@ -142,7 +138,7 @@
                 }
                 <div class="col-md-1">
                     @Html.LabelFor(model => model.MultiServing)
-                    @Html.DropDownListFor(model => model.MultiServing, Multiserving, new { @class = "form-control"})
+                    @Html.DropDownListFor(model => model.MultiServing, Multiserving, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.MultiServing, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-1" id="MultiservingItm">
@@ -151,23 +147,27 @@
                         <i class="fas fa-info-circle" style="color:green"></i>
                     </button>
                 </div>
-                <div class="col-md-1">
-                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.Status)
-                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger", required = "required" })
-                        </div>
+                <div class="col-md-2">
+                    <div class="checkbox2 container">
+                        @Html.CheckBoxFor(model => model.Status, new { @class = "form-control" })
+                        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label  " })
                     </div>
                 </div>
-                <div class="col-sm-1">
-                    @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+
+                </div>
+                <div class="col-md-2 ">
+                    @Html.Label("SAVE", new { @class = "text-white" })
+                    <input type="submit" value="SAVE" class="form-control SaveBtn" />
+                </div>
+                <div class="col-md-5">
 
                 </div>
             </div>
-                }
-            </div>
+        }
+    </div>
         </div>
         <script>
             $(document).ready(function () {

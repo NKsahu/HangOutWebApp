@@ -6,19 +6,10 @@
     Layout = null;
 }
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center"><b>Comlementry Dish</b> </h3>
-        <hr />
+    <div class="card-header card-header-color">
+        <h3 class="text-white" style="text-align:center">Comlementry Dish </h3>
     </div>
-
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-5"></div>
-            <div class="col-md-2">
-                <button onclick="CreateEdit('0')" class="btn btn-info form-control">New </button>
-            </div>
-            <div class="col-md-5"></div>
-        </div>
         <table class="table table-hover w-100" id="TBLID">
             <thead>
                 <tr>
@@ -58,7 +49,7 @@
                         <button class="btn btn-success btn-sm " onclick="EditItem(@SSize.CashBkId)">Edit Items</button>
                     </td>
                     <td>
-                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.CashBkId)">Edit</button>
+                        <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.CashBkId)"><i class="fas fa-edit"></i></button>
                     </td>
                 </tr>
                 }
@@ -70,6 +61,8 @@
 <script>
 
     var AddTr = false;
+    var AddBtnhtml = '<button class="DataTbl" onclick="CreateEdit(0)" >Add </button>';
+    AddBtn(AddBtnhtml);
     function Terminate(CBID, Sts) {
 
         if (confirm('Are you sure to want to TERMINATE campaign permanently ?')) {
@@ -158,7 +151,7 @@
         HtmlStr += '<td id="S'+Jitmobj.CashBkId +'"><button class="btn btn-info btn-sm "  onclick="Status(' + Jitmobj.CashBkId + ','+Jitmobj.CBStsID+')">'+Jitmobj.CBSts+'</button></td>';
         HtmlStr += '<td><button class="btn btn-success btn-sm " onclick="Seating(' + Jitmobj.CashBkId + ')">Edit Seating</button></td>';
          HtmlStr += '<td><button class="btn btn-success btn-sm " onclick="EditItem(' + Jitmobj.CashBkId + ')">Edit Items</button></td>';
-            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CashBkId + ')"> Edit</button>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.CashBkId + ')"><i class="fas fa-edit"></i></button>';
             var table = $('table').DataTable();
             if (AddTr) {
                 table.row.add($(HtmlStr)).draw();

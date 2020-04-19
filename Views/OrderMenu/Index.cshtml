@@ -4,14 +4,14 @@
 }
 <style>
     .SelectedMenu {
-        background-color: #a9bf1a;
+        background-color:#44cd4a;
     }
     .SelectedTable {
-        background-color: #a9bf1a;
+        background-color: #44cd4a;
     }
 
     div.scrollmenu {
-        background-color: #333;
+        background-color: black;
         overflow-x: auto;
         white-space: nowrap;
     }
@@ -48,11 +48,10 @@
 </style>
 @Html.Hidden("COrgId",OrgObj["OrgId"])
 <div class="row" style="width:100%">
-    <div class="card-header" style="width:100%">
-        <h3 style="text-align:center; background-color:#5de79a"><b>Order Menu</b> </h3>
-        <hr />
+    <div class="card-header card-header-color" style="width:100%">
+        <h3 style="text-align:center; color:white;">Order Menu</h3>
     </div>
-    <div class="scrollmenu" id="Menus">
+    <div class="scrollmenu" id="Menus" style="margin-top:20px;">
         <block id="AddNew" class="ShowMenu" ondblclick="AddOrderMenu(0)">Add New</block>
     </div>
 
@@ -81,7 +80,7 @@
 
     </div>
     <div class="col-md-2">
-        <button class="btn btn-danger form-control " onclick="Apply()">Apply</button>
+        <button class="btn text-white form-control BlackClr" onclick="Apply()">Apply</button>
     </div>
     <div class="col-md-5">
 
@@ -129,8 +128,8 @@
 
             for (var i = 0; i < categorylist.length; i++) {
                 var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
-                FloorHtml += '<h4 style="text-align:right">' + categorylist[i].Name + '</h4> </div><div class="col-md-6">';
-                var TablesOrSheat = ' <div class="row">';
+                FloorHtml += '<h4 style="text-align:right">' + categorylist[i].Name + '</h4> </div><div class="col-md-6"><div class="checkbox2 container">';
+                var TablesOrSheat = ' <div class="row" style="width:100%;">';
                 var TableSHaetList = categorylist[i].TableSheatList;
                 var TotalSelectedTble = 0;
                 for (var j = 0; j < TableSHaetList.length; j++) {
@@ -149,7 +148,7 @@
                 if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
                     // CheckBoxCls = "checked";
                 }
-                FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="' + categorylist[i].Floor_or_ScreenID + '" id="FS' + categorylist[i].Floor_or_ScreenID + '" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
+                FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="' + categorylist[i].Floor_or_ScreenID + '" id="FS' + categorylist[i].Floor_or_ScreenID + '" /><label class="control-label" for="FS'+categorylist[i].Floor_or_ScreenID+'"> </label></div></div>';
                 FloorHtml += TablesOrSheat;
                 FloorHtml += '</blockTable>';
                 $("#Floor").append(FloorHtml);
@@ -175,14 +174,17 @@
         }
 
         function ChangeIcon(event) {
-            console.log("aaya");
             if ($(event).find('a').find('i').hasClass('fa-plus')) {
                 $(event).find('a').find('i').removeClass('fa-plus');
                 $(event).find('a').find('i').addClass('fa-minus');
+                var SubMenuId = $(event).find('a').attr('data-target');
+                $(SubMenuId).show();
             }
             else {
                 $(event).find('a').find('i').removeClass('fa-minus');
                 $(event).find('a').find('i').addClass('fa-plus');
+                var SubMenuId = $(event).find('a').attr('data-target');
+                $(SubMenuId).hide();
             }
         }
         function RowUp(event) {

@@ -12,7 +12,6 @@ namespace HangOut.Controllers.POS
         public ActionResult Index()
         {
             int OrgId = OrderType.CurrOrgId();
-            //List<ServingSize> servingSizes = ServingSize.GetAll(OrgId); 
             List<HG_Items> ServingItems = new HG_Items().GetAll(OrgId, 2);
             return View(ServingItems);
         }

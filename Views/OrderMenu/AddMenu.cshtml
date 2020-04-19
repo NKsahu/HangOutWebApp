@@ -6,8 +6,8 @@
 
 <div class="row" style="width:100%">
     @Html.Hidden("OMId", OMId)
-    <div class="card-header" style="width:100%">
-        <h2 style="text-align:center; background-color:#5de79a"><b>Order Menu</b> </h2>
+    <div class="card-header card-header-color" style="width:100%">
+        <h3 style="text-align:center; color:white">Order Menu</h3>
     </div>
     <div class="col-md-12" style="padding:10px;">
         <input type="text" OMId="0" id="OrderMenuName" placeholder="Enter Menu Name.." required class="form-control" />
@@ -111,7 +111,7 @@
             var OrdNo = i + 1;
             var MainLi = '<li class="nav-item card mainList" style="padding:15px" OrderNo="' + OrdNo +'"><div class="row" style="width:100%" >';
             var CategoryDiv = '<div class="col-md-4"><label></label><input type="text" class="form-control Category"  id="' + list[i].id+'" CategoryId="'+list[i].CategoryID+'" value="' + list[i].Category+'"></div>';
-            var CatePlusIcn = '<div onclick="ChangeIcon(this)" class="col-md-2"><label></label><a style="text-align:center" class="nav-link have-sub-menu collapsed" href="#" data-target="#C'+list[i].CategoryID+'" data-toggle="collapse"><i class="fas fa-plus" style="font-size:x-large"></i></a></div >';
+            var CatePlusIcn = '<div onclick="ChangeIcon(this)" class="col-md-2"><label></label><a style="text-align:center" class="nav-link  " href="#" data-target="#C'+list[i].CategoryID+'" ><i class="fas fa-plus" style="font-size:x-large"></i></a></div >';
             var CatDownIcon = '<div class="col-md-2"><label></label><a onclick="RowDown(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-down" style="font-size:x-large"></i></a></div>';
             var CatUpIcon = '<div class="col-md-2"><label></label><a onclick="RowUp(this)" style="text-align:center;color:dodgerblue" class="nav-link"><i class="fas fa-arrow-up" style="font-size:x-large"></i></a></div >';
            var CatCheckStatus = '<div class="col-md-1"><label></label><input type="checkbox" class="form-control CheckStatus" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
@@ -119,10 +119,10 @@
              CatCheckStatus = '<div class="col-md-1"><label></label><input type="checkbox" checked class="form-control CheckStatus" style="border: 2px dotted #00f; display: block; background: #ff0000" /></div></div>';
             } 
             var ItemList = list[i].ItemList;
-            var ItemUl = '<ul id="C'+list[i].CategoryID+'" class="collapse list-unstyled " data-parent="#myaccordion">';
+            var ItemUl = '<ul id="C'+list[i].CategoryID+'" style="display:none;">';
             for (var j = 0; j < ItemList.length; j++) {
                 var OrdN = j + 1;
-                var ItemLi = '<li class="nav-item" data-parent="#myaccordion" id="' + ItemList[j].id+'" Itmid="' + ItemList[j].ItemID+'" OrderNo="' +OrdN+'"><div class="row">';
+                var ItemLi = '<li  class="nav-item"  id="' + ItemList[j].id+'" Itmid="' + ItemList[j].ItemID+'" OrderNo="' +OrdN+'"><div class="row">';
                 var DisaplyItm = '<div class="col-md-2"><label></label><a style="text-align:center;color:darkblue" class="nav-link">' + ItemList[j].Items+'</a></div >';
                 var ItemRowDown = '<div class="col-md-1"><label></label><a onclick="RowDown(this)" style="text-align:center;color:darkblue" class="nav-link"><i class="fas fa-arrow-down" style="font-size:x-large"></i></a></div>';
                 var ItemRowUp = '<div class="col-md-1"><label></label><a onclick="RowUp(this)" style="text-align:center;color:darkblue" class="nav-link"><i class="fas fa-arrow-up" style="font-size:x-large"></i></a></div >';

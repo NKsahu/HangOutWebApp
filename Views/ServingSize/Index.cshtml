@@ -4,70 +4,62 @@
         Layout = null;
     }
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center"><b>SERVING SIZE</b> </h3>
-        <hr />
-        <button style="float:left;" onclick="BULKEXCELUPL()" class="btn btn-lg btn-info ">BULK UPLOAD</button>
-        <button style="float:right !important;" onclick="DownloadExl()" class="btn btn-lg btn-info ">DOWNLOAD EXCEL</button>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <a href="/HG_Items/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default  blackTest form-control">ITEM</a>
+        <div class="card-header card-header-color">
+            <h3 style="text-align:center;color:white;">Serving Size</h3>
         </div>
-        <div class="col-md-3">
-            <a href="/HG_Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">CATEGORY</a>
-        </div>
-        <div class="col-md-3">
-            <a href="/HG_Category/AddonsIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackTest form-control">ADD ON</a>
-        </div>
-        <div class="col-md-3">
-            <a href="/ServingSize/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground blackTest form-control">Serving Size</a>
-        </div>
-    </div>
-    <div class="card-body">
         <div class="row">
-            <div class="col-md-5"></div>
-            <div class="col-md-2">
-                <button onclick="CreateEdit('0')" class="btn btn-info form-control">Add One</button>
+            <div class="col-md-3">
+                <a href="/HG_Items/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default blackBackground  text-white form-control">ITEM</a>
             </div>
-            <div class="col-md-5"></div>
+            <div class="col-md-3">
+                <a href="/HG_Category/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn btn-default  text-white blackBackground form-control">CATEGORY</a>
+            </div>
+            <div class="col-md-3">
+                <a href="/HG_Category/AddonsIndex" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn  blackBackground text-white  form-control">ADD ON</a>
+            </div>
+            <div class="col-md-3">
+                <a href="/ServingSize/Index" data-ajax="true" data-ajax-update="#DynamicData" data-ajax-mode="replace" data-ajax-loading="#waiting" class="btn  GreenClr text-white  form-control">Serving Size</a>
+            </div>
         </div>
-        <table class="table table-hover w-100" id="TBLID">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayName("ID")
-                    </th>
-                    <th>
-                        @Html.DisplayName("Name")
-                    </th>
-                    
-                    <th class="noExport"> </th>
-                </tr>
-            </thead>
-            <tbody id="Tbody">
-                @foreach (var SSize in Model)
-                {
-                    <tr id="@SSize.ItemID">
-                        <td>
-                           @SSize.ItemID
-                        </td>
-                        <td>
-                            @SSize.Items
-                        </td>
-                        <td>
-                            <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.ItemID)">Edit</button>
-                        </td>
+        <div class="card-body">
+            <table class="table table-hover w-100" id="TBLID">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayName("ID")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Name")
+                        </th>
+
+                        <th class="noExport"> </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="Tbody">
+                    @foreach (var SSize in Model)
+                    {
+                        <tr id="@SSize.ItemID">
+                            <td>
+                                @SSize.ItemID
+                            </td>
+                            <td>
+                                @SSize.Items
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm " onclick="CreateEdit(@SSize.ItemID)"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
 <script>
    
     var AddTr = false;
+    var AddBtnhtml = '<button class="DataTbl" onclick="CreateEdit(0)" >Add </button>';
+    AddBtn(AddBtnhtml);
     function JsonSuccess(Jobj) {
         if (Jobj.data != undefined && Jobj.data == '1') {
             $('#waiting').hide();
@@ -80,7 +72,7 @@
             var HtmlStr = "<tr id='" + Jitmobj.ItemID + "'>";
             HtmlStr += '<td>' + Jitmobj.ItemID + '</td>';
             HtmlStr += '<td>' + Jitmobj.Items + '</td>';
-            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ItemID + ')"> Edit</button>';
+            HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ItemID + ')"><i class="fas fa-edit"></i></button>';
             var table = $('table').DataTable();
             if (AddTr) {
                 table.row.add($(HtmlStr)).draw();
@@ -113,29 +105,7 @@
         });
 
     }
-    function BULKEXCELUPL() {
-        $('#waiting').show();
-        $.ajax({
-            type: 'GET',
-            url: "/HG_Items/UplExl",
-            success: function (data) {
-                makedpt("CreateSheat");
-                $("#CreateSheat > .modal-dialog > .modal-content > .modal-body").html(data);
-                showdpt("CreateSheat");
-                $('#waiting').hide();
-            },
-            error: function (jqXhr, textStatus, errorMessage) { // error callback
-                $('#waiting').hide();
-            }
-        });
-    }
     
-    function DownloadExl() {
-        if (confirm('Are You Sure')) {
-            $('.buttons-excel').click();
-        }
-
-    }
     
 </script>
 

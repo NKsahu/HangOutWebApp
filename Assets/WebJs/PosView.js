@@ -246,6 +246,7 @@ function SubmitAddon(itemid) {
         ObjCart.Count = Cnt;
         ObjCart.ItemUUID = GetUUID();
         ObjCart.IsParcel = IsParcel;
+        ObjCart.IsPlaced = 0;
         ItemUUID = ObjCart.ItemUUID;
         ItemPrice = ObjCart.ItemPrice;
         CartList.push(ObjCart);
@@ -344,7 +345,8 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
             SingleItemPrice = Cart.ItemPrice;
             Cart.ItemUUID = GetUUID();
             Cart.IsParcel = IsParcel;
-            Cart.ParcelCharge = 0;;
+            Cart.ParcelCharge = 0;
+            Cart.IsPlaced = 0;
             ItemUUID = Cart.ItemUUID;
             MyCart = Cart;
             CartList.push(Cart);
@@ -368,6 +370,7 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
         Cart.IsParcel = IsParcel;
         Cart.ItemPrice = ObjItem.ItemPrice;
         Cart.ParcelCharge = 0;
+        Cart.IsPlaced = 0;
         SingleItemPrice = Cart.ItemPrice;
         ItemUUID = Cart.ItemUUID;
         MyCart = Cart;

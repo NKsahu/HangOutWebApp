@@ -12,8 +12,8 @@
     }
 }
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>CashBack</b></h3>
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white">CashBack</h3>
         <hr />
     </div>
     <div class="card-body">
@@ -38,60 +38,67 @@
     @Html.HiddenFor(model => model.StartDate)
     @Html.HiddenFor(model => model.ValidTillDate)
 
-        <div class="row">
-            <div class="col-md-2">
-                @Html.Label("Start From")
-                @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
-                @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-2">
-                @Html.Label("Valid Till")
-                @Html.DropDownListFor(model => model.ValidTill, SL, new { @class = "form-control " })
-                @Html.ValidationMessageFor(model => model.ValidTill, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-2">
-                @Html.Label("Date")
-                @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
-                @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-2">
-                @Html.Label("CashBackType")
-                @Html.DropDownListFor(model => model.CashBkType, CashBkType, new { @class = "form-control " })
-                @Html.ValidationMessageFor(model => model.CashBkType, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-1">
-                @Html.Label("Percentage")
-                @Html.TextBoxFor(model => model.Percentage, new { @class = "form-control autodouble" })
-                @Html.ValidationMessageFor(model => model.Percentage, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-md-1">
-                @Html.Label("Min Bill Amt")
-                @Html.TextBoxFor(model => model.BilAmt, new { @class = "form-control autodouble" })
-                @Html.ValidationMessageFor(model => model.BilAmt, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-2">
-                @Html.Label("Max CashBack Limit")
-                @Html.DropDownListFor(model => model.MaxCBLimit, CashBkLimit, new { @class = "form-control " })
-                @Html.ValidationMessageFor(model => model.MaxCBLimit, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-2">
-                @Html.Label("Max CashBack Amt")
-                @Html.TextBoxFor(model => model.MaxAmt, new { @class = "form-control autodouble" })
-                @Html.ValidationMessageFor(model => model.MaxAmt, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-1">
-                @Html.Label("Raise Dynamically")
-                @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble", @onchange = "RaiseDynamicFun()" })
-                @Html.ValidationMessageFor(model => model.RaiseDynamic, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="col-sm-1" style="margin-top:5px;">
-                @Html.Label("Save", new { @class = "text-white" })
-                <input type="submit" value="Next" class="btn btn-success" />
-            </div>
+    <div class="row">
+        <div class="col-md-2">
+            @Html.Label("Start From")
+            @Html.TextBoxFor(model => model.StrStartDate, Model.StrStartDate, new { @class = "form-control datefield" })
+            @Html.ValidationMessageFor(model => model.StrStartDate, "", new { @class = "text-danger" })
         </div>
+        <div class="col-md-2">
+            @Html.Label("Valid Till")
+            @Html.DropDownListFor(model => model.ValidTill, SL, new { @class = "form-control " })
+            @Html.ValidationMessageFor(model => model.ValidTill, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Date")
+            @Html.TextBoxFor(model => model.ValidTillStr, Model.ValidTillStr, new { @class = "form-control datefield" })
+            @Html.ValidationMessageFor(model => model.ValidTillStr, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-2">
+            @Html.Label("CashBackType")
+            @Html.DropDownListFor(model => model.CashBkType, CashBkType, new { @class = "form-control " })
+            @Html.ValidationMessageFor(model => model.CashBkType, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            @Html.Label("Percentage")
+            @Html.TextBoxFor(model => model.Percentage, new { @class = "form-control autodouble" })
+            @Html.ValidationMessageFor(model => model.Percentage, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-1">
+            @Html.Label("Min Bill Amt")
+            @Html.TextBoxFor(model => model.BilAmt, new { @class = "form-control autodouble" })
+            @Html.ValidationMessageFor(model => model.BilAmt, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Max CashBack Limit")
+            @Html.DropDownListFor(model => model.MaxCBLimit, CashBkLimit, new { @class = "form-control " })
+            @Html.ValidationMessageFor(model => model.MaxCBLimit, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.Label("Max CashBack Amt")
+            @Html.TextBoxFor(model => model.MaxAmt, new { @class = "form-control autodouble" })
+            @Html.ValidationMessageFor(model => model.MaxAmt, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1">
+            @Html.Label("Raise Dynamically")
+            @Html.CheckBoxFor(model => model.RaiseDynamic, new { @class = "form-control autodouble", @onchange = "RaiseDynamicFun()" })
+            @Html.ValidationMessageFor(model => model.RaiseDynamic, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+
+        </div>
+        <div class="col-md-2 ">
+            @Html.Label("NEXT", new { @class = "text-white" })
+            <input type="submit" value="NEXT" class="form-control SaveBtn" />
+        </div>
+        <div class="col-md-5">
+
+        </div>
+    </div>
 }
     </div>
     <div class="card-footer">

@@ -5,9 +5,8 @@
     var CurrentOrg = Request.Cookies["UserInfo"];
 }
 <div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center;color:#000000"><b>Serving Size</b></h3>
-        <hr />
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white">Serving Size</h3>
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("SaveSS", "HG_Items", new { ItemID = Model.ItemID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))

@@ -1,7 +1,6 @@
 ﻿@using HangOut.Models.Common;
 @{ Layout = null;}
-<html>
-<body>
+
 
     <!--HIDDEN ELEMENT FOR DUPLICATING -->
     <div class="row aa MainDivs mt-2" style="border:ridge;display:none" OrderNo="1" id="CreateCopy">
@@ -69,10 +68,9 @@
 
 
     <!---->
-    <div class=" card p-1 m-5" style="border:thick;box-shadow:2px 2px 4px black;z-index:1000">
-        <div class="card-header" style="border:thick;">
-            <h4 class="text-center"><b>Video Category</b></h4>
-            <hr />
+    
+        <div class="card-header card-header-color" style="border:thick;">
+            <h3 class="text-center text-white">Video Category</h3>
         </div>
         @{
                if (Request.QueryString["Id"] != "0")
@@ -280,10 +278,6 @@
                 </div>
             }
         }
-
-    </div>
-    </body>
-</html>
     <script>
         function divup(event) {
             console.log('li');
