@@ -7,11 +7,11 @@
         background-color:#44cd4a;
     }
     .SelectedTable {
-        background-color: #44cd4a;
+        background-color: #def6e1;
+        border:1px solid #44cd4a;
     }
 
     div.scrollmenu {
-        background-color: black;
         overflow-x: auto;
         white-space: nowrap;
     }
@@ -23,19 +23,19 @@
             padding: 20px;
             border-left: solid 1px #5de79a;
             text-decoration: none;
+            
         }
     div.scrollTables {
         background-color: white;
-        overflow: auto;
+        overflow: scroll;
+        overflow-x:auto;
+        height:350px;
         white-space: nowrap;
     }
     div.scrollTables blockTable {
-        display: inline-block;
         text-align: center;
-       width:35%;
+       width:100%;
        height:250px;
-       overflow-y:auto;
-        border-right: solid 2px #f00;
         text-decoration: none;
     }
 
@@ -44,6 +44,11 @@
         }
     block.selected {
         color: green;
+    }
+   block {
+       width:150px;
+       margin:10px;
+       background-color:#000000;
     }
 </style>
 @Html.Hidden("COrgId",OrgObj["OrgId"])
@@ -56,7 +61,7 @@
     </div>
 
 </div>
-<div class=" scrollTables"  id="Floor">
+<div class=" scrollTables"style="margin-top:20px;"  id="Floor">
 
     <blockTable>
         <div class="row">
@@ -80,7 +85,7 @@
 
     </div>
     <div class="col-md-2">
-        <button class="btn text-white form-control BlackClr" onclick="Apply()">Apply</button>
+        <button class="btn text-white form-control GreenClr" onclick="Apply()">Apply</button>
     </div>
     <div class="col-md-5">
 
@@ -113,7 +118,7 @@
         function ShowOrderMenus(list) {
             $("#Menus").html('');
             $("#Floor").html('');
-            $("#Menus").append('<block id="AddNew" ondblclick="AddOrderMenu(0)">Add New</block>');
+            $("#Menus").append('<block id="AddNew" style="background-color: #def6e1;color:black;" ondblclick="AddOrderMenu(0)">Add New</block>');
             MenuList = list.MenuList;
             var SelectedMenu = -5;
             for (var i = 0; i < MenuList.length; i++) {
@@ -127,8 +132,8 @@
             categorylist = list.FloorList;
 
             for (var i = 0; i < categorylist.length; i++) {
-                var FloorHtml = '<blockTable><div class="row" ><div class="col-md-6">';
-                FloorHtml += '<h4 style="text-align:right">' + categorylist[i].Name + '</h4> </div><div class="col-md-6"><div class="checkbox2 container">';
+                var FloorHtml = '<blockTable><div  class="row" ><div style="background-color: #def6e1;text-align: right;font-size: large;font-weight: bold;" class="col-md-6">';
+                FloorHtml += '' + categorylist[i].Name + '</div><div style="background-color: #def6e1;" class="col-md-6"><div class="checkbox2 container">';
                 var TablesOrSheat = ' <div class="row" style="width:100%;">';
                 var TableSHaetList = categorylist[i].TableSheatList;
                 var TotalSelectedTble = 0;
@@ -139,22 +144,22 @@
                         // Tablecls = "SelectedTable";
                         TotalSelectedTble += 1;
                     }
-                    TablesOrSheat += '<div class="col-md-3 card ' + Tablecls + '"  onclick="ActiveTable(this)" TSID="' + TableSHaetList[j].Table_or_RowID + '" id="TS' + TableSHaetList[j].Table_or_RowID + '" childs="' + categorylist[i].Floor_or_ScreenID + '" ><p>' + TableSHaetList[j].Table_or_SheetName + '</p></div>';
+                    TablesOrSheat += '<div class="col-md-2 card ' + Tablecls + '" style="margin: 5px;" onclick="ActiveTable(this)" TSID="' + TableSHaetList[j].Table_or_RowID + '" id="TS' + TableSHaetList[j].Table_or_RowID + '" childs="' + categorylist[i].Floor_or_ScreenID + '" ><p>' + TableSHaetList[j].Table_or_SheetName + '</p></div>';
                 }
 
-                TablesOrSheat += '<div class="col-md-3 " onclick="AddTorS(this)" id="Add' + categorylist[i].Floor_or_ScreenID + '"><p><i class="fa fa-plus" aria-hidden="true"></i></p></div>';
+                TablesOrSheat += '<div class="col-md-2 " onclick="AddTorS(this)" id="Add' + categorylist[i].Floor_or_ScreenID + '"><p><i style="color:#44cd4a;font-size: larger;background-color:#def6e1;" class="fa fa-plus" aria-hidden="true"></i></p></div>';
                 TablesOrSheat += "</div>";
                 var CheckBoxCls = "";
                 if (TableSHaetList.length > 0 && (TableSHaetList.length == TotalSelectedTble)) {
                     // CheckBoxCls = "checked";
                 }
-                FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="' + categorylist[i].Floor_or_ScreenID + '" id="FS' + categorylist[i].Floor_or_ScreenID + '" /><label class="control-label" for="FS'+categorylist[i].Floor_or_ScreenID+'"> </label></div></div>';
+                FloorHtml += '<input type="checkbox" ' + CheckBoxCls + ' class=" form-control Checkbox" onclick="ActiveScrn(this)" FSID="' + categorylist[i].Floor_or_ScreenID + '" id="FS' + categorylist[i].Floor_or_ScreenID + '" /><label style="float: right;" class="control-label" for="FS'+categorylist[i].Floor_or_ScreenID+'"> </label></div></div>';
                 FloorHtml += TablesOrSheat;
                 FloorHtml += '</blockTable>';
                 $("#Floor").append(FloorHtml);
 
             }
-            var AddNew = '<blockTable><div class="row"><div class="col-md-12"> <i class="fa fa-plus" aria-hidden="true"></i></div></div></blockTable>';
+            var AddNew = '<blockTable><div class="row"><div class="col-md-12"> <i style="color:#44cd4a;font-size: larger;background-color:#def6e1;" class="fa fa-plus" aria-hidden="true"></i></div></div></blockTable>';
             $("#Floor").append(AddNew);
         }
         function AddOrderMenu(OMID) {

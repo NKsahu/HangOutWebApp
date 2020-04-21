@@ -169,15 +169,15 @@
                             </button>
                         </div>
 
-                        <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn">
+                        <div class="btn-group btn-group-justified row" role="group" id="ChargeBtn" style="width:100%;">
                             <!---->
                             <div class="row" style="width:100%">
-                                <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;">
+                                <div id="SubMitbtn" class="btn-group col-md-6" role="group" style="width:50% ;display:none;">
                                     <button type="button" class="form-control btn BlackClr" style="color:#ffffff;border-radius:5px;" onclick="SUBMIT();">
                                         Send to CHEF
                                     </button>
                                 </div>
-                                <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%;" onclick="INSTANTCLR()">
+                                <div id="InstantClear" class="btn-group col-md-6" role="group" style="width:50%;display:none;" onclick="INSTANTCLR()">
                                     <button type="button" style="color:#ffffff;border-radius:5px;" class="form-control btn BlackClr">
                                         Direct ADD-To BILL
                                     </button>
@@ -197,7 +197,7 @@
                                 </div>
                             </div>
 
-                            <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px" onclick="Charge()">
+                            <div id="Charge" class="btn-group" role="group" style="width:100%; padding:10px;" onclick="Charge()">
                                 <button type="button" style="color:#ffffff;border-radius:5px;" class="form-control btn GreenClr"  id="FinalAmtCharge">
                                     CHARGE
                                 </button>
@@ -222,6 +222,8 @@
         GetItemList(SeatingId);
         $("#CartItemsMenu").show();
         $("#AddMoreItems").show();
+        document.getElementById("InstantClear").style.display = "none";
+        document.getElementById("SubMitbtn").style.display = "none";
         
     }
     function SeatingDBClick(SeatingId) {
@@ -236,6 +238,8 @@
     $("#AddMoreItems").click(function () {
         GetOnlyItemsList(CurrentOrder)
         $("#AddMoreItems").hide();
+        document.getElementById("InstantClear").style.display = "block";
+        document.getElementById("SubMitbtn").style.display = "block";
         HideSeatingShowItem();
     });
 
@@ -259,6 +263,7 @@
         $("#MenuItems").hide();
         $("#SearchFilter").show();
         $("#MenuFilter").hide();
+        SeatingClick(CurrentOrder);
         
     }
     function ShowSearch() {

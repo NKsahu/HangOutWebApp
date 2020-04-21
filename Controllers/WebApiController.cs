@@ -1133,43 +1133,38 @@ namespace HangOut.Controllers
         public JObject CompleteOrder(int PaymentType,int UpdatedBy, Int64 OID = 0, int TorSid = 0,int AppType=0)
         {
             JObject jObject = new JObject();
-            //JournalEntry jObj = new JournalEntry();
             JournalEntryController journalControllerObj = new JournalEntryController();
             BalanceStatementController balanceStatement = new BalanceStatementController();
-            List<HG_Orders> OrderList = new List<HG_Orders>();
+            HG_Orders order = new HG_Orders();
             HG_Tables_or_Sheat obj = new HG_Tables_or_Sheat();
             List<HG_OrderItem> OrdrItmsList = new List<HG_OrderItem>();
             if (OID > 0)
             {
-                HG_Orders order = new HG_Orders().GetOne(OID);
+                order = new HG_Orders().GetOne(OID);
                 obj = new HG_Tables_or_Sheat().GetOne(order.Table_or_SheatId);
-                OrderList.Add(order);
+                
             }
             else if (TorSid > 0)
             {
                 obj = new HG_Tables_or_Sheat().GetOne(TorSid);
-                OrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-                OrderList = OrderList.FindAll(x => x.Table_or_SheatId == TorSid && x.TableOtp==obj.Otp);
-                OrderList = OrderList.FindAll(x => x.Status =="1");// order placed
+              var  OrderList = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
+                order = OrderList.Find(x => x.Table_or_SheatId == TorSid && x.TableOtp==obj.Otp);
             }
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(obj.OrgId);
             bool Status = false;
             int ChangeOtpTbl = 0;
             Int64 OrdId = 0;
-            foreach(var order in OrderList)
+            if(order!=null&&order.OID>0)
             {
                 if (ObjOrg.PaymentType == 1)// prepaid case only accept payment 
                 {
                     //send msg to chef
-                        
                     order.PaymentStatus = PaymentType;
                     order.Update_By = UpdatedBy;
                     order.PayReceivedBy = UpdatedBy;
-                    order.Save();
                     Status = true;
                     OrdrItmsList=new HG_OrderItem().GetAll(order.OID);
                     List<HG_OrderItem> CompletedItems = OrdrItmsList.FindAll(x => x.Status == 3);
-
                      var CompltedOrCacelOdrItms = OrdrItmsList.FindAll(x => x.Status == 3 || x.Status == 4);
                     if (CompltedOrCacelOdrItms.Count == OrdrItmsList.Count)
                     {
@@ -1177,19 +1172,19 @@ namespace HangOut.Controllers
                         obj.Otp = OTPGeneretion.Generate();
                         obj.save();
                         order.Status = "3";//completed
-                        order.Save();
-                        Wallet.AddToWallet(order,AppType);
-                        //=======Journal Entry======
-                        try
-                        {
-                            balanceStatement.GetDetails(CompletedItems);
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                        ///==============
                         ChangeOtpTbl = 1;
+                        
+                        //=======Journal Entry======
+                        //try
+                        //{
+                        //    balanceStatement.GetDetails(CompletedItems);
+                        //}
+                        //catch (Exception ex)
+                        //{
+
+                        //}
+                        ///==============
+                       
                         if (obj.Type != "3")
                         {
                             SendMsgCustomer(order.CID, order.OID,order);
@@ -1206,18 +1201,17 @@ namespace HangOut.Controllers
                     {
                         PendingPrints.SaveKotPrint(order, ObjOrg.Copy,hG_OrderItems: OrdrItmsList);
                     }
-                    
+                    order.Save();
+                    Wallet.AddToWallet(order, AppType);
                 }
                 else
                 {
                     if (order.OID > 0 && obj.Table_or_RowID > 0)
                     {
                         var OrderItems = new HG_OrderItem().GetAll(order.OID);
-                        
                         order.Update_By = UpdatedBy;
                         order.PayReceivedBy = UpdatedBy;
                         order.PaymentStatus = PaymentType;// update payment status
-                        order.Save();
                         //for balance Statement
                         List<HG_OrderItem> CompletedItems = OrdrItmsList.FindAll(x => x.Status == 3);
                         //==============
@@ -1229,18 +1223,16 @@ namespace HangOut.Controllers
                             obj.save();
                             ChangeOtpTbl = 1;
                             order.Status = "3";//3 order completed
-
-                            order.Save();
-                            Wallet.AddToWallet(order, AppType);
+                            
                             //=======Journal Entry======
-                            try
-                            {
-                                balanceStatement.GetDetails(CompletedItems);
-                            }
-                            catch (Exception ex)
-                            {
+                            //try
+                            //{
+                            //    balanceStatement.GetDetails(CompletedItems);
+                            //}
+                            //catch (Exception ex)
+                            //{
 
-                            }
+                            //}
                             ///==============
                             if (obj.Type != "3")
                             {
@@ -1249,6 +1241,8 @@ namespace HangOut.Controllers
 
                         }
                         Status = true;
+                        order.Save();
+                        Wallet.AddToWallet(order, AppType);
                     }
                     else
                     {
@@ -1267,6 +1261,7 @@ namespace HangOut.Controllers
                 jObject.Add("Status", 200);
                 jObject.Add("MSG", obj.Otp);
                 jObject.Add("OID", OrdId);
+                jObject.Add("OrdSts", order.Status);
                 jObject.Add("ChangeOtp", ChangeOtpTbl);
             }
             else

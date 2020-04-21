@@ -66,8 +66,8 @@
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.Floor_or_ScreenID)"> Edit</button>
-                                    <button class="btn btn-danger btn-sm " onclick="Delete(@item.Floor_or_ScreenID)"> Delete</button>
+                                    <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.Floor_or_ScreenID)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-sm " onclick="Delete(@item.Floor_or_ScreenID)"> <i class="fas fa-archive"></i></button>
                                 </td>
                             </tr>
                         }
@@ -93,8 +93,8 @@
                     var HtmlStr = "<tr id='" + Jitmobj.Floor_or_ScreenID + "'>";
                     HtmlStr += '<td>' + Jitmobj.Floor_or_ScreenID + '</td>';
                     HtmlStr += '<td>' + Jitmobj.Name + '</td>';
-                    HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID + ')"> Edit</button>';
-                    HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Floor_or_ScreenID + ')"> Delete</button>';
+                    HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Floor_or_ScreenID + ')"><i class="fas fa-edit"></i></button>';
+                    HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Floor_or_ScreenID + ')"><i class="fas fa-archive"></i></button>';
                     HtmlStr += '</td ></tr >';
                     var table = $('table').DataTable();
             if (AddTr) {

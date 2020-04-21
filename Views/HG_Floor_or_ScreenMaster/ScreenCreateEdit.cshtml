@@ -7,9 +7,8 @@
 @using HangOut.Models
 @{ List<HG_OrganizationDetails> listorgonization = new HG_OrganizationDetails().GetAll();}
 <div class="card">
-    <div class="card-header">
-        <h4 style="text-align:center;color:#000000"><b> ADD SCREEN </b></h4>
-        <hr />
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white"> ADD SCREEN </h3>
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("ScreenCreateEdit", "HG_Floor_or_ScreenMaster", new { ID = Model.Floor_or_ScreenID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
@@ -44,12 +43,20 @@
                     @Html.ValidationMessageFor(model => model.OrgID, "", new { @class = "text-danger" })
 
                 </div>
+            </div>
+            <div class="row">
 
-                <div class="col-sm-1">
-                    @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="SaVe" class="btn btn-success " />
+                <div class="col-md-5">
+
                 </div>
+                <div class="col-md-1">
+                    @Html.Label("Save", new { @class = "text-white" })
+                    <input type="submit" value="Save" class="btn SaveBtn form-control" />
 
+                </div>
+                <div class="col-md-5">
+
+                </div>
             </div>
         }
 

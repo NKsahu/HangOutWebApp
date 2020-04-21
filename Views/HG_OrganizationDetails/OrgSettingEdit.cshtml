@@ -82,19 +82,25 @@
                 <h5 class="enableCrg" style="text-align:center"> Apply Charges On</h5>
                 <div class="row enableCrg " style="padding:10px;">
                     <div class="col-md-2">
-                        @Html.Label("Customer App", htmlAttributes: new { @class = "control-label  " })
-                        @Html.CheckBoxFor(model => model.ApplyInCustomerApp, new { @class = "form-control " })
-                        @Html.ValidationMessageFor(model => model.ApplyInCustomerApp, "", new { @class = "text-danger" })
+                        <div class="checkbox2 container">
+                            @Html.CheckBoxFor(model => model.ApplyInCustomerApp, new { @class = "form-control" })
+                            @Html.LabelFor(model => model.ApplyInCustomerApp, htmlAttributes: new { @class = "control-label  " })
+                            @Html.ValidationMessageFor(model => model.ApplyInCustomerApp, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        @Html.Label("Captain App", htmlAttributes: new { @class = "control-label  " })
-                        @Html.CheckBoxFor(model => model.ApplyInCaptainApp, new { @class = "form-control " })
-                        @Html.ValidationMessageFor(model => model.ApplyInCaptainApp, "", new { @class = "text-danger" })
+                        <div class="checkbox2 container">
+                            @Html.CheckBoxFor(model => model.ApplyInCaptainApp, new { @class = "form-control" })
+                            @Html.LabelFor(model => model.ApplyInCaptainApp, htmlAttributes: new { @class = "control-label  " })
+                            @Html.ValidationMessageFor(model => model.ApplyInCaptainApp, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        @Html.Label("Admin Panel", htmlAttributes: new { @class = "control-label  " })
-                        @Html.CheckBoxFor(model => model.ApplyInAdminPanel, new { @class = "form-control " })
-                        @Html.ValidationMessageFor(model => model.ApplyInAdminPanel, "", new { @class = "text-danger" })
+                        <div class="checkbox2 container">
+                            @Html.CheckBoxFor(model => model.ApplyInAdminPanel, new { @class = "form-control" })
+                            @Html.LabelFor(model => model.ApplyInAdminPanel, htmlAttributes: new { @class = "control-label  " })
+                            @Html.ValidationMessageFor(model => model.ApplyInAdminPanel, "", new { @class = "text-danger" })
+                        </div>
                     </div>
 
                 </div>

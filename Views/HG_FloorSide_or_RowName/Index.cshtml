@@ -61,8 +61,8 @@
                                     @Html.DisplayFor(modelItem => item.FloorSide_or_RowName)
                                 </td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.ID)">Edit</button>
-                                    <button class="btn btn-danger btn-sm " onclick="Delete(@item.ID)"> Delete</button>
+                                    <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.ID)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-sm " onclick="Delete(@item.ID)"><i class="fas fa-archive"></i></button>
                                 </td>
                             </tr>
                         }
@@ -113,8 +113,8 @@
                     var Jitmobj = Jobj.data;
                     var HtmlStr = "<tr id='" + Jitmobj.ID + "'>";
                     HtmlStr += '<td>' + Jitmobj.FloorSide_or_RowName + '</td>';
-                    HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ID + ')"> Edit</button>';
-                    HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ID + ')"> Delete</button>';
+                    HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.ID + ')"><i class="fas fa-edit"></i></button>';
+                    HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.ID + ')"> <i class="fas fa-archive"></i></button>';
                     HtmlStr += '</td ></tr >';
                     var table = $('table').DataTable();
             if (AddTr) {

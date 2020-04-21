@@ -95,8 +95,8 @@
                                 @Html.DisplayFor(modelItem => item.Otp)
                             </td>
                             <td>
-                                <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.Table_or_RowID)"> Edit</button>
-                                <button class="btn btn-danger btn-sm " onclick="Delete(@item.Table_or_RowID)"> Delete</button>
+                                <button class="btn btn-warning btn-sm " onclick="CreateEdit(@item.Table_or_RowID)"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger btn-sm " onclick="Delete(@item.Table_or_RowID)"> <i class="fas fa-archive"></i></button>
                             </td>
                         </tr>
                     }
@@ -127,8 +127,8 @@
                 HtmlStr += '<td>' + Jitmobj.RowName + '</td>';
                 HtmlStr += '<td>' + Jitmobj.QrCode + '</td>';
                 HtmlStr += '<td>' + Jitmobj.Otp + '</td>';
-                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"> Edit</button>';
-                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID + ')"> Delete</button></td ></tr > ';
+                HtmlStr += '<td><button class="btn btn-warning btn-sm " onclick="CreateEdit(' + Jitmobj.Table_or_RowID + ')"><i class="fas fa-edit"></i></button>';
+                HtmlStr += '<button class="btn btn-danger btn-sm " onclick="Delete(' + Jitmobj.Table_or_RowID + ')"> <i class="fas fa-archive"></i></button></td ></tr > ';
                 var table = $('table').DataTable();
             if (AddTr) {
                 table.row.add($(HtmlStr)).draw();

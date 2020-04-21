@@ -36,6 +36,7 @@ function AddDbCart(Cart) {
     
 }
 function GetCartList() {
+    console.log("reading..");
     var CartList = [];
     var cartObj = db.transaction('CartTbl', 'readonly');
     var CartTbl = cartObj.objectStore('CartTbl');

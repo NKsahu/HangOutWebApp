@@ -174,7 +174,8 @@ header .btn-group a i:hover {
     }
 
         .dropdown-content a:hover {
-            background-color: #f1f1f1;
+            background-color:  #44cd4a !important;
+            
         }
 
 .dropdown:hover .dropdown-content {

@@ -3,7 +3,8 @@
     var OrgId = 0;
     var LoginId = 0;
     var OrgType = 0;
-    var CartList = [];
+var CartList = [];
+var PlacedCartItms = [];
     var TablesList = null;
     var ItemList = null;
     var ChargeAmt = 0.00;
@@ -18,7 +19,13 @@
     var KotNoOfCopy = 0;
 var ParcelCharge = 0.00;
 console.log("aaya");
-CartList =GetCartList();
+CartList = GetCartList();
+//PlacedCartItms = CartList.filter(function (x) {
+//    return x.IsPlaced == 1;
+//});
+//CartList = CartList.filter(function (x) {
+//    return x.IsPlaced == 0;
+//});
     //=======
         var ItemHtmlFirst = "<div class='col-md-3  sp-grid-cell ItemsClass'";
     var ItemHtmlFirstPrefix = "><div class='sp-grid-cell-contents highlight-color-4DB6AC' > <span class='sp-grid-cell-text'>";
@@ -59,7 +66,7 @@ function AddByItemClick(itemid) {
     var UUID = ObjItem.UUID;
     if (UUID != null && UUID != "") {
         var carts = CartList.filter(function (x) {
-            return x.ItemId.toString() == itemid;
+            return x.ItemId.toString() == itemid && x.IsPlaced == 0 && x.TableorSheatOrTaleAwayId == CurrentOrder;
         });
         if (carts.length > 0) {
             for (var i = 0; i < carts.length; i++) {
@@ -229,7 +236,7 @@ function SubmitAddon(itemid) {
     ResetOrder(CurrentOrder, 3);
 
     var CurrItemIndex = CartList.findIndex(x => {
-        return (x.ItemId == ObjCart.ItemId && x.itemAddons != null && x.itemAddons.AddonItemIdCsv == AddonItemIdCsv && x.IsParcel == 0 && x.TableorSheatOrTaleAwayId == CurrentOrder)
+        return (x.ItemId == ObjCart.ItemId && x.itemAddons != null && x.itemAddons.AddonItemIdCsv == AddonItemIdCsv && x.IsParcel == 0 && x.TableorSheatOrTaleAwayId == CurrentOrder && x.IsPlaced==0)
     });
     var ItemUUID = "";
     var Cnt = 1;
@@ -265,6 +272,7 @@ function SubmitAddon(itemid) {
     ObjItmAdd.IsAddon = 1;
     ObjItmAdd.Price = ItemPrice;
     ObjItmAdd.Cnt = Cnt;
+    ObjItmAdd.IsPlaced = ObjCart.IsPlaced;
     ObjItmAdd.ParcelCharge = 0.00;
     ObjItmAdd.AddonAmts = AddonAmts;
     ObjItmAdd.IsParcel = IsParcel;
@@ -311,7 +319,7 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
     var MyCart = {};
     if (CartList.length > 0) {
         var Cart = CartList.find(x => {
-            return x.ItemUUID == ItemUUID;
+            return x.ItemUUID == ItemUUID &&x.IsPlaced==0;
         });
         if (Cart != null) {
             for (var i = 0; i < CartList.length; i++) {
@@ -379,7 +387,7 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
     AddDbCart(MyCart);
     var FinlAmt = 0.00;
     var CurrSeatingItem = CartList.filter(function (x) {
-        return x.TableorSheatOrTaleAwayId == CurrentOrder;
+        return x.TableorSheatOrTaleAwayId == CurrentOrder &&x.IsPlaced==0;
     });
     console.log("Cuuseatingcnt=" + CurrSeatingItem.length + "Finalamt=" + FinlAmt);
     for (var i = 0; i < CurrSeatingItem.length; i++) {
@@ -407,6 +415,7 @@ function AddToCartOffline(itemId, ItemUUID, Cnt) {
         ObjItmAdd.IsAddon = 0;
         ObjItmAdd.Price = SingleItemPrice;
         ObjItmAdd.IsParcel = IsParcel;
+        ObjItmAdd.IsPlaced = MyCart.IsPlaced;
         ObjItmAdd.ParcelCharge = ParcelCharge;
         ObjItmAdd.Cnt = Cnt;
         ObjItem.ItemArray.push(ObjItmAdd);
@@ -502,6 +511,7 @@ function AddItemToQue(ObjItem) {
             var ItmUUID = ItemUUIDS[i].UUID;
             var IsAddon = ItemUUIDS[i].IsAddon;
             var IsParcel = ItemUUIDS[i].IsParcel;
+            var IsPlaced = ItemUUIDS[i].IsPlaced;
             var info = "";
             var ItemPrice = parseFloat(ObjUUID.Price) * parseInt(ObjUUID.Cnt);
             ItemPrice += ItemUUIDS[i].ParcelCharge * parseInt(ObjUUID.Cnt);
@@ -515,7 +525,22 @@ function AddItemToQue(ObjItem) {
             if (IsParcel == 1) {
                 ParcelHtml = "<td><i style='color:red;font-size:medium;'title='remove parcel' UUID=" + ItmUUID + " onclick='Makeparcel(this)'  class='fas fa-shopping-bag'></i></td></tr>";
             }
-            $("#AddItem").append("<tr class='ItemsTr' id='tr" + ItmUUID + "'><td style='font-size:medium;'>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond +"<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>" + info + cartlasthtml + ParcelHtml);
+            if (IsPlaced == 0) {
+                $("#AddItem").append("<tr class='ItemsTr PlacedItem' id='tr" + ItmUUID + "'><td style='font-size:medium;'>" + ObjItem.ItemName + first + Minushtml + "onclick='minus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + CountHtml + "id='C" + ItmUUID + "' >" + ObjUUID.Cnt + PlusHtml + "onclick='plus(\"" + Itemid + "\",\"" + ItmUUID + "\")'" + Carthtmfirst + Carthtmlsecond + "<Span id='P" + ItmUUID + "'>" + ItemPrice.toFixed(2) + "</span>" + info + cartlasthtml + ParcelHtml);
+            }
+            else {
+                var html = '<tr class="ItemsTr">' + '<td style ="font-size:medium;">' + ObjItem.ItemName + '</td>';
+                html += '<td><div style="width:100%">';
+                html += '<div class="row" style="border: 1px solid;border-radius: 5px;">';
+                html += '<span class="col-md-12" style=" font-size:medium;text-align: center;" >' + ObjUUID.Cnt + '</span ></div></div></td>';
+                html += '<td style="font-size:medium;" class="sp-product-price">';
+                html += '<span>' + ItemPrice.toFixed(2) + '</span>';
+                if (IsAddon == 1) {
+                    html += '<i class="fa fa-info-circle" style="font-size:small;" aria-hidden="true"></i></span>';
+                }
+                html += '</td><td><i style="font-size:medium;" class="fas fa-shopping-bag"></i></td></tr>';
+                $("#AddItem").append(html);
+            }
         }
 
     }
@@ -561,7 +586,7 @@ function Makeparcel(event) {
         }
     }
     var CurrSeatingItem = CartList.filter(function (x) {
-        return x.TableorSheatOrTaleAwayId == CurrentOrder;
+        return x.TableorSheatOrTaleAwayId == CurrentOrder &&x.IsPlaced==0;
     });
     $("#P" + itemuuid).text(CountAmt.toFixed(2));
     var FinlAmt = 0.00;
@@ -683,7 +708,7 @@ function ShowOrders(list) {
         var SeatName = list[i].SeatName;
         var RowSide = list[i].RowSide;
         var CurrSeatingItem = CartList.filter(function (x) {
-            return x.TableorSheatOrTaleAwayId == TableID;
+            return x.TableorSheatOrTaleAwayId == TableID &&x.IsPlaced==0;
         });
        // var ShowStatus = list[i].SeatingUser == null ? "" : list[i].SeatingUser;
         var html = '<div id="SeatingId'+TableID+'" class="col-md-' + ColSize + ' SeatingNum" onclick="SeatingClick(' + TableID + ');" ondblclick="SeatingDBClick(' + TableID+');">';
@@ -734,7 +759,7 @@ function FreeOrOccupied(Status,event) {
 }
 
 function ReloadSeating() {
-    console.log("aaya reload");
+   // console.log("aaya reload");
     var RunningOrd = [];
     if ($("#TblSearch").length > 0) {
         $.ajax({
@@ -769,8 +794,10 @@ function ReloadSeating() {
                                 TablesList[i].SeatingAmt = 00;
                                 $("#SeatingLine" + TablesList[i].Table_or_RowID).css('background-color', '#4ac959');
                                 $("#OtpBox" + TablesList[i].Table_or_RowID).css('color', '#4ac959');
+
                             }
                         }
+                       
                     }
                 myVar = setTimeout(function () { ReloadSeating(); }, 30000);
             },
@@ -802,15 +829,31 @@ function GetItemListByCategory(TableOrMWid) {
     
     var TotalRs = 0.00;
     ChargeAmt = 0.00;
+    if (CurrOID == 0) {
+        var CurrSeatingItemPlaced = CartList.filter(function (x) {
+            return x.TableorSheatOrTaleAwayId == CurrentOrder &&x.IsPlaced==1;
+        });
+        var CurrSeatingItemNotPlaced = CartList.filter(function (x) {
+            return x.TableorSheatOrTaleAwayId == CurrentOrder && x.IsPlaced == 0;
+        });
+        if (CurrSeatingItemNotPlaced.length == 0 && CurrSeatingItemPlaced.length > 0) {
+            for (var i = 0; i < CurrSeatingItemPlaced.length; i++) {
+                CurrSeatingItemPlaced[i].Count = 0;
+                AddDbCart(CurrSeatingItemPlaced[i]);
+            }
+            CartList=  CartList.filter(function (x) {
+                return x.TableorSheatOrTaleAwayId != CurrentOrder;
+            });
+        }
+    }
     var CurrSeatingItem = CartList.filter(function (x) {
         return x.TableorSheatOrTaleAwayId == CurrentOrder;
     });
     for (i = 0; i < CategoryList.length; i++) {
         var ItemsList = CategoryList[i].MenuItems;
         for (j = 0; j < ItemsList.length; j++) {
-           // ShowItems(ItemsList[j]);
             var CartalreadyAdded = CurrSeatingItem.filter(function (x) {
-                return x.ItemId == ItemsList[j].IID.toString();
+                return x.ItemId == ItemsList[j].IID.toString() &&x.IsPlaced==1 ;
             });
             if (CartalreadyAdded.length > 0) {
                 var list = [];
@@ -820,6 +863,7 @@ function GetItemListByCategory(TableOrMWid) {
                     Jobj.Price = CartalreadyAdded[k].ItemPrice;
                     Jobj.Cnt = CartalreadyAdded[k].Count;
                     Jobj.IsAddon = CartalreadyAdded[k].IsAddon;
+                    Jobj.IsPlaced = CartalreadyAdded[k].IsPlaced;
                     if (Jobj.IsAddon == 1) {
                         Jobj.AddonAmts = CartalreadyAdded[k].AddonAmts;
                     }
@@ -834,6 +878,9 @@ function GetItemListByCategory(TableOrMWid) {
         }
     }
     ChargeAmt = parseFloat(CurrSeatObj.SeatingAmt);
+    CurrSeatingItem = CartList.filter(function (x) {
+        return x.IsPlaced == 0;
+    });
     for (var c = 0; c < CurrSeatingItem.length; c++) {
         TotalRs += CurrSeatingItem[c].ItemPrice * CurrSeatingItem[c].Count;
         TotalRs += CurrSeatingItem[c].ParcelCharge * CurrSeatingItem[c].Count;
@@ -861,12 +908,16 @@ function GetOnlyItemsList(SeatingId) {
     ItemList = [];
     $("#MenuFilter").html('');
     $("#SubMenuItems").html('');
+    $("tr.ItemsTr").remove();
     var ObjOrderName = TablesList.find(x => {
         return x.Table_or_RowID == SeatingId;
     });
     CurrOID = ObjOrderName.CurrOID;
     var CurrSeatObj = ObjOrderName;
     var CategoryList = CurrSeatObj.MenuItems;
+    var CurrSeatingItem = CartList.filter(function (x) {
+        return x.TableorSheatOrTaleAwayId == CurrentOrder;
+    });
     var HtmlMenuFilter = '<div class="col-md-2">';
     var categoryCnt = CategoryList.length;
     HtmlMenuFilter += '<button class="btn btn-sm MenuBox form-control " onclick="filterItemByCat(this, 0)" style="background-color:#44cd4a" > <span class="TblBtnText">All</span></button ></div>';
@@ -894,6 +945,31 @@ function GetOnlyItemsList(SeatingId) {
         for (j = 0; j < ItemsList.length; j++) {
             ItemList.push(ItemsList[j]);
             ShowItems(ItemsList[j]);
+            for (j = 0; j < ItemsList.length; j++) {
+                var CartalreadyAdded = CurrSeatingItem.filter(function (x) {
+                    return x.ItemId == ItemsList[j].IID.toString() && x.IsPlaced == 0;
+                });
+                if (CartalreadyAdded.length > 0) {
+                    var list = [];
+                    for (var k = 0; k < CartalreadyAdded.length; k++) {
+                        var Jobj = {};
+                        Jobj.UUID = CartalreadyAdded[k].ItemUUID;
+                        Jobj.Price = CartalreadyAdded[k].ItemPrice;
+                        Jobj.Cnt = CartalreadyAdded[k].Count;
+                        Jobj.IsAddon = CartalreadyAdded[k].IsAddon;
+                        Jobj.IsPlaced = CartalreadyAdded[k].IsPlaced;
+                        if (Jobj.IsAddon == 1) {
+                            Jobj.AddonAmts = CartalreadyAdded[k].AddonAmts;
+                        }
+                        Jobj.IsParcel = CartalreadyAdded[k].IsParcel;
+                        Jobj.ParcelCharge = CartalreadyAdded[k].ParcelCharge;
+                        list.push(Jobj);
+                    }
+                    ItemsList[j].ItemCartValue = CartalreadyAdded.length;
+                    ItemsList[j].ItemArray = list;
+                    AddItemToQue(ItemsList[j]);
+                }
+            }
         }
     }
 
@@ -961,7 +1037,7 @@ function ResetOrder(SeatingId, status) {
 }
 function PostOrder(Obj) {
     var CurrSeatingItems = CartList.filter(function (x) {
-        return x.TableorSheatOrTaleAwayId == CurrentOrder;
+        return x.TableorSheatOrTaleAwayId == CurrentOrder && x.IsPlaced==0;
     });
     Obj.OrderList = CurrSeatingItems;
     $("#waiting").show();
@@ -978,17 +1054,16 @@ function PostOrder(Obj) {
                 });
             }
             else {
-
-                var CuuCartItems = CartList.filter(function (x) {
-                    return x.TableorSheatOrTaleAwayId == CurrentOrder;
-                });
-                for (var i = 0; i < CuuCartItems.length; i++) {
-                    CuuCartItems[i].Count = 0;
-                    AddDbCart(CuuCartItems[i]);
+                console.log("post");
+                //CartList = CartList.filter(function (x) {
+                //    return x.TableorSheatOrTaleAwayId != CurrentOrder;
+                //});
+                for (var i = 0; i < CartList.length; i++) {
+                    if (CartList[i].TableorSheatOrTaleAwayId == CurrentOrder) {
+                        CartList[i].IsPlaced = 1;
+                        AddDbCart(CartList[i]);
+                    }
                 }
-                CartList = CartList.filter(function (x) {
-                    return x.TableorSheatOrTaleAwayId != CurrentOrder;
-                });
                 var JsonMsg = JsonObj.MSG.split(",");
                 var PaymentSts = JsonMsg[2];
                 var OrderSts = parseInt(JsonObj.OrderSts);
@@ -1032,7 +1107,13 @@ function PostOrder(Obj) {
                             break;
                         }
                     }
-
+                    for (var i = 0; i < CartList.length; i++) {
+                        if (CartList[i].TableorSheatOrTaleAwayId == CurrentOrder) {
+                            CartList[i].Count = 0;
+                            AddDbCart(CartList[i]);
+                        }
+                    }
+                    ResetCart(CurrentOrder);
                 }
 
                 if (PrintInvoice == 1 && Obj.PaymtType != 0) {
@@ -1060,6 +1141,12 @@ function PostOrder(Obj) {
         }
     });
 }
+function ResetCart(Seating) {
+     CartList = CartList.filter(function (x) {
+        return x.TableorSheatOrTaleAwayId == CurrentOrder;
+    });
+}
+
 function SUBMIT() {
     $("#SubMitbtn").find('button').css('background-color', '#000000');
     DeliveryCharge(1);
@@ -1222,64 +1309,26 @@ function DeliveryCharge(Status) {
 }
 function Charge() {
     $("#Charge").find('button').css('background-color', '#44cd4a');
-    $.ajax({
-        type: 'POST',
-        url: "/WebApi/ShowOrderItems?TOrSId=" + CurrentOrder,
-        success: function (data) {
-            var Jobje = JSON.parse(data);
-            if ($("tr.ItemsTr").length > 0) {
-                $.alert({
-                    title: 'Alert !',
-                    content: 'please take action on selected item first',
-                });
-                return;
-            }
-            else if (Jobje.Status == 400 && Jobje.TorSsts != 1) {
-                $.alert({
-                    title: 'Alert !',
-                    content: 'Already Charged ',
-                });
-                //Jobje.MSG
-                return;
-            }
-            else if (Jobje.Status == 400 && Jobje.TorSsts == 1) {
-                $.alert({
-                    title: 'Alert !',
-                    content: 'NO TICKETS YET',
-                });
-                //Jobje.MSG
-                return;
-            }
-            else {
-                FinaliZeOrd();
-            }
-
-        },
-        error: function (jqXhr, textStatus, errorMessage) { // error callback
-            $("#waiting").hide();
-        }
-    });
-}
-function GenInvoice(oldOtp, OID) {
-    if (OID == undefined || OID == null) {
-        OID = 0;
+    if (CurrentOrder <= 0) {
+        $.alert({
+            title: 'Alert !',
+            content: 'NO TICKETS YET',
+        });
+        return;
     }
-    $("#PrintInvoice").html('');
-    $("#waiting").show();
-    $.ajax({
-        type: 'POST',
-        url: "/HG_Orders/PrintInvoice?TorSid=" + CurrentOrder + "&OldOtp=" + oldOtp + "&OID=" + OID,
-        success: function (data) {
-            $("#PrintInvoice").html(data);
-            PrintElem();
-            $("#waiting").hide();
-            //var Jobje = JSON.parse(data);
-        },
-        error: function (jqXhr, textStatus, errorMessage) { // error callback
-            $("#waiting").hide();
-        }
+    var CurrSeatingItems = CartList.filter(function (x) {
+        return x.TableorSheatOrTaleAwayId == CurrentOrder &&x.IsPlaced==0;
     });
+    if (CurrSeatingItems.length > 0) {
+        $.alert({
+            title: 'Alert !',
+            content: 'please take action on selected item first',
+        });
+        return;
+    }
+    FinaliZeOrd();
 }
+
 function ByCash() {
     CompleteOrder(1)// bycash
 }
@@ -1299,8 +1348,6 @@ function CompleteOrder(PaymentType) {
                 });
             }
             else {
-                // CurrOID = 0;
-                var OldOtp = 0;
                 for (var i = 0; i < TablesList.length; i++) {
                     if (TablesList[i].Table_or_RowID == CurrentOrder) {
                         TablesList[i].CurrOID = 0;
@@ -1312,8 +1359,18 @@ function CompleteOrder(PaymentType) {
                 }
                 $("#FinalAmtCharge").text('00.00 /RS')
                 $("#OtpBox" + CurrentOrder).text(Jobj.MSG);
-               // OtpBox18
-                if (Jobj.ChangeOtp > 0) {
+                console.log("Ord sts=" + Jobj.OrdSts);
+                if (Jobj.OrdSts == "3") {
+                    var CurrSeatingItems = CartList.filter(function (x) {
+                        return x.TableorSheatOrTaleAwayId == CurrentOrder;
+                    });
+                    for (var i = 0; i < CurrSeatingItems.length; i++) {
+                        CurrSeatingItems[i].Count = 0;
+                        AddDbCart(CurrSeatingItems[i]);
+                    }
+                    CartList=  CartList.filter(function (x) {
+                        return x.TableorSheatOrTaleAwayId != CurrentOrder;
+                    });
                     ResetOrder(CurrentOrder, 1);
                 }
                 if (PrintInvoice == 1) {

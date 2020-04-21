@@ -13,9 +13,8 @@
 
     }
 <div class="card">
-    <div class="card-header">
-        <h4 style="text-align:center;color:#000000"><b> ADD SEAT </b></h4>
-        <hr />
+    <div class="card-header card-header-color">
+        <h3 style="text-align:center;color:white"><b> ADD SEAT </b></h3>
     </div>
     <div class="card-body">
         @using (Ajax.BeginForm("SheetCreateEdit", "HG_Tables_or_Sheat", new { Table_or_RowID = Model.Table_or_RowID }, new AjaxOptions { HttpMethod = "POST", LoadingElementId = "waiting", OnSuccess = "OnSuccess" }))
@@ -66,25 +65,23 @@
 
                 <div class="col-md-2">
                     @Html.Label("Row Number")
-
                     @Html.DropDownListFor(model => model.FloorSide_or_RowNoID, new SelectList(new HG_FloorSide_or_RowName().GetAll(2), " ID", "FloorSide_or_RowName", Model.FloorSide_or_RowNoID), "Select  Row Number", new { @class = "form-control", required = "required" })
                     @Html.ValidationMessageFor(model => model.FloorSide_or_RowNoID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-5">
 
                 </div>
-
-                @*<div class="col-md-2">
-
-                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label  " })
-
-                    @Html.DropDownListFor(model => model.Type, new SelectList(OrgType.List, "id", "Name", "2"), new { @class = "form-control", required = "required" })
-                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-
-                </div>*@
-                <div class=" col-md-1">
+                <div class="col-md-1">
                     @Html.Label("Save", new { @class = "text-white" })
-                    <input type="submit" value="Save" class="btn btn-success form-control" />
-                </div>
+                    <input type="submit" value="Save" class="btn SaveBtn form-control" />
 
+                </div>
+                <div class="col-md-5">
+
+                </div>
             </div>
         }
 

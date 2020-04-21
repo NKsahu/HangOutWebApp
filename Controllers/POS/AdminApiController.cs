@@ -15,7 +15,6 @@ namespace HangOut.Controllers.POS
         // GET: AdminApi
         public JObject GetSeating(int OrgId=0)
         {
-            List<HG_Orders> Orderlist = new List<HG_Orders>();
             List<HG_Items> ListItems = new List<HG_Items>();
             List<HG_Category> MenuList = new List<HG_Category>();
             if (OrgId <= 0)
@@ -24,12 +23,17 @@ namespace HangOut.Controllers.POS
             }
             if (OrgId > 0)
             {
-                Orderlist = new HG_Orders().GetListByGetDate(DateTime.Now, DateTime.Now);
-                Orderlist = Orderlist.FindAll(x => x.Status != "3" && x.Status != "4");
                 ListItems = new HG_Items().GetAll(OrgId);
                 ListItems = ListItems.FindAll(x => x.ItemAvaibility == 0);// only available items
                 MenuList = new HG_Category().GetAll(OrgId: OrgId);
             }
+            JObject ProcedureParm = new JObject();
+            var CurrDate = DateTime.Now;
+            var Todate = new DateTime(CurrDate.Year, CurrDate.Month, CurrDate.Day, 23, 59, 00);
+            ProcedureParm.Add("FromDate", CurrDate.ToString("MM/dd/yyyy"));
+            ProcedureParm.Add("Todate", Todate.ToString("MM/dd/yyyy HH:mm:ss"));
+            ProcedureParm.Add("Orgid", OrgId);
+            List<TblData> RunningOrds = TblData.GetAll("GetRunningOrder", ProcedureParm);
             HG_OrganizationDetails ObjOrg = new HG_OrganizationDetails().GetOne(OrgId);
             List<Seating> Listseating = Seating.GetSeating(OrgId);
             JObject JobjResonse = new JObject();
@@ -47,24 +51,12 @@ namespace HangOut.Controllers.POS
                 jObject.Add("RowSide", ObjSeating.RowSideName);
                 jObject.Add("Floor_or_ScreenId", ObjSeating.FSIS);
                 JArray MenuJarray = new JArray();
-                var order = Orderlist.Find(x => x.Table_or_SheatId == ObjSeating.SeatId && x.TableOtp == ObjSeating.Otp);
-                if (order != null && order.OID > 0)
+                var order = RunningOrds.Find(x => x.getVal<Int64>("Table_or_SheatId") == ObjSeating.SeatId && x.getVal<int>("TableOtp") == ObjSeating.Otp);
+                if (order != null && order.getVal<Int64>("OID")> 0)
                 {
-                    jObject.Add("CurrOID", order.OID);
+                    jObject.Add("CurrOID", order.getVal<Int64>("OID"));
                     jObject.Add("Status", 3);//table is booked
-                    if (order.ContactId > 0)
-                    {
-                        LocalContacts localContacts = LocalContacts.GetOne(order.ContactId);
-                        jObject.Add("SeatingUser", localContacts.Cust_Name + " (" + localContacts.MobileNo + ")");
-                    }
-                    else
-                    {
-                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)order.CID);
-                        if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
-                        {
-                            jObject.Add("SeatingUser", ObjUser.UserName + " (" + ObjUser.UserId + ")");
-                        }
-                    }
+                    
                 }
                 else
                 {
@@ -78,16 +70,16 @@ namespace HangOut.Controllers.POS
                 int ContactId = 0;
                 if (order != null)
                 {
-                    if (order.ContactId > 0)
+                    if (order.getVal<int>("ContactId") > 0)
                     {
-                        LocalContacts localContacts = LocalContacts.GetOne(order.ContactId);
+                        LocalContacts localContacts = LocalContacts.GetOne(order.getVal<int>("ContactId"));
                         Cmobile = localContacts.MobileNo;
                         Cname = localContacts.Cust_Name;
                         ContactId = localContacts.ContctID;
                     }
                     else
                     {
-                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)order.CID);
+                        vw_HG_UsersDetails ObjUser = new vw_HG_UsersDetails().GetSingleByUserId((int)order.getVal<Int64>("CID"));
                         if (ObjUser != null && ObjUser.UserCode > 0 && ObjUser.UserType == "CUST")
                         {
                             Cmobile = ObjUser.UserId;
@@ -95,15 +87,11 @@ namespace HangOut.Controllers.POS
                             ContactId = -1;// minus show dont edit this. Order Palced By Customer
                         }
                     }
-                    if (order.PaymentStatus == 0)
+                    if (order.getVal<int>("PaymentStatus") == 0)
                     {
-                        var OrderItems = new HG_OrderItem().GetAll(order.OID);
-                        OrderItems = OrderItems.FindAll(x => x.Status != 4);// not ccanceled items
-                        CurrentTableAmt = order.DeliveryCharge;
-                        for (var i = 0; i < OrderItems.Count; i++)
-                        {
-                            CurrentTableAmt += OrderItems[i].Count * OrderItems[i].Price;
-                        }
+
+                        CurrentTableAmt += order.getVal<double>("OrdAmt");
+                        
                     }
 
                 }
